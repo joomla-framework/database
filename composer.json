@@ -1,0 +1,19 @@
+{
+    "name": "joomla/filesystem",
+    "type": "joomla-package",
+    "description": "Joomla Filesystem Package",
+    "keywords": ["joomla", "framework", "filesystem"],
+    "homepage": "https://github.com/joomla/joomla-framework-filesystem",
+    "license": "GPL-2.0+",
+    "require": {
+        "php": ">=5.3.10",
+        "joomla/log": "dev-master",
+        "joomla/client": "dev-master"
+    },
+    "target-dir": "Joomla/Filesystem",
+    "autoload": {
+    	"psr-0": {
+    		"Joomla\\Filesystem": ""
+    	}
+    }
+}
