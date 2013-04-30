@@ -107,7 +107,30 @@ class MysqliDriver extends DatabaseDriver
 		 * Unlike mysql_connect(), mysqli_connect() takes the port and socket as separate arguments. Therefore, we
 		 * have to extract them from the host string.
 		 */
-		$tmp = substr(strstr($this->options['host'], ':'), 1);
+
+		// @bug: http://joomlacode.org/gf/project/joomla/tracker/?action=TrackerItemEdit&tracker_item_id=30698
+		if ( $this->options["host"]{0} == '[' )
+		{
+			// We have an IPv6 ip address.
+			$host          = trim($this->options["host"], "[]");
+			$endingBracket = strstr( $host, ']' );
+
+			if( $endingBracket )
+			{
+				// There is a port number at the end?
+				$this->options["port"] = substr($host, $endingBracket);
+				$this->options["host"] = substr($host, 0, $endingBracket - 1);
+			}
+			else
+			{
+				$this->options["host"] = $host;
+			}
+		}
+		else
+		{
+			$tmp = substr(strstr($this->options['host'], ':'), 1);
+		}
+		// end bug fix.
 
 		if (!empty($tmp))
 		{
