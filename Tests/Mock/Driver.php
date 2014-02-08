@@ -139,7 +139,7 @@ class Driver
 	 *
 	 * @since   1.0
 	 */
-	public function mockEscape($text)
+	public static function mockEscape($text)
 	{
 		return "_{$text}_";
 	}
