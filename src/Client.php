@@ -6,13 +6,12 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Oauth2;
+namespace Joomla\OAuth2;
 
 use Joomla\Registry\Registry;
 use Joomla\Application\AbstractWebApplication;
 use Joomla\Input\Input;
 use Joomla\Http\Http;
-use Joomla\Factory;
 use InvalidArgumentException;
 use RuntimeException;
 use Exception;
@@ -58,12 +57,12 @@ class Client
 	 *
 	 * @since   1.0
 	 */
-	public function __construct(Registry $options = null, Http $http = null, Input $input, AbstractWebApplication $application = null)
+	public function __construct(Registry $options, Http $http, Input $input, AbstractWebApplication $application)
 	{
-		$this->options = isset($options) ? $options : new Registry;
-		$this->http = isset($http) ? $http : new Http($this->options);
-		$this->input = isset($input) ? $input : Factory::getApplication()->input;
-		$this->application = isset($application) ? $application : AbstractWebApplication::getInstance();
+		$this->options = $options;
+		$this->http = $http;
+		$this->input = $input;
+		$this->application = $application;
 	}
 
 	/**
