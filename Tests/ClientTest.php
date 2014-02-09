@@ -4,9 +4,9 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Oauth1\Tests;
+namespace Joomla\OAuth1\Tests;
 
-use Joomla\Oauth1\Client;
+use Joomla\OAuth1\Client;
 use Joomla\Registry\Registry;
 use Joomla\Input\Input;
 use Joomla\Test\WebInspector;
@@ -87,7 +87,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 		$this->input = new Input;
 		$this->application = new WebInspector;
 
-		$this->application->setSession($this->getMock('Joomla\\Session\\Session'));
+		$mockSession = $this->getMock('Joomla\\Session\\Session');
+
+		$this->application->setSession($mockSession);
 
 		$this->options->set('consumer_key', $key);
 		$this->options->set('consumer_secret', $secret);
