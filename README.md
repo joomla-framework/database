@@ -260,20 +260,18 @@ $registry->loadString('<data><value name="foo" type="string">bar</value></data>,
 
 ## Installation via Composer
 
-Add `"joomla/registry": "dev-master"` to the require block in your composer.json, make sure you have `"minimum-stability": "dev"` and then run `composer install`.
+Add `"joomla/registry": "~1.0"` to the require block in your composer.json and then run `composer install`.
 
 ```json
 {
 	"require": {
-		"joomla/registry": "dev-master"
-	},
-	"minimum-stability": "dev"
+		"joomla/registry": "~1.0"
+	}
 }
 ```
 
 Alternatively, you can simply run the following from the command line:
 
 ```sh
-composer init --stability="dev"
-composer require joomla/registry "dev-master"
+composer require joomla/registry "~1.0"
 ```
