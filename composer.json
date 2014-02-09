@@ -3,17 +3,16 @@
     "type": "joomla-package",
     "description": "Joomla Utilities Package",
     "keywords": ["joomla", "framework", "utilities"],
-    "homepage": "https://github.com/joomla/joomla-framework-utilities",
+    "homepage": "https://github.com/joomla-framework/utilities",
     "license": "GPL-2.0+",
     "require": {
         "php": ">=5.3.10",
          "joomla/string": "~1.0"
     },
-    "target-dir": "Joomla/Utilities",
     "autoload": {
-    	"psr-0": {
-    		"Joomla\\Utilities": ""
+    	"psr-4": {
+    		"Joomla\\Utilities\\": "src/",
+            "Joomla\\Utilities\\Tests\\": "Tests/"
     	}
-    },
-    "minimum-stability": "dev"
+    }
 }
