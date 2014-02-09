@@ -3,7 +3,7 @@
     "type": "joomla-package",
     "description": "Joomla Language Package",
     "keywords": ["joomla", "framework", "language"],
-    "homepage": "https://github.com/joomla/joomla-framework-language",
+    "homepage": "https://github.com/joomla-framework/language",
     "license": "GPL-2.0+",
     "require": {
         "php": ">=5.3.10",
@@ -13,11 +13,10 @@
         "joomla/filesystem": "~1.0",
         "joomla/test": "~1.0"
     },
-    "target-dir": "Joomla/Language",
     "autoload": {
-    	"psr-0": {
-    		"Joomla\\Language": ""
+    	"psr-4": {
+    		"Joomla\\Language\\": "src/",
+            "Joomla\\Language\\Tests\\": "Tests/"
     	}
-    },
-    "minimum-stability": "beta"
+    }
 }
