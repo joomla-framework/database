@@ -15,7 +15,8 @@
     },
     "autoload": {
     	"psr-4": {
-    		"Joomla\\Data\\": "src/"
+    		"Joomla\\Data\\": "src/",
+            "Joomla\\Data\\Tests\\": "Tests/"
     	}
     }
 }
