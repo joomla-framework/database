@@ -3,7 +3,7 @@
     "type": "joomla-package",
     "description": "Joomla Router Package",
     "keywords": ["joomla", "framework", "router"],
-    "homepage": "https://github.com/joomla/joomla-framework-router",
+    "homepage": "https://github.com/joomla-framework/router",
     "license": "GPL-2.0+",
     "require": {
         "php": ">=5.3.10",
@@ -13,11 +13,10 @@
     "require-dev": {
     	"joomla/test": "~1.0"
     },
-    "target-dir": "Joomla/Router",
     "autoload": {
-    	"psr-0": {
-    		"Joomla\\Router": ""
+    	"psr-4": {
+    		"Joomla\\Router\\": "src/",
+            "Joomla\\Router\\Tests\\": "Tests/"
     	}
-    },
-    "minimum-stability": "beta"
+    }
 }
