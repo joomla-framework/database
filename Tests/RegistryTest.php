@@ -259,10 +259,10 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 		$c = Registry::getInstance('c');
 
 		// Check the object type.
-		$this->assertThat(
-			$a instanceof Joomla\Registry\Registry,
-			$this->isTrue(),
-			'Line: ' . __LINE__ . '.'
+		$this->assertInstanceOf(
+			'\\Joomla\\Registry\\Registry',
+			$a,
+			'Line ' . __LINE__ . ' - Object $a should be an instance of Registry.'
 		);
 
 		// Check cache handling for same registry id.
