@@ -17,13 +17,30 @@ use RuntimeException;
  */
 class Authentication
 {
+	/**
+	 * Authentication was successful.
+	 */
 	const SUCCESS = 1;
 
-	const INVALID_PASSWORD = 2;
+	/**
+	 * Credentials were provided but they were invalid.
+	 */
+	const INVALID_CREDENTIALS = 2;
 
+	/**
+	 * Credentials were provided but the user did not exist in the credential store.
+	 */
 	const NO_SUCH_USER = 3;
 
-	const MISSING_CREDENTIALS = 4;
+	/**
+	 * There were no credentials found.
+	 */
+	const NO_CREDENTIALS = 4;
+
+	/**
+	 * There were partial credentials found but they were not complete.
+	 */
+	const INCOMPLETE_CREDENTIALS = 5;
 
 	/**
 	 * The array of strategies.

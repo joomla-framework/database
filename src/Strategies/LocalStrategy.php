@@ -72,7 +72,7 @@ class LocalStrategy implements AuthenticationStrategyInterface
 
 		if (!$username || !$password)
 		{
-			$this->status = Authentication::MISSING_CREDENTIALS;
+			$this->status = Authentication::NO_CREDENTIALS;
 
 			return false;
 		}
@@ -96,7 +96,7 @@ class LocalStrategy implements AuthenticationStrategyInterface
 		}
 		else
 		{
-			$this->status = Authentication::INVALID_PASSWORD;
+			$this->status = Authentication::INVALID_CREDENTIALS;
 
 			return false;
 		}
