@@ -3,7 +3,7 @@
     "type": "joomla-package",
     "description": "Joomla Model Package",
     "keywords": ["joomla", "framework", "model"],
-    "homepage": "https://github.com/joomla/joomla-framework-model",
+    "homepage": "https://github.com/joomla-framework/model",
     "license": "GPL-2.0+",
     "require": {
         "php": ">=5.3.10",
@@ -13,11 +13,10 @@
     "require-dev": {
         "joomla/test": "~1.0"
     },
-    "target-dir": "Joomla/Model",
     "autoload": {
-    	"psr-0": {
-    		"Joomla\\Model": ""
+    	"psr-4": {
+    		"Joomla\\Model\\": "src/",
+            "Joomla\\Model\\Tests\\": "Tests/"
     	}
-    },
-    "minimum-stability": "beta"
+    }
 }
