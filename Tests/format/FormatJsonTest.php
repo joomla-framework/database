@@ -4,6 +4,8 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+namespace Joomla\Registry\Tests\Format;
+
 use Joomla\Registry\AbstractRegistryFormat;
 
 /**
@@ -12,7 +14,7 @@ use Joomla\Registry\AbstractRegistryFormat;
  *
  * @since  1.0
  */
-class JRegistryFormatJSONTest extends PHPUnit_Framework_TestCase
+class JRegistryFormatJSONTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * Test the Json::objectToString method.
@@ -25,7 +27,7 @@ class JRegistryFormatJSONTest extends PHPUnit_Framework_TestCase
 	{
 		$class = AbstractRegistryFormat::getInstance('JSON');
 		$options = null;
-		$object = new stdClass;
+		$object = new \stdClass;
 		$object->foo = 'bar';
 		$object->quoted = '"stringwithquotes"';
 		$object->booleantrue = true;
@@ -34,7 +36,7 @@ class JRegistryFormatJSONTest extends PHPUnit_Framework_TestCase
 		$object->numericfloat = 3.1415;
 
 		// The PHP registry format does not support nested objects
-		$object->section = new stdClass;
+		$object->section = new \stdClass;
 		$object->section->key = 'value';
 		$object->array = array('nestedarray' => array('test1' => 'value1'));
 
@@ -66,20 +68,20 @@ class JRegistryFormatJSONTest extends PHPUnit_Framework_TestCase
 		$string1 = '{"title":"Joomla Framework","author":"Me","params":{"show_title":1,"show_abstract":0,"show_author":1,"categories":[1,2]}}';
 		$string2 = "[section]\nfoo=bar";
 
-		$object1 = new stdClass;
+		$object1 = new \stdClass;
 		$object1->title = 'Joomla Framework';
 		$object1->author = 'Me';
-		$object1->params = new stdClass;
+		$object1->params = new \stdClass;
 		$object1->params->show_title = 1;
 		$object1->params->show_abstract = 0;
 		$object1->params->show_author = 1;
 		$object1->params->categories = array(1, 2);
 
-		$object2 = new stdClass;
-		$object2->section = new stdClass;
+		$object2 = new \stdClass;
+		$object2->section = new \stdClass;
 		$object2->section->foo = 'bar';
 
-		$object3 = new stdClass;
+		$object3 = new \stdClass;
 		$object3->foo = 'bar';
 
 		// Test basic JSON string to object.

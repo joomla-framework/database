@@ -4,6 +4,8 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+namespace Joomla\Registry\Tests\Format;
+
 use Joomla\Registry\AbstractRegistryFormat;
 
 /**
@@ -11,7 +13,7 @@ use Joomla\Registry\AbstractRegistryFormat;
  *
  * @since  1.0
  */
-class JRegistryFormatXMLTest extends PHPUnit_Framework_TestCase
+class JRegistryFormatXMLTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * Test the Cml::objectToString method.
@@ -24,14 +26,14 @@ class JRegistryFormatXMLTest extends PHPUnit_Framework_TestCase
 	{
 		$class = AbstractRegistryFormat::getInstance('XML');
 		$options = null;
-		$object = new stdClass;
+		$object = new \stdClass;
 		$object->foo = 'bar';
 		$object->quoted = '"stringwithquotes"';
 		$object->booleantrue = true;
 		$object->booleanfalse = false;
 		$object->numericint = 42;
 		$object->numericfloat = 3.1415;
-		$object->section = new stdClass;
+		$object->section = new \stdClass;
 		$object->section->key = 'value';
 		$object->array = array('nestedarray' => array('test1' => 'value1'));
 
@@ -74,14 +76,14 @@ class JRegistryFormatXMLTest extends PHPUnit_Framework_TestCase
 	public function testStringToObject()
 	{
 		$class = AbstractRegistryFormat::getInstance('XML');
-		$object = new stdClass;
+		$object = new \stdClass;
 		$object->foo = 'bar';
 		$object->booleantrue = true;
 		$object->booleanfalse1 = false;
 		$object->booleanfalse2 = false;
 		$object->numericint = 42;
 		$object->numericfloat = 3.1415;
-		$object->section = new stdClass;
+		$object->section = new \stdClass;
 		$object->section->key = 'value';
 		$object->array = array('test1' => 'value1');
 

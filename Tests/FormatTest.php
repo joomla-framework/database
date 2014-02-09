@@ -4,6 +4,8 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+namespace Joomla\Registry\Tests;
+
 use Joomla\Registry\AbstractRegistryFormat;
 
 /**
@@ -11,7 +13,7 @@ use Joomla\Registry\AbstractRegistryFormat;
  *
  * @since  1.0
  */
-class AbstractRegistryFormatTest extends PHPUnit_Framework_TestCase
+class AbstractRegistryFormatTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * Data provider for testGetInstance

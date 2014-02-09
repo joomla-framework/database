@@ -4,6 +4,8 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+namespace Joomla\Registry\Tests\Format;
+
 use Joomla\Registry\AbstractRegistryFormat;
 
 /**
@@ -11,7 +13,7 @@ use Joomla\Registry\AbstractRegistryFormat;
  *
  * @since  1.0
  */
-class JRegistryFormatPHPTest extends PHPUnit_Framework_TestCase
+class JRegistryFormatPHPTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * Test the Php::objectToString method.
@@ -24,7 +26,7 @@ class JRegistryFormatPHPTest extends PHPUnit_Framework_TestCase
 	{
 		$class = AbstractRegistryFormat::getInstance('PHP');
 		$options = array('class' => 'myClass');
-		$object = new stdClass;
+		$object = new \stdClass;
 		$object->foo = 'bar';
 		$object->quoted = '"stringwithquotes"';
 		$object->booleantrue = true;
@@ -33,7 +35,7 @@ class JRegistryFormatPHPTest extends PHPUnit_Framework_TestCase
 		$object->numericfloat = 3.1415;
 
 		// The PHP registry format does not support nested objects
-		$object->section = new stdClass;
+		$object->section = new \stdClass;
 		$object->section->key = 'value';
 		$object->array = array('nestedarray' => array('test1' => 'value1'));
 
