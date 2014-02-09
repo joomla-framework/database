@@ -16,10 +16,10 @@ $credentialStore = array(
 	'joe' => 'sdgjrly435235'		// username and password hash
 )
 
-$authentication->addStrategy(new Authentication\Strategies\LocalStrategy($input, ))
+$authentication->addStrategy(new Authentication\Strategies\LocalStrategy($input, $credentialStore));
 
 $username = $authentication->authenticate();   //  Try all authentication strategies
-$username = $authentication->authenticate('local');
+$username = $authentication->authenticate('local');   // Try just the one strategy named local
 
 if ($username)
 {
