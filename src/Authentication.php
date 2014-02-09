@@ -8,6 +8,8 @@
 
 namespace Joomla\Authentication;
 
+use RuntimeException;
+
 /**
  * Joomla Framework Authentication Class
  *
@@ -15,6 +17,14 @@ namespace Joomla\Authentication;
  */
 class Authentication
 {
+	const SUCCESS = 1;
+
+	const INVALID_PASSWORD = 2;
+
+	const NO_SUCH_USER = 3;
+
+	const MISSING_CREDENTIALS = 4;
+
 	/**
 	 * The array of strategies.
 	 *
@@ -25,17 +35,27 @@ class Authentication
 	private $strategies = array();
 
 	/**
+	 * The array of strategies.
+	 *
+	 * @var    array
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $results = array();
+
+	/**
 	 * Register a new strategy
 	 *
-	 * @param   AuthenticationStrategyInterface  $strategy  The authentication strategy object to add.
+	 * @param   string                           $strategyName  The name to use for the strategy.
+	 * @param   AuthenticationStrategyInterface  $strategy      The authentication strategy object to add.
 	 *
 	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function addStrategy(AuthenticationStrategyInterface $strategy)
+	public function addStrategy($strategyName, AuthenticationStrategyInterface $strategy)
 	{
-		$this->strategies[$strategy->getName()] = $strategy;
+		$this->strategies[$strategyName] = $strategy;
 	}
 
 	/**
@@ -61,7 +81,7 @@ class Authentication
 			{
 				if (isset($this->strategies[$strategy]))
 				{
-					$strategyObjects[] = $this->strategies[$strategy];
+					$strategyObjects[$strategy] = $this->strategies[$strategy];
 				}
 				else
 				{
@@ -70,16 +90,32 @@ class Authentication
 			}
 		}
 
-		foreach ($strategyObjects AS $strategyObject)
+		foreach ($strategyObjects AS $strategy => $strategyObject)
 		{
 			$username = $strategyObject->authenticate();
 
-			if ($username)
+			$this->results[$strategy] = $strategyObject->getResult();
+
+			if (is_string($username))
 			{
 				return $username;
 			}
 		}
 
 		return false;
+	}
+
+	/**
+	 * Get authentication results.
+	 *
+	 * Use this if you want to get more detailed information about the results of an authentication attempts.
+	 *
+	 * @return  An array containing authentication results.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getResults()
+	{
+		return $this->results;
 	}
 }

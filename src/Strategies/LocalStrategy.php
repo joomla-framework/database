@@ -1,14 +1,15 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: imaclennan
- * Date: 2/8/14
- * Time: 5:24 PM
+ * Part of the Joomla Framework Authentication Package
+ *
+ * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Authentication\Strategies;
 
 use Joomla\Authentication\AuthenticationStrategyInterface;
+use Joomla\Authentication\Authentication;
 use Joomla\Input\Input;
 
 class LocalStrategy implements AuthenticationStrategyInterface
@@ -30,6 +31,15 @@ class LocalStrategy implements AuthenticationStrategyInterface
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $credentialStore;
+
+	/**
+	 * The last authentication status.
+	 *
+	 * @var    int  $status  The last status result (use constants from Authentication)
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $status;
 
 	/**
 	 * Strategy Constructor
@@ -57,35 +67,50 @@ class LocalStrategy implements AuthenticationStrategyInterface
 	 */
 	public function authenticate()
 	{
-		$username = $input->get('username');
-		$password = $input->get('password');
+		$username = $this->input->get('username', false);
+		$password = $this->input->get('password', false);
 
 		if (!$username || !$password)
 		{
+			$this->status = Authentication::MISSING_CREDENTIALS;
+
 			return false;
 		}
 
-		if (isset($credentialStore[$username]))
+		if (isset($this->credentialStore[$username]))
 		{
 			$hash = $this->credentialStore[$username];
 		}
 		else
 		{
+			$this->status = Authentication::NO_SUCH_USER;
+
 			return false;
 		}
 
-		return password_verify($password, $hash);
+		if (\password_verify($password, $hash))
+		{
+			$this->status = Authentication::SUCCESS;
+
+			return $username;
+		}
+		else
+		{
+			$this->status = Authentication::INVALID_PASSWORD;
+
+			return false;
+		}
 	}
 
 	/**
-	 * Get strategy name
+	 * Get the status of the last authentication attempt.
 	 *
-	 * @return  string  A string containing the strategy name.
+	 * @return  integer  Authentication class constant result.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getName()
+	public function getResult()
 	{
-		return 'local';
+		return $this->status;
 	}
 }

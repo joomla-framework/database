@@ -25,11 +25,11 @@ interface AuthenticationStrategyInterface
 	public function authenticate();
 
 	/**
-	 * Get strategy name
+	 * Get last authentication result.
 	 *
-	 * @return  string  A string containing the strategy name.
+	 * @return  integer  An integer from Authentication class constants with the authentication result.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getName();
+	public function getResult();
 }

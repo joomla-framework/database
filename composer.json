@@ -1,0 +1,22 @@
+{
+    "name": "joomla/authentication",
+    "type": "joomla-package",
+    "description": "Joomla Authentication Package",
+    "keywords": ["joomla", "framework", "authentication"],
+    "homepage": "https://github.com/joomla-framework/authentication",
+    "license": "GPL-2.0+",
+    "require": {
+        "php": ">=5.3.10",
+        "joomla/input": "~1.0",
+		"ircmaxell/password-compat": "~1.0"
+    },
+    "require-dev": {
+        "joomla/test": "~1.0"
+    },
+    "autoload": {
+    	"psr-4": {
+    		"Joomla\\Authentication\\": "src/",
+            "Joomla\\Authentication\\Tests\\": "Tests/"
+    	}
+    }
+}
