@@ -389,3 +389,21 @@ be reasonable for the controllers to have access to the container in order to bu
 
 > __NOTE:__ The business layer of your app (eg: Models) should _never_ be container aware. Doing so will
 > make your code harder to test, and is a far cry from best practices.
+
+## Installation via Composer
+
+Add `"joomla/di": "~1.0"` to the require block in your composer.json and then run `composer install`.
+
+```json
+{
+	"require": {
+		"joomla/di": "~1.0"
+	}
+}
+```
+
+Alternatively, you can simply run the following from the command line:
+
+```sh
+composer require joomla/di "~1.0"
+```
