@@ -56,20 +56,18 @@ $archive->extract('archive.zip', 'destination');
 
 ## Installation via Composer
 
-Add `"joomla/archive": "dev-master"` to the require block in your composer.json, make sure you have `"minimum-stability": "dev"` and then run `composer install`.
+Add `"joomla/archive": "~1.0"` to the require block in your composer.json and then run `composer install`.
 
 ```json
 {
 	"require": {
-		"joomla/archive": "dev-master"
-	},
-	"minimum-stability": "dev"
+		"joomla/archive": "~1.0"
+	}
 }
 ```
 
 Alternatively, you can simply run the following from the command line:
 
 ```sh
-composer init --stability="dev"
-composer require joomla/archive "dev-master"
+composer require joomla/archive "~1.0"
 ```
