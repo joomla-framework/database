@@ -373,20 +373,18 @@ This is useful when you want to make sure that 3rd party applications, won't reg
 
 ## Installation via Composer
 
-Add `"joomla/event": "dev-master"` to the require block in your composer.json, make sure you have `"minimum-stability": "dev"` and then run `composer install`.
+Add `"joomla/event": "~1.0"` to the require block in your composer.json and then run `composer install`.
 
 ```json
 {
 	"require": {
-		"joomla/event": "dev-master"
-	},
-	"minimum-stability": "dev"
+		"joomla/event": "~1.0"
+	}
 }
 ```
 
 Alternatively, you can simply run the following from the command line:
 
 ```sh
-composer init --stability="dev"
-composer require joomla/event "dev-master"
+composer require joomla/event "~1.0"
 ```
