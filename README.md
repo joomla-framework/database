@@ -34,20 +34,18 @@ Aside from the two methods create and verify methods, this implementation also a
 
 ## Installation via Composer
 
-Add `"joomla/crypt": "dev-master"` to the require block in your composer.json, make sure you have `"minimum-stability": "dev"` and then run `composer install`.
+Add `"joomla/crypt": "~1.0"` to the require block in your composer.json and then run `composer install`.
 
 ```json
 {
 	"require": {
-		"joomla/crypt": "dev-master"
-	},
-	"minimum-stability": "dev"
+		"joomla/crypt": "~1.0"
+	}
 }
 ```
 
 Alternatively, you can simply run the following from the command line:
 
 ```sh
-composer init --stability="dev"
-composer require joomla/crypt "dev-master"
+composer require joomla/crypt "~1.0"
 ```
