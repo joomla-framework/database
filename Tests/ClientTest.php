@@ -87,6 +87,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 		$this->input = new Input;
 		$this->application = new WebInspector;
 
+
+
 		$mockSession = $this->getMock('Joomla\\Session\\Session');
 
 		$this->application->setSession($mockSession);
