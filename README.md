@@ -764,21 +764,18 @@ The following resources contain more information:  [Joomla! API Reference](http:
 
 ## Installation via Composer
 
-Add `"joomla/github": "dev-master"` to the require block in your composer.json, make sure you have
-`"minimum-stability": "dev"` and then run `composer install`.
+Add `"joomla/github": "~1.0"` to the require block in your composer.json and then run `composer install`.
 
 ```json
 {
 	"require": {
-		"joomla/github": "dev-master"
-	},
-	"minimum-stability": "dev"
+		"joomla/github": "~1.0"
+	}
 }
 ```
 
 Alternatively, you can simply run the following from the command line:
 
 ```sh
-composer init --stability="dev"
-composer require joomla/github "dev-master"
+composer require joomla/github "~1.0"
 ```
