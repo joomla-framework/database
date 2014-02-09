@@ -3,7 +3,7 @@
     "type": "joomla-package",
     "description": "Joomla Github Package",
     "keywords": ["joomla", "framework", "github"],
-    "homepage": "https://github.com/joomla/joomla-framework-github",
+    "homepage": "https://github.com/joomla-framework/github-api",
     "license": "GPL-2.0+",
     "require": {
         "php": ">=5.3.10",
@@ -12,11 +12,10 @@
         "joomla/registry": "~1.0",
         "joomla/uri": "~1.0"
     },
-    "target-dir": "Joomla/Github",
     "autoload": {
-    	"psr-0": {
-    		"Joomla\\Github": ""
+    	"psr-4": {
+    		"Joomla\\Github\\": "src/",
+            "Joomla\\Github\\Tests\\": "Tests/"
     	}
-    },
-    "minimum-stability": "beta"
+    }
 }
