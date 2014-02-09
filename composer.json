@@ -6,11 +6,12 @@
     "homepage": "https://github.com/joomla-framework/test",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.3.10"
+        "php": ">=5.3.10",
+        "joomla/database": "~1.0"
     },
     "autoload": {
-    	"psr-4": {
-    		"Joomla\\Test\\": "src/"
-    	}
+        "psr-4": {
+            "Joomla\\Test\\": "src/"
+        }
     }
 }
