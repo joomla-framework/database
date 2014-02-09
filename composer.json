@@ -3,16 +3,18 @@
     "type": "joomla-package",
     "description": "Joomla String Package",
     "keywords": ["joomla", "framework", "string"],
-    "homepage": "https://github.com/joomla/joomla-framework-string",
+    "homepage": "https://github.com/joomla-framework/string",
     "license": "GPL-2.0+",
     "require": {
         "php": ">=5.3.10"
     },
-    "target-dir": "Joomla/String",
-    "autoload": {
-    	"psr-0": {
-    		"Joomla\\String": ""
-    	}
+    "require-dev": {
+        "joomla/test": "~1.0"
     },
-    "minimum-stability": "beta"
+    "autoload": {
+    	"psr-4": {
+    		"Joomla\\String\\": "src/",
+            "Joomla\\String\\Tests\\": "Tests/"
+    	}
+    }
 }
