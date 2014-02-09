@@ -9,11 +9,10 @@
         "php": ">=5.3.10",
         "joomla/log": "~1.0"
     },
-    "target-dir": "Joomla/Filesystem",
     "autoload": {
-    	"psr-0": {
-    		"Joomla\\Filesystem": ""
+    	"psr-4": {
+    		"Joomla\\Filesystem\\": "src/",
+            "Joomla\\Filesystem\\Tests\\": "Tests/"
     	}
-    },
-    "minimum-stability": "beta"
+    }
 }
