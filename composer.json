@@ -19,9 +19,10 @@
     },
     "target-dir": "Joomla/Registry",
     "autoload": {
-    	"psr-0": {
-    		"Joomla\\Registry": ""
-    	}
+        "psr-4": {
+            "Joomla\\Registry\\": "src/",
+            "Joomla\\Registry\\Tests\\": "Tests/"
+        }
     },
     "minimum-stability": "beta"
 }
