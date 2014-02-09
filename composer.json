@@ -3,18 +3,17 @@
     "type": "joomla-package",
     "description": "Joomla Keychain Package",
     "keywords": ["joomla", "framework", "keychain"],
-    "homepage": "https://github.com/joomla/joomla-framework-keychain",
+    "homepage": "https://github.com/joomla-framework/keychain",
     "license": "GPL-2.0+",
     "require": {
         "php": ">=5.3.10",
         "joomla/registry": "~1.0"
     },
-    "target-dir": "Joomla/Keychain",
     "autoload": {
-    	"psr-0": {
-    		"Joomla\\Keychain": ""
-    	}
+        "psr-4": {
+            "Joomla\\Keychain\\": "src/",
+            "Joomla\\Keychain\\Tests\\": "Tests/"
+        }
     },
-    "bin": ["bin/keychain"],
-    "minimum-stability": "beta"
+    "bin": ["bin/keychain"]
 }
