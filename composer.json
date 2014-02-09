@@ -8,6 +8,7 @@
     "require": {
         "php": ">=5.3.10",
         "joomla/input": "~1.0",
+        "joomla/event": "~1.0",
         "joomla/session": "~1.0",
         "joomla/string": "~1.0",
         "joomla/registry": "~1.0",
