@@ -7,7 +7,6 @@
 namespace Joomla\Data\Tests;
 
 use Joomla\Data\DataObject;
-use Joomla\Date\Date;
 use Joomla\Registry\Registry;
 use Joomla\Test\TestHelper;
 
@@ -282,7 +281,7 @@ class DataObjectTest extends \PHPUnit_Framework_TestCase
 
 		$properties = array(
 			'scalar' => 'value_1',
-			'date' => new Date('2012-01-01'),
+			'date' => new \DateTime('2012-01-01'),
 			'registry' => new Registry(array('key' => 'value')),
 			'Object' => new DataObject(
 				array(
@@ -317,7 +316,7 @@ class DataObjectTest extends \PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('Joomla\\Data\\DataObject', $dump->Object->level2->level3->level4);
 
 		$dump = $this->instance->dump(0);
-		$this->assertInstanceOf('Joomla\\Date\\Date', $dump->date);
+		$this->assertInstanceOf('DateTime', $dump->date);
 		$this->assertInstanceOf('Joomla\\Registry\\Registry', $dump->registry);
 		$this->assertInstanceOf('Joomla\\Data\\DataObject', $dump->Object);
 
