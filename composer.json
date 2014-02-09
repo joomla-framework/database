@@ -3,16 +3,15 @@
     "type": "joomla-package",
     "description": "Joomla Uri Package",
     "keywords": ["joomla", "framework", "uri"],
-    "homepage": "https://github.com/joomla/joomla-framework-uri",
+    "homepage": "https://github.com/joomla-framework/uri",
     "license": "GPL-2.0+",
     "require": {
         "php": ">=5.3.10"
     },
-    "target-dir": "Joomla/Uri",
     "autoload": {
-    	"psr-0": {
-    		"Joomla\\Uri": ""
+    	"psr-4": {
+    		"Joomla\\Uri\\": "src/",
+            "Joomla\\Uri\\Tests\\": "Tests/"
     	}
-    },
-    "minimum-stability": "beta"
+    }
 }
