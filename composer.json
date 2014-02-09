@@ -3,7 +3,7 @@
     "type": "joomla-package",
     "description": "Joomla Registry Package",
     "keywords": ["joomla", "framework", "registry"],
-    "homepage": "https://github.com/joomla/joomla-framework-registry",
+    "homepage": "https://github.com/joomla-framework/registry",
     "license": "GPL-2.0+",
     "require": {
         "php": ">=5.3.10",
@@ -17,11 +17,10 @@
     "suggest": {
         "symfony/yaml": "Install 2.* if you require YAML support."
     },
-    "target-dir": "Joomla/Registry",
     "autoload": {
-    	"psr-0": {
-    		"Joomla\\Registry": ""
+    	"psr-4": {
+    		"Joomla\\Registry\\": "src/",
+            "Joomla\\Registry\\Tests\\": "Tests/"
     	}
-    },
-    "minimum-stability": "beta"
+    }
 }
