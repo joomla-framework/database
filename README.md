@@ -125,20 +125,18 @@ If debugging is enabled (using `setDebug(true)`), all queries are logged with a 
 
 ## Installation via Composer
 
-Add `"joomla/database": "dev-master"` to the require block in your composer.json, make sure you have `"minimum-stability": "dev"` and then run `composer install`.
+Add `"joomla/database": "~1.0"` to the require block in your composer.json and then run `composer install`.
 
 ```json
 {
 	"require": {
-		"joomla/database": "dev-master"
-	},
-	"minimum-stability": "dev"
+		"joomla/database": "~1.0"
+	}
 }
 ```
 
 Alternatively, you can simply run the following from the command line:
 
 ```sh
-composer init --stability="dev"
-composer require joomla/database "dev-master"
+composer require joomla/database "~1.0"
 ```
