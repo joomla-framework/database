@@ -4,6 +4,8 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+namespace Joomla\Registry\Tests\Format;
+
 use Joomla\Registry\AbstractRegistryFormat;
 
 /**
@@ -11,7 +13,7 @@ use Joomla\Registry\AbstractRegistryFormat;
  *
  * @since  1.0
  */
-class JRegistryFormatINITest extends PHPUnit_Framework_TestCase
+class JRegistryFormatINITest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * Test the Ini::objectToString method.
@@ -24,13 +26,13 @@ class JRegistryFormatINITest extends PHPUnit_Framework_TestCase
 	{
 		$class = AbstractRegistryFormat::getInstance('INI');
 		$options = null;
-		$object = new stdClass;
+		$object = new \stdClass;
 		$object->foo = 'bar';
 		$object->booleantrue = true;
 		$object->booleanfalse = false;
 		$object->numericint = 42;
 		$object->numericfloat = 3.1415;
-		$object->section = new stdClass;
+		$object->section = new \stdClass;
 		$object->section->key = 'value';
 
 		// Test basic object to string.
@@ -54,10 +56,10 @@ class JRegistryFormatINITest extends PHPUnit_Framework_TestCase
 
 		$string2 = "[section]\nfoo=bar";
 
-		$object1 = new stdClass;
+		$object1 = new \stdClass;
 		$object1->foo = 'bar';
 
-		$object2 = new stdClass;
+		$object2 = new \stdClass;
 		$object2->section = $object1;
 
 		// Test INI format string without sections.
@@ -77,7 +79,7 @@ class JRegistryFormatINITest extends PHPUnit_Framework_TestCase
 		// Test empty string
 		$this->assertThat(
 			$class->stringToObject(null),
-			$this->equalTo(new stdClass)
+			$this->equalTo(new \stdClass)
 		);
 
 		$string3 = "[section]\nfoo=bar\n;Testcomment\nkey=value\n\n/brokenkey=)brokenvalue";
@@ -89,7 +91,7 @@ class JRegistryFormatINITest extends PHPUnit_Framework_TestCase
 		);
 
 		$string4 = "boolfalse=false\nbooltrue=true\nkeywithoutvalue\nnumericfloat=3.1415\nnumericint=42\nkey=\"value\"";
-		$object3 = new stdClass;
+		$object3 = new \stdClass;
 		$object3->boolfalse = false;
 		$object3->booltrue = true;
 		$object3->numericfloat = 3.1415;

@@ -4,6 +4,8 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+namespace Joomla\Registry\Tests;
+
 use Joomla\Registry\Registry;
 use Joomla\Test\TestHelper;
 
@@ -12,7 +14,7 @@ use Joomla\Test\TestHelper;
  *
  * @since  1.0
  */
-class RegistryTest extends PHPUnit_Framework_TestCase
+class RegistryTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * Test the Joomla\Registry\Registry::__clone method.
@@ -50,7 +52,7 @@ class RegistryTest extends PHPUnit_Framework_TestCase
 	 */
 	public function test__toString()
 	{
-		$object = new stdClass;
+		$object = new \stdClass;
 		$a = new Registry($object);
 		$a->set('foo', 'bar');
 
@@ -77,7 +79,7 @@ class RegistryTest extends PHPUnit_Framework_TestCase
 			$this->markTestSkipped('This test requires PHP 5.4 or newer.');
 		}
 
-		$object = new stdClass;
+		$object = new \stdClass;
 		$a = new Registry($object);
 		$a->set('foo', 'bar');
 
@@ -148,7 +150,7 @@ class RegistryTest extends PHPUnit_Framework_TestCase
 	public function testBindData()
 	{
 		$a = new Registry;
-		$parent = new stdClass;
+		$parent = new \stdClass;
 
 		TestHelper::invoke($a, 'bindData', $parent, 'foo');
 		$this->assertThat(
@@ -257,10 +259,10 @@ class RegistryTest extends PHPUnit_Framework_TestCase
 		$c = Registry::getInstance('c');
 
 		// Check the object type.
-		$this->assertThat(
-			$a instanceof Joomla\Registry\Registry,
-			$this->isTrue(),
-			'Line: ' . __LINE__ . '.'
+		$this->assertInstanceOf(
+			'\\Joomla\\Registry\\Registry',
+			$a,
+			'Line ' . __LINE__ . ' - Object $a should be an instance of Registry.'
 		);
 
 		// Check cache handling for same registry id.
@@ -419,7 +421,7 @@ class RegistryTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testLoadObject()
 	{
-		$object = new stdClass;
+		$object = new \stdClass;
 		$object->foo = 'testloadobject';
 
 		$registry = new Registry;
@@ -555,7 +557,7 @@ class RegistryTest extends PHPUnit_Framework_TestCase
 
 		// Chicking we merge a non Registry object will return error.
 		$a = new Registry;
-		$b = new stdClass;
+		$b = new Registry;
 
 		try
 		{
@@ -700,10 +702,10 @@ class RegistryTest extends PHPUnit_Framework_TestCase
 		$a->set('foo2', 'testtoobject2');
 		$a->set('config.foo3', 'testtoobject3');
 
-		$expected = new stdClass;
+		$expected = new \stdClass;
 		$expected->foo1 = 'testtoobject1';
 		$expected->foo2 = 'testtoobject2';
-		$expected->config = new StdClass;
+		$expected->config = new \stdClass;
 		$expected->config->foo3 = 'testtoobject3';
 
 		$this->assertThat(

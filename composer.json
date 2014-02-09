@@ -18,9 +18,9 @@
         "symfony/yaml": "Install 2.* if you require YAML support."
     },
     "autoload": {
-    	"psr-4": {
-    		"Joomla\\Registry\\": "src/",
+        "psr-4": {
+            "Joomla\\Registry\\": "src/",
             "Joomla\\Registry\\Tests\\": "Tests/"
-    	}
+        }
     }
 }
