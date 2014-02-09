@@ -19,7 +19,8 @@
     },
     "autoload": {
     	"psr-4": {
-    		"Joomla\\Controller\\": "src/"
+    		"Joomla\\Controller\\": "src/",
+            "Joomla\\Controller\\Tests\\": "Tests/"
     	}
     }
 }
