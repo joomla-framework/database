@@ -1,4 +1,4 @@
-## The HTTP Package
+## The HTTP Package [![Build Status](https://travis-ci.org/joomla-framework/http.png?branch=master)](https://travis-ci.org/joomla-framework/http)
 
 The HTTP package includes a suite of classes to facilitate RESTful HTTP requests over a variety of transport protocols.
 
