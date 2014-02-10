@@ -1,4 +1,4 @@
-# The Github Package
+# The Github Package [![Build Status](https://travis-ci.org/joomla-framework/github-api.png?branch=master)](https://travis-ci.org/joomla-framework/github-api)
 
 ## Using the Github Package
 
