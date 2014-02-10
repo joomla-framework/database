@@ -1,4 +1,4 @@
-# The Model Package
+# The Model Package [![Build Status](https://travis-ci.org/joomla-framework/model.png?branch=master)](https://travis-ci.org/joomla-framework/model)
 
 ## Interfaces
 
