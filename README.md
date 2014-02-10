@@ -1,4 +1,4 @@
-# The View Package
+# The View Package [![Build Status](https://travis-ci.org/joomla-framework/view.png?branch=master)](https://travis-ci.org/joomla-framework/view)
 
 ## Interfaces
 
