@@ -1,4 +1,4 @@
-# The Archive Package
+# The Archive Package [![Build Status](https://travis-ci.org/joomla-framework/archive.png?branch=master)](https://travis-ci.org/joomla-framework/archive)
 
 The archive package will intelligently load the correct adapter for the specified archive type. It knows how to properly handle the following archive types:
 
