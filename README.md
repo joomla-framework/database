@@ -1,4 +1,4 @@
-# The Filesystem Package
+# The Filesystem Package [![Build Status](https://travis-ci.org/joomla-framework/filesystem.png?branch=master)](https://travis-ci.org/joomla-framework/filesystem)
 
 
 ## Installation via Composer
