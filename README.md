@@ -1,4 +1,4 @@
-# The Input Package
+# The Input Package [![Build Status](https://travis-ci.org/joomla-framework/input.png?branch=master)](https://travis-ci.org/joomla-framework/input)
 
 This package comprises of four classes, `Input\Input`and four sub-classes extended from it: `Input\Cli`, `Input\Cookie`, `Input\Files`, and `Input\Json`. An input object is generally owned by the application and explicitly added to an application class as a public property, such as can be found in `Application\AbstractApplication`.
 
