@@ -1,4 +1,4 @@
-# The OAuth2 Package
+# The OAuth2 Package [![Build Status](https://travis-ci.org/joomla-framework/oauth2.png?branch=master)](https://travis-ci.org/joomla-framework/oauth2)
 
 ## Installation via Composer
 
