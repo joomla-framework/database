@@ -1,4 +1,4 @@
-# The Language Package
+# The Language Package [![Build Status](https://travis-ci.org/joomla-framework/language.png?branch=master)](https://travis-ci.org/joomla-framework/language)
 
 ## Usage
 
