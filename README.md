@@ -1,4 +1,4 @@
-# The Session Package
+# The Session Package [![Build Status](https://travis-ci.org/joomla-framework/session.png?branch=master)](https://travis-ci.org/joomla-framework/session)
 
 
 ## Installation via Composer
