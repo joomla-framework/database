@@ -1,4 +1,4 @@
-# The Registry Package
+# The Registry Package [![Build Status](https://travis-ci.org/joomla-framework/registry.png?branch=master)](https://travis-ci.org/joomla-framework/registry)
 
 ``` php
 use Joomla\Registry\Registry;
