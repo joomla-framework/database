@@ -1,4 +1,4 @@
-# The Filter Package
+# The Filter Package [![Build Status](https://travis-ci.org/joomla-framework/filter.png?branch=master)](https://travis-ci.org/joomla-framework/filter)
 
 
 ## Installation via Composer
