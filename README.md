@@ -1,4 +1,4 @@
-# The Utilities Package
+# The Utilities Package [![Build Status](https://travis-ci.org/joomla-framework/utilities.png?branch=master)](https://travis-ci.org/joomla-framework/utilities)
 
 ## Using ArrayHelper
 
