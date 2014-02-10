@@ -1,4 +1,4 @@
-# The Application Package
+# The Application Package [![Build Status](https://travis-ci.org/joomla-framework/application.png?branch=master)](https://travis-ci.org/joomla-framework/application)
 
 ## Initialising Applications
 
