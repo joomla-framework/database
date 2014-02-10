@@ -1,4 +1,4 @@
-## The Uri Package
+## The Uri Package [![Build Status](https://travis-ci.org/joomla-framework/uri.png?branch=master)](https://travis-ci.org/joomla-framework/uri)
 
 ### Introduction
 
