@@ -4,11 +4,15 @@ php:
   - 5.3
   - 5.4
 
+services:
+  - memcached # will start memcached
+
 before_script:
   - composer update --dev
   - pyrus channel-discover pear.phpunit.de
   - pyrus install --force phpunit/DbUnit
   - phpenv rehash
+  - phpenv config-add build/travis/phpenv/memcached.ini
 
 script:
   - phpunit
