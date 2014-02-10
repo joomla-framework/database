@@ -15,4 +15,4 @@ before_script:
   - psql -d joomla_ut -a -f Tests/Stubs/postgresql.sql
 
 script:
-  - phpunit
+  - phpunit --configuration phpunit.travis.xml
