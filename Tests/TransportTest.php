@@ -16,10 +16,10 @@ use Joomla\Uri\Uri;
 class TransportTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var    Registry  Options for the Transport object.
+	 * @var    array  Options for the Transport object.
 	 * @since  1.0
 	 */
-	protected $options;
+	protected $options = array();
 
 	/**
 	 * @var    string  The URL string for the HTTP stub.
@@ -38,8 +38,6 @@ class TransportTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-
-		$this->options = $this->getMock('Joomla\\Registry\\Registry', array('get', 'set'));
 
 		if (!defined('JTEST_HTTP_STUB') && getenv('JTEST_HTTP_STUB') == '')
 		{
