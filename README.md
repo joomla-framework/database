@@ -1,4 +1,4 @@
-## The Profiler Package
+## The Profiler Package [![Build Status](https://travis-ci.org/joomla-framework/profiler.png?branch=master)](https://travis-ci.org/joomla-framework/profiler)
 
 The Joomla Framework provides you a Profiler to profile the time that it takes to do certain tasks or reach various milestones as your extension runs.
 
