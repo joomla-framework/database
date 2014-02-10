@@ -1,4 +1,4 @@
-## The Keychain Package
+## The Keychain Package [![Build Status](https://travis-ci.org/joomla-framework/keychain.png?branch=master)](https://travis-ci.org/joomla-framework/keychain)
 
 The keychain provides a way to securely store sensitive information such as access credentials or any other data.
 
