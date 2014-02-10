@@ -1,4 +1,4 @@
-# The Database Package
+# The Database Package [![Build Status](https://travis-ci.org/joomla-framework/database.png?branch=master)](https://travis-ci.org/joomla-framework/database)
 
 ## Introduction
 
