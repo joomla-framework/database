@@ -1,4 +1,4 @@
-## The Crypt Package
+## The Crypt Package [![Build Status](https://travis-ci.org/joomla-framework/crypt.png?branch=master)](https://travis-ci.org/joomla-framework/crypt)
 
 The Crypt password provides a set of classes that can be used for encrypting and hashing data.
 
