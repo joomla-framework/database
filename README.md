@@ -1,4 +1,4 @@
-## The OAuth1 Package
+## The OAuth1 Package [![Build Status](https://travis-ci.org/joomla-framework/oauth1.png?branch=master)](https://travis-ci.org/joomla-framework/oauth1)
 
 ### Using the OAuth1 Package
 
