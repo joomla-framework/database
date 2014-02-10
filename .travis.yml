@@ -13,4 +13,4 @@ before_script:
   - composer update --dev
 
 script:
-  - phpunit
+  - phpunit --configuration phpunit.travis.xml
