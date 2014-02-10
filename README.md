@@ -1,4 +1,4 @@
-# The String Package
+# The String Package [![Build Status](https://travis-ci.org/joomla-framework/string.png?branch=master)](https://travis-ci.org/joomla-framework/string)
 
 
 ## Installation via Composer
