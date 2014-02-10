@@ -1,4 +1,4 @@
-# The Router Package
+# The Router Package [![Build Status](https://travis-ci.org/joomla-framework/router.png?branch=master)](https://travis-ci.org/joomla-framework/router)
 
 ## The standard router
 
