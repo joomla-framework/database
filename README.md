@@ -1,4 +1,4 @@
-# The Event Package
+# The Event Package [![Build Status](https://travis-ci.org/joomla-framework/event.png?branch=master)](https://travis-ci.org/joomla-framework/event)
 
 The event package provides foundations to build event systems and an implementation supporting prioritized listeners.
 
