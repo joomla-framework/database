@@ -115,7 +115,7 @@ To create a Twig function to do this after creating the Twig_Environment and bef
 	$loader = new \Twig_Loader_Filesystem($this->path);
 	$twig = new \Twig_Environment($loader);
 
-	$jtextFunction = new \Twig_SimpleFunction('text',function($string){
+	$jtextFunction = new \Twig_SimpleFunction('jtext',function($string){
 		$translation = Text::_($string);
 		return $translation;
 	},array('is_safe'=>array('html')));
