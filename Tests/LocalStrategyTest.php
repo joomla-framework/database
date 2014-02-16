@@ -72,7 +72,7 @@ class LocalStrategyTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals(false, $localStrategy->authenticate());
 
-		$this->assertEquals(Authentication::INVALID_PASSWORD, $localStrategy->getResult());
+		$this->assertEquals(Authentication::INVALID_CREDENTIALS, $localStrategy->getResult());
 	}
 
 	/**
@@ -96,7 +96,7 @@ class LocalStrategyTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals(false, $localStrategy->authenticate());
 
-		$this->assertEquals(Authentication::MISSING_CREDENTIALS, $localStrategy->getResult());
+		$this->assertEquals(Authentication::NO_CREDENTIALS, $localStrategy->getResult());
 	}
 
 	/**
