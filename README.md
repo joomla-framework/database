@@ -22,7 +22,7 @@ use Joomla\Input;
 $input = new Input\Input;
 
 // Construction with data injection.
-$input = new Input\Input(array('foo' => 'bar');
+$input = new Input\Input(array('foo' => 'bar'));
 
 // Construction with a custom filter.
 $filter = new InputFilter(/* custom settings */);
