@@ -15,6 +15,12 @@ use Joomla\Archive\Tar as ArchiveTar;
  */
 class TarTest extends \PHPUnit_Framework_TestCase
 {
+
+	/**
+	 * Output directory
+	 *
+	 * @var string
+	 */
 	protected static $outputPath;
 
 	/**

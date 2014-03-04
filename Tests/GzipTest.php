@@ -15,6 +15,12 @@ use Joomla\Archive\Gzip as ArchiveGzip;
  */
 class GzipTest extends \PHPUnit_Framework_TestCase
 {
+
+	/**
+	 * Output directory
+	 *
+	 * @var string
+	 */
 	protected static $outputPath;
 
 	/**
