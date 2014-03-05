@@ -15,6 +15,12 @@ use Joomla\Archive\Bzip2 as ArchiveBzip2;
  */
 class Bzip2Test extends \PHPUnit_Framework_TestCase
 {
+
+	/**
+	 * Output directory
+	 *
+	 * @var string
+	 */
 	protected static $outputPath;
 
 	/**
