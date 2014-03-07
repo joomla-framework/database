@@ -27,7 +27,7 @@ $registry->loadString('<root></root>', 'xml');
 
 // Load by object or array
 $registry->loadObject($object);
-$registry->loadaArray($array);
+$registry->loadArray($array);
 
 // Load by file
 $registry->loadFile($root . '/config/config.json', 'json');
