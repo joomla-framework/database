@@ -9,18 +9,18 @@ namespace Joomla\Archive\Tests;
 use Joomla\Archive\Zip as ArchiveZip;
 
 /**
- * Inspector for the JApplicationBase class.
+ * Inspector for the ArchiveZip class.
  *
  * @since  1.0
  */
 class ZipInspector extends ArchiveZip
 {
 	/**
-	 * Test...
+	 * Inspects the extractCustom Method.
 	 *
-	 * @param   string  $archive      @todo
-	 * @param   string  $destination  @todo
-	 * @param   array   $options      @todo
+	 * @param   string  $archive      Path to zip archive to extract
+	 * @param   string  $destination  Path to extract archive into
+	 * @param   array   $options      An array of options
 	 *
 	 * @return mixed
 	 */
@@ -30,11 +30,11 @@ class ZipInspector extends ArchiveZip
 	}
 
 	/**
-	 * Test...
+	 * Inspects the extractNative Method.
 	 *
-	 * @param   string  $archive      @todo
-	 * @param   string  $destination  @todo
-	 * @param   array   $options      @todo
+	 * @param   string  $archive      Path to zip archive to extract
+	 * @param   string  $destination  Path to extract archive into
+	 * @param   array   $options      An array of options
 	 *
 	 * @return bool
 	 */
