@@ -27,6 +27,18 @@ abstract class CliOutput
 	protected $processor;
 
 	/**
+	 * Constructor
+	 *
+	 * @param   ProcessorInterface  $processor  ProcessorInterface object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function __constructor(ProcessorInterface $processor = null)
+	{
+		$this->setProcessor(($processor instanceof ProcessorInterface) ? $processor : new Output\Processor\ColorProcessor);
+	}
+
+	/**
 	 * Set a processor
 	 *
 	 * @param   ProcessorInterface  $processor  The output processor.
@@ -48,10 +60,16 @@ abstract class CliOutput
 	 * @return  ProcessorInterface
 	 *
 	 * @since   1.0
+	 * @throws  \RuntimeException
 	 */
 	public function getProcessor()
 	{
-		return $this->processor;
+		if ($this->processor)
+		{
+			return $this->processor;
+		}
+
+		throw new \RuntimeException('A ProcessorInterface object has not been set.');
 	}
 
 	/**
