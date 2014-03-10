@@ -13,7 +13,7 @@ use Joomla\DI\Container;
 /**
  * Defines the trait for a Container Aware Class.
  *
- * @since  1.1.2
+ * @since  1.2
  *
  * @note   Traits are available in PHP 5.4+
  */
@@ -23,7 +23,7 @@ trait ContainerAwareTrait
 	 * DI Container
 	 *
 	 * @var    Container
-	 * @since  1.1.2
+	 * @since  1.2
 	 */
 	private $container;
 
@@ -32,7 +32,7 @@ trait ContainerAwareTrait
 	 *
 	 * @return  Container
 	 *
-	 * @since   1.1.2
+	 * @since   1.2
 	 *
 	 * @throws  \UnexpectedValueException May be thrown if the container has not been set.
 	 */
@@ -53,7 +53,7 @@ trait ContainerAwareTrait
 	 *
 	 * @return  mixed  Returns itself to support chaining.
 	 *
-	 * @since   1.1.2
+	 * @since   1.2
 	 */
 	public function setContainer(Container $container)
 	{
