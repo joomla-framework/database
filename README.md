@@ -390,6 +390,28 @@ be reasonable for the controllers to have access to the container in order to bu
 > __NOTE:__ The business layer of your app (eg: Models) should _never_ be container aware. Doing so will
 > make your code harder to test, and is a far cry from best practices.
 
+### Container Aware Trait
+
+Since PHP 5.4 traits are [available](http://www.php.net/traits), so you can use `ContainerAwareTrait`.
+
+Usage:
+
+```php
+use Joomla\DI\ContainerAwareInterface,
+    Joomla\DI\ContainerAwareTrait,
+	Joomla\Controller\AbstractController;
+
+class MyConroller extends AbstractController implements ContainerAwareInterface
+{
+    use ContainerAwareTrait;
+
+	public function execute()
+	{
+		$container = $this->getContainer();
+	}
+}
+```
+
 ## Installation via Composer
 
 Add `"joomla/di": "~1.0"` to the require block in your composer.json and then run `composer install`.
