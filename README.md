@@ -398,7 +398,7 @@ Usage:
 
 ```php
 use Joomla\DI\ContainerAwareInterface,
-    Joomla\DI\ContainerAwareTrait,
+	Joomla\DI\ContainerAwareTrait,
 	Joomla\Controller\AbstractController;
 
 class MyConroller extends AbstractController implements ContainerAwareInterface
