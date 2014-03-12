@@ -6,7 +6,8 @@
     "homepage": "https://github.com/joomla-framework/uri",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.3.10"
+        "php": ">=5.3.10",
+        "joomla/test": "~1.0"
     },
     "autoload": {
     	"psr-4": {

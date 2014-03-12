@@ -7,6 +7,7 @@
 namespace Joomla\Uri\Tests;
 
 use Joomla\Uri\Uri;
+use Joomla\Test\TestHelper;
 
 /**
  * Tests for the Joomla\Uri\Uri class.
@@ -63,14 +64,12 @@ class UriTest extends \PHPUnit_Framework_TestCase
 	public function testBuildQuery()
 	{
 		$this->assertThat(
-			$this->invokeMethod(
+			TestHelper::invoke(
 				$this->object,
 				'buildQuery',
 				array(
-					array(
-						'var' => 'value',
-						'foo' => 'bar'
-					)
+					'var' => 'value',
+					'foo' => 'bar'
 				)
 			),
 			$this->equalTo('var=value&foo=bar')
@@ -88,28 +87,28 @@ class UriTest extends \PHPUnit_Framework_TestCase
 	public function testcleanPath()
 	{
 		$this->assertThat(
-			$this->invokeMethod(
+			TestHelper::invoke(
 				$this->object,
 				'cleanPath',
-				array('/foo/bar/../boo.php')
+				'/foo/bar/../boo.php'
 			),
 			$this->equalTo('/foo/boo.php')
 		);
 
 		$this->assertThat(
-			$this->invokeMethod(
+			TestHelper::invoke(
 				$this->object,
 				'cleanPath',
-				array('/foo/bar/../../boo.php')
+				'/foo/bar/../../boo.php'
 			),
 			$this->equalTo('/boo.php')
 		);
 
 		$this->assertThat(
-			$this->invokeMethod(
+			TestHelper::invoke(
 				$this->object,
 				'cleanPath',
-				array('/foo/bar/.././/boo.php')
+				'/foo/bar/.././/boo.php'
 			),
 			$this->equalTo('/foo/boo.php')
 		);
@@ -586,24 +585,5 @@ class UriTest extends \PHPUnit_Framework_TestCase
 			$object->isSSL(),
 			$this->equalTo(false)
 		);
-	}
-
-	/**
-	 * Call protected/private method of a class.
-	 * Taken from https://jtreminio.com
-	 *
-	 * @param object &$object    Instantiated object that we will run method on.
-	 * @param string $methodName Method name to call
-	 * @param array  $parameters Array of parameters to pass into method.
-	 *
-	 * @return mixed Method return.
-	 */
-	public function invokeMethod(&$object, $methodName, array $parameters = array())
-	{
-	    $reflection = new \ReflectionClass(get_class($object));
-	    $method = $reflection->getMethod($methodName);
-	    $method->setAccessible(true);
-
-	    return $method->invokeArgs($object, $parameters);
 	}
 }
