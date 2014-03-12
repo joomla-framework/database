@@ -37,6 +37,20 @@ class UriImmuteableTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test the __set method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 * @covers  Joomla\Uri\UriImmutable::__set
+	 * @expectedException \BadMethodCallException
+	 */
+	public function test__set()
+	{
+		$this->object->uri = 'http://someuser:somepass@www.example.com:80/path/file.html?var=value#fragment';
+	}
+
+	/**
 	 * Test the __toString method.
 	 *
 	 * @return  void
