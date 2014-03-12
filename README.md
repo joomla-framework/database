@@ -40,7 +40,7 @@ class FooTest extends \PHPUnit_Framework_TestCase
 			'method2' => array($this, 'mockMethod2'),
 		);
 
-		TestHelper::assignMockReturns($mockFoo, $this, $mockReturns);
+		TestHelper::assignMockCallbacks($mockFoo, $this, $mockCallbacks);
 	}
 
 	public function mockMethod2($value)
