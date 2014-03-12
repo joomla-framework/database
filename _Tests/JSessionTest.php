@@ -95,8 +95,8 @@ class JSessionTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Test getInstance
 	 *
-	 * @param   string  $store    @todo
-	 * @param   array   $options  @todo
+	 * @param   string  $store    Type of storage for the session
+	 * @param   array   $options  Optional parameters
 	 *
 	 * @dataProvider casesGetInstance
 	 * @covers  JSession::getInstance
