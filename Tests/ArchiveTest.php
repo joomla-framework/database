@@ -205,7 +205,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
+	 * Tests getting adapter.
 	 *
 	 * @return  mixed
 	 *
