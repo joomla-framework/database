@@ -53,6 +53,69 @@ class UriTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test the buildQuery method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 * @covers  Joomla\Uri\Uri::buildQuery
+	 */
+	public function testBuildQuery()
+	{
+		$this->assertThat(
+			$this->invokeMethod(
+				$this->object,
+				'buildQuery',
+				array(
+					array(
+						'var' => 'value',
+						'foo' => 'bar'
+					)
+				)
+			),
+			$this->equalTo('var=value&foo=bar')
+		);
+	}
+
+	/**
+	 * Test the cleanPath method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 * @covers  Joomla\Uri\Uri::cleanPath
+	 */
+	public function testcleanPath()
+	{
+		$this->assertThat(
+			$this->invokeMethod(
+				$this->object,
+				'cleanPath',
+				array('/foo/bar/../boo.php')
+			),
+			$this->equalTo('/foo/boo.php')
+		);
+
+		$this->assertThat(
+			$this->invokeMethod(
+				$this->object,
+				'cleanPath',
+				array('/foo/bar/../../boo.php')
+			),
+			$this->equalTo('/boo.php')
+		);
+
+		$this->assertThat(
+			$this->invokeMethod(
+				$this->object,
+				'cleanPath',
+				array('/foo/bar/.././/boo.php')
+			),
+			$this->equalTo('/foo/boo.php')
+		);
+	}
+
+	/**
 	 * Test the parse method.
 	 *
 	 * @return  void
@@ -250,6 +313,15 @@ class UriTest extends \PHPUnit_Framework_TestCase
 		$this->assertThat(
 			$this->object->getQuery(true),
 			$this->equalTo(array('var' => 'value'))
+		);
+
+		// Set a new query
+		$this->object->setQuery('somevar=somevalue');
+
+		// Test if query is null, to build query in getQuery call.
+		$this->assertThat(
+			$this->object->getQuery(),
+			$this->equalTo('somevar=somevalue')
 		);
 	}
 
@@ -514,5 +586,24 @@ class UriTest extends \PHPUnit_Framework_TestCase
 			$object->isSSL(),
 			$this->equalTo(false)
 		);
+	}
+
+	/**
+	 * Call protected/private method of a class.
+	 * Taken from https://jtreminio.com
+	 *
+	 * @param object &$object    Instantiated object that we will run method on.
+	 * @param string $methodName Method name to call
+	 * @param array  $parameters Array of parameters to pass into method.
+	 *
+	 * @return mixed Method return.
+	 */
+	public function invokeMethod(&$object, $methodName, array $parameters = array())
+	{
+	    $reflection = new \ReflectionClass(get_class($object));
+	    $method = $reflection->getMethod($methodName);
+	    $method->setAccessible(true);
+
+	    return $method->invokeArgs($object, $parameters);
 	}
 }
