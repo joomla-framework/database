@@ -75,8 +75,8 @@ class InputTest extends \PHPUnit_Framework_TestCase
 		// Test the set method.
 		$this->instance->post->set('foo', 'notbar');
 		$this->assertThat(
-			$_POST['foo'],
-			$this->equalTo('bar'),
+			$this->instance->post->get('foo'),
+			$this->equalTo('notbar'),
 			'Line: ' . __LINE__ . '.'
 		);
 
