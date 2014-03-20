@@ -271,7 +271,7 @@ abstract class AbstractUri implements UriInterface
 	}
 
 	/**
-	 * Get the URI archor string
+	 * Get the URI anchor string
 	 * Everything after the "#".
 	 *
 	 * @return  string  The URI anchor string.
