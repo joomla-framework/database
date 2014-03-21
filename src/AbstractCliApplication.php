@@ -26,6 +26,12 @@ abstract class AbstractCliApplication extends AbstractApplication
 	protected $output;
 
 	/**
+	 * @var    CliInput   Cli Input object
+	 * @since  1.2
+	 */
+	protected $cliInput;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @param   Input\Cli  $input   An optional argument to provide dependency injection for the application's
@@ -60,6 +66,9 @@ abstract class AbstractCliApplication extends AbstractApplication
 		$this->set('cwd', getcwd());
 
 		$this->output = ($output instanceof CliOutput) ? $output : new Cli\Output\Stdout;
+
+		// Set the input object.
+		$this->cliInput = new Cli\CliInput;
 	}
 
 	/**
@@ -72,6 +81,18 @@ abstract class AbstractCliApplication extends AbstractApplication
 	public function getOutput()
 	{
 		return $this->output;
+	}
+
+	/**
+	 * Get an cli input object.
+	 *
+	 * @return  CliInput
+	 *
+	 * @since   1.2
+	 */
+	public function getCliInput()
+	{
+		return $this->cliInput;
 	}
 
 	/**
@@ -102,6 +123,6 @@ abstract class AbstractCliApplication extends AbstractApplication
 	 */
 	public function in()
 	{
-		return rtrim(fread(STDIN, 8192), "\n\r");
+		return $this->cliInput->in();
 	}
 }
