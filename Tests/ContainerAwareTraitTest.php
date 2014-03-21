@@ -25,6 +25,22 @@ class ContainerAwareTraitTest extends \PHPUnit_Framework_TestCase
 	protected $object;
 
 	/**
+	 * This method is called before the first test of this test class is run.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.2
+	 */
+	public static function setUpBeforeClass()
+	{
+		// Only run tests on PHP 5.4+
+		if (version_compare(PHP_VERSION, '5.4', '<'))
+		{
+			static::markTestSkipped('Tests are not present in PHP 5.4');
+		}
+	}
+
+	/**
 	 * Setup the tests.
 	 *
 	 * @return  void
