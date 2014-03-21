@@ -86,13 +86,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 */
 	public function __construct(Input $input = null, Registry $config = null, Web\WebClient $client = null)
 	{
-		parent::__construct($input, $config);
-
 		$this->client = $client instanceof Web\WebClient ? $client : new Web\WebClient;
-
-		// Set the execution datetime and timestamp;
-		$this->set('execution.datetime', gmdate('Y-m-d H:i:s'));
-		$this->set('execution.timestamp', time());
 
 		// Setup the response object.
 		$this->response = new \stdClass;
@@ -100,8 +94,15 @@ abstract class AbstractWebApplication extends AbstractApplication
 		$this->response->headers = array();
 		$this->response->body = array();
 
+		// Call the constructor as late as possible (it runs `initialise`).
+		parent::__construct($input, $config);
+
 		// Set the system URIs.
 		$this->loadSystemUris();
+
+		// Set the execution datetime and timestamp;
+		$this->set('execution.datetime', gmdate('Y-m-d H:i:s'));
+		$this->set('execution.timestamp', time());
 	}
 
 	/**

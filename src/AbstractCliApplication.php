@@ -50,6 +50,9 @@ abstract class AbstractCliApplication extends AbstractApplication
 
 		// @codeCoverageIgnoreEnd
 
+		$this->output = ($output instanceof CliOutput) ? $output : new Cli\Output\Stdout;
+
+		// Call the constructor as late as possible (it runs `initialise`).
 		parent::__construct($input instanceof Input\Input ? $input : new Input\Cli, $config);
 
 		// Set the execution datetime and timestamp;
@@ -58,8 +61,6 @@ abstract class AbstractCliApplication extends AbstractApplication
 
 		// Set the current directory.
 		$this->set('cwd', getcwd());
-
-		$this->output = ($output instanceof CliOutput) ? $output : new Cli\Output\Stdout;
 	}
 
 	/**
