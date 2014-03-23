@@ -25,11 +25,12 @@ class Stdout extends CliOutput
 	 *
 	 * @return  Stdout  Instance of $this to allow chaining.
 	 *
+	 * @codeCoverageIgnore
 	 * @since   1.0
 	 */
 	public function out($text = '', $nl = true)
 	{
-		fwrite(STDOUT, $this->processor->process($text) . ($nl ? "\n" : null));
+		fwrite(STDOUT, $this->getProcessor()->process($text) . ($nl ? "\n" : null));
 
 		return $this;
 	}

@@ -8,7 +8,6 @@
 
 namespace Joomla\Application\Cli;
 
-use Joomla\Application\Cli\Output\Stdout;
 use Joomla\Application\Cli\Output\Processor\ProcessorInterface;
 
 /**
@@ -25,6 +24,18 @@ abstract class CliOutput
 	 * @since  1.0
 	 */
 	protected $processor;
+
+	/**
+	 * Constructor
+	 *
+	 * @param   ProcessorInterface  $processor  The output processor.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function __construct(ProcessorInterface $processor = null)
+	{
+		$this->setProcessor(($processor instanceof ProcessorInterface) ? $processor : new Output\Processor\ColorProcessor);
+	}
 
 	/**
 	 * Set a processor
@@ -48,10 +59,16 @@ abstract class CliOutput
 	 * @return  ProcessorInterface
 	 *
 	 * @since   1.0
+	 * @throws  \RuntimeException
 	 */
 	public function getProcessor()
 	{
-		return $this->processor;
+		if ($this->processor)
+		{
+			return $this->processor;
+		}
+
+		throw new \RuntimeException('A ProcessorInterface object has not been set.');
 	}
 
 	/**
