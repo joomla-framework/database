@@ -112,7 +112,7 @@ class TestHelper
 	 *
 	 * Example usage:
 	 *
-	 * $this->asserTrue(TestHelper::invoke($this->object, 'methodName', 123));
+	 * $this->assertTrue(TestHelper::invoke($this->object, 'methodName', 123));
 	 * where 123 is the input parameter for your method
 	 *
 	 * @param   object  $object      The object on which to invoke the method.
