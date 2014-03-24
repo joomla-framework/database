@@ -13,7 +13,7 @@ use Joomla\Test\TestHelper;
 /**
  * Test class for Joomla\Application\Cli\Output\Stdout.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  
  */
 class StdoutTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class StdoutTest extends \PHPUnit_Framework_TestCase
 	 * Object under test
 	 *
 	 * @var    Stdout
-	 * @since  __DEPLOY_VERSION__
+	 * @since  
 	 */
 	protected $object;
 
@@ -31,7 +31,7 @@ class StdoutTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   
 	 */
 	protected function setUp()
 	{
@@ -43,7 +43,7 @@ class StdoutTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   
 	 * @expectedException  \RuntimeException
 	 */
 	public function testGetProcessorException()
@@ -58,7 +58,7 @@ class StdoutTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   
 	 */
 	public function testSetAndGetProcessor()
 	{
@@ -75,7 +75,7 @@ class StdoutTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   
 	 */
 	public function test__constructProcessorInjection()
 	{

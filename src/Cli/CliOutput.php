@@ -30,7 +30,7 @@ abstract class CliOutput
 	 *
 	 * @param   ProcessorInterface  $processor  The output processor.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   
 	 */
 	public function __construct(ProcessorInterface $processor = null)
 	{
