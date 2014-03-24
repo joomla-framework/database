@@ -11,7 +11,7 @@ use Joomla\Application\Cli\Output\Processor\ProcessorInterface;
 /**
  * Class TestProcessor.
  *
- * @since  
+ * @since  1.1.2
  */
 class TestProcessor implements ProcessorInterface
 {
@@ -22,7 +22,7 @@ class TestProcessor implements ProcessorInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   
+	 * @since   1.1.2
 	 */
 	public function process($string)
 	{
