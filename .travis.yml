@@ -10,6 +10,7 @@ before_install:
   - sh -e .travis/scripts/apache2-configure.sh
 
 before_script:
+  - composer self-update
   - composer update --dev
 
 script:
