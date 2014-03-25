@@ -156,6 +156,43 @@ class TransportTest extends \PHPUnit_Framework_TestCase
 		);
 	}
 
+  /**
+   * Tests the request method with credentials supplied
+   *
+   * @param   string  $transportClass  The transport class to test
+   *
+   * @return  void
+   *
+   * @since      1.0
+   * @dataProvider  transportProvider
+   */
+  public function testRequestCredentials($transportClass)
+  {
+    $transport = new $transportClass($this->options);
+
+    $uri = new Uri($this->stubUrl);
+    $credentialedUri = new Uri($uri->toString(array('scheme')) . 'username:password@' . $uri->toString(array('host', 'port', 'path', 'query', 'fragment')));
+
+    $response = $transport->request('get', $credentialedUri);
+
+    $body = json_decode($response->body);
+
+    $this->assertThat(
+      $response->code,
+      $this->equalTo(200)
+    );
+
+    $this->assertThat(
+      $body->username,
+      $this->equalTo('username')
+    );
+
+    $this->assertThat(
+      $body->password,
+      $this->equalTo('password')
+    );
+  }
+
 	/**
 	 * Tests the request method with a post request and array data
 	 *
