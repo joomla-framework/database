@@ -116,12 +116,12 @@ class Socket implements TransportInterface
 			$headers['User-Agent'] = $userAgent;
 		}
 
-    // If we have a username then we include basic authentication credentials.
-    if ($uri->getUser())
-    {
-      $authString = $uri->getUser() . ':' . $uri->getPass();
-      $headers['Authorization'] = 'Basic ' . base64_encode($authString);
-    }
+		// If we have a username then we include basic authentication credentials.
+		if ($uri->getUser())
+		{
+			$authString = $uri->getUser() . ':' . $uri->getPass();
+			$headers['Authorization'] = 'Basic ' . base64_encode($authString);
+		}
 
 		// If there are custom headers to send add them to the request payload.
 		if (is_array($headers))
