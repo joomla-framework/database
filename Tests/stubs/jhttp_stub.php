@@ -24,6 +24,9 @@ $response->http_accept = getVar($_SERVER, 'HTTP_ACCEPT');
 $response->http_accept_charset = getVar($_SERVER, 'HTTP_ACCEPT_CHARSET');
 $response->http_accept_encoding = getVar($_SERVER, 'HTTP_ACCEPT_ENCODING');
 
+$response->username = getVar($_SERVER, 'PHP_AUTH_USER');
+$response->password = getVar($_SERVER, 'PHP_AUTH_PW');
+
 $response->http_referer = getVar($_SERVER, 'HTTP_REFERER');
 
 $response->get = $_GET;
