@@ -1,0 +1,14 @@
+# IDE/System based files and folders #
+.buildpath
+.project
+.settings
+.DS_Store
+.idea
+
+# Composer installation #
+vendor/*
+composer.phar
+composer.lock
+
+# Local PHPUnit configuration #
+phpunit.xml
