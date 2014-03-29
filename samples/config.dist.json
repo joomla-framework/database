@@ -1,0 +1,9 @@
+{
+	"template": {
+		"renderer" : "twig",
+		"path"     : "/absolute/path/to/templates",
+		"partials" : "/absolute/path/to/templates/partials",
+		"debug"    : false,
+		"extension": ".twig"
+	}
+}
