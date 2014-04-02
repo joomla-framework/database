@@ -309,7 +309,23 @@ class Registry implements \JsonSerializable, \ArrayAccess
 	 */
 	public function merge(Registry $source, $recursive = false)
 	{
-		$this->bindData($this->data, $source->toArray(), $recursive);
+		if (!$source instanceof Registry)
+		{
+			return false;
+		}
+
+		$data  = $source->toArray();
+		$array = array();
+
+		foreach ($data as $k => $v)
+		{
+			if (($v !== null) && ($v !== ''))
+			{
+				$array[$k] = $v;
+			}
+		}
+
+		$this->bindData($this->data, $array, $recursive);
 
 		return $this;
 	}
@@ -482,12 +498,7 @@ class Registry implements \JsonSerializable, \ArrayAccess
 
 		foreach ($data as $k => $v)
 		{
-			if ($v === '' || $v === null)
-			{
-				continue;
-			}
-
-			if ((is_array($v) && ArrayHelper::isAssociative($v)) || is_object($v) && $recursive)
+			if ($recursive && ((is_array($v) && ArrayHelper::isAssociative($v)) || is_object($v)))
 			{
 				if (!isset($parent->$k))
 				{
