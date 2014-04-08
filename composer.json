@@ -6,8 +6,7 @@
     "homepage": "https://github.com/joomla/joomla-framework-filesystem",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.3.10",
-        "joomla/log": "~1.0"
+        "php": ">=5.3.10"
     },
     "autoload": {
     	"psr-4": {

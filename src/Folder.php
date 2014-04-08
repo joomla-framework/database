@@ -8,8 +8,6 @@
 
 namespace Joomla\Filesystem;
 
-use Joomla\Log\Log;
-
 /**
  * A Folder handling class
  *
@@ -119,6 +117,7 @@ abstract class Folder
 	 * @return  boolean  True if successful.
 	 *
 	 * @since   1.0
+	 * @throws  \RuntimeException
 	 */
 	public static function create($path = '', $mode = 0755)
 	{
@@ -137,16 +136,13 @@ abstract class Folder
 
 			if (($nested > 20) || ($parent == $path))
 			{
-				Log::add(__METHOD__ . ': Infinite loop detected', Log::WARNING, 'jerror');
-				$nested--;
-
-				return false;
+				throw new \RuntimeException(__METHOD__ . ': Infinite loop detected');
 			}
 
 			// Create the parent directory
 			if (self::create($parent, $mode) !== true)
 			{
-				// JFolder::create throws an error
+				// Folder::create throws an error
 				$nested--;
 
 				return false;
@@ -195,10 +191,8 @@ abstract class Folder
 
 			if ($inBaseDir == false)
 			{
-				// Return false for JFolder::create because the path to be created is not in open_basedir
-				Log::add(__METHOD__ . ': Path not in open_basedir paths', Log::WARNING, 'jerror');
-
-				return false;
+				// Throw a RuntimeException because the path to be created is not in open_basedir
+				throw new \RuntimeException(__METHOD__ . ': Path not in open_basedir paths');
 			}
 		}
 
@@ -209,9 +203,8 @@ abstract class Folder
 		if (!$ret = @mkdir($path, $mode))
 		{
 			@umask($origmask);
-			Log::add(__METHOD__ . ': Could not create directory.  Path: ' . $path, Log::WARNING, 'jerror');
 
-			return false;
+			throw new \RuntimeException(__METHOD__ . ': Could not create directory.  Path: ' . $path);
 		}
 
 		// Reset umask
@@ -228,6 +221,7 @@ abstract class Folder
 	 * @return  boolean  True on success.
 	 *
 	 * @since   1.0
+	 * @throws  \RuntimeException
 	 * @throws  \UnexpectedValueException
 	 */
 	public static function delete($path)
@@ -238,9 +232,7 @@ abstract class Folder
 		if (!$path)
 		{
 			// Bad programmer! Bad Bad programmer!
-			Log::add(__METHOD__ . ': You can not delete a base directory.', Log::WARNING, 'jerror');
-
-			return false;
+			throw new \RuntimeException(__METHOD__ . ': You can not delete a base directory.');
 		}
 
 		try
@@ -250,15 +242,13 @@ abstract class Folder
 		}
 		catch (\UnexpectedValueException $e)
 		{
-			throw new \UnexpectedValueException($e);
+			throw $e;
 		}
 
 		// Is this really a folder?
 		if (!is_dir($path))
 		{
-			Log::add(sprintf('%1$s: Path is not a folder. Path: %2$s', __METHOD__, $path), Log::WARNING, 'jerror');
-
-			return false;
+			throw new \UnexpectedValueException(sprintf('%1$s: Path is not a folder. Path: %2$s', __METHOD__, $path));
 		}
 
 		// Remove all the files in folder if they exist; disable all filtering
@@ -289,7 +279,7 @@ abstract class Folder
 			}
 			elseif (self::delete($folder) !== true)
 			{
-				// JFolder::delete throws an error
+				// Folder::delete throws an error
 				return false;
 			}
 		}
@@ -302,9 +292,7 @@ abstract class Folder
 		}
 		else
 		{
-			Log::add(sprintf('%1$s: Could not delete folder. Path: %2$s', __METHOD__, $path), Log::WARNING, 'jerror');
-
-			return false;
+			throw new \RuntimeException(sprintf('%1$s: Could not delete folder. Path: %2$s', __METHOD__, $path));
 		}
 	}
 
@@ -373,6 +361,7 @@ abstract class Folder
 	 * @return  array  Files in the given folder.
 	 *
 	 * @since   1.0
+	 * @throws  \UnexpectedValueException
 	 */
 	public static function files($path, $filter = '.', $recurse = false, $full = false, $exclude = array('.svn', 'CVS', '.DS_Store', '__MACOSX'),
 		$excludefilter = array('^\..*', '.*~'))
@@ -383,9 +372,7 @@ abstract class Folder
 		// Is the path a folder?
 		if (!is_dir($path))
 		{
-			Log::add(sprintf('%1$s: Path is not a folder. Path: %2$s', __METHOD__, $path), Log::WARNING, 'jerror');
-
-			return false;
+			throw new \UnexpectedValueException(sprintf('%1$s: Path is not a folder. Path: %2$s', __METHOD__, $path));
 		}
 
 		// Compute the excludefilter string
@@ -420,6 +407,7 @@ abstract class Folder
 	 * @return  array  Folders in the given folder.
 	 *
 	 * @since   1.0
+	 * @throws  \UnexpectedValueException
 	 */
 	public static function folders($path, $filter = '.', $recurse = false, $full = false, $exclude = array('.svn', 'CVS', '.DS_Store', '__MACOSX'),
 		$excludefilter = array('^\..*'))
@@ -430,9 +418,7 @@ abstract class Folder
 		// Is the path a folder?
 		if (!is_dir($path))
 		{
-			Log::add(sprintf('%1$s: Path is not a folder. Path: %2$s', __METHOD__, $path), Log::WARNING, 'jerror');
-
-			return false;
+			throw new \UnexpectedValueException(sprintf('%1$s: Path is not a folder. Path: %2$s', __METHOD__, $path));
 		}
 
 		// Compute the excludefilter string

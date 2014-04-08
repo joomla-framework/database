@@ -168,11 +168,6 @@ class FolderTest extends PHPUnit_Framework_TestCase
 			'Line: ' . __LINE__ . ' non-recursive should return only file name of top folder file'
 		);
 
-		$this->assertFalse(
-			Folder::files('/this/is/not/a/path'),
-			'Line: ' . __LINE__ . ' Non-existent path should return false'
-		);
-
 		$this->assertEquals(
 			array(),
 			Folder::files(Path::clean(__DIR__ . '/tmp/test'), 'nothing.here', true, true, array(), array()),
@@ -184,6 +179,19 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the Folder::files method.
+	 *
+	 * @return  void
+	 *
+	 * @covers             Joomla\Filesystem\Folder::files
+	 * @expectedException  \UnexpectedValueException
+	 */
+	public function testFilesException()
+	{
+		Folder::files('/this/is/not/a/path');
+	}
+
+	/**
 	 * Tests the Folder::folders method.
 	 *
 	 * @return  void
@@ -191,6 +199,7 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	 * @since   1.0
 	 *
 	 * @covers  Joomla\Filesystem\Folder::files
+	 * @covers  Joomla\Filesystem\Folder::folders
 	 * @covers  Joomla\Filesystem\Folder::_items
 	 */
 	public function testFolders()
@@ -302,11 +311,6 @@ class FolderTest extends PHPUnit_Framework_TestCase
 			Folder::folders(Path::clean(__DIR__ . '/tmp/test'), '.', false, false, array(), array())
 		);
 
-		$this->assertFalse(
-			Folder::folders('this/is/not/a/path'),
-			'Line: ' . __LINE__ . ' Non-existent path should return false'
-		);
-
 		// Clean up the folders
 		rmdir(Path::clean(__DIR__ . '/tmp/test/foo2/bar2'));
 		rmdir(Path::clean(__DIR__ . '/tmp/test/foo2/bar1'));
@@ -315,6 +319,19 @@ class FolderTest extends PHPUnit_Framework_TestCase
 		rmdir(Path::clean(__DIR__ . '/tmp/test/foo1/bar1'));
 		rmdir(Path::clean(__DIR__ . '/tmp/test/foo1'));
 		rmdir(Path::clean(__DIR__ . '/tmp/test'));
+	}
+
+	/**
+	 * Tests the Folder::folders method for an exception.
+	 *
+	 * @return  void
+	 *
+	 * @covers             Joomla\Filesystem\Folder::folders
+	 * @expectedException  \UnexpectedValueException
+	 */
+	public function testFoldersException()
+	{
+		Folder::folders('this/is/not/a/path');
 	}
 
 	/**

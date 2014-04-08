@@ -8,8 +8,6 @@
 
 namespace Joomla\Filesystem;
 
-use Joomla\Log\Log;
-
 /**
  * A File handling class
  *
@@ -64,6 +62,8 @@ class File
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
+	 * @throws  \RuntimeException
+	 * @throws  \UnexpectedValueException
 	 */
 	public static function copy($src, $dest, $path = null, $use_streams = false)
 	{
@@ -77,9 +77,7 @@ class File
 		// Check src path
 		if (!is_readable($src))
 		{
-			Log::add(__METHOD__ . ': Cannot find or read file: ' . $src, Log::WARNING, 'jerror');
-
-			return false;
+			throw new \UnexpectedValueException(__METHOD__ . ': Cannot find or read file: ' . $src);
 		}
 
 		if ($use_streams)
@@ -88,9 +86,7 @@ class File
 
 			if (!$stream->copy($src, $dest))
 			{
-				Log::add(sprintf('%1$s(%2$s, %3$s): %4$s', __METHOD__, $src, $dest, $stream->getError()), Log::WARNING, 'jerror');
-
-				return false;
+				throw new \RuntimeException(sprintf('%1$s(%2$s, %3$s): %4$s', __METHOD__, $src, $dest, $stream->getError()));
 			}
 
 			return true;
@@ -99,9 +95,7 @@ class File
 		{
 			if (!@ copy($src, $dest))
 			{
-				Log::add(__METHOD__ . ': Copy failed.', Log::WARNING, 'jerror');
-
-				return false;
+				throw new \RuntimeException(__METHOD__ . ': Copy failed.');
 			}
 
 			return true;
@@ -116,6 +110,7 @@ class File
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
+	 * @throws  \RuntimeException
 	 */
 	public static function delete($file)
 	{
@@ -131,16 +126,11 @@ class File
 
 			// In case of restricted permissions we zap it one way or the other
 			// as long as the owner is either the webserver or the ftp
-			if (@unlink($file))
-			{
-				// Do nothing
-			}
-			else
+			if (!@ unlink($file))
 			{
 				$filename = basename($file);
-				Log::add(__METHOD__ . ': Failed deleting ' . $filename, Log::WARNING, 'jerror');
 
-				return false;
+				throw new \RuntimeException(__METHOD__ . ': Failed deleting ' . $filename);
 			}
 		}
 
@@ -158,6 +148,7 @@ class File
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
+	 * @throws  \RuntimeException
 	 */
 	public static function move($src, $dest, $path = '', $use_streams = false)
 	{
@@ -179,9 +170,7 @@ class File
 
 			if (!$stream->move($src, $dest))
 			{
-				Log::add(__METHOD__ . ': ' . $stream->getError(), Log::WARNING, 'jerror');
-
-				return false;
+				throw new \RuntimeException(__METHOD__ . ': ' . $stream->getError());
 			}
 
 			return true;
@@ -190,9 +179,7 @@ class File
 		{
 			if (!@ rename($src, $dest))
 			{
-				Log::add(__METHOD__ . ': Rename failed.', Log::WARNING, 'jerror');
-
-				return false;
+				throw new \RuntimeException(__METHOD__ . ': Rename failed.');
 			}
 
 			return true;
@@ -209,6 +196,7 @@ class File
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
+	 * @throws  \RuntimeException
 	 */
 	public static function write($file, &$buffer, $use_streams = false)
 	{
@@ -229,9 +217,7 @@ class File
 
 			if (!$stream->writeFile($file, $buffer))
 			{
-				Log::add(sprintf('%1$s(%2$s): %3$s', __METHOD__, $file, $stream->getError()), Log::WARNING, 'jerror');
-
-				return false;
+				throw new \RuntimeException(sprintf('%1$s(%2$s): %3$s', __METHOD__, $file, $stream->getError()));
 			}
 
 			return true;
@@ -255,6 +241,7 @@ class File
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
+	 * @throws  \RuntimeException
 	 */
 	public static function upload($src, $dest, $use_streams = false)
 	{
@@ -275,9 +262,7 @@ class File
 
 			if (!$stream->upload($src, $dest))
 			{
-				Log::add(__METHOD__ . ': ' . $stream->getError(), Log::WARNING, 'jerror');
-
-				return false;
+				throw new \RuntimeException(__METHOD__ . ': ' . $stream->getError());
 			}
 
 			return true;
@@ -293,12 +278,12 @@ class File
 				}
 				else
 				{
-					Log::add(__METHOD__ . ': Failed to change file permissions.', Log::WARNING, 'jerror');
+					throw new \RuntimeException(__METHOD__ . ': Failed to change file permissions.');
 				}
 			}
 			else
 			{
-				Log::add(__METHOD__ . ': Failed to move file.', Log::WARNING, 'jerror');
+				throw new \RuntimeException(__METHOD__ . ': Failed to move file.');
 			}
 
 			return false;
