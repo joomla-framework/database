@@ -309,11 +309,6 @@ class Registry implements \JsonSerializable, \ArrayAccess
 	 */
 	public function merge(Registry $source, $recursive = false)
 	{
-		if (!$source instanceof Registry)
-		{
-			return false;
-		}
-
 		$this->bindData($this->data, $source->toArray(), $recursive, false);
 
 		return $this;
