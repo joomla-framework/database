@@ -314,18 +314,7 @@ class Registry implements \JsonSerializable, \ArrayAccess
 			return false;
 		}
 
-		$data  = $source->toArray();
-		$array = array();
-
-		foreach ($data as $k => $v)
-		{
-			if (($v !== null) && ($v !== ''))
-			{
-				$array[$k] = $v;
-			}
-		}
-
-		$this->bindData($this->data, $array, $recursive);
+		$this->bindData($this->data, $source->toArray(), $recursive, false);
 
 		return $this;
 	}
@@ -484,7 +473,7 @@ class Registry implements \JsonSerializable, \ArrayAccess
 	 *
 	 * @since   1.0
 	 */
-	protected function bindData($parent, $data, $recursive = true)
+	protected function bindData($parent, $data, $recursive = true, $allowNull = true)
 	{
 		// Ensure the input data is an array.
 		if (is_object($data))
@@ -498,6 +487,11 @@ class Registry implements \JsonSerializable, \ArrayAccess
 
 		foreach ($data as $k => $v)
 		{
+			if (!$allowNull && (($v !== null) && ($v !== '')))
+			{
+				continue;
+			}
+
 			if ($recursive && ((is_array($v) && ArrayHelper::isAssociative($v)) || is_object($v)))
 			{
 				if (!isset($parent->$k))
