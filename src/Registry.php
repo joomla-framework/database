@@ -482,7 +482,7 @@ class Registry implements \JsonSerializable, \ArrayAccess
 
 		foreach ($data as $k => $v)
 		{
-			if (!$allowNull && (($v !== null) && ($v !== '')))
+			if (!$allowNull && !(($v !== null) && ($v !== '')))
 			{
 				continue;
 			}
