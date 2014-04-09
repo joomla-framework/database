@@ -17,7 +17,6 @@
         "psr/log": "~1.0"
     },
     "require-dev": {
-        "joomla/controller": "~1.1",
         "joomla/test": "~1.1"
     },
     "autoload": {
