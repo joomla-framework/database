@@ -809,7 +809,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		// Make sure that the folder where we are writing the process id file exists.
 		$folder = dirname($file);
 
-		if (!is_dir($folder) && !@ mkdir($folder, 0755))
+		if (!is_dir($folder) && !@ mkdir($folder, $this->get('folder_permission', 0755)))
 		{
 			$this->getLogger()->error('Unable to create directory: ' . $folder);
 
@@ -825,7 +825,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		}
 
 		// Make sure the permissions for the proccess id file are accurate.
-		if (!chmod($file, 0644))
+		if (!chmod($file, $this->get('file_permission', 0644)))
 		{
 			$this->getLogger()->error('Unable to adjust permissions for the proccess id file: ' . $file);
 
