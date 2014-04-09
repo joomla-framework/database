@@ -16,6 +16,7 @@ use Joomla\Database\DatabaseDriver;
  *
  * @see    http://www.php.net/manual/en/function.session-set-save-handler.php
  * @since  1.0
+ * @deprecated  The joomla/session package is deprecated
  */
 class Database extends Storage
 {

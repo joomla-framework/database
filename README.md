@@ -1,5 +1,8 @@
 # The Session Package [![Build Status](https://travis-ci.org/joomla-framework/session.png?branch=master)](https://travis-ci.org/joomla-framework/session)
 
+## Deprecated
+
+The `joomla/session` package has been deprecated.  No further updates are planned.
 
 ## Installation via Composer
 

@@ -14,6 +14,7 @@ use Joomla\Session\Storage;
  * WINCACHE session storage handler for PHP
  *
  * @since  1.0
+ * @deprecated  The joomla/session package is deprecated
  */
 class Wincache extends Storage
 {
