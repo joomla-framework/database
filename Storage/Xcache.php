@@ -14,6 +14,7 @@ use Joomla\Session\Storage;
  * XCache session storage handler
  *
  * @since  1.0
+ * @deprecated  The joomla/session package is deprecated
  */
 class Xcache extends Storage
 {

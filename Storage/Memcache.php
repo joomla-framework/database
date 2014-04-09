@@ -14,6 +14,7 @@ use Joomla\Session\Storage;
  * Memcache session storage handler for PHP
  *
  * @since  1.0
+ * @deprecated  The joomla/session package is deprecated
  */
 class Memcache extends Storage
 {
