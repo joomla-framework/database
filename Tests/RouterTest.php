@@ -274,7 +274,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testFetchControllerWithMissingClass()
 	{
-		$this->setExpectedException('RuntimeException');
+		$this->setExpectedException('RuntimeException', null, 404);
 		$controller = TestHelper::invoke($this->instance, 'fetchController', 'goober');
 	}
 
@@ -288,7 +288,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testFetchControllerWithNonController()
 	{
-		$this->setExpectedException('RuntimeException');
+		$this->setExpectedException('RuntimeException', null, 500);
 		$controller = TestHelper::invoke($this->instance, 'fetchController', 'MyTestControllerBaz');
 	}
 
