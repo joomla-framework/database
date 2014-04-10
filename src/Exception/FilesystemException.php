@@ -11,7 +11,7 @@ namespace Joomla\Filesystem\Exception;
 /**
  * Exception class for handling errors in the Filesystem package
  *
- * @since  1.0
+ * @since  1.2.0
  */
 class FilesystemException extends \RuntimeException
 {
