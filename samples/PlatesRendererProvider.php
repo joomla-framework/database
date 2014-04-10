@@ -27,14 +27,14 @@ class PlatesRendererProvider implements ServiceProviderInterface
 	 *
 	 * @param   Container  $container  The DI container.
 	 *
-	 * @return  Container  Returns itself to support chaining.
+	 * @return  void
 	 *
 	 * @since   1.0
 	 */
 	public function register(Container $container)
 	{
 		$container->set(
-			'renderer',
+			'BabDev\Renderer\RendererInterface',
 			function (Container $container) {
 				/* @type  \Joomla\Registry\Registry  $config */
 				$config = $container->get('config');
@@ -47,5 +47,9 @@ class PlatesRendererProvider implements ServiceProviderInterface
 			true,
 			true
 		);
+
+		$container->alias('renderer', 'BabDev\Renderer\RendererInterface');
+
+		return;
 	}
 }

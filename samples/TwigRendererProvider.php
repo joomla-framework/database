@@ -44,7 +44,7 @@ class TwigRendererProvider implements ServiceProviderInterface
 	 *
 	 * @param   Container  $container  The DI container.
 	 *
-	 * @return  Container  Returns itself to support chaining.
+	 * @return  void
 	 *
 	 * @since   1.0
 	 */
@@ -53,7 +53,7 @@ class TwigRendererProvider implements ServiceProviderInterface
 		$options = $this->config;
 
 		$container->set(
-			'renderer',
+			'BabDev\Renderer\RendererInterface',
 			function (Container $container) use ($options) {
 				/* @type  \Joomla\Registry\Registry  $config */
 				$config = $container->get('config');
@@ -76,5 +76,9 @@ class TwigRendererProvider implements ServiceProviderInterface
 			true,
 			true
 		);
+
+		$container->alias('renderer', 'BabDev\Renderer\RendererInterface');
+
+		return;
 	}
 }
