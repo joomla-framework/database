@@ -4,6 +4,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+use Joomla\Filesystem\Exception\FilesystemException;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
 
@@ -149,10 +150,10 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test makeCopy method
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @covers        Joomla\Filesystem\File::copy
-	 * @since         1.0
+	 * @covers  Joomla\Filesystem\File::copy
+	 * @since   1.0
 	 */
 	public function testCopy()
 	{
@@ -163,14 +164,6 @@ class JFileTest extends PHPUnit_Framework_TestCase
 
 		// Create a temp file to test copy operation
 		$this->object->write($path . '/' . $name, $data);
-
-		// Trying to read non-existing file.
-		$this->assertThat(
-			File::copy($path . '/' . $name . 'foobar', $path . '/' . $copiedFileName),
-			$this->isFalse(),
-			'Line:' . __LINE__ . ' File should not copy successfully.'
-		);
-		File::delete($path . '/' . $copiedFileName);
 
 		$this->assertThat(
 			File::copy($path . '/' . $name, $path . '/' . $copiedFileName),
@@ -195,6 +188,23 @@ class JFileTest extends PHPUnit_Framework_TestCase
 		File::delete($path . '/' . $copiedFileName);
 
 		File::delete($path . '/' . $name);
+	}
+
+	/**
+	 * Test makeCopy method for an exception
+	 *
+	 * @return  void
+	 *
+	 * @covers             Joomla\Filesystem\File::copy
+	 * @expectedException  \UnexpectedValueException
+	 */
+	public function testCopyException()
+	{
+		$name = 'tempFile';
+		$path = __DIR__;
+		$copiedFileName = 'copiedTempFile';
+
+		File::copy($path . '/' . $name . 'foobar', $path . '/' . $copiedFileName);
 	}
 
 	/**
