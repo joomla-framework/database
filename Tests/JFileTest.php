@@ -4,6 +4,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+use Joomla\Filesystem\Exception\FilesystemException;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
 
@@ -195,7 +196,7 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers             Joomla\Filesystem\File::copy
-	 * @expectedException  \RuntimeException
+	 * @expectedException  \UnexpectedValueException
 	 */
 	public function testCopyException()
 	{

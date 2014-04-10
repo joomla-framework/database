@@ -8,6 +8,8 @@
 
 namespace Joomla\Filesystem;
 
+use Joomla\Filesystem\Exception\FilesystemException;
+
 /**
  * A File handling class
  *
@@ -62,7 +64,7 @@ class File
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 * @throws  \UnexpectedValueException
 	 */
 	public static function copy($src, $dest, $path = null, $use_streams = false)
@@ -86,7 +88,7 @@ class File
 
 			if (!$stream->copy($src, $dest))
 			{
-				throw new \RuntimeException(sprintf('%1$s(%2$s, %3$s): %4$s', __METHOD__, $src, $dest, $stream->getError()));
+				throw new FilesystemException(sprintf('%1$s(%2$s, %3$s): %4$s', __METHOD__, $src, $dest, $stream->getError()));
 			}
 
 			return true;
@@ -95,7 +97,7 @@ class File
 		{
 			if (!@ copy($src, $dest))
 			{
-				throw new \RuntimeException(__METHOD__ . ': Copy failed.');
+				throw new FilesystemException(__METHOD__ . ': Copy failed.');
 			}
 
 			return true;
@@ -110,7 +112,7 @@ class File
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public static function delete($file)
 	{
@@ -130,7 +132,7 @@ class File
 			{
 				$filename = basename($file);
 
-				throw new \RuntimeException(__METHOD__ . ': Failed deleting ' . $filename);
+				throw new FilesystemException(__METHOD__ . ': Failed deleting ' . $filename);
 			}
 		}
 
@@ -148,7 +150,7 @@ class File
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public static function move($src, $dest, $path = '', $use_streams = false)
 	{
@@ -170,7 +172,7 @@ class File
 
 			if (!$stream->move($src, $dest))
 			{
-				throw new \RuntimeException(__METHOD__ . ': ' . $stream->getError());
+				throw new FilesystemException(__METHOD__ . ': ' . $stream->getError());
 			}
 
 			return true;
@@ -179,7 +181,7 @@ class File
 		{
 			if (!@ rename($src, $dest))
 			{
-				throw new \RuntimeException(__METHOD__ . ': Rename failed.');
+				throw new FilesystemException(__METHOD__ . ': Rename failed.');
 			}
 
 			return true;
@@ -196,7 +198,7 @@ class File
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public static function write($file, &$buffer, $use_streams = false)
 	{
@@ -217,7 +219,7 @@ class File
 
 			if (!$stream->writeFile($file, $buffer))
 			{
-				throw new \RuntimeException(sprintf('%1$s(%2$s): %3$s', __METHOD__, $file, $stream->getError()));
+				throw new FilesystemException(sprintf('%1$s(%2$s): %3$s', __METHOD__, $file, $stream->getError()));
 			}
 
 			return true;
@@ -241,7 +243,7 @@ class File
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public static function upload($src, $dest, $use_streams = false)
 	{
@@ -262,7 +264,7 @@ class File
 
 			if (!$stream->upload($src, $dest))
 			{
-				throw new \RuntimeException(__METHOD__ . ': ' . $stream->getError());
+				throw new FilesystemException(__METHOD__ . ': ' . $stream->getError());
 			}
 
 			return true;
@@ -278,12 +280,12 @@ class File
 				}
 				else
 				{
-					throw new \RuntimeException(__METHOD__ . ': Failed to change file permissions.');
+					throw new FilesystemException(__METHOD__ . ': Failed to change file permissions.');
 				}
 			}
 			else
 			{
-				throw new \RuntimeException(__METHOD__ . ': Failed to move file.');
+				throw new FilesystemException(__METHOD__ . ': Failed to move file.');
 			}
 
 			return false;

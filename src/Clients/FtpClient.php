@@ -8,6 +8,8 @@
 
 namespace Joomla\Filesystem\Clients;
 
+use Joomla\Filesystem\Exception\FilesystemException;
+
 /** Error Codes:
  * - 30 : Unable to connect to host
  * - 31 : Not connected
@@ -248,7 +250,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function connect($host = '127.0.0.1', $port = 21)
 	{
@@ -268,7 +270,7 @@ class FtpClient
 
 			if ($this->conn === false)
 			{
-				throw new \RuntimeException(sprintf('%1$s: Could not connect to host " %2$s " on port " %3$s "', __METHOD__, $host, $port));
+				throw new FilesystemException(sprintf('%1$s: Could not connect to host " %2$s " on port " %3$s "', __METHOD__, $host, $port));
 			}
 
 			// Set the timeout for this connection
@@ -282,7 +284,7 @@ class FtpClient
 
 		if (!$this->conn)
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf(
 					'%1$s: Could not connect to host " %2$s " on port " %3$s ". Socket error number: %4$s and error message: %5$s',
 					__METHOD__,
@@ -300,7 +302,7 @@ class FtpClient
 		// Check for welcome response code
 		if (!$this->_verifyResponse(220))
 		{
-			throw new \RuntimeException(sprintf('%1$s: Bad response. Server response: %2$s [Expected: 220]', __METHOD__, $this->response));
+			throw new FilesystemException(sprintf('%1$s: Bad response. Server response: %2$s [Expected: 220]', __METHOD__, $this->response));
 		}
 
 		return true;
@@ -327,7 +329,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function login($user = 'anonymous', $pass = 'jftp@joomla.org')
 	{
@@ -336,7 +338,7 @@ class FtpClient
 		{
 			if (@ftp_login($this->conn, $user, $pass) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . ': Unable to login');
+				throw new FilesystemException(__METHOD__ . ': Unable to login');
 			}
 
 			return true;
@@ -345,7 +347,7 @@ class FtpClient
 		// Send the username
 		if (!$this->_putCmd('USER ' . $user, array(331, 503)))
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Bad Username. Server response: %2$s [Expected: 331]. Username sent: %3$s', __METHOD__, $this->response, $user)
 			);
 		}
@@ -359,7 +361,7 @@ class FtpClient
 		// Send the password
 		if (!$this->_putCmd('PASS ' . $pass, 230))
 		{
-			throw new \RuntimeException(sprintf('%1$s: Bad Password. Server response: %2$s [Expected: 230].', __METHOD__, $this->response));
+			throw new FilesystemException(sprintf('%1$s: Bad Password. Server response: %2$s [Expected: 230].', __METHOD__, $this->response));
 		}
 
 		return true;
@@ -395,7 +397,7 @@ class FtpClient
 	 * @return  string   Current working directory
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function pwd()
 	{
@@ -404,7 +406,7 @@ class FtpClient
 		{
 			if (($ret = @ftp_pwd($this->conn)) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . 'Bad response.');
+				throw new FilesystemException(__METHOD__ . 'Bad response.');
 			}
 
 			return $ret;
@@ -415,7 +417,7 @@ class FtpClient
 		// Send print working directory command and verify success
 		if (!$this->_putCmd('PWD', 257))
 		{
-			throw new \RuntimeException(sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 257]', __METHOD__, $this->response));
+			throw new FilesystemException(sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 257]', __METHOD__, $this->response));
 		}
 
 		// Match just the path
@@ -431,7 +433,7 @@ class FtpClient
 	 * @return  string   System identifier string
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function syst()
 	{
@@ -440,7 +442,7 @@ class FtpClient
 		{
 			if (($ret = @ftp_systype($this->conn)) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . 'Bad response.');
+				throw new FilesystemException(__METHOD__ . 'Bad response.');
 			}
 		}
 		else
@@ -448,7 +450,7 @@ class FtpClient
 			// Send print working directory command and verify success
 			if (!$this->_putCmd('SYST', 215))
 			{
-				throw new \RuntimeException(sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 215]', __METHOD__, $this->response));
+				throw new FilesystemException(sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 215]', __METHOD__, $this->response));
 			}
 
 			$ret = $this->response;
@@ -480,7 +482,7 @@ class FtpClient
 	 * @return  boolean True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function chdir($path)
 	{
@@ -489,7 +491,7 @@ class FtpClient
 		{
 			if (@ftp_chdir($this->conn, $path) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . 'Bad response.');
+				throw new FilesystemException(__METHOD__ . 'Bad response.');
 			}
 
 			return true;
@@ -498,7 +500,7 @@ class FtpClient
 		// Send change directory command and verify success
 		if (!$this->_putCmd('CWD ' . $path, 250))
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 250].  Sent path: %3$s', __METHOD__, $this->response, $path)
 			);
 		}
@@ -514,7 +516,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function reinit()
 	{
@@ -523,7 +525,7 @@ class FtpClient
 		{
 			if (@ftp_site($this->conn, 'REIN') === false)
 			{
-				throw new \RuntimeException(__METHOD__ . 'Bad response.');
+				throw new FilesystemException(__METHOD__ . 'Bad response.');
 			}
 
 			return true;
@@ -532,7 +534,7 @@ class FtpClient
 		// Send reinitialise command to the server
 		if (!$this->_putCmd('REIN', 220))
 		{
-			throw new \RuntimeException(sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 220]', __METHOD__, $this->response));
+			throw new FilesystemException(sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 220]', __METHOD__, $this->response));
 		}
 
 		return true;
@@ -547,7 +549,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function rename($from, $to)
 	{
@@ -556,7 +558,7 @@ class FtpClient
 		{
 			if (@ftp_rename($this->conn, $from, $to) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . 'Bad response.');
+				throw new FilesystemException(__METHOD__ . 'Bad response.');
 			}
 
 			return true;
@@ -565,7 +567,7 @@ class FtpClient
 		// Send rename from command to the server
 		if (!$this->_putCmd('RNFR ' . $from, 350))
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 350].  From path sent: %3$s', __METHOD__, $this->response, $from)
 			);
 		}
@@ -573,7 +575,7 @@ class FtpClient
 		// Send rename to command to the server
 		if (!$this->_putCmd('RNTO ' . $to, 250))
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 250].  To path sent: %3$s', __METHOD__, $this->response, $to)
 			);
 		}
@@ -590,7 +592,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function chmod($path, $mode)
 	{
@@ -613,7 +615,7 @@ class FtpClient
 			{
 				if (!defined('PHP_WINDOWS_VERSION_MAJOR'))
 				{
-					throw new \RuntimeException(__METHOD__ . 'Bad response.');
+					throw new FilesystemException(__METHOD__ . 'Bad response.');
 				}
 
 				return false;
@@ -627,7 +629,7 @@ class FtpClient
 		{
 			if (!defined('PHP_WINDOWS_VERSION_MAJOR'))
 			{
-				throw new \RuntimeException(
+				throw new FilesystemException(
 					sprintf(
 						'%1$s: Bad response.  Server response: %2$s [Expected: 250].  Path sent: %3$s.  Mode sent: %4$s',
 						__METHOD__,
@@ -652,7 +654,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function delete($path)
 	{
@@ -663,7 +665,7 @@ class FtpClient
 			{
 				if (@ftp_rmdir($this->conn, $path) === false)
 				{
-					throw new \RuntimeException(__METHOD__ . 'Bad response.');
+					throw new FilesystemException(__METHOD__ . 'Bad response.');
 				}
 			}
 
@@ -675,7 +677,7 @@ class FtpClient
 		{
 			if (!$this->_putCmd('RMD ' . $path, 250))
 			{
-				throw new \RuntimeException(
+				throw new FilesystemException(
 					sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 250].  Path sent: %3$s', __METHOD__, $this->response, $path)
 				);
 			}
@@ -692,7 +694,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function mkdir($path)
 	{
@@ -701,7 +703,7 @@ class FtpClient
 		{
 			if (@ftp_mkdir($this->conn, $path) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . 'Bad response.');
+				throw new FilesystemException(__METHOD__ . 'Bad response.');
 			}
 
 			return true;
@@ -710,7 +712,7 @@ class FtpClient
 		// Send change directory command and verify success
 		if (!$this->_putCmd('MKD ' . $path, 257))
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 257].  Path sent: %3$s', __METHOD__, $this->response, $path)
 			);
 		}
@@ -726,7 +728,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function restart($point)
 	{
@@ -735,7 +737,7 @@ class FtpClient
 		{
 			if (@ftp_site($this->conn, 'REST ' . $point) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . 'Bad response.');
+				throw new FilesystemException(__METHOD__ . 'Bad response.');
 			}
 
 			return true;
@@ -744,7 +746,7 @@ class FtpClient
 		// Send restart command and verify success
 		if (!$this->_putCmd('REST ' . $point, 350))
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf(
 					'%1$s: Bad response.  Server response: %2$s [Expected: 350].  Restart point sent: %3$s', __METHOD__, $this->response, $point
 				)
@@ -762,7 +764,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function create($path)
 	{
@@ -772,7 +774,7 @@ class FtpClient
 			// Turn passive mode on
 			if (@ftp_pasv($this->conn, true) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . ': Unable to use passive mode.');
+				throw new FilesystemException(__METHOD__ . ': Unable to use passive mode.');
 			}
 
 			$buffer = fopen('buffer://tmp', 'r');
@@ -781,7 +783,7 @@ class FtpClient
 			{
 				fclose($buffer);
 
-				throw new \RuntimeException(__METHOD__ . 'Bad response.');
+				throw new FilesystemException(__METHOD__ . 'Bad response.');
 			}
 
 			fclose($buffer);
@@ -792,13 +794,13 @@ class FtpClient
 		// Start passive mode
 		if (!$this->_passive())
 		{
-			throw new \RuntimeException(__METHOD__ . ': Unable to use passive mode.');
+			throw new FilesystemException(__METHOD__ . ': Unable to use passive mode.');
 		}
 
 		if (!$this->_putCmd('STOR ' . $path, array(150, 125)))
 		{
 			@ fclose($this->dataconn);
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 150 or 125].  Path sent: %3$s', __METHOD__, $this->response, $path)
 			);
 		}
@@ -808,7 +810,7 @@ class FtpClient
 
 		if (!$this->_verifyResponse(226))
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Transfer failed.  Server response: %2$s [Expected: 226].  Path sent: %3$s', __METHOD__, $this->response, $path)
 			);
 		}
@@ -825,7 +827,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function read($remote, &$buffer)
 	{
@@ -838,7 +840,7 @@ class FtpClient
 			// Turn passive mode on
 			if (@ftp_pasv($this->conn, true) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . ': Unable to use passive mode.');
+				throw new FilesystemException(__METHOD__ . ': Unable to use passive mode.');
 			}
 
 			$tmp = fopen('buffer://tmp', 'br+');
@@ -847,7 +849,7 @@ class FtpClient
 			{
 				fclose($tmp);
 
-				throw new \RuntimeException(__METHOD__ . 'Bad response.');
+				throw new FilesystemException(__METHOD__ . 'Bad response.');
 			}
 
 			// Read tmp buffer contents
@@ -869,14 +871,14 @@ class FtpClient
 		// Start passive mode
 		if (!$this->_passive())
 		{
-			throw new \RuntimeException(__METHOD__ . ': Unable to use passive mode.');
+			throw new FilesystemException(__METHOD__ . ': Unable to use passive mode.');
 		}
 
 		if (!$this->_putCmd('RETR ' . $remote, array(150, 125)))
 		{
 			@ fclose($this->dataconn);
 
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 150 or 125].  Path sent: %3$s', __METHOD__, $this->response, $remote)
 			);
 		}
@@ -907,7 +909,7 @@ class FtpClient
 
 		if (!$this->_verifyResponse(226))
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf(
 					'%1$s: Transfer failed.  Server response: %2$s [Expected: 226].  Restart point sent: %3$s',
 					__METHOD__, $this->response, $remote
@@ -927,7 +929,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function get($local, $remote)
 	{
@@ -940,12 +942,12 @@ class FtpClient
 			// Turn passive mode on
 			if (@ftp_pasv($this->conn, true) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . ': Unable to use passive mode.');
+				throw new FilesystemException(__METHOD__ . ': Unable to use passive mode.');
 			}
 
 			if (@ftp_get($this->conn, $local, $remote, $mode) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . 'Bad response.');
+				throw new FilesystemException(__METHOD__ . 'Bad response.');
 			}
 
 			return true;
@@ -958,20 +960,20 @@ class FtpClient
 
 		if (!$fp)
 		{
-			throw new \RuntimeException(sprintf('%1$s: Unable to open local file for writing.  Local path: %2$s', __METHOD__, $local));
+			throw new FilesystemException(sprintf('%1$s: Unable to open local file for writing.  Local path: %2$s', __METHOD__, $local));
 		}
 
 		// Start passive mode
 		if (!$this->_passive())
 		{
-			throw new \RuntimeException(__METHOD__ . ': Unable to use passive mode.');
+			throw new FilesystemException(__METHOD__ . ': Unable to use passive mode.');
 		}
 
 		if (!$this->_putCmd('RETR ' . $remote, array(150, 125)))
 		{
 			@ fclose($this->dataconn);
 
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 150 or 125].  Path sent: %3$s', __METHOD__, $this->response, $remote)
 			);
 		}
@@ -989,7 +991,7 @@ class FtpClient
 
 		if (!$this->_verifyResponse(226))
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Transfer failed.  Server response: %2$s [Expected: 226].  Path sent: %3$s', __METHOD__, $this->response, $remote)
 			);
 		}
@@ -1006,7 +1008,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function store($local, $remote = null)
 	{
@@ -1026,12 +1028,12 @@ class FtpClient
 			// Turn passive mode on
 			if (@ftp_pasv($this->conn, true) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . ': Unable to use passive mode.');
+				throw new FilesystemException(__METHOD__ . ': Unable to use passive mode.');
 			}
 
 			if (@ftp_put($this->conn, $remote, $local, $mode) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . 'Bad response.');
+				throw new FilesystemException(__METHOD__ . 'Bad response.');
 			}
 
 			return true;
@@ -1046,12 +1048,12 @@ class FtpClient
 
 			if (!$fp)
 			{
-				throw new \RuntimeException(sprintf('%1$s: Unable to open local file for reading. Local path: %2$s', __METHOD__, $local));
+				throw new FilesystemException(sprintf('%1$s: Unable to open local file for reading. Local path: %2$s', __METHOD__, $local));
 			}
 		}
 		else
 		{
-			throw new \RuntimeException(sprintf('%1$s: Unable to find local file. Local path: %2$s', __METHOD__, $local));
+			throw new FilesystemException(sprintf('%1$s: Unable to find local file. Local path: %2$s', __METHOD__, $local));
 		}
 
 		// Start passive mode
@@ -1059,7 +1061,7 @@ class FtpClient
 		{
 			@ fclose($fp);
 
-			throw new \RuntimeException(__METHOD__ . ': Unable to use passive mode.');
+			throw new FilesystemException(__METHOD__ . ': Unable to use passive mode.');
 		}
 
 		// Send store command to the FTP server
@@ -1068,7 +1070,7 @@ class FtpClient
 			@ fclose($fp);
 			@ fclose($this->dataconn);
 
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 150 or 125].  Path sent: %3$s', __METHOD__, $this->response, $remote)
 			);
 		}
@@ -1082,7 +1084,7 @@ class FtpClient
 			{
 				if (($result = @ fwrite($this->dataconn, $line)) === false)
 				{
-					throw new \RuntimeException(__METHOD__ . ': Unable to write to data port socket');
+					throw new FilesystemException(__METHOD__ . ': Unable to write to data port socket');
 				}
 
 				$line = substr($line, $result);
@@ -1096,7 +1098,7 @@ class FtpClient
 
 		if (!$this->_verifyResponse(226))
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Transfer failed.  Server response: %2$s [Expected: 226].  Path sent: %3$s', __METHOD__, $this->response, $remote)
 			);
 		}
@@ -1113,7 +1115,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function write($remote, $buffer)
 	{
@@ -1126,7 +1128,7 @@ class FtpClient
 			// Turn passive mode on
 			if (@ftp_pasv($this->conn, true) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . ': Unable to use passive mode.');
+				throw new FilesystemException(__METHOD__ . ': Unable to use passive mode.');
 			}
 
 			$tmp = fopen('buffer://tmp', 'br+');
@@ -1137,7 +1139,7 @@ class FtpClient
 			{
 				fclose($tmp);
 
-				throw new \RuntimeException(__METHOD__ . 'Bad response.');
+				throw new FilesystemException(__METHOD__ . 'Bad response.');
 			}
 
 			fclose($tmp);
@@ -1151,7 +1153,7 @@ class FtpClient
 		// Start passive mode
 		if (!$this->_passive())
 		{
-			throw new \RuntimeException(__METHOD__ . ': Unable to use passive mode.');
+			throw new FilesystemException(__METHOD__ . ': Unable to use passive mode.');
 		}
 
 		// Send store command to the FTP server
@@ -1159,7 +1161,7 @@ class FtpClient
 		{
 			@ fclose($this->dataconn);
 
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 150 or 125].  Path sent: %3$s', __METHOD__, $this->response, $remote)
 			);
 		}
@@ -1169,7 +1171,7 @@ class FtpClient
 		{
 			if (($result = @ fwrite($this->dataconn, $buffer)) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . ': Unable to write to data port socket.');
+				throw new FilesystemException(__METHOD__ . ': Unable to write to data port socket.');
 			}
 
 			$buffer = substr($buffer, $result);
@@ -1183,7 +1185,7 @@ class FtpClient
 		// Verify that the server recieved the transfer
 		if (!$this->_verifyResponse(226))
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Transfer failed.  Server response: %2$s [Expected: 226].  Path sent: %3$s', __METHOD__, $this->response, $remote)
 			);
 		}
@@ -1202,7 +1204,7 @@ class FtpClient
 	 * @return  string  Directory listing
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function listNames($path = null)
 	{
@@ -1214,7 +1216,7 @@ class FtpClient
 			// Turn passive mode on
 			if (@ftp_pasv($this->conn, true) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . ': Unable to use passive mode.');
+				throw new FilesystemException(__METHOD__ . ': Unable to use passive mode.');
 			}
 
 			if (($list = @ftp_nlist($this->conn, $path)) === false)
@@ -1225,7 +1227,7 @@ class FtpClient
 					return array();
 				}
 
-				throw new \RuntimeException(__METHOD__ . 'Bad response.');
+				throw new FilesystemException(__METHOD__ . 'Bad response.');
 			}
 
 			$list = preg_replace('#^' . preg_quote($path, '#') . '[/\\\\]?#', '', $list);
@@ -1250,7 +1252,7 @@ class FtpClient
 		// Start passive mode
 		if (!$this->_passive())
 		{
-			throw new \RuntimeException(__METHOD__ . ': Unable to use passive mode.');
+			throw new FilesystemException(__METHOD__ . ': Unable to use passive mode.');
 		}
 
 		if (!$this->_putCmd('NLST' . $path, array(150, 125)))
@@ -1263,7 +1265,7 @@ class FtpClient
 				return array();
 			}
 
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 150 or 125].  Path sent: %3$s', __METHOD__, $this->response, $path)
 			);
 
@@ -1281,7 +1283,7 @@ class FtpClient
 		// Everything go okay?
 		if (!$this->_verifyResponse(226))
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Transfer failed.  Server response: %2$s [Expected: 226].  Path sent: %3$s', __METHOD__, $this->response, $path)
 			);
 		}
@@ -1309,7 +1311,7 @@ class FtpClient
 	 * @return  mixed  If $type is raw: string Directory listing, otherwise array of string with file-names
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function listDetails($path = null, $type = 'all')
 	{
@@ -1327,12 +1329,12 @@ class FtpClient
 			// Turn passive mode on
 			if (@ftp_pasv($this->conn, true) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . ': Unable to use passive mode.');
+				throw new FilesystemException(__METHOD__ . ': Unable to use passive mode.');
 			}
 
 			if (($contents = @ftp_rawlist($this->conn, $path)) === false)
 			{
-				throw new \RuntimeException(__METHOD__ . 'Bad response.');
+				throw new FilesystemException(__METHOD__ . 'Bad response.');
 			}
 		}
 		else
@@ -1342,7 +1344,7 @@ class FtpClient
 			// Start passive mode
 			if (!$this->_passive())
 			{
-				throw new \RuntimeException(__METHOD__ . ': Unable to use passive mode.');
+				throw new FilesystemException(__METHOD__ . ': Unable to use passive mode.');
 			}
 
 			// If a path exists, prepend a space
@@ -1356,7 +1358,7 @@ class FtpClient
 			{
 				@ fclose($this->dataconn);
 
-				throw new \RuntimeException(
+				throw new FilesystemException(
 					sprintf(
 						'%1$s: Bad response.  Server response: %2$s [Expected: 150 or 125].  Path sent: %3$s',
 						__METHOD__, $this->response, $path
@@ -1377,7 +1379,7 @@ class FtpClient
 			// Everything go okay?
 			if (!$this->_verifyResponse(226))
 			{
-				throw new \RuntimeException(
+				throw new FilesystemException(
 					sprintf('%1$s: Transfer failed.  Server response: %2$s [Expected: 226].  Path sent: %3$s', __METHOD__, $this->response, $path)
 				);
 			}
@@ -1432,7 +1434,7 @@ class FtpClient
 
 		if (!$osType)
 		{
-			throw new \RuntimeException(__METHOD__ . ': Unrecognised directory listing format.');
+			throw new FilesystemException(__METHOD__ . ': Unrecognised directory listing format.');
 		}
 
 		/*
@@ -1534,20 +1536,20 @@ class FtpClient
 	 * @return  boolean  True if command executed successfully
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	protected function _putCmd($cmd, $expectedResponse)
 	{
 		// Make sure we have a connection to the server
 		if (!is_resource($this->conn))
 		{
-			throw new \RuntimeException(__METHOD__ . ': Not connected to the control port.');
+			throw new FilesystemException(__METHOD__ . ': Not connected to the control port.');
 		}
 
 		// Send the command to the server
 		if (!fwrite($this->conn, $cmd . "\r\n"))
 		{
-			throw new \RuntimeException(sprintf('%1$s: Unable to send command: %2$s', __METHOD__, $cmd));
+			throw new FilesystemException(sprintf('%1$s: Unable to send command: %2$s', __METHOD__, $cmd));
 		}
 
 		return $this->_verifyResponse($expectedResponse);
@@ -1561,7 +1563,7 @@ class FtpClient
 	 * @return  boolean  True if response code from the server is expected
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	protected function _verifyResponse($expected)
 	{
@@ -1581,7 +1583,7 @@ class FtpClient
 		// Catch a timeout or bad response
 		if (!isset($parts[1]))
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf(
 					'%1$s: Timeout or unrecognised response while waiting for a response from the server. Server response: %2$s',
 					__METHOD__, $this->response
@@ -1626,7 +1628,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	protected function _passive()
 	{
@@ -1638,7 +1640,7 @@ class FtpClient
 		// Make sure we have a connection to the server
 		if (!is_resource($this->conn))
 		{
-			throw new \RuntimeException(__METHOD__ . ': Not connected to the control port.');
+			throw new FilesystemException(__METHOD__ . ': Not connected to the control port.');
 		}
 
 		// Request a passive connection - this means, we'll talk to you, you don't talk to us.
@@ -1658,7 +1660,7 @@ class FtpClient
 		// Catch a timeout or bad response
 		if (!isset($parts[1]))
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf(
 					'%1$s: Timeout or unrecognised response while waiting for a response from the server. Server response: %2$s',
 					__METHOD__, $this->response
@@ -1673,7 +1675,7 @@ class FtpClient
 		// If it's not 227, we weren't given an IP and port, which means it failed.
 		if ($this->_responseCode != '227')
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: Unable to obtain IP and port for data transfer. Server response: %2$s', __METHOD__, $this->_responseMsg)
 			);
 		}
@@ -1681,7 +1683,7 @@ class FtpClient
 		// Snatch the IP and port information, or die horribly trying...
 		if (preg_match('~\((\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))\)~', $this->_responseMsg, $match) == 0)
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf('%1$s: IP and port for data transfer not valid. Server response: %2$s', __METHOD__, $this->_responseMsg)
 			);
 		}
@@ -1694,7 +1696,7 @@ class FtpClient
 
 		if (!$this->dataconn)
 		{
-			throw new \RuntimeException(
+			throw new FilesystemException(
 				sprintf(
 					'%1$s: Could not connect to host %2$s on port %3$s. Socket error number: %4$s and error message: %5$s',
 					__METHOD__,
@@ -1758,7 +1760,7 @@ class FtpClient
 	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	protected function _mode($mode)
 	{
@@ -1766,7 +1768,7 @@ class FtpClient
 		{
 			if (!$this->_putCmd("TYPE I", 200))
 			{
-				throw new \RuntimeException(
+				throw new FilesystemException(
 					sprintf('%1$s: Bad response. Server response: %2$s [Expected: 200]. Mode sent: Binary', __METHOD__, $this->response)
 				);
 			}
@@ -1775,7 +1777,7 @@ class FtpClient
 		{
 			if (!$this->_putCmd("TYPE A", 200))
 			{
-				throw new \RuntimeException(
+				throw new FilesystemException(
 					sprintf('%1$s: Bad response. Server response: %2$s [Expected: 200]. Mode sent: ASCII', __METHOD__, $this->response)
 				);
 			}

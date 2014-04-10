@@ -8,6 +8,8 @@
 
 namespace Joomla\Filesystem;
 
+use Joomla\Filesystem\Exception\FilesystemException;
+
 /**
  * A Folder handling class
  *
@@ -27,7 +29,7 @@ abstract class Folder
 	 * @return  boolean  True on success.
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public static function copy($src, $dest, $path = '', $force = false, $use_streams = false)
 	{
@@ -45,23 +47,23 @@ abstract class Folder
 
 		if (!is_dir(Path::clean($src)))
 		{
-			throw new \RuntimeException('Source folder not found', -1);
+			throw new FilesystemException('Source folder not found', -1);
 		}
 
 		if (is_dir(Path::clean($dest)) && !$force)
 		{
-			throw new \RuntimeException('Destination folder not found', -1);
+			throw new FilesystemException('Destination folder not found', -1);
 		}
 
 		// Make sure the destination exists
 		if (!self::create($dest))
 		{
-			throw new \RuntimeException('Cannot create destination folder', -1);
+			throw new FilesystemException('Cannot create destination folder', -1);
 		}
 
 		if (!($dh = @opendir($src)))
 		{
-			throw new \RuntimeException('Cannot open source folder', -1);
+			throw new FilesystemException('Cannot open source folder', -1);
 		}
 
 		// Walk through the directory copying files and recursing into folders.
@@ -91,14 +93,14 @@ abstract class Folder
 
 						if (!$stream->copy($sfid, $dfid))
 						{
-							throw new \RuntimeException('Cannot copy file: ' . $stream->getError(), -1);
+							throw new FilesystemException('Cannot copy file: ' . $stream->getError(), -1);
 						}
 					}
 					else
 					{
 						if (!@copy($sfid, $dfid))
 						{
-							throw new \RuntimeException('Copy file failed', -1);
+							throw new FilesystemException('Copy file failed', -1);
 						}
 					}
 					break;
@@ -117,7 +119,7 @@ abstract class Folder
 	 * @return  boolean  True if successful.
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public static function create($path = '', $mode = 0755)
 	{
@@ -136,7 +138,7 @@ abstract class Folder
 
 			if (($nested > 20) || ($parent == $path))
 			{
-				throw new \RuntimeException(__METHOD__ . ': Infinite loop detected');
+				throw new FilesystemException(__METHOD__ . ': Infinite loop detected');
 			}
 
 			// Create the parent directory
@@ -191,8 +193,8 @@ abstract class Folder
 
 			if ($inBaseDir == false)
 			{
-				// Throw a RuntimeException because the path to be created is not in open_basedir
-				throw new \RuntimeException(__METHOD__ . ': Path not in open_basedir paths');
+				// Throw a FilesystemException because the path to be created is not in open_basedir
+				throw new FilesystemException(__METHOD__ . ': Path not in open_basedir paths');
 			}
 		}
 
@@ -204,7 +206,7 @@ abstract class Folder
 		{
 			@umask($origmask);
 
-			throw new \RuntimeException(__METHOD__ . ': Could not create directory.  Path: ' . $path);
+			throw new FilesystemException(__METHOD__ . ': Could not create directory.  Path: ' . $path);
 		}
 
 		// Reset umask
@@ -221,7 +223,7 @@ abstract class Folder
 	 * @return  boolean  True on success.
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 * @throws  \UnexpectedValueException
 	 */
 	public static function delete($path)
@@ -232,7 +234,7 @@ abstract class Folder
 		if (!$path)
 		{
 			// Bad programmer! Bad Bad programmer!
-			throw new \RuntimeException(__METHOD__ . ': You can not delete a base directory.');
+			throw new FilesystemException(__METHOD__ . ': You can not delete a base directory.');
 		}
 
 		try
@@ -292,7 +294,7 @@ abstract class Folder
 		}
 		else
 		{
-			throw new \RuntimeException(sprintf('%1$s: Could not delete folder. Path: %2$s', __METHOD__, $path));
+			throw new FilesystemException(sprintf('%1$s: Could not delete folder. Path: %2$s', __METHOD__, $path));
 		}
 	}
 
