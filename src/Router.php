@@ -231,7 +231,7 @@ class Router
 		// If the controller does not follows the implementation.
 		if (!is_subclass_of($class, 'Joomla\\Controller\\ControllerInterface'))
 		{
-			throw new \RuntimeException(sprintf('Invalid Controller. Controllers must implement Joomla\Controller\ControllerInterface. `%s`.', $class), 400);
+			throw new \RuntimeException(sprintf('Invalid Controller. Controllers must implement Joomla\Controller\ControllerInterface. `%s`.', $class), 500);
 		}
 
 		// Instantiate the controller.
