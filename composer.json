@@ -14,7 +14,7 @@
     },
     "autoload": {
     	"psr-4": {
-    		"Joomla\\Github\\": "src/",
+            "Joomla\\Github\\": "src/",
             "Joomla\\Github\\Tests\\": "Tests/"
     	}
     }
