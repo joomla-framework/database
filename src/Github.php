@@ -16,6 +16,7 @@ use Joomla\Registry\Registry;
  * @property-read  Package\Activity       $activity       GitHub API object for the activity package.
  * @property-read  Package\Authorization  $authorization  GitHub API object for the authorizations package.
  * @property-read  Package\Data           $data           GitHub API object for the data package.
+ * @property-read  Package\Emojis         $emojis         GitHub API object for the emojis package.
  * @property-read  Package\Gists          $gists          GitHub API object for the gists package.
  * @property-read  Package\Gitignore      $gitignore      GitHub API object for the gitignore package.
  * @property-read  Package\Issues         $issues         GitHub API object for the issues package.
