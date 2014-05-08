@@ -10,7 +10,7 @@
     },
     "autoload": {
     	"psr-4": {
-    		"Joomla\\Filesystem\\": "src/",
+            "Joomla\\Filesystem\\": "src/",
             "Joomla\\Filesystem\\Tests\\": "Tests/"
     	}
     }
