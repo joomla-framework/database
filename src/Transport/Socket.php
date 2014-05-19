@@ -11,6 +11,7 @@ namespace Joomla\Http\Transport;
 use Joomla\Http\TransportInterface;
 use Joomla\Http\Response;
 use Joomla\Uri\UriInterface;
+use Joomla\Uri\Uri;
 
 /**
  * HTTP transport class for using sockets directly.
@@ -149,8 +150,20 @@ class Socket implements TransportInterface
 		{
 			$content .= fgets($connection, 4096);
 		}
+		$content = $this->getResponse($content);
 
-		return $this->getResponse($content);
+		/* Wikipedia says: A user agent should not automatically redirect a request more than five times, 
+		 * since such redirections usually indicate an infinite loop
+		 *
+		 * However Transport\Curl doesn't set CURLOPT_MAXREDIRS, Transport\Stream uses max_redirects default 20
+		 * so let's rely on severs' sanity :D
+		 */
+		if ($content->code >= 301 && $content->code < 400 && isset($content->headers['Location']))
+		{
+			return $this->request($method, new Uri($content->headers['Location']), $data, $headers, $timeout, $userAgent);
+		}
+
+		return $content;
 	}
 
 	/**
