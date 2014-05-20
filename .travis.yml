@@ -9,8 +9,6 @@ services:
 
 before_script:
   - composer update --dev
-  - pyrus channel-discover pear.phpunit.de
-  - pyrus install --force phpunit/DbUnit
   - phpenv rehash
   - phpenv config-add build/travis/phpenv/memcached.ini
 
