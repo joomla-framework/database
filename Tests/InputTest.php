@@ -176,6 +176,14 @@ class InputTest extends \PHPUnit_Framework_TestCase
 			$this->equalTo('default'),
 			'Line: ' . __LINE__ . '.'
 		);
+
+		$_REQUEST['empty'] = '';
+
+		// Test the get method
+		$this->assertThat(
+			$instance->get('empty', 'default'),
+			$this->equalTo('default')
+		);
 	}
 
 	/**
