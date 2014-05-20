@@ -47,7 +47,7 @@ $foo = $input->get('foo');
 $foo = $input->get('foo', 'bar');
 
 // Apply a custom filter to the variable, in this case, get the raw value.
-$foo = $input->get('body', null, 'string');
+$foo = $input->get('body', null, 'raw');
 
 // Explicitly set an input value.
 $input->set('hidemainmenu', true);
