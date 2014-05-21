@@ -31,6 +31,7 @@ abstract class AbstractHtmlView extends AbstractView
 	 *
 	 * @var    \SplPriorityQueue
 	 * @since  1.0
+	 * @deprecated  2.0  In 2.0, a RendererInterface object will be required which will manage paths.
 	 */
 	protected $paths;
 
@@ -38,7 +39,7 @@ abstract class AbstractHtmlView extends AbstractView
 	 * Method to instantiate the view.
 	 *
 	 * @param   ModelInterface     $model  The model object.
-	 * @param   \SplPriorityQueue  $paths  The paths queue.
+	 * @param   \SplPriorityQueue  $paths  The paths queue. [@deprecated In 2.0, a RendererInterface object will be required which will manage paths.]
 	 *
 	 * @since   1.0
 	 */
@@ -106,6 +107,7 @@ abstract class AbstractHtmlView extends AbstractView
 	 * @return  mixed  The layout file name if found, false otherwise.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  In 2.0, a RendererInterface object will be required which will manage paths.
 	 */
 	public function getPath($layout, $ext = 'php')
 	{
@@ -124,6 +126,7 @@ abstract class AbstractHtmlView extends AbstractView
 	 * @return  \SplPriorityQueue  The paths queue.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  In 2.0, a RendererInterface object will be required which will manage paths.
 	 */
 	public function getPaths()
 	{
@@ -185,6 +188,7 @@ abstract class AbstractHtmlView extends AbstractView
 	 * @return  AbstractHtmlView  Method supports chaining.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  In 2.0, a RendererInterface object will be required which will manage paths.
 	 */
 	public function setPaths(\SplPriorityQueue $paths)
 	{
@@ -199,6 +203,7 @@ abstract class AbstractHtmlView extends AbstractView
 	 * @return  \SplPriorityQueue  The paths queue.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  In 2.0, a RendererInterface object will be required which will manage paths.
 	 */
 	protected function loadPaths()
 	{
