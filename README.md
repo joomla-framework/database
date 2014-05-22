@@ -128,7 +128,7 @@ class FooTest extends \PHPUnit_Framework_TestCase
 		$instance = new \Foo;
 
 		// Set the value of a protected `bar` property.
-		TestHelper::getValue($instance, 'bar', 'New Value');
+		TestHelper::setValue($instance, 'bar', 'New Value');
 	}
 }
 
