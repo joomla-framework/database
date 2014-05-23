@@ -765,6 +765,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 * @return  boolean  True if found and valid, false otherwise.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	public function checkToken($method = 'post')
 	{
@@ -797,6 +798,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 * @return  string  Hashed var name
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	public function getFormToken($forceNew = false)
 	{
