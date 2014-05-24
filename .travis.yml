@@ -9,7 +9,6 @@ services:
 
 before_script:
   - composer update --dev
-  - phpenv rehash
   - phpenv config-add build/travis/phpenv/memcached.ini
 
 script:
