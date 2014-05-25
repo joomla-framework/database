@@ -65,7 +65,7 @@ class Client
 	}
 
 	/**
-	 * Get the access token or redict to the authentication URL.
+	 * Get the access token or redirect to the authentication URL.
 	 *
 	 * @return  string  The access token
 	 *
