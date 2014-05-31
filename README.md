@@ -1,6 +1,4 @@
-# This is a in progress work to be submitted to the Joomla framework based on that which is currently found in the CMS
-
-## The MediaWiki Package [![Build Status](https://travis-ci.org/wilsonge/framework-wiki.png?branch=master)](https://travis-ci.org/wilsonge/framework-wiki)
+## The MediaWiki Package [![Build Status](https://travis-ci.org/joomla-framework/mediawiki-api.png?branch=master)](https://travis-ci.org/joomla-framework/mediawiki-api)
 
 ### Using the MediaWiki Package
 
