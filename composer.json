@@ -1,0 +1,24 @@
+{
+    "name": "joomla/mediawiki",
+    "type": "joomla-package",
+    "description": "Joomla Mediawiki Package",
+    "keywords": ["joomla", "framework", "mediawiki"],
+    "homepage": "https://github.com/joomla-framework/mediawiki-api",
+    "license": "GPL-2.0+",
+    "require": {
+        "php": ">=5.3.10",
+        "joomla/http": "~1.0",
+        "joomla/registry": "~1.0",
+        "joomla/uri": "~1.0"
+    },
+    "require-dev": {
+        "joomla/test": "~1.0"
+    },
+    "autoload": {
+    	"psr-4": {
+            "Joomla\\Mediawiki\\": "src/",
+            "Joomla\\Mediawiki\\Tests\\": "Tests/"
+    	}
+    }
+}
+
