@@ -1,22 +1,19 @@
 <?php
 /**
- * @package     Joomla.Platform
- * @subpackage  MediaWiki
+ * Part of the Joomla Framework MediaWiki Package
  *
- * @copyright   Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE
+ * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-defined('JPATH_PLATFORM') or die;
+namespace Joomla\Mediawiki;
 
 /**
- * MediaWiki API Categories class for the Joomla Platform.
+ * MediaWiki API Categories class.
  *
- * @package     Joomla.Platform
- * @subpackage  MediaWiki
- * @since       12.3
+ * @since  1.0
  */
-class JMediawikiCategories extends JMediawikiObject
+class Categories extends AbstractMediawikiObject
 {
 	/**
 	 * Method to list all categories the page(s) belong to.
@@ -31,7 +28,7 @@ class JMediawikiCategories extends JMediawikiObject
 	 *
 	 * @return  object
 	 *
-	 * @since   12.1
+	 * @since   1.0
 	 */
 	public function getCategories(array $titles, array $clprop = null, array $clshow = null, $cllimit = null, $clcontinue = false,
 		array $clcategories = null, $cldir = null)
@@ -85,7 +82,7 @@ class JMediawikiCategories extends JMediawikiObject
 	 *
 	 * @return  object
 	 *
-	 * @since   12.3
+	 * @since   1.0
 	 */
 	public function getCategoriesUsed(array $titles)
 	{
@@ -109,7 +106,7 @@ class JMediawikiCategories extends JMediawikiObject
 	 *
 	 * @return  object
 	 *
-	 * @since   12.3
+	 * @since   1.0
 	 */
 	public function getCategoriesInfo(array $titles, $clcontinue = false)
 	{
@@ -153,8 +150,8 @@ class JMediawikiCategories extends JMediawikiObject
 	 *
 	 * @return  object
 	 *
-	 * @since   3.2.2 (CMS)
-	 * @throws  RuntimeException
+	 * @since   1.0
+	 * @throws  \RuntimeException
 	 */
 	public function getCategoryMembers($cmtitle = null, $cmpageid = null, $cmlimit = null, array $cmprop = null, array $cmnamespace = null,
 		array $cmtype = null, $cmstart = null, $cmend = null, $cmstartsortkey = null, $cmendsortkey = null, $cmstartsortkeyprefix = null,
@@ -166,7 +163,7 @@ class JMediawikiCategories extends JMediawikiObject
 		// Make sure both $cmtitle and $cmpageid are not set
 		if (isset($cmtitle) && isset($cmpageid))
 		{
-			throw new RuntimeException('Both the $cmtitle and $cmpageid parameters cannot be set, please only use one of the two.');
+			throw new \RuntimeException('Both the $cmtitle and $cmpageid parameters cannot be set, please only use one of the two.');
 		}
 
 		if (isset($cmtitle))
@@ -174,7 +171,7 @@ class JMediawikiCategories extends JMediawikiObject
 			// Verify that the Category: prefix exists
 			if (strpos($cmtitle, 'Category:') !== 0)
 			{
-				throw new RuntimeException('The $cmtitle parameter must include the Category: prefix.');
+				throw new \RuntimeException('The $cmtitle parameter must include the Category: prefix.');
 			}
 
 			$path .= '&cmtitle=' . $cmtitle;
@@ -270,7 +267,7 @@ class JMediawikiCategories extends JMediawikiObject
 	 *
 	 * @return  object
 	 *
-	 * @since   12.3
+	 * @since   1.0
 	 */
 	public function enumerateCategories($acfrom = null, $acto = null, $acprefix = null, $acdir = null, $acmin = null,
 		$acmax = null, $aclimit = null, array $acprop = null)
@@ -337,7 +334,7 @@ class JMediawikiCategories extends JMediawikiObject
 	 *
 	 * @return  object
 	 *
-	 * @since   12.3
+	 * @since   1.0
 	 */
 	public function getChangeTags(array $tgprop = null, $tglimit = null)
 	{
@@ -354,7 +351,7 @@ class JMediawikiCategories extends JMediawikiObject
 			$path .= '&tglimit=' . $tglimit;
 		}
 
-		// @TODO add support for $tgcontinue
+		// @todo add support for $tgcontinue
 
 		// Send the request.
 		$response = $this->client->get($this->fetchUrl($path));

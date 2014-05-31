@@ -1,53 +1,54 @@
 <?php
 /**
- * @package     Joomla.UnitTest
- * @subpackage  Mediawiki
- *
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE
+ * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-require_once JPATH_PLATFORM . '/joomla/mediawiki/mediawiki.php';
-require_once JPATH_PLATFORM . '/joomla/mediawiki/http.php';
-require_once JPATH_PLATFORM . '/joomla/mediawiki/users.php';
+namespace Joomla\Mediawiki\Tests;
+
+use Joomla\Registry\Registry;
+use Joomla\Mediawiki\Users;
 
 /**
- * Test class for JMediawikiUsers.
+ * Test class for Users.
  *
- * @package     Joomla.UnitTest
- * @subpackage  Mediawiki
- *
- * @since       12.3
+ * @since  1.0
  */
-class JMediawikiUsersTest extends PHPUnit_Framework_TestCase
+class UsersTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var    JRegistry  Options for the Mediawiki object.
-	 * @since  12.3
+	 * @var    Registry  Options for the Mediawiki object.
+	 * @since  1.0
 	 */
 	protected $options;
 
 	/**
-	 * @var    JMediawikiHttp  Mock client object.
-	 * @since  12.3
+	 * @var    \PHPUnit_Framework_MockObject_MockObject  Mock client object.
+	 * @since  1.0
 	 */
 	protected $client;
 
 	/**
-	 * @var    JMediawikiUsers  Object under test.
-	 * @since  12.3
+	 * @var    Users  Object under test.
+	 * @since  1.0
 	 */
 	protected $object;
 
 	/**
+	 * @var    \Joomla\Http\Response  Mock response object.
+	 * @since  1.0
+	 */
+	protected $response;
+
+	/**
 	 * @var    string  Sample xml string.
-	 * @since  12.3
+	 * @since  1.0
 	 */
 	protected $sampleString = '<a><b></b><c></c></a>';
 
 	/**
 	 * @var    string  Sample xml error message.
-	 * @since  12.3
+	 * @since  1.0
 	 */
 	protected $errorString = '<message>Generic Error</message>';
 
@@ -58,48 +59,62 @@ class JMediawikiUsersTest extends PHPUnit_Framework_TestCase
 	 * @access protected
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	protected function setUp()
 	{
-		$this->options = new JRegistry;
-		$this->client = $this->getMock('JMediawikiHttp', array('get', 'post', 'delete', 'patch', 'put'));
+		$this->options = new Registry;
+		$this->client = $this->getMock('\\Joomla\\Mediawiki\\Http', array('get', 'post', 'delete', 'patch', 'put'));
+		$this->response = $this->getMock('\\Joomla\\Http\\Response');
 
-		$this->object = new JMediawikiUsers($this->options, $this->client);
+		$this->object = new Users($this->options, $this->client);
 	}
 
 	/**
 	 * Tests the login method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testLogin()
 	{
+		$this->markTestIncomplete(
+			'This test has not been implemented yet.'
+        );
 	}
 
 	/**
 	 * Tests the logout method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testLogout()
 	{
+		$this->markTestIncomplete(
+			'This test has not been implemented yet.'
+        );
 	}
 
 	/**
 	 * Tests the getUserInfo method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testGetUserInfo()
 	{
-		$returnData = new stdClass;
-		$returnData->code = 200;
-		$returnData->body = $this->sampleString;
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
 
 		$this->client->expects($this->once())
 			->method('get')
 			->with('/api.php?action=query&list=users&ususers=Joomla&format=xml')
-			->will($this->returnValue($returnData));
+			->will($this->returnValue($this->response));
 
 		$this->assertThat(
 			$this->object->getUserInfo(array('Joomla')),
@@ -111,17 +126,18 @@ class JMediawikiUsersTest extends PHPUnit_Framework_TestCase
 	 * Tests the getCurrentUserInfo method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testGetCurrentUserInfo()
 	{
-		$returnData = new stdClass;
-		$returnData->code = 200;
-		$returnData->body = $this->sampleString;
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
 
 		$this->client->expects($this->once())
 			->method('get')
 			->with('/api.php?action=query&meta=userinfo&format=xml')
-			->will($this->returnValue($returnData));
+			->will($this->returnValue($this->response));
 
 		$this->assertThat(
 			$this->object->getCurrentUserInfo(),
@@ -133,17 +149,18 @@ class JMediawikiUsersTest extends PHPUnit_Framework_TestCase
 	 * Tests the getUserContribs method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testGetUserContribs()
 	{
-		$returnData = new stdClass;
-		$returnData->code = 200;
-		$returnData->body = $this->sampleString;
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
 
 		$this->client->expects($this->once())
 			->method('get')
 			->with('/api.php?action=query&list=usercontribs&ucuser=Joomla&format=xml')
-			->will($this->returnValue($returnData));
+			->will($this->returnValue($this->response));
 
 		$this->assertThat(
 			$this->object->getUserContribs('Joomla'),
@@ -155,53 +172,83 @@ class JMediawikiUsersTest extends PHPUnit_Framework_TestCase
 	 * Tests the blockUser method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testBlockUser()
 	{
+		$this->markTestIncomplete(
+			'This test has not been implemented yet.'
+        );
 	}
 
 	/**
 	 * Tests the unBlockUserByName method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testUnBlockUserByName()
 	{
+		$this->markTestIncomplete(
+			'This test has not been implemented yet.'
+        );
 	}
 
 	/**
 	 * Tests the unBlockUserByID method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testUnBlockUserByID()
 	{
+		$this->markTestIncomplete(
+			'This test has not been implemented yet.'
+        );
 	}
 
 	/**
 	 * Tests the assignGroup method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testAssignGroup()
 	{
+		$this->markTestIncomplete(
+			'This test has not been implemented yet.'
+        );
 	}
 
 	/**
 	 * Tests the emailUser method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testEmailUser()
 	{
+		$this->markTestIncomplete(
+			'This test has not been implemented yet.'
+        );
 	}
 
 	/**
 	 * Tests the getToken method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testGetToken()
 	{
+		$this->markTestIncomplete(
+			'This test has not been implemented yet.'
+        );
 	}
 }

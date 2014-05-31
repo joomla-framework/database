@@ -1,113 +1,112 @@
 <?php
 /**
- * @package     Joomla.Platform
- * @subpackage  MediaWiki
+ * Part of the Joomla Framework MediaWiki Package
  *
- * @copyright   Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE
+ * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-defined('JPATH_PLATFORM') or die;
+namespace Joomla\Mediawiki;
+
+use Joomla\Registry\Registry;
 
 /**
- * Joomla Platform class for interacting with a Mediawiki server instance.
+ * Class for interacting with a MediaWiki server instance.
  *
- * @property-read  JMediawikiSites          $sites          MediaWiki API object for sites.
- * @property-read  JMediawikiPages          $pages          MediaWiki API object for pages.
- * @property-read  JMediawikiUsers          $users          MediaWiki API object for users.
- * @property-read  JMediawikiLinks          $links          MediaWiki API object for links.
- * @property-read  JMediawikiCategories     $categories     MediaWiki API object for categories.
- * @property-read  JMediawikiImages         $images         MediaWiki API object for images.
- * @property-read  JMediawikiSearch         $search         MediaWiki API object for search.
+ * @property-read  Joomla\Mediawiki\Sites          $sites          MediaWiki API object for sites.
+ * @property-read  Joomla\Mediawiki\Pages          $pages          MediaWiki API object for pages.
+ * @property-read  Joomla\Mediawiki\Users          $users          MediaWiki API object for users.
+ * @property-read  Joomla\Mediawiki\Links          $links          MediaWiki API object for links.
+ * @property-read  Joomla\Mediawiki\Categories     $categories     MediaWiki API object for categories.
+ * @property-read  Joomla\Mediawiki\Images         $images         MediaWiki API object for images.
+ * @property-read  Joomla\Mediawiki\Search         $search         MediaWiki API object for search.
  *
- * @package     Joomla.Platform
- * @subpackage  MediaWiki
- * @since       12.3
+ * @since  1.0
  */
-class JMediawiki
+class Mediawiki
 {
 	/**
-	 * @var    JRegistry  Options for the MediaWiki object.
-	 * @since  12.1
+	 * @var    Registry  Options for the MediaWiki object.
+	 * @since  1.0
 	 */
 	protected $options;
 
 	/**
-	 * @var    JMediawikiHttp  The HTTP client object to use in sending HTTP requests.
-	 * @since  12.3
+	 * @var    Http  The HTTP client object to use in sending HTTP requests.
+	 * @since  1.0
 	 */
 	protected $client;
 
 	/**
-	 * @var    JMediawikiSites  MediaWiki API object for Site.
-	 * @since  12.3
+	 * @var    Sites  MediaWiki API object for Site.
+	 * @since  1.0
 	 */
 	protected $sites;
 
 	/**
-	 * @var    JMediawikiPages  MediaWiki API object for pages.
-	 * @since  12.1
+	 * @var    Pages  MediaWiki API object for pages.
+	 * @since  1.0
 	 */
 	protected $pages;
 
 	/**
-	 * @var    JMediawikiUsers  MediaWiki API object for users.
-	 * @since  12.3
+	 * @var    Users  MediaWiki API object for users.
+	 * @since  1.0
 	 */
 	protected $users;
 
 	/**
-	 * @var    JMediawikiLinks  MediaWiki API object for links.
-	 * @since  12.3
+	 * @var    Links  MediaWiki API object for links.
+	 * @since  1.0
 	 */
 	protected $links;
 
 	/**
-	 * @var    JMediawikiCategories  MediaWiki API object for categories.
-	 * @since  12.3
+	 * @var    Categories  MediaWiki API object for categories.
+	 * @since  1.0
 	 */
 	protected $categories;
 
 	/**
-	 * @var    JMediawikiImages  MediaWiki API object for images.
-	 * @since  12.3
+	 * @var    Images  MediaWiki API object for images.
+	 * @since  1.0
 	 */
 	protected $images;
 
 	/**
-	 * @var    JMediawikiSearch  MediaWiki API object for search.
-	 * @since  12.1
+	 * @var    Search  MediaWiki API object for search.
+	 * @since  1.0
 	 */
 	protected $search;
 
 	/**
-     * Constructor.
-     *
-     * @param   JRegistry       $options  MediaWiki options object.
-     * @param   JMediawikiHttp  $client   The HTTP client object.
-     *
-     * @since   12.3
-     */
-	public function __construct(JRegistry $options = null, JMediawikiHttp $client = null)
+	 * Constructor.
+	 *
+	 * @param   array  $options  MediaWiki options array.
+	 * @param   Http   $client   The HTTP client object.
+	 *
+	 * @since   1.0
+	 */
+	public function __construct(Registry $options = null, Http $client = null)
 	{
-		$this->options = isset($options) ? $options : new JRegistry;
-		$this->client = isset($client) ? $client : new JMediawikiHttp($this->options);
+		$this->options = isset($options) ? $options : new Registry;
+		$this->client = isset($client) ? $client : new Http($this->options);
 	}
 
 	/**
-     * Magic method to lazily create API objects
-     *
-     * @param   string  $name  Name of property to retrieve
-     *
-     * @return  JMediaWikiObject  MediaWiki API object (users, reviews, etc).
-     *
-     * @since   12.3
-     * @throws  InvalidArgumentException
-     */
+	 * Magic method to lazily create API objects
+	 *
+	 * @param   string  $name  Name of property to retrieve
+	 *
+	 * @return  AbstractMediawikiObject  MediaWiki API object (users, reviews, etc).
+	 *
+	 * @since   1.0
+	 * @throws  \InvalidArgumentException
+	 */
 	public function __get($name)
 	{
 		$name = strtolower($name);
-		$class = 'JMediawiki' . ucfirst($name);
+		$class = 'Joomla\\Mediawiki\\' . ucfirst($name);
 		$accessible = array(
 			'categories',
 			'images',
@@ -128,33 +127,33 @@ class JMediawiki
 			return $this->$name;
 		}
 
-		throw new InvalidArgumentException(sprintf('Property %s is not accessible.', $name));
+		throw new \InvalidArgumentException(sprintf('Property %s is not accessible.', $name));
 	}
 
 	/**
-     * Get an option from the JMediawiki instance.
-     *
-     * @param   string  $key  The name of the option to get.
-     *
-     * @return  mixed  The option value.
-     *
-     * @since   12.3
-     */
+	 * Get an option from the Mediawiki instance.
+	 *
+	 * @param   string  $key  The name of the option to get.
+	 *
+	 * @return  mixed  The option value.
+	 *
+	 * @since   1.0
+	 */
 	public function getOption($key)
 	{
 		return $this->options->get($key);
 	}
 
 	/**
-     * Set an option for the JMediawiki instance.
-     *
-     * @param   string  $key    The name of the option to set.
-     * @param   mixed   $value  The option value to set.
-     *
-     * @return  JMediawiki  This object for method chaining.
-     *
-     * @since   12.3
-     */
+	 * Set an option for the Mediawiki instance.
+	 *
+	 * @param   string  $key    The name of the option to set.
+	 * @param   mixed   $value  The option value to set.
+	 *
+	 * @return  Mediawiki  This object for method chaining.
+	 *
+	 * @since   1.0
+	 */
 	public function setOption($key, $value)
 	{
 		$this->options->set($key, $value);

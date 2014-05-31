@@ -1,22 +1,19 @@
 <?php
 /**
- * @package     Joomla.Platform
- * @subpackage  MediaWiki
+ * Part of the Joomla Framework MediaWiki Package
  *
- * @copyright   Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE
+ * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-defined('JPATH_PLATFORM') or die;
+namespace Joomla\Mediawiki;
 
 /**
- * MediaWiki API Users class for the Joomla Platform.
+ * MediaWiki API Users class.
  *
- * @package     Joomla.Platform
- * @subpackage  MediaWiki
- * @since       12.3
+ * @since  1.0
  */
-class JMediawikiUsers extends JMediawikiObject
+class Users extends AbstractMediawikiObject
 {
 	/**
      * Method to login and get authentication tokens.
@@ -27,7 +24,7 @@ class JMediawikiUsers extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function login($lgname, $lgpassword, $lgdomain = null)
 	{
@@ -75,14 +72,14 @@ class JMediawikiUsers extends JMediawikiObject
 	 *
 	 * @return  object
 	 *
-	 * @since   12.3
+	 * @since   1.0
 	 */
 	public function logout()
 	{
 		// Build the request path.
 		$path = '?action=login';
 
-		// @TODO clear internal data as well
+		// @todo clear internal data as well
 
 		// Send the request.
 		$response = $this->client->get($this->fetchUrl($path));
@@ -98,7 +95,7 @@ class JMediawikiUsers extends JMediawikiObject
 	 *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function getUserInfo(array $ususers, array $usprop = null)
 	{
@@ -126,7 +123,7 @@ class JMediawikiUsers extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function getCurrentUserInfo(array $uiprop = null)
 	{
@@ -162,7 +159,7 @@ class JMediawikiUsers extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function getUserContribs($ucuser = null, $ucuserprefix = null, $uclimit = null, $ucstart = null, $ucend = null, $uccontinue = null,
 		$ucdir = null, array $ucnamespace = null, array $ucprop = null, array $ucshow = null, $uctag = null, $uctoponly = null)
@@ -253,7 +250,7 @@ class JMediawikiUsers extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function blockUser($user, $expiry = null, $reason = null, $anononly = null, $nocreate = null, $autoblock = null, $noemail = null,
 		$hidename = null, $allowusertalk = null, $reblock = null, $watchuser = null)
@@ -294,7 +291,7 @@ class JMediawikiUsers extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function unBlockUserByName($user, $reason = null)
 	{
@@ -325,7 +322,7 @@ class JMediawikiUsers extends JMediawikiObject
 	 *
 	 * @return  object
 	 *
-	 * @since   12.3
+	 * @since   1.0
 	 */
 	public function unBlockUserByID($id, $reason = null)
 	{
@@ -359,7 +356,7 @@ class JMediawikiUsers extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function assignGroup($username, $add = null, $remove = null, $reason = null)
 	{
@@ -394,7 +391,7 @@ class JMediawikiUsers extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function emailUser($target, $subject = null, $text = null, $ccme = null)
 	{
@@ -427,7 +424,7 @@ class JMediawikiUsers extends JMediawikiObject
 	 *
 	 * @return  object
 	 *
-	 * @since   12.3
+	 * @since   1.0
 	 */
 	public function getToken($user, $intoken)
 	{

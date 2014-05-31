@@ -1,22 +1,19 @@
 <?php
 /**
- * @package     Joomla.Platform
- * @subpackage  MediaWiki
+ * Part of the Joomla Framework MediaWiki Package
  *
- * @copyright   Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE
+ * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-defined('JPATH_PLATFORM') or die;
+namespace Joomla\Mediawiki;
 
 /**
- * MediaWiki API Pages class for the Joomla Platform.
+ * MediaWiki API Pages class.
  *
- * @package     Joomla.Platform
- * @subpackage  MediaWiki
- * @since       12.3
+ * @since  1.0
  */
-class JMediawikiPages extends JMediawikiObject
+class Pages extends AbstractMediawikiObject
 {
 	/**
      * Method to edit a page.
@@ -29,7 +26,7 @@ class JMediawikiPages extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function editPage($title, $section = null, $sectiontitle = null, $text = null, $summary = null)
 	{
@@ -65,7 +62,7 @@ class JMediawikiPages extends JMediawikiObject
 	 *
 	 * @return  object
 	 *
-	 * @since   12.3
+	 * @since   1.0
 	 */
 	public function deletePageByName($title, $reason = null, $watchlist = null, $oldimage = null)
 	{
@@ -100,7 +97,7 @@ class JMediawikiPages extends JMediawikiObject
 	 *
 	 * @return  object
 	 *
-	 * @since   12.3
+	 * @since   1.0
 	 */
 	public function deletePageByID($pageid,  $reason = null, $watchlist = null, $oldimage = null)
 	{
@@ -135,7 +132,7 @@ class JMediawikiPages extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function undeletePage($title, $reason = null, $timestamp = null, $watchlist = null)
 	{
@@ -174,7 +171,7 @@ class JMediawikiPages extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function movePageByName($from, $to, $reason = null, $movetalk = null, $movesubpages = null, $noredirect = null,
 		$watchlist =null, $ignorewarnings = null)
@@ -218,7 +215,7 @@ class JMediawikiPages extends JMediawikiObject
 	 *
 	 * @return  object
 	 *
-	 * @since   12.3
+	 * @since   1.0
 	 */
 	public function movePageByID($fromid, $to, $reason = null, $movetalk = null, $movesubpages = null, $noredirect = null,
 		$watchlist =null, $ignorewarnings = null)
@@ -259,7 +256,7 @@ class JMediawikiPages extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function rollback($title, $user, $summary = null, $markbot = null, $watchlist = null)
 	{
@@ -297,7 +294,7 @@ class JMediawikiPages extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function changeProtection($title, $protections, $expiry = null, $reason = null, $cascade = null, $watchlist = null)
 	{
@@ -334,7 +331,7 @@ class JMediawikiPages extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function getPageInfo(array $titles, array $inprop = null, array $intoken = null, $incontinue = null)
 	{
@@ -374,7 +371,7 @@ class JMediawikiPages extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function getPageProperties(array $titles, $ppcontinue = null, $ppprop = null)
 	{
@@ -410,7 +407,7 @@ class JMediawikiPages extends JMediawikiObject
 	 *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function getRevisions(array $titles, array $rvprop = null, $rvparse = null, $rvlimit = null)
 	{
@@ -453,7 +450,7 @@ class JMediawikiPages extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function getPageTemplates(array $titles, array $tlnamespace = null, $tllimit = null, $tlcontinue = null, $tltemplates = null, $tldir = null)
 	{
@@ -507,7 +504,7 @@ class JMediawikiPages extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function getBackLinks($bltitle, $blpageid = null, $blcontinue = null, array $blnamespace = null, $blfilterredirect = null,
 		$bllimit = null, $blredirect = null)
@@ -567,7 +564,7 @@ class JMediawikiPages extends JMediawikiObject
      *
      * @return  object
      *
-     * @since   12.3
+     * @since   1.0
      */
 	public function getIWBackLinks($iwbltitle, $iwblprefix = null, $iwblcontinue = null, $iwbllimit = null, array $iwblprop = null)
 	{
@@ -613,7 +610,7 @@ class JMediawikiPages extends JMediawikiObject
 	 *
 	 * @return  object
 	 *
-	 * @since   12.1
+	 * @since   1.0
 	 */
 	public function getToken($user, $intoken)
 	{

@@ -1,51 +1,48 @@
 <?php
 /**
- * @package     Joomla.UnitTest
- * @subpackage  Client
- *
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE
+ * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-require_once JPATH_PLATFORM . '/joomla/mediawiki/mediawiki.php';
+namespace Joomla\Mediawiki\Tests;
+
+use Joomla\Registry\Registry;
+use Joomla\Mediawiki\Mediawiki;
 
 /**
  * Test class for JMediawiki.
  *
- * @package     Joomla.UnitTest
- * @subpackage  Mediawiki
- *
- * @since       12.3
+ * @since  1.0
  */
-class JMediawikiTest extends PHPUnit_Framework_TestCase
+class MediawikiTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var    JRegistry  Options for the Mediawiki object.
-	 * @since  12.3
+	 * @var    Registry  Options for the Mediawiki object.
+	 * @since  1.0
 	 */
 	protected $options;
 
 	/**
-	 * @var    JMediawikiHttp  Mock client object.
-	 * @since  12.3
+	 * @var    \PHPUnit_Framework_MockObject_MockObject  Mock client object.
+	 * @since  1.0
 	 */
 	protected $client;
 
 	/**
-	 * @var    JMediawiki Object under test.
-	 * @since  12.3
+	 * @var    Mediawiki Object under test.
+	 * @since  1.0
 	 */
 	protected $object;
 
 	/**
 	 * @var    string  Sample xml string.
-	 * @since  12.3
+	 * @since  1.0
 	 */
 	protected $sampleString = '<a><b></b><c></c></a>';
 
 	/**
 	 * @var    string  Sample xml error message.
-	 * @since  12.3
+	 * @since  1.0
 	 */
 	protected $errorString = '<message>Generic Error</message>';
 
@@ -56,25 +53,29 @@ class JMediawikiTest extends PHPUnit_Framework_TestCase
 	 * @access protected
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	protected function setUp()
 	{
-		$this->options = new JRegistry;
-		$this->client = $this->getMock('JMediawikiHttp', array('get', 'post', 'delete', 'patch', 'put'));
+		$this->options = new Registry;
+		$this->client = $this->getMock('\\Joomla\\Mediawiki\\Http', array('get', 'post', 'delete', 'patch', 'put'));
 
-		$this->object = new JMediawiki($this->options, $this->client);
+		$this->object = new Mediawiki($this->options, $this->client);
 	}
 
 	/**
 	 * Tests the magic __get method - pages
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function test__GetPages()
 	{
 		$this->assertThat(
 			$this->object->pages,
-			$this->isInstanceOf('JMediawikiPages')
+			$this->isInstanceOf('Joomla\Mediawiki\Pages')
 		);
 	}
 
@@ -82,12 +83,14 @@ class JMediawikiTest extends PHPUnit_Framework_TestCase
 	 * Tests the magic __get method - users
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function test__GetUsers()
 	{
 		$this->assertThat(
 			$this->object->users,
-			$this->isInstanceOf('JMediawikiUsers')
+			$this->isInstanceOf('Joomla\Mediawiki\Users')
 		);
 	}
 
@@ -95,12 +98,14 @@ class JMediawikiTest extends PHPUnit_Framework_TestCase
 	 * Tests the magic __get method - links
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function test__GetLinks()
 	{
 		$this->assertThat(
 			$this->object->links,
-			$this->isInstanceOf('JMediawikiLinks')
+			$this->isInstanceOf('Joomla\Mediawiki\Links')
 		);
 	}
 
@@ -108,12 +113,14 @@ class JMediawikiTest extends PHPUnit_Framework_TestCase
 	 * Tests the magic __get method - categories
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function test__GetCategories()
 	{
 		$this->assertThat(
 			$this->object->categories,
-			$this->isInstanceOf('JMediawikiCategories')
+			$this->isInstanceOf('Joomla\Mediawiki\Categories')
 		);
 	}
 
@@ -121,12 +128,14 @@ class JMediawikiTest extends PHPUnit_Framework_TestCase
 	 * Tests the magic __get method - images
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function test__GetImages()
 	{
 		$this->assertThat(
 			$this->object->images,
-			$this->isInstanceOf('JMediawikiImages')
+			$this->isInstanceOf('Joomla\Mediawiki\Images')
 		);
 	}
 
@@ -134,12 +143,14 @@ class JMediawikiTest extends PHPUnit_Framework_TestCase
 	 * Tests the magic __get method - search
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function test__GetSearch()
 	{
 		$this->assertThat(
 			$this->object->search,
-			$this->isInstanceOf('JMediawikiSearch')
+			$this->isInstanceOf('Joomla\Mediawiki\Search')
 		);
 	}
 
@@ -147,6 +158,8 @@ class JMediawikiTest extends PHPUnit_Framework_TestCase
 	 * Tests the setOption method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testSetOption()
 	{
@@ -162,6 +175,8 @@ class JMediawikiTest extends PHPUnit_Framework_TestCase
 	 * Tests the getOption method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testGetOption()
 	{

@@ -1,21 +1,20 @@
 <?php
 /**
- * @package     Joomla.UnitTest
- * @subpackage  Application
- *
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE
+ * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+namespace Joomla\Mediawiki\Tests;
+
+use Joomla\Mediawiki\AbstractMediawikiObject;
+use Joomla\Http\Response;
+
 /**
- * JMediawikiObjectMock class.
+ * AbstractMediawikiObjectMock class.
  *
- * @package     Joomla.UnitTest
- * @subpackage  Mediawiki
- *
- * @since       12.3
+ * @since  1.0
  */
-class JMediawikiObjectMock extends JMediawikiObject
+class AbstractMediawikiObjectMock extends AbstractMediawikiObject
 {
 	/**
 	 * Method to build and return a full request URL for the request.  This method will
@@ -26,7 +25,7 @@ class JMediawikiObjectMock extends JMediawikiObject
 	 *
 	 * @return  string   The request URL.
 	 *
-	 * @since   12.3
+	 * @since   1.0
 	 */
 	public function fetchUrl($path)
 	{
@@ -40,9 +39,9 @@ class JMediawikiObjectMock extends JMediawikiObject
 	 *
 	 * @return  string   request parameter
 	 *
-	 * @since   12.3
+	 * @since   1.0
 	 */
-	public function buildParameter($params)
+	public function buildParameter(array $params)
 	{
 		return parent::buildParameter($params);
 	}
@@ -50,13 +49,13 @@ class JMediawikiObjectMock extends JMediawikiObject
 	/**
 	 * Method to validate response for errors
 	 *
-	 * @param   JHttpresponse  $response  reponse from the mediawiki server
+	 * @param   Response  $response  The response from the mediawiki server.
 	 *
 	 * @return  Object
 	 *
-	 * @since   12.3
+	 * @since   1.0
 	 */
-	public function validateResponse($response)
+	public function validateResponse(Response $response)
 	{
 		return parent::validateResponse($response);
 	}

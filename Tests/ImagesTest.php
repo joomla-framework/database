@@ -1,53 +1,56 @@
 <?php
 /**
- * @package     Joomla.UnitTest
- * @subpackage  Mediawiki
+ * Part of the Joomla Framework Mediawiki Package
  *
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE
+ * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-require_once JPATH_PLATFORM . '/joomla/mediawiki/mediawiki.php';
-require_once JPATH_PLATFORM . '/joomla/mediawiki/http.php';
-require_once JPATH_PLATFORM . '/joomla/mediawiki/images.php';
+namespace Joomla\Mediawiki\Tests;
+
+use Joomla\Registry\Registry;
+use Joomla\Mediawiki\Images;
 
 /**
- * Test class for JMediawikiImages.
+ * Test class for Images.
  *
- * @package     Joomla.UnitTest
- * @subpackage  Mediawiki
- *
- * @since       12.3
+ * @since  1.0
  */
-class JMediawikiImagesTest extends PHPUnit_Framework_TestCase
+class ImagesTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var    JRegistry  Options for the Mediawiki object.
-	 * @since  12.3
+	 * @var    Registry  Options for the Mediawiki object.
+	 * @since  1.0
 	 */
 	protected $options;
 
 	/**
-	 * @var    JMediawikiHttp  Mock client object.
-	 * @since  12.3
+	 * @var    \PHPUnit_Framework_MockObject_MockObject  Mock client object.
+	 * @since  1.0
 	 */
 	protected $client;
 
 	/**
-	 * @var    JMediawikiImages  Object under test.
-	 * @since  12.3
+	 * @var    Images  Object under test.
+	 * @since  1.0
 	 */
 	protected $object;
 
 	/**
+	 * @var    \Joomla\Http\Response  Mock response object.
+	 * @since  1.0
+	 */
+	protected $response;
+
+	/**
 	 * @var    string  Sample xml string.
-	 * @since  12.3
+	 * @since  1.0
 	 */
 	protected $sampleString = '<a><b></b><c></c></a>';
 
 	/**
 	 * @var    string  Sample xml error message.
-	 * @since  12.3
+	 * @since  1.0
 	 */
 	protected $errorString = '<message>Generic Error</message>';
 
@@ -58,30 +61,34 @@ class JMediawikiImagesTest extends PHPUnit_Framework_TestCase
 	 * @access protected
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	protected function setUp()
 	{
-		$this->options = new JRegistry;
-		$this->client = $this->getMock('JMediawikiHttp', array('get', 'post', 'delete', 'patch', 'put'));
+		$this->options = new Registry;
+		$this->client = $this->getMock('\\Joomla\\Mediawiki\\Http', array('get', 'post', 'delete', 'patch', 'put'));
+		$this->response = $this->getMock('\\Joomla\\Http\\Response');
 
-		$this->object = new JMediawikiImages($this->options, $this->client);
+		$this->object = new Images($this->options, $this->client);
 	}
 
 	/**
 	 * Tests the getImages method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testGetImages()
 	{
-		$returnData = new stdClass;
-		$returnData->code = 200;
-		$returnData->body = $this->sampleString;
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
 
 		$this->client->expects($this->once())
 			->method('get')
 			->with('/api.php?action=query&prop=images&titles=Main Page&format=xml')
-			->will($this->returnValue($returnData));
+			->will($this->returnValue($this->response));
 
 		$this->assertThat(
 			$this->object->getImages(array('Main Page')),
@@ -93,17 +100,18 @@ class JMediawikiImagesTest extends PHPUnit_Framework_TestCase
 	 * Tests the getImagesUsed method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testGetImagesUsed()
 	{
-		$returnData = new stdClass;
-		$returnData->code = 200;
-		$returnData->body = $this->sampleString;
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
 
 		$this->client->expects($this->once())
 			->method('get')
 			->with('/api.php?action=query&generator=images&prop=info&titles=Main Page&format=xml')
-			->will($this->returnValue($returnData));
+			->will($this->returnValue($this->response));
 
 		$this->assertThat(
 			$this->object->getImagesUsed(array('Main Page')),
@@ -115,17 +123,18 @@ class JMediawikiImagesTest extends PHPUnit_Framework_TestCase
 	 * Tests the getImageInfo method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testGetImageInfo()
 	{
-		$returnData = new stdClass;
-		$returnData->code = 200;
-		$returnData->body = $this->sampleString;
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
 
 		$this->client->expects($this->once())
 			->method('get')
 			->with('/api.php?action=query&prop=imageinfo&format=xml')
-			->will($this->returnValue($returnData));
+			->will($this->returnValue($this->response));
 
 		$this->assertThat(
 			$this->object->getImageInfo(),
@@ -137,17 +146,18 @@ class JMediawikiImagesTest extends PHPUnit_Framework_TestCase
 	 * Tests the enumerateImages method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testEnumerateImages()
 	{
-		$returnData = new stdClass;
-		$returnData->code = 200;
-		$returnData->body = $this->sampleString;
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
 
 		$this->client->expects($this->once())
 			->method('get')
 			->with('/api.php?action=query&list=allimages&format=xml')
-			->will($this->returnValue($returnData));
+			->will($this->returnValue($this->response));
 
 		$this->assertThat(
 			$this->object->enumerateImages(),

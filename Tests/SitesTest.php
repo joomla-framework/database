@@ -1,53 +1,54 @@
 <?php
 /**
- * @package     Joomla.UnitTest
- * @subpackage  Mediawiki
- *
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE
+ * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-require_once JPATH_PLATFORM . '/joomla/mediawiki/mediawiki.php';
-require_once JPATH_PLATFORM . '/joomla/mediawiki/http.php';
-require_once JPATH_PLATFORM . '/joomla/mediawiki/sites.php';
+namespace Joomla\Mediawiki\Tests;
+
+use Joomla\Registry\Registry;
+use Joomla\Mediawiki\Sites;
 
 /**
- * Test class for JMediawikiCategories.
+ * Test class for Sites.
  *
- * @package     Joomla.UnitTest
- * @subpackage  Mediawiki
- *
- * @since       12.3
+ * @since  1.0
  */
-class JMediawikiSitesTest extends PHPUnit_Framework_TestCase
+class SitesTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var    JRegistry  Options for the Mediawiki object.
-	 * @since  12.3
+	 * @var    Registry  Options for the Mediawiki object.
+	 * @since  1.0
 	 */
 	protected $options;
 
 	/**
-	 * @var    JMediawikiHttp  Mock client object.
-	 * @since  12.3
+	 * @var    \PHPUnit_Framework_MockObject_MockObject  Mock client object.
+	 * @since  1.0
 	 */
 	protected $client;
 
 	/**
-	 * @var    JMediawikiSites  Object under test.
-	 * @since  12.3
+	 * @var    Sites  Object under test.
+	 * @since  1.0
 	 */
 	protected $object;
 
 	/**
+	 * @var    \Joomla\Http\Response  Mock response object.
+	 * @since  1.0
+	 */
+	protected $response;
+
+	/**
 	 * @var    string  Sample xml string.
-	 * @since  12.3
+	 * @since  1.0
 	 */
 	protected $sampleString = '<a><b></b><c></c></a>';
 
 	/**
 	 * @var    string  Sample xml error message.
-	 * @since  12.3
+	 * @since  1.0
 	 */
 	protected $errorString = '<message>Generic Error</message>';
 
@@ -58,30 +59,34 @@ class JMediawikiSitesTest extends PHPUnit_Framework_TestCase
 	 * @access protected
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	protected function setUp()
 	{
-		$this->options = new JRegistry;
-		$this->client = $this->getMock('JMediawikiHttp', array('get', 'post', 'delete', 'patch', 'put'));
+		$this->options = new Registry;
+		$this->client = $this->getMock('\\Joomla\\Mediawiki\\Http', array('get', 'post', 'delete', 'patch', 'put'));
+		$this->response = $this->getMock('\\Joomla\\Http\\Response');
 
-		$this->object = new JMediawikiSites($this->options, $this->client);
+		$this->object = new Sites($this->options, $this->client);
 	}
 
 	/**
 	 * Tests the getSiteInfo method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testGetSiteInfo()
 	{
-		$returnData = new stdClass;
-		$returnData->code = 200;
-		$returnData->body = $this->sampleString;
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
 
 		$this->client->expects($this->once())
 			->method('get')
 			->with('/api.php?action=query&meta=siteinfo&format=xml')
-			->will($this->returnValue($returnData));
+			->will($this->returnValue($this->response));
 
 		$this->assertThat(
 			$this->object->getSiteInfo(),
@@ -93,17 +98,18 @@ class JMediawikiSitesTest extends PHPUnit_Framework_TestCase
 	 * Tests the getEvents method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testGetEvents()
 	{
-		$returnData = new stdClass;
-		$returnData->code = 200;
-		$returnData->body = $this->sampleString;
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
 
 		$this->client->expects($this->once())
 			->method('get')
 			->with('/api.php?action=query&list=logevents&format=xml')
-			->will($this->returnValue($returnData));
+			->will($this->returnValue($this->response));
 
 		$this->assertThat(
 			$this->object->getEvents(),
@@ -115,17 +121,18 @@ class JMediawikiSitesTest extends PHPUnit_Framework_TestCase
 	 * Tests the getRecentChanges method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testGetRecentChanges()
 	{
-		$returnData = new stdClass;
-		$returnData->code = 200;
-		$returnData->body = $this->sampleString;
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
 
 		$this->client->expects($this->once())
 			->method('get')
 			->with('/api.php?action=query&list=recentchanges&format=xml')
-			->will($this->returnValue($returnData));
+			->will($this->returnValue($this->response));
 
 		$this->assertThat(
 			$this->object->getRecentChanges(),
@@ -137,17 +144,18 @@ class JMediawikiSitesTest extends PHPUnit_Framework_TestCase
 	 * Tests the getProtectedTitles method
 	 *
 	 * @return void
+	 *
+	 * @since  1.0
 	 */
 	public function testGetProtectedTitles()
 	{
-		$returnData = new stdClass;
-		$returnData->code = 200;
-		$returnData->body = $this->sampleString;
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
 
 		$this->client->expects($this->once())
 			->method('get')
 			->with('/api.php?action=query&list=protectedtitles&format=xml')
-			->will($this->returnValue($returnData));
+			->will($this->returnValue($this->response));
 
 		$this->assertThat(
 			$this->object->getProtectedTitles(),
