@@ -167,7 +167,7 @@ class Input implements \Serializable, \Countable
 	 */
 	public function get($name, $default = null, $filter = 'cmd')
 	{
-		if (isset($this->data[$name]) && !empty($this->data[$name]))
+		if (isset($this->data[$name]))
 		{
 			return $this->filter->clean($this->data[$name], $filter);
 		}
