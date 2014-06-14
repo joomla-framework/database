@@ -105,7 +105,7 @@ class String
 	 */
 	public function stream_open($path, $mode, $options, &$opened_path)
 	{
-		$this->currentString = &StringController::getRef(str_replace('string://', '', $path));
+		$this->currentString = & StringController::getRef(str_replace('string://', '', $path));
 
 		if ($this->currentString)
 		{
@@ -148,7 +148,7 @@ class String
 	public function url_stat($path, $flags = 0)
 	{
 		$now = time();
-		$string = &StringController::getRef(str_replace('string://', '', $path));
+		$string = & StringController::getRef(str_replace('string://', '', $path));
 		$stat = array(
 			'dev' => 0,
 			'ino' => 0,
@@ -224,7 +224,7 @@ class String
 	 */
 	public function stream_eof()
 	{
-		if ($this->pos > $this->len)
+		if ($this->pos >= $this->len)
 		{
 			return true;
 		}
@@ -258,7 +258,7 @@ class String
 				break;
 
 			case SEEK_CUR:
-				if (($this->pos + $offset) < $this->len)
+				if (($this->pos + $offset) <= $this->len)
 				{
 					$this->pos += $offset;
 				}

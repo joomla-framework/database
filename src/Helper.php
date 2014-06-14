@@ -38,9 +38,9 @@ class Helper
 
 		if (($sch == 'http') || ($sch == 'https'))
 		{
-			$headers = get_headers($url, 1);
+			$headers = @ get_headers($url, 1);
 
-			if ((!array_key_exists('Content-Length', $headers)))
+			if (!$headers || (!array_key_exists('Content-Length', $headers)))
 			{
 				return false;
 			}
@@ -79,11 +79,11 @@ class Helper
 			switch ($sch)
 			{
 				case 'ftp':
-					$ftpid = ftp_connect($server, $port);
+					$ftpid = @ftp_connect($server, $port);
 					break;
 
 				case 'ftps':
-					$ftpid = ftp_ssl_connect($server, $port);
+					$ftpid = @ftp_ssl_connect($server, $port);
 					break;
 			}
 
@@ -92,7 +92,7 @@ class Helper
 				return false;
 			}
 
-			$login = ftp_login($ftpid, $user, $pass);
+			$login = @ftp_login($ftpid, $user, $pass);
 
 			if (!$login)
 			{
@@ -160,11 +160,11 @@ class Helper
 		switch ($sch)
 		{
 			case 'ftp':
-				$ftpid = ftp_connect($server, $port);
+				$ftpid = @ftp_connect($server, $port);
 				break;
 
 			case 'ftps':
-				$ftpid = ftp_ssl_connect($server, $port);
+				$ftpid = @ftp_ssl_connect($server, $port);
 				break;
 		}
 
@@ -173,14 +173,14 @@ class Helper
 			return false;
 		}
 
-		$login = ftp_login($ftpid, $user, $pass);
+		$login = @ftp_login($ftpid, $user, $pass);
 
 		if (!$login)
 		{
 			return false;
 		}
 
-		$res = ftp_chmod($ftpid, $mode, $path);
+		$res = @ftp_chmod($ftpid, $mode, $path);
 		ftp_close($ftpid);
 
 		return $res;

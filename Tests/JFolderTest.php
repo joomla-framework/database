@@ -5,6 +5,7 @@
  */
 
 use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\File;
 use Joomla\Filesystem\Path;
 
 /**
@@ -20,48 +21,231 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	protected $object;
 
 	/**
-	 * Test...
+	 * Tests the Folder::copy method.
 	 *
-	 * @todo Implement testCopy().
+	 * @return  void
 	 *
-	 * @return void
+	 * @since   1.0
 	 */
 	public function testCopy()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$name = 'tempFolder';
+		$copiedFolderName = 'tempCopiedFolderName';
+		$path = __DIR__;
+
+		Folder::create($path . '/' . $name);
+
+		$this->assertThat(
+			Folder::copy($name, $copiedFolderName, $path),
+			$this->isTrue(),
+			'Line:' . __LINE__ . ' Folder should be copied successfully.'
 		);
+		Folder::delete($path . '/' . $copiedFolderName);
+
+		$this->assertThat(
+			Folder::copy($path . '/' . $name, $path . '/' . $copiedFolderName),
+			$this->isTrue(),
+			'Line:' . __LINE__ . ' Folder should be copied successfully.'
+		);
+		Folder::delete($path . '/' . $copiedFolderName);
+
+		Folder::delete($path . '/' . $name);
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testCreate().
+	 * Test the Folder::copy method where source folder doesn't exist.
 	 *
 	 * @return void
+	 *
+	 * @since   1.0
+	 * @expectedException Joomla\Filesystem\Exception\FilesystemException
+	 */
+	public function testCopySrcDontExist()
+	{
+
+		$name = 'tempFolder';
+		$copiedFolderName = 'tempCopiedFolderName';
+		$path = __DIR__ . '/tmp';
+
+		Folder::copy($path . '/' . $name . 'foobar', $path . '/' . $copiedFolderName);
+
+		Folder::delete($path . '/' . $copiedFolderName);
+		Folder::delete($path . '/' . $name);
+	}
+
+	/**
+	 * Test the Folder::copy method where destination folder exist already.
+	 *
+	 * @return void
+	 *
+	 * @since   1.0
+	 */
+	public function testCopyDestExist()
+	{
+		$name = 'tempFolder';
+		$copiedFolderName = 'tempCopiedFolderName';
+		$path = __DIR__;
+
+		Folder::create($path . '/' . $name);
+		Folder::create($path . '/' . $copiedFolderName);
+
+		// Destination folder exist already and copy is forced.
+		$this->assertThat(
+			Folder::copy($name, $copiedFolderName, $path, true),
+			$this->isTrue(),
+			'Line:' . __LINE__ . ' Folder should be copied successfully.'
+		);
+
+		try
+		{
+			Folder::copy($name, $copiedFolderName, $path);
+		}
+		catch (Exception $exception)
+		{
+			// Destination folder exist already and copy is not forced.
+			$this->assertInstanceOf(
+				'RuntimeException',
+				$exception,
+				'Line:' . __LINE__ . ' Folder should not be copied successfully.'
+			);
+		}
+
+		Folder::delete($path . '/' . $copiedFolderName);
+
+		Folder::delete($path . '/' . $name);
+	}
+
+	/**
+	 * Tests the Folder::create method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testCreate()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$name = 'tempFolder';
+		$path = __DIR__;
+
+		$this->assertThat(
+			Folder::create($path . '/' . $name),
+			$this->isTrue(),
+			'Line:' . __LINE__ . ' Folder should be created successfully.'
 		);
+
+		// Already existing directory (made by previous call).
+		$this->assertThat(
+			Folder::create($path . '/' . $name),
+			$this->isTrue(),
+			'Line:' . __LINE__ . ' Folder should be created successfully.'
+		);
+
+		Folder::delete($path . '/' . $name);
+
+		// Creating parent directory recursively.
+		$this->assertThat(
+			Folder::create($path . '/' . $name . '/' . $name),
+			$this->isTrue(),
+			'Line:' . __LINE__ . ' Folder should be created successfully.'
+		);
+
+		Folder::delete($path . '/' . $name . '/' . $name);
+
+		
 	}
 
 	/**
-	 * Test...
+	 * Tests the Folder::create method.
 	 *
-	 * @todo Implement testDelete().
+	 * @return  void
 	 *
-	 * @return void
+	 * @since   1.0
+	 * @expectedException Joomla\Filesystem\Exception\FilesystemException
+	 */
+	public function testCreateInfiniteLoopException()
+	{
+		$name = 'tempFolder';
+
+		// Checking for infinite loop in the path.
+		$path = __DIR__ . '/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z';
+		$this->assertThat(
+			Folder::create($path . '/' . $name),
+			$this->isFalse(),
+			'Line:' . __LINE__ . ' Folder should be created successfully.'
+		);
+
+		Folder::delete($path . '/' . $name);
+	}
+
+	/**
+	 * Tests the Folder::delete method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testDelete()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$name = 'tempFolder';
+		$path = __DIR__;
+
+		Folder::create($path . '/' . $name);
+
+		$this->assertThat(
+			Folder::delete($path . '/' . $name),
+			$this->isTrue(),
+			'Line:' . __LINE__ . ' Folder should be deleted successfully.'
 		);
+
+		// Create a folder and a sub-folder and file in it.
+		$data = 'Lorem ipsum dolor sit amet';
+		Folder::create($path . '/' . $name);
+		File::write($path . '/' . $name . '/' . $name . '.txt', $data);
+		Folder::create($path . '/' . $name . '/' . $name);
+
+		$this->assertThat(
+			Folder::delete($path . '/' . $name),
+			$this->isTrue(),
+			'Line:' . __LINE__ . ' Folder and its sub folder & files should be deleted successfully.'
+		);
+
+		
+	}
+
+	/**
+	 * Tests the Folder::delete method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 * @expectedException  Joomla\Filesystem\Exception\FilesystemException
+	 */
+	public function testDeleteBaseDir()
+	{
+		Folder::delete('');
+	}
+
+	/**
+	 * Tests the Folder::delete method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 * @expectedException  UnexpectedValueException
+	 */
+	public function testDeleteFile()
+	{
+		$name = 'tempFile';
+		$path = __DIR__ . '/tmp';
+		$data = 'Lorem ipsum dolor sit amet';
+
+		// Create a temp file to test copy operation
+		file_put_contents($path . '/' . $name, $data);
+
+		// Testing file delete.
+		Folder::delete($path . '/' . $name);
+
+		unlink($path . '/' . $name);
 	}
 
 	/**
@@ -77,18 +261,54 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
+	 * Tests the Folder::move method.
 	 *
-	 * @todo Implement testMove().
+	 * @return  void
 	 *
-	 * @return void
+	 * @since   1.0
 	 */
 	public function testMove()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$name = 'tempFolder';
+		$movedFolderName = 'tempMovedFolderName';
+		$path = __DIR__;
+
+		Folder::create($path . '/' . $name);
+
+		$this->assertThat(
+			Folder::move($name, $movedFolderName, $path),
+			$this->isTrue(),
+			'Line:' . __LINE__ . ' Folder should be moved successfully.'
 		);
+
+		// Testing using streams.
+		$this->assertThat(
+			Folder::move($movedFolderName, $name, $path, true),
+			$this->isTrue(),
+			'Line:' . __LINE__ . ' Folder should be moved successfully.'
+		);
+
+		$this->assertThat(
+			Folder::move($path . '/' . $name, $path . '/' . $movedFolderName),
+			$this->isTrue(),
+			'Line:' . __LINE__ . ' Folder should be moved successfully.'
+		);
+
+		// Testing condition of source folder don't exist.
+		$this->assertEquals(
+			Folder::move($name, $movedFolderName, $path),
+			'Cannot find source folder',
+			'Line:' . __LINE__ . ' Folder should not be moved successfully.'
+		);
+
+		// Testing condition of dest folder exist already.
+		$this->assertEquals(
+			Folder::move($movedFolderName, $movedFolderName, $path),
+			'Folder already exists',
+			'Line:' . __LINE__ . ' Folder should not be moved successfully.'
+		);
+
+		Folder::delete($path . '/' . $movedFolderName);
 	}
 
 	/**
@@ -335,18 +555,107 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
+	 * Tests the Folder::listFolderTree method.
 	 *
-	 * @todo Implement testListFolderTree().
+	 * @return  void
 	 *
-	 * @return void
+	 * @since   1.0
 	 */
 	public function testListFolderTree()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+		$name = 'tempFolder';
+		$path = __DIR__;
+
+		// -tempFolder
+		Folder::create("$path/$name");
+		$this->assertEquals(
+			Folder::listFolderTree("$path/$name", '.'),
+			array(),
+			'Line: ' . __LINE__ . ' Observed folder tree is not correct.');
+
+		// -tempFolder
+		// ---SubFolder
+		$subfullname = "$path/$name/SubFolder";
+		$subrelname = str_replace(JPATH_ROOT, '', $subfullname);
+		Folder::create($subfullname);
+		$this->assertEquals(
+			Folder::listFolderTree("$path/$name", '.'),
+			array(
+				array(
+					'id' => 1,
+					'parent' => 0,
+					'name' => 'SubFolder',
+					'fullname' => $subfullname,
+					'relname' => $subrelname
+				)
+			),
+			'Line: ' . __LINE__ . ' Observed folder tree is not correct.');
+
+		/* -tempFolder
+			---SubFolder
+			---AnotherSubFolder
+		*/
+		$anothersubfullname = "$path/$name/AnotherSubFolder";
+		$anothersubrelname = str_replace(JPATH_ROOT, '', $anothersubfullname);
+		Folder::create($anothersubfullname);
+		$this->assertEquals(
+			Folder::listFolderTree("$path/$name", '.'),
+			array(
+				array(
+					'id' => 1,
+					'parent' => 0,
+					'name' => 'AnotherSubFolder',
+					'fullname' => $anothersubfullname,
+					'relname' => $anothersubrelname
+				),
+				array(
+					'id' => 2,
+					'parent' => 0,
+					'name' => 'SubFolder',
+					'fullname' => $subfullname,
+					'relname' => $subrelname
+				)
+
+			),
+			'Line: ' . __LINE__ . ' Observed folder tree is not correct.');
+
+		/* -tempFolder
+				-SubFolder
+					-SubSubFolder
+				-AnotherSubFolder
+		*/
+		$subsubfullname = "$subfullname/SubSubFolder";
+		$subsubrelname = str_replace(JPATH_ROOT, '', $subsubfullname);
+		Folder::create($subsubfullname);
+		$this->assertEquals(
+			Folder::listFolderTree("$path/$name", '.'),
+			array(
+				array(
+					'id' => 1,
+					'parent' => 0,
+					'name' => 'AnotherSubFolder',
+					'fullname' => $anothersubfullname,
+					'relname' => $anothersubrelname
+				),
+				array(
+					'id' => 2,
+					'parent' => 0,
+					'name' => 'SubFolder',
+					'fullname' => $subfullname,
+					'relname' => $subrelname
+				),
+				array(
+					'id' => 3,
+					'parent' => 2,
+					'name' => 'SubSubFolder',
+					'fullname' => $subsubfullname,
+					'relname' => $subsubrelname
+				)
+
+			),
+			'Line: ' . __LINE__ . ' Observed folder tree is not correct.');
+
+		Folder::delete($path . '/' . $name);
 	}
 
 	/**

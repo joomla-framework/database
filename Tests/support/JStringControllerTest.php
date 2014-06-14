@@ -5,6 +5,7 @@
  */
 
 use Joomla\Filesystem\Support\StringController;
+use Joomla\Test\TestHelper;
 
 /**
  * Test class for StringController.
@@ -14,24 +15,6 @@ use Joomla\Filesystem\Support\StringController;
 class StringControllerTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var StringController
-	 */
-	protected $object;
-
-	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
-	 *
-	 * @return void
-	 */
-	protected function setUp()
-	{
-		parent::setUp();
-
-		$this->object = new StringController;
-	}
-
-	/**
 	 * Test...
 	 *
 	 * @todo Implement test_getArray().
@@ -40,10 +23,17 @@ class StringControllerTest extends PHPUnit_Framework_TestCase
 	 */
 	public function test_getArray()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$strings = array('foo' => 'bar');
+
+		TestHelper::setValue(new StringController, 'strings', $strings);
+
+		$this->assertEquals(
+			$strings,
+			StringController::_getArray()
 		);
+
+		// Clean up static variable
+		TestHelper::setValue(new StringController, 'strings', array());
 	}
 
 	/**
@@ -55,10 +45,19 @@ class StringControllerTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCreateRef()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$string = "foo";
+
+		StringController::createRef('bar', $string);
+
+		$strings = StringController::_getArray();
+
+		$this->assertEquals(
+			$string,
+			$strings['bar']
 		);
+
+		// Clean up static variable
+		TestHelper::setValue(new StringController, 'strings', array());
 	}
 
 	/**
@@ -70,9 +69,17 @@ class StringControllerTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetRef()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$string = "foo";
+		StringController::createRef('bar', $string);
+
+		$this->assertEquals(
+			$string,
+			StringController::getRef('bar')
+		);
+
+		$this->assertEquals(
+			false,
+			StringController::getRef('foo')
 		);
 	}
 }

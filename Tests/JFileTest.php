@@ -158,26 +158,26 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	public function testCopy()
 	{
 		$name = 'tempFile';
-		$path = __DIR__;
+		$path = __DIR__ . '/tmp';
 		$copiedFileName = 'copiedTempFile';
 		$data = 'Lorem ipsum dolor sit amet';
 
 		// Create a temp file to test copy operation
-		$this->object->write($path . '/' . $name, $data);
+		file_put_contents($path . '/' . $name, $data);
 
 		$this->assertThat(
 			File::copy($path . '/' . $name, $path . '/' . $copiedFileName),
 			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should copy successfully.'
 		);
-		File::delete($path . '/' . $copiedFileName);
+		unlink($path . '/' . $copiedFileName);
 
 		$this->assertThat(
 			File::copy($name, $copiedFileName, $path),
 			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should copy successfully.'
 		);
-		File::delete($path . '/' . $copiedFileName);
+		unlink($path . '/' . $copiedFileName);
 
 		// Copy using streams.
 		$this->assertThat(
@@ -185,9 +185,9 @@ class JFileTest extends PHPUnit_Framework_TestCase
 			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should copy successfully.'
 		);
-		File::delete($path . '/' . $copiedFileName);
+		unlink($path . '/' . $copiedFileName);
 
-		File::delete($path . '/' . $name);
+		unlink($path . '/' . $name);
 	}
 
 	/**
@@ -201,7 +201,7 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	public function testCopyException()
 	{
 		$name = 'tempFile';
-		$path = __DIR__;
+		$path = __DIR__ . '/tmp';
 		$copiedFileName = 'copiedTempFile';
 
 		File::copy($path . '/' . $name . 'foobar', $path . '/' . $copiedFileName);
@@ -218,17 +218,19 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	public function testDelete()
 	{
 		$name = 'tempFile';
-		$path = __DIR__;
+		$path = __DIR__ . '/tmp';
 		$data = 'Lorem ipsum dolor sit amet';
 
 		// Create a temp file to test delete operation
-		$this->object->write($path . '/' . $name, $data);
+		file_put_contents($path . '/' . $name, $data);
 
 		$this->assertThat(
 			File::delete($path . '/' . $name),
 			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should be deleted successfully.'
 		);
+
+		@unlink($path . '/' . $name);
 	}
 
 	/**
@@ -242,12 +244,12 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	public function testMove()
 	{
 		$name = 'tempFile';
-		$path = __DIR__;
+		$path = __DIR__ . '/tmp';
 		$movedFileName = 'movedTempFile';
 		$data = 'Lorem ipsum dolor sit amet';
 
 		// Create a temp file to test copy operation
-		$this->object->write($path . '/' . $name, $data);
+		file_put_contents($path . '/' . $name, $data);
 
 		$this->assertThat(
 			File::move($path . '/' . $name, $path . '/' . $movedFileName),
@@ -268,22 +270,7 @@ class JFileTest extends PHPUnit_Framework_TestCase
 			'Line:' . __LINE__ . ' File should be moved successfully.'
 		);
 
-		File::delete($path . '/' . $movedFileName);
-	}
-
-	/**
-	 * Test...
-	 *
-	 * @todo Implement testRead().
-	 *
-	 * @return void
-	 */
-	public function testRead()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+		unlink($path . '/' . $movedFileName);
 	}
 
 	/**
@@ -297,7 +284,7 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	public function testWrite()
 	{
 		$name = 'tempFile';
-		$path = __DIR__;
+		$path = __DIR__ . '/tmp';
 		$data = 'Lorem ipsum dolor sit amet';
 
 		// Create a file on pre existing path.
@@ -322,7 +309,7 @@ class JFileTest extends PHPUnit_Framework_TestCase
 		);
 
 		// Removes file and folder.
-		File::delete($path . '/' . $name);
+		unlink($path . '/' . $name);
 		Folder::delete($path . '/TempFolder');
 	}
 
@@ -335,9 +322,59 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testUpload()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$name = 'tempFile';
+		$path = __DIR__ . '/tmp';
+		$uploadedFileName = 'uploadedFileName';
+		$data = 'Lorem ipsum dolor sit amet';
+		include_once __DIR__ . '/Stubs/PHPUploadStub.php';
+
+		// Create a temp file to test copy operation
+		file_put_contents($path . '/' . $name, $data);
+
+		$_FILES = array(
+            'test' => array(
+                'name' => 'test.jpg',
+                'tmp_name' => $path . '/' . $name
+            )
+        );
+
+		$this->assertTrue(
+			File::upload($path . '/' . $name, $path . '/' . $uploadedFileName)
 		);
+		unlink($path . '/' . $uploadedFileName);
+
+		$this->assertTrue(
+			File::upload($path . '/' . $name, $path . '/' . $uploadedFileName, true)
+		);
+		unlink($path . '/' . $uploadedFileName);
+
+		
+
+		unlink($path . '/' . $name);
+		unset($_FILES);
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @todo Implement testUpload().
+	 *
+	 * @return void
+	 * @expectedException \Joomla\Filesystem\Exception\FilesystemException
+	 */
+	public function testUploadDestInaccessibleException()
+	{
+        $name = 'tempFile';
+        $path = __DIR__ . '/tmp';
+        $uploadedFileName = 'uploadedFileName';
+        $data = 'Lorem ipsum dolor sit amet';
+        include_once __DIR__ . '/Stubs/PHPUploadStub.php';
+
+        // Create a temp file to test copy operation
+        file_put_contents($path . '/' .  $name, $data);
+
+		File::upload($path . '/' . $name, '/' . $uploadedFileName);
+
+		@unlink('/' . $uploadedFileName);
 	}
 }

@@ -5,6 +5,8 @@
  */
 
 use Joomla\Filesystem\Stream;
+use Joomla\Test\TestHelper;
+use Joomla\Filesystem\Support\StringController;
 
 /**
  * Test class for Stream.
@@ -34,15 +36,32 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @todo Implement test__destruct().
+	 * @todo Implement test__construct().
 	 *
 	 * @return void
 	 */
-	public function test__destruct()
+	public function test__construct()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$object = new Stream('foo', 'bar');
+
+		$this->assertEquals(
+			'foo',
+			TestHelper::getValue($object, 'writeprefix')
+		);
+
+		$this->assertEquals(
+			'bar',
+			TestHelper::getValue($object, 'readprefix')
+		);
+
+		$this->assertEquals(
+			0,
+			count(TestHelper::getValue($object, 'contextOptions'))
+		);
+
+		$this->assertEquals(
+			null,
+			TestHelper::getValue($object, 'context')
 		);
 	}
 
@@ -53,13 +72,80 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetStream()
 	{
-		$this->object = Stream::getStream();
+		$object = Stream::getStream();
 
 		$this->assertInstanceOf(
 			'Joomla\\Filesystem\\Stream',
-			$this->object,
+			$object,
 			'getStream must return an instance of Joomla\\Filesystem\\Stream'
 		);
+
+		$this->assertEquals(
+			dirname(__DIR__) . '/',
+			TestHelper::getValue($object, 'writeprefix')
+		);
+
+		$this->assertEquals(
+			dirname(__DIR__),
+			TestHelper::getValue($object, 'readprefix')
+		);
+
+		$object = Stream::getStream(false);
+
+		$this->assertInstanceOf(
+			'Joomla\\Filesystem\\Stream',
+			$object,
+			'getStream must return an instance of Joomla\\Filesystem\\Stream'
+		);
+
+		$this->assertEquals(
+			'',
+			TestHelper::getValue($object, 'writeprefix')
+		);
+
+		$this->assertEquals(
+			'',
+			TestHelper::getValue($object, 'readprefix')
+		);
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @todo Implement testOpen().
+	 *
+	 * @return void
+	 * @expectedException RuntimeException
+	 */
+	public function testOpenNoFilenameException()
+	{
+		$this->object->open('');
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @todo Implement testOpen().
+	 *
+	 * @return void
+	 * @expectedException RuntimeException
+	 */
+	public function testOpenInvlaidFilenameException()
+	{
+		$this->object->open('foobar');
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @todo Implement testOpen().
+	 *
+	 * @return void
+	 * @expectedException RuntimeException
+	 */
+	public function testOpenInvlaidStringnameException()
+	{
+		$this->object->open('string://bbarfoo');
 	}
 
 	/**
@@ -71,10 +157,52 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testOpen()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+        // Test simple file open
+        $name = 'tempFile';
+		$path = __DIR__ . '/tmp/';
+		$data = 'Lorem ipsum dolor sit amet';
+		$filename = $path . $name;		
+		// Create a temp file to test open operation
+		file_put_contents($filename, $data);
+
+		$this->object->open($filename);
+
+		$this->assertEquals(
+			$filename,
+			TestHelper::getValue($this->object, 'filename')
 		);
+
+		$this->assertEquals(
+			'r',
+			TestHelper::getValue($this->object, 'openmode')
+		);
+
+		$this->assertEquals(
+			'f',
+			TestHelper::getValue($this->object, 'processingmethod')
+		);
+
+		$this->assertEquals(
+			'resource',
+			gettype(TestHelper::getValue($this->object, 'fh'))
+		);
+
+		$this->object->close();
+		unlink($filename);
+
+		// Test custom stream open
+		$string = "Lorem ipsum dolor sit amet";
+		StringController::createRef('lorem', $string);
+		$filename = 'string://lorem';
+
+		$this->object->open($filename);
+
+		$this->assertEquals(
+			$filename,
+			TestHelper::getValue($this->object, 'filename')
+		);
+
+		$this->object->close();
 	}
 
 	/**
@@ -83,13 +211,26 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 * @todo Implement testClose().
 	 *
 	 * @return void
+	 * @expectedException RuntimeException
 	 */
-	public function testClose()
+	public function testCloseBeforeOpeningException()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+		$object = new Stream;
+
+		$object->close();
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @todo Implement testEof().
+	 *
+	 * @return void
+	 * @expectedException RuntimeException
+	 */
+	public function testEofNotOpenException()
+	{
+		$this->object->eof();
 	}
 
 	/**
@@ -101,10 +242,36 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testEof()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$string = "Lorem ipsum dolor sit amet";
+		StringController::createRef('lorem', $string);
+		$filename = 'string://lorem';
+
+		$this->object->open($filename);
+
+		$this->assertFalse(
+			$this->object->eof()
 		);
+
+		$this->object->read(strlen($string));
+
+		$this->assertTrue(
+			$this->object->eof()
+		);
+
+		$this->object->close();
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @todo Implement testFilesize().
+	 *
+	 * @return void
+	 * @expectedException RuntimeException
+	 */
+	public function testFilesizeNotOpen()
+	{
+		$this->object->filesize();
 	}
 
 	/**
@@ -116,10 +283,39 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testFilesize()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$string = "Lorem ipsum dolor sit amet";
+		StringController::createRef('lorem', $string);
+		$filename = 'string://lorem';
+
+		$this->object->open($filename);
+
+		$this->assertEquals(
+			strlen($string),
+			$this->object->filesize()
 		);
+
+		$this->object->close();
+
+		$this->object->open('http://www.joomla.org');
+
+		$this->assertTrue(
+			is_numeric($this->object->filesize())
+		);
+
+		$this->object->close();
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @todo Implement testGets().
+	 *
+	 * @return void
+	 * @expectedException RuntimeException
+	 */
+	public function testGetsNotOpen()
+	{
+		$this->object->gets();
 	}
 
 	/**
@@ -131,10 +327,57 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGets()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$string = "Lorem ipsum dolor sit amet.\nFoo bar";
+		StringController::createRef('lorem', $string);
+		$filename = 'string://lorem';
+
+		$this->object->open($filename);
+
+		$this->assertEquals(
+			"Lorem ipsum dolor sit amet.\n",
+			$this->object->gets()
 		);
+
+		$this->assertEquals(
+			"Foo",
+			$this->object->gets(4)
+		);
+
+		$this->object->close();
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @todo Implement testGets().
+	 *
+	 * @return void
+	 * @expectedException RuntimeException
+	 */
+	public function testGetsInvalidLength()
+	{
+		$string = "Lorem ipsum dolor sit amet.\nFoo bar";
+		StringController::createRef('lorem', $string);
+		$filename = 'string://lorem';
+
+		$this->object->open($filename);
+
+		$this->object->gets(1);
+
+		$this->object->close();
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @todo Implement testRead().
+	 *
+	 * @return void
+	 * @expectedException RuntimeException
+	 */
+	public function testReadNotOpen()
+	{
+		$this->object->read();
 	}
 
 	/**
@@ -146,10 +389,23 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testRead()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$string = "Lorem ipsum dolor sit amet.\nFoo bar";
+		StringController::createRef('lorem', $string);
+		$filename = 'string://lorem';
+
+		$this->object->open($filename);
+
+		$this->assertEquals(
+			"L",
+			$this->object->read(1)
 		);
+
+		$this->assertEquals(
+			"orem ipsum dolor sit amet.\nFoo bar",
+			$this->object->read()
+		);
+
+		$this->object->close();
 	}
 
 	/**
@@ -158,13 +414,55 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 * @todo Implement testSeek().
 	 *
 	 * @return void
+	 * @expectedException RuntimeException
 	 */
-	public function testSeek()
+	public function testSeekNotOpen()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$this->object->seek(0);
+	}
+
+	public function dataSeek()
+	{
+		return array(
+			array(0, 0, SEEK_SET, 0),
+			array(0, 0, SEEK_CUR, 0),
+			array(0, 0, SEEK_END, 35),
+			array(0, 5, SEEK_SET, 5),
+			array(0, 5, SEEK_CUR, 5),
+			array(0, 5, SEEK_END, 30),
+			array(5, 5, SEEK_SET, 5),
+			array(5, 5, SEEK_CUR, 10),
+			array(5, 5, SEEK_END, 30),
 		);
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @todo Implement testSeek().
+	 *
+	 * @dataProvider dataSeek
+	 * @return void
+	 */
+	public function testSeek($initial, $offset, $whence, $expPos)
+	{
+		$string = "Lorem ipsum dolor sit amet.\nFoo bar";
+		StringController::createRef('lorem', $string);
+		$filename = 'string://lorem';
+
+		$this->object->open($filename);
+		$this->object->seek($initial, SEEK_SET);
+
+		$this->assertTrue(
+			$this->object->seek($offset, $whence)
+		);
+
+		$this->assertEquals(
+			$expPos,
+			$this->object->tell()
+		);
+
+		$this->object->close();
 	}
 
 	/**
@@ -173,13 +471,53 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 * @todo Implement testTell().
 	 *
 	 * @return void
+	 * @expectedException RuntimeException
 	 */
-	public function testTell()
+	public function testTellNotOpen()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+		$this->object->tell();
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @todo Implement testWrite().
+	 *
+	 * @return void
+	 * @expectedException RuntimeException
+	 */
+	public function testWriteNotOpen()
+	{
+		$data = 'foobar';
+		$this->object->write($data);
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @todo Implement testWrite().
+	 *
+	 * @return void
+	 * @expectedException RuntimeException
+	 */
+	public function testWriteReadonly()
+	{
+		$name = 'tempFile';
+		$path = __DIR__ . '/tmp/';
+		$data = 'Lorem ipsum dolor sit amet';
+		$filename = $path . $name;
+		// Create a temp file to test copy operation
+		file_put_contents($filename, $data);
+
+		$object = Stream::getStream();
+		$object->open($filename);
+
+		$data = 'foobar';
+		$this->assertTrue($object->write($data));
+
+		$object->close();
+
+		unlink($filename);
 	}
 
 	/**
@@ -191,10 +529,40 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testWrite()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$name = 'tempFile';
+		$path = __DIR__ . '/tmp/';
+		$data = 'Lorem ipsum dolor sit amet';
+		$filename = $path . $name;
+		// Create a temp file to test copy operation
+		file_put_contents($filename, $data);
+
+		$object = Stream::getStream();
+		$object->open($filename, 'w');
+
+		$data = 'foobar';
+		$this->assertTrue($object->write($data));
+
+		$object->close();
+
+		$this->assertEquals(
+			$data,
+			file_get_contents($filename)
 		);
+
+		unlink($filename);
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @todo Implement testChmod().
+	 *
+	 * @return void
+	 * @expectedException RuntimeException
+	 */
+	public function testChmodNoFilename()
+	{
+		$this->object->chmod();
 	}
 
 	/**
@@ -206,10 +574,47 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testChmod()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$name = 'tempFile';
+		$path = __DIR__ . '/tmp/';
+		$data = 'Lorem ipsum dolor sit amet';
+		$filename = $path . $name;
+		// Create a temp file to test copy operation
+		file_put_contents($filename, $data);
+
+		$this->assertTrue($this->object->chmod($filename,0777));
+
+		$this->assertEquals(
+			'0777',
+			substr(sprintf('%o', fileperms($filename)), -4)
 		);
+
+		$this->object = Stream::getStream();
+		$this->object->open($filename, 'w');
+
+		$this->assertTrue($this->object->chmod('', 0644));
+
+		$this->object->close();
+
+		clearstatcache();
+		$this->assertEquals(
+			'0644',
+			substr(sprintf('%o', fileperms($filename)), -4)
+		);
+
+		unlink($filename);
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @todo Implement testGet_meta_data().
+	 *
+	 * @return void
+	 * @expectedException RuntimeException
+	 */
+	public function testGet_meta_dataNotOpen()
+	{
+		$this->object->get_meta_data();
 	}
 
 	/**
@@ -221,10 +626,26 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGet_meta_data()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$name = 'tempFile';
+		$path = __DIR__ . '/tmp/';
+		$data = 'Lorem ipsum dolor sit amet';
+		$filename = $path . $name;
+		// Create a temp file to test copy operation
+		file_put_contents($filename, $data);
+
+		$this->object->open($filename);
+		$metaData = $this->object->get_meta_data();
+
+		$this->assertTrue(
+			is_array($metaData)
 		);
+
+		$this->assertEquals(
+			$filename,
+			$metaData['uri']
+		);
+
+		unlink($filename);
 	}
 
 	/**
@@ -236,9 +657,30 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function test_buildContext()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$contextOptions = array();
+		
+		TestHelper::setValue($this->object, 'contextOptions', $contextOptions);
+		$this->object->_buildContext();
+
+		$this->assertEquals(
+			null,
+			TestHelper::getValue($this->object, 'context')
+		);
+
+		$contextOptions = array(
+			'http'=>array(
+				'method'=>"GET",
+				'header'=>"Accept-language: en\r\n" .
+					"Cookie: foo=bar\r\n"
+			)
+		);
+		
+		TestHelper::setValue($this->object, 'contextOptions', $contextOptions);
+		$this->object->_buildContext();
+
+		$this->assertEquals(
+			'resource',
+			gettype(TestHelper::getValue($this->object, 'context'))
 		);
 	}
 
@@ -251,9 +693,19 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSetContextOptions()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$contextOptions = array(
+			'http'=>array(
+				'method'=>"GET",
+				'header'=>"Accept-language: en\r\n" .
+					"Cookie: foo=bar\r\n"
+			)
+		);
+
+		$this->object->setContextOptions($contextOptions);
+
+		$this->assertEquals(
+			$contextOptions,
+			TestHelper::getValue($this->object, 'contextOptions')
 		);
 	}
 
@@ -266,9 +718,12 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAddContextEntry()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$this->object->addContextEntry('foo', 'bar', 'barfoo');
+		$contextOptions = TestHelper::getValue($this->object, 'contextOptions');
+
+		$this->assertEquals(
+			'barfoo',
+			$contextOptions['foo']['bar']
 		);
 	}
 
@@ -281,9 +736,39 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testDeleteContextEntry()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$contextOptions = array(
+			'foo' => array(
+				'bar' => 'Bar',
+				'rab' => 'Rab'
+			)
+		);
+		
+		TestHelper::setValue($this->object, 'contextOptions', $contextOptions);
+		
+		$this->object->deleteContextEntry('foo', 'bar');
+		$actual = TestHelper::getValue($this->object, 'contextOptions');
+		
+		$this->assertArrayHasKey(
+			'foo',
+			$actual
+		);
+
+		$this->assertArrayHasKey(
+			'rab',
+			$actual['foo']
+		);
+
+		$this->assertArrayNotHasKey(
+			'bar',
+			$actual['foo']
+		);
+
+		$this->object->deleteContextEntry('foo', 'rab');
+		$actual = TestHelper::getValue($this->object, 'contextOptions');
+
+		$this->assertArrayNotHasKey(
+			'foo',
+			$actual
 		);
 	}
 
@@ -296,10 +781,19 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testApplyContextToStream()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+		$this->assertFalse($this->object->applyContextToStream());
+
+		$name = 'tempFile';
+		$path = __DIR__ . '/tmp/';
+		$data = 'Lorem ipsum dolor sit amet';
+		$filename = $path . $name;
+		// Create a temp file to test copy operation
+		file_put_contents($filename, $data);
+
+		$this->object->open($filename);
+		$this->assertTrue($this->object->applyContextToStream());
+
+		unlink($filename);
 	}
 
 	/**
@@ -308,13 +802,37 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 * @todo Implement testAppendFilter().
 	 *
 	 * @return void
+	 * @expectedException RuntimeException
 	 */
 	public function testAppendFilter()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$this->assertFalse($this->object->appendFilter("string.rot13"));
+
+		$name = 'tempFile';
+		$path = __DIR__ . '/tmp/';
+		$data = 'Lorem ipsum dolor sit amet';
+		$filename = $path . $name;
+		// Create a temp file to test copy operation
+		file_put_contents($filename, $data);
+
+		$this->object->open($filename);
+
+		$filters = TestHelper::getValue($this->object, 'filters');
+
+		$this->assertEquals(
+			'resource',
+			gettype($this->object->appendFilter("string.rot13"))
 		);
+
+		$this->assertEquals(
+			count($filters) + 1,
+			count(TestHelper::getValue($this->object, 'filters'))
+		);
+
+		unlink($filename);
+
+		// Tests for invalid filters
+		$this->object->appendFilter("foobar");
 	}
 
 	/**
@@ -323,13 +841,39 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 * @todo Implement testPrependFilter().
 	 *
 	 * @return void
+	 * @expectedException RuntimeException
 	 */
 	public function testPrependFilter()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$this->assertFalse($this->object->prependFilter("string.rot13"));
+
+		$name = 'tempFile';
+		$path = __DIR__ . '/tmp/';
+		$data = 'Lorem ipsum dolor sit amet';
+		$filename = $path . $name;
+		// Create a temp file to test copy operation
+		file_put_contents($filename, $data);
+
+		$this->object->open($filename);
+
+		$filters = TestHelper::getValue($this->object, 'filters');
+
+		$this->assertEquals(
+			'resource',
+			gettype($this->object->prependFilter("string.rot13"))
 		);
+
+		$this->assertEquals(
+			count($filters) + 1,
+			count(TestHelper::getValue($this->object, 'filters'))
+		);
+
+		// Tests for invalid filters
+		$this->object->prependFilter("foobar");
+
+		unlink($filename);
+
+		$this->object->close();
 	}
 
 	/**
@@ -356,10 +900,22 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCopy()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$name = 'tempFile';
+		$path = __DIR__ . '/tmp';
+		$copiedFileName = 'copiedTempFile';
+		$data = 'Lorem ipsum dolor sit amet';
+
+		// Create a temp file to test copy operation
+		file_put_contents($path . '/' . $name, $data);
+
+		$this->assertThat(
+			$this->object->copy($path . '/' . $name, $path . '/' . $copiedFileName),
+			$this->isTrue(),
+			'Line:' . __LINE__ . ' File should copy successfully.'
 		);
+		unlink($path . '/' . $copiedFileName);
+
+		unlink($path . '/' . $name);
 	}
 
 	/**
@@ -371,10 +927,22 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testMove()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$name = 'tempFile';
+		$path = __DIR__ . '/tmp';
+		$movedFileName = 'copiedTempFile';
+		$data = 'Lorem ipsum dolor sit amet';
+
+		// Create a temp file to test copy operation
+		file_put_contents($path . '/' . $name, $data);
+
+		$this->assertThat(
+			$this->object->move($path . '/' . $name, $path . '/' . $movedFileName),
+			$this->isTrue(),
+			'Line:' . __LINE__ . ' File should moved successfully.'
 		);
+		unlink($path . '/' . $movedFileName);
+
+		@unlink($path . '/' . $name);
 	}
 
 	/**
@@ -386,10 +954,20 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testDelete()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$name = 'tempFile';
+		$path = __DIR__ . '/tmp';
+		$data = 'Lorem ipsum dolor sit amet';
+
+		// Create a temp file to test copy operation
+		file_put_contents($path . '/' . $name, $data);
+
+		$this->assertThat(
+			$this->object->delete($path . '/' . $name),
+			$this->isTrue(),
+			'Line:' . __LINE__ . ' File should deleted successfully.'
 		);
+
+		@unlink($path . '/' . $name);
 	}
 
 	/**
@@ -416,9 +994,35 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testWriteFile()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$name = 'tempFile';
+		$path = __DIR__ . '/tmp';
+		$data = 'Lorem ipsum dolor sit amet';
+
+		$this->assertTrue(
+			$this->object->writeFile($path . '/' . $name, $data)
+		);
+
+		$this->assertEquals(
+			$data,
+			file_get_contents($path . '/' . $name)
+		);
+
+		unlink($path . '/' . $name);
+	}
+
+	public function data_getFilename()
+	{
+		return array(
+			array('', '', 'foobar', 'r', false, false, 'foobar'),
+			array('', '', 'foobar', 'r', false, true, 'foobar'),
+			array('', '', 'foobar', 'w', false, false, 'foobar'),
+			array('', '', 'foobar', 'w', false, true, 'foobar'),
+			array('one', 'two', 'foobar', 'r', true, false, 'twofoobar'),
+			array('one', 'two', 'foobar', 'w', true, false, 'onefoobar'),
+			array('one', 'two', 'foobar', 'r', true, true, 'twofoobar'),
+			array('one', 'two', 'foobar', 'w', true, true, 'onefoobar'),
+			array('one', 'two', __DIR__ . '/foobar', 'r', true, false, 'two/Tests/foobar'),
+			array('one', 'two', __DIR__ . '/foobar', 'w', true, false, 'one/Tests/foobar'),
 		);
 	}
 
@@ -426,14 +1030,18 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 * Test...
 	 *
 	 * @todo Implement test_getFilename().
-	 *
+	 * @dataProvider data_getFilename
 	 * @return void
 	 */
-	public function test_getFilename()
+	public function test_getFilename($wPrefix, $rPrefix, $filename, $mode, $use_prefix,
+		$relative, $expected)
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		TestHelper::setValue($this->object, 'writeprefix', $wPrefix);
+		TestHelper::setValue($this->object, 'readprefix', $rPrefix);
+
+		$this->assertEquals(
+			$expected,
+			$this->object->_getFilename($filename, $mode, $use_prefix, $relative)
 		);
 	}
 

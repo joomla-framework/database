@@ -15,6 +15,8 @@ namespace Joomla\Filesystem\Support;
  */
 class StringController
 {
+	private static $strings = array();
+
 	/**
 	 * Defines a variable as an array
 	 *
@@ -22,11 +24,9 @@ class StringController
 	 *
 	 * @since   1.0
 	 */
-	public function _getArray()
+	public static function _getArray()
 	{
-		static $strings = array();
-
-		return $strings;
+		return self::$strings;
 	}
 
 	/**
@@ -39,10 +39,9 @@ class StringController
 	 *
 	 * @since   1.0
 	 */
-	public function createRef($reference, &$string)
+	public static function createRef($reference, &$string)
 	{
-		$ref = &self::_getArray();
-		$ref[$reference] = & $string;
+		self::$strings[$reference] = & $string;
 	}
 
 	/**
@@ -54,13 +53,11 @@ class StringController
 	 *
 	 * @since   1.0
 	 */
-	public function getRef($reference)
+	public static function getRef($reference)
 	{
-		$ref = &self::_getArray();
-
-		if (isset($ref[$reference]))
+		if (isset(self::$strings[$reference]))
 		{
-			return $ref[$reference];
+			return self::$strings[$reference];
 		}
 		else
 		{

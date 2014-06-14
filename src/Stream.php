@@ -227,10 +227,12 @@ class Stream
 
 		if (isset($url['scheme']))
 		{
+			$url['scheme'] = ucfirst($url['scheme']);
+
 			// If we're dealing with a Joomla! stream, load it
 			if (Helper::isJoomlaStream($url['scheme']))
 			{
-				require_once __DIR__ . '/streams/' . $url['scheme'] . '.php';
+				require_once __DIR__ . '/Stream/' . $url['scheme'] . '.php';
 			}
 
 			// We have a scheme! force the method to be f
@@ -284,17 +286,17 @@ class Stream
 				// One supplied at open; overrides everything
 				if ($context)
 				{
-					$this->fh = fopen($filename, $mode, $use_include_path, $context);
+					$this->fh = @fopen($filename, $mode, $use_include_path, $context);
 				}
 				elseif ($this->context)
 				// One provided at initialisation
 				{
-					$this->fh = fopen($filename, $mode, $use_include_path, $this->context);
+					$this->fh = @fopen($filename, $mode, $use_include_path, $this->context);
 				}
 				else
 				// No context; all defaults
 				{
-					$this->fh = fopen($filename, $mode, $use_include_path);
+					$this->fh = @fopen($filename, $mode, $use_include_path);
 				}
 				break;
 		}
@@ -546,6 +548,11 @@ class Stream
 	 */
 	public function read($length = 0)
 	{
+		if (!$this->fh)
+		{
+			throw new \RuntimeException('File not open');
+		}
+
 		if (!$this->filesize && !$length)
 		{
 			// Get the filesize
@@ -560,11 +567,6 @@ class Stream
 			{
 				$length = $this->filesize;
 			}
-		}
-
-		if (!$this->fh)
-		{
-			throw new \RuntimeException('File not open');
 		}
 
 		$retval = false;
@@ -754,6 +756,11 @@ class Stream
 		if (!$this->fh)
 		{
 			throw new \RuntimeException('File not open');
+		}
+
+		if ($this->openmode == 'r')
+		{
+			throw new \RuntimeException('File is in readonly mode');
 		}
 
 		// If the length isn't set, set it to the length of the string.
@@ -1093,8 +1100,8 @@ class Stream
 			}
 			else
 			{
-				array_unshift($res, '');
-				$res[0] = &$this->filters;
+				array_unshift($this->filters, '');
+				$this->filters[0] = &$res;
 			}
 
 			// Restore error tracking to what it was before.

@@ -31,7 +31,7 @@ class Path
 	 */
 	public static function canChmod($path)
 	{
-		$perms = fileperms($path);
+		$perms = @fileperms($path);
 
 		if ($perms !== false)
 		{
@@ -64,39 +64,42 @@ class Path
 
 		if (is_dir($path))
 		{
-			$dh = opendir($path);
+			$dh = @opendir($path);
 
-			while ($file = readdir($dh))
+			if($dh)
 			{
-				if ($file != '.' && $file != '..')
+			while ($file = readdir($dh))
 				{
-					$fullpath = $path . '/' . $file;
+					if ($file != '.' && $file != '..')
+					{
+						$fullpath = $path . '/' . $file;
 
-					if (is_dir($fullpath))
-					{
-						if (!self::setPermissions($fullpath, $filemode, $foldermode))
+						if (is_dir($fullpath))
 						{
-							$ret = false;
-						}
-					}
-					else
-					{
-						if (isset($filemode))
-						{
-							if (!@ chmod($fullpath, octdec($filemode)))
+							if (!self::setPermissions($fullpath, $filemode, $foldermode))
 							{
 								$ret = false;
 							}
 						}
+						else
+						{
+							if (isset($filemode))
+							{
+								if (!self::canChmod($fullpath) || !@ chmod($fullpath, octdec($filemode)))
+								{
+									$ret = false;
+								}
+							}
+						}
 					}
 				}
-			}
 
-			closedir($dh);
+				closedir($dh);
+			}
 
 			if (isset($foldermode))
 			{
-				if (!@ chmod($path, octdec($foldermode)))
+				if (!self::canChmod($path) || !@ chmod($path, octdec($foldermode)))
 				{
 					$ret = false;
 				}
@@ -106,7 +109,10 @@ class Path
 		{
 			if (isset($filemode))
 			{
-				$ret = @ chmod($path, octdec($filemode));
+				if (!self::canChmod($path) || !@ chmod($path, octdec($filemode)))
+				{
+					$ret = false;
+				}
 			}
 		}
 
@@ -161,7 +167,7 @@ class Path
 	 */
 	public static function check($path)
 	{
-		if (strpos($path, '..') !== false)
+		if (strpos($path, '/') !== 0 || strpos($path, '/../') !== false || strpos($path, '/..') + 3 == strlen($path))
 		{
 			throw new \Exception('JPath::check Use of relative paths not permitted', 20);
 		}
@@ -227,7 +233,7 @@ class Path
 	{
 		$tmp = md5(mt_rand());
 		$ssp = ini_get('session.save_path');
-		$jtp = JPATH_ROOT . '/tmp';
+		$jtp = JPATH_ROOT;
 
 		// Try to find a writable directory
 		$dir = is_writable('/tmp') ? '/tmp' : false;
@@ -257,7 +263,7 @@ class Path
 	/**
 	 * Searches the directory paths for a given file.
 	 *
-	 * @param   mixed   $paths  An path string or array of path strings to search in
+	 * @param   mixed   $paths  A path string or array of path strings to search in
 	 * @param   string  $file   The file name to look for.
 	 *
 	 * @return  mixed   The full path and file name for the target file, or boolean false if the file is not found in any of the paths.
