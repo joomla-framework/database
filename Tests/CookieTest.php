@@ -9,6 +9,8 @@ namespace Joomla\Input\Tests;
 use Joomla\Input\Cookie;
 use Joomla\Test\TestHelper;
 
+require_once __DIR__ . '/Stubs/FilterInputMock.php';
+
 /**
  * Test class for JInputCookie.
  *
@@ -17,10 +19,42 @@ use Joomla\Test\TestHelper;
 class CookieTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var    Cookie
-	 * @since  1.0
+	 * Test the Joomla\Input\Cookie::__construct method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\Input\Cookie::__construct
+	 * @since   1.0
 	 */
-	private $instance;
+	public function test__construct()
+	{
+		// Default constructor call
+		$instance = new Cookie;
+
+		$this->assertInstanceOf(
+			'Joomla\Filter\InputFilter',
+			TestHelper::getValue($instance, 'filter')
+		);
+
+		$this->assertEquals(
+			array(),
+			TestHelper::getValue($instance, 'options')
+		);
+
+		$this->assertEquals(
+			$_COOKIE,
+			TestHelper::getValue($instance, 'data')
+		);
+
+		// Given Source & filter
+		$src = array('foo' => 'bar');
+		$instance = new Cookie($src, array('filter' => new FilterInputMock));
+
+		$this->assertArrayHasKey(
+			'filter',
+			TestHelper::getValue($instance, 'options')
+		);
+	}
 
 	/**
 	 * Test the Joomla\Input\Cookie::set method.
@@ -33,33 +67,21 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 	 * @since   1.0
 	 */
 	public function testSet()
-	{
-		if (headers_sent())
-		{
-			$this->markTestSkipped();
-		}
-		else
-		{
-			$this->instance->set('foo', 'bar');
+	{	
+		$instance = new Cookie;
+		$instance->set('foo', 'bar');
 
-			$data = TestHelper::getValue($this->instance, 'data');
+		$data = TestHelper::getValue($instance, 'data');
 
-			$this->assertTrue(array_key_exists('foo', $data));
-			$this->assertTrue(in_array('bar', $data));
-		}
+		$this->assertTrue(array_key_exists('foo', $data));
+		$this->assertTrue(in_array('bar', $data));
 	}
+}
 
-	/**
-	 * Sets up the fixture.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	protected function setUp()
-	{
-		parent::setUp();
+// Stub for setcookie
+namespace Joomla\Input;
 
-		$this->instance = new Cookie;
-	}
+function setcookie($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httpOnly = false)
+{
+	return true;
 }

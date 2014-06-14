@@ -19,11 +19,50 @@ require_once __DIR__ . '/Stubs/FilterInputMock.php';
 class CliTest extends \PHPUnit_Framework_TestCase
 {
 	/**
+	 * Test the Joomla\Input\Cli::__construct method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\Input\Cli::__construct
+	 * @since   1.0
+	 */
+	public function test__construct()
+	{
+		// Default constructor call
+		$_SERVER['argv'] = array('/dev/null', '--foo=bar', '-ab', 'blah', '-g', 'flower sakura');
+		$instance = new Cli;
+
+		$this->assertEquals(
+			array(
+				'foo' => 'bar',
+				'a' => true,
+				'b' => true,
+				'g' => 'flower sakura'
+			),
+			TestHelper::getValue($instance, 'data')
+		);
+
+		$this->assertInstanceOf(
+			'Joomla\Filter\InputFilter',
+			TestHelper::getValue($instance, 'filter')
+		);
+
+		// Given source & filter
+		$instance = new Cli(null, array('filter' => new FilterInputMock));
+
+		$this->assertInstanceOf(
+			'Joomla\Input\Tests\FilterInputMock',
+			TestHelper::getValue($instance, 'filter')
+		);
+	}
+
+	/**
 	 * Test the Joomla\Input\Cli::get method.
 	 *
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Cli::get
+	 * @covers  Joomla\Input\Cli::parseArguments
 	 * @since   1.0
 	 */
 	public function testGet()
@@ -69,6 +108,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Cli::get
+	 * @covers  Joomla\Input\Cli::parseArguments
 	 * @since   1.0
 	 */
 	public function testParseLongArguments()
@@ -107,6 +147,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Cli::get
+	 * @covers  Joomla\Input\Cli::parseArguments
 	 * @since   1.0
 	 */
 	public function testParseShortArguments()
@@ -292,5 +333,64 @@ class CliTest extends \PHPUnit_Framework_TestCase
 			$this->identicalTo($_SERVER['PHP_SELF']),
 			'Line: ' . __LINE__ . '.'
 		);
+	}
+
+	/**
+	 * Test the Joomla\Input\Input::serialize method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\Input\Input::serialize
+	 * @since   1.0
+	 */
+	public function testSerialize()
+	{
+		/*$_SERVER['argv'] = array('/dev/null', '--foo=bar');
+		$instance = new Cli(null, array('filter' => new FilterInputMock));
+
+		$this->assertThat(
+			$instance->serialize(),
+			$this->equalTo('')
+		);*/
+	}
+
+	/**
+	 * Test the Joomla\Input\Input::unserialize method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\Input\Input::unserialize
+	 * @since   1.0
+	 */
+	public function testUnserialize()
+	{
+		/*$serialized = 'a:3:{i:0;a:1:{s:6:"filter";s:3:"raw";}i:1;s:4:"data";i:2;a:1:{s:7:"request";s:4:"keep";}}';
+
+		$instance = new Cli(null, array('filter' => new FilterInputMock));
+
+		$instance->unserialize($serialized);
+
+		// Adjust the values so they are easier to handle.
+		$this->assertEquals(
+			array('request' => 'keep'),
+			TestHelper::getValue($instance, 'inputs')
+		);
+
+		$this->assertEquals(
+			array('filter' => 'raw'),
+			TestHelper::getValue($instance, 'options')
+		);
+		
+		$this->assertEquals(
+			'data',
+			TestHelper::getValue($instance, 'data')
+		);
+
+		$serialized = 'a:3:{i:0;a:1:{i:0;s:7:"options";}i:1;s:4:"data";i:2;a:1:{s:7:"request";s:4:"keep";}}';
+		$instance->unserialize($serialized);
+		$this->assertEquals(
+			array('options'),
+			TestHelper::getValue($instance, 'options')
+		);*/
 	}
 }
