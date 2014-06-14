@@ -48,6 +48,26 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
+	public function seedTestIs_ascii()
+	{
+		return array(
+			array('ascii', true),
+			array('1024', true),
+			array('#$#@$%', true),
+			array('áÑ', false),
+			array('ÿ©', false),
+			array('¡¾', false),
+			array('÷™', false),
+		);
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @return  array
+	 *
+	 * @since   1.0
+	 */
 	public function seedTestStrpos()
 	{
 		return array(
@@ -438,6 +458,10 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	public function seedTestValid()
 	{
 		return array(
+			array("\xCF\xB0", true),
+			array("\xFBa", false),
+			array("\xFDa", false),
+			array("foo\xF7bar", false),
 			array('george Мога Ž Ψυχοφθόρα ฉันกินกระจกได้ 我能吞下玻璃而不伤身体 ', true),
 			array("\xFF ABC", false),
 			array("0xfffd ABC", true),
@@ -463,6 +487,26 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->assertThat(
 			String::increment($string, $style, $number),
+			$this->equalTo($expected)
+		);
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @param   string  $string    @todo
+	 * @param   boolean  $expected  @todo
+	 *
+	 * @return  void
+	 *
+	 * @dataProvider  seedTestIs_ascii
+	 * @since      1.0
+	 * @covers        Joomla\String\String::is_ascii
+	 */
+	public function testIs_ascii($string, $expected)
+	{
+		$this->assertThat(
+			String::is_ascii($string),
 			$this->equalTo($expected)
 		);
 	}

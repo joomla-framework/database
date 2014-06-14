@@ -425,6 +425,7 @@ class Inflector
 			return $inflected;
 		}
 
+		// Dead code
 		return false;
 	}
 

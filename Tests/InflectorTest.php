@@ -306,6 +306,45 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Method to test Inflector::addWord().
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 * @covers  Joomla\String\Inflector::addWord
+	 */
+	public function testAddWord()
+	{
+		$this->assertEquals(
+			$this->inflector,
+			$this->inflector->addWord('foo')
+		);
+
+		$cache = TestHelper::getValue($this->inflector, 'cache');
+
+		$this->assertArrayHasKey('foo', $cache);
+
+		$this->assertEquals(
+			'foo',
+			$cache['foo']
+		);
+
+		$this->assertEquals(
+			$this->inflector,
+			$this->inflector->addWord('bar', 'foo')
+		);
+
+		$cache = TestHelper::getValue($this->inflector, 'cache');
+
+		$this->assertArrayHasKey('bar', $cache);
+
+		$this->assertEquals(
+			'foo',
+			$cache['bar']
+		);
+	}
+
+	/**
 	 * Method to test Inflector::addPluraliseRule().
 	 *
 	 * @return  void
@@ -499,6 +538,22 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
+	 * @since   1.0
+	 * @covers  Joomla\String\Inflector::toPlural
+	 */
+	public function testToPluralAlreadyPlural()
+	{
+		$this->assertFalse($this->inflector->toPlural('buses'));
+	}
+
+	/**
+	 * Method to test Inflector::toPlural().
+	 *
+	 * @param   string  $singular  The singular form of a word.
+	 * @param   string  $plural    The plural form of a word.
+	 *
+	 * @return  void
+	 *
 	 * @dataProvider  seedSinglePlural
 	 * @since   1.0
 	 * @covers  Joomla\String\Inflector::toSingular
@@ -509,5 +564,24 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 			$this->inflector->toSingular($plural),
 			$this->equalTo($singular)
 		);
+	}
+
+	/**
+	 * Method to test Inflector::toPlural().
+	 *
+	 * @param   string  $singular  The singular form of a word.
+	 * @param   string  $plural    The plural form of a word.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 * @covers  Joomla\String\Inflector::toSingular
+	 */
+	public function testToSingularRetFalse()
+	{
+		// Assertion for already singular
+		$this->assertFalse($this->inflector->toSingular('bus'));
+
+		$this->assertFalse($this->inflector->toSingular('foo'));
 	}
 }
