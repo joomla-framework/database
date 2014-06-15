@@ -12,14 +12,16 @@ use Joomla\Authentication\AuthenticationStrategyInterface;
 /**
  * Test class for Authentication
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.0
  */
 class AuthenticationTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	protected function setUp()
 	{
@@ -31,7 +33,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function testSingleStrategy()
 	{
@@ -52,7 +54,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function testSingleStrategyEmptyArray()
 	{
@@ -73,7 +75,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function testSomeStrategies()
 	{
@@ -104,7 +106,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 *
 	 * @expectedException  RuntimeException
 	 */
@@ -118,7 +120,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function testGetResults()
 	{

@@ -11,7 +11,7 @@ namespace Joomla\Authentication;
 /**
  * Joomla Framework AuthenticationStrategy Interface
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.0
  */
 interface AuthenticationStrategyInterface
 {
@@ -20,7 +20,7 @@ interface AuthenticationStrategyInterface
 	 *
 	 * @return  mixed  A string containing a username if authentication is successful, false otherwise.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function authenticate();
 
@@ -29,7 +29,7 @@ interface AuthenticationStrategyInterface
 	 *
 	 * @return  integer  An integer from Authentication class constants with the authentication result.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function getResult();
 }

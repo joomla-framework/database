@@ -12,14 +12,18 @@ use Joomla\Authentication\AuthenticationStrategyInterface;
 use Joomla\Authentication\Authentication;
 use Joomla\Input\Input;
 
+/**
+ * Joomla Framework Local Strategy Authentication class
+ *
+ * @since  1.0
+ */
 class LocalStrategy implements AuthenticationStrategyInterface
 {
 	/**
 	 * The Input object
 	 *
-	 * @var    Joomla\Input\Input  $input  The input object from which to retrieve the username and password.
-	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @var    Input  $input  The input object from which to retrieve the username and password.
+	 * @since  1.0
 	 */
 	private $input;
 
@@ -27,34 +31,29 @@ class LocalStrategy implements AuthenticationStrategyInterface
 	 * The credential store.
 	 *
 	 * @var    array  $credentialStore  An array of username/hash pairs.
-	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.0
 	 */
 	private $credentialStore;
 
 	/**
 	 * The last authentication status.
 	 *
-	 * @var    int  $status  The last status result (use constants from Authentication)
-	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @var    integer  $status  The last status result (use constants from Authentication)
+	 * @since  1.0
 	 */
 	private $status;
 
 	/**
 	 * Strategy Constructor
 	 *
-	 * @param   Joomla\Input\Input  $input            The input object from which to retrieve the request credentials.
-	 * @param   array               $credentialStore  Hash of username and hash pairs.
+	 * @param   Input  $input            The input object from which to retrieve the request credentials.
+	 * @param   array  $credentialStore  Hash of username and hash pairs.
 	 *
-	 * @return  void
-	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function __construct(Input $input, $credentialStore)
 	{
 		$this->input = $input;
-
 		$this->credentialStore = $credentialStore;
 	}
 
@@ -63,7 +62,7 @@ class LocalStrategy implements AuthenticationStrategyInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function authenticate()
 	{
@@ -107,7 +106,7 @@ class LocalStrategy implements AuthenticationStrategyInterface
 	 *
 	 * @return  integer  Authentication class constant result.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function getResult()
 	{

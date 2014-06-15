@@ -13,14 +13,16 @@ use Joomla\Input\Input;
 /**
  * Test class for Authentication
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.0
  */
 class LocalStrategyTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	protected function setUp()
 	{
@@ -32,7 +34,7 @@ class LocalStrategyTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function testValidPassword()
 	{
@@ -56,7 +58,7 @@ class LocalStrategyTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function testInvalidPassword()
 	{
@@ -80,7 +82,7 @@ class LocalStrategyTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function testNoPassword()
 	{
@@ -104,7 +106,7 @@ class LocalStrategyTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function testUserNotExist()
 	{

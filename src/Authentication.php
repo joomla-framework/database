@@ -8,12 +8,10 @@
 
 namespace Joomla\Authentication;
 
-use RuntimeException;
-
 /**
  * Joomla Framework Authentication Class
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.0
  */
 class Authentication
 {
@@ -46,8 +44,7 @@ class Authentication
 	 * The array of strategies.
 	 *
 	 * @var    array
-	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.0
 	 */
 	private $strategies = array();
 
@@ -55,8 +52,7 @@ class Authentication
 	 * The array of strategies.
 	 *
 	 * @var    array
-	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.0
 	 */
 	private $results = array();
 
@@ -68,7 +64,7 @@ class Authentication
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function addStrategy($strategyName, AuthenticationStrategyInterface $strategy)
 	{
@@ -82,7 +78,8 @@ class Authentication
 	 *
 	 * @return  A string containing a username if authentication is successful, false otherwise.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
+	 * @throws  \RuntimeException
 	 */
 	public function authenticate($strategies = array())
 	{
@@ -102,7 +99,7 @@ class Authentication
 				}
 				else
 				{
-					throw new RuntimeException('Authentication Strategy Not Found');
+					throw new \RuntimeException('Authentication Strategy Not Found');
 				}
 			}
 		}
@@ -129,7 +126,7 @@ class Authentication
 	 *
 	 * @return  An array containing authentication results.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
 	public function getResults()
 	{
