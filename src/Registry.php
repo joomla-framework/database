@@ -463,6 +463,7 @@ class Registry implements \JsonSerializable, \ArrayAccess
 	 * @param   object   $parent     The parent object on which to attach the data values.
 	 * @param   mixed    $data       An array or object of data to bind to the parent object.
 	 * @param   boolean  $recursive  True to support recursive bindData.
+	 * @param   boolean  $allowNull  True to allow null values.
 	 *
 	 * @return  void
 	 *
