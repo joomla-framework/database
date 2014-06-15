@@ -32,7 +32,7 @@ abstract class AbstractGithubObject
 	protected $client;
 
 	/**
-	 * @var    string
+	 * @var    string  The package the object resides in
 	 * @since  1.0
 	 */
 	protected $package = '';
