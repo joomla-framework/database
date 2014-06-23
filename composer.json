@@ -9,7 +9,8 @@
         "php": ">=5.3.10"
     },
     "require-dev": {
-        "joomla/test": "~1.0"
+        "joomla/test": "~1.0",
+        "mikey179/vfsStream": ">=1.0.0"
     },
     "autoload": {
     	"psr-4": {

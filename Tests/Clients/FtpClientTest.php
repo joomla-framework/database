@@ -7,6 +7,7 @@
 namespace Joomla\Filesystem\Clients\Tests;
 
 use Joomla\Filesystem\Clients\FtpClient;
+use Joomla\Test\TestHelper;
 
 /**
  * Test class for FtpClient.
@@ -31,19 +32,40 @@ class FtpClientTest extends \PHPUnit_Framework_TestCase
 		parent::setUp();
 
 		$this->object = new FtpClient;
+
+		include_once __DIR__ . "/../Stubs/PHPFTPStub.php";
 	}
 
 	/**
 	 * Test...
 	 *
-	 * @todo Implement test__destruct().
-	 *
 	 * @return void
 	 */
-	public function test__destruct()
+	public function test__construct()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$object = new FtpClient;
+
+		$this->assertEquals(
+			FTP_BINARY,
+			TestHelper::getValue($object, 'type')
+		);
+
+		$this->assertEquals(
+			15,
+			TestHelper::getValue($object, 'timeout')
+		);
+
+		$object = new FtpClient(array('type' => FTP_ASCII, 'timeout' => 200));
+
+		$this->assertEquals(
+			FTP_ASCII,
+			TestHelper::getValue($object, 'type')
+		);
+
+		$this->assertEquals(
+			200,
+			TestHelper::getValue($object, 'timeout')
+		);
 	}
 
 	/**
@@ -55,8 +77,49 @@ class FtpClientTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetInstance()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$object = FtpClient::getInstance();
+
+		// Connet to 127.0.0.1
+		$this->assertInstanceOf(
+			'\\Joomla\\Filesystem\\Clients\\FtpClient',
+			$object
+		);
+
+		// Retrieve using sig., set options and login
+		$oldObject = FtpClient::getInstance(
+			'127.0.0.1',
+			'21',
+			array('type' => FTP_ASCII, 'timeout' => 200)
+		);
+
+		$this->assertEquals(
+			$object,
+			$oldObject
+		);
+
+		$this->assertEquals(
+			FTP_ASCII,
+			TestHelper::getValue($oldObject, 'type')
+		);
+
+		$this->assertEquals(
+			200,
+			TestHelper::getValue($oldObject, 'timeout')
+		);
+
+        //  Login
+        $object = FtpClient::getInstance(
+            'localhost',
+            '21',
+            array('type' => FTP_ASCII, 'timeout' => 200),
+            'anonymous',
+            ''
+        );
+
+        $this->assertInstanceOf(
+            '\\Joomla\\Filesystem\\Clients\\FtpClient',
+            $object
+        );
 	}
 
 	/**

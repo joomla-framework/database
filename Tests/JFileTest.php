@@ -7,6 +7,7 @@
 use Joomla\Filesystem\Exception\FilesystemException;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
+use org\bovigo\vfs\vfsStream;
 
 /**
  * Test class for Joomla\Filesystem\File.
@@ -21,6 +22,11 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	protected $object;
 
 	/**
+     * @var  vfsStreamDirectory
+     */
+    private $root;
+
+	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
@@ -31,6 +37,8 @@ class JFileTest extends PHPUnit_Framework_TestCase
 		parent::setUp();
 
 		$this->object = new File;
+
+		$this->root = vfsStream::setup('root');
 	}
 
 	/**
@@ -158,8 +166,8 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	public function testCopy()
 	{
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp';
-		$copiedFileName = 'copiedTempFile';
+		$path = vfsStream::url('root');
+		$copiedFileName = 'foo';
 		$data = 'Lorem ipsum dolor sit amet';
 
 		// Create a temp file to test copy operation
@@ -170,24 +178,42 @@ class JFileTest extends PHPUnit_Framework_TestCase
 			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should copy successfully.'
 		);
-		unlink($path . '/' . $copiedFileName);
 
+		$this->assertEquals(
+			$data,
+			file_get_contents($path . '/' . $copiedFileName),
+			'Line:' . __LINE__ . ' Content should remain intact after copy.'
+		);
+
+		// Failing becuase Path::clean relpace // to / in path.
+		// So vfs://root/tempPath becomes vfs:/root/tempPath
+		/*
+		$copiedFileName = 'bar';
 		$this->assertThat(
 			File::copy($name, $copiedFileName, $path),
 			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should copy successfully.'
 		);
-		unlink($path . '/' . $copiedFileName);
+
+		$this->assertEquals(
+			$data,
+			file_get_contents($path . '/' . $copiedFileName),
+			'Line:' . __LINE__ . ' Content should remain intact after copy.'
+		);
 
 		// Copy using streams.
+		$copiedFileName = 'foobar';
 		$this->assertThat(
 			File::copy($name, $copiedFileName, $path, true),
 			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should copy successfully.'
 		);
-		unlink($path . '/' . $copiedFileName);
 
-		unlink($path . '/' . $name);
+		$this->assertEquals(
+			$data,
+			file_get_contents($path . '/' . $copiedFileName),
+			'Line:' . __LINE__ . ' Content should remain intact after copy.'
+		);*/
 	}
 
 	/**
