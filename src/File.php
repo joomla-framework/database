@@ -86,7 +86,7 @@ class File
 		{
 			$stream = Stream::getStream();
 
-			if (!$stream->copy($src, $dest))
+			if (!$stream->copy($src, $dest, null, false))
 			{
 				throw new FilesystemException(sprintf('%1$s(%2$s, %3$s): %4$s', __METHOD__, $src, $dest, $stream->getError()));
 			}

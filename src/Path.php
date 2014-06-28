@@ -66,9 +66,9 @@ class Path
 		{
 			$dh = @opendir($path);
 
-			if($dh)
+			if ($dh)
 			{
-			while ($file = readdir($dh))
+				while ($file = readdir($dh))
 				{
 					if ($file != '.' && $file != '..')
 					{
@@ -200,6 +200,16 @@ class Path
 			throw new \UnexpectedValueException('JPath::clean $path is not a string.');
 		}
 
+        $stream = explode("://", $path, 2);
+        $scheme = '';
+        $path = $stream[0];
+
+        if (count($stream) >= 2)
+        {
+            $scheme = $stream[0] . '://';
+            $path = $stream[1];
+        }
+
 		$path = trim($path);
 
 		if (empty($path))
@@ -217,7 +227,7 @@ class Path
 			$path = preg_replace('#[/\\\\]+#', $ds, $path);
 		}
 
-		return $path;
+		return $scheme . $path;
 	}
 
 	/**

@@ -185,9 +185,6 @@ class JFileTest extends PHPUnit_Framework_TestCase
 			'Line:' . __LINE__ . ' Content should remain intact after copy.'
 		);
 
-		// Failing becuase Path::clean relpace // to / in path.
-		// So vfs://root/tempPath becomes vfs:/root/tempPath
-		/*
 		$copiedFileName = 'bar';
 		$this->assertThat(
 			File::copy($name, $copiedFileName, $path),
@@ -213,7 +210,7 @@ class JFileTest extends PHPUnit_Framework_TestCase
 			$data,
 			file_get_contents($path . '/' . $copiedFileName),
 			'Line:' . __LINE__ . ' Content should remain intact after copy.'
-		);*/
+		);
 	}
 
 	/**
@@ -227,7 +224,7 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	public function testCopyException()
 	{
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp';
+		$path = vfsStream::url('root');
 		$copiedFileName = 'copiedTempFile';
 
 		File::copy($path . '/' . $name . 'foobar', $path . '/' . $copiedFileName);
@@ -244,7 +241,7 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	public function testDelete()
 	{
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp';
+		$path = vfsStream::url('root');
 		$data = 'Lorem ipsum dolor sit amet';
 
 		// Create a temp file to test delete operation

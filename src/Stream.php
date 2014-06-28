@@ -1381,6 +1381,16 @@ class Stream
 			// Get rid of binary or t, should be at the end of the string
 			$tmode = trim($mode, 'btf123456789');
 
+			$stream = explode("://", $filename, 2);
+            $scheme = '';
+            $filename = $stream[0];
+
+			if (count($stream) >= 2)
+			{
+				$scheme = $stream[0] . '://';
+				$filename = $stream[1];
+			}
+
 			// Check if it's a write mode then add the appropriate prefix
 			// Get rid of JPATH_ROOT (legacy compat) along the way
 			if (in_array($tmode, Helper::getWriteModes()))
@@ -1401,6 +1411,8 @@ class Stream
 
 				$filename = $this->readprefix . $filename;
 			}
+
+                $filename = $scheme . $filename;
 		}
 
 		return $filename;
