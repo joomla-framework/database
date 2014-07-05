@@ -370,9 +370,11 @@ class InputTest extends \PHPUnit_Framework_TestCase
 
 		$input = $this->getInputObject($array);
 
-		$this->assertEquals($array, $input->getArray(
-			array('var1' => 'filter1', 'var2' => 'filter2', 'var3' => 'filter3')
-		));
+		$this->assertEquals(
+			$array, $input->getArray(
+				array('var1' => 'filter1', 'var2' => 'filter2', 'var3' => 'filter3')
+			)
+		);
 
 		$this->assertEquals(array('value1', 'filter1'), $this->filterMock->calls['clean'][0]);
 		$this->assertEquals(array(34, 'filter2'), $this->filterMock->calls['clean'][1]);
@@ -519,7 +521,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
 			array('filter' => 'raw'),
 			TestHelper::getValue($instance, 'options')
 		);
-		
+
 		$this->assertEquals(
 			'data',
 			TestHelper::getValue($instance, 'data')
@@ -543,7 +545,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testLoadAllInputs()
 	{
-		$instance = new Input(array(), array('filter' => $this->filterMock));
+		$instance = $this->getInputObject(array());
 
 		$inputs = TestHelper::getValue($instance, 'inputs');
 		$this->assertCount(0, $inputs);
@@ -557,11 +559,13 @@ class InputTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Get Input object populated with passed in data
 	 *
+	 * @param   array  $data  Optional source data. If omitted, a copy of the server variable '_REQUEST' is used.
+	 *
 	 * @return  Input
 	 *
 	 * @since   1.0
 	 */
-	protected function getInputObject($data)
+	protected function getInputObject($data = null)
 	{
 		return new Input($data, array('filter' => $this->filterMock));
 	}

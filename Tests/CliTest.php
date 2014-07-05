@@ -380,7 +380,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
 			array('filter' => 'raw'),
 			TestHelper::getValue($instance, 'options')
 		);
-		
+
 		$this->assertEquals(
 			'data',
 			TestHelper::getValue($instance, 'data')

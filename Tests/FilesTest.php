@@ -72,27 +72,27 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 
 		$data = array(
 			'myfile' => array(
-				'name' => 'n', 
-				'type' => 'ty', 
-				'tmp_name' => 'tm', 
-				'error' => 'e', 
+				'name' => 'n',
+				'type' => 'ty',
+				'tmp_name' => 'tm',
+				'error' => 'e',
 				'size' => 's'
 			),
 			'myfile2' => array(
-				'name' => 'nn', 
-				'type' => 'ttyy', 
-				'tmp_name' => 'ttmm', 
-				'error' => 'ee', 
+				'name' => 'nn',
+				'type' => 'ttyy',
+				'tmp_name' => 'ttmm',
+				'error' => 'ee',
 				'size' => 'ss'
 			)
 		);
 
 		$decoded = TestHelper::setValue($instance, 'data', $data);
 		$expected = array(
-			'name' => 'n', 
-			'type' => 'ty', 
-			'tmp_name' => 'tm', 
-			'error' => 'e', 
+			'name' => 'n',
+			'type' => 'ty',
+			'tmp_name' => 'tm',
+			'error' => 'e',
 			'size' => 's'
 		);
 
@@ -114,10 +114,10 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 		$data = array('n', 'ty', 'tm', 'e', 's');
 		$decoded = TestHelper::invoke($instance, 'decodeData', $data);
 		$expected = array(
-			'name' => 'n', 
-			'type' => 'ty', 
-			'tmp_name' => 'tm', 
-			'error' => 'e', 
+			'name' => 'n',
+			'type' => 'ty',
+			'tmp_name' => 'tm',
+			'error' => 'e',
 			'size' => 's'
 		);
 
@@ -125,20 +125,20 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 
 		$dataArr = array('first', 'second');
 		$data = array($dataArr , $dataArr, $dataArr, $dataArr, $dataArr);
-		
+
 		$decoded = TestHelper::invoke($instance, 'decodeData', $data);
 		$expectedFirst = array(
-			'name' => 'first', 
-			'type' => 'first', 
-			'tmp_name' => 'first', 
-			'error' => 'first', 
+			'name' => 'first',
+			'type' => 'first',
+			'tmp_name' => 'first',
+			'error' => 'first',
 			'size' => 'first'
 		);
 		$expectedSecond = array(
-			'name' => 'second', 
-			'type' => 'second', 
-			'tmp_name' => 'second', 
-			'error' => 'second', 
+			'name' => 'second',
+			'type' => 'second',
+			'tmp_name' => 'second',
+			'error' => 'second',
 			'size' => 'second'
 		);
 		$expected = array($expectedFirst, $expectedSecond);
@@ -157,6 +157,6 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 	{
 		$instance = new Files;
 
-		$this->assertNull($instance->set('foo','bar'));
+		$this->assertNull($instance->set('foo', 'bar'));
 	}
 }

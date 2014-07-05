@@ -67,7 +67,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 	 * @since   1.0
 	 */
 	public function testSet()
-	{	
+	{
 		$instance = new Cookie;
 		$instance->set('foo', 'bar');
 
@@ -81,6 +81,21 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 // Stub for setcookie
 namespace Joomla\Input;
 
+/**
+ * Stub.
+ *
+ * @param   string  $name      Name
+ * @param   string  $value     Name
+ * @param   int     $expire    Name
+ * @param   string  $path      Name
+ * @param   string  $domain    Name
+ * @param   bool    $secure    Name
+ * @param   bool    $httpOnly  Name
+ *
+ * @return  void
+ *
+ * @since   __VERSION_NO__
+ */
 function setcookie($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httpOnly = false)
 {
 	return true;
