@@ -546,6 +546,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
 	public function testLoadAllInputs()
 	{
 		$instance = $this->getInputObject(array());
+		TestHelper::setValue($instance, 'loaded', false);
 
 		$inputs = TestHelper::getValue($instance, 'inputs');
 		$this->assertCount(0, $inputs);

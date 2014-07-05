@@ -368,7 +368,7 @@ class Input implements \Serializable, \Countable
 	 */
 	protected function loadAllInputs()
 	{
-		if (!$this->loaded)
+		if (!self::$loaded)
 		{
 			// Load up all the globals.
 			foreach ($GLOBALS as $global => $data)
@@ -385,7 +385,7 @@ class Input implements \Serializable, \Countable
 				}
 			}
 
-			$this->loaded = true;
+			self::$loaded = true;
 		}
 	}
 }

@@ -340,18 +340,18 @@ class CliTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Input\Input::serialize
+	 * @covers  Joomla\Input\Cli::serialize
 	 * @since   1.0
 	 */
 	public function testSerialize()
 	{
-		/*$_SERVER['argv'] = array('/dev/null', '--foo=bar');
+		$_SERVER['argv'] = array('/dev/null', '--foo=bar');
 		$instance = new Cli(null, array('filter' => new FilterInputMock));
 
-		$this->assertThat(
-			$instance->serialize(),
-			$this->equalTo('')
-		);*/
+		$this->assertGreaterThan(
+			0,
+			count($instance->serialize())
+		);
 	}
 
 	/**
@@ -359,18 +359,27 @@ class CliTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Input\Input::unserialize
+	 * @covers  Joomla\Input\Cli::unserialize
 	 * @since   1.0
 	 */
 	public function testUnserialize()
 	{
-		/*$serialized = 'a:3:{i:0;a:1:{s:6:"filter";s:3:"raw";}i:1;s:4:"data";i:2;a:1:{s:7:"request";s:4:"keep";}}';
+		$serialized = 'a:5:{i:0;s:9:"/dev/null";i:1;a:1:{s:3:"foo";s:3:"bar";}i:2;a:1:{s:6:"filter";s:3:"raw";}i:3;s:4:"data";i:4;a:1:{s:7:"request";s:4:"keep";}}';
 
 		$instance = new Cli(null, array('filter' => new FilterInputMock));
 
 		$instance->unserialize($serialized);
 
-		// Adjust the values so they are easier to handle.
+		$this->assertEquals(
+			'/dev/null',
+			TestHelper::getValue($instance, 'executable')
+		);
+
+		$this->assertEquals(
+			array('foo' => 'bar'),
+			TestHelper::getValue($instance, 'args')
+		);
+
 		$this->assertEquals(
 			array('request' => 'keep'),
 			TestHelper::getValue($instance, 'inputs')
@@ -385,12 +394,5 @@ class CliTest extends \PHPUnit_Framework_TestCase
 			'data',
 			TestHelper::getValue($instance, 'data')
 		);
-
-		$serialized = 'a:3:{i:0;a:1:{i:0;s:7:"options";}i:1;s:4:"data";i:2;a:1:{s:7:"request";s:4:"keep";}}';
-		$instance->unserialize($serialized);
-		$this->assertEquals(
-			array('options'),
-			TestHelper::getValue($instance, 'options')
-		);*/
 	}
 }
