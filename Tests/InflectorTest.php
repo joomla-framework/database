@@ -101,8 +101,8 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @covers  Joomla\String\Inflector::addRule
+	 * @since   1.0
 	 */
 	public function testAddRule()
 	{
@@ -151,9 +151,9 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
-	 * @expectedException  InvalidArgumentException
 	 * @covers  Joomla\String\Inflector::addRule
+	 * @expectedException  InvalidArgumentException
+	 * @since   1.0
 	 */
 	public function testAddRuleException()
 	{
@@ -165,8 +165,8 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @covers  Joomla\String\Inflector::getCachedPlural
+	 * @since   1.0
 	 */
 	public function testGetCachedPlural()
 	{
@@ -191,8 +191,8 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @covers  Joomla\String\Inflector::getCachedSingular
+	 * @since   1.0
 	 */
 	public function testGetCachedSingular()
 	{
@@ -217,8 +217,8 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @covers  Joomla\String\Inflector::matchRegexRule
+	 * @since   1.0
 	 */
 	public function testMatchRegexRule()
 	{
@@ -246,8 +246,8 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @covers  Joomla\String\Inflector::setCache
+	 * @since   1.0
 	 */
 	public function testSetCache()
 	{
@@ -277,8 +277,8 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @covers  Joomla\String\Inflector::addCountableRule
+	 * @since   1.0
 	 */
 	public function testAddCountableRule()
 	{
@@ -310,8 +310,8 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @covers  Joomla\String\Inflector::addWord
+	 * @since   1.0
 	 */
 	public function testAddWord()
 	{
@@ -349,8 +349,8 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @covers  Joomla\String\Inflector::addPluraliseRule
+	 * @since   1.0
 	 */
 	public function testAddPluraliseRule()
 	{
@@ -376,8 +376,8 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @covers  Joomla\String\Inflector::addSingulariseRule
+	 * @since   1.0
 	 */
 	public function testAddSingulariseRule()
 	{
@@ -403,8 +403,8 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @covers  Joomla\String\Inflector::getInstance
+	 * @since   1.0
 	 */
 	public function testGetInstance()
 	{
@@ -438,9 +438,9 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
+	 * @covers  Joomla\String\Inflector::isCountable
 	 * @dataProvider  seedIsCountable
 	 * @since   1.0
-	 * @covers  Joomla\String\Inflector::isCountable
 	 */
 	public function testIsCountable($input, $expected)
 	{
@@ -458,9 +458,9 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
+	 * @covers  Joomla\String\Inflector::isPlural
 	 * @dataProvider  seedSinglePlural
 	 * @since   1.0
-	 * @covers  Joomla\String\Inflector::isPlural
 	 */
 	public function testIsPlural($singular, $plural)
 	{
@@ -488,9 +488,9 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
+	 * @covers  Joomla\String\Inflector::isSingular
 	 * @dataProvider  seedSinglePlural
 	 * @since   1.0
-	 * @covers  Joomla\String\Inflector::isSingular
 	 */
 	public function testIsSingular($singular, $plural)
 	{
@@ -518,9 +518,9 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
+	 * @covers  Joomla\String\Inflector::toPlural
 	 * @dataProvider  seedSinglePlural
 	 * @since   1.0
-	 * @covers  Joomla\String\Inflector::toPlural
 	 */
 	public function testToPlural($singular, $plural)
 	{
@@ -533,13 +533,10 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Method to test Inflector::toPlural().
 	 *
-	 * @param   string  $singular  The singular form of a word.
-	 * @param   string  $plural    The plural form of a word.
-	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @covers  Joomla\String\Inflector::toPlural
+	 * @since   1.0
 	 */
 	public function testToPluralAlreadyPlural()
 	{
@@ -554,9 +551,9 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
+	 * @covers  Joomla\String\Inflector::toSingular
 	 * @dataProvider  seedSinglePlural
 	 * @since   1.0
-	 * @covers  Joomla\String\Inflector::toSingular
 	 */
 	public function testToSingular($singular, $plural)
 	{
@@ -569,13 +566,10 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Method to test Inflector::toPlural().
 	 *
-	 * @param   string  $singular  The singular form of a word.
-	 * @param   string  $plural    The plural form of a word.
-	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @covers  Joomla\String\Inflector::toSingular
+	 * @since   1.0
 	 */
 	public function testToSingularRetFalse()
 	{
