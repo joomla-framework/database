@@ -7,6 +7,7 @@
 namespace Joomla\Archive\Tests;
 
 use Joomla\Archive\Tar as ArchiveTar;
+use Joomla\Test\TestHelper;
 
 /**
  * Test class for Joomla\Archive\Tar.
@@ -15,7 +16,6 @@ use Joomla\Archive\Tar as ArchiveTar;
  */
 class TarTest extends \PHPUnit_Framework_TestCase
 {
-
 	/**
 	 * Output directory
 	 *
@@ -46,6 +46,32 @@ class TarTest extends \PHPUnit_Framework_TestCase
 		}
 
 		$this->object = new ArchiveTar;
+	}
+
+	/**
+	 * Tests the constructor.
+	 *
+	 * @group   JArchive
+	 * @return  void
+	 *
+	 * @covers  Joomla\Archive\Tar::__construct
+	 */
+	public function test__construct()
+	{
+		$object = new ArchiveTar;
+
+		$this->assertEquals(
+			array(),
+			TestHelper::getValue($object, 'options')
+		);
+
+		$options = array('foo' => 'bar');
+		$object = new ArchiveTar($options);
+
+		$this->assertEquals(
+			$options,
+			TestHelper::getValue($object, 'options')
+		);
 	}
 
 	/**
