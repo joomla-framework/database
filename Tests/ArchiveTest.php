@@ -59,14 +59,81 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test data for extracting ZIP : testExtract.
+	 *
+	 * @return  void
+	 *
+	 * @since   __VERSION_NO__
+	 */
+	public function dataExtract()
+	{
+		return array(
+			array('logo.zip', 'Zip', 'logo-zip.png', false),
+			array('logo.tar', 'Tar', 'logo-tar.png', false),
+			array('logo.gz', 'Gzip', 'logo-gz.png', true),
+			array('logo.bz2', 'Bzip2', 'logo-bz2.png', true),
+			array('logo.tar.gz', 'Gzip', 'logo-tar-gz.png', false),
+			array('logo.tar.bz2', 'Bzip2', 'logo-tar-bz2.png', false),
+		);
+	}
+
+	/**
+	 * Tests extracting ZIP.
+	 *
+	 * @param   string  $filename           Name of the file to extract
+	 * @param   string  $adapterType        Type of adaptar that will be used
+	 * @param   string  $extractedFilename  Name of the file to extracted file
+	 * @param   bool    $isOutputFile       Whether output is a dirctory or file
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\Archive\Archive::extract
+	 * @dataProvider dataExtract
+	 * @since   1.0
+	 */
+	public function testExtract($filename, $adapterType, $extractedFilename, $isOutputFile = false)
+	{
+		if (!is_dir($this->outputPath))
+		{
+			$this->markTestSkipped("Couldn't create folder.");
+
+			return;
+		}
+
+		if (!is_writable($this->outputPath) || !is_writable($this->fixture->options['tmp_path']))
+		{
+			$this->markTestSkipped("Folder not writable.");
+
+			return;
+		}
+
+		$adapter = "Joomla\\Archive\\$adapterType";
+
+		if (!$adapter::isSupported())
+		{
+			$this->markTestSkipped($adapterType . ' files can not be extracted.');
+
+			return;
+		}
+
+		$outputPath = $this->outputPath . ($isOutputFile ? "/$extractedFilename" : '');
+
+		$this->assertTrue($this->fixture->extract(__DIR__ . "/$filename", $outputPath));
+		$this->assertTrue(is_file($this->outputPath . "/$extractedFilename"));
+
+		@unlink($this->outputPath . "/$extractedFilename");
+	}
+
+	/**
 	 * Tests extracting ZIP.
 	 *
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Archive::extract
+	 * @expectedException InvalidArgumentException
 	 * @since   1.0
 	 */
-	public function testExtractZip()
+	public function testExtractUnknown()
 	{
 		if (!is_dir($this->outputPath))
 		{
@@ -75,133 +142,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		if (!ArchiveZip::isSupported())
-		{
-			$this->markTestSkipped('ZIP files can not be extracted.');
-
-			return;
-		}
-
-		$this->fixture->extract(__DIR__ . '/logo.zip', $this->outputPath);
-		$this->assertTrue(is_file($this->outputPath . '/logo-zip.png'));
-
-		if (is_file($this->outputPath . '/logo-zip.png'))
-		{
-			unlink($this->outputPath . '/logo-zip.png');
-		}
-	}
-
-	/**
-	 * Tests extracting TAR.
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\Archive\Archive::extract
-	 * @since   1.0
-	 */
-	public function testExtractTar()
-	{
-		if (!is_dir($this->outputPath))
-		{
-			$this->markTestSkipped("Couldn't create folder.");
-
-			return;
-		}
-
-		if (!ArchiveTar::isSupported())
-		{
-			$this->markTestSkipped('Tar files can not be extracted.');
-
-			return;
-		}
-
-		$this->fixture->extract(__DIR__ . '/logo.tar', $this->outputPath);
-		$this->assertTrue(is_file($this->outputPath . '/logo-tar.png'));
-
-		if (is_file($this->outputPath . '/logo-tar.png'))
-		{
-			unlink($this->outputPath . '/logo-tar.png');
-		}
-	}
-
-	/**
-	 * Tests extracting gzip.
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\Archive\Archive::extract
-	 * @since   1.0
-	 */
-	public function testExtractGzip()
-	{
-		if (!is_dir($this->outputPath))
-		{
-			$this->markTestSkipped("Couldn't create folder.");
-
-			return;
-		}
-
-		if (!is_writable($this->outputPath) || !is_writable($this->fixture->options['tmp_path']))
-		{
-			$this->markTestSkipped("Folder not writable.");
-
-			return;
-		}
-
-		if (!ArchiveGzip::isSupported())
-		{
-			$this->markTestSkipped('Gzip files can not be extracted.');
-
-			return;
-		}
-
-		$this->fixture->extract(__DIR__ . '/logo.gz', $this->outputPath . '/logo-gz.png');
-		$this->assertTrue(is_file($this->outputPath . '/logo-gz.png'));
-
-		if (is_file($this->outputPath . '/logo-gz.png'))
-		{
-			unlink($this->outputPath . '/logo-gz.png');
-		}
-	}
-
-	/**
-	 * Tests extracting bzip2.
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\Archive\Archive::extract
-	 * @since   1.0
-	 */
-	public function testExtractBzip2()
-	{
-		if (!is_dir($this->outputPath))
-		{
-			$this->markTestSkipped("Couldn't create folder.");
-
-			return;
-		}
-
-		if (!is_writable($this->outputPath) || !is_writable($this->fixture->options['tmp_path']))
-		{
-			$this->markTestSkipped("Folder not writable.");
-
-			return;
-		}
-
-		if (!ArchiveBzip2::isSupported())
-		{
-			$this->markTestSkipped('Bzip2 files can not be extracted.');
-
-			return;
-		}
-
-		$this->fixture->extract(__DIR__ . '/logo.bz2', $this->outputPath . '/logo-bz2.png');
-		$this->assertTrue(is_file($this->outputPath . '/logo-bz2.png'));
-
-		if (is_file($this->outputPath . '/logo-bz2.png'))
-		{
-			unlink($this->outputPath . '/logo-bz2.png');
-		}
+		$this->fixture->extract(__DIR__ . '/logo.dat', $this->outputPath);
 	}
 
 	/**
@@ -262,6 +203,24 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test setAdapter.
+	 *
+	 * @return  void
+	 *
+	 * @covers             Joomla\Archive\Archive::setAdapter
+	 *
+	 * @since              1.0
+	 */
+	public function testSetAdapter()
+	{
+		$class = 'Joomla\\Archive\\Zip';
+		$this->assertInstanceOf(
+			'Joomla\\Archive\\Archive',
+			$this->fixture->setAdapter('zip', new $class)
+		);
+	}
+
+	/**
 	 * Test setAdapter exception.
 	 *
 	 * @return  void
@@ -270,7 +229,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 * @expectedException  \InvalidArgumentException
 	 * @since              1.0
 	 */
-	public function testSetAdapterException()
+	public function testSetAdapterUnknownException()
 	{
 		$this->fixture->setAdapter('unknown', 'unknown-class');
 	}
@@ -280,6 +239,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
+	 * @covers             Joomla\Archive\Archive::setAdapter
 	 * @since  1.0
 	 */
 	public function testSetAdapterExceptionMessage()
@@ -292,7 +252,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 		catch (\InvalidArgumentException $e)
 		{
 			$this->assertEquals(
-				'The provided adapter "unknown" (class "FooArchiveAdapter") must implement Joomla\\Archive\\ExtractableInterface',
+				'Archive adapter "unknown" (class "FooArchiveAdapter") not found.',
 				$e->getMessage()
 			);
 		}
