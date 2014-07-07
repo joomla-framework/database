@@ -7,6 +7,7 @@
 namespace Joomla\Archive\Tests;
 
 use Joomla\Archive\Bzip2 as ArchiveBzip2;
+use Joomla\Test\TestHelper;
 
 /**
  * Test class for Joomla\Archive\Bzip2.
@@ -15,7 +16,6 @@ use Joomla\Archive\Bzip2 as ArchiveBzip2;
  */
 class Bzip2Test extends \PHPUnit_Framework_TestCase
 {
-
 	/**
 	 * Output directory
 	 *
@@ -46,6 +46,32 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 		}
 
 		$this->object = new ArchiveBzip2;
+	}
+
+	/**
+	 * Tests the constructor.
+	 *
+	 * @group   JArchive
+	 * @return  void
+	 *
+	 * @covers  Joomla\Archive\Bzip2::__construct
+	 */
+	public function test__construct()
+	{
+		$object = new ArchiveBzip2;
+
+		$this->assertEquals(
+			array(),
+			TestHelper::getValue($object, 'options')
+		);
+
+		$options = array('use_streams' => false);
+		$object = new ArchiveBzip2($options);
+
+		$this->assertEquals(
+			$options,
+			TestHelper::getValue($object, 'options')
+		);
 	}
 
 	/**
@@ -89,14 +115,8 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		try
-		{
-			$this->object->extract(__DIR__ . '/logo.bz2', self::$outputPath . '/logo-bz2.png', array('use_streams' => true));
-		}
-		catch (\RuntimeException $e)
-		{
-			$this->assertTrue(is_file(self::$outputPath . '/logo-bz2.png'));
-		}
+		$object = new ArchiveBzip2(array('use_streams' => true));
+		$object->extract(__DIR__ . '/logo.bz2', self::$outputPath . '/logo-bz2.png');
 
 		$this->assertTrue(is_file(self::$outputPath . '/logo-bz2.png'));
 
