@@ -113,6 +113,8 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testExtractWithStreams()
 	{
+		$this->markTestSkipped('There is a bug, see https://bugs.php.net/bug.php?id=63195&edit=1');
+
 		if (!ArchiveGzip::isSupported())
 		{
 			$this->markTestSkipped('Gzip files can not be extracted.');
@@ -144,7 +146,7 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(
 			extension_loaded('zlib'),
-            $this->object->isSupported()
+			$this->object->isSupported()
 		);
 	}
 
@@ -158,7 +160,7 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetFilePosition()
 	{
-        // @todo use an all flags enabled file
+		// @todo use an all flags enabled file
 		TestHelper::setValue(
 			$this->object,
 			'data',

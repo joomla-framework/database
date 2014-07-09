@@ -110,6 +110,8 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	 */
 	public function testExtractWithStreams()
 	{
+		$this->markTestSkipped('There is a bug, see https://bugs.php.net/bug.php?id=63195&edit=1');
+
 		if (!\Joomla\Archive\Bzip2::isSupported())
 		{
 			$this->markTestSkipped('Bzip2 files can not be extracted.');
