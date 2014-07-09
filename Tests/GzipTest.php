@@ -7,6 +7,7 @@
 namespace Joomla\Archive\Tests;
 
 use Joomla\Archive\Gzip as ArchiveGzip;
+use Joomla\Test\TestHelper;
 
 /**
  * Test class for Joomla\Archive\Gzip.
@@ -15,7 +16,6 @@ use Joomla\Archive\Gzip as ArchiveGzip;
  */
 class GzipTest extends \PHPUnit_Framework_TestCase
 {
-
 	/**
 	 * Output directory
 	 *
@@ -49,6 +49,32 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the constructor.
+	 *
+	 * @group   JArchive
+	 * @return  void
+	 *
+	 * @covers  Joomla\Archive\Gzip::__construct
+	 */
+	public function test__construct()
+	{
+		$object = new ArchiveGzip;
+
+		$this->assertEquals(
+			array(),
+			TestHelper::getValue($object, 'options')
+		);
+
+		$options = array('use_streams' => false);
+		$object = new ArchiveGzip($options);
+
+		$this->assertEquals(
+			$options,
+			TestHelper::getValue($object, 'options')
+		);
+	}
+
+	/**
 	 * Tests the extract Method.
 	 *
 	 * @group   JArchive
@@ -66,12 +92,14 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 		}
 
 		$this->object->extract(__DIR__ . '/logo.gz', self::$outputPath . '/logo-gz.png');
-		$this->assertTrue(is_file(self::$outputPath . '/logo-gz.png'));
 
-		if (is_file(self::$outputPath . '/logo-gz.png'))
-		{
-			unlink(self::$outputPath . '/logo-gz.png');
-		}
+		$this->assertFileExists(self::$outputPath . '/logo-gz.png');
+		$this->assertFileEquals(
+			self::$outputPath . '/logo-gz.png',
+			__DIR__ . '/logo.png'
+		);
+
+		@unlink(self::$outputPath . '/logo-gz.png');
 	}
 
 	/**
@@ -92,21 +120,16 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		try
-		{
-			$this->object->extract(__DIR__ . '/logo.gz', self::$outputPath . '/logo-gz.png', array('use_streams' => true));
-		}
-		catch (\RuntimeException $e)
-		{
-			$this->assertTrue(is_file(self::$outputPath . '/logo-gz.png'));
-		}
+		$object = new ArchiveGzip(array('use_streams' => true));
+		$object->extract(__DIR__ . '/logo.gz', self::$outputPath . '/logo-gz.png');
 
-		$this->assertTrue(is_file(self::$outputPath . '/logo-gz.png'));
+		$this->assertFileExists(self::$outputPath . '/logo-gz.png');
+		$this->assertFileEquals(
+			self::$outputPath . '/logo-gz.png',
+			__DIR__ . '/logo.png'
+		);
 
-		if (is_file(self::$outputPath . '/logo-gz.png'))
-		{
-			unlink(self::$outputPath . '/logo-gz.png');
-		}
+		@unlink(self::$outputPath . '/logo-gz.png');
 	}
 
 	/**
@@ -121,7 +144,7 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(
 			extension_loaded('zlib'),
-			ArchiveGzip::isSupported()
+            $this->object->isSupported()
 		);
 	}
 
@@ -130,13 +153,21 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @todo Implement test_getFilePosition().
 	 *
+	 * @covers  Joomla\Archive\Gzip::getFilePosition
 	 * @return void
 	 */
-	public function test_getFilePosition()
+	public function testGetFilePosition()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-				'This test has not been implemented yet.'
+        // @todo use an all flags enabled file
+		TestHelper::setValue(
+			$this->object,
+			'data',
+			file_get_contents(__DIR__ . '/logo.gz')
+		);
+
+		$this->assertEquals(
+			22,
+			$this->object->getFilePosition()
 		);
 	}
 }

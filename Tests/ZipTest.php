@@ -7,8 +7,7 @@
 namespace Joomla\Archive\Tests;
 
 use Joomla\Archive\Zip as ArchiveZip;
-
-require_once __DIR__ . '/ZipInspector.php';
+use Joomla\Test\TestHelper;
 
 /**
  * Test class for Joomla\Archive\Zip.
@@ -17,7 +16,6 @@ require_once __DIR__ . '/ZipInspector.php';
  */
 class ZipTest extends \PHPUnit_Framework_TestCase
 {
-
 	/**
 	 * Output directory
 	 *
@@ -51,18 +49,60 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the constructor.
+	 *
+	 * @group   JArchive
+	 * @return  void
+	 *
+	 * @covers  Joomla\Archive\Zip::__construct
+	 */
+	public function test__construct()
+	{
+		$object = new ArchiveZip;
+
+		$this->assertEquals(
+			array(),
+			TestHelper::getValue($object, 'options')
+		);
+
+		$options = array('use_streams' => false);
+		$object = new ArchiveZip($options);
+
+		$this->assertEquals(
+			$options,
+			TestHelper::getValue($object, 'options')
+		);
+	}
+
+	/**
 	 * Test...
 	 *
 	 * @todo Implement testCreate().
 	 *
+	 * @covers  Joomla\Archive\Zip::create
+	 * @covers  Joomla\Archive\Zip::addToZIPFile
+	 * @covers  Joomla\Archive\Zip::unix2DOSTime
+	 * @covers  Joomla\Archive\Zip::createZIPFile
 	 * @return void
 	 */
 	public function testCreate()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$result = $this->object->create(
+			self::$outputPath . '/logo.zip',
+			array(array(
+				'name' => 'logo.png',
+				'data' => file_get_contents(__DIR__ . '/logo.png'),
+			))
 		);
+
+		$this->assertTrue($result);
+
+		$dataZip = file_get_contents(self::$outputPath . '/logo.zip');
+		$this->assertTrue(
+			$this->object->checkZipData($dataZip)
+		);
+
+		@unlink(self::$outputPath . '/logo.zip');
 	}
 
 	/**
@@ -85,12 +125,14 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 		}
 
 		$this->object->accessExtractNative(__DIR__ . '/logo.zip', self::$outputPath);
-		$this->assertTrue(is_file(self::$outputPath . '/logo-zip.png'));
 
-		if (is_file(self::$outputPath . '/logo-zip.png'))
-		{
-			unlink(self::$outputPath . '/logo-zip.png');
-		}
+		$this->assertFileExists(self::$outputPath . '/logo-zip.png');
+		$this->assertFileEquals(
+			self::$outputPath . '/logo-zip.png',
+			__DIR__ . '/logo.png'
+		);
+
+		@unlink(self::$outputPath . '/logo-zip.png');
 	}
 
 	/**
@@ -115,12 +157,14 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 		}
 
 		$this->object->accessExtractCustom(__DIR__ . '/logo.zip', self::$outputPath);
-		$this->assertTrue(is_file(self::$outputPath . '/logo-zip.png'));
 
-		if (is_file(self::$outputPath . '/logo-zip.png'))
-		{
-			unlink(self::$outputPath . '/logo-zip.png');
-		}
+		$this->assertFileExists(self::$outputPath . '/logo-zip.png');
+		$this->assertFileEquals(
+			self::$outputPath . '/logo-zip.png',
+			__DIR__ . '/logo.png'
+		);
+
+		@unlink(self::$outputPath . '/logo-zip.png');
 	}
 
 	/**
@@ -143,12 +187,37 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 		}
 
 		$this->object->extract(__DIR__ . '/logo.zip', self::$outputPath);
-		$this->assertTrue(is_file(self::$outputPath . '/logo-zip.png'));
 
-		if (is_file(self::$outputPath . '/logo-zip.png'))
+		$this->assertFileExists(self::$outputPath . '/logo-zip.png');
+		$this->assertFileEquals(
+			self::$outputPath . '/logo-zip.png',
+			__DIR__ . '/logo.png'
+		);
+
+		@unlink(self::$outputPath . '/logo-zip.png');
+	}
+
+	/**
+	 * Tests the extract Method exception on non-existent archive file.
+	 *
+	 * @group   JArchive
+	 *
+	 * @covers             Joomla\Archive\Zip::extract
+	 * @expectedException  RuntimeException
+	 * @return  void
+	 */
+	public function testExtractException()
+	{
+		if (!ArchiveZip::isSupported())
 		{
-			unlink(self::$outputPath . '/logo-zip.png');
+			$this->markTestSkipped(
+				'ZIP files can not be extracted.'
+			);
+
+			return;
 		}
+
+		$this->object->extract(__DIR__ . '/foobar.zip', self::$outputPath);
 	}
 
 	/**

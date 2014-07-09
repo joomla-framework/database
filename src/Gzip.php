@@ -75,7 +75,12 @@ class Gzip implements ExtractableInterface
 	{
 		$this->data = null;
 
-		if (!isset($this->options['use_streams']) || $this->options['use_streams'] == false)
+		/* @todo - Enable extraction using streams when
+		 https://bugs.php.net/bug.php?id=63195&edit=1 is fixed.
+		*/
+		if (!isset($this->options['use_streams'])
+			|| $this->options['use_streams'] == false
+			|| $this->options['use_streams'] == true)
 		{
 			$this->data = file_get_contents($archive);
 
@@ -97,6 +102,7 @@ class Gzip implements ExtractableInterface
 				throw new \RuntimeException('Unable to write archive');
 			}
 		}
+		/* Extraction using stream is disabled, check todo mentioned above.
 		else
 		{
 			// New style! streams!
@@ -138,7 +144,7 @@ class Gzip implements ExtractableInterface
 
 			$output->close();
 			$input->close();
-		}
+		}*/
 
 		return true;
 	}

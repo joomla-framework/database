@@ -92,12 +92,14 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 		}
 
 		$this->object->extract(__DIR__ . '/logo.bz2', self::$outputPath . '/logo-bz2.png');
-		$this->assertTrue(is_file(self::$outputPath . '/logo-bz2.png'));
 
-		if (is_file(self::$outputPath . '/logo-bz2.png'))
-		{
-			unlink(self::$outputPath . '/logo-bz2.png');
-		}
+		$this->assertFileExists(self::$outputPath . '/logo-bz2.png');
+		$this->assertFileEquals(
+			self::$outputPath . '/logo-bz2.png',
+			__DIR__ . '/logo.png'
+		);
+
+		@unlink(self::$outputPath . '/logo-bz2.png');
 	}
 
 	/**
@@ -118,12 +120,13 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 		$object = new ArchiveBzip2(array('use_streams' => true));
 		$object->extract(__DIR__ . '/logo.bz2', self::$outputPath . '/logo-bz2.png');
 
-		$this->assertTrue(is_file(self::$outputPath . '/logo-bz2.png'));
+		$this->assertFileExists(self::$outputPath . '/logo-bz2.png');
+		$this->assertFileEquals(
+			self::$outputPath . '/logo-bz2.png',
+			__DIR__ . '/logo.png'
+		);
 
-		if (is_file(self::$outputPath . '/logo-bz2.png'))
-		{
-			unlink(self::$outputPath . '/logo-bz2.png');
-		}
+		@unlink(self::$outputPath . '/logo-bz2.png');
 	}
 
 	/**
