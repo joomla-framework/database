@@ -21,7 +21,8 @@ You can use the `Uri` class a number of different ways when dealing with Uris. I
 
 The methods provided in the `Uri` class allow you to manipulate all aspects of a uri. For example, suppose you wanted to set a new uri, add in a port, and then also post a username and password to authenticate a .htaccess security file. You could use the following syntax:
 
-```
+```php
+<?php
 // new uri object
 $uri = new Joomla\Uri\Uri;
 
@@ -37,7 +38,8 @@ This will output:
 
 If you wanted to add a specific filepath after the host you could use the `setPath()` method:
 
-```
+```php
+<?php
 // set path
 $uri->setPath('path/to/file.php');
 ```
@@ -46,7 +48,8 @@ Which will output
    myUser:myPass@http://localhost:8888path/to/file.php
 
 Adding a URL query:
-```
+```php
+<?php
 // url query
 $uri->setQuery('foo=bar');
 ```
