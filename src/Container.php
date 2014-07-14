@@ -413,7 +413,7 @@ class Container
 	/**
 	 * Register a service provider to the container.
 	 *
-	 * @param   ServiceProviderInterface  $provider  The service provider to register.w
+	 * @param   ServiceProviderInterface  $provider  The service provider to register.
 	 *
 	 * @return  Container  This object for chaining.
 	 *
