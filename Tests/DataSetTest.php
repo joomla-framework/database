@@ -294,15 +294,21 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	public function testNext()
 	{
 		$this->instance->next();
-		$this->assertThat(
-			TestHelper::getValue($this->instance, 'current'),
-			$this->equalTo(1)
+		$this->assertEquals(
+			1,
+			TestHelper::getValue($this->instance, 'current')
 		);
 
 		$this->instance->next();
-		$this->assertThat(
-			TestHelper::getValue($this->instance, 'current'),
-			$this->equalTo(false)
+		$this->assertNull(
+			TestHelper::getValue($this->instance, 'current')
+		);
+
+		TestHelper::setValue($this->instance, 'current', false);
+		$this->instance->next();
+		$this->assertEquals(
+			0,
+			TestHelper::getValue($this->instance, 'current')
 		);
 	}
 
@@ -383,10 +389,20 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testOffsetUnset()
 	{
+		TestHelper::setValue($this->instance, 'current', 1);
+
+		$this->instance->offsetUnset(1);
+		$objects = TestHelper::getValue($this->instance, 'objects');
+
+		$this->assertFalse(isset($objects[1]));
+
 		$this->instance->offsetUnset(0);
 		$objects = TestHelper::getValue($this->instance, 'objects');
 
 		$this->assertFalse(isset($objects[0]));
+
+		// Nonexistent offset
+		$this->instance->offsetUnset(-1);
 	}
 
 	/**
