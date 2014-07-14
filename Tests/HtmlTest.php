@@ -60,6 +60,13 @@ class AbstractHtmlViewTest extends \PHPUnit_Framework_TestCase
 
 		$this->instance->setLayout('olivia');
 		$this->assertEquals($this->instance->setLayout('olivia'), (string) $this->instance);
+
+		// Invalid Layout path.
+		$this->instance->setLayout('foobar');
+		$this->assertEquals(
+			'Layout Path Not Found',
+			(string) $this->instance
+		);
 	}
 
 	/**
