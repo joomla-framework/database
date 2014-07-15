@@ -6,7 +6,8 @@
 
 The standard router optionally takes a `Joomla\Input\Input` object. If not provided, the router will create a new `Input` object which imports its data from `$_REQUEST`.
 
-```
+```php
+<?php
 use Joomla\Router\Router;
 
 // Create a default web request router.
@@ -22,7 +23,8 @@ The purpose of a router is to find a controller based on a routing path. The pat
 
 The `addMap` method is used to map at routing pattern to a controller.
 
-```
+```php
+<?php
 $router = new Router;
 $router->addMap('/article/:article_id', '\\Acme\\ArticleController`)
 	->addMap('/component/*', '\\Acme\\ComponentFrontController');
@@ -30,7 +32,8 @@ $router->addMap('/article/:article_id', '\\Acme\\ArticleController`)
 
 #### Matching an exact route.
 
-```
+```php
+<?php
 $router->addMap('/articles', 'ArticlesController');
 $controller = $router->getController('/articles');
 ```
@@ -39,14 +42,16 @@ In this case there is an exact match between the route and the map. An `Articles
 
 #### Matching any segment with wildcards
 
-```
+```php
+<?php
 $router->addMap('/articles/*', 'ArticlesController');
 $controller = $router->getController('/articles/foo/bar');
 ```
 
 In this case, the router will match any route starting with "/articles/". Anything after that initial prefix is ignored and the controller would have to inspect the route manually to determine the last part of the route.
 
-```
+```php
+<?php
 $router->addMap('/articles/*/published', 'PublishedController');
 $controller = $router->getController('/articles/foo/bar/published');
 ```
@@ -55,19 +60,22 @@ Wildcards can be used within segments. In the second example if the "/published"
 
 #### Matching any segments to named variables
 
-```
+```php
+<?php
 $router->addMap('/articles/*tags', 'ArticlesController');
 $controller = $router->getController('/articles/space,apollo,moon');
 ```
 A star `*` followed by a name will store the wildcard match in a variable of that name. In this case, the router will return an `ArticlesController` but it will inject a variable into the input named `tags` holding the value of anything that came after the prefix. In this example, `tags` will be equal to the value "space,apollo,moon".
 
-```
+```php
+<?php
 $controller = $router->getController('/articles/space,apollo,moon/and-stars');
 ```
 
 Note, however, all the route after the "/articles/" prefix will be matched. In the second case, `tags` would equal "space,apollo,moon/and-stars". This could, however, be used to map a category tree, for example:
 
-```
+```php
+<?php
 $controller = $router->getController('/articles/*categories', 'ArticlesController');
 $controller = $router->getController('/articles/cat-1/cat-2');
 ```
@@ -76,13 +84,15 @@ In this case the router would return a `ArticlesController` where the input was 
 
 If you need to match the star character exactly, back-quote it, for example:
 
-```
+```php
+<?php
 $router->addMap('/articles/\*tags', 'ArticlesTagController');
 ```
 
 #### Matching one segment to a named variable
 
-```
+```php
+<?php
 $router->addMap('/articles/:article_id', 'ArticleController');
 $controller = $router->getController('/articles/1');
 ```
@@ -90,14 +100,16 @@ A colon `:` followed by a name will store the value of that segment in a variabl
 
 Note that a route of `/articles/1/like` would not be matched. The following cases would be required to match this type of route:
 
-```
+```php
+<?php
 $router->addMap('/articles/:article_id/like', 'ArticleLikeController');
 $router->addMap('/articles/:article_id/*action', 'ArticleActionController');
 ```
 
 If you need to match the colon character exactly, back-quote it, for example:
 
-```
+```php
+<?php
 $router->addMap('/articles/\:tags', 'ArticlesTagController');
 ```
 
