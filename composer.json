@@ -10,7 +10,7 @@
     },
     "autoload": {
     	"psr-4": {
-    		"Joomla\\DI\\": "src/",
+            "Joomla\\DI\\": "src/",
             "Joomla\\DI\\Tests\\": "Tests/"
     	}
     }
