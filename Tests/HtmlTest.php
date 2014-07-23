@@ -166,9 +166,8 @@ class AbstractHtmlViewTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\View\AbstractHtmlView::render
-	 * @since   1.0
-	 *
 	 * @expectedException  RuntimeException
+	 * @since   1.0
 	 */
 	public function testRender_exception()
 	{
