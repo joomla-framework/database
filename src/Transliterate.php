@@ -19,8 +19,8 @@ class Transliterate
 	/**
 	 * Returns strings transliterated from UTF-8 to Latin
 	 *
-	 * @param   string   $string  String to transliterate
-	 * @param   boolean  $case    Optionally specify upper or lower case. Default to null.
+	 * @param   string  $string  String to transliterate
+	 * @param   int     $case    Optionally specify upper or lower case. Default to 0 (both).
 	 *
 	 * @return  string  Transliterated string
 	 *
@@ -35,6 +35,7 @@ class Transliterate
 		{
 			if (is_null($UTF8_LOWER_ACCENTS))
 			{
+				// @codeCoverageIgnoreStart
 				$UTF8_LOWER_ACCENTS = array(
 					'à' => 'a',
 					'ô' => 'o',
@@ -143,6 +144,8 @@ class Transliterate
 					'œ' => 'oe');
 			}
 
+			// @codeCoverageIgnoreEnd
+
 			$string = str_replace(array_keys($UTF8_LOWER_ACCENTS), array_values($UTF8_LOWER_ACCENTS), $string);
 		}
 
@@ -150,6 +153,7 @@ class Transliterate
 		{
 			if (is_null($UTF8_UPPER_ACCENTS))
 			{
+				// @codeCoverageIgnoreStart
 				$UTF8_UPPER_ACCENTS = array(
 					'À' => 'A',
 					'Ô' => 'O',
@@ -255,6 +259,8 @@ class Transliterate
 					'Ĕ' => 'E',
 					'Œ' => 'Oe');
 			}
+
+			// @codeCoverageIgnoreEnd
 
 			$string = str_replace(array_keys($UTF8_UPPER_ACCENTS), array_values($UTF8_UPPER_ACCENTS), $string);
 		}

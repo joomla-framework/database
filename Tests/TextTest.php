@@ -11,7 +11,7 @@ use Joomla\Language\Text;
  *
  * @since  1.0
  */
-class JTextTest extends PHPUnit_Framework_TestCase
+class TextTest extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var Joomla\Language\Text
