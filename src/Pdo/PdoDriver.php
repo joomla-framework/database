@@ -18,6 +18,8 @@ use Joomla\Database\Query\PreparableInterface;
  *
  * @see    http://php.net/pdo
  * @since  1.0
+ *
+ * @property \PDO $connection
  */
 abstract class PdoDriver extends DatabaseDriver
 {

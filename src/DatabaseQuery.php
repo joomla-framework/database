@@ -94,7 +94,7 @@ abstract class DatabaseQuery
 	/**
 	 * The join element.
 	 *
-	 * @var    Query\QueryElement
+	 * @var    Query\QueryElement[]
 	 * @since  1.0
 	 */
 	protected $join = null;
@@ -199,25 +199,24 @@ abstract class DatabaseQuery
 	 */
 	public function __call($method, $args)
 	{
-		if (empty($args))
+		if (!empty($args))
 		{
-			return;
+			switch ($method)
+			{
+				case 'q':
+					return $this->quote($args[0], isset($args[1]) ? $args[1] : true);
+					break;
+
+				case 'qn':
+					return $this->quoteName($args[0], isset($args[1]) ? $args[1] : null);
+					break;
+
+				case 'e':
+					return $this->escape($args[0], isset($args[1]) ? $args[1] : false);
+					break;
+			}
 		}
-
-		switch ($method)
-		{
-			case 'q':
-				return $this->quote($args[0], isset($args[1]) ? $args[1] : true);
-				break;
-
-			case 'qn':
-				return $this->quoteName($args[0], isset($args[1]) ? $args[1] : null);
-				break;
-
-			case 'e':
-				return $this->escape($args[0], isset($args[1]) ? $args[1] : false);
-				break;
-		}
+		return null;
 	}
 
 	/**

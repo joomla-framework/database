@@ -14,6 +14,8 @@ use Psr\Log;
 /**
  * MySQLi Database Driver
  *
+ * @property \mysqli $connection
+ *
  * @see    http://php.net/manual/en/book.mysqli.php
  * @since  1.0
  */

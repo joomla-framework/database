@@ -13,6 +13,8 @@ use Joomla\Database\DatabaseExporter;
 /**
  * PostgreSQL Database Exporter.
  *
+ * @property PostgresqlDriver $db
+ *
  * @since  1.0
  */
 class PostgresqlExporter extends DatabaseExporter
