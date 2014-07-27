@@ -78,7 +78,7 @@ class MyApplication extends AbstractWebApplication
 	}
 }
 
-``
+```
 
 ### Use `Text` methods
 
