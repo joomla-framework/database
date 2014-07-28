@@ -108,6 +108,10 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 		// @codingStandardsIgnoreEnd
 		$this->assertInstanceOf('Joomla\Language\Language', $instance);
 		$this->assertFalse($instance->getDebug());
+
+		$override = TestHelper::getValue($instance, 'override');
+		$this->assertArrayHasKey('OVER', $override);
+		$this->assertEquals('Ride', $override['OVER']);
 	}
 
 	/**
@@ -121,6 +125,18 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	{
 		$string1 = 'delete';
 		$string2 = "delete's";
+
+		$this->assertEquals(
+			'',
+			$this->object->_('', false),
+			'Line: ' . __LINE__ . ' Empty string should return as it is when javascript safe is false '
+		);
+
+		$this->assertEquals(
+			'',
+			$this->object->_('', true),
+			'Line: ' . __LINE__ . ' Empty string should return as it is when javascript safe is true '
+		);
 
 		$this->assertEquals(
 			'delete',
@@ -174,6 +190,58 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
+	 * @covers Joomla\Language\Language::_
+	 *
+	 * @return void
+	 */
+	public function test_WithLoadedStringsAndDebug()
+	{
+		// Loading some strings.
+		TestHelper::setValue($this->object, 'strings', array('DEL' => 'Delete'));
+
+		$this->assertEquals(
+			"Delete",
+			$this->object->_('del', true)
+		);
+
+		$this->assertEquals(
+			"Delete",
+			$this->object->_('DEL', true)
+		);
+
+		// Debug true tests
+		TestHelper::setValue($this->object, 'debug', true);
+
+		$this->assertArrayNotHasKey(
+			'DEL',
+			TestHelper::getValue($this->object, 'used')
+		);
+		$this->assertEquals(
+			"**Delete**",
+			$this->object->_('del', true)
+		);
+		$this->assertArrayHasKey(
+			'DEL',
+			TestHelper::getValue($this->object, 'used')
+		);
+
+		$this->assertArrayNotHasKey(
+			'DELET\\ED',
+			TestHelper::getValue($this->object, 'orphans')
+		);
+		$this->assertEquals(
+			"??Delet\\\\ed??",
+			$this->object->_('Delet\\ed', true)
+		);
+		$this->assertArrayHasKey(
+			'DELET\\ED',
+			TestHelper::getValue($this->object, 'orphans')
+		);
+	}
+
+	/**
+	 * Test...
+	 *
 	 * @covers Joomla\Language\Language::transliterate
 	 *
 	 * @return void
@@ -182,6 +250,9 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	{
 		$string1 = 'Así';
 		$string2 = 'EÑE';
+
+		// Don't use loaded transliterator for this test.
+		TestHelper::setValue($this->object, 'transliterator', null);
 
 		$this->assertEquals(
 			'asi',
@@ -218,6 +289,25 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 			$this->object->transliterate($string2),
 			'Line: ' . __LINE__
 		);
+
+		TestHelper::setValue(
+			$this->object,
+			'transliterator',
+			function ($string)
+			{
+				return str_replace(
+					array('a', 'c', 'e', 'g'),
+					array('b', 'd', 'f', 'h'),
+					$string
+				);
+			}
+		);
+
+		$this->assertEquals(
+			'bbddffhh',
+			$this->object->transliterate('abcdefgh'),
+			'Line: ' . __LINE__
+		);
 	}
 
 	/**
@@ -231,9 +321,8 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	{
 		$lang = new Language('');
 
-		// The first time you run the method returns NULL
-		// Only if there is an setTransliterator, this test is wrong
-		$this->assertNull(
+		$this->assertEquals(
+			array('en_GBLocalise', 'transliterate'),
 			$lang->getTransliterator()
 		);
 	}
@@ -252,8 +341,9 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 		$function2 = 'print';
 		$lang = new Language('');
 
-		// Note: set -> $funtion1: set returns NULL and get returns $function1
-		$this->assertNull(
+		// Set sets new function and return old.
+		$this->assertEquals(
+			array('en_GBLocalise', 'transliterate'),
 			$lang->setTransliterator($function1)
 		);
 
@@ -315,6 +405,13 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(
 			array('1'),
 			$this->object->getPluralSuffixes(1),
+			'Line: ' . __LINE__
+		);
+
+		TestHelper::setValue($this->object, 'pluralSuffixesCallback', null);
+		$this->assertEquals(
+			array(100),
+			$this->object->getPluralSuffixes(100),
 			'Line: ' . __LINE__
 		);
 	}
@@ -413,6 +510,13 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 			$lang->getIgnoredSearchWords(),
 			'Line: ' . __LINE__
 		);
+
+		TestHelper::setValue($lang, 'ignoredSearchWordsCallback', null);
+		$this->assertEquals(
+			array(),
+			$lang->getIgnoredSearchWords(),
+			'Line: ' . __LINE__
+		);
 	}
 
 	/**
@@ -505,6 +609,13 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	{
 		$lang = new Language('');
 
+		$this->assertEquals(
+			3,
+			$lang->getLowerLimitSearchWord(),
+			'Line: ' . __LINE__
+		);
+
+		TestHelper::setValue($lang, 'lowerLimitSearchWordCallback', null);
 		$this->assertEquals(
 			3,
 			$lang->getLowerLimitSearchWord(),
@@ -607,6 +718,13 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 			$lang->getUpperLimitSearchWord(),
 			'Line: ' . __LINE__
 		);
+
+		TestHelper::setValue($lang, 'upperLimitSearchWordCallback', null);
+		$this->assertEquals(
+			20,
+			$lang->getUpperLimitSearchWord(),
+			'Line: ' . __LINE__
+		);
 	}
 
 	/**
@@ -699,6 +817,13 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	{
 		$lang = new Language('');
 
+		$this->assertEquals(
+			200,
+			$lang->getSearchDisplayedCharactersNumber(),
+			'Line: ' . __LINE__
+		);
+
+		TestHelper::setValue($lang, 'searchDisplayedCharactersNumberCallback', null);
 		$this->assertEquals(
 			200,
 			$lang->getSearchDisplayedCharactersNumber(),
@@ -820,10 +945,68 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testLoad()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		TestHelper::setValue($this->object, 'paths', array());
+
+		$this->assertTrue($this->object->load());
+
+		$filename = JPATH_ROOT . '/language/en-GB/en-GB.ini';
+		$paths = TestHelper::getValue($this->object, 'paths');
+		$this->assertArrayHasKey('joomla', $paths);
+		$this->assertArrayHasKey(
+			$filename,
+			$paths['joomla']
 		);
+		$this->assertTrue($paths['joomla'][$filename]);
+
+		// Loading non-existent language should load default language.
+		TestHelper::setValue($this->object, 'paths', array());
+
+		$this->assertTrue($this->object->load('joomla', JPATH_ROOT, 'es-ES'));
+
+		$paths = TestHelper::getValue($this->object, 'paths');
+		$this->assertArrayHasKey('joomla', $paths);
+		$this->assertArrayHasKey(
+			$filename,
+			$paths['joomla']
+		);
+		$this->assertTrue($paths['joomla'][$filename]);
+
+		// Don't reload if language file is already laoded.
+		$this->assertTrue($this->object->load());
+	}
+
+	/**
+	 * Test...
+	 *
+	 * @covers Joomla\Language\Language::loadLanguage
+	 *
+	 * @return void
+	 */
+	public function testLoadLanguage()
+	{
+		$ob = $this->object;
+
+		TestHelper::setValue($ob, 'counter', 1);
+		TestHelper::setValue($ob, 'strings', array('bar' => 'foo'));
+		TestHelper::setValue($ob, 'override', array('FOO' => 'OOF'));
+
+		$filename = __DIR__ . '/data/good.ini';
+		$result = TestHelper::invoke($ob, 'loadLanguage', $filename);
+
+		$this->assertTrue($result);
+		$this->assertEquals(
+			2,
+			TestHelper::getValue($ob, 'counter')
+		);
+
+		$strings = TestHelper::getValue($ob, 'strings');
+		$this->assertArrayHasKey('bar', $strings);
+		$this->assertEquals('foo', $strings['bar']);
+		$this->assertEquals('OOF', $strings['FOO']);
+
+		$paths = TestHelper::getValue($ob, 'paths');
+		$this->assertArrayHasKey($filename, $paths['unknown']);
+		$this->assertTrue($paths['unknown'][$filename]);
 	}
 
 	/**
@@ -862,7 +1045,6 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 * Test...
 	 *
 	 * @covers Joomla\Language\Language::get
-	 * @todo Implement testGet().
 	 *
 	 * @return void
 	 */
@@ -888,18 +1070,30 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 			'English (United Kingdom)',
 			$this->object->get('name')
 		);
+	}
 
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+	/**
+	 * Test...
+	 *
+	 * @covers Joomla\Language\Language::getCallerInfo
+	 *
+	 * @return void
+	 */
+	public function testGetCallerInfo()
+	{
+		$info = TestHelper::invoke($this->object, 'getCallerInfo');
+
+		$this->assertArrayHasKey('function', $info);
+		$this->assertArrayHasKey('class', $info);
+		$this->assertArrayHasKey('step', $info);
+		$this->assertArrayHasKey('file', $info);
+		$this->assertArrayHasKey('line', $info);
 	}
 
 	/**
 	 * Test...
 	 *
 	 * @covers Joomla\Language\Language::getName
-	 * @todo Implement testGetName().
 	 *
 	 * @return void
 	 */
@@ -909,31 +1103,33 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 			'English (United Kingdom)',
 			$this->object->getName()
 		);
-
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
 	}
 
 	/**
 	 * Test...
 	 *
 	 * @covers Joomla\Language\Language::getPaths
-	 * @todo Implement testGetPaths().
 	 *
 	 * @return void
 	 */
 	public function testGetPaths()
 	{
-		// Without extension, retuns NULL
+		// Non-existent extension, retuns NULL
 		$this->assertNull(
 			$this->object->getPaths('')
 		);
 
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$paths = array('f' => 'foo', 'bar');
+		TestHelper::setValue($this->object, 'paths', $paths);
+
+		$this->assertEquals(
+			$paths,
+			$this->object->getPaths()
+		);
+
+		$this->assertEquals(
+			'foo',
+			$this->object->getPaths('f')
 		);
 	}
 
@@ -941,15 +1137,15 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 * Test...
 	 *
 	 * @covers Joomla\Language\Language::getErrorFiles
-	 * @todo Implement testGetErrorFiles().
 	 *
 	 * @return void
 	 */
 	public function testGetErrorFiles()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		TestHelper::setValue($this->object, 'errorfiles', array('foo', 'bar'));
+		$this->assertEquals(
+			array('foo', 'bar'),
+			$this->object->getErrorFiles()
 		);
 	}
 
@@ -957,7 +1153,6 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 * Test...
 	 *
 	 * @covers Joomla\Language\Language::getTag
-	 * @todo Implement testGetTag().
 	 *
 	 * @return void
 	 */
@@ -968,9 +1163,10 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 			$this->object->getTag()
 		);
 
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		TestHelper::setValue($this->object, 'metadata', array('tag' => 'foobar'));
+		$this->assertEquals(
+			'foobar',
+			$this->object->getTag()
 		);
 	}
 
@@ -978,7 +1174,6 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 * Test...
 	 *
 	 * @covers Joomla\Language\Language::isRTL
-	 * @todo Implement testIsRTL().
 	 *
 	 * @return void
 	 */
@@ -988,9 +1183,9 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 			$this->object->isRTL()
 		);
 
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		TestHelper::setValue($this->object, 'metadata', array('rtl' => true));
+		$this->assertTrue(
+			$this->object->isRTL()
 		);
 	}
 
@@ -1104,9 +1299,15 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 			'Line: ' . __LINE__
 		);
 
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		TestHelper::setValue(
+			$this->object,
+			'orphans',
+			array('COM_ADMIN.KEY' => array('caller info'))
+		);
+		$this->assertEquals(
+			array('COM_ADMIN.KEY' => array('caller info')),
+			$this->object->getOrphans(),
+			'Line: ' . __LINE__
 		);
 	}
 
@@ -1126,9 +1327,15 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 			'Line: ' . __LINE__
 		);
 
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		TestHelper::setValue(
+			$this->object,
+			'used',
+			array('COM_ADMIN.KEY' => array('caller info'))
+		);
+		$this->assertEquals(
+			array('COM_ADMIN.KEY' => array('caller info')),
+			$this->object->getUsed(),
+			'Line: ' . __LINE__
 		);
 	}
 
@@ -1147,9 +1354,9 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 			$this->object->hasKey('com_admin.key')
 		);
 
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		TestHelper::setValue($this->object, 'strings', array('COM_ADMIN.KEY' => 'A key'));
+		$this->assertTrue(
+			$this->object->hasKey('com_admin.key')
 		);
 	}
 
@@ -1287,9 +1494,14 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetLocale()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		TestHelper::setValue($this->object, 'metadata', array('locale' => null));
+		$this->assertFalse($this->object->getLocale());
+
+		TestHelper::setValue($this->object, 'locale', null);
+		TestHelper::setValue($this->object, 'metadata', array('locale' => 'en_GB, en, english'));
+		$this->assertEquals(
+			array('en_GB', 'en', 'english'),
+			$this->object->getLocale()
 		);
 	}
 
@@ -1297,16 +1509,16 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 * Test...
 	 *
 	 * @covers Joomla\Language\Language::getFirstDay
-	 * @todo Implement testGetFirstDay().
 	 *
 	 * @return void
 	 */
 	public function testGetFirstDay()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+		TestHelper::setValue($this->object, 'metadata', array('firstDay' => null));
+		$this->assertEquals(0, $this->object->getFirstDay());
+
+		TestHelper::setValue($this->object, 'metadata', array('firstDay' => 1));
+		$this->assertEquals(1, $this->object->getFirstDay());
 	}
 
 	/**
