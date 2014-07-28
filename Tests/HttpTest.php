@@ -129,13 +129,16 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testHead()
 	{
+		// Set header option
+		$this->object->setOption('headers', array('option' => 'optionHeader'));
+
 		$this->transport->expects($this->once())
 			->method('request')
-			->with('HEAD', new Uri('http://example.com'), null, array('testHeader'))
+			->with('HEAD', new Uri('http://example.com'), null, array('test' => 'testHeader', 'option' => 'optionHeader'))
 			->will($this->returnValue('ReturnString'));
 
 		$this->assertThat(
-			$this->object->head('http://example.com', array('testHeader')),
+			$this->object->head('http://example.com', array('test' => 'testHeader')),
 			$this->equalTo('ReturnString')
 		);
 	}
@@ -149,9 +152,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGet()
 	{
+		// Set timeout option
+		$this->object->setOption('timeout', 100);
+
 		$this->transport->expects($this->once())
 			->method('request')
-			->with('GET', new Uri('http://example.com'), null, array('testHeader'))
+			->with('GET', new Uri('http://example.com'), null, array('testHeader'), 100)
 			->will($this->returnValue('ReturnString'));
 
 		$this->assertThat(
