@@ -95,6 +95,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 	public function testGetHttpTransports()
 	{
 		$transports = array('Stream', 'Socket', 'Curl');
+		sort($transports);
+
 		$this->assertEquals(
 			$transports,
 			HttpFactory::getHttpTransports()

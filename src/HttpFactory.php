@@ -106,6 +106,8 @@ class HttpFactory
 			}
 		}
 
+		sort($names);
+
 		return $names;
 	}
 }
