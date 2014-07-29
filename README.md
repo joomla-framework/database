@@ -122,6 +122,48 @@ If debugging is enabled (using `setDebug(true)`), all queries are logged with a 
 * **sql** : The query that was executed.
 * **category** : A value of "databasequery" is used.
 
+### An example to log error by Monolog
+
+Add this to composeer.json
+
+``` json
+{
+	"require" : {
+		"monolog/monolog" : "1.*"
+	}
+}
+```
+
+Then we push Monolog into Database instance.
+
+``` php
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Processor\PsrLogMessageProcessor;
+
+// Create logger object
+$logger = new Logger('sql');
+
+// Push logger handler, use DEBUG level that we can log all information
+$logger->pushHandler(new StreamHandler('path/to/log/sql.log', Logger::DEBUG));
+
+// Use PSR-3 logger processor that we can replace {sql} with context like array('sql' => 'XXX')
+$logger->pushProcessor(new PsrLogMessageProcessor);
+
+// Push into DB
+$db->setLogger($logger);
+
+// Do something
+$db->setQuery('A WRONG QUERY')->execute();
+```
+
+This is the log file:
+
+```
+[2014-07-29 07:25:22] sql.DEBUG: A WRONG QUERY {"sql":"A WRONG QUERY","category":"databasequery","trace":[...]} []
+[2014-07-29 07:36:01] sql.ERROR: Database query failed (error #42000): SQL: 42000, 1064, You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'A WRONG QUERY' at line 1 {"code":42000,"message":"SQL: 42000, 1064, You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'A WRONG QUERY' at line 1"} []
+```
+
 
 ## Installation via Composer
 
