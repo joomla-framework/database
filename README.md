@@ -124,7 +124,7 @@ If debugging is enabled (using `setDebug(true)`), all queries are logged with a 
 
 ### An example to log error by Monolog
 
-Add this to composeer.json
+Add this to `composer.json`
 
 ``` json
 {
@@ -152,6 +152,7 @@ $logger->pushProcessor(new PsrLogMessageProcessor);
 
 // Push into DB
 $db->setLogger($logger);
+$db->setDebug(true);
 
 // Do something
 $db->setQuery('A WRONG QUERY')->execute();
