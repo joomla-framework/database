@@ -142,7 +142,7 @@ class Simple implements PasswordInterface
 		}
 
 		// Check if the hash is a Joomla hash.
-		if (preg_match('#[a-z0-9]{32}:[A-Za-z0-9]{32}#', $hash) === 1)
+		if (preg_match('#[a-z0-9]{32}:[./A-Za-z0-9]{32}#', $hash) === 1)
 		{
 			return md5($password . substr($hash, 33)) == substr($hash, 0, 32);
 		}
