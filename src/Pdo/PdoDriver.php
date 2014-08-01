@@ -808,6 +808,7 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			return $this->prepared->fetch(\PDO::FETCH_NUM);
 		}
+		return false;
 	}
 
 	/**
@@ -830,6 +831,7 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			return $this->prepared->fetch(\PDO::FETCH_ASSOC);
 		}
+		return false;
 	}
 
 	/**
@@ -853,6 +855,7 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			return $this->prepared->fetchObject($class);
 		}
+		return false;
 	}
 
 	/**
