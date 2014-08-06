@@ -7,6 +7,7 @@
 namespace Joomla\Input\Tests;
 
 use Joomla\Input\Cli;
+use Joomla\Test\TestHelper;
 
 require_once __DIR__ . '/Stubs/FilterInputMock.php';
 
@@ -152,15 +153,15 @@ class CliTest extends \PHPUnit_Framework_TestCase
 	public function test_parseArguments($inputArgv, $expectedData, $expectedArgs)
 	{
 		$_SERVER['argv'] = $inputArgv;
-		$this->inspector = new JInputCLIInspector(null, array('filter' => new JFilterInputMock));
+		$instance = new Cli(null, array('filter' => new FilterInputMock));
 
 		$this->assertThat(
-			$this->inspector->data,
+			TestHelper::getValue($instance, 'data'),
 			$this->identicalTo($expectedData)
 		);
 
 		$this->assertThat(
-			$this->inspector->args,
+			TestHelper::getValue($instance, 'args'),
 			$this->identicalTo($expectedArgs)
 		);
 	}
