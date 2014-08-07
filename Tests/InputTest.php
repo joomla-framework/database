@@ -94,8 +94,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
 			$instance->getRaw('one', 'two')
 		);
 
-		$this->assertEquals(
-			null,
+		$this->assertNull(
 			$instance->setRaw('one', 'two')
 		);
 	}
@@ -277,8 +276,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
 	{
 		$instance = $this->getInputObject(array('foo' => false));
 
-		$this->assertEquals(
-			false,
+		$this->assertFalse(
 			$instance->getBoolean('foo')
 		);
 
@@ -371,7 +369,8 @@ class InputTest extends \PHPUnit_Framework_TestCase
 		$input = $this->getInputObject($array);
 
 		$this->assertEquals(
-			$array, $input->getArray(
+			$array,
+			$input->getArray(
 				array('var1' => 'filter1', 'var2' => 'filter2', 'var3' => 'filter3')
 			)
 		);
@@ -489,9 +488,9 @@ class InputTest extends \PHPUnit_Framework_TestCase
 		TestHelper::setValue($instance, 'options', array('options'));
 		TestHelper::setValue($instance, 'data', 'data');
 
-		$this->assertThat(
-			$instance->serialize(),
-			$this->equalTo('a:3:{i:0;a:1:{i:0;s:7:"options";}i:1;s:4:"data";i:2;a:1:{s:7:"request";s:4:"keep";}}')
+		$this->assertEquals(
+			'a:3:{i:0;a:1:{i:0;s:7:"options";}i:1;s:4:"data";i:2;a:1:{s:7:"request";s:4:"keep";}}',
+			$instance->serialize()
 		);
 	}
 

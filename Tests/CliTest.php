@@ -134,9 +134,8 @@ class CliTest extends \PHPUnit_Framework_TestCase
 			'Line: ' . __LINE__ . '.'
 		);
 
-		$this->assertThat(
+		$this->assertEmpty(
 			$instance->args,
-			$this->equalTo(array()),
 			'Line: ' . __LINE__ . '.'
 		);
 	}

@@ -36,8 +36,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 			TestHelper::getValue($instance, 'filter')
 		);
 
-		$this->assertEquals(
-			array(),
+		$this->assertEmpty(
 			TestHelper::getValue($instance, 'options')
 		);
 
@@ -73,8 +72,8 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
 		$data = TestHelper::getValue($instance, 'data');
 
-		$this->assertTrue(array_key_exists('foo', $data));
-		$this->assertTrue(in_array('bar', $data));
+		$this->assertArrayHasKey('foo', $data);
+		$this->assertContains('bar', $data);
 	}
 }
 
@@ -85,12 +84,12 @@ namespace Joomla\Input;
  * Stub.
  *
  * @param   string  $name      Name
- * @param   string  $value     Name
- * @param   int     $expire    Name
- * @param   string  $path      Name
- * @param   string  $domain    Name
- * @param   bool    $secure    Name
- * @param   bool    $httpOnly  Name
+ * @param   string  $value     Value
+ * @param   int     $expire    Expire
+ * @param   string  $path      Path
+ * @param   string  $domain    Domain
+ * @param   bool    $secure    Secure
+ * @param   bool    $httpOnly  HttpOnly
  *
  * @return  void
  *

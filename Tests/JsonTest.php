@@ -36,13 +36,11 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 			TestHelper::getValue($instance, 'filter')
 		);
 
-		$this->assertEquals(
-			array(),
+		$this->assertEmpty(
 			TestHelper::getValue($instance, 'options')
 		);
 
-		$this->assertEquals(
-			array(),
+		$this->assertEmpty(
 			TestHelper::getValue($instance, 'data')
 		);
 
