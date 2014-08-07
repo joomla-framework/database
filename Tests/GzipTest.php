@@ -88,8 +88,7 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	{
 		$object = new ArchiveGzip;
 
-		$this->assertEquals(
-			array(),
+		$this->assertEmpty(
 			TestHelper::getValue($object, 'options')
 		);
 
@@ -119,7 +118,10 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$this->object->extract(self::$inputPath . '/logo.gz', self::$outputPath . '/logo-gz.png');
+		$this->object->extract(
+			self::$inputPath . '/logo.gz',
+			self::$outputPath . '/logo-gz.png'
+		);
 
 		$this->assertFileExists(self::$outputPath . '/logo-gz.png');
 		$this->assertFileEquals(
@@ -151,7 +153,10 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 		}
 
 		$object = new ArchiveGzip(array('use_streams' => true));
-		$object->extract(self::$inputPath . '/logo.gz', self::$outputPath . '/logo-gz.png');
+		$object->extract(
+			self::$inputPath . '/logo.gz',
+			self::$outputPath . '/logo-gz.png'
+		);
 
 		$this->assertFileExists(self::$outputPath . '/logo-gz.png');
 		$this->assertFileEquals(

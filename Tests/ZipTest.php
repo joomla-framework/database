@@ -88,8 +88,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	{
 		$object = new ArchiveZip;
 
-		$this->assertEquals(
-			array(),
+		$this->assertEmpty(
 			TestHelper::getValue($object, 'options')
 		);
 
@@ -152,7 +151,11 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		TestHelper::invoke($this->object, 'extractNative', self::$inputPath . '/logo.zip', self::$outputPath);
+		TestHelper::invoke(
+			$this->object,
+			'extractNative',
+			self::$inputPath . '/logo.zip', self::$outputPath
+		);
 
 		$this->assertFileExists(self::$outputPath . '/logo-zip.png');
 		$this->assertFileEquals(
@@ -184,7 +187,11 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		TestHelper::invoke($this->object, 'extractCustom', self::$inputPath . '/logo.zip', self::$outputPath);
+		TestHelper::invoke(
+			$this->object,
+			'extractCustom',
+			self::$inputPath . '/logo.zip', self::$outputPath
+		);
 
 		$this->assertFileExists(self::$outputPath . '/logo-zip.png');
 		$this->assertFileEquals(
@@ -214,7 +221,10 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$this->object->extract(self::$inputPath . '/logo.zip', self::$outputPath);
+		$this->object->extract(
+			self::$inputPath . '/logo.zip',
+			self::$outputPath
+		);
 
 		$this->assertFileExists(self::$outputPath . '/logo-zip.png');
 		$this->assertFileEquals(
@@ -245,7 +255,10 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$this->object->extract(self::$inputPath . '/foobar.zip', self::$outputPath);
+		$this->object->extract(
+			self::$inputPath . '/foobar.zip',
+			self::$outputPath
+		);
 	}
 
 	/**

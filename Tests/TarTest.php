@@ -88,8 +88,7 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	{
 		$object = new ArchiveTar;
 
-		$this->assertEquals(
-			array(),
+		$this->assertEmpty(
 			TestHelper::getValue($object, 'options')
 		);
 
@@ -121,7 +120,7 @@ class TarTest extends \PHPUnit_Framework_TestCase
 		}
 
 		$this->object->extract(self::$inputPath . '/logo.tar', self::$outputPath);
-		$this->assertTrue(is_file(self::$outputPath . '/logo-tar.png'));
+		$this->assertFileExists(self::$outputPath . '/logo-tar.png');
 
 		if (is_file(self::$outputPath . '/logo-tar.png'))
 		{

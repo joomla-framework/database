@@ -146,8 +146,11 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 
 		$outputPath = self::$outputPath . ($isOutputFile ? "/$extractedFilename" : '');
 
-		$this->assertTrue($this->fixture->extract(self::$inputPath . "/$filename", $outputPath));
-		$this->assertTrue(is_file(self::$outputPath . "/$extractedFilename"));
+		$this->assertTrue(
+			$this->fixture->extract(self::$inputPath . "/$filename", $outputPath)
+		);
+
+		$this->assertFileExists(self::$outputPath . "/$extractedFilename");
 
 		@unlink(self::$outputPath . "/$extractedFilename");
 	}
@@ -170,7 +173,10 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$this->fixture->extract(self::$inputPath . '/logo.dat', self::$outputPath);
+		$this->fixture->extract(
+			self::$inputPath . '/logo.dat',
+			self::$outputPath
+		);
 	}
 
 	/**
@@ -185,10 +191,13 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	{
 		$zip = $this->fixture->getAdapter('zip');
 		$this->assertInstanceOf('Joomla\\Archive\\Zip', $zip);
+
 		$bzip2 = $this->fixture->getAdapter('bzip2');
 		$this->assertInstanceOf('Joomla\\Archive\\Bzip2', $bzip2);
+
 		$gzip = $this->fixture->getAdapter('gzip');
 		$this->assertInstanceOf('Joomla\\Archive\\Gzip', $gzip);
+
 		$tar = $this->fixture->getAdapter('tar');
 		$this->assertInstanceOf('Joomla\\Archive\\Tar', $tar);
 	}

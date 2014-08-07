@@ -88,8 +88,7 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	{
 		$object = new ArchiveBzip2;
 
-		$this->assertEquals(
-			array(),
+		$this->assertEmpty(
 			TestHelper::getValue($object, 'options')
 		);
 
@@ -119,7 +118,10 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$this->object->extract(self::$inputPath . '/logo.bz2', self::$outputPath . '/logo-bz2.png');
+		$this->object->extract(
+			self::$inputPath . '/logo.bz2',
+			self::$outputPath . '/logo-bz2.png'
+		);
 
 		$this->assertFileExists(self::$outputPath . '/logo-bz2.png');
 		$this->assertFileEquals(
@@ -148,7 +150,10 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 		}
 
 		$object = new ArchiveBzip2(array('use_streams' => true));
-		$object->extract(self::$inputPath . '/logo.bz2', self::$outputPath . '/logo-bz2.png');
+		$object->extract(
+			self::$inputPath . '/logo.bz2',
+			self::$outputPath . '/logo-bz2.png'
+		);
 
 		$this->assertFileExists(self::$outputPath . '/logo-bz2.png');
 		$this->assertFileEquals(
