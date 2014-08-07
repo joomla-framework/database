@@ -25,9 +25,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetHttp()
 	{
-		$this->assertThat(
-			HttpFactory::getHttp(),
-			$this->isInstanceOf('Joomla\\Http\\Http')
+		$this->assertInstanceOf(
+			'Joomla\\Http\\Http',
+			HttpFactory::getHttp()
 		);
 	}
 
@@ -42,9 +42,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetHttpException()
 	{
-		$this->assertThat(
-			HttpFactory::getHttp(array(), array()),
-			$this->isInstanceOf('Joomla\\Http\\Http')
+		$this->assertInstanceOf(
+			'Joomla\\Http\\Http',
+			HttpFactory::getHttp(array(), array())
 		);
 	}
 
@@ -63,23 +63,20 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 			HttpFactory::getAvailableDriver(array(), null)
 		);
 
-		$this->assertThat(
+		$this->assertFalse(
 			HttpFactory::getAvailableDriver(array(), array()),
-			$this->isFalse(),
 			'Passing an empty array should return false due to there being no adapters to test'
 		);
 
-		$this->assertThat(
+		$this->assertFalse(
 			HttpFactory::getAvailableDriver(array(), array('fopen')),
-			$this->isFalse(),
 			'A false should be returned if a class is not present or supported'
 		);
 
 		include_once __DIR__ . '/stubs/DummyTransport.php';
 
-		$this->assertThat(
+		$this->assertFalse(
 			HttpFactory::getAvailableDriver(array(), array('DummyTransport')),
-			$this->isFalse(),
 			'Passing an empty array should return false due to there being no adapters to test'
 		);
 	}
