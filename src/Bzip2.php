@@ -84,6 +84,7 @@ class Bzip2 implements ExtractableInterface
 				throw new \RuntimeException('Unable to write archive');
 			}
 		}
+		// @codeCoverageIgnoreStart
 		else
 		{
 			// New style! streams!
@@ -126,7 +127,7 @@ class Bzip2 implements ExtractableInterface
 			$output->close();
 			$input->close();
 		}
-
+		// @codeCoverageIgnoreEnd
 		return true;
 	}
 

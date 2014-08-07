@@ -24,6 +24,14 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	protected static $outputPath;
 
 	/**
+	 * Input directory
+	 *
+	 * @var    string
+	 * @since  1.0
+	 */
+	protected static $inputPath;
+
+	/**
 	 * @var Joomla\Archive\Tar
 	 */
 	protected $object;
@@ -38,6 +46,7 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
+		self::$inputPath = __DIR__ . '/testdata';
 		self::$outputPath = __DIR__ . '/output';
 
 		if (!is_dir(self::$outputPath))
@@ -46,6 +55,25 @@ class TarTest extends \PHPUnit_Framework_TestCase
 		}
 
 		$this->object = new ArchiveTar;
+	}
+
+	/**
+	 * Tear down the fixture.
+	 *
+	 * This method is called after a test is executed.
+	 *
+	 * @return  mixed
+	 *
+	 * @since   1.0
+	 */
+	protected function tearDown()
+	{
+		if (is_dir(self::$outputPath))
+		{
+			rmdir(self::$outputPath);
+		}
+
+		parent::tearDown();
 	}
 
 	/**
@@ -92,7 +120,7 @@ class TarTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$this->object->extract(__DIR__ . '/logo.tar', self::$outputPath);
+		$this->object->extract(self::$inputPath . '/logo.tar', self::$outputPath);
 		$this->assertTrue(is_file(self::$outputPath . '/logo-tar.png'));
 
 		if (is_file(self::$outputPath . '/logo-tar.png'))

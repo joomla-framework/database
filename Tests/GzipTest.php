@@ -24,6 +24,14 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	protected static $outputPath;
 
 	/**
+	 * Input directory
+	 *
+	 * @var    string
+	 * @since  1.0
+	 */
+	protected static $inputPath;
+
+	/**
 	 * @var Joomla\Archive\Gzip
 	 */
 	protected $object;
@@ -38,6 +46,7 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
+		self::$inputPath = __DIR__ . '/testdata';
 		self::$outputPath = __DIR__ . '/output';
 
 		if (!is_dir(self::$outputPath))
@@ -46,6 +55,25 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 		}
 
 		$this->object = new ArchiveGzip;
+	}
+
+	/**
+	 * Tear down the fixture.
+	 *
+	 * This method is called after a test is executed.
+	 *
+	 * @return  mixed
+	 *
+	 * @since   1.0
+	 */
+	protected function tearDown()
+	{
+		if (is_dir(self::$outputPath))
+		{
+			rmdir(self::$outputPath);
+		}
+
+		parent::tearDown();
 	}
 
 	/**
@@ -91,12 +119,12 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$this->object->extract(__DIR__ . '/logo.gz', self::$outputPath . '/logo-gz.png');
+		$this->object->extract(self::$inputPath . '/logo.gz', self::$outputPath . '/logo-gz.png');
 
 		$this->assertFileExists(self::$outputPath . '/logo-gz.png');
 		$this->assertFileEquals(
 			self::$outputPath . '/logo-gz.png',
-			__DIR__ . '/logo.png'
+			self::$inputPath . '/logo.png'
 		);
 
 		@unlink(self::$outputPath . '/logo-gz.png');
@@ -123,12 +151,12 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 		}
 
 		$object = new ArchiveGzip(array('use_streams' => true));
-		$object->extract(__DIR__ . '/logo.gz', self::$outputPath . '/logo-gz.png');
+		$object->extract(self::$inputPath . '/logo.gz', self::$outputPath . '/logo-gz.png');
 
 		$this->assertFileExists(self::$outputPath . '/logo-gz.png');
 		$this->assertFileEquals(
 			self::$outputPath . '/logo-gz.png',
-			__DIR__ . '/logo.png'
+			self::$inputPath . '/logo.png'
 		);
 
 		@unlink(self::$outputPath . '/logo-gz.png');
@@ -164,7 +192,7 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 		TestHelper::setValue(
 			$this->object,
 			'data',
-			file_get_contents(__DIR__ . '/logo.gz')
+			file_get_contents(self::$inputPath . '/logo.gz')
 		);
 
 		$this->assertEquals(

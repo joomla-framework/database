@@ -24,6 +24,14 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	protected static $outputPath;
 
 	/**
+	 * Input directory
+	 *
+	 * @var    string
+	 * @since  1.0
+	 */
+	protected static $inputPath;
+
+	/**
 	 * @var Joomla\Archive\Zip
 	 */
 	protected $object;
@@ -38,6 +46,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
+		self::$inputPath = __DIR__ . '/testdata';
 		self::$outputPath = __DIR__ . '/output';
 
 		if (!is_dir(self::$outputPath))
@@ -45,7 +54,26 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 			mkdir(self::$outputPath, 0777);
 		}
 
-		$this->object = new ZipInspector;
+		$this->object = new ArchiveZip;
+	}
+
+	/**
+	 * Tear down the fixture.
+	 *
+	 * This method is called after a test is executed.
+	 *
+	 * @return  mixed
+	 *
+	 * @since   1.0
+	 */
+	protected function tearDown()
+	{
+		if (is_dir(self::$outputPath))
+		{
+			rmdir(self::$outputPath);
+		}
+
+		parent::tearDown();
 	}
 
 	/**
@@ -91,7 +119,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 			self::$outputPath . '/logo.zip',
 			array(array(
 				'name' => 'logo.png',
-				'data' => file_get_contents(__DIR__ . '/logo.png'),
+				'data' => file_get_contents(self::$inputPath . '/logo.png'),
 			))
 		);
 
@@ -124,12 +152,12 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$this->object->accessExtractNative(__DIR__ . '/logo.zip', self::$outputPath);
+		TestHelper::invoke($this->object, 'extractNative', self::$inputPath . '/logo.zip', self::$outputPath);
 
 		$this->assertFileExists(self::$outputPath . '/logo-zip.png');
 		$this->assertFileEquals(
 			self::$outputPath . '/logo-zip.png',
-			__DIR__ . '/logo.png'
+			self::$inputPath . '/logo.png'
 		);
 
 		@unlink(self::$outputPath . '/logo-zip.png');
@@ -156,12 +184,12 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$this->object->accessExtractCustom(__DIR__ . '/logo.zip', self::$outputPath);
+		TestHelper::invoke($this->object, 'extractCustom', self::$inputPath . '/logo.zip', self::$outputPath);
 
 		$this->assertFileExists(self::$outputPath . '/logo-zip.png');
 		$this->assertFileEquals(
 			self::$outputPath . '/logo-zip.png',
-			__DIR__ . '/logo.png'
+			self::$inputPath . '/logo.png'
 		);
 
 		@unlink(self::$outputPath . '/logo-zip.png');
@@ -186,12 +214,12 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$this->object->extract(__DIR__ . '/logo.zip', self::$outputPath);
+		$this->object->extract(self::$inputPath . '/logo.zip', self::$outputPath);
 
 		$this->assertFileExists(self::$outputPath . '/logo-zip.png');
 		$this->assertFileEquals(
 			self::$outputPath . '/logo-zip.png',
-			__DIR__ . '/logo.png'
+			self::$inputPath . '/logo.png'
 		);
 
 		@unlink(self::$outputPath . '/logo-zip.png');
@@ -217,7 +245,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$this->object->extract(__DIR__ . '/foobar.zip', self::$outputPath);
+		$this->object->extract(self::$inputPath . '/foobar.zip', self::$outputPath);
 	}
 
 	/**
@@ -262,12 +290,12 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCheckZipData()
 	{
-		$dataZip = file_get_contents(__DIR__ . '/logo.zip');
+		$dataZip = file_get_contents(self::$inputPath . '/logo.zip');
 		$this->assertTrue(
 			$this->object->checkZipData($dataZip)
 		);
 
-		$dataTar = file_get_contents(__DIR__ . '/logo.tar');
+		$dataTar = file_get_contents(self::$inputPath . '/logo.tar');
 		$this->assertFalse(
 			$this->object->checkZipData($dataTar)
 		);

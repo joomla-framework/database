@@ -24,6 +24,14 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	protected static $outputPath;
 
 	/**
+	 * Input directory
+	 *
+	 * @var    string
+	 * @since  1.0
+	 */
+	protected static $inputPath;
+
+	/**
 	 * @var ArchiveBzip2
 	 */
 	protected $object;
@@ -38,6 +46,7 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
+		self::$inputPath = __DIR__ . '/testdata';
 		self::$outputPath = __DIR__ . '/output';
 
 		if (!is_dir(self::$outputPath))
@@ -46,6 +55,25 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 		}
 
 		$this->object = new ArchiveBzip2;
+	}
+
+	/**
+	 * Tear down the fixture.
+	 *
+	 * This method is called after a test is executed.
+	 *
+	 * @return  mixed
+	 *
+	 * @since   1.0
+	 */
+	protected function tearDown()
+	{
+		if (is_dir(self::$outputPath))
+		{
+			rmdir(self::$outputPath);
+		}
+
+		parent::tearDown();
 	}
 
 	/**
@@ -91,12 +119,12 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$this->object->extract(__DIR__ . '/logo.bz2', self::$outputPath . '/logo-bz2.png');
+		$this->object->extract(self::$inputPath . '/logo.bz2', self::$outputPath . '/logo-bz2.png');
 
 		$this->assertFileExists(self::$outputPath . '/logo-bz2.png');
 		$this->assertFileEquals(
 			self::$outputPath . '/logo-bz2.png',
-			__DIR__ . '/logo.png'
+			self::$inputPath . '/logo.png'
 		);
 
 		@unlink(self::$outputPath . '/logo-bz2.png');
@@ -120,12 +148,12 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 		}
 
 		$object = new ArchiveBzip2(array('use_streams' => true));
-		$object->extract(__DIR__ . '/logo.bz2', self::$outputPath . '/logo-bz2.png');
+		$object->extract(self::$inputPath . '/logo.bz2', self::$outputPath . '/logo-bz2.png');
 
 		$this->assertFileExists(self::$outputPath . '/logo-bz2.png');
 		$this->assertFileEquals(
 			self::$outputPath . '/logo-bz2.png',
-			__DIR__ . '/logo.png'
+			self::$inputPath . '/logo.png'
 		);
 
 		@unlink(self::$outputPath . '/logo-bz2.png');

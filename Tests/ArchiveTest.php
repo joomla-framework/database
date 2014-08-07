@@ -33,7 +33,15 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected $outputPath;
+	protected static $outputPath;
+
+	/**
+	 * Input directory
+	 *
+	 * @var    string
+	 * @since  1.0
+	 */
+	protected static $inputPath;
 
 	/**
 	 * Sets up the fixture.
@@ -48,14 +56,34 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
-		$this->outputPath = __DIR__ . '/output';
+		self::$inputPath = __DIR__ . '/testdata';
+		self::$outputPath = __DIR__ . '/output';
 
-		if (!is_dir($this->outputPath))
+		if (!is_dir(self::$outputPath))
 		{
-			mkdir($this->outputPath, 0777);
+			mkdir(self::$outputPath, 0777);
 		}
 
 		$this->fixture = new Archive;
+	}
+
+	/**
+	 * Tear down the fixture.
+	 *
+	 * This method is called after a test is executed.
+	 *
+	 * @return  mixed
+	 *
+	 * @since   1.0
+	 */
+	protected function tearDown()
+	{
+		if (is_dir(self::$outputPath))
+		{
+			rmdir(self::$outputPath);
+		}
+
+		parent::tearDown();
 	}
 
 	/**
@@ -93,14 +121,14 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testExtract($filename, $adapterType, $extractedFilename, $isOutputFile = false)
 	{
-		if (!is_dir($this->outputPath))
+		if (!is_dir(self::$outputPath))
 		{
 			$this->markTestSkipped("Couldn't create folder.");
 
 			return;
 		}
 
-		if (!is_writable($this->outputPath) || !is_writable($this->fixture->options['tmp_path']))
+		if (!is_writable(self::$outputPath) || !is_writable($this->fixture->options['tmp_path']))
 		{
 			$this->markTestSkipped("Folder not writable.");
 
@@ -116,12 +144,12 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$outputPath = $this->outputPath . ($isOutputFile ? "/$extractedFilename" : '');
+		$outputPath = self::$outputPath . ($isOutputFile ? "/$extractedFilename" : '');
 
-		$this->assertTrue($this->fixture->extract(__DIR__ . "/$filename", $outputPath));
-		$this->assertTrue(is_file($this->outputPath . "/$extractedFilename"));
+		$this->assertTrue($this->fixture->extract(self::$inputPath . "/$filename", $outputPath));
+		$this->assertTrue(is_file(self::$outputPath . "/$extractedFilename"));
 
-		@unlink($this->outputPath . "/$extractedFilename");
+		@unlink(self::$outputPath . "/$extractedFilename");
 	}
 
 	/**
@@ -135,14 +163,14 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testExtractUnknown()
 	{
-		if (!is_dir($this->outputPath))
+		if (!is_dir(self::$outputPath))
 		{
 			$this->markTestSkipped("Couldn't create folder.");
 
 			return;
 		}
 
-		$this->fixture->extract(__DIR__ . '/logo.dat', $this->outputPath);
+		$this->fixture->extract(self::$inputPath . '/logo.dat', self::$outputPath);
 	}
 
 	/**
