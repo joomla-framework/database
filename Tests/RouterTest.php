@@ -109,7 +109,11 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test__construct()
 	{
-		$this->assertAttributeInstanceOf('Joomla\\Input\\Input', 'input', $this->instance);
+		$this->assertAttributeInstanceOf(
+			'Joomla\\Input\\Input',
+			'input',
+			$this->instance
+		);
 	}
 
 	/**
@@ -152,15 +156,13 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->instance->addMap($route, $controller);
 
-		$this->assertTrue(
-			in_array(
-				array(
-					'regex' => chr(1) . $regex . chr(1),
-					'vars' => $vars,
-					'controller' => $called
-				),
-				TestHelper::getValue($this->instance, 'maps')
-			)
+		$this->assertContains(
+			array(
+				'regex' => chr(1) . $regex . chr(1),
+				'vars' => $vars,
+				'controller' => $called
+			),
+			TestHelper::getValue($this->instance, 'maps')
 		);
 	}
 
