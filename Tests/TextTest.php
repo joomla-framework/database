@@ -151,14 +151,10 @@ class TextTest extends PHPUnit_Framework_TestCase
 		$output = Text::plural($string, 0, $options);
 
 		$this->assertEquals("bar\\'s", $output);
-		$this->assertEquals(
+		$this->assertCount(
 			$nStrings,
-			count(TestHelper::getValue($this->object, 'strings'))
+			TestHelper::getValue($this->object, 'strings')
 		);
-
-		$nStrings = count(TestHelper::getValue($this->object, 'strings'));
-		$options = array('script' => true);
-		$output = Text::plural($string, 0, $options);
 	}
 
 	/**
@@ -180,9 +176,9 @@ class TextTest extends PHPUnit_Framework_TestCase
 		$output = Text::sprintf($string, $options);
 
 		$this->assertEquals("foobar\\'s", $output);
-		$this->assertEquals(
+		$this->assertCount(
 			$nStrings,
-			count(TestHelper::getValue($this->object, 'strings'))
+			TestHelper::getValue($this->object, 'strings')
 		);
 
 		$nStrings = count(TestHelper::getValue($this->object, 'strings'));
@@ -190,9 +186,9 @@ class TextTest extends PHPUnit_Framework_TestCase
 		$output = Text::sprintf($string, $options);
 
 		$this->assertEquals("foobar's", $output);
-		$this->assertEquals(
+		$this->assertCount(
 			$nStrings + 1,
-			count(TestHelper::getValue($this->object, 'strings'))
+			TestHelper::getValue($this->object, 'strings')
 		);
 	}
 

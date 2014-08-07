@@ -55,6 +55,8 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	protected function tearDown()
 	{
 		Folder::delete(JPATH_ROOT . '/language');
+
+		parent::tearDown();
 	}
 
 	/**
@@ -512,8 +514,7 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 		);
 
 		TestHelper::setValue($lang, 'ignoredSearchWordsCallback', null);
-		$this->assertEquals(
-			array(),
+		$this->assertEmpty(
 			$lang->getIgnoredSearchWords(),
 			'Line: ' . __LINE__
 		);
@@ -1020,9 +1021,8 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	{
 		$strings = $this->inspector->parse(__DIR__ . '/data/good.ini');
 
-		$this->assertThat(
+		$this->assertNotEmpty(
 			$strings,
-			$this->logicalNot($this->equalTo(array())),
 			'Line: ' . __LINE__ . ' good ini file should load properly.'
 		);
 
@@ -1034,9 +1034,8 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 
 		$strings = $this->inspector->parse(__DIR__ . '/data/bad.ini');
 
-		$this->assertEquals(
+		$this->assertEmpty(
 			$strings,
-			array(),
 			'Line: ' . __LINE__ . ' bad ini file should not load properly.'
 		);
 	}
@@ -1293,8 +1292,7 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetOrphans()
 	{
-		$this->assertEquals(
-			array(),
+		$this->assertEmpty(
 			$this->object->getOrphans(),
 			'Line: ' . __LINE__
 		);
@@ -1321,8 +1319,7 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetUsed()
 	{
-		$this->assertEquals(
-			array(),
+		$this->assertEmpty(
 			$this->object->getUsed(),
 			'Line: ' . __LINE__
 		);
