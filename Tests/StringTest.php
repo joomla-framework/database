@@ -485,9 +485,9 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testIncrement($string, $style, $number, $expected)
 	{
-		$this->assertThat(
-			String::increment($string, $style, $number),
-			$this->equalTo($expected)
+		$this->assertEquals(
+			$expected,
+			String::increment($string, $style, $number)
 		);
 	}
 
@@ -505,9 +505,9 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testIs_ascii($string, $expected)
 	{
-		$this->assertThat(
-			String::is_ascii($string),
-			$this->equalTo($expected)
+		$this->assertEquals(
+			$expected,
+			String::is_ascii($string)
 		);
 	}
 

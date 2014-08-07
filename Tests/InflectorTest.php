@@ -111,9 +111,9 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 
 		$rules = TestHelper::getValue($this->inflector, 'rules');
 
-		$this->assertThat(
-			in_array('/foo/', $rules['singular']),
-			$this->isTrue(),
+		$this->assertContains(
+			'/foo/',
+			$rules['singular'],
 			'Checks if the singular rule was added correctly.'
 		);
 
@@ -122,9 +122,9 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 
 		$rules = TestHelper::getValue($this->inflector, 'rules');
 
-		$this->assertThat(
-			in_array('/bar/', $rules['plural']),
-			$this->isTrue(),
+		$this->assertContains(
+			'/bar/',
+			$rules['plural'],
 			'Checks if the plural rule was added correctly.'
 		);
 
@@ -133,15 +133,15 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 
 		$rules = TestHelper::getValue($this->inflector, 'rules');
 
-		$this->assertThat(
-			in_array('/goo/', $rules['singular']),
-			$this->isTrue(),
+		$this->assertContains(
+			'/goo/',
+			$rules['singular'],
 			'Checks if an array of rules was added correctly (1).'
 		);
 
-		$this->assertThat(
-			in_array('/car/', $rules['singular']),
-			$this->isTrue(),
+		$this->assertContains(
+			'/car/',
+			$rules['singular'],
 			'Checks if an array of rules was added correctly (2).'
 		);
 	}
@@ -173,15 +173,14 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 		// Reset the cache.
 		TestHelper::setValue($this->inflector, 'cache', array('foo' => 'bar'));
 
-		$this->assertThat(
+		$this->assertFalse(
 			TestHelper::invoke($this->inflector, 'getCachedPlural', 'bar'),
-			$this->isFalse(),
 			'Checks for an uncached plural.'
 		);
 
-		$this->assertThat(
+		$this->assertEquals(
+			'bar',
 			TestHelper::invoke($this->inflector, 'getCachedPlural', 'foo'),
-			$this->equalTo('bar'),
 			'Checks for a cached plural word.'
 		);
 	}
@@ -199,9 +198,8 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 		// Reset the cache.
 		TestHelper::setValue($this->inflector, 'cache', array('foo' => 'bar'));
 
-		$this->assertThat(
+		$this->assertFalse(
 			TestHelper::invoke($this->inflector, 'getCachedSingular', 'foo'),
-			$this->isFalse(),
 			'Checks for an uncached singular.'
 		);
 
@@ -234,9 +232,8 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 			'Checks singularising against the basic regex.'
 		);
 
-		$this->assertThat(
+		$this->assertFalse(
 			TestHelper::invoke($this->inflector, 'matchRegexRule', 'xyz', 'singular'),
-			$this->isFalse(),
 			'Checks singularising against an unmatched regex.'
 		);
 	}
@@ -287,9 +284,9 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 
 		$rules = TestHelper::getValue($this->inflector, 'rules');
 
-		$this->assertThat(
-			in_array('foo', $rules['countable']),
-			$this->isTrue(),
+		$this->assertContains(
+			'foo',
+			$rules['countable'],
 			'Checks a countable rule was added.'
 		);
 
@@ -298,9 +295,9 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 
 		$rules = TestHelper::getValue($this->inflector, 'rules');
 
-		$this->assertThat(
-			in_array('car', $rules['countable']),
-			$this->isTrue(),
+		$this->assertContains(
+			'car',
+			$rules['countable'],
 			'Checks a countable rule was added by array.'
 		);
 	}
@@ -364,9 +361,9 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 
 		$rules = TestHelper::getValue($this->inflector, 'rules');
 
-		$this->assertThat(
-			in_array('/bar/', $rules['plural']),
-			$this->isTrue(),
+		$this->assertCOntains(
+			'/bar/',
+			$rules['plural'],
 			'Checks a pluralisation rule was added.'
 		);
 	}
@@ -391,9 +388,9 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 
 		$rules = TestHelper::getValue($this->inflector, 'rules');
 
-		$this->assertThat(
-			in_array('/bar/', $rules['singular']),
-			$this->isTrue(),
+		$this->assertContains(
+			'/bar/',
+			$rules['singular'],
 			'Checks a singularisation rule was added.'
 		);
 	}
@@ -464,17 +461,15 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testIsPlural($singular, $plural)
 	{
-		$this->assertThat(
+		$this->assertTrue(
 			$this->inflector->isPlural($plural),
-			$this->isTrue(),
 			'Checks the plural is a plural.'
 		);
 
 		if ($singular != $plural)
 		{
-			$this->assertThat(
+			$this->assertFalse(
 				$this->inflector->isPlural($singular),
-				$this->isFalse(),
 				'Checks the singular is not plural.'
 			);
 		}
@@ -494,17 +489,15 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testIsSingular($singular, $plural)
 	{
-		$this->assertThat(
+		$this->assertTrue(
 			$this->inflector->isSingular($singular),
-			$this->isTrue(),
 			'Checks the singular is a singular.'
 		);
 
 		if ($singular != $plural)
 		{
-			$this->assertThat(
+			$this->assertFalse(
 				$this->inflector->isSingular($plural),
-				$this->isFalse(),
 				'Checks the plural is not singular.'
 			);
 		}

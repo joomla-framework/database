@@ -8,7 +8,6 @@
 
 namespace Joomla\String;
 
-
 use InvalidArgumentException;
 
 /**
