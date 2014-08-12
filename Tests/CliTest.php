@@ -150,7 +150,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @dataProvider provider_parseArguments
 	 */
-	public function test_parseArguments($inputArgv, $expectedData, $expectedArgs)
+	public function testParseArguments($inputArgv, $expectedData, $expectedArgs)
 	{
 		$_SERVER['argv'] = $inputArgv;
 		$instance = new Cli(null, array('filter' => new FilterInputMock));
@@ -161,7 +161,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
 		);
 
 		$this->assertThat(
-			TestHelper::getValue($instance, 'args'),
+			$instance->args,
 			$this->identicalTo($expectedArgs)
 		);
 	}
