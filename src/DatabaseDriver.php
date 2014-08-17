@@ -824,10 +824,17 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	{
 		$fields = array();
 		$values = array();
+		$tableColumns = $this->getTableColumns($table);
 
 		// Iterate over the object variables to build the query fields and values.
 		foreach (get_object_vars($object) as $k => $v)
 		{
+			// Skip columns that don't exist in the table.
+			if (! array_key_exists($k, $tableColumns))
+			{
+				continue;
+			}
+
 			// Only process non-null scalars.
 			if (is_array($v) or is_object($v) or $v === null)
 			{
@@ -1607,6 +1614,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	{
 		$fields = array();
 		$where = array();
+		$tableColumns = $this->getTableColumns($table);
 
 		if (is_string($key))
 		{
@@ -1624,6 +1632,12 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		// Iterate over the object variables to build the query fields/value pairs.
 		foreach (get_object_vars($object) as $k => $v)
 		{
+			// Skip columns that don't exist in the table.
+			if (! array_key_exists($k, $tableColumns))
+			{
+				continue;
+			}
+
 			// Only process scalars that are not internal fields.
 			if (is_array($v) or is_object($v) or $k[0] == '_')
 			{

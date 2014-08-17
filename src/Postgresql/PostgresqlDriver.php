@@ -429,7 +429,20 @@ class PostgresqlDriver extends DatabaseDriver
 		{
 			foreach ($fields as $field)
 			{
-				$result[$field->column_name] = $field;
+				// Do some dirty translation to MySQL output.
+				// @todo: Come up with and implement a standard across databases.
+				$result[$field->column_name] = (object) array(
+					'column_name' => $field->column_name,
+					'type' => $field->type,
+					'null' => $field->null,
+					'Default' => $field->Default,
+					'comments' => '',
+					'Field' => $field->column_name,
+					'Type' => $field->type,
+					'Null' => $field->null,
+					// @todo: Improve query above to return primary key info as well
+					//'Key' => ($field->PK == '1' ? 'PRI' : '')
+				);
 			}
 		}
 
@@ -1094,14 +1107,20 @@ class PostgresqlDriver extends DatabaseDriver
 		// Iterate over the object variables to build the query fields and values.
 		foreach (get_object_vars($object) as $k => $v)
 		{
+			// Skip columns that don't exist in the table.
+			if (! array_key_exists($k, $columns))
+			{
+				continue;
+			}
+
 			// Only process non-null scalars.
 			if (is_array($v) or is_object($v) or $v === null)
 			{
 				continue;
 			}
 
-			// Ignore any internal fields.
-			if ($k[0] == '_')
+			// Ignore any internal fields or primary keys with value 0.
+			if (($k[0] == "_") || ($k == $key && $v === 0))
 			{
 				continue;
 			}
@@ -1423,6 +1442,12 @@ class PostgresqlDriver extends DatabaseDriver
 		// Iterate over the object variables to build the query fields/value pairs.
 		foreach (get_object_vars($object) as $k => $v)
 		{
+			// Skip columns that don't exist in the table.
+			if (! array_key_exists($k, $columns))
+			{
+				continue;
+			}
+
 			// Only process scalars that are not internal fields.
 			if (is_array($v) or is_object($v) or $k[0] == '_')
 			{

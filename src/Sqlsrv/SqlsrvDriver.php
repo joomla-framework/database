@@ -454,10 +454,17 @@ class SqlsrvDriver extends DatabaseDriver
 	{
 		$fields = array();
 		$values = array();
+		$tableColumns = $this->getTableColumns($table);
 		$statement = 'INSERT INTO ' . $this->quoteName($table) . ' (%s) VALUES (%s)';
 
 		foreach (get_object_vars($object) as $k => $v)
 		{
+			// Skip columns that don't exist in the table.
+			if (! array_key_exists($k, $tableColumns))
+			{
+				continue;
+			}
+
 			// Only process non-null scalars.
 			if (is_array($v) or is_object($v) or $v === null)
 			{
