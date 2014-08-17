@@ -60,6 +60,13 @@ class AbstractHtmlViewTest extends \PHPUnit_Framework_TestCase
 
 		$this->instance->setLayout('olivia');
 		$this->assertEquals($this->instance->setLayout('olivia'), (string) $this->instance);
+
+		// Invalid Layout path.
+		$this->instance->setLayout('foobar');
+		$this->assertEquals(
+			'Layout Path Not Found',
+			(string) $this->instance
+		);
 	}
 
 	/**
@@ -159,9 +166,8 @@ class AbstractHtmlViewTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\View\AbstractHtmlView::render
-	 * @since   1.0
-	 *
 	 * @expectedException  RuntimeException
+	 * @since   1.0
 	 */
 	public function testRender_exception()
 	{
