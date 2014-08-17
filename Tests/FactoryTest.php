@@ -20,7 +20,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers Joomla\Http\HttpFactory::getHttp
+	 * @covers  Joomla\Http\HttpFactory::getHttp
 	 * @since   1.0
 	 */
 	public function testGetHttp()
@@ -36,9 +36,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers Joomla\Http\HttpFactory::getHttp
+	 * @covers  Joomla\Http\HttpFactory::getHttp
 	 * @expectedException RuntimeException
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetHttpException()
 	{
@@ -53,7 +53,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers Joomla\Http\HttpFactory::getAvailableDriver
+	 * @covers  Joomla\Http\HttpFactory::getAvailableDriver
 	 * @since   1.0
 	 */
 	public function testGetAvailableDriver()
@@ -86,8 +86,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers Joomla\Http\HttpFactory::getHttpTransports
-	 * @since   1.0
+	 * @covers  Joomla\Http\HttpFactory::getHttpTransports
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetHttpTransports()
 	{
