@@ -1438,6 +1438,8 @@ abstract class DatabaseQuery
 	 */
 	public function union($query, $distinct = false, $glue = '')
 	{
+		$this->type = 'union';
+		
 		// Clear any ORDER BY clause in UNION query
 		// See http://dev.mysql.com/doc/refman/5.0/en/union.html
 		if (!is_null($this->order))
@@ -1448,19 +1450,17 @@ abstract class DatabaseQuery
 		// Set up the DISTINCT flag, the name with parentheses, and the glue.
 		if ($distinct)
 		{
-			$name = 'UNION DISTINCT ()';
 			$glue = ')' . PHP_EOL . 'UNION DISTINCT (';
 		}
 		else
 		{
 			$glue = ')' . PHP_EOL . 'UNION (';
-			$name = 'UNION ()';
 		}
 
 		// Get the Query\QueryElement if it does not exist
 		if (is_null($this->union))
 		{
-			$this->union = new Query\QueryElement($name, $query, "$glue");
+			$this->union = new Query\QueryElement('()', $query, "$glue");
 		}
 		else
 		// Otherwise append the second UNION.
