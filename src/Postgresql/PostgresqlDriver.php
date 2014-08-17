@@ -1107,6 +1107,12 @@ class PostgresqlDriver extends DatabaseDriver
 		// Iterate over the object variables to build the query fields and values.
 		foreach (get_object_vars($object) as $k => $v)
 		{
+			// Skip columns that don't exist in the table.
+			if (! array_key_exists($k, $columns))
+			{
+				continue;
+			}
+
 			// Only process non-null scalars.
 			if (is_array($v) or is_object($v) or $v === null)
 			{
@@ -1436,6 +1442,12 @@ class PostgresqlDriver extends DatabaseDriver
 		// Iterate over the object variables to build the query fields/value pairs.
 		foreach (get_object_vars($object) as $k => $v)
 		{
+			// Skip columns that don't exist in the table.
+			if (! array_key_exists($k, $columns))
+			{
+				continue;
+			}
+
 			// Only process scalars that are not internal fields.
 			if (is_array($v) or is_object($v) or $k[0] == '_')
 			{
