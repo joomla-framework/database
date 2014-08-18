@@ -106,6 +106,7 @@ class HttpFactory
 			}
 		}
 
+		// Keep alphabetical order across all environments
 		sort($names);
 
 		return $names;

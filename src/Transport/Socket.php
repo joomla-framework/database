@@ -11,6 +11,7 @@ namespace Joomla\Http\Transport;
 use Joomla\Http\TransportInterface;
 use Joomla\Http\Response;
 use Joomla\Uri\UriInterface;
+use Joomla\Uri\Uri;
 
 /**
  * HTTP transport class for using sockets directly.
@@ -150,7 +151,15 @@ class Socket implements TransportInterface
 			$content .= fgets($connection, 4096);
 		}
 
-		return $this->getResponse($content);
+		$content = $this->getResponse($content);
+
+		// Follow Http redirects
+		if ($content->code >= 301 && $content->code < 400 && isset($content->headers['Location']))
+		{
+			return $this->request($method, new Uri($content->headers['Location']), $data, $headers, $timeout, $userAgent);
+		}
+
+		return $content;
 	}
 
 	/**
