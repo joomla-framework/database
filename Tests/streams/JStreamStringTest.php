@@ -17,6 +17,8 @@ class StreamStringTest extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var StreamString
+	 *
+	 * @since __VERSION_NO__
 	 */
 	protected $object;
 
@@ -25,24 +27,26 @@ class StreamStringTest extends PHPUnit_Framework_TestCase
 	 * This method is called before a test is executed.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	protected function setUp()
 	{
 		parent::setUp();
 
 		$ref = 'lorem';
-        $string = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit';
+		$string = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit';
 
-        StringController::createRef($ref, $string);
+		StringController::createRef($ref, $string);
 		$this->object = new StreamString;
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testStream_open().
+	 * Test stream_open method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testStream_open()
 	{
@@ -68,11 +72,11 @@ class StreamStringTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testStream_stat().
+	 * Test stream_stat method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testStream_stat()
 	{
@@ -102,11 +106,11 @@ class StreamStringTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testUrl_stat().
+	 * Test url_stat method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testUrl_stat()
 	{
@@ -158,16 +162,16 @@ class StreamStringTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testStream_read().
+	 * Test stream_read method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testStream_read()
 	{
 		TestHelper::setValue($this->object, 'currentString', StringController::getRef('lorem'));
-		
+
 		$this->assertEquals(
 			0,
 			TestHelper::getValue($this->object, 'pos')
@@ -185,11 +189,11 @@ class StreamStringTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testStream_write().
+	 * Test stream_write method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testStream_write()
 	{
@@ -199,11 +203,11 @@ class StreamStringTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testStream_tell().
+	 * Test stream_tell method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testStream_tell()
 	{
@@ -216,36 +220,43 @@ class StreamStringTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testStream_eof().
+	 * Test stream_eof method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testStream_eof()
 	{
 		TestHelper::setValue($this->object, 'pos', 5);
 		TestHelper::setValue($this->object, 'len', 6);
-		
+
 		$this->assertFalse(
 			$this->object->stream_eof()
 		);
 
 		TestHelper::setValue($this->object, 'pos', 6);
 		TestHelper::setValue($this->object, 'len', 6);
-		
+
 		$this->assertTrue(
 			$this->object->stream_eof()
 		);
 
 		TestHelper::setValue($this->object, 'pos', 7);
 		TestHelper::setValue($this->object, 'len', 6);
-		
+
 		$this->assertTrue(
 			$this->object->stream_eof()
 		);
 	}
 
+	/**
+	 * Test data for test of stream_seek method.
+	 *
+	 * @return array
+	 *
+	 * @since __VERSION_NO__
+	 */
 	public function dataStream_seek()
 	{
 		return array(
@@ -269,11 +280,19 @@ class StreamStringTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
+	 * Test stream_seek method.
 	 *
-	 * @todo Implement testStream_seek().
-	 * @dataProvider dataStream_seek
+	 * @param   int  $currPos    Current Position
+	 * @param   int  $currLen    Current Length
+	 * @param   int  $offset     Offset to seek
+	 * @param   int  $whence     Seek type
+	 * @param   int  $expPos     Expected pointer position
+	 * @param   int  $expReturn  Expected return value
+	 *
 	 * @return void
+	 *
+	 * @dataProvider dataStream_seek
+	 * @since __VERSION_NO__
 	 */
 	public function testStream_seek($currPos, $currLen, $offset, $whence, $expPos, $expReturn)
 	{
@@ -292,11 +311,11 @@ class StreamStringTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testStream_flush().
+	 * Test stream_flush method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testStream_flush()
 	{

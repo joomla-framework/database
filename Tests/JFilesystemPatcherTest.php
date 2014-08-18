@@ -182,9 +182,8 @@ class PatcherTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
-	 *
 	 * @dataProvider PatcherTest::addData
+	 * @since   1.0
 	 */
 	public function testAdd($udiff, $root, $strip, $expected)
 	{
@@ -253,6 +252,8 @@ class PatcherTest extends PHPUnit_Framework_TestCase
 	 * Patcher::reset reset the patcher to its initial state
 	 *
 	 * @return  void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testReset()
 	{
@@ -913,9 +914,8 @@ But after they are produced,
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
-	 *
 	 * @dataProvider PatcherTest::applyData
+	 * @since   1.0
 	 */
 	public function testApply($udiff, $root, $strip, $sources, $destinations, $result, $throw)
 	{

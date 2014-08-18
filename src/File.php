@@ -175,7 +175,7 @@ class File
 		{
 			$stream = Stream::getStream();
 
-			if (!$stream->move($src, $dest))
+			if (!$stream->move($src, $dest, null, false))
 			{
 				throw new FilesystemException(__METHOD__ . ': ' . $stream->getError());
 			}
@@ -267,7 +267,7 @@ class File
 		{
 			$stream = Stream::getStream();
 
-			if (!$stream->upload($src, $dest))
+			if (!$stream->upload($src, $dest, null, false))
 			{
 				throw new FilesystemException(sprintf('%1$s(%2$s, %3$s): %4$s', __METHOD__, $src, $dest, $stream->getError()));
 			}

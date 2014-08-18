@@ -15,11 +15,11 @@ use Joomla\Test\TestHelper;
 class StringControllerTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * Test...
-	 *
-	 * @todo Implement test_getArray().
+	 * Test _getArray method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function test_getArray()
 	{
@@ -37,11 +37,11 @@ class StringControllerTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testCreateRef().
+	 * Test createRef method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testCreateRef()
 	{
@@ -61,11 +61,11 @@ class StringControllerTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testGetRef().
+	 * Test getRef method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testGetRef()
 	{

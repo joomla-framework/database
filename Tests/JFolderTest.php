@@ -7,6 +7,7 @@
 use Joomla\Filesystem\Folder;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Path;
+use org\bovigo\vfs\vfsStream;
 
 /**
  * Test class for JFolder.
@@ -17,8 +18,25 @@ class FolderTest extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var Joomla\Filesystem\Folder
+	 *
+	 * @since __VERSION_NO__
 	 */
 	protected $object;
+
+	/**
+	 * Sets up the fixture, for example, opens a network connection.
+	 * This method is called before a test is executed.
+	 *
+	 * @return void
+	 *
+	 * @since __VERSION_NO__
+	 */
+	protected function setUp()
+	{
+		parent::setUp();
+
+		vfsStream::setup('root');
+	}
 
 	/**
 	 * Tests the Folder::copy method.
@@ -31,7 +49,7 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	{
 		$name = 'tempFolder';
 		$copiedFolderName = 'tempCopiedFolderName';
-		$path = __DIR__;
+		$path = vfsStream::url('root');
 
 		Folder::create($path . '/' . $name);
 
@@ -57,15 +75,14 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return void
 	 *
-	 * @since   1.0
 	 * @expectedException Joomla\Filesystem\Exception\FilesystemException
+	 * @since   1.0
 	 */
 	public function testCopySrcDontExist()
 	{
-
 		$name = 'tempFolder';
 		$copiedFolderName = 'tempCopiedFolderName';
-		$path = __DIR__ . '/tmp';
+		$path = vfsStream::url('root') . '/tmp';
 
 		Folder::copy($path . '/' . $name . 'foobar', $path . '/' . $copiedFolderName);
 
@@ -84,7 +101,7 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	{
 		$name = 'tempFolder';
 		$copiedFolderName = 'tempCopiedFolderName';
-		$path = __DIR__;
+		$path = vfsStream::url('root');
 
 		Folder::create($path . '/' . $name);
 		Folder::create($path . '/' . $copiedFolderName);
@@ -125,7 +142,7 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	public function testCreate()
 	{
 		$name = 'tempFolder';
-		$path = __DIR__;
+		$path = vfsStream::url('root');
 
 		$this->assertThat(
 			Folder::create($path . '/' . $name),
@@ -150,8 +167,6 @@ class FolderTest extends PHPUnit_Framework_TestCase
 		);
 
 		Folder::delete($path . '/' . $name . '/' . $name);
-
-		
 	}
 
 	/**
@@ -159,15 +174,15 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @expectedException Joomla\Filesystem\Exception\FilesystemException
+	 * @since   1.0
 	 */
 	public function testCreateInfiniteLoopException()
 	{
 		$name = 'tempFolder';
 
 		// Checking for infinite loop in the path.
-		$path = __DIR__ . '/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z';
+		$path = vfsStream::url('root') . '/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z';
 		$this->assertThat(
 			Folder::create($path . '/' . $name),
 			$this->isFalse(),
@@ -187,7 +202,7 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	public function testDelete()
 	{
 		$name = 'tempFolder';
-		$path = __DIR__;
+		$path = vfsStream::url('root');
 
 		Folder::create($path . '/' . $name);
 
@@ -208,8 +223,6 @@ class FolderTest extends PHPUnit_Framework_TestCase
 			$this->isTrue(),
 			'Line:' . __LINE__ . ' Folder and its sub folder & files should be deleted successfully.'
 		);
-
-		
 	}
 
 	/**
@@ -217,8 +230,8 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @expectedException  Joomla\Filesystem\Exception\FilesystemException
+	 * @since   1.0
 	 */
 	public function testDeleteBaseDir()
 	{
@@ -230,14 +243,17 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
 	 * @expectedException  UnexpectedValueException
+	 * @since   1.0
 	 */
 	public function testDeleteFile()
 	{
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp';
+		$path = vfsStream::url('root') . '/tmp';
 		$data = 'Lorem ipsum dolor sit amet';
+
+		// Create tmp directory at vfsStream root
+		mkdir($path);
 
 		// Create a temp file to test copy operation
 		file_put_contents($path . '/' . $name, $data);
@@ -254,6 +270,7 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @expectedException  UnexpectedValueException
+	 * @since __VERSION_NO__
 	 */
 	public function testDeleteArrayPath()
 	{
@@ -316,45 +333,43 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
-	 *
 	 * @covers  Joomla\Filesystem\Folder::files
 	 * @covers  Joomla\Filesystem\Folder::_items
+	 * @since   1.0
 	 */
 	public function testFiles()
 	{
-		// Make sure previous test files are cleaned up
-		$this->_cleanupTestFiles();
+		$root = vfsStream::url('root') . '/tmp';
+
+		mkdir($root);
 
 		// Make some test files and folders
-		mkdir(Path::clean(__DIR__ . '/tmp/test'), 0777, true);
-		file_put_contents(Path::clean(__DIR__ . '/tmp/test/index.html'), 'test');
-		file_put_contents(Path::clean(__DIR__ . '/tmp/test/index.txt'), 'test');
-		mkdir(Path::clean(__DIR__ . '/tmp/test/test'), 0777, true);
-		file_put_contents(Path::clean(__DIR__ . '/tmp/test/test/index.html'), 'test');
-		file_put_contents(Path::clean(__DIR__ . '/tmp/test/test/index.txt'), 'test');
+		mkdir(Path::clean($root . '/test'), 0777, true);
+		file_put_contents(Path::clean($root . '/test/index.html'), 'test');
+		file_put_contents(Path::clean($root . '/test/index.txt'), 'test');
+		mkdir(Path::clean($root . '/test/test'), 0777, true);
+		file_put_contents(Path::clean($root . '/test/test/index.html'), 'test');
+		file_put_contents(Path::clean($root . '/test/test/index.txt'), 'test');
 
 		// Use of realpath to ensure test works for on all platforms
-		$result = Folder::files(Path::clean(__DIR__ . '/tmp/test'), 'index.*', true, true, array('index.html'));
-		$result[0] = realpath($result[0]);
-		$result[1] = realpath($result[1]);
+		$result = Folder::files(Path::clean($root . '/test'), 'index.*', true, true, array('index.html'));
+
 		$this->assertEquals(
 			array(
-				Path::clean(__DIR__ . '/tmp/test/index.txt'),
-				Path::clean(__DIR__ . '/tmp/test/test/index.txt')
+				Path::clean($root . '/test/index.txt'),
+				Path::clean($root . '/test/test/index.txt')
 			),
 			$result,
 			'Line: ' . __LINE__ . ' Should exclude index.html files'
 		);
 
 		// Use of realpath to ensure test works for on all platforms
-		$result = Folder::files(Path::clean(__DIR__ . '/tmp/test'), 'index.html', true, true);
-		$result[0] = realpath($result[0]);
-		$result[1] = realpath($result[1]);
+		$result = Folder::files(Path::clean($root . '/test'), 'index.html', true, true);
+
 		$this->assertEquals(
 			array(
-				Path::clean(__DIR__ . '/tmp/test/index.html'),
-				Path::clean(__DIR__ . '/tmp/test/test/index.html')
+				Path::clean($root . '/test/index.html'),
+				Path::clean($root . '/test/test/index.html')
 			),
 			$result,
 			'Line: ' . __LINE__ . ' Should include full path of both index.html files'
@@ -365,16 +380,16 @@ class FolderTest extends PHPUnit_Framework_TestCase
 				Path::clean('index.html'),
 				Path::clean('index.html')
 			),
-			Folder::files(Path::clean(__DIR__ . '/tmp/test'), 'index.html', true, false),
+			Folder::files(Path::clean($root . '/test'), 'index.html', true, false),
 			'Line: ' . __LINE__ . ' Should include only file names of both index.html files'
 		);
 
 		// Use of realpath to ensure test works for on all platforms
-		$result = Folder::files(Path::clean(__DIR__ . '/tmp/test'), 'index.html', false, true);
-		$result[0] = realpath($result[0]);
+		$result = Folder::files(Path::clean($root . '/test'), 'index.html', false, true);
+
 		$this->assertEquals(
 			array(
-				Path::clean(__DIR__ . '/tmp/test/index.html')
+				Path::clean($root . '/test/index.html')
 			),
 			$result,
 			'Line: ' . __LINE__ . ' Non-recursive should only return top folder file full path'
@@ -384,18 +399,15 @@ class FolderTest extends PHPUnit_Framework_TestCase
 			array(
 				Path::clean('index.html')
 			),
-			Folder::files(Path::clean(__DIR__ . '/tmp/test'), 'index.html', false, false),
+			Folder::files(Path::clean($root . '/test'), 'index.html', false, false),
 			'Line: ' . __LINE__ . ' non-recursive should return only file name of top folder file'
 		);
 
 		$this->assertEquals(
 			array(),
-			Folder::files(Path::clean(__DIR__ . '/tmp/test'), 'nothing.here', true, true, array(), array()),
+			Folder::files(Path::clean($root . '/test'), 'nothing.here', true, true, array(), array()),
 			'Line: ' . __LINE__ . ' When nothing matches the filter, should return empty array'
 		);
-
-		// Clean up our files
-		$this->_cleanupTestFiles();
 	}
 
 	/**
@@ -405,6 +417,7 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @covers             Joomla\Filesystem\Folder::files
 	 * @expectedException  \UnexpectedValueException
+	 * @since __VERSION_NO__
 	 */
 	public function testFilesException()
 	{
@@ -416,84 +429,74 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
-	 *
 	 * @covers  Joomla\Filesystem\Folder::files
 	 * @covers  Joomla\Filesystem\Folder::folders
 	 * @covers  Joomla\Filesystem\Folder::_items
+	 * @since   1.0
 	 */
 	public function testFolders()
 	{
-		// Make sure previous test files are cleaned up
-		$this->_cleanupTestFiles();
+		$root = vfsStream::url('root') . '/tmp';
+
+		mkdir($root);
 
 		// Create the test folders
-		mkdir(Path::clean(__DIR__ . '/tmp/test'), 0777, true);
-		mkdir(Path::clean(__DIR__ . '/tmp/test/foo1'), 0777, true);
-		mkdir(Path::clean(__DIR__ . '/tmp/test/foo1/bar1'), 0777, true);
-		mkdir(Path::clean(__DIR__ . '/tmp/test/foo1/bar2'), 0777, true);
-		mkdir(Path::clean(__DIR__ . '/tmp/test/foo2'), 0777, true);
-		mkdir(Path::clean(__DIR__ . '/tmp/test/foo2/bar1'), 0777, true);
-		mkdir(Path::clean(__DIR__ . '/tmp/test/foo2/bar2'), 0777, true);
+		mkdir(Path::clean($root . '/test'), 0777, true);
+		mkdir(Path::clean($root . '/test/foo1'), 0777, true);
+		mkdir(Path::clean($root . '/test/foo1/bar1'), 0777, true);
+		mkdir(Path::clean($root . '/test/foo1/bar2'), 0777, true);
+		mkdir(Path::clean($root . '/test/foo2'), 0777, true);
+		mkdir(Path::clean($root . '/test/foo2/bar1'), 0777, true);
+		mkdir(Path::clean($root . '/test/foo2/bar2'), 0777, true);
 
 		$this->assertEquals(
 			array(),
-			Folder::folders(Path::clean(__DIR__ . '/tmp/test'), 'bar1', true, true, array('foo1', 'foo2'))
+			Folder::folders(Path::clean($root . '/test'), 'bar1', true, true, array('foo1', 'foo2'))
 		);
 
 		// Use of realpath to ensure test works for on all platforms
-		$result = Folder::folders(Path::clean(__DIR__ . '/tmp/test'), 'bar1', true, true, array('foo1'));
-		$result[0] = realpath($result[0]);
+		$result = Folder::folders(Path::clean($root . '/test'), 'bar1', true, true, array('foo1'));
+
 		$this->assertEquals(
-			array(Path::clean(__DIR__ . '/tmp/test/foo2/bar1')),
+			array(Path::clean($root . '/test/foo2/bar1')),
 			$result
 		);
 
 		// Use of realpath to ensure test works for on all platforms
-		$result = Folder::folders(Path::clean(__DIR__ . '/tmp/test'), 'bar1', true, true);
-		$result[0] = realpath($result[0]);
-		$result[1] = realpath($result[1]);
+		$result = Folder::folders(Path::clean($root . '/test'), 'bar1', true, true);
+
 		$this->assertEquals(
 			array(
-				Path::clean(__DIR__ . '/tmp/test/foo1/bar1'),
-				Path::clean(__DIR__ . '/tmp/test/foo2/bar1'),
+				Path::clean($root . '/test/foo1/bar1'),
+				Path::clean($root . '/test/foo2/bar1'),
 			),
 			$result
 		);
 
 		// Use of realpath to ensure test works for on all platforms
-		$result = Folder::folders(Path::clean(__DIR__ . '/tmp/test'), 'bar', true, true);
-		$result[0] = realpath($result[0]);
-		$result[1] = realpath($result[1]);
-		$result[2] = realpath($result[2]);
-		$result[3] = realpath($result[3]);
+		$result = Folder::folders(Path::clean($root . '/test'), 'bar', true, true);
+
 		$this->assertEquals(
 			array(
-				Path::clean(__DIR__ . '/tmp/test/foo1/bar1'),
-				Path::clean(__DIR__ . '/tmp/test/foo1/bar2'),
-				Path::clean(__DIR__ . '/tmp/test/foo2/bar1'),
-				Path::clean(__DIR__ . '/tmp/test/foo2/bar2'),
+				Path::clean($root . '/test/foo1/bar1'),
+				Path::clean($root . '/test/foo1/bar2'),
+				Path::clean($root . '/test/foo2/bar1'),
+				Path::clean($root . '/test/foo2/bar2'),
 			),
 			$result
 		);
 
 		// Use of realpath to ensure test works for on all platforms
-		$result = Folder::folders(Path::clean(__DIR__ . '/tmp/test'), '.', true, true);
-		$result[0] = realpath($result[0]);
-		$result[1] = realpath($result[1]);
-		$result[2] = realpath($result[2]);
-		$result[3] = realpath($result[3]);
-		$result[4] = realpath($result[4]);
-		$result[5] = realpath($result[5]);
+		$result = Folder::folders(Path::clean($root . '/test'), '.', true, true);
 
 		$this->assertEquals(
 			array(
-				Path::clean(__DIR__ . '/tmp/test/foo1'),
-				Path::clean(__DIR__ . '/tmp/test/foo1/bar1'),
-				Path::clean(__DIR__ . '/tmp/test/foo1/bar2'),
-				Path::clean(__DIR__ . '/tmp/test/foo2'),
-				Path::clean(__DIR__ . '/tmp/test/foo2/bar1'),
-				Path::clean(__DIR__ . '/tmp/test/foo2/bar2'),
+				Path::clean($root . '/test/foo1'),
+				Path::clean($root . '/test/foo1/bar1'),
+				Path::clean($root . '/test/foo1/bar2'),
+				Path::clean($root . '/test/foo2'),
+				Path::clean($root . '/test/foo2/bar1'),
+				Path::clean($root . '/test/foo2/bar2'),
 			),
 			$result
 		);
@@ -507,18 +510,16 @@ class FolderTest extends PHPUnit_Framework_TestCase
 				Path::clean('foo1'),
 				Path::clean('foo2'),
 			),
-			Folder::folders(Path::clean(__DIR__ . '/tmp/test'), '.', true, false)
+			Folder::folders(Path::clean($root . '/test'), '.', true, false)
 		);
 
 		// Use of realpath to ensure test works for on all platforms
-		$result = Folder::folders(Path::clean(__DIR__ . '/tmp/test'), '.', false, true);
-		$result[0] = realpath($result[0]);
-		$result[1] = realpath($result[1]);
+		$result = Folder::folders(Path::clean($root . '/test'), '.', false, true);
 
 		$this->assertEquals(
 			array(
-				Path::clean(__DIR__ . '/tmp/test/foo1'),
-				Path::clean(__DIR__ . '/tmp/test/foo2'),
+				Path::clean($root . '/test/foo1'),
+				Path::clean($root . '/test/foo2'),
 			),
 			$result
 		);
@@ -528,17 +529,17 @@ class FolderTest extends PHPUnit_Framework_TestCase
 				Path::clean('foo1'),
 				Path::clean('foo2'),
 			),
-			Folder::folders(Path::clean(__DIR__ . '/tmp/test'), '.', false, false, array(), array())
+			Folder::folders(Path::clean($root . '/test'), '.', false, false, array(), array())
 		);
 
 		// Clean up the folders
-		rmdir(Path::clean(__DIR__ . '/tmp/test/foo2/bar2'));
-		rmdir(Path::clean(__DIR__ . '/tmp/test/foo2/bar1'));
-		rmdir(Path::clean(__DIR__ . '/tmp/test/foo2'));
-		rmdir(Path::clean(__DIR__ . '/tmp/test/foo1/bar2'));
-		rmdir(Path::clean(__DIR__ . '/tmp/test/foo1/bar1'));
-		rmdir(Path::clean(__DIR__ . '/tmp/test/foo1'));
-		rmdir(Path::clean(__DIR__ . '/tmp/test'));
+		rmdir(Path::clean($root . '/test/foo2/bar2'));
+		rmdir(Path::clean($root . '/test/foo2/bar1'));
+		rmdir(Path::clean($root . '/test/foo2'));
+		rmdir(Path::clean($root . '/test/foo1/bar2'));
+		rmdir(Path::clean($root . '/test/foo1/bar1'));
+		rmdir(Path::clean($root . '/test/foo1'));
+		rmdir(Path::clean($root . '/test'));
 	}
 
 	/**
@@ -548,6 +549,7 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @covers             Joomla\Filesystem\Folder::folders
 	 * @expectedException  \UnexpectedValueException
+	 * @since __VERSION_NO__
 	 */
 	public function testFoldersException()
 	{
@@ -564,7 +566,7 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	public function testListFolderTree()
 	{
 		$name = 'tempFolder';
-		$path = __DIR__;
+		$path = vfsStream::url('root');
 
 		// -tempFolder
 		Folder::create("$path/$name");
@@ -663,54 +665,12 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
-	 *
 	 * @covers  Joomla\Filesystem\Folder::makeSafe
+	 * @since   1.0
 	 */
 	public function testMakeSafe()
 	{
 		$actual = Folder::makeSafe('test1/testdirectory');
 		$this->assertEquals('test1/testdirectory', $actual);
-	}
-
-	/**
-	 * Convenience method to cleanup before and after testFiles
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	private function _cleanupTestFiles()
-	{
-		$this->_cleanupFile(Path::clean(__DIR__ . '/tmp/test/test/index.html'));
-		$this->_cleanupFile(Path::clean(__DIR__ . '/tmp/test/test/index.txt'));
-		$this->_cleanupFile(Path::clean(__DIR__ . '/tmp/test/test'));
-		$this->_cleanupFile(Path::clean(__DIR__ . '/tmp/test/index.html'));
-		$this->_cleanupFile(Path::clean(__DIR__ . '/tmp/test/index.txt'));
-		$this->_cleanupFile(Path::clean(__DIR__ . '/tmp/test'));
-	}
-
-	/**
-	 * Convenience method to clean up for files test
-	 *
-	 * @param   string  $path  The path to clean
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	private function _cleanupFile($path)
-	{
-		if (file_exists($path))
-		{
-			if (is_file($path))
-			{
-				unlink($path);
-			}
-			elseif (is_dir($path))
-			{
-				rmdir($path);
-			}
-		}
 	}
 }

@@ -17,6 +17,8 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var JBuffer
+	 *
+	 * @since __VERSION_NO__
 	 */
 	protected $object;
 
@@ -25,6 +27,8 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	 * This method is called before a test is executed.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	protected function setUp()
 	{
@@ -34,19 +38,11 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 *
-	 * @return void
-	 */
-	protected function tearDown()
-	{
-	}
-
-	/**
 	 * Test cases for the stream_open test
 	 *
 	 * @return array
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function casesOpen()
 	{
@@ -62,7 +58,7 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * testing stream_open().
+	 * Test stream_open method.
 	 *
 	 * @param   string  $path         The path to buffer
 	 * @param   string  $mode         The mode of the buffer
@@ -70,8 +66,10 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	 * @param   string  $opened_path  The path
 	 * @param   string  $expected     The expected test return
 	 *
-	 * @dataProvider casesOpen
 	 * @return void
+	 *
+	 * @dataProvider casesOpen
+	 * @since __VERSION_NO__
 	 */
 	public function testStreamOpen($path, $mode, $options, $opened_path, $expected)
 	{
@@ -86,6 +84,8 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	 * Test cases for the stream_read test
 	 *
 	 * @return array
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function casesRead()
 	{
@@ -101,7 +101,7 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * testing stream_read().
+	 * Test stream_read method.
 	 *
 	 * @param   string  $buffer    The buffer to perform the operation upon
 	 * @param   string  $name      The name of the buffer
@@ -109,8 +109,10 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	 * @param   int     $count     The movement of the pointer
 	 * @param   bool    $expected  The expected test return
 	 *
-	 * @dataProvider casesRead
 	 * @return void
+	 *
+	 * @dataProvider casesRead
+	 * @since __VERSION_NO__
 	 */
 	public function testStreamRead($buffer, $name, $position, $count, $expected)
 	{
@@ -128,6 +130,8 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	 * Test cases for the stream_write test
 	 *
 	 * @return array
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function casesWrite()
 	{
@@ -143,7 +147,7 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * testing stream_write().
+	 * Test stream_write method.
 	 *
 	 * @param   string  $buffer    The buffer to perform the operation upon
 	 * @param   string  $name      The name of the buffer
@@ -151,8 +155,10 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	 * @param   string  $write     The data to write
 	 * @param   bool    $expected  The expected test return
 	 *
-	 * @dataProvider casesWrite
 	 * @return void
+	 *
+	 * @dataProvider casesWrite
+	 * @since __VERSION_NO__
 	 */
 	public function testStreamWrite($buffer, $name, $position, $write, $expected)
 	{
@@ -168,9 +174,11 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Testing stream_tell.
+	 * Test stream_tell method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testStreamTell()
 	{
@@ -187,6 +195,8 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	 * Test cases for the stream_eof test
 	 *
 	 * @return array
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function casesEOF()
 	{
@@ -207,15 +217,17 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Testing stream_eof.
+	 * Test stream_eof method.
 	 *
 	 * @param   string  $buffer    The buffer to perform the operation upon
 	 * @param   string  $name      The name of the buffer
 	 * @param   int     $position  The position in the buffer of the current pointer
 	 * @param   bool    $expected  The expected test return
 	 *
-	 * @dataProvider casesEOF
 	 * @return void
+	 *
+	 * @dataProvider casesEOF
+	 * @since __VERSION_NO__
 	 */
 	public function testStreamEOF($buffer, $name, $position, $expected)
 	{
@@ -233,6 +245,8 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	 * Test cases for the stream_seek test
 	 *
 	 * @return array
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function casesSeek()
 	{
@@ -313,7 +327,7 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Testing stream_seek.
+	 * Test stream_seek method.
 	 *
 	 * @param   string  $buffer       The buffer to perform the operation upon
 	 * @param   string  $name         The name of the buffer
@@ -323,8 +337,10 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	 * @param   bool    $expected     The expected test return
 	 * @param   int     $expectedPos  The new buffer position pointer
 	 *
-	 * @dataProvider casesSeek
 	 * @return void
+	 *
+	 * @dataProvider casesSeek
+	 * @since __VERSION_NO__
 	 */
 	public function testStreamSeek($buffer, $name, $position, $offset, $whence, $expected, $expectedPos)
 	{

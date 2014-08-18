@@ -18,19 +18,18 @@ class JFileTest extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var Joomla\Filesystem\File
+	 *
+	 * @since __VERSION_NO__
 	 */
 	protected $object;
-
-	/**
-     * @var  vfsStreamDirectory
-     */
-    private $root;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	protected function setUp()
 	{
@@ -38,7 +37,7 @@ class JFileTest extends PHPUnit_Framework_TestCase
 
 		$this->object = new File;
 
-		$this->root = vfsStream::setup('root');
+		vfsStream::setup('root');
 	}
 
 	/**
@@ -137,7 +136,7 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test makeSafe method
+	 * Test makeSafe method.
 	 *
 	 * @param   string  $name        The name of the file to test filtering of
 	 * @param   array   $stripChars  Whether to filter spaces out the name or not
@@ -156,7 +155,7 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test makeCopy method
+	 * Test makeCopy method.
 	 *
 	 * @return  void
 	 *
@@ -167,48 +166,45 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	{
 		$name = 'tempFile';
 		$path = vfsStream::url('root');
-		$copiedFileName = 'foo';
 		$data = 'Lorem ipsum dolor sit amet';
 
 		// Create a temp file to test copy operation
 		file_put_contents($path . '/' . $name, $data);
 
-		$this->assertThat(
+		$copiedFileName = 'foo';
+		$this->assertTrue(
 			File::copy($path . '/' . $name, $path . '/' . $copiedFileName),
-			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should copy successfully.'
 		);
 
-		$this->assertEquals(
-			$data,
-			file_get_contents($path . '/' . $copiedFileName),
+		$this->assertFileEquals(
+			$path . '/' . $name,
+			$path . '/' . $copiedFileName,
 			'Line:' . __LINE__ . ' Content should remain intact after copy.'
 		);
 
 		$copiedFileName = 'bar';
-		$this->assertThat(
+		$this->assertTrue(
 			File::copy($name, $copiedFileName, $path),
-			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should copy successfully.'
 		);
 
-		$this->assertEquals(
-			$data,
-			file_get_contents($path . '/' . $copiedFileName),
+		$this->assertFileEquals(
+			$path . '/' . $name,
+			$path . '/' . $copiedFileName,
 			'Line:' . __LINE__ . ' Content should remain intact after copy.'
 		);
 
 		// Copy using streams.
 		$copiedFileName = 'foobar';
-		$this->assertThat(
+		$this->assertTrue(
 			File::copy($name, $copiedFileName, $path, true),
-			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should copy successfully.'
 		);
 
-		$this->assertEquals(
-			$data,
-			file_get_contents($path . '/' . $copiedFileName),
+		$this->assertFileEquals(
+			$path . '/' . $name,
+			$path . '/' . $copiedFileName,
 			'Line:' . __LINE__ . ' Content should remain intact after copy.'
 		);
 	}
@@ -220,6 +216,7 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @covers             Joomla\Filesystem\File::copy
 	 * @expectedException  \UnexpectedValueException
+	 * @since __VERSION_NO__
 	 */
 	public function testCopyException()
 	{
@@ -227,11 +224,14 @@ class JFileTest extends PHPUnit_Framework_TestCase
 		$path = vfsStream::url('root');
 		$copiedFileName = 'copiedTempFile';
 
-		File::copy($path . '/' . $name . 'foobar', $path . '/' . $copiedFileName);
+		File::copy(
+			$path . '/' . $name . 'foobar',
+			$path . '/' . $copiedFileName
+		);
 	}
 
 	/**
-	 * Test delete method
+	 * Test delete method.
 	 *
 	 * @return void
 	 *
@@ -247,17 +247,18 @@ class JFileTest extends PHPUnit_Framework_TestCase
 		// Create a temp file to test delete operation
 		file_put_contents($path . '/' . $name, $data);
 
-		$this->assertThat(
+		$this->assertFileExists($path . '/' . $name);
+
+		$this->assertTrue(
 			File::delete($path . '/' . $name),
-			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should be deleted successfully.'
 		);
 
-		@unlink($path . '/' . $name);
+		$this->assertFileNotExists($path . '/' . $name);
 	}
 
 	/**
-	 * Test move method
+	 * Test move method.
 	 *
 	 * @return void
 	 *
@@ -267,37 +268,43 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	public function testMove()
 	{
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp';
+		$path = vfsStream::url('root');
 		$movedFileName = 'movedTempFile';
 		$data = 'Lorem ipsum dolor sit amet';
 
 		// Create a temp file to test copy operation
 		file_put_contents($path . '/' . $name, $data);
 
-		$this->assertThat(
+		$this->assertFileExists($path . '/' . $name);
+
+		$this->assertTrue(
 			File::move($path . '/' . $name, $path . '/' . $movedFileName),
-			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should be moved successfully.'
 		);
 
-		$this->assertThat(
+		$this->assertFileNotExists($path . '/' . $name);
+		$this->assertFileExists($path . '/' . $movedFileName);
+
+		$this->assertTrue(
 			File::move($movedFileName, $name, $path),
-			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should be moved successfully.'
 		);
+
+		$this->assertFileNotExists($path . '/' . $movedFileName);
+		$this->assertFileExists($path . '/' . $name);
 
 		// Using streams.
-		$this->assertThat(
+		$this->assertTrue(
 			File::move($name, $movedFileName, $path, true),
-			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should be moved successfully.'
 		);
 
-		unlink($path . '/' . $movedFileName);
+		$this->assertFileNotExists($path . '/' . $name);
+		$this->assertFileExists($path . '/' . $movedFileName);
 	}
 
 	/**
-	 * Test write method
+	 * Test write method.
 	 *
 	 * @return void
 	 *
@@ -307,41 +314,46 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	public function testWrite()
 	{
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp';
+		$path = vfsStream::url('root');
 		$data = 'Lorem ipsum dolor sit amet';
 
 		// Create a file on pre existing path.
-		$this->assertThat(
+		$this->assertTrue(
 			File::write($path . '/' . $name, $data),
-			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should be written successfully.'
+		);
+		$this->assertStringEqualsFile(
+			$path . '/' . $name,
+			$data
 		);
 
 		// Create a file on pre existing path by using streams.
-		$this->assertThat(
+		$this->assertTrue(
 			File::write($path . '/' . $name, $data, true),
-			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should be written successfully.'
+		);
+		$this->assertStringEqualsFile(
+			$path . '/' . $name,
+			$data
 		);
 
 		// Create a file on non-existing path.
-		$this->assertThat(
+		$this->assertTrue(
 			File::write($path . '/TempFolder/' . $name, $data),
-			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should be written successfully.'
 		);
-
-		// Removes file and folder.
-		unlink($path . '/' . $name);
-		Folder::delete($path . '/TempFolder');
+		$this->assertStringEqualsFile(
+			$path . '/' . $name,
+			$data
+		);
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testUpload().
+	 * Test upload method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testUpload()
 	{
@@ -355,11 +367,11 @@ class JFileTest extends PHPUnit_Framework_TestCase
 		file_put_contents($path . '/' . $name, $data);
 
 		$_FILES = array(
-            'test' => array(
-                'name' => 'test.jpg',
-                'tmp_name' => $path . '/' . $name
-            )
-        );
+			'test' => array(
+				'name' => 'test.jpg',
+				'tmp_name' => $path . '/' . $name
+			)
+		);
 
 		$this->assertTrue(
 			File::upload($path . '/' . $name, $path . '/' . $uploadedFileName)
@@ -371,33 +383,29 @@ class JFileTest extends PHPUnit_Framework_TestCase
 		);
 		unlink($path . '/' . $uploadedFileName);
 
-		
-
 		unlink($path . '/' . $name);
 		unset($_FILES);
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testUpload().
+	 * Test upload method's destination inaccessible exception.
 	 *
 	 * @return void
+	 *
 	 * @expectedException \Joomla\Filesystem\Exception\FilesystemException
+	 * @since __VERSION_NO__
 	 */
 	public function testUploadDestInaccessibleException()
 	{
-        $name = 'tempFile';
-        $path = __DIR__ . '/tmp';
-        $uploadedFileName = 'uploadedFileName';
-        $data = 'Lorem ipsum dolor sit amet';
-        include_once __DIR__ . '/Stubs/PHPUploadStub.php';
+		$name = 'tempFile';
+		$path = vfsStream::url('root');
+		$uploadedFileName = 'uploadedFileName';
+		$data = 'Lorem ipsum dolor sit amet';
+		include_once __DIR__ . '/Stubs/PHPUploadStub.php';
 
-        // Create a temp file to test copy operation
-        file_put_contents($path . '/' .  $name, $data);
+		// Create a temp file to test copy operation
+		file_put_contents($path . '/' . $name, $data);
 
 		File::upload($path . '/' . $name, '/' . $uploadedFileName);
-
-		@unlink('/' . $uploadedFileName);
 	}
 }

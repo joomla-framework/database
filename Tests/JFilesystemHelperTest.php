@@ -14,11 +14,11 @@ use Joomla\Filesystem\Helper;
 class FilesystemHelperTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testRemotefsize().
+	 * Test remotefsize method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testRemotefsize()
 	{
@@ -44,11 +44,11 @@ class FilesystemHelperTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testFtpChmod().
+	 * Test ftpChmod method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testFtpChmod()
 	{
@@ -79,11 +79,11 @@ class FilesystemHelperTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testGetSupported().
+	 * Test getSupported method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testGetSupported()
 	{
@@ -102,11 +102,11 @@ class FilesystemHelperTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testGetTransports().
+	 * Test getTransports method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testGetTransports()
 	{
@@ -120,11 +120,11 @@ class FilesystemHelperTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testGetFilters().
+	 * Test getFilters method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testGetFilters()
 	{
@@ -138,11 +138,11 @@ class FilesystemHelperTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @covers  Joomla\Filesystem\Helper::getJStreams
+	 * Test getJStreams mthod.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testGetJStreams()
 	{
@@ -155,11 +155,12 @@ class FilesystemHelperTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @covers  Joomla\Filesystem\Helper::isJoomlaStream
+	 * Test
 	 *
 	 * @return void
+	 *
+	 * @covers  Joomla\Filesystem\Helper::isJoomlaStream
+	 * @since __VERSION_NO__
 	 */
 	public function testIsJoomlaStream()
 	{

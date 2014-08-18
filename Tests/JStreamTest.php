@@ -7,6 +7,7 @@
 use Joomla\Filesystem\Stream;
 use Joomla\Test\TestHelper;
 use Joomla\Filesystem\Support\StringController;
+use org\bovigo\vfs\vfsStream;
 
 /**
  * Test class for Stream.
@@ -17,6 +18,8 @@ class StreamTest extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var Stream
+	 *
+	 * @since __VERSION_NO__
 	 */
 	protected $object;
 
@@ -25,20 +28,23 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 * This method is called before a test is executed.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	protected function setUp()
 	{
 		parent::setUp();
 
 		$this->object = new Stream;
+		vfsStream::setup('root');
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement test__construct().
+	 * Test counstructor method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function test__construct()
 	{
@@ -66,9 +72,11 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests getStream()
+	 * Tests getStream method.
 	 *
 	 * @return  void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testGetStream()
 	{
@@ -110,12 +118,12 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testOpen().
+	 * Test open method with no filename.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testOpenNoFilenameException()
 	{
@@ -123,12 +131,12 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testOpen().
+	 * Test open method with invalid filename.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testOpenInvlaidFilenameException()
 	{
@@ -136,12 +144,12 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testOpen().
+	 * Test open method with invalid string name.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testOpenInvlaidStringnameException()
 	{
@@ -149,19 +157,20 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testOpen().
+	 * Test open method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testOpen()
 	{
-        // Test simple file open
-        $name = 'tempFile';
-		$path = __DIR__ . '/tmp/';
+		// Test simple file open
+		$name = 'tempFile';
+		$path = vfsStream::url('root');
 		$data = 'Lorem ipsum dolor sit amet';
-		$filename = $path . $name;		
+		$filename = $path . '/' . $name;
+
 		// Create a temp file to test open operation
 		file_put_contents($filename, $data);
 
@@ -206,12 +215,12 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testClose().
+	 * Test closing of a stream before opening it.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testCloseBeforeOpeningException()
 	{
@@ -221,12 +230,12 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testEof().
+	 * Test eof not found exception.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testEofNotOpenException()
 	{
@@ -234,11 +243,11 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testEof().
+	 * Test eof method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testEof()
 	{
@@ -262,12 +271,12 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testFilesize().
+	 * Test file size method exception - File not open.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testFilesizeNotOpen()
 	{
@@ -275,11 +284,11 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testFilesize().
+	 * Test filesize method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testFilesize()
 	{
@@ -306,12 +315,12 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testGets().
+	 * Test gets method's stream not open exception.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testGetsNotOpen()
 	{
@@ -319,11 +328,11 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testGets().
+	 * Test gets method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testGets()
 	{
@@ -347,12 +356,12 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testGets().
+	 * Test gets invalid length exception.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testGetsInvalidLength()
 	{
@@ -368,12 +377,12 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testRead().
+	 * Test read method's stream not open exception.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testReadNotOpen()
 	{
@@ -381,11 +390,11 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testRead().
+	 * Test read method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testRead()
 	{
@@ -409,18 +418,25 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testSeek().
+	 * Test seek method stream not open exception.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testSeekNotOpen()
 	{
 		$this->object->seek(0);
 	}
 
+	/**
+	 * Test data for seek test.
+	 *
+	 * @return array
+	 *
+	 * @since __VERSION_NO__
+	 */
 	public function dataSeek()
 	{
 		return array(
@@ -437,12 +453,17 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
+	 * Test seek method.
 	 *
-	 * @todo Implement testSeek().
+	 * @param   int  $initial  Intial position of the pointer
+	 * @param   int  $offset   Offset to seek
+	 * @param   int  $whence   Seek type
+	 * @param   int  $expPos   Expected pointer position
+	 *
+	 * @return void
 	 *
 	 * @dataProvider dataSeek
-	 * @return void
+	 * @since __VERSION_NO__
 	 */
 	public function testSeek($initial, $offset, $whence, $expPos)
 	{
@@ -466,12 +487,12 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testTell().
+	 * Test tell method stream not open exception.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testTellNotOpen()
 	{
@@ -479,12 +500,12 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testWrite().
+	 * Test write method stream not open exception.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testWriteNotOpen()
 	{
@@ -493,23 +514,26 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testWrite().
+	 * Test write method with readonly mode excepton.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testWriteReadonly()
 	{
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp/';
+		$path = vfsStream::url('root');
 		$data = 'Lorem ipsum dolor sit amet';
-		$filename = $path . $name;
+		$filename = $path . '/' . $name;
+
 		// Create a temp file to test copy operation
 		file_put_contents($filename, $data);
 
 		$object = Stream::getStream();
+
+		// Open stream in reading mode.
 		$object->open($filename);
 
 		$data = 'foobar';
@@ -521,20 +545,17 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testWrite().
+	 * Test write method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testWrite()
 	{
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp/';
-		$data = 'Lorem ipsum dolor sit amet';
-		$filename = $path . $name;
-		// Create a temp file to test copy operation
-		file_put_contents($filename, $data);
+		$path = vfsStream::url('root');
+		$filename = $path . '/' . $name;
 
 		$object = Stream::getStream();
 		$object->open($filename, 'w');
@@ -544,21 +565,21 @@ class StreamTest extends PHPUnit_Framework_TestCase
 
 		$object->close();
 
-		$this->assertEquals(
-			$data,
-			file_get_contents($filename)
+		$this->assertStringEqualsFile(
+			$filename,
+			$data
 		);
 
 		unlink($filename);
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testChmod().
+	 * Test chmod with no filename exception.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testChmodNoFilename()
 	{
@@ -566,9 +587,7 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testChmod().
+	 * Test chmod method.
 	 *
 	 * @return void
 	 */
@@ -578,10 +597,11 @@ class StreamTest extends PHPUnit_Framework_TestCase
 		$path = __DIR__ . '/tmp/';
 		$data = 'Lorem ipsum dolor sit amet';
 		$filename = $path . $name;
+
 		// Create a temp file to test copy operation
 		file_put_contents($filename, $data);
 
-		$this->assertTrue($this->object->chmod($filename,0777));
+		$this->assertTrue($this->object->chmod($filename, 0777));
 
 		$this->assertEquals(
 			'0777',
@@ -605,12 +625,12 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testGet_meta_data().
+	 * Test get_meta_data stream not open exception.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testGet_meta_dataNotOpen()
 	{
@@ -618,18 +638,17 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testGet_meta_data().
+	 * Test get_meta_data method.
 	 *
 	 * @return void
 	 */
 	public function testGet_meta_data()
 	{
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp/';
+		$path = vfsStream::url('root');
 		$data = 'Lorem ipsum dolor sit amet';
-		$filename = $path . $name;
+		$filename = $path . '/' . $name;
+
 		// Create a temp file to test copy operation
 		file_put_contents($filename, $data);
 
@@ -649,16 +668,16 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement test_buildContext().
+	 * Test buildContext method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function test_buildContext()
 	{
 		$contextOptions = array();
-		
+
 		TestHelper::setValue($this->object, 'contextOptions', $contextOptions);
 		$this->object->_buildContext();
 
@@ -668,13 +687,13 @@ class StreamTest extends PHPUnit_Framework_TestCase
 		);
 
 		$contextOptions = array(
-			'http'=>array(
-				'method'=>"GET",
-				'header'=>"Accept-language: en\r\n" .
+			'http' => array(
+				'method' => "GET",
+				'header' => "Accept-language: en\r\n" .
 					"Cookie: foo=bar\r\n"
 			)
 		);
-		
+
 		TestHelper::setValue($this->object, 'contextOptions', $contextOptions);
 		$this->object->_buildContext();
 
@@ -685,18 +704,18 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testSetContextOptions().
+	 * Test setContextOptions method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testSetContextOptions()
 	{
 		$contextOptions = array(
-			'http'=>array(
-				'method'=>"GET",
-				'header'=>"Accept-language: en\r\n" .
+			'http' => array(
+				'method' => "GET",
+				'header' => "Accept-language: en\r\n" .
 					"Cookie: foo=bar\r\n"
 			)
 		);
@@ -710,11 +729,11 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testAddContextEntry().
+	 * Test addContextEntry method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testAddContextEntry()
 	{
@@ -728,11 +747,11 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testDeleteContextEntry().
+	 * Test deleteContextEntry method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testDeleteContextEntry()
 	{
@@ -742,12 +761,12 @@ class StreamTest extends PHPUnit_Framework_TestCase
 				'rab' => 'Rab'
 			)
 		);
-		
+
 		TestHelper::setValue($this->object, 'contextOptions', $contextOptions);
-		
+
 		$this->object->deleteContextEntry('foo', 'bar');
 		$actual = TestHelper::getValue($this->object, 'contextOptions');
-		
+
 		$this->assertArrayHasKey(
 			'foo',
 			$actual
@@ -773,20 +792,21 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testApplyContextToStream().
+	 * Test applyContextToStream method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testApplyContextToStream()
 	{
 		$this->assertFalse($this->object->applyContextToStream());
 
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp/';
+		$path = vfsStream::url('root');
 		$data = 'Lorem ipsum dolor sit amet';
-		$filename = $path . $name;
+		$filename = $path . '/' . $name;
+
 		// Create a temp file to test copy operation
 		file_put_contents($filename, $data);
 
@@ -797,21 +817,22 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testAppendFilter().
+	 * Test appendFilter method.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testAppendFilter()
 	{
 		$this->assertFalse($this->object->appendFilter("string.rot13"));
 
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp/';
+		$path = vfsStream::url('root');
 		$data = 'Lorem ipsum dolor sit amet';
-		$filename = $path . $name;
+		$filename = $path . '/' . $name;
+
 		// Create a temp file to test copy operation
 		file_put_contents($filename, $data);
 
@@ -836,21 +857,22 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testPrependFilter().
+	 * Test prependFilter method.
 	 *
 	 * @return void
+	 *
 	 * @expectedException RuntimeException
+	 * @since __VERSION_NO__
 	 */
 	public function testPrependFilter()
 	{
 		$this->assertFalse($this->object->prependFilter("string.rot13"));
 
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp/';
+		$path = vfsStream::url('root');
 		$data = 'Lorem ipsum dolor sit amet';
-		$filename = $path . $name;
+		$filename = $path . '/' . $name;
+
 		// Create a temp file to test copy operation
 		file_put_contents($filename, $data);
 
@@ -882,6 +904,8 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 * @todo Implement testRemoveFilter().
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testRemoveFilter()
 	{
@@ -892,26 +916,29 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testCopy().
+	 * Test copy method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testCopy()
 	{
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp';
+		$path = vfsStream::url('root');
 		$copiedFileName = 'copiedTempFile';
 		$data = 'Lorem ipsum dolor sit amet';
 
 		// Create a temp file to test copy operation
 		file_put_contents($path . '/' . $name, $data);
 
-		$this->assertThat(
+		$this->assertTrue(
 			$this->object->copy($path . '/' . $name, $path . '/' . $copiedFileName),
-			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should copy successfully.'
+		);
+		$this->assertFileEquals(
+			$path . '/' . $name,
+			$path . '/' . $copiedFileName
 		);
 		unlink($path . '/' . $copiedFileName);
 
@@ -919,11 +946,11 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testMove().
+	 * Test move mthod.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testMove()
 	{
@@ -946,26 +973,28 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testDelete().
+	 * Test delete method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testDelete()
 	{
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp';
+		$path = vfsStream::url('root');
 		$data = 'Lorem ipsum dolor sit amet';
 
 		// Create a temp file to test copy operation
 		file_put_contents($path . '/' . $name, $data);
 
+		$this->assertFileExists($path . '/' . $name);
 		$this->assertThat(
 			$this->object->delete($path . '/' . $name),
 			$this->isTrue(),
 			'Line:' . __LINE__ . ' File should deleted successfully.'
 		);
+		$this->assertFileNotExists($path . '/' . $name);
 
 		@unlink($path . '/' . $name);
 	}
@@ -976,6 +1005,8 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 * @todo Implement testUpload().
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testUpload()
 	{
@@ -986,30 +1017,38 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testWriteFile().
+	 * Test writeFile method.
 	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testWriteFile()
 	{
 		$name = 'tempFile';
-		$path = __DIR__ . '/tmp';
+		$path = vfsStream::url('root');
 		$data = 'Lorem ipsum dolor sit amet';
 
 		$this->assertTrue(
 			$this->object->writeFile($path . '/' . $name, $data)
 		);
 
-		$this->assertEquals(
-			$data,
-			file_get_contents($path . '/' . $name)
+		$this->assertFileExists($path . '/' . $name);
+		$this->assertStringEqualsFile(
+			$path . '/' . $name,
+			$data
 		);
 
 		unlink($path . '/' . $name);
 	}
 
+	/**
+	 * Test data for _getFilename test
+	 *
+	 * @return void
+	 *
+	 * @since __VERSION_NO__
+	 */
 	public function data_getFilename()
 	{
 		return array(
@@ -1027,11 +1066,20 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
+	 * Test _getFilename method.
 	 *
-	 * @todo Implement test_getFilename().
-	 * @dataProvider data_getFilename
+	 * @param   string   $wPrefix     Write prefix
+	 * @param   string   $rPrefix     Read prefix
+	 * @param   string   $filename    Filename
+	 * @param   string   $mode        File open mode
+	 * @param   boolean  $use_prefix  Whether to use prefix or not
+	 * @param   boolean  $relative    filename is relative or not
+	 * @param   string   $expected    Expected path
+	 *
 	 * @return void
+	 *
+	 * @dataProvider data_getFilename
+	 * @since __VERSION_NO__
 	 */
 	public function test_getFilename($wPrefix, $rPrefix, $filename, $mode, $use_prefix,
 		$relative, $expected)
@@ -1048,9 +1096,9 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @todo Implement testGetFileHandle().
-	 *
 	 * @return void
+	 *
+	 * @since __VERSION_NO__
 	 */
 	public function testGetFileHandle()
 	{

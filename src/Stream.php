@@ -1382,8 +1382,8 @@ class Stream
 			$tmode = trim($mode, 'btf123456789');
 
 			$stream = explode("://", $filename, 2);
-            $scheme = '';
-            $filename = $stream[0];
+			$scheme = '';
+			$filename = $stream[0];
 
 			if (count($stream) >= 2)
 			{
@@ -1412,7 +1412,7 @@ class Stream
 				$filename = $this->readprefix . $filename;
 			}
 
-                $filename = $scheme . $filename;
+			$filename = $scheme . $filename;
 		}
 
 		return $filename;
