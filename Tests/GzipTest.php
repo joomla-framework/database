@@ -79,7 +79,6 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the constructor.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Gzip::__construct
@@ -104,7 +103,6 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extract Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Gzip::extract
@@ -135,7 +133,6 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extract Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Gzip::extract
@@ -170,7 +167,6 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the isSupported Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Gzip::isSupported

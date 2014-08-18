@@ -79,7 +79,6 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the constructor.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Zip::__construct
@@ -135,7 +134,6 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extractNative Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Zip::extractNative
@@ -169,7 +167,6 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extractCustom Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Zip::extractCustom
@@ -205,7 +202,6 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extract Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Zip::extract
@@ -238,8 +234,6 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extract Method exception on non-existent archive file.
 	 *
-	 * @group   JArchive
-	 *
 	 * @covers             Joomla\Archive\Zip::extract
 	 * @expectedException  RuntimeException
 	 * @return  void
@@ -264,7 +258,6 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the hasNativeSupport Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Zip::hasNativeSupport
@@ -280,7 +273,6 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the isSupported Method.
 	 *
-	 * @group    JArchive
 	 * @return   void
 	 *
 	 * @covers   Joomla\Archive\Zip::isSupported

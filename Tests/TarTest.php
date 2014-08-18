@@ -79,7 +79,6 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the constructor.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Tar::__construct
@@ -104,7 +103,6 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extract Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Tar::extract
@@ -131,7 +129,6 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the isSupported Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Tar::isSupported

@@ -79,7 +79,6 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the constructor.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Bzip2::__construct
@@ -104,7 +103,6 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extract Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Bzip2::extract
@@ -135,7 +133,6 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extract Method.
 	 *
-	 * @group   JArchive
 	 * @return  Joomla\Archive\Bzip2::extract
 	 */
 	public function testExtractWithStreams()
@@ -167,7 +164,6 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the isSupported Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Bzip2::isSupported
