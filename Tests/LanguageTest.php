@@ -4,7 +4,6 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-require_once __DIR__ . '/JLanguageInspector.php';
 require_once __DIR__ . '/data/language/en-GB/en-GB.localise.php';
 
 use Joomla\Language\Language;
@@ -19,7 +18,10 @@ use Joomla\Test\TestHelper;
 class LanguageTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var Joomla\Language\Language
+	 * Test language object
+	 *
+	 * @var    Joomla\Language\Language
+	 * @since  1.0
 	 */
 	protected $object;
 
@@ -27,7 +29,9 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	protected function setUp()
 	{
@@ -43,14 +47,15 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 		Folder::copy(__DIR__ . '/data/language', $path);
 
 		$this->object = new Language;
-		$this->inspector = new JLanguageInspector('', true);
 	}
 
 	/**
 	 * Tears down the fixture, for example, closes a network connection.
 	 * This method is called after a test is executed.
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	protected function tearDown()
 	{
@@ -60,12 +65,14 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
+	 * Tests retrieving an instance of the Language object
 	 *
-	 * @covers Joomla\Language\Language::getInstance
-	 * @covers Joomla\Language\Language::getLanguage
+	 * @covers  Joomla\Language\Language::getInstance
+	 * @covers  Joomla\Language\Language::getLanguage
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetInstanceAndLanguage()
 	{
@@ -90,9 +97,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::__construct
+	 * @covers  Joomla\Language\Language::__construct
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testConstruct()
 	{
@@ -108,6 +117,7 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 		// @todo check the instanciating new classes without brackets sniff
 		$instance = new Language(null, false);
 		// @codingStandardsIgnoreEnd
+
 		$this->assertInstanceOf('Joomla\Language\Language', $instance);
 		$this->assertFalse($instance->getDebug());
 
@@ -117,11 +127,13 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
+	 * Tests the _ method
 	 *
-	 * @covers Joomla\Language\Language::_
+	 * @covers  Joomla\Language\Language::_
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function test_()
 	{
@@ -190,11 +202,13 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
+	 * Tests the _ method with strings loaded and debug enabled
 	 *
-	 * @covers Joomla\Language\Language::_
+	 * @covers  Joomla\Language\Language::_
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function test_WithLoadedStringsAndDebug()
 	{
@@ -242,11 +256,13 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
+	 * Tests the transliterate function
 	 *
-	 * @covers Joomla\Language\Language::transliterate
+	 * @covers  Joomla\Language\Language::transliterate
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testTransliterate()
 	{
@@ -313,11 +329,13 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
+	 * Tests the getTransliterator function
 	 *
-	 * @covers Joomla\Language\Language::getTransliterator
+	 * @covers  Joomla\Language\Language::getTransliterator
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetTransliterator()
 	{
@@ -330,12 +348,13 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
+	 * Tests the setTransliterator function
 	 *
-	 * @covers Joomla\Language\Language::setTransliterator
-	 * @todo Implement testSetTransliterator().
+	 * @covers  Joomla\Language\Language::setTransliterator
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testSetTransliterator()
 	{
@@ -390,11 +409,13 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
+	 * Tests the getPluralSuffixes method
 	 *
-	 * @covers Joomla\Language\Language::getPluralSuffixes
+	 * @covers  Joomla\Language\Language::getPluralSuffixes
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetPluralSuffixes()
 	{
@@ -421,9 +442,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getPluralSuffixesCallback
+	 * @covers  Joomla\Language\Language::getPluralSuffixesCallback
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetPluralSuffixesCallback()
 	{
@@ -437,10 +460,12 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::setPluralSuffixesCallback
-	 * @covers Joomla\Language\Language::getPluralSuffixesCallback
+	 * @covers  Joomla\Language\Language::setPluralSuffixesCallback
+	 * @covers  Joomla\Language\Language::getPluralSuffixesCallback
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testSetPluralSuffixesCallback()
 	{
@@ -499,9 +524,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getIgnoredSearchWords
+	 * @covers  Joomla\Language\Language::getIgnoredSearchWords
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetIgnoredSearchWords()
 	{
@@ -523,9 +550,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getIgnoredSearchWordsCallback
+	 * @covers  Joomla\Language\Language::getIgnoredSearchWordsCallback
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetIgnoredSearchWordsCallback()
 	{
@@ -539,10 +568,12 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::setIgnoredSearchWordsCallback
-	 * @covers Joomla\Language\Language::getIgnoredSearchWordsCallback
+	 * @covers  Joomla\Language\Language::setIgnoredSearchWordsCallback
+	 * @covers  Joomla\Language\Language::getIgnoredSearchWordsCallback
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testSetIgnoredSearchWordsCallback()
 	{
@@ -602,9 +633,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getLowerLimitSearchWord
+	 * @covers  Joomla\Language\Language::getLowerLimitSearchWord
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetLowerLimitSearchWord()
 	{
@@ -627,9 +660,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getLowerLimitSearchWordCallback
+	 * @covers  Joomla\Language\Language::getLowerLimitSearchWordCallback
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetLowerLimitSearchWordCallback()
 	{
@@ -643,10 +678,12 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::setLowerLimitSearchWordCallback
-	 * @covers Joomla\Language\Language::getLowerLimitSearchWordCallback
+	 * @covers  Joomla\Language\Language::setLowerLimitSearchWordCallback
+	 * @covers  Joomla\Language\Language::getLowerLimitSearchWordCallback
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testSetLowerLimitSearchWordCallback()
 	{
@@ -706,9 +743,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getUpperLimitSearchWord
+	 * @covers  Joomla\Language\Language::getUpperLimitSearchWord
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetUpperLimitSearchWord()
 	{
@@ -731,9 +770,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getUpperLimitSearchWordCallback
+	 * @covers  Joomla\Language\Language::getUpperLimitSearchWordCallback
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetUpperLimitSearchWordCallback()
 	{
@@ -747,10 +788,12 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::setUpperLimitSearchWordCallback
-	 * @covers Joomla\Language\Language::getUpperLimitSearchWordCallback
+	 * @covers  Joomla\Language\Language::setUpperLimitSearchWordCallback
+	 * @covers  Joomla\Language\Language::getUpperLimitSearchWordCallback
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testSetUpperLimitSearchWordCallback()
 	{
@@ -810,9 +853,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getSearchDisplayedCharactersNumber
+	 * @covers  Joomla\Language\Language::getSearchDisplayedCharactersNumber
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetSearchDisplayedCharactersNumber()
 	{
@@ -835,9 +880,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getSearchDisplayedCharactersNumberCallback
+	 * @covers  Joomla\Language\Language::getSearchDisplayedCharactersNumberCallback
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetSearchDisplayedCharactersNumberCallback()
 	{
@@ -851,10 +898,12 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::setSearchDisplayedCharactersNumberCallback
-	 * @covers Joomla\Language\Language::getSearchDisplayedCharactersNumberCallback
+	 * @covers  Joomla\Language\Language::setSearchDisplayedCharactersNumberCallback
+	 * @covers  Joomla\Language\Language::getSearchDisplayedCharactersNumberCallback
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testSetSearchDisplayedCharactersNumberCallback()
 	{
@@ -914,10 +963,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::exists
-	 * @todo Implement testExists().
+	 * @covers  Joomla\Language\Language::exists
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testExists()
 	{
@@ -939,10 +989,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::load
-	 * @todo Implement testLoad().
+	 * @covers  Joomla\Language\Language::load
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testLoad()
 	{
@@ -979,9 +1030,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::loadLanguage
+	 * @covers  Joomla\Language\Language::loadLanguage
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testLoadLanguage()
 	{
@@ -1013,13 +1066,15 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::parse
+	 * @covers  Joomla\Language\Language::parse
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testParse()
 	{
-		$strings = $this->inspector->parse(__DIR__ . '/data/good.ini');
+		$strings = TestHelper::invoke($this->object, 'parse', __DIR__ . '/data/good.ini');
 
 		$this->assertNotEmpty(
 			$strings,
@@ -1032,7 +1087,7 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 			'Line: ' . __LINE__ . ' test that the strings were parsed correctly.'
 		);
 
-		$strings = $this->inspector->parse(__DIR__ . '/data/bad.ini');
+		$strings = TestHelper::invoke($this->object, 'parse', __DIR__ . '/data/bad.ini');
 
 		$this->assertEmpty(
 			$strings,
@@ -1043,9 +1098,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::get
+	 * @covers  Joomla\Language\Language::get
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGet()
 	{
@@ -1074,9 +1131,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getCallerInfo
+	 * @covers  Joomla\Language\Language::getCallerInfo
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetCallerInfo()
 	{
@@ -1092,9 +1151,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getName
+	 * @covers  Joomla\Language\Language::getName
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetName()
 	{
@@ -1107,9 +1168,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getPaths
+	 * @covers  Joomla\Language\Language::getPaths
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetPaths()
 	{
@@ -1135,9 +1198,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getErrorFiles
+	 * @covers  Joomla\Language\Language::getErrorFiles
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetErrorFiles()
 	{
@@ -1151,9 +1216,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getTag
+	 * @covers  Joomla\Language\Language::getTag
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetTag()
 	{
@@ -1172,9 +1239,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::isRTL
+	 * @covers  Joomla\Language\Language::isRTL
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testIsRTL()
 	{
@@ -1191,10 +1260,12 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::setDebug
-	 * @covers Joomla\Language\Language::getDebug
+	 * @covers  Joomla\Language\Language::setDebug
+	 * @covers  Joomla\Language\Language::getDebug
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetSetDebug()
 	{
@@ -1251,9 +1322,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getDefault
+	 * @covers  Joomla\Language\Language::getDefault
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetDefault()
 	{
@@ -1267,9 +1340,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::setDefault
+	 * @covers  Joomla\Language\Language::setDefault
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testSetDefault()
 	{
@@ -1285,10 +1360,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getOrphans
-	 * @todo Implement testGetOrphans().
+	 * @covers  Joomla\Language\Language::getOrphans
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetOrphans()
 	{
@@ -1312,10 +1388,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getUsed
-	 * @todo Implement testGetUsed().
+	 * @covers  Joomla\Language\Language::getUsed
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetUsed()
 	{
@@ -1339,10 +1416,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::hasKey
-	 * @todo Implement testHasKey().
+	 * @covers  Joomla\Language\Language::hasKey
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testHasKey()
 	{
@@ -1360,16 +1438,17 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getMetadata
-	 * @todo Implement testGetMetadata().
+	 * @covers  Joomla\Language\Language::getMetadata
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetMetadata()
 	{
 		// Language doesn't exist, retun NULL
 		$this->assertNull(
-			$this->inspector->getMetadata('es-ES')
+		     TestHelper::invoke($this->object, 'getMetadata', 'es-ES')
 		);
 
 		$localeString = 'en_GB.utf8, en_GB.UTF-8, en_GB, eng_GB, en, english, english-uk, uk, gbr, britain, england, great britain, ' .
@@ -1388,16 +1467,18 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 		// Language exists, returns array with values
 		$this->assertEquals(
 			$options,
-			$this->inspector->getMetadata('en-GB')
+			TestHelper::invoke($this->object, 'getMetadata', 'en-GB')
 		);
 	}
 
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getKnownLanguages
+	 * @covers  Joomla\Language\Language::getKnownLanguages
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetKnownLanguages()
 	{
@@ -1429,9 +1510,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getLanguagePath
+	 * @covers  Joomla\Language\Language::getLanguagePath
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetLanguagePath()
 	{
@@ -1462,9 +1545,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::setLanguage
+	 * @covers  Joomla\Language\Language::setLanguage
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testSetLanguage()
 	{
@@ -1484,10 +1569,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getLocale
-	 * @todo Implement testGetLocale().
+	 * @covers  Joomla\Language\Language::getLocale
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetLocale()
 	{
@@ -1505,9 +1591,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::getFirstDay
+	 * @covers  Joomla\Language\Language::getFirstDay
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetFirstDay()
 	{
@@ -1521,9 +1609,11 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Language::parseLanguageFiles
+	 * @covers  Joomla\Language\Language::parseLanguageFiles
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testParseLanguageFiles()
 	{
@@ -1554,7 +1644,9 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @covers  Joomla\Language\Language::parseXMLLanguageFile
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testParseXMLLanguageFile()
 	{
@@ -1588,7 +1680,9 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 * @covers  Joomla\Language\Language::parseXMLLanguageFile
 	 * @expectedException  RuntimeException
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testParseXMLLanguageFileException()
 	{
