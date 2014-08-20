@@ -90,4 +90,22 @@ abstract class En_GBLocalise
 	{
 		return 200;
 	}
+
+	/**
+	 * Custom translitrate fucntion to use.
+	 *
+	 * @param   string  $string  String to transliterate
+	 *
+	 * @return  integer  The number of chars to display when searching.
+	 *
+	 * @since   1.0
+	 */
+	public static function transliterate($string)
+	{
+		return str_replace(
+			array('a', 'c', 'e', 'g'),
+			array('b', 'd', 'f', 'h'),
+			$string
+		);
+	}
 }

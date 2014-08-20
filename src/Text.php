@@ -285,8 +285,6 @@ class Text
 
 			return call_user_func_array('sprintf', $args);
 		}
-
-		return '';
 	}
 
 	/**
@@ -322,8 +320,6 @@ class Text
 
 			return call_user_func_array('printf', $args);
 		}
-
-		return '';
 	}
 
 	/**
@@ -339,26 +335,26 @@ class Text
 	 */
 	public static function script($string = null, $jsSafe = false, $interpretBackSlashes = true)
 	{
-		if (is_array($jsSafe))
-		{
-			if (array_key_exists('interpretBackSlashes', $jsSafe))
-			{
-				$interpretBackSlashes = (boolean) $jsSafe['interpretBackSlashes'];
-			}
-
-			if (array_key_exists('jsSafe', $jsSafe))
-			{
-				$jsSafe = (boolean) $jsSafe['jsSafe'];
-			}
-			else
-			{
-				$jsSafe = false;
-			}
-		}
-
 		// Add the string to the array if not null.
 		if ($string !== null)
 		{
+			if (is_array($jsSafe))
+			{
+				if (array_key_exists('interpretBackSlashes', $jsSafe))
+				{
+					$interpretBackSlashes = (boolean) $jsSafe['interpretBackSlashes'];
+				}
+
+				if (array_key_exists('jsSafe', $jsSafe))
+				{
+					$jsSafe = (boolean) $jsSafe['jsSafe'];
+				}
+				else
+				{
+					$jsSafe = false;
+				}
+			}
+
 			// Normalize the key and translate the string.
 			self::$strings[strtoupper($string)] = static::getLanguage()->_($string, $jsSafe, $interpretBackSlashes);
 		}
