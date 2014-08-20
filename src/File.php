@@ -121,6 +121,7 @@ class File
 		foreach ($files as $file)
 		{
 			$file = Path::clean($file);
+			$filename = basename($file);
 
 			if (!Path::canChmod($file))
 			{
@@ -135,8 +136,6 @@ class File
 			// as long as the owner is either the webserver or the ftp
 			if (!@ unlink($file))
 			{
-				$filename = basename($file);
-
 				throw new FilesystemException(__METHOD__ . ': Failed deleting ' . $filename);
 			}
 		}
