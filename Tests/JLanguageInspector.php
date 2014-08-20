@@ -1,22 +1,24 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 /**
- * Inspector for the JLanguage class.
+ * Inspector for the \Joomla\Language\Language class.
  *
  * @since  1.0
  */
-class JLanguageInspector extends Joomla\Language\Language
+class JLanguageInspector extends \Joomla\Language\Language
 {
 	/**
 	 * Method for inspecting protected variables.
 	 *
 	 * @param   string  $name  Property name.
 	 *
-	 * @return mixed The value of the class variable.
+	 * @return  mixed  The value of the class variable.
+	 *
+	 * @since   1.0
 	 */
 	public function __get($name)
 	{
@@ -38,7 +40,9 @@ class JLanguageInspector extends Joomla\Language\Language
 	 * @param   string  $property  The name of the class property.
 	 * @param   string  $value     The value of the class property.
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function __set($property, $value)
 	{
@@ -51,7 +55,9 @@ class JLanguageInspector extends Joomla\Language\Language
 	 * @param   string      $name        Name of the method to invoke
 	 * @param   array|bool  $parameters  Parameters to be handed over to the original method
 	 *
-	 * @return mixed The return value of the method
+	 * @return  mixed The return value of the method
+	 *
+	 * @since   1.0
 	 */
 	public function __call($name, $parameters = false)
 	{
@@ -61,7 +67,7 @@ class JLanguageInspector extends Joomla\Language\Language
 	/**
 	 * Allows the internal singleton to be set and mocked.
 	 *
-	 * @param   JLanguage  $instance  A language object.
+	 * @param   \Joomla\Language\Language  $instance  A language object.
 	 *
 	 * @return  void
 	 *
