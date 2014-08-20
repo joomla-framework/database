@@ -109,31 +109,60 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test__construct()
 	{
-		$this->assertAttributeInstanceOf('Joomla\\Input\\Input', 'input', $this->instance);
+		$this->assertAttributeInstanceOf(
+			'Joomla\\Input\\Input',
+			'input',
+			$this->instance
+		);
+	}
+
+	/**
+	 * Test data the Joomla\Router\Router::addMap method.
+	 *
+	 * @return  array
+	 *
+	 * @since   1.0
+	 */
+	public function dataAddMap()
+	{
+		return array(
+			// Note: route, controller, regex, vars, controller
+			array('foo', 'FooCont', '^foo$', array(), 'FooCont'),
+			array('/arts/:', 'ArtCont', '^arts/[^/]*$', array(), 'ArtCont'),
+			array('/art/:art_id', 'ArtCont', '^art/([^/]*)$', array('art_id'), 'ArtCont'),
+			array('/art/\\:art_id', 'ArtCont', '^art/\:art_id$', array(), 'ArtCont'),
+			array('/arts/*', 'ArtCont', '^arts/.*$', array(), 'ArtCont'),
+			array('/arts/*tags', 'ArtCont', '^arts/(.*)$', array('tags'), 'ArtCont'),
+			array('/arts/\\*tags', 'ArtCont', '^arts/\*tags$', array(), 'ArtCont'),
+		);
 	}
 
 	/**
 	 * Tests the Joomla\Router\Router::addMap method.
 	 *
+	 * @param   string  $route       The route pattern to use for matching.
+	 * @param   string  $controller  The controller name to map to the given pattern.
+	 * @param   string  $regex       The generated regex to match.
+	 * @param   array   $vars        Variables captured from route
+	 * @param   string  $called      Controller called.
+	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Router\Router::addMap
-	 * @since   1.0
+	 * @covers        Joomla\Router\Router::addMap
+	 * @dataProvider  dataAddMap
+	 * @since         1.0
 	 */
-	public function testAddMap()
+	public function testAddMap($route, $controller, $regex, $vars, $called)
 	{
-		$this->assertAttributeEmpty('maps', $this->instance);
-		$this->instance->addMap('foo', 'MyApplicationFoo');
-		$this->assertAttributeEquals(
+		$this->instance->addMap($route, $controller);
+
+		$this->assertContains(
 			array(
-				array(
-					'regex' => chr(1) . '^foo$' . chr(1),
-					'vars' => array(),
-					'controller' => 'MyApplicationFoo'
-				)
+				'regex' => chr(1) . $regex . chr(1),
+				'vars' => $vars,
+				'controller' => $called
 			),
-			'maps',
-			$this->instance
+			TestHelper::getValue($this->instance, 'maps')
 		);
 	}
 

@@ -175,15 +175,15 @@ class RestRouterTest extends \PHPUnit_Framework_TestCase
 	public function testMethodInPostRequest()
 	{
 		// Check the defaults
-		$this->assertEquals(false, TestHelper::invoke($this->instance, 'isMethodInPostRequest'));
+		$this->assertFalse(TestHelper::invoke($this->instance, 'isMethodInPostRequest'));
 
 		// Check setting true
 		TestHelper::invoke($this->instance, 'setMethodInPostRequest', true);
-		$this->assertEquals(true, TestHelper::invoke($this->instance, 'isMethodInPostRequest'));
+		$this->assertTrue(TestHelper::invoke($this->instance, 'isMethodInPostRequest'));
 
 		// Check setting false
 		TestHelper::invoke($this->instance, 'setMethodInPostRequest', false);
-		$this->assertEquals(false, TestHelper::invoke($this->instance, 'isMethodInPostRequest'));
+		$this->assertFalse(TestHelper::invoke($this->instance, 'isMethodInPostRequest'));
 	}
 
 	/**
