@@ -197,6 +197,7 @@ class FolderTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
+	 * @requires PHP 5.4
 	 * @since   1.0
 	 */
 	public function testDelete()

@@ -549,6 +549,7 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return void
 	 *
+	 * @requires PHP 5.4
 	 * @since __VERSION_NO__
 	 */
 	public function testWrite()
@@ -920,6 +921,7 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return void
 	 *
+	 * @requires PHP 5.4
 	 * @since __VERSION_NO__
 	 */
 	public function testCopy()
@@ -1021,6 +1023,7 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return void
 	 *
+	 * @requires PHP 5.4
 	 * @since __VERSION_NO__
 	 */
 	public function testWriteFile()

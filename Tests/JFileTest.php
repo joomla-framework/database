@@ -155,7 +155,7 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test makeCopy method.
+	 * Test copy method.
 	 *
 	 * @return  void
 	 *
@@ -194,8 +194,26 @@ class JFileTest extends PHPUnit_Framework_TestCase
 			$path . '/' . $copiedFileName,
 			'Line:' . __LINE__ . ' Content should remain intact after copy.'
 		);
+	}
 
-		// Copy using streams.
+	/**
+	 * Test copy method using streams.
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\Filesystem\File::copy
+	 * @requires PHP 5.4
+	 * @since   1.0
+	 */
+	public function testCopyUsingStreams()
+	{
+		$name = 'tempFile';
+		$path = vfsStream::url('root');
+		$data = 'Lorem ipsum dolor sit amet';
+
+		// Create a temp file to test copy operation
+		file_put_contents($path . '/' . $name, $data);
+
 		$copiedFileName = 'foobar';
 		$this->assertTrue(
 			File::copy($name, $copiedFileName, $path, true),
@@ -235,8 +253,9 @@ class JFileTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return void
 	 *
-	 * @covers        Joomla\Filesystem\File::delete
-	 * @since         1.0
+	 * @covers    Joomla\Filesystem\File::delete
+	 * @requires  PHP 5.4
+	 * @since     1.0
 	 */
 	public function testDelete()
 	{
@@ -292,8 +311,29 @@ class JFileTest extends PHPUnit_Framework_TestCase
 
 		$this->assertFileNotExists($path . '/' . $movedFileName);
 		$this->assertFileExists($path . '/' . $name);
+	}
 
-		// Using streams.
+	/**
+	 * Test move method using streams.
+	 *
+	 * @return void
+	 *
+	 * @covers   Joomla\Filesystem\File::move
+	 * @requires PHP 5.4
+	 * @since    1.0
+	 */
+	public function testMoveUsingStreams()
+	{
+		$name = 'tempFile';
+		$path = vfsStream::url('root');
+		$movedFileName = 'movedTempFile';
+		$data = 'Lorem ipsum dolor sit amet';
+
+		// Create a temp file to test copy operation
+		file_put_contents($path . '/' . $name, $data);
+
+		$this->assertFileExists($path . '/' . $name);
+
 		$this->assertTrue(
 			File::move($name, $movedFileName, $path, true),
 			'Line:' . __LINE__ . ' File should be moved successfully.'
@@ -327,19 +367,34 @@ class JFileTest extends PHPUnit_Framework_TestCase
 			$data
 		);
 
-		// Create a file on pre existing path by using streams.
+		// Create a file on non-existing path.
 		$this->assertTrue(
-			File::write($path . '/' . $name, $data, true),
+			File::write($path . '/TempFolder/' . $name, $data),
 			'Line:' . __LINE__ . ' File should be written successfully.'
 		);
 		$this->assertStringEqualsFile(
 			$path . '/' . $name,
 			$data
 		);
+	}
 
-		// Create a file on non-existing path.
+	/**
+	 * Test write method using streams.
+	 *
+	 * @return void
+	 *
+	 * @covers        Joomla\Filesystem\File::write
+	 * @requires PHP 5.4
+	 * @since         1.0
+	 */
+	public function testWriteUsingStreams()
+	{
+		$name = 'tempFile';
+		$path = vfsStream::url('root');
+		$data = 'Lorem ipsum dolor sit amet';
+
 		$this->assertTrue(
-			File::write($path . '/TempFolder/' . $name, $data),
+			File::write($path . '/' . $name, $data, true),
 			'Line:' . __LINE__ . ' File should be written successfully.'
 		);
 		$this->assertStringEqualsFile(
