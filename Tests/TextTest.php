@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -9,14 +9,15 @@ use Joomla\Language\Language;
 use Joomla\Test\TestHelper;
 
 /**
- * Test class for JText.
+ * Test class for \Joomla\Language\Text.
  *
  * @since  1.0
  */
 class TextTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var Joomla\Language\Text
+	 * @var    Joomla\Language\Text
+	 * @since  1.0
 	 */
 	protected $object;
 
@@ -24,7 +25,9 @@ class TextTest extends PHPUnit_Framework_TestCase
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	protected function setUp()
 	{
@@ -38,7 +41,9 @@ class TextTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @covers Joomla\Language\Text::getLanguage
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetLanguage()
 	{
@@ -53,7 +58,9 @@ class TextTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @covers Joomla\Language\Text::setLanguage
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testSetLanguage()
 	{
@@ -75,9 +82,10 @@ class TextTest extends PHPUnit_Framework_TestCase
 	 * Test...
 	 *
 	 * @covers Joomla\Language\Text::_
-	 * @todo Implement test_().
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function test_()
 	{
@@ -116,10 +124,10 @@ class TextTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Text::alt
-	 * @todo Implement testAlt().
+	 * @covers  Joomla\Language\Text::alt
+	 * @todo    Implement testAlt().
 	 *
-	 * @return void
+	 * @return  void
 	 */
 	public function testAlt()
 	{
@@ -132,10 +140,11 @@ class TextTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Text::plural
-	 * @todo Implement testPlural().
+	 * @covers  Joomla\Language\Text::plural
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testPlural()
 	{
@@ -160,9 +169,11 @@ class TextTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Text::sprintf
+	 * @covers  Joomla\Language\Text::sprintf
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testSprintf()
 	{
@@ -195,10 +206,11 @@ class TextTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Text::printf
-	 * @todo Implement testPrintf().
+	 * @covers  Joomla\Language\Text::printf
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testPrintf()
 	{
@@ -224,9 +236,11 @@ class TextTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @covers Joomla\Language\Text::script
+	 * @covers  Joomla\Language\Text::script
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testScript()
 	{

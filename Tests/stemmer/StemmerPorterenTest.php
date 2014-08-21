@@ -95,7 +95,7 @@ class PorterenTest extends PHPUnit_Framework_TestCase
 			array('valenci', 'valenc', 'en'),
 			array('hesitanci', 'hesit', 'en'),
 			array('digitizer', 'digit', 'en'),
-            array('antropologi', 'antropolog', 'en'),
+			array('antropologi', 'antropolog', 'en'),
 			array('conformabli', 'conform', 'en'),
 			array('radicalli', 'radic', 'en'),
 			array('differentli', 'differ', 'en'),
