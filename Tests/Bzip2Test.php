@@ -7,6 +7,7 @@
 namespace Joomla\Archive\Tests;
 
 use Joomla\Archive\Bzip2 as ArchiveBzip2;
+use Joomla\Test\TestHelper;
 
 /**
  * Test class for Joomla\Archive\Bzip2.
@@ -15,13 +16,20 @@ use Joomla\Archive\Bzip2 as ArchiveBzip2;
  */
 class Bzip2Test extends \PHPUnit_Framework_TestCase
 {
-
 	/**
 	 * Output directory
 	 *
 	 * @var string
 	 */
 	protected static $outputPath;
+
+	/**
+	 * Input directory
+	 *
+	 * @var    string
+	 * @since  1.0
+	 */
+	protected static $inputPath;
 
 	/**
 	 * @var ArchiveBzip2
@@ -38,6 +46,7 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
+		self::$inputPath = __DIR__ . '/testdata';
 		self::$outputPath = __DIR__ . '/output';
 
 		if (!is_dir(self::$outputPath))
@@ -49,9 +58,51 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tear down the fixture.
+	 *
+	 * This method is called after a test is executed.
+	 *
+	 * @return  mixed
+	 *
+	 * @since   1.0
+	 */
+	protected function tearDown()
+	{
+		if (is_dir(self::$outputPath))
+		{
+			rmdir(self::$outputPath);
+		}
+
+		parent::tearDown();
+	}
+
+	/**
+	 * Tests the constructor.
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\Archive\Bzip2::__construct
+	 */
+	public function test__construct()
+	{
+		$object = new ArchiveBzip2;
+
+		$this->assertEmpty(
+			TestHelper::getValue($object, 'options')
+		);
+
+		$options = array('use_streams' => false);
+		$object = new ArchiveBzip2($options);
+
+		$this->assertEquals(
+			$options,
+			TestHelper::getValue($object, 'options')
+		);
+	}
+
+	/**
 	 * Tests the extract Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Bzip2::extract
@@ -65,23 +116,29 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$this->object->extract(__DIR__ . '/logo.bz2', self::$outputPath . '/logo-bz2.png');
-		$this->assertTrue(is_file(self::$outputPath . '/logo-bz2.png'));
+		$this->object->extract(
+			self::$inputPath . '/logo.bz2',
+			self::$outputPath . '/logo-bz2.png'
+		);
 
-		if (is_file(self::$outputPath . '/logo-bz2.png'))
-		{
-			unlink(self::$outputPath . '/logo-bz2.png');
-		}
+		$this->assertFileExists(self::$outputPath . '/logo-bz2.png');
+		$this->assertFileEquals(
+			self::$outputPath . '/logo-bz2.png',
+			self::$inputPath . '/logo.png'
+		);
+
+		@unlink(self::$outputPath . '/logo-bz2.png');
 	}
 
 	/**
 	 * Tests the extract Method.
 	 *
-	 * @group   JArchive
 	 * @return  Joomla\Archive\Bzip2::extract
 	 */
 	public function testExtractWithStreams()
 	{
+		$this->markTestSkipped('There is a bug, see https://bugs.php.net/bug.php?id=63195&edit=1');
+
 		if (!\Joomla\Archive\Bzip2::isSupported())
 		{
 			$this->markTestSkipped('Bzip2 files can not be extracted.');
@@ -89,27 +146,24 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		try
-		{
-			$this->object->extract(__DIR__ . '/logo.bz2', self::$outputPath . '/logo-bz2.png', array('use_streams' => true));
-		}
-		catch (\RuntimeException $e)
-		{
-			$this->assertTrue(is_file(self::$outputPath . '/logo-bz2.png'));
-		}
+		$object = new ArchiveBzip2(array('use_streams' => true));
+		$object->extract(
+			self::$inputPath . '/logo.bz2',
+			self::$outputPath . '/logo-bz2.png'
+		);
 
-		$this->assertTrue(is_file(self::$outputPath . '/logo-bz2.png'));
+		$this->assertFileExists(self::$outputPath . '/logo-bz2.png');
+		$this->assertFileEquals(
+			self::$outputPath . '/logo-bz2.png',
+			self::$inputPath . '/logo.png'
+		);
 
-		if (is_file(self::$outputPath . '/logo-bz2.png'))
-		{
-			unlink(self::$outputPath . '/logo-bz2.png');
-		}
+		@unlink(self::$outputPath . '/logo-bz2.png');
 	}
 
 	/**
 	 * Tests the isSupported Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Bzip2::isSupported

@@ -158,19 +158,27 @@ class Archive
 	 */
 	public function setAdapter($type, $class, $override = true)
 	{
-		if (!($class instanceof ExtractableInterface))
-		{
-			throw new \InvalidArgumentException(
-				sprintf(
-					'The provided adapter "%s" (class "%s") must implement Joomla\\Archive\\ExtractableInterface',
-					$type,
-					$class
-				)
-			);
-		}
-
 		if ($override || !isset($this->adapters[$type]))
 		{
+			$error = !is_object($class) && !class_exists($class)
+					? 'Archive adapter "%s" (class "%s") not found.'
+					: '';
+
+			$error = $error == '' && !($class instanceof ExtractableInterface)
+					? 'The provided adapter "%s" (class "%s") must implement Joomla\\Archive\\ExtractableInterface'
+					: $error;
+
+			$error = $error == '' && !$class::isSupported()
+					? 'Archive adapter "%s" (class "%s") not supported.'
+					: $error;
+
+			if ($error != '')
+			{
+				throw new \InvalidArgumentException(
+					sprintf($error, $type, $class)
+				);
+			}
+
 			$this->adapters[$type] = new $class($this->options);
 		}
 

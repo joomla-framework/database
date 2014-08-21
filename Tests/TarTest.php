@@ -7,6 +7,7 @@
 namespace Joomla\Archive\Tests;
 
 use Joomla\Archive\Tar as ArchiveTar;
+use Joomla\Test\TestHelper;
 
 /**
  * Test class for Joomla\Archive\Tar.
@@ -15,13 +16,20 @@ use Joomla\Archive\Tar as ArchiveTar;
  */
 class TarTest extends \PHPUnit_Framework_TestCase
 {
-
 	/**
 	 * Output directory
 	 *
 	 * @var string
 	 */
 	protected static $outputPath;
+
+	/**
+	 * Input directory
+	 *
+	 * @var    string
+	 * @since  1.0
+	 */
+	protected static $inputPath;
 
 	/**
 	 * @var Joomla\Archive\Tar
@@ -38,6 +46,7 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
+		self::$inputPath = __DIR__ . '/testdata';
 		self::$outputPath = __DIR__ . '/output';
 
 		if (!is_dir(self::$outputPath))
@@ -49,9 +58,51 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tear down the fixture.
+	 *
+	 * This method is called after a test is executed.
+	 *
+	 * @return  mixed
+	 *
+	 * @since   1.0
+	 */
+	protected function tearDown()
+	{
+		if (is_dir(self::$outputPath))
+		{
+			rmdir(self::$outputPath);
+		}
+
+		parent::tearDown();
+	}
+
+	/**
+	 * Tests the constructor.
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\Archive\Tar::__construct
+	 */
+	public function test__construct()
+	{
+		$object = new ArchiveTar;
+
+		$this->assertEmpty(
+			TestHelper::getValue($object, 'options')
+		);
+
+		$options = array('foo' => 'bar');
+		$object = new ArchiveTar($options);
+
+		$this->assertEquals(
+			$options,
+			TestHelper::getValue($object, 'options')
+		);
+	}
+
+	/**
 	 * Tests the extract Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Tar::extract
@@ -66,8 +117,8 @@ class TarTest extends \PHPUnit_Framework_TestCase
 			return;
 		}
 
-		$this->object->extract(__DIR__ . '/logo.tar', self::$outputPath);
-		$this->assertTrue(is_file(self::$outputPath . '/logo-tar.png'));
+		$this->object->extract(self::$inputPath . '/logo.tar', self::$outputPath);
+		$this->assertFileExists(self::$outputPath . '/logo-tar.png');
 
 		if (is_file(self::$outputPath . '/logo-tar.png'))
 		{
@@ -78,7 +129,6 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the isSupported Method.
 	 *
-	 * @group   JArchive
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Tar::isSupported

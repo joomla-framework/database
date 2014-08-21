@@ -97,6 +97,7 @@ class Gzip implements ExtractableInterface
 				throw new \RuntimeException('Unable to write archive');
 			}
 		}
+		// @codeCoverageIgnoreStart
 		else
 		{
 			// New style! streams!
@@ -139,6 +140,7 @@ class Gzip implements ExtractableInterface
 			$output->close();
 			$input->close();
 		}
+		// @codeCoverageIgnoreEnd
 
 		return true;
 	}
