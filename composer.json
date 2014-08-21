@@ -10,8 +10,13 @@
     },
     "target-dir": "Joomla/Crypt",
     "autoload": {
-    	"psr-0": {
-    		"Joomla\\Crypt": ""
-    	}
+        "psr-0": {
+            "Joomla\\Crypt": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-1.x-dev": "1.x-dev"
+        }
     }
 }
