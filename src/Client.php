@@ -84,7 +84,7 @@ class Client
 
 			if ($response->code >= 200 && $response->code < 400)
 			{
-				if (strpos($response->headers['Content-Type'], 'application/json'))
+				if (strpos($response->headers['Content-Type'], 'application/json') !== false)
 				{
 					$token = array_merge(json_decode($response->body, true), array('created' => time()));
 				}
