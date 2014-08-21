@@ -19,7 +19,8 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Output directory
 	 *
-	 * @var string
+	 * @var    string
+	 * @since  1.0
 	 */
 	protected static $outputPath;
 
@@ -27,12 +28,15 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	 * Input directory
 	 *
 	 * @var    string
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected static $inputPath;
 
 	/**
-	 * @var Joomla\Archive\Tar
+	 * Object under test
+	 *
+	 * @var    ArchiveTar
+	 * @since  1.0
 	 */
 	protected $object;
 
@@ -40,7 +44,9 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	protected function setUp()
 	{
@@ -62,9 +68,9 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * This method is called after a test is executed.
 	 *
-	 * @return  mixed
+	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function tearDown()
 	{
@@ -79,9 +85,11 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the constructor.
 	 *
+	 * @covers  Joomla\Archive\Tar::__construct
+	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Archive\Tar::__construct
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function test__construct()
 	{
@@ -103,10 +111,12 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extract Method.
 	 *
-	 * @return  void
-	 *
 	 * @covers  Joomla\Archive\Tar::extract
 	 * @covers  Joomla\Archive\Tar::getTarInfo
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testExtract()
 	{
@@ -129,9 +139,11 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the isSupported Method.
 	 *
+	 * @covers  Joomla\Archive\Tar::isSupported
+	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Archive\Tar::isSupported
+	 * @since   1.0
 	 */
 	public function testIsSupported()
 	{

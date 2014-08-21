@@ -19,7 +19,8 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Output directory
 	 *
-	 * @var string
+	 * @var    string
+	 * @since  1.0
 	 */
 	protected static $outputPath;
 
@@ -27,12 +28,15 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	 * Input directory
 	 *
 	 * @var    string
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected static $inputPath;
 
 	/**
-	 * @var Joomla\Archive\Gzip
+	 * Object under test
+	 *
+	 * @var    ArchiveGzip
+	 * @since  1.0
 	 */
 	protected $object;
 
@@ -40,7 +44,9 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	protected function setUp()
 	{
@@ -62,9 +68,9 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * This method is called after a test is executed.
 	 *
-	 * @return  mixed
+	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function tearDown()
 	{
@@ -79,9 +85,11 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the constructor.
 	 *
+	 * @covers  Joomla\Archive\Gzip::__construct
+	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Archive\Gzip::__construct
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function test__construct()
 	{
@@ -103,9 +111,11 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extract Method.
 	 *
+	 * @covers  Joomla\Archive\Gzip::extract
+	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Archive\Gzip::extract
+	 * @since   1.0
 	 */
 	public function testExtract()
 	{
@@ -133,10 +143,12 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extract Method.
 	 *
-	 * @return  void
-	 *
 	 * @covers  Joomla\Archive\Gzip::extract
 	 * @covers  Joomla\Archive\Gzip::getFilePosition
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testExtractWithStreams()
 	{
@@ -167,9 +179,11 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the isSupported Method.
 	 *
+	 * @covers  Joomla\Archive\Gzip::isSupported
+	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Archive\Gzip::isSupported
+	 * @since   1.0
 	 */
 	public function testIsSupported()
 	{
@@ -182,10 +196,11 @@ class GzipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Test...
 	 *
-	 * @todo Implement test_getFilePosition().
-	 *
 	 * @covers  Joomla\Archive\Gzip::getFilePosition
-	 * @return void
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testGetFilePosition()
 	{

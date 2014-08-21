@@ -19,7 +19,8 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Output directory
 	 *
-	 * @var string
+	 * @var    string
+	 * @since  1.0
 	 */
 	protected static $outputPath;
 
@@ -27,12 +28,15 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	 * Input directory
 	 *
 	 * @var    string
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected static $inputPath;
 
 	/**
-	 * @var Joomla\Archive\Zip
+	 * Object under test
+	 *
+	 * @var    ArchiveZip
+	 * @since  1.0
 	 */
 	protected $object;
 
@@ -40,7 +44,9 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	protected function setUp()
 	{
@@ -62,9 +68,9 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * This method is called after a test is executed.
 	 *
-	 * @return  mixed
+	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function tearDown()
 	{
@@ -79,9 +85,11 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the constructor.
 	 *
+	 * @covers  Joomla\Archive\Zip::__construct
+	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Archive\Zip::__construct
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function test__construct()
 	{
@@ -101,15 +109,16 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement testCreate().
+	 * Tests the create method
 	 *
 	 * @covers  Joomla\Archive\Zip::create
 	 * @covers  Joomla\Archive\Zip::addToZIPFile
 	 * @covers  Joomla\Archive\Zip::unix2DOSTime
 	 * @covers  Joomla\Archive\Zip::createZIPFile
-	 * @return void
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testCreate()
 	{
@@ -134,9 +143,11 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extractNative Method.
 	 *
+	 * @covers  Joomla\Archive\Zip::extractNative
+	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Archive\Zip::extractNative
+	 * @since   1.0
 	 */
 	public function testExtractNative()
 	{
@@ -167,11 +178,13 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extractCustom Method.
 	 *
-	 * @return  void
-	 *
 	 * @covers  Joomla\Archive\Zip::extractCustom
 	 * @covers  Joomla\Archive\Zip::readZipInfo
 	 * @covers  Joomla\Archive\Zip::getFileData
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testExtractCustom()
 	{
@@ -202,9 +215,11 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extract Method.
 	 *
+	 * @covers  Joomla\Archive\Zip::extract
+	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Archive\Zip::extract
+	 * @since   1.0
 	 */
 	public function testExtract()
 	{
@@ -236,7 +251,10 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @covers             Joomla\Archive\Zip::extract
 	 * @expectedException  RuntimeException
+	 *
 	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testExtractException()
 	{
@@ -258,9 +276,11 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the hasNativeSupport Method.
 	 *
+	 * @covers  Joomla\Archive\Zip::hasNativeSupport
+	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Archive\Zip::hasNativeSupport
+	 * @since   1.0
 	 */
 	public function testHasNativeSupport()
 	{
@@ -291,7 +311,9 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @covers  Joomla\Archive\Zip::checkZipData
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testCheckZipData()
 	{

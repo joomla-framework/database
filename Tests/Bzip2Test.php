@@ -19,7 +19,8 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	/**
 	 * Output directory
 	 *
-	 * @var string
+	 * @var    string
+	 * @since  1.0
 	 */
 	protected static $outputPath;
 
@@ -27,12 +28,15 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	 * Input directory
 	 *
 	 * @var    string
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected static $inputPath;
 
 	/**
-	 * @var ArchiveBzip2
+	 * Object under test
+	 *
+	 * @var    ArchiveBzip2
+	 * @since  1.0
 	 */
 	protected $object;
 
@@ -40,7 +44,9 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	protected function setUp()
 	{
@@ -62,9 +68,9 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	 *
 	 * This method is called after a test is executed.
 	 *
-	 * @return  mixed
+	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function tearDown()
 	{
@@ -79,9 +85,11 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the constructor.
 	 *
+	 * @covers  Joomla\Archive\Bzip2::__construct
+	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Archive\Bzip2::__construct
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function test__construct()
 	{
@@ -103,13 +111,15 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extract Method.
 	 *
+	 * @covers  Joomla\Archive\Bzip2::extract
+	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Archive\Bzip2::extract
+	 * @since   1.0
 	 */
 	public function testExtract()
 	{
-		if (!\Joomla\Archive\Bzip2::isSupported())
+		if (!ArchiveBzip2::isSupported())
 		{
 			$this->markTestSkipped('Bzip2 files can not be extracted.');
 
@@ -133,13 +143,17 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the extract Method.
 	 *
-	 * @return  Joomla\Archive\Bzip2::extract
+	 * @covers  Joomla\Archive\Bzip2::extract
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
 	public function testExtractWithStreams()
 	{
 		$this->markTestSkipped('There is a bug, see https://bugs.php.net/bug.php?id=63195&edit=1');
 
-		if (!\Joomla\Archive\Bzip2::isSupported())
+		if (!ArchiveBzip2::isSupported())
 		{
 			$this->markTestSkipped('Bzip2 files can not be extracted.');
 
@@ -164,15 +178,17 @@ class Bzip2Test extends \PHPUnit_Framework_TestCase
 	/**
 	 * Tests the isSupported Method.
 	 *
+	 * @covers  Joomla\Archive\Bzip2::isSupported
+	 *
 	 * @return  void
 	 *
-	 * @covers  Joomla\Archive\Bzip2::isSupported
+	 * @since   1.0
 	 */
 	public function testIsSupported()
 	{
 		$this->assertEquals(
 			extension_loaded('bz2'),
-			\Joomla\Archive\Bzip2::isSupported()
+			ArchiveBzip2::isSupported()
 		);
 	}
 }

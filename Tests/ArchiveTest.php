@@ -39,7 +39,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 * Input directory
 	 *
 	 * @var    string
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected static $inputPath;
 
@@ -74,7 +74,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  mixed
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function tearDown()
 	{
@@ -91,7 +91,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function dataExtract()
 	{
@@ -161,7 +161,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Archive\Archive::extract
-	 * @expectedException InvalidArgumentException
+	 * @expectedException  \InvalidArgumentException
 	 * @since   1.0
 	 */
 	public function testExtractUnknown()
@@ -221,7 +221,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since  1.0
+	 * @since   1.0
 	 */
 	public function testGetAdapterExceptionMessage()
 	{
@@ -244,9 +244,9 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers             Joomla\Archive\Archive::setAdapter
+	 * @covers  Joomla\Archive\Archive::setAdapter
 	 *
-	 * @since              1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testSetAdapter()
 	{
@@ -277,7 +277,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers             Joomla\Archive\Archive::setAdapter
-	 * @since  1.0
+	 * @since   1.0
 	 */
 	public function testSetAdapterExceptionMessage()
 	{
