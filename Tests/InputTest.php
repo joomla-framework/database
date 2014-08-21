@@ -540,7 +540,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Input::loadAllInputs
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testLoadAllInputs()
 	{

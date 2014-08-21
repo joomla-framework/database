@@ -12,7 +12,7 @@ use Joomla\Test\TestHelper;
 require_once __DIR__ . '/Stubs/FilterInputMock.php';
 
 /**
- * Test class for JInput.
+ * Test class for \Joomla\Input\Cli.
  *
  * @since  1.0
  */
@@ -24,7 +24,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Cli::__construct
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function test__construct()
 	{
@@ -340,7 +340,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Cli::serialize
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testSerialize()
 	{
@@ -359,7 +359,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Cli::unserialize
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testUnserialize()
 	{

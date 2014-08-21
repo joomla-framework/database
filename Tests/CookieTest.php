@@ -12,7 +12,7 @@ use Joomla\Test\TestHelper;
 require_once __DIR__ . '/Stubs/FilterInputMock.php';
 
 /**
- * Test class for JInputCookie.
+ * Test class for \Joomla\Input\Cookie.
  *
  * @since  1.0
  */
@@ -24,7 +24,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Cookie::__construct
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function test__construct()
 	{
@@ -93,7 +93,7 @@ namespace Joomla\Input;
  *
  * @return  void
  *
- * @since   __VERSION_NO__
+ * @since   __DEPLOY_VERSION__
  */
 function setcookie($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httpOnly = false)
 {

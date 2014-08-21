@@ -75,9 +75,9 @@ class Input implements \Serializable, \Countable
 	 * Is all GLOBAL added
 	 *
 	 * @var    boolean
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
-	static protected $loaded = false;
+	protected static $loaded = false;
 
 	/**
 	 * Constructor.

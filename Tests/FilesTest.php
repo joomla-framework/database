@@ -12,7 +12,7 @@ use Joomla\Test\TestHelper;
 require_once __DIR__ . '/Stubs/FilterInputMock.php';
 
 /**
- * Test class for JInputFiles.
+ * Test class for \Joomla\Input\Files.
  *
  * @since  1.0
  */
@@ -24,7 +24,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Files::__construct
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function test__construct()
 	{
@@ -104,7 +104,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Files::decodeData
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testDecodeData()
 	{
