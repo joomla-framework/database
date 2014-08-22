@@ -11,7 +11,8 @@
     "require-dev": {
         "league/plates": "~1.0",
         "mustache/mustache": "~2.0",
-        "twig/twig": "~1.0"
+        "twig/twig": "~1.0",
+        "squizlabs/php_codesniffer": "1.*"
     },
     "suggest": {
         "league/plates": "Install ~1.0 if you are using the Plates template engine.",
