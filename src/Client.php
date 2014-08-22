@@ -56,7 +56,7 @@ class Client
 	 *
 	 * @since   1.0
 	 */
-	public function __construct($options = array(), Http $http, Input $input, AbstractWebApplication $application)
+	public function __construct($options = array(), Http $http, Input $input, AbstractWebApplication $application = null)
 	{
 		$this->options = $options;
 		$this->http = $http;
@@ -106,7 +106,12 @@ class Client
 
 		if ($this->getOption('sendheaders'))
 		{
-			$this->application->redirect($this->createUrl());
+			if($this->application instanceof AbstractWebApplication){
+				$this->application->redirect($this->createUrl());
+			}else{
+				throw new RuntimeException('AbstractWebApplication object required for authentication process.');
+			}
+			
 		}
 
 		return false;
