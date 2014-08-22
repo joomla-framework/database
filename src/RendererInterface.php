@@ -15,6 +15,18 @@ namespace BabDev\Renderer;
  */
 interface RendererInterface
 {
+    
+  /**
+  * A constructor method
+  *
+  * @param  array  $config  Configurations
+  *
+  * @return void
+  *
+  * @since   1.0
+  */
+  public function __construct($config = array());  
+  
 	/**
 	 * Render and return compiled data.
 	 *
