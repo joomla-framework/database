@@ -38,7 +38,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @covers  Joomla\Http\HttpFactory::getHttp
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.4
 	 */
 	public function testGetHttpException()
 	{
@@ -87,7 +87,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Http\HttpFactory::getHttpTransports
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.4
 	 */
 	public function testGetHttpTransports()
 	{

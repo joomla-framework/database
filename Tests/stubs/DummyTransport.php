@@ -11,7 +11,7 @@ namespace Joomla\Http\Transport;
 /**
  * HTTP transport class for testing purpose only.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.1.4
  */
 class DummyTransport
 {
@@ -20,7 +20,7 @@ class DummyTransport
 	 *
 	 * @return  boolean  True if available, else false
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.4
 	 */
 	public static function isSupported()
 	{
