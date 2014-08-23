@@ -71,11 +71,11 @@ class PlatesRenderer implements RendererInterface
 	 */
 	public function render($template, array $data = array())
 	{
-		$data = array_merge($this->data, $data);
+		$plates = new Template($this->engine);
 
 		// TODO Process template name
 
-		parent::render($template, $data);
+		return $plates->render($template, $data);
 	}
 
 	/**

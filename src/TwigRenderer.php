@@ -78,7 +78,7 @@ class TwigRenderer extends \Twig_Environment implements RendererInterface
 
 		// TODO Process template name
 
-		parent::render($template, $data);
+		return parent::render($template, $data);
 	}
 
 	/**
