@@ -15,5 +15,4 @@ namespace BabDev\Renderer;
  */
 class AbstractRenderer implements RendererInterface
 {
-  
 }
