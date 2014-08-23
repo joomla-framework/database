@@ -39,7 +39,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 * Input directory
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.1.3
 	 */
 	protected static $inputPath;
 
@@ -74,7 +74,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  mixed
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.3
 	 */
 	protected function tearDown()
 	{
@@ -91,7 +91,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.3
 	 */
 	public function dataExtract()
 	{
@@ -246,7 +246,7 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @covers  Joomla\Archive\Archive::setAdapter
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.3
 	 */
 	public function testSetAdapter()
 	{

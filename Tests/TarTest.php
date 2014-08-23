@@ -28,7 +28,7 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	 * Input directory
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.1.3
 	 */
 	protected static $inputPath;
 
@@ -70,7 +70,7 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.3
 	 */
 	protected function tearDown()
 	{
@@ -89,7 +89,7 @@ class TarTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.3
 	 */
 	public function test__construct()
 	{
