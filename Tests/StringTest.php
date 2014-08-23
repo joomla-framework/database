@@ -46,7 +46,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function seedTestIs_ascii()
 	{
@@ -474,7 +474,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function seedTestUnicodeToUtf8()
 	{
@@ -489,7 +489,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function seedTestUnicodeToUtf16()
 	{
@@ -531,7 +531,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @covers        Joomla\String\String::is_ascii
 	 * @dataProvider  seedTestIs_ascii
-	 * @since         __DEPLOY_VERSION__
+	 * @since         1.2.0
 	 */
 	public function testIs_ascii($string, $expected)
 	{
@@ -1049,7 +1049,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @covers        Joomla\String\String::unicode_to_utf8
 	 * @dataProvider  seedTestUnicodeToUtf8
-	 * @since         __DEPLOY_VERSION__
+	 * @since         1.2.0
 	 */
 	public function testUnicodeToUtf8($string, $expect)
 	{
@@ -1067,7 +1067,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @covers        Joomla\String\String::unicode_to_utf16
 	 * @dataProvider  seedTestUnicodeToUtf16
-	 * @since         __DEPLOY_VERSION__
+	 * @since         1.2.0
 	 */
 	public function testUnicodeToUtf16($string, $expect)
 	{

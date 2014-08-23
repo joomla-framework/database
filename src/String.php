@@ -885,7 +885,7 @@ abstract class String
 	 *
 	 * @return  string  UTF-8 string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public static function unicode_to_utf8($str)
 	{
@@ -913,7 +913,7 @@ abstract class String
 	 *
 	 * @return  string  UTF-16 string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public static function unicode_to_utf16($str)
 	{

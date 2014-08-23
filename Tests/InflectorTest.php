@@ -308,7 +308,7 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\String\Inflector::addWord
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function testAddWord()
 	{
@@ -529,7 +529,7 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\String\Inflector::toPlural
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function testToPluralAlreadyPlural()
 	{
@@ -562,7 +562,7 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\String\Inflector::toSingular
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function testToSingularRetFalse()
 	{
