@@ -9,13 +9,13 @@
         "php": ">=5.3.10"
     },
     "require-dev": {
-        "league/plates": "~1.0",
+        "league/plates": "~2.0",
         "mustache/mustache": "~2.0",
         "twig/twig": "~1.0",
         "squizlabs/php_codesniffer": "1.*"
     },
     "suggest": {
-        "league/plates": "Install ~1.0 if you are using the Plates template engine.",
+        "league/plates": "Install ~2.0 if you are using the Plates template engine.",
         "mustache/mustache": "Install ~2.0 if you are using the Mustache template engine.",
         "twig/twig": "Install ~1.0 if you are using the Twig template engine."
     },
