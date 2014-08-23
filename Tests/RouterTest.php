@@ -121,7 +121,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.2
 	 */
 	public function dataAddMap()
 	{
