@@ -468,7 +468,37 @@ class StringTest extends \PHPUnit_Framework_TestCase
 			array('', true)
 		);
 	}
-
+	
+	/**
+	 * Test...
+	 *
+	 * @return  array
+	 *
+	 * @since   1.0
+	 */
+	public function seedTestUnicodeToUtf8()
+	{
+		return array(
+			array("\u0422\u0435\u0441\u0442 \u0441\u0438\u0441\u0442\u0435\u043c\u044b", "Тест системы"),
+			array("\u00dcberpr\u00fcfung der Systemumstellung", "Überprüfung der Systemumstellung")
+		);
+	}
+	
+	/**
+	 * Test...
+	 *
+	 * @return  array
+	 *
+	 * @since   1.0
+	 */
+	public function seedTestUnicodeToUtf16()
+	{
+		return array(
+			array("\u0422\u0435\u0441\u0442 \u0441\u0438\u0441\u0442\u0435\u043c\u044b", "Тест системы"),
+			array("\u00dcberpr\u00fcfung der Systemumstellung", "Überprüfung der Systemumstellung")
+		);
+	}
+	
 	/**
 	 * Test...
 	 *
@@ -1008,7 +1038,43 @@ class StringTest extends \PHPUnit_Framework_TestCase
 		$actual = String::valid($string);
 		$this->assertEquals($expect, $actual);
 	}
-
+	
+	/**
+	 * Test...
+	 *
+	 * @param   string  $string  @todo
+	 * @param   string  $expect  @todo
+	 *
+	 * @return  array
+	 *
+	 * @covers        Joomla\String\String::unicode_to_utf8
+	 * @dataProvider  seedTestUnicodeToUtf8
+	 * @since         1.0
+	 */
+	public function testUnicodeToUtf8($string, $expect)
+	{
+		$actual = String::unicode_to_utf8($string);
+		$this->assertEquals($expect, $actual);
+	}
+	
+	/**
+	 * Test...
+	 *
+	 * @param   string  $string  @todo
+	 * @param   string  $expect  @todo
+	 *
+	 * @return  array
+	 *
+	 * @covers        Joomla\String\String::unicode_to_utf16
+	 * @dataProvider  seedTestUnicodeToUtf16
+	 * @since         1.0
+	 */
+	public function testUnicodeToUtf16($string, $expect)
+	{
+		$actual = String::unicode_to_utf16($string);
+		$this->assertEquals($expect, $actual);
+	}
+	
 	/**
 	 * Test...
 	 *

@@ -877,4 +877,49 @@ abstract class String
 		 */
 		return (preg_match('/^.{1}/us', $str, $ar) == 1);
 	}
+	
+	/**
+	 * Converts Unicode sequences to UTF-8 string
+	 * 
+	 * @param   string  $str  Unicode string to convert
+	 * 
+	 * @return  string  UTF-8 string
+	 */
+	public static function unicode_to_utf8($str)
+	{
+		if (extension_loaded('mbstring'))
+		{
+			return preg_replace_callback(
+				'/\\\\u([0-9a-fA-F]{4})/', 
+				function ($match) 
+				{
+					return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
+				}, 
+				$str
+			);
+		}
+		else
+		{
+			return $str;
+		}
+	}
+	
+	public static function unicode_to_utf16($str)
+	{
+		if (extension_loaded('mbstring'))
+		{
+		return preg_replace_callback(
+			'/\\\\u([0-9a-fA-F]{4})/', 
+			function ($match) 
+			{
+    				return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UTF-16BE');
+			}, 
+			$str);
+		}	
+		else
+		{
+			return $str;
+		}
+	}
+	
 }
