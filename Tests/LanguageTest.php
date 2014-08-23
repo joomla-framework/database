@@ -208,7 +208,7 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.2
 	 */
 	public function test_WithLoadedStringsAndDebug()
 	{
@@ -1034,7 +1034,7 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.2
 	 */
 	public function testLoadLanguage()
 	{
@@ -1135,7 +1135,7 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.2
 	 */
 	public function testGetCallerInfo()
 	{

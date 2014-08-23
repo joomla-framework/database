@@ -43,7 +43,7 @@ class TextTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.2
 	 */
 	public function testGetLanguage()
 	{
@@ -60,7 +60,7 @@ class TextTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.2
 	 */
 	public function testSetLanguage()
 	{
@@ -144,7 +144,7 @@ class TextTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.2
 	 */
 	public function testPlural()
 	{
@@ -173,7 +173,7 @@ class TextTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.2
 	 */
 	public function testSprintf()
 	{
@@ -210,7 +210,7 @@ class TextTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.2
 	 */
 	public function testPrintf()
 	{
@@ -240,7 +240,7 @@ class TextTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.2
 	 */
 	public function testScript()
 	{
