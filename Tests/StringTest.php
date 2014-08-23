@@ -46,7 +46,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function seedTestIs_ascii()
 	{
@@ -501,7 +501,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @covers        Joomla\String\String::is_ascii
 	 * @dataProvider  seedTestIs_ascii
-	 * @since         1.0
+	 * @since         __DEPLOY_VERSION__
 	 */
 	public function testIs_ascii($string, $expected)
 	{
