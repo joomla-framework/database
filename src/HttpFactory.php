@@ -43,7 +43,7 @@ class HttpFactory
 	 * @param   array  $options  Option for creating http transport object
 	 * @param   mixed  $default  Adapter (string) or queue of adapters (array) to use
 	 *
-	 * @return  TransportInterface  Interface sub-class
+	 * @return  TransportInterface|boolean  Interface sub-class or boolean false if no adapters are available
 	 *
 	 * @since   1.0
 	 */

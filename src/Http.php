@@ -37,11 +37,24 @@ class Http
 	 * @param   TransportInterface  $transport  The HTTP transport object.
 	 *
 	 * @since   1.0
+	 * @throws  \InvalidArgumentException
 	 */
 	public function __construct($options = array(), TransportInterface $transport = null)
 	{
 		$this->options   = $options;
-		$this->transport = isset($transport) ? $transport : HttpFactory::getAvailableDriver($this->options);
+
+		if (!isset($transport))
+		{
+			$transport = HttpFactory::getAvailableDriver($this->options);
+		}
+
+		// Ensure the transport is a TransportInterface instance or bail out
+		if (!($transport instanceof TransportInterface))
+		{
+			throw new \InvalidArgumentException('A valid TransportInterface object was not set.');
+		}
+
+		$this->transport = $transport;
 	}
 
 	/**
