@@ -24,7 +24,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Cookie::__construct
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.4
 	 */
 	public function test__construct()
 	{
@@ -93,7 +93,7 @@ namespace Joomla\Input;
  *
  * @return  void
  *
- * @since   __DEPLOY_VERSION__
+ * @since   1.1.4
  */
 function setcookie($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httpOnly = false)
 {

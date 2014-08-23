@@ -24,7 +24,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Cli::__construct
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.4
 	 */
 	public function test__construct()
 	{
@@ -340,7 +340,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Cli::serialize
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.4
 	 */
 	public function testSerialize()
 	{
@@ -359,7 +359,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Cli::unserialize
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.4
 	 */
 	public function testUnserialize()
 	{

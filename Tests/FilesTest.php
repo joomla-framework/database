@@ -24,7 +24,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Files::__construct
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.4
 	 */
 	public function test__construct()
 	{
@@ -104,7 +104,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Files::decodeData
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.4
 	 */
 	public function testDecodeData()
 	{
