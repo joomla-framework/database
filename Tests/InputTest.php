@@ -351,6 +351,27 @@ class InputTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test the Joomla\Input\Input::exists method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\Input\Input::exists
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testExists()
+	{
+		$instance = $this->getInputObject(array('foo' => 'bar'));
+
+		$this->assertTrue(
+			$instance->exists('foo')
+		);
+
+		$this->assertFalse(
+			$instance->exists('bar')
+		);
+	}
+
+	/**
 	 * Test the Joomla\Input\Input::getArray method.
 	 *
 	 * @return  void
