@@ -332,7 +332,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	 * 
 	 * @since   1.0
 	 */
-	public function walk(callable $funcname)
+	public function walk($funcname)
 	{
 		if (!is_callable($funcname))
 		{
