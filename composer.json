@@ -14,12 +14,14 @@
     },
     "require-dev": {
         "joomla/test": "~1.0",
-        "joomla/event": "~1.0"
+        "joomla/event": "~1.0",
+        "phpunit/phpunit": "4.*",
+        "squizlabs/php_codesniffer": "1.*"
     },
     "autoload": {
-    	"psr-4": {
-    		"Joomla\\OAuth1\\": "src/",
+        "psr-4": {
+            "Joomla\\OAuth1\\": "src/",
             "Joomla\\OAuth1\\Tests\\": "Tests/"
-    	}
+        }
     }
 }
