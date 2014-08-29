@@ -12,13 +12,15 @@
         "joomla/uri": "~1.0"
     },
     "require-dev": {
-        "joomla/test": "~1.0"
+        "joomla/test": "~1.0",
+        "phpunit/phpunit": "4.*",
+        "squizlabs/php_codesniffer": "1.*"
     },
     "autoload": {
-    	"psr-4": {
+        "psr-4": {
             "Joomla\\Mediawiki\\": "src/",
             "Joomla\\Mediawiki\\Tests\\": "Tests/"
-    	}
+        }
     }
 }
 

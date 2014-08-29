@@ -16,16 +16,16 @@ namespace Joomla\Mediawiki;
 class Users extends AbstractMediawikiObject
 {
 	/**
-     * Method to login and get authentication tokens.
-     *
-     * @param   string  $lgname      User Name.
-     * @param   string  $lgpassword  Password.
-     * @param   string  $lgdomain    Domain (optional).
-     *
-     * @return  object
-     *
-     * @since   1.0
-     */
+	 * Method to login and get authentication tokens.
+	 *
+	 * @param   string  $lgname      User Name.
+	 * @param   string  $lgpassword  Password.
+	 * @param   string  $lgdomain    Domain (optional).
+	 *
+	 * @return  object
+	 *
+	 * @since   1.0
+	 */
 	public function login($lgname, $lgpassword, $lgdomain = null)
 	{
 		// Build the request path.
@@ -88,15 +88,15 @@ class Users extends AbstractMediawikiObject
 	}
 
 	/**
-     * Method to get user information.
+	 * Method to get user information.
 	 *
 	 * @param   array  $ususers  A list of users to obtain the same information for.
 	 * @param   array  $usprop   What pieces of information to include.
 	 *
-     * @return  object
-     *
-     * @since   1.0
-     */
+	 * @return  object
+	 *
+	 * @since   1.0
+	 */
 	public function getUserInfo(array $ususers, array $usprop = null)
 	{
 		// Build the request path.
@@ -117,14 +117,14 @@ class Users extends AbstractMediawikiObject
 	}
 
 	/**
-     * Method to get current user information.
+	 * Method to get current user information.
 	 *
 	 * @param   array  $uiprop  What pieces of information to include.
-     *
-     * @return  object
-     *
-     * @since   1.0
-     */
+	 *
+	 * @return  object
+	 *
+	 * @since   1.0
+	 */
 	public function getCurrentUserInfo(array $uiprop = null)
 	{
 		// Build the request path.
@@ -142,25 +142,25 @@ class Users extends AbstractMediawikiObject
 	}
 
 	/**
-     * Method to get user contributions.
-     *
-     * @param   string   $ucuser        The users to retrieve contributions for.
+	 * Method to get user contributions.
+	 *
+	 * @param   string   $ucuser        The users to retrieve contributions for.
 	 * @param   string   $ucuserprefix  Retrieve contibutions for all users whose names begin with this value.
-     * @param   integer  $uclimit       The users to retrieve contributions for.
-     * @param   string   $ucstart       The start timestamp to return from.
-     * @param   string   $ucend         The end timestamp to return to.
-     * @param   boolean  $uccontinue    When more results are available, use this to continue.
-     * @param   string   $ucdir         In which direction to enumerate.
-     * @param   array    $ucnamespace   Only list contributions in these namespaces.
-     * @param   array    $ucprop        Include additional pieces of information.
-     * @param   array    $ucshow        Show only items that meet this criteria.
-     * @param   string   $uctag         Only list revisions tagged with this tag.
-     * @param   string   $uctoponly     Only list changes which are the latest revision
-     *
-     * @return  object
-     *
-     * @since   1.0
-     */
+	 * @param   integer  $uclimit       The users to retrieve contributions for.
+	 * @param   string   $ucstart       The start timestamp to return from.
+	 * @param   string   $ucend         The end timestamp to return to.
+	 * @param   boolean  $uccontinue    When more results are available, use this to continue.
+	 * @param   string   $ucdir         In which direction to enumerate.
+	 * @param   array    $ucnamespace   Only list contributions in these namespaces.
+	 * @param   array    $ucprop        Include additional pieces of information.
+	 * @param   array    $ucshow        Show only items that meet this criteria.
+	 * @param   string   $uctag         Only list revisions tagged with this tag.
+	 * @param   string   $uctoponly	 Only list changes which are the latest revision
+	 *
+	 * @return  object
+	 *
+	 * @since   1.0
+	 */
 	public function getUserContribs($ucuser = null, $ucuserprefix = null, $uclimit = null, $ucstart = null, $ucend = null, $uccontinue = null,
 		$ucdir = null, array $ucnamespace = null, array $ucprop = null, array $ucshow = null, $uctag = null, $uctoponly = null)
 	{
@@ -234,7 +234,7 @@ class Users extends AbstractMediawikiObject
 	}
 
 	/**
-     * Method to block a user.
+	 * Method to block a user.
 	 *
 	 * @param   string   $user           Username, IP address or IP range you want to block.
 	 * @param   string   $expiry         Relative expiry time, Default: never.
@@ -247,11 +247,11 @@ class Users extends AbstractMediawikiObject
 	 * @param   boolean  $allowusertalk  Allow the user to edit their own talk page.
 	 * @param   boolean  $reblock        If the user is already blocked, overwrite the existing block.
 	 * @param   boolean  $watchuser      Watch the user/IP's user and talk pages.
-     *
-     * @return  object
-     *
-     * @since   1.0
-     */
+	 *
+	 * @return  object
+	 *
+	 * @since   1.0
+	 */
 	public function blockUser($user, $expiry = null, $reason = null, $anononly = null, $nocreate = null, $autoblock = null, $noemail = null,
 		$hidename = null, $allowusertalk = null, $reblock = null, $watchuser = null)
 	{
@@ -284,15 +284,15 @@ class Users extends AbstractMediawikiObject
 	}
 
 	/**
-     * Method to unblock a user.
+	 * Method to unblock a user.
 	 *
 	 * @param   string  $user    Username, IP address or IP range you want to unblock.
 	 * @param   string  $reason  Reason for unblock (optional).
-     *
-     * @return  object
-     *
-     * @since   1.0
-     */
+	 *
+	 * @return  object
+	 *
+	 * @since   1.0
+	 */
 	public function unBlockUserByName($user, $reason = null)
 	{
 		// Get the token.
@@ -347,17 +347,17 @@ class Users extends AbstractMediawikiObject
 	}
 
 	/**
-     * Method to assign a user to a group.
+	 * Method to assign a user to a group.
 	 *
 	 * @param   string  $username  User name.
 	 * @param   array   $add       Add the user to these groups.
 	 * @param   array   $remove    Remove the user from these groups.
 	 * @param   string  $reason    Reason for the change.
-     *
-     * @return  object
-     *
-     * @since   1.0
-     */
+	 *
+	 * @return  object
+	 *
+	 * @since   1.0
+	 */
 	public function assignGroup($username, $add = null, $remove = null, $reason = null)
 	{
 		// Get the token.
@@ -382,17 +382,17 @@ class Users extends AbstractMediawikiObject
 	}
 
 	/**
-     * Method to email a user.
+	 * Method to email a user.
 	 *
 	 * @param   string   $target   User to send email to.
 	 * @param   string   $subject  Subject header.
 	 * @param   string   $text     Mail body.
 	 * @param   boolean  $ccme     Send a copy of this mail to me.
-     *
-     * @return  object
-     *
-     * @since   1.0
-     */
+	 *
+	 * @return  object
+	 *
+	 * @since   1.0
+	 */
 	public function emailUser($target, $subject = null, $text = null, $ccme = null)
 	{
 		// Get the token.
