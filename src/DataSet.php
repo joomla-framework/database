@@ -187,6 +187,42 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	}
 
 	/**
+	 * Gets an array of keys, existing in objects
+	 * 
+	 * @param   string  $type  Selection type 'all' or 'common'
+	 * 
+	 * @throws  Exception
+	 * 
+	 * @return  array   Array of keys
+	 */
+
+	public function getObjectsKeys($type = 'all')
+	{
+		$keys = array();
+
+		if ($type == 'all')
+		{
+			$function = 'array_merge';
+		}
+		elseif ($type == 'common')
+		{
+			$function = 'array_intersect_key';
+		}
+		else
+		{
+			throw new \Exception("Unknown selection type: " . $type);
+		}
+
+		foreach ($this->objects as $object)
+		{
+			$object_vars = json_decode(json_encode($object), true);
+			$keys = $function($keys, $object_vars);
+		}
+
+		return array_keys($keys);
+	}
+
+	/**
 	 * Gets all objects as an array
 	 *
 	 * @param   boolean  $associative  Option to set return mode: associative or numeric array.
