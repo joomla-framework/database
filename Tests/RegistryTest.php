@@ -598,15 +598,15 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 		$c = $a->extract('subset.data3');
 
 		$this->assertInstanceOf(
-		     '\\Joomla\\Registry\\Registry',
-		     $b,
-		     'Line ' . __LINE__ . ' - Object $b should be an instance of Registry.'
+			'\\Joomla\\Registry\\Registry',
+			$b,
+			'Line ' . __LINE__ . ' - Object $b should be an instance of Registry.'
 		);
 
 		$this->assertInstanceOf(
-		     '\\Joomla\\Registry\\Registry',
-		     $c,
-		     'Line ' . __LINE__ . ' - Object $c should be an instance of Registry.'
+			'\\Joomla\\Registry\\Registry',
+			$c,
+			'Line ' . __LINE__ . ' - Object $c should be an instance of Registry.'
 		);
 
 		$this->assertEquals('test2', $b->get('data2'), 'Test sub-registry path');
