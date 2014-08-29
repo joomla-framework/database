@@ -565,7 +565,9 @@ class DriverMysqlTest extends DatabaseMysqlCase
 	 */
 	public function testExecute()
 	{
-		self::$driver->setQuery("REPLACE INTO `jos_dbtest` SET `id` = 5, `title` = 'testTitle'");
+		self::$driver->setQuery(
+			"REPLACE INTO `jos_dbtest` SET `id` = 5, `title` = 'testTitle', `start_date` = '1980-04-18 00:00:00', `description` = 'Testing'"
+		);
 
 		$this->assertThat((bool) self::$driver->execute(), $this->isTrue(), __LINE__);
 
