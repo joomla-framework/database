@@ -186,52 +186,52 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 		}
 	}
 
-  /**
-   * Gets all objects as an array
-   *
-   * @param   boolean  $associative  Option to set return mode: associative or numeric array.
-   * @param   string   $k,...        Unlimited optional property names to extract from objects.
-   * 
-   * @return  array    Returns an array according to defined options.
-   *
-   * @since   1.0
-   */
-  public function toArray($associative = true, $k = NULL)
-  {
-    $keys = func_get_args();
-    
-    $associative = array_shift($keys);
-    
-    $full = (count($keys)==0);
-    
-    $return = array();
-    
-    $i = 0;
-    foreach ($this->objects as $key => $object)
-    {
-      $return_object = array();
-      
-      $key = ($associative) ? $key : $i++;
-      
-      if (!$full)
-      {
-        $j = 0;
-        foreach ($keys as $property)
-        {
-          $property_key = ($associative) ? $property : $j++;
-          $return_object[$property_key] = (isset($object->$property)) ? $object->$property : null;
-        }
-      }
-      else
-      {
-        $return_object = ($associative) ? (array) $object : array_values((array) $object);
-      }
-      
-      $return[$key] = $return_object;
-    }
-    return $return;
-    
-  }
+	/**
+	 * Gets all objects as an array
+	 *
+	 * @param   boolean  $associative  Option to set return mode: associative or numeric array.
+	 * @param   string   $k            Unlimited optional property names to extract from objects.
+	 * 
+	 * @return  array    Returns an array according to defined options.
+	 *
+	 * @since   1.0
+	 */
+	public function toArray($associative = true, $k = null)
+	{
+		$keys = func_get_args();
+		$associative = array_shift($keys);
+		$full = (count($keys) == 0);
+
+		$return = array();
+
+		$i = 0;
+
+		foreach ($this->objects as $key => $object)
+		{
+			$return_object = array();
+
+			$key = ($associative) ? $key : $i++;
+
+			if (!$full)
+			{
+				$j = 0;
+
+				foreach ($keys as $property)
+				{
+					$property_key = ($associative) ? $property : $j++;
+					$return_object[$property_key] = (isset($object->$property)) ? $object->$property : null;
+				}
+			}
+			else
+			{
+				$return_object = ($associative) ? (array) $object : array_values((array) $object);
+			}
+
+			$return[$key] = $return_object;
+		}
+
+		return $return;
+	}
 
 	/**
 	 * Gets the number of data objects in the set.
