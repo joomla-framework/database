@@ -164,8 +164,47 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 * @covers  Joomla\Data\DataSet::toArray
 	 * @since   1.0
 	 */
+	public function testGetObjectsKeys()
+	{
+		if (version_compare(PHP_VERSION, '5.4.0', '<='))
+		{
+			$this->markTestIncomplete('JsonSerializable is not supported in PHP 5.3');
+		}
+
+		$instance = new Data\DataSet(
+			array(
+				'key1' => new Data\DataObject(array('foo' => 'var', 'bar' => 'var', 'baz' => 'var')),
+				'key2' => new Data\DataObject(array('foo' => 'var', 'quz' => 'var', 'baz' => 'var')),
+				'key3' => new Data\DataObject(array('foo' => 'var', 'bar' => 'var'))
+			)
+		);
+
+		$this->assertThat(
+			$instance->getObjectsKeys(),
+			$this->equalTo(array('foo','bar','baz','quz'))
+		);
+
+		$this->assertThat(
+			$instance->getObjectsKeys('common'),
+			$this->equalTo(array('foo'))
+		);
+	}
+
+	/**
+	 * Tests the Joomla\Data\DataSet::toArray method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\Data\DataSet::toArray
+	 * @since   1.0
+	 */
 	public function testToArray()
 	{
+		if (version_compare(PHP_VERSION, '5.4.0', '<='))
+		{
+			$this->markTestIncomplete('JsonSerializable is not supported in PHP 5.3');
+		}
+
 		$instance = new Data\DataSet(
 			array(
 				'key1' => new Data\DataObject(array('date1' => '2014-08-29', 'date2' => '2014-09-16')),

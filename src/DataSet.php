@@ -198,7 +198,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 
 	public function getObjectsKeys($type = 'all')
 	{
-		$keys = array();
+		$keys = null;
 
 		if ($type == 'all')
 		{
@@ -216,7 +216,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 		foreach ($this->objects as $object)
 		{
 			$object_vars = json_decode(json_encode($object), true);
-			$keys = $function($keys, $object_vars);
+			$keys = (is_null($keys)) ? $object_vars : $function($keys, $object_vars);
 		}
 
 		return array_keys($keys);
