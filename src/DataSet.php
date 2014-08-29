@@ -236,7 +236,11 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	{
 		$keys = func_get_args();
 		$associative = array_shift($keys);
-		$full = (count($keys) == 0);
+
+		if (empty($keys))
+		{
+			$keys = $this->getObjectsKeys();
+		}
 
 		$return = array();
 
@@ -244,26 +248,19 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 
 		foreach ($this->objects as $key => $object)
 		{
-			$return_object = array();
+			$array_item = array();
 
 			$key = ($associative) ? $key : $i++;
 
-			if (!$full)
-			{
-				$j = 0;
+			$j = 0;
 
-				foreach ($keys as $property)
-				{
-					$property_key = ($associative) ? $property : $j++;
-					$return_object[$property_key] = (isset($object->$property)) ? $object->$property : null;
-				}
-			}
-			else
+			foreach ($keys as $property)
 			{
-				$return_object = ($associative) ? (array) $object : array_values((array) $object);
+				$property_key = ($associative) ? $property : $j++;
+				$array_item[$property_key] = (isset($object->$property)) ? $object->$property : null;
 			}
 
-			$return[$key] = $return_object;
+			$return[$key] = $array_item;
 		}
 
 		return $return;
