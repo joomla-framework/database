@@ -10,4 +10,5 @@ before_script:
   - composer update --dev
 
 script:
-  - phpunit
+  - ./vendor/bin/phpunit
+  - ./vendor/bin/phpcs -p --report=full --extensions=php --standard=.travis/phpcs/Joomla/ruleset.xml src/
