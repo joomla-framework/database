@@ -25,7 +25,7 @@ class JRegistryFormatINITest extends \PHPUnit_Framework_TestCase
 	public function testObjectToString()
 	{
 		$class = AbstractRegistryFormat::getInstance('INI');
-		$options = null;
+
 		$object = new \stdClass;
 		$object->foo = 'bar';
 		$object->booleantrue = true;
@@ -36,7 +36,7 @@ class JRegistryFormatINITest extends \PHPUnit_Framework_TestCase
 		$object->section->key = 'value';
 
 		// Test basic object to string.
-		$string = $class->objectToString($object, $options);
+		$string = $class->objectToString($object, array('processSections' => true));
 		$this->assertThat(
 			trim($string),
 			$this->equalTo("foo=\"bar\"\nbooleantrue=true\nbooleanfalse=false\nnumericint=42\nnumericfloat=3.1415\n\n[section]\nkey=\"value\"")
@@ -109,4 +109,24 @@ class JRegistryFormatINITest extends \PHPUnit_Framework_TestCase
 			$this->equalTo($object3)
 		);
 	}
+
+	/**
+	 * Test input and output data equality.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testDataEquality()
+	{
+		$class = AbstractRegistryFormat::getInstance('INI');
+
+		$input = "[section1]\nboolfalse=false\nbooltrue=true\nnumericfloat=3.1415\nnumericint=42\nkey=\"value\"\narrayitem[]=\"item1\"\narrayitem[]=\"item2\"\n\n".
+				 "[section2]\nboolfalse=false\nbooltrue=true\nnumericfloat=3.1415\nnumericint=42\nkey=\"value\"";
+		
+		$object = $class->stringToObject($input, array('processSections' => true, 'supportArrayValues' => true));
+		$output = $class->objectToString($object, array('processSections' => true, 'supportArrayValues' => true));
+
+		$this->assertEquals($input, $output, 'Line:' . __LINE__ . ' Input and output data must be equal.');
+	}	
 }
