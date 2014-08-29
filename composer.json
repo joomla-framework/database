@@ -12,10 +12,14 @@
         "joomla/registry": "~1.0",
         "joomla/uri": "~1.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "4.*",
+        "squizlabs/php_codesniffer": "1.*"
+    },
     "autoload": {
-    	"psr-4": {
+        "psr-4": {
             "Joomla\\Github\\": "src/",
             "Joomla\\Github\\Tests\\": "Tests/"
-    	}
+        }
     }
 }
