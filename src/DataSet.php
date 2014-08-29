@@ -323,32 +323,36 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 		return array_keys($this->objects);
 	}
 
-  /**
-   * Applies a function to every object in the set (emulates array_walk).
-   * 
-   * @param   callable  Callback function.  
-   * 
-   * @return  boolean   Returns TRUE on success or FALSE on failure.
-   * 
-   * @since   1.0
-   */
-  public function walk(callable $funcname) 
-  {
-    if (!is_callable($funcname))
-    {
-      $message = 'Joomla\\Data\\DataSet::walk() expects parameter 1 to be a valid callback';
-      if (is_string($funcname)) 
-      {
-        $message .= sprintf(', function \'%s\' not found or invalid function name', $funcname);
-      }
-      throw new \Exception($message);
-    }
-    foreach ($this->objects as $key => $object)
-    {
-      $funcname($object, $key);
-    }
-    return true;
-  }
+	/**
+	 * Applies a function to every object in the set (emulates array_walk).
+	 * 
+	 * @param   callable  $funcname  Callback function.  
+	 * 
+	 * @return  boolean   Returns TRUE on success or FALSE on failure.
+	 * 
+	 * @since   1.0
+	 */
+	public function walk(callable $funcname)
+	{
+		if (!is_callable($funcname))
+		{
+			$message = 'Joomla\\Data\\DataSet::walk() expects parameter 1 to be a valid callback';
+
+			if (is_string($funcname))
+			{
+				$message .= sprintf(', function \'%s\' not found or invalid function name', $funcname);
+			}
+
+			throw new \Exception($message);
+		}
+
+		foreach ($this->objects as $key => $object)
+		{
+			$funcname($object, $key);
+		}
+
+		return true;
+	}
 
 	/**
 	 * Advances the iterator to the next object in the iterator.
