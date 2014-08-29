@@ -272,19 +272,19 @@ class Input implements \Serializable, \Countable
 		$this->data[$name] = $value;
 	}
 
-  /**
-   * Check if a value name exists.
-   *
-   * @param   string  $path  Value name
-   *
-   * @return  boolean
-   *
-   * @since   1.0
-   */
-  public function exists($name)
-  {
-    return isset($this->data[$name]);
-  }
+	/**
+	 * Check if a value name exists.
+	 *
+	 * @param   string  $path  Value name
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function exists($name)
+	{
+		return isset($this->data[$name]);
+	}
 
 	/**
 	 * Magic method to get filtered input data.
