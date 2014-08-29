@@ -11,7 +11,10 @@
         "joomla/event": "~1.1"
     },
     "require-dev": {
-        "joomla/test": "~1.0"
+        "joomla/test": "~1.0",
+        "phpunit/phpunit": "4.*",
+        "phpunit/dbunit": "~1.2",
+        "squizlabs/php_codesniffer": "1.*"
     },
     "suggest": {
         "joomla/database": "Install joomla/database if you want to use Database session storage."
@@ -21,6 +24,5 @@
         "psr-0": {
             "Joomla\\Session": ""
         }
-    },
-    "minimum-stability": "beta"
+    }
 }

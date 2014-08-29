@@ -4,6 +4,7 @@ php:
   - 5.3
   - 5.4
   - 5.5
+  - 5.6
 
 services:
   - memcached # will start memcached
@@ -13,4 +14,5 @@ before_script:
   - phpenv config-add build/travis/phpenv/memcached.ini
 
 script:
-  - phpunit
+  - ./vendor/bin/phpunit
+  - ./vendor/bin/phpcs -p --report=full --extensions=php --standard=.travis/phpcs/Joomla/ruleset.xml Storage/ Session.php Storage.php
