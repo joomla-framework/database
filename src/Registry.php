@@ -134,9 +134,13 @@ class Registry implements \JsonSerializable, \ArrayAccess
 			// Traverse the registry to find the correct node for the result.
 			for ($i = 0, $n = count($nodes); $i < $n; $i++)
 			{
-				if (isset($node->$nodes[$i]))
+				if (is_object($node) && isset($node->$nodes[$i]))
 				{
 					$node = $node->$nodes[$i];
+				}
+				elseif (is_array($node) && isset($node[$nodes[$i]]))
+				{
+					$node = $node[$nodes[$i]];
 				}
 				else
 				{
@@ -182,9 +186,14 @@ class Registry implements \JsonSerializable, \ArrayAccess
 		// Traverse the registry to find the correct node for the result.
 		foreach ($nodes as $n)
 		{
-			if (isset($node->$n))
+			if (is_object($node) && isset($node->$n))
 			{
 				$node = $node->$n;
+				$found = true;
+			}
+			elseif (is_array($node) && isset($node[$n]))
+			{
+				$node = $node[$n];
 				$found = true;
 			}
 			else
@@ -317,7 +326,7 @@ class Registry implements \JsonSerializable, \ArrayAccess
 	/**
 	 * Method to extract a sub-registry from path
 	 *
-	 * @param   string  $path     Registry path (e.g. joomla.content.showauthor)
+	 * @param   string  $path  Registry path (e.g. joomla.content.showauthor)
 	 *
 	 * @return  Registry|null  Registry object if data is present
 	 *
@@ -421,16 +430,102 @@ class Registry implements \JsonSerializable, \ArrayAccess
 			// Traverse the registry to find the correct node for the result.
 			for ($i = 0, $n = count($nodes) - 1; $i < $n; $i++)
 			{
-				if (!isset($node->$nodes[$i]) && ($i != $n))
+				if (is_object($node))
 				{
-					$node->$nodes[$i] = new \stdClass;
-				}
+					if (!isset($node->$nodes[$i]) && ($i != $n))
+					{
+						$node->$nodes[$i] = new \stdClass;
+					}
 
-				$node = $node->$nodes[$i];
+					// Pass the child as pointer in case it is an array
+					$node = &$node->$nodes[$i];
+				}
+				elseif (is_array($node))
+				{
+					if (!isset($node[$nodes[$i]]) && ($i != $n))
+					{
+						$node[$nodes[$i]] = new \stdClass;
+					}
+
+					// Pass the child as pointer in case it is an array
+					$node = &$node[$nodes[$i]];
+				}
 			}
 
 			// Get the old value if exists so we can return it
-			$result = $node->$nodes[$i] = $value;
+			if (is_object($node))
+			{
+				$result = $node->$nodes[$i] = $value;
+			}
+			elseif (is_array($node))
+			{
+				$result = $node[$nodes[$i]] = $value;
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Append value to a path in registry
+	 *
+	 * @param   string  $path   Parent registry Path (e.g. joomla.content.showauthor)
+	 * @param   mixed   $value  Value of entry
+	 *
+	 * @return  mixed  The value of the that has been set.
+	 *
+	 * @since   1.0
+	 */
+	public function append($path, $value)
+	{
+		$result = null;
+
+		/**
+		 * Explode the registry path into an array and remove empty
+		 * nodes that occur as a result of a double dot. ex: joomla..test
+		 * Finally, re-key the array so they are sequential.
+		 */
+		$nodes = array_values(array_filter(explode('.', $path), 'strlen'));
+
+		if ($nodes)
+		{
+			// Initialize the current node to be the registry root.
+			$node = $this->data;
+
+			// Traverse the registry to find the correct node for the result.
+			// TODO Create a new private method from part of code below, as it is almost equal to 'set' method
+			for ($i = 0, $n = count($nodes) - 1; $i <= $n; $i++)
+			{
+				if (is_object($node))
+				{
+					if (!isset($node->$nodes[$i]) && ($i != $n))
+					{
+						$node->$nodes[$i] = new \stdClass;
+					}
+
+					// Pass the child as pointer in case it is an array
+					$node = &$node->$nodes[$i];
+				}
+				elseif (is_array($node))
+				{
+					if (!isset($node[$nodes[$i]]) && ($i != $n))
+					{
+						$node[$nodes[$i]] = new \stdClass;
+					}
+
+					// Pass the child as pointer in case it is an array
+					$node = &$node[$nodes[$i]];
+				}
+			}
+
+			if (!is_array($node))
+			// Convert the node to array to make append possible
+			{
+				$node = get_object_vars($node);
+			}
+
+			array_push($node, $value);
+			$result = $value;
 		}
 
 		return $result;

@@ -703,6 +703,73 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test the Joomla\Registry\Registry::append method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\Registry\Registry::append
+	 * @since   1.0
+	 */
+	public function testAppend()
+	{
+		$a = new Registry;
+		$a->set('foo', array('var1', 'var2', 'var3'));
+		$a->append('foo', 'var4');
+
+		$this->assertThat(
+			$a->get('foo.3'),
+			$this->equalTo('var4'),
+			'Line: ' . __LINE__ . '.'
+		);
+
+		$b = $a->get('foo');
+		$this->assertTrue(is_array($b));
+
+		$b[] = 'var5';
+		$this->assertNull($a->get('foo.4'));
+	}
+
+	/**
+	 * Test the registry set for unassociative arrays
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnassocArrays()
+	{
+		$a = new Registry;
+		$a->loadArray(
+			array(
+				'assoc' => array(
+					'foo' => 'bar'
+				),
+				'unassoc' => array(
+					'baz', 'baz2', 'baz3'
+				),
+				'mixed' => array(
+					'var', 'var2', 'key' => 'var3'
+				)
+			)
+		);
+
+		$a->set('assoc.foo2', 'bar2');
+		$this->assertEquals('bar2', $a->get('assoc.foo2'));
+
+		$a->set('mixed.key2', 'var4');
+		$this->assertEquals('var4', $a->get('mixed.key2'));
+
+		$a->set('mixed.2', 'var5');
+		$this->assertEquals('var5', $a->get('mixed.2'));
+		$this->assertEquals('var2', $a->get('mixed.1'));
+
+		$a->set('unassoc.3', 'baz4');
+		$this->assertEquals('baz4', $a->get('unassoc.3'));
+
+		$this->assertTrue(is_array($a->get('unassoc')), 'Un-associative array should remain after write');
+	}
+
+	/**
 	 * Test the Joomla\Registry\Registry::toArray method.
 	 *
 	 * @return  void
