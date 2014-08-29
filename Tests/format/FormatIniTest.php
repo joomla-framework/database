@@ -121,12 +121,13 @@ class JRegistryFormatINITest extends \PHPUnit_Framework_TestCase
 	{
 		$class = AbstractRegistryFormat::getInstance('INI');
 
-		$input = "[section1]\nboolfalse=false\nbooltrue=true\nnumericfloat=3.1415\nnumericint=42\nkey=\"value\"\narrayitem[]=\"item1\"\narrayitem[]=\"item2\"\n\n".
-				 "[section2]\nboolfalse=false\nbooltrue=true\nnumericfloat=3.1415\nnumericint=42\nkey=\"value\"";
-		
+		$input = "[section1]\nboolfalse=false\nbooltrue=true\nnumericfloat=3.1415\nnumericint=42\nkey=\"value\"\n" .
+			"arrayitem[]=\"item1\"\narrayitem[]=\"item2\"\n\n" .
+			"[section2]\nboolfalse=false\nbooltrue=true\nnumericfloat=3.1415\nnumericint=42\nkey=\"value\"";
+
 		$object = $class->stringToObject($input, array('processSections' => true, 'supportArrayValues' => true));
 		$output = $class->objectToString($object, array('processSections' => true, 'supportArrayValues' => true));
 
 		$this->assertEquals($input, $output, 'Line:' . __LINE__ . ' Input and output data must be equal.');
-	}	
+	}
 }

@@ -30,7 +30,7 @@ class Ini extends AbstractRegistryFormat
 		'parseBooleanWords'  => false,
 		'processSections'    => false,
 	);
-	 
+
 	/**
 	 * A cache used by stringToobject.
 	 *
@@ -55,22 +55,24 @@ class Ini extends AbstractRegistryFormat
 	public function objectToString($object, $options = array())
 	{
 		$options = array_merge(self::$options, $options);
-		
+
 		$local = array();
 		$global = array();
 
 		$variables = get_object_vars($object);
-		
+
 		$last = count($variables);
-		//Assume that the first element is in section
+
+		// Assume that the first element is in section
 		$in_section = true;
+
 		// Iterate over the object to set the properties.
 		foreach ($variables as $key => $value)
 		{
 			// If the value is an object then we need to put it in a local section.
 			if (is_object($value))
 			{
-				//Add an empty line if previous string wasn't in a section
+				// Add an empty line if previous string wasn't in a section
 				if (!$in_section)
 				{
 					$local[] = '';
@@ -84,18 +86,19 @@ class Ini extends AbstractRegistryFormat
 					if (is_array($v) && $options['supportArrayValues'])
 					{
 						$assoc = ArrayHelper::isAssociative($v);
+
 						foreach ($v as $array_key => $item)
 						{
 							$array_key = ($assoc) ? $array_key : '';
-							$local[] = $k . '['. $array_key .']='. $this->getValueAsINI($item);
+							$local[] = $k . '[' . $array_key . ']=' . $this->getValueAsINI($item);
 						}
 					}
-					else 
+					else
 					{
 						$local[] = $k . '=' . $this->getValueAsINI($v);
 					}
 				}
-				//Add empty line after section if it is not the last one
+				// Add empty line after section if it is not the last one
 				if (0 != --$last)
 				{
 					$local[] = '';
@@ -104,10 +107,11 @@ class Ini extends AbstractRegistryFormat
 			elseif (is_array($value) && $options['supportArrayValues'])
 			{
 				$assoc = ArrayHelper::isAssociative($value);
+
 				foreach ($value as $array_key => $item)
 				{
 					$array_key = ($assoc) ? $array_key : '';
-					$global[] = $key . '['. $array_key .']='. $this->getValueAsINI($item);
+					$global[] = $key . '[' . $array_key . ']=' . $this->getValueAsINI($item);
 				}
 			}
 			else
@@ -192,28 +196,31 @@ class Ini extends AbstractRegistryFormat
 
 			// Get the key and value for the line.
 			list ($key, $value) = explode('=', $line, 2);
-			
-			//If we have an array item
+
+			// If we have an array item
 			if (substr($key, -1) == ']' && ($open_brace = strpos($key, '[', 1)) !== false)
 			{
 				if ($options['supportArrayValues'])
 				{
 					$array = true;
-					$array_key = substr($key, $open_brace+1, -1);
-					if (strpos($array_key,'[') !== false || strpos($array_key,']') !== false)
-					//If we have a multi-dimensional array or malformed key
+					$array_key = substr($key, $open_brace + 1, -1);
+
+					if (strpos($array_key, '[') !== false || strpos($array_key, ']') !== false)
+
+					// If we have a multi-dimensional array or malformed key
 					{
 						// Maybe throw exception?
 						continue;
 					}
+
 					$key = substr($key, 0, $open_brace);
 				}
-				else 
+				else
 				{
 					continue;
 				}
 			}
-			
+
 			// Validate the key.
 			if (preg_match('/[^A-Z0-9_]/i', $key))
 			{
@@ -244,8 +251,8 @@ class Ini extends AbstractRegistryFormat
 				{
 					$value = true;
 				}
-				elseif ($options['parseBooleanWords'] && in_array(strtolower($value), array('yes', 'no'))) 
-				//If the value is 'yes' or 'no' and option is enabled assume appropriate boolean
+				elseif ($options['parseBooleanWords'] && in_array(strtolower($value), array('yes', 'no')))
+				// If the value is 'yes' or 'no' and option is enabled assume appropriate boolean
 				{
 					$value = (strtolower($value) == 'yes');
 				}
@@ -273,16 +280,17 @@ class Ini extends AbstractRegistryFormat
 					{
 						$obj->$section->$key = array();
 					}
+
 					if (!empty($array_key))
 					{
 						$obj->$section->{$key}[$array_key] = $value;
 					}
-					else 
+					else
 					{
 						$obj->$section->{$key}[] = $value;
 					}
 				}
-				else 
+				else
 				{
 					$obj->$section->$key = $value;
 				}
@@ -295,25 +303,27 @@ class Ini extends AbstractRegistryFormat
 					{
 						$obj->$key = array();
 					}
+
 					if (!empty($array_key))
 					{
 						$obj->{$key}[$array_key] = $value;
 					}
-					else 
+					else
 					{
 						$obj->{$key}[] = $value;
 					}
 				}
-				else 
+				else
 				{
 					$obj->$key = $value;
 				}
 			}
+
 			$array = false;
 		}
 
 		// Cache the string to save cpu cycles -- thus the world :)
-		self::$cache[$hash] = clone ($obj);
+		self::$cache[$hash] = clone $obj;
 
 		return $obj;
 	}

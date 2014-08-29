@@ -72,7 +72,7 @@ class JRegistryFormatPHPTest extends \PHPUnit_Framework_TestCase
 		// This method is not implemented in the class. The test is to achieve 100% code coverage
 		$this->assertTrue($class->stringToObject(''));
 	}
-	
+
 	/**
 	 * Test input and output data equality.
 	 *

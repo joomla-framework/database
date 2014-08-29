@@ -168,9 +168,8 @@ array:
 	 */
 	public function testDataEquality()
 	{
-
-		$input = "foo: bar\nquoted: '\"stringwithquotes\"'\nbooleantrue: true\nbooleanfalse: false\nnumericint: 42\nnumericfloat: 3.1415\n".
-				 "section:\n    key: value\narray:\n    nestedarray: { test1: value1 }\n";
+		$input = "foo: bar\nquoted: '\"stringwithquotes\"'\nbooleantrue: true\nbooleanfalse: false\nnumericint: 42\nnumericfloat: 3.1415\n" .
+				"section:\n    key: value\narray:\n    nestedarray: { test1: value1 }\n";
 
 		$object = $this->fixture->stringToObject($input);
 		$output = $this->fixture->objectToString($object);
