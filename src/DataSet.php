@@ -213,10 +213,22 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 			throw new \Exception("Unknown selection type: " . $type);
 		}
 
-		foreach ($this->objects as $object)
+		if (version_compare(PHP_VERSION, '5.4.0', '<'))
 		{
-			$object_vars = json_decode(json_encode($object), true);
-			$keys = (is_null($keys)) ? $object_vars : $function($keys, $object_vars);
+			foreach ($this->objects as $object)
+			{
+				$object_vars = json_decode(json_encode($object->jsonSerialize()), true);
+				$keys = (is_null($keys)) ? $object_vars : $function($keys, $object_vars);
+			}
+		}
+		else
+		{
+			foreach ($this->objects as $object)
+			{
+				
+				$object_vars = json_decode(json_encode($object), true);
+				$keys = (is_null($keys)) ? $object_vars : $function($keys, $object_vars);
+			}
 		}
 
 		return array_keys($keys);

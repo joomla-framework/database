@@ -166,11 +166,6 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetObjectsKeys()
 	{
-		if (version_compare(PHP_VERSION, '5.4.0', '<='))
-		{
-			$this->markTestIncomplete('JsonSerializable is not supported in PHP 5.3');
-		}
-
 		$instance = new Data\DataSet(
 			array(
 				'key1' => new Data\DataObject(array('foo' => 'var', 'bar' => 'var', 'baz' => 'var')),
@@ -200,11 +195,6 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testToArray()
 	{
-		if (version_compare(PHP_VERSION, '5.4.0', '<='))
-		{
-			$this->markTestIncomplete('JsonSerializable is not supported in PHP 5.3');
-		}
-
 		$instance = new Data\DataSet(
 			array(
 				'key1' => new Data\DataObject(array('date1' => '2014-08-29', 'date2' => '2014-09-16')),
