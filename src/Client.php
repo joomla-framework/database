@@ -106,12 +106,14 @@ class Client
 
 		if ($this->getOption('sendheaders'))
 		{
-			if($this->application instanceof AbstractWebApplication){
+			if ($this->application instanceof AbstractWebApplication)
+			{
 				$this->application->redirect($this->createUrl());
-			}else{
+			}
+			else
+			{
 				throw new RuntimeException('AbstractWebApplication object required for authentication process.');
 			}
-			
 		}
 
 		return false;
