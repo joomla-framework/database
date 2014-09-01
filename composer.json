@@ -20,5 +20,10 @@
             "Joomla\\Database\\": "src/",
             "Joomla\\Database\\Tests\\": "Tests/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
     }
 }
