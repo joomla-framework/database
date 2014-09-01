@@ -17,5 +17,10 @@
             "Joomla\\Event\\": "src/",
             "Joomla\\Event\\Tests\\": "Tests/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
     }
 }
