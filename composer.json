@@ -18,5 +18,10 @@
             "Joomla\\Utilities\\": "src/",
             "Joomla\\Utilities\\Tests\\": "Tests/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
     }
 }
