@@ -7,6 +7,7 @@
 namespace Joomla\Uri\Tests;
 
 use Joomla\Uri\Uri;
+use Joomla\Test\TestHelper;
 
 /**
  * Tests for the Joomla\Uri\Uri class.
@@ -49,6 +50,67 @@ class UriTest extends \PHPUnit_Framework_TestCase
 		$this->assertThat(
 			$this->object->__toString(),
 			$this->equalTo('http://someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
+		);
+	}
+
+	/**
+	 * Test the buildQuery method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 * @covers  Joomla\Uri\Uri::buildQuery
+	 */
+	public function testBuildQuery()
+	{
+		$this->assertThat(
+			TestHelper::invoke(
+				$this->object,
+				'buildQuery',
+				array(
+					'var' => 'value',
+					'foo' => 'bar'
+				)
+			),
+			$this->equalTo('var=value&foo=bar')
+		);
+	}
+
+	/**
+	 * Test the cleanPath method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 * @covers  Joomla\Uri\Uri::cleanPath
+	 */
+	public function testcleanPath()
+	{
+		$this->assertThat(
+			TestHelper::invoke(
+				$this->object,
+				'cleanPath',
+				'/foo/bar/../boo.php'
+			),
+			$this->equalTo('/foo/boo.php')
+		);
+
+		$this->assertThat(
+			TestHelper::invoke(
+				$this->object,
+				'cleanPath',
+				'/foo/bar/../../boo.php'
+			),
+			$this->equalTo('/boo.php')
+		);
+
+		$this->assertThat(
+			TestHelper::invoke(
+				$this->object,
+				'cleanPath',
+				'/foo/bar/.././/boo.php'
+			),
+			$this->equalTo('/foo/boo.php')
 		);
 	}
 
@@ -250,6 +312,15 @@ class UriTest extends \PHPUnit_Framework_TestCase
 		$this->assertThat(
 			$this->object->getQuery(true),
 			$this->equalTo(array('var' => 'value'))
+		);
+
+		// Set a new query
+		$this->object->setQuery('somevar=somevalue');
+
+		// Test if query is null, to build query in getQuery call.
+		$this->assertThat(
+			$this->object->getQuery(),
+			$this->equalTo('somevar=somevalue')
 		);
 	}
 
