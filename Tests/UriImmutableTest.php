@@ -37,11 +37,12 @@ class UriImmuteableTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test the __set method.
+	 * Tests the __set method. Immutable objects will throw
+	 * an exception when you try to change a property.
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 * @covers  Joomla\Uri\UriImmutable::__set
 	 * @expectedException \BadMethodCallException
 	 */

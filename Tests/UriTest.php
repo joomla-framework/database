@@ -58,7 +58,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 * @covers  Joomla\Uri\Uri::buildQuery
 	 */
 	public function testBuildQuery()
@@ -81,7 +81,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 * @covers  Joomla\Uri\Uri::cleanPath
 	 */
 	public function testcleanPath()

@@ -6,10 +6,10 @@
     "homepage": "https://github.com/joomla-framework/uri",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.3.10",
-        "joomla/test": "~1.0"
+        "php": ">=5.3.10"
     },
     "require-dev": {
+	    "joomla/test": "~1.0",
         "phpunit/phpunit": "4.*",
         "squizlabs/php_codesniffer": "1.*"
     },
