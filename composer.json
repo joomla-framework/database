@@ -21,5 +21,10 @@
             "Joomla\\OAuth2\\": "src/",
             "Joomla\\OAuth2\\Tests\\": "Tests/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
     }
 }
