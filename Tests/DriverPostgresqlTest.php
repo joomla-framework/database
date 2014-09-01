@@ -885,20 +885,6 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	}
 
 	/**
-	 * Test Test method - there really isn't a lot to test here, but
-	 * this is present for the sake of completeness
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 * @deprecated  2.0
-	 */
-	public function testTest()
-	{
-		$this->assertThat(\Joomla\Database\Postgresql\PostgresqlDriver::test(), $this->isTrue(), __LINE__);
-	}
-
-	/**
 	 * Test updateObject function.
 	 *
 	 * @return  void
