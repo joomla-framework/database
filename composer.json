@@ -20,5 +20,10 @@
             "Joomla\\Authentication\\": "src/",
             "Joomla\\Authentication\\Tests\\": "Tests/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
     }
 }
