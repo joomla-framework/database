@@ -17,5 +17,10 @@
             "Joomla\\DI\\": "src/",
             "Joomla\\DI\\Tests\\": "Tests/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
     }
 }
