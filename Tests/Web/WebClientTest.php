@@ -191,6 +191,8 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 
 		$_SERVER['HTTP_HOST'] = 'mydomain.com';
 		$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0';
+		$_SERVER['HTTP_CUSTOM_HEADER'] = 'Client custom header';
+		$_SERVER['HTTP_AUTHORIZATION'] = 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==';
 
 		// Get a new JWebInspector instance.
 		$this->inspector = new JWebClientInspector;
@@ -242,6 +244,25 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 		// Test the assertions.
 		$this->assertEquals($this->inspector->browser, $b, 'Browser detection failed');
 		$this->assertEquals($this->inspector->browserVersion, $v, 'Version detection failed');
+	}
+
+	/**
+	 * Tests the Joomla\Application\Web\WebClient::detectheaders method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testDetectHeaders()
+	{
+		$expected = array(
+			'Host' => 'mydomain.com',
+			'User-Agent' => 'Mozilla/5.0',
+			'Custom-Header' => 'Client custom header',
+			'Authorization' => 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ=='
+		);
+
+		$this->assertEquals($this->inspector->headers, $expected, 'Headers detection failed');
 	}
 
 	/**
