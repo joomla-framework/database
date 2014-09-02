@@ -25,6 +25,14 @@ class ColorProcessorTest extends \PHPUnit_Framework_TestCase
 	protected $object;
 
 	/**
+	 * Windows OS flag
+	 *
+	 * @var    boolean
+	 * @since  1.0
+	 */
+	protected $winOs = false;
+
+	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
@@ -35,6 +43,7 @@ class ColorProcessorTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		$this->object = new ColorProcessor;
+		$this->winOs = ((strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'));
 	}
 
 	/**
@@ -50,9 +59,11 @@ class ColorProcessorTest extends \PHPUnit_Framework_TestCase
 		$style = new ColorStyle('red');
 		$this->object->addStyle('foo', $style);
 
+		$check = ($this->winOs) ? 'foo' : '[31mfoo[0m';
+
 		$this->assertThat(
 			$this->object->process('<foo>foo</foo>'),
-			$this->equalTo('[31mfoo[0m')
+			$this->equalTo($check)
 		);
 	}
 
@@ -82,9 +93,11 @@ class ColorProcessorTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testProcess()
 	{
+		$check = ($this->winOs) ? 'foo' : '[31mfoo[0m';
+
 		$this->assertThat(
 			$this->object->process('<fg=red>foo</fg=red>'),
-			$this->equalTo('[31mfoo[0m')
+			$this->equalTo($check)
 		);
 	}
 
@@ -101,9 +114,11 @@ class ColorProcessorTest extends \PHPUnit_Framework_TestCase
 		$style = new ColorStyle('red');
 		$this->object->addStyle('foo', $style);
 
+		$check = ($this->winOs) ? 'foo' : '[31mfoo[0m';
+
 		$this->assertThat(
 			$this->object->process('<foo>foo</foo>'),
-			$this->equalTo('[31mfoo[0m')
+			$this->equalTo($check)
 		);
 	}
 
@@ -117,9 +132,11 @@ class ColorProcessorTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testProcessReplace()
 	{
+		$check = ($this->winOs) ? 'foo' : '[31mfoo[0m';
+
 		$this->assertThat(
 			$this->object->process('<fg=red>foo</fg=red>'),
-			$this->equalTo('[31mfoo[0m')
+			$this->equalTo($check)
 		);
 	}
 }
