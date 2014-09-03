@@ -326,7 +326,7 @@ class Registry implements \JsonSerializable, \ArrayAccess
 	 *
 	 * @return  Registry|null  Registry object if data is present
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function extract($path)
 	{

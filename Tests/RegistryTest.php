@@ -579,7 +579,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Registry\Registry::extract
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function testExtract()
 	{
