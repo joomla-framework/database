@@ -117,11 +117,7 @@ class MysqlDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$query = $this->getQuery(true);
-
-		$query->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($tableName));
-
-		$this->setQuery($query);
+		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($tableName));
 
 		$this->execute();
 
