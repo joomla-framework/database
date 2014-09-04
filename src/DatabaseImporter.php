@@ -120,6 +120,41 @@ abstract class DatabaseImporter
 	}
 
 	/**
+	 * Get the SQL syntax to add a column.
+	 *
+	 * @param   string             $table  The table name.
+	 * @param   \SimpleXMLElement  $field  The XML field definition.
+	 *
+	 * @return  string
+	 *
+	 * @since   1.0
+	 */
+	protected function getAddColumnSQL($table, \SimpleXMLElement $field)
+	{
+		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD COLUMN ' . $this->getColumnSQL($field);
+
+		return $sql;
+	}
+
+	/**
+	 * Get the syntax to alter a column.
+	 *
+	 * @param   string             $table  The name of the database table to alter.
+	 * @param   \SimpleXMLElement  $field  The XML definition for the field.
+	 *
+	 * @return  string
+	 *
+	 * @since   1.0
+	 */
+	protected function getChangeColumnSQL($table, \SimpleXMLElement $field)
+	{
+		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
+			. $this->getColumnSQL($field);
+
+		return $sql;
+	}
+
+	/**
 	 * Get the SQL syntax to drop a column.
 	 *
 	 * @param   string  $table  The table name.
@@ -134,6 +169,42 @@ abstract class DatabaseImporter
 		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP COLUMN ' . $this->db->quoteName($name);
 
 		return $sql;
+	}
+
+	/**
+	 * Get the details list of keys for a table.
+	 *
+	 * @param   array  $keys  An array of objects that comprise the keys for the table.
+	 *
+	 * @return  array  The lookup array. array({key name} => array(object, ...))
+	 *
+	 * @since   1.0
+	 */
+	protected function getKeyLookup($keys)
+	{
+		// First pass, create a lookup of the keys.
+		$lookup = array();
+
+		foreach ($keys as $key)
+		{
+			if ($key instanceof \SimpleXMLElement)
+			{
+				$kName = (string) $key['Key_name'];
+			}
+			else
+			{
+				$kName = $key->Key_name;
+			}
+
+			if (empty($lookup[$kName]))
+			{
+				$lookup[$kName] = array();
+			}
+
+			$lookup[$kName][] = $key;
+		}
+
+		return $lookup;
 	}
 
 	/**

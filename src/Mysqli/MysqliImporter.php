@@ -43,23 +43,6 @@ class MysqliImporter extends DatabaseImporter
 	}
 
 	/**
-	 * Get the SQL syntax to add a column.
-	 *
-	 * @param   string             $table  The table name.
-	 * @param   \SimpleXMLElement  $field  The XML field definition.
-	 *
-	 * @return  string
-	 *
-	 * @since   1.0
-	 */
-	protected function getAddColumnSQL($table, \SimpleXMLElement $field)
-	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD COLUMN ' . $this->getColumnSQL($field);
-
-		return $sql;
-	}
-
-	/**
 	 * Get the SQL syntax to add a key.
 	 *
 	 * @param   string  $table  The table name.

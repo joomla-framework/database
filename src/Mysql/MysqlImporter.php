@@ -18,23 +18,6 @@ use Joomla\Database\DatabaseImporter;
 class MysqlImporter extends DatabaseImporter
 {
 	/**
-	 * Get the SQL syntax to add a column.
-	 *
-	 * @param   string             $table  The table name.
-	 * @param   \SimpleXMLElement  $field  The XML field definition.
-	 *
-	 * @return  string
-	 *
-	 * @since   1.0
-	 */
-	protected function getAddColumnSQL($table, \SimpleXMLElement $field)
-	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD COLUMN ' . $this->getColumnSQL($field);
-
-		return $sql;
-	}
-
-	/**
 	 * Get the SQL syntax to add a key.
 	 *
 	 * @param   string  $table  The table name.
@@ -271,23 +254,6 @@ class MysqlImporter extends DatabaseImporter
 		{
 			$sql .= ' ' . strtoupper($fExtra);
 		}
-
-		return $sql;
-	}
-
-	/**
-	 * Get the SQL syntax to drop a column.
-	 *
-	 * @param   string  $table  The table name.
-	 * @param   string  $name   The name of the field to drop.
-	 *
-	 * @return  string
-	 *
-	 * @since   1.0
-	 */
-	protected function getDropColumnSQL($table, $name)
-	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP COLUMN ' . $this->db->quoteName($name);
 
 		return $sql;
 	}
