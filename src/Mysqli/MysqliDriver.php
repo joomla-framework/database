@@ -84,7 +84,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function __destruct()
 	{
-		if (is_callable(array($this->connection, 'close')))
+		if (is_resource($this->connection))
 		{
 			mysqli_close($this->connection);
 		}
