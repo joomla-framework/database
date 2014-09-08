@@ -123,7 +123,7 @@ class PlatesRenderer implements RendererInterface
 	public function pathExists($path)
 	{
 		// TODO check for directories
-		return $this->engine->exists($path);
+		return $this->engine->pathExists($path);
 	}
 
 	/**
