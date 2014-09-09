@@ -101,7 +101,7 @@ class Input implements \Serializable, \Countable
 
 		if (is_null($source))
 		{
-			$this->data = $_REQUEST;
+			$this->data = &$_REQUEST;
 		}
 		else
 		{
