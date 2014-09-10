@@ -16,16 +16,6 @@ namespace BabDev\Renderer;
 interface RendererInterface
 {
 	/**
-	 * Interface constructor
-	 *
-	 * @param   array  $config  Configuration array
-	 *
-	 * @since   1.0
-	 * @todo    Probably the config should be a Joomla Registry instance to avoid excess variables checks
-	 */
-	public function __construct($config = array());
-
-	/**
 	 * Render and return compiled data.
 	 *
 	 * @param   string  $template  The template file name
