@@ -59,7 +59,7 @@ class PhpEngineRenderer implements RendererInterface
 	{
 		$data = array_merge($this->data, $data);
 
-		$this->engine->render($template, $data);
+		return $this->engine->render($template, $data);
 	}
 
 	/**
