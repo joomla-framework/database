@@ -8,14 +8,16 @@
 
 namespace BabDev\Renderer;
 
+use Symfony\Component\Templating\Loader\LoaderInterface;
 use Symfony\Component\Templating\PhpEngine;
+use Symfony\Component\Templating\TemplateNameParserInterface;
 
 /**
  * PhpEngine template renderer
  *
  * @since  1.0
  */
-class PhpEngineRenderer extends PhpEngine implements RendererInterface
+class PhpEngineRenderer implements RendererInterface
 {
 	/**
 	 * Data for output by the renderer
@@ -24,6 +26,41 @@ class PhpEngineRenderer extends PhpEngine implements RendererInterface
 	 * @since  1.0
 	 */
 	private $data = array();
+
+	/**
+	 * Rendering engine
+	 *
+	 * @var    PhpEngine
+	 * @since  1.0
+	 */
+	private $engine;
+
+	/**
+	 * Constructor
+	 *
+	 * @since   1.0
+	 */
+	public function __construct(TemplateNameParserInterface $parser, LoaderInterface $loader)
+	{
+		$this->engine = new PhpEngine($parser, $loader);
+	}
+
+	/**
+	 * Render and return compiled data.
+	 *
+	 * @param   string  $template  The template file name
+	 * @param   array   $data      The data to pass to the template
+	 *
+	 * @return  string  Compiled data
+	 *
+	 * @since   1.0
+	 */
+	public function render($template, array $data = array())
+	{
+		$data = array_merge($this->data, $data);
+
+		$this->engine->render($template, $data);
+	}
 
 	/**
 	 * Add a folder with alias to the renderer
@@ -65,7 +102,7 @@ class PhpEngineRenderer extends PhpEngine implements RendererInterface
 	 */
 	public function pathExists($path)
 	{
-		return $this->exists($path);
+		return $this->engine->exists($path);
 	}
 
 	/**
@@ -96,5 +133,20 @@ class PhpEngineRenderer extends PhpEngine implements RendererInterface
 		$this->data = array();
 
 		return $this;
+	}
+
+	/**
+	 * Sets a piece of data
+	 *
+	 * @param   string  $key    Name of variable
+	 * @param   string  $value  Value of variable
+	 *
+	 * @return  PhpEngineRenderer  Returns self for chaining
+	 *
+	 * @since   1.0
+	 */
+	public function set($key, $value)
+	{
+		// TODO: Implement set() method.
 	}
 }
