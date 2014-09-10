@@ -16,6 +16,14 @@ namespace BabDev\Renderer;
 class MustacheRenderer extends \Mustache_Engine implements RendererInterface
 {
 	/**
+	 * Data for output by the renderer
+	 *
+	 * @var    array
+	 * @since  1.0
+	 */
+	private $data = array();
+
+	/**
 	 * Render and return compiled data.
 	 *
 	 * @param   string  $template  The template file name
@@ -68,6 +76,16 @@ class MustacheRenderer extends \Mustache_Engine implements RendererInterface
 	 */
 	public function pathExists($path)
 	{
+		try
+		{
+			$this->getLoader()->load($name);
+
+			return true;
+		}
+		catch (Mustache_Exception_UnknownTemplateException $e)
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -81,6 +99,9 @@ class MustacheRenderer extends \Mustache_Engine implements RendererInterface
 	 */
 	public function setData($data)
 	{
+		$this->data = $data;
+
+		return $this;
 	}
 
 	/**
@@ -92,6 +113,9 @@ class MustacheRenderer extends \Mustache_Engine implements RendererInterface
 	 */
 	public function unsetData()
 	{
+		$this->data = array();
+
+		return $this;
 	}
 
 	/**
