@@ -4,15 +4,16 @@
 
 ### `Renderer\RendererInterface`
 
-`Renderer\RendererInterface` is an interface that requires a class to be implemented with a `render` method.
+`Renderer\RendererInterface` is an interface to provide a common rendering API.
 
 ## Classes
 
 * `Renderer\MustacheRenderer`
+* `Renderer\PhpEngineRenderer`
 * `Renderer\PlatesRenderer`
 * `Renderer\TwigRenderer`
 
-Each of these classes extends the parent rendering engine classes to enable those engines to implement the `RendererInterface`.
+All classes except `PlatesRenderer` extend the parent rendering engine classes to enable those engines to implement the `RendererInterface`.
 
 ##### Usage
 
