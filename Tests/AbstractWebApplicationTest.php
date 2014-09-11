@@ -966,6 +966,53 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the Joomla\Application\AbstractWebApplication::redirect method with aditional headers.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testRedirectWithAdditionalHeaders()
+	{
+		$base = 'http://j.org/';
+		$url = 'index.php';
+		$expires = gmdate('D, d M Y H:i:s \G\M\T', time());
+
+		// Inject the client information.
+		TestHelper::setValue(
+			$this->instance,
+			'client',
+			(object) array(
+				'engine' => WebClient::GECKO,
+			)
+		);
+
+		// Inject the internal configuration.
+		$config = new Registry;
+		$config->set('uri.base.full', $base);
+
+		TestHelper::setValue($this->instance, 'config', $config);
+
+		$this->instance
+			->setHeader('Cache-Control', 'no-cache')
+			->setHeader('Expires', $expires);
+		$this->instance->redirect($url, false);
+
+		$this->assertThat(
+			$this->instance->headers,
+			$this->equalTo(
+				array(
+					array('HTTP/1.1 303 See other', true, null),
+					array('Location: ' . $base . $url, true, null),
+					array('Content-Type: text/html; charset=utf-8', true, null),
+					array('Cache-Control: no-cache', true, null),
+					array('Expires: ' . $expires, true, null),
+				)
+			)
+		);
+	}
+
+	/**
 	 * Tests the Joomla\Application\AbstractWebApplication::redirect method with headers already sent.
 	 *
 	 * @return  void

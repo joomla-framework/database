@@ -329,6 +329,9 @@ abstract class AbstractWebApplication extends AbstractApplication
 				$this->header($moved ? 'HTTP/1.1 301 Moved Permanently' : 'HTTP/1.1 303 See other');
 				$this->header('Location: ' . $url);
 				$this->header('Content-Type: text/html; charset=' . $this->charSet);
+
+				// Send other headers that may have been set.
+				$this->sendHeaders();
 			}
 		}
 
