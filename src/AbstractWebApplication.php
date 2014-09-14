@@ -362,7 +362,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 				// @deprecated 3.0
 				if (is_bool($status))
 				{
-					$status = $status ? 303 : 301;
+					$status = $status ? 301 : 303;
 				}
 
 				// All other cases use the more efficient HTTP header for redirection.
