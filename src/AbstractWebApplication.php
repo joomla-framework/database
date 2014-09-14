@@ -298,6 +298,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @throws  \InvalidArgumentException
 	 */
 	public function redirect($url, $status = 303)
 	{
@@ -363,6 +364,11 @@ abstract class AbstractWebApplication extends AbstractApplication
 				if (is_bool($status))
 				{
 					$status = $status ? 301 : 303;
+				}
+
+				if (!is_int($status) && !isset($this->responseMap[$status]))
+				{
+					throw new \InvalidArgumentException('You have not supplied a valid HTTP 1.1 status code');
 				}
 
 				// All other cases use the more efficient HTTP header for redirection.
