@@ -366,7 +366,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 				}
 
 				// All other cases use the more efficient HTTP header for redirection.
-				$this->header($responseMap[$status]);
+				$this->header($this->responseMap[$status]);
 				$this->header('Location: ' . $url);
 				$this->header('Content-Type: text/html; charset=' . $this->charSet);
 			}
