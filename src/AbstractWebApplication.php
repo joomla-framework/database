@@ -71,6 +71,39 @@ abstract class AbstractWebApplication extends AbstractApplication
 	private $session;
 
 	/**
+	 * A map of integer HTTP 1.1 response codes to the full HTTP Status for the headers.
+	 *
+	 * @var    object
+	 * @since  1.0
+	 * @see    http://tools.ietf.org/pdf/rfc7231.pdf
+	 */
+	private $responseMap = array(
+		100 => 'HTTP/1.1 100 Continue',
+		101 => 'HTTP/1.1 101 Switching Protocols',
+		200 => 'HTTP/1.1 200 OK',
+		201 => 'HTTP/1.1 201 Created',
+		202 => 'HTTP/1.1 202 Accepted',
+		203 => 'HTTP/1.1 203 Non-Authoritative Information',
+		204 => 'HTTP/1.1 204 No Content',
+		205 => 'HTTP/1.1 205 Reset Content',
+		300 => 'HTTP/1.1 300 Multiple Choices',
+		301 => 'HTTP/1.1 301 Moved Permanently',
+		302 => 'HTTP/1.1 302 Found',
+		303 => 'HTTP/1.1 303 See other',
+		305 => 'HTTP/1.1 305 Use Proxy',
+		306 => 'HTTP/1.1 306 (Unused)',
+		307 => 'HTTP/1.1 307 Temporary Redirect',
+		400 => 'HTTP/1.1 400 Bad Request',
+		426 => 'HTTP/1.1 426 Upgrade Required',
+		500 => 'HTTP/1.1 500 Internal Server Error',
+		501 => 'HTTP/1.1 501 Not Implemented',
+		502 => 'HTTP/1.1 502 Bad Gateway',
+		503 => 'HTTP/1.1 503 Service Unavailable',
+		504 => 'HTTP/1.1 504 Gateway Timeout',
+		505 => 'HTTP/1.1 505 HTTP Version Not Supported',
+	);
+
+	/**
 	 * Class constructor.
 	 *
 	 * @param   Input          $input   An optional argument to provide dependency injection for the application's
@@ -259,14 +292,14 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 * or "303 See Other" code in the header pointing to the new location. If the headers have already been
 	 * sent this will be accomplished using a JavaScript statement.
 	 *
-	 * @param   string   $url    The URL to redirect to. Can only be http/https URL
-	 * @param   boolean  $moved  True if the page is 301 Permanently Moved, otherwise 303 See Other is assumed.
+	 * @param   string   $url     The URL to redirect to. Can only be http/https URL
+	 * @param   integer  $status  The HTTP 1.1 status code to be provided. 303 is assumed by default.
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0
 	 */
-	public function redirect($url, $moved = false)
+	public function redirect($url, $status = 303)
 	{
 		// Check for relative internal links.
 		if (preg_match('#^index\.php#', $url))
@@ -325,8 +358,15 @@ abstract class AbstractWebApplication extends AbstractApplication
 			}
 			else
 			{
+				// Check if we have a boolean for the status variable for compatability with v1 of the framework
+				// @deprecated 3.0
+				if (is_bool($status))
+				{
+					$status = $status ? 303 : 301;
+				}
+
 				// All other cases use the more efficient HTTP header for redirection.
-				$this->header($moved ? 'HTTP/1.1 301 Moved Permanently' : 'HTTP/1.1 303 See other');
+				$this->header($responseMap[$status]);
 				$this->header('Location: ' . $url);
 				$this->header('Content-Type: text/html; charset=' . $this->charSet);
 			}
