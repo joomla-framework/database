@@ -165,6 +165,35 @@ $registry->toString('xml');
 $registry->toString('ini');
 ```
 
+## Dump to one dimension
+
+``` php
+$array = array(
+    'flower' => array(
+        'sunflower' => 'light',
+        'sakura' => 'samurai'
+    )
+);
+
+$registry = new Registry($array);
+
+// Make data to one dimension
+
+$flatted = $registry->flatten();
+
+print_r($flatted);
+```
+
+The result:
+
+```
+Array
+(
+    [flower.sunflower] => light
+    [flower.sakura] => samurai
+)
+```
+
 ## Using YAML
 
 Add Symfony YAML component in `composer.json`

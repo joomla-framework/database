@@ -562,4 +562,49 @@ class Registry implements \JsonSerializable, \ArrayAccess
 
 		return $array;
 	}
+
+	/**
+	 * Dump to one dimension array.
+	 *
+	 * @param   string  $separator The key separator.
+	 *
+	 * @return  string[] Dumped array.
+	 */
+	public function flatten($separator = '.')
+	{
+		$array = array();
+
+		$this->toFlatten($separator, $this->data, $array);
+
+		return $array;
+	}
+
+	/**
+	 * Method to recursively convert data to one dimension array.
+	 *
+	 * @param string        $separator  The key separator.
+	 * @param array|object  $data       Data source of this scope.
+	 * @param array         &$array     The result array, it is pass by reference.
+	 * @param string        $prefix     Last level key prefix.
+	 *
+	 * @return  void
+	 */
+	protected function toFlatten($separator = '.', $data = null, &$array = array(), $prefix = '')
+	{
+		$data = (array) $data;
+
+		foreach ($data as $k => $v)
+		{
+			$key = $prefix ? $prefix . $separator . $k : $k;
+
+			if (is_object($v) || is_array($v))
+			{
+				$this->toFlatten($separator, $v, $array, $key);
+			}
+			else
+			{
+				$array[$key] = $v;
+			}
+		}
+	}
 }
