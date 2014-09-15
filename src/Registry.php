@@ -566,9 +566,9 @@ class Registry implements \JsonSerializable, \ArrayAccess
 	/**
 	 * Dump to one dimension array.
 	 *
-	 * @param   string  $separator The key separator.
+	 * @param   string  $separator  The key separator.
 	 *
-	 * @return  string[] Dumped array.
+	 * @return  string[]  Dumped array.
 	 */
 	public function flatten($separator = '.')
 	{
@@ -582,10 +582,10 @@ class Registry implements \JsonSerializable, \ArrayAccess
 	/**
 	 * Method to recursively convert data to one dimension array.
 	 *
-	 * @param string        $separator  The key separator.
-	 * @param array|object  $data       Data source of this scope.
-	 * @param array         &$array     The result array, it is pass by reference.
-	 * @param string        $prefix     Last level key prefix.
+	 * @param   string        $separator  The key separator.
+	 * @param   array|object  $data       Data source of this scope.
+	 * @param   array         &$array     The result array, it is pass by reference.
+	 * @param   string        $prefix     Last level key prefix.
 	 *
 	 * @return  void
 	 */
