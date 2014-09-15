@@ -15,7 +15,7 @@ use Joomla\Utilities\ArrayHelper;
  *
  * @since  1.0
  */
-class Registry implements \JsonSerializable, \ArrayAccess
+class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \Countable
 {
 	/**
 	 * Registry Object
@@ -78,6 +78,26 @@ class Registry implements \JsonSerializable, \ArrayAccess
 	public function __toString()
 	{
 		return $this->toString();
+	}
+
+	/**
+	 * Count elements of the data object
+	 *
+	 * @return  integer  The custom count as an integer.
+	 *
+	 * @link    http://php.net/manual/en/countable.count.php
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function count()
+	{
+		$i = 0;
+
+		foreach ($this->data as $item)
+		{
+			$i++;
+		}
+
+		return $i++;
 	}
 
 	/**
@@ -223,6 +243,21 @@ class Registry implements \JsonSerializable, \ArrayAccess
 		}
 
 		return self::$instances[$id];
+	}
+
+	/**
+	 * Gets this object represented as an ArrayIterator.
+	 *
+	 * This allows the data properties to be accessed via a foreach statement.
+	 *
+	 * @return  \ArrayIterator  This object represented as an ArrayIterator.
+	 *
+	 * @see     IteratorAggregate::getIterator()
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getIterator()
+	{
+		return new \ArrayIterator($this->data);
 	}
 
 	/**
