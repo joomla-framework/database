@@ -360,6 +360,31 @@ array(3) {
 }
 ```
 
+### flatten
+
+``` php
+use Joomla\Utilities\ArrayHelper;
+
+$array = array(
+    'flower' => array(
+        'sakura' => 'samurai',
+        'olive' => 'peace'
+    )
+);
+
+// Make nested data flatten and separate by dot (".")
+
+$flatted1 = ArrayHelper::flatten($array);
+
+echo $flatted1['flower.sakura']; // 'samuari'
+
+// Custom separator
+
+$flatted2 = ArrayHelper::flatten($array, '/');
+
+echo $flatted2['flower/olive']; // 'peace'
+```
+
 ## Installation via Composer
 
 Add `"joomla/utilities": "~1.0"` to the require block in your composer.json and then run `composer install`.
