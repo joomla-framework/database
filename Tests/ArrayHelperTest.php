@@ -1701,4 +1701,34 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 		// Search non existent value.
 		$this->assertEquals(false, ArrayHelper::arraySearch('barfoo', $array));
 	}
+
+	/**
+	 * testFlatten
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\Utilities\ArrayHelper::flatten
+	 * @since   1.0
+	 */
+	public function testFlatten()
+	{
+		$array = array(
+			'flower' => 'sakura',
+			'olive' => 'peace',
+			'pos1' => array(
+				'sunflower' => 'love'
+			),
+			'pos2' => array(
+				'cornflower' => 'elegant'
+			)
+		);
+
+		$flatted = ArrayHelper::flatten($array);
+
+		$this->assertEquals($flatted['pos1.sunflower'], 'love');
+
+		$flatted = ArrayHelper::flatten($array, '/');
+
+		$this->assertEquals($flatted['pos1/sunflower'], 'love');
+	}
 }
