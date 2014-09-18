@@ -579,7 +579,7 @@ final class ArrayHelper
 	/**
 	 * Method to recursively convert data to one dimension array.
 	 *
-	 * @param   array|object  $array      The result array, it is pass by reference.
+	 * @param   array|object  $array      The array or object to convert.
 	 * @param   string        $separator  The key separator.
 	 * @param   string        $prefix     Last level key prefix.
 	 *
@@ -589,7 +589,7 @@ final class ArrayHelper
 	{
 		if ($array instanceof \Traversable)
 		{
-			$array  = iterator_to_array($array);
+			$array = iterator_to_array($array);
 		}
 		elseif (is_object($array))
 		{
