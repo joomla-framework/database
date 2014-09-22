@@ -111,12 +111,12 @@ class HttpFactory
 
 
 		// If curl is available set it to the first position
-		$key = array_search('curl', $names);
+		$key = array_search('Curl', $names);
 
 		if ($key)
 		{
 			unset($names[$key]);
-			array_unshift($names, 'curl');
+			array_unshift($names, 'Curl');
 		}
 
 		return $names;
