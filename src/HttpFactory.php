@@ -109,6 +109,16 @@ class HttpFactory
 		// Keep alphabetical order across all environments
 		sort($names);
 
+
+		// If curl is available set it to the first position
+		$key = array_search('curl', $names);
+
+		if ($key)
+		{
+			unset($names[$key]);
+			array_unshift($names, 'curl');
+		}
+
 		return $names;
 	}
 }
