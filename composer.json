@@ -6,8 +6,7 @@
     "homepage": "https://github.com/joomla-framework/filter",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.3.10",
-        "joomla/string": "~1.0"
+        "php": ">=5.3.10"
     },
     "require-dev": {
         "joomla/language": "~1.0",
@@ -15,7 +14,8 @@
         "squizlabs/php_codesniffer": "1.*"
     },
     "suggest": {
-        "joomla/language": "Required only if you want to use `OutputFilter::stringURLSafe`."
+        "joomla/language": "Required only if you want to use `OutputFilter::stringURLSafe`.",
+        "joomla/string": "Required only if you want to use `OutputFilter::stringURLSafe` and `OutputFilter::stringURLUnicodeSlug`."
     },
     "autoload": {
         "psr-4": {
