@@ -75,7 +75,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 *
 	 * @var    object
 	 * @since  1.0
-	 * @see    http://tools.ietf.org/pdf/rfc7231.pdf
+	 * @see    http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
 	 */
 	private $responseMap = array(
 		100 => 'HTTP/1.1 100 Continue',
@@ -90,9 +90,11 @@ abstract class AbstractWebApplication extends AbstractApplication
 		301 => 'HTTP/1.1 301 Moved Permanently',
 		302 => 'HTTP/1.1 302 Found',
 		303 => 'HTTP/1.1 303 See other',
+		304 => 'HTTP/1.1 304 Not Modified',
 		305 => 'HTTP/1.1 305 Use Proxy',
 		306 => 'HTTP/1.1 306 (Unused)',
 		307 => 'HTTP/1.1 307 Temporary Redirect',
+		308 => 'HTTP/1.1 308 Permanent Redirect',
 		400 => 'HTTP/1.1 400 Bad Request',
 		402 => 'HTTP/1.1 402 Payment Required',
 		403 => 'HTTP/1.1 403 Forbidden',
