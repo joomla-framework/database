@@ -24,23 +24,23 @@ use Joomla\Filter;
  * @property-read    Files   $files
  * @property-read    Cookie  $cookie
  *
- * @method      integer  getInt()       getInt($name, $default = null)    Get a signed integer.
- * @method      integer  getUint()      getUint($name, $default = null)   Get an unsigned integer.
- * @method      float    getFloat()     getFloat($name, $default = null)  Get a floating-point number.
- * @method      boolean  getBool()      getBool($name, $default = null)   Get a boolean.
- * @method      string   getWord()      getWord($name, $default = null)
- * @method      string   getAlnum()     getAlnum($name, $default = null)
- * @method      string   getCmd()       getCmd($name, $default = null)
- * @method      string   getBase64()    getBase64($name, $default = null)
- * @method      string   getString()    getString($name, $default = null)
- * @method      string   getHtml()      getHtml($name, $default = null)
- * @method      string   getPath()      getPath($name, $default = null)
- * @method      string   getUsername()  getUsername($name, $default = null)
+ * @method      integer  getInt($name, $default = null)       Get a signed integer.
+ * @method      integer  getUint($name, $default = null)      Get an unsigned integer.
+ * @method      float    getFloat($name, $default = null)     Get a floating-point number.
+ * @method      boolean  getBool($name, $default = null)      Get a boolean value.
+ * @method      string   getWord($name, $default = null)      Get a word.
+ * @method      string   getAlnum($name, $default = null)     Get an alphanumeric string.
+ * @method      string   getCmd($name, $default = null)       Get a CMD filtered string.
+ * @method      string   getBase64($name, $default = null)    Get a base64 encoded string.
+ * @method      string   getString($name, $default = null)    Get a string.
+ * @method      string   getHtml($name, $default = null)      Get a HTML string.
+ * @method      string   getPath($name, $default = null)      Get a file path.
+ * @method      string   getUsername($name, $default = null)  Get a username.
  */
 class Input implements \Serializable, \Countable
 {
 	/**
-	 * Options array for the JInput instance.
+	 * Options array for the Input instance.
 	 *
 	 * @var    array
 	 * @since  1.0
@@ -66,7 +66,7 @@ class Input implements \Serializable, \Countable
 	/**
 	 * Input objects
 	 *
-	 * @var    array
+	 * @var    Input[]
 	 * @since  1.0
 	 */
 	protected $inputs = array();
@@ -171,6 +171,7 @@ class Input implements \Serializable, \Countable
 	 *
 	 * @return  mixed  The filtered input value.
 	 *
+	 * @see     \Joomla\Filter\InputFilter::clean()
 	 * @since   1.0
 	 */
 	public function get($name, $default = null, $filter = 'cmd')
