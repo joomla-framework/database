@@ -586,7 +586,7 @@ abstract class DatabaseQuery
 	/**
 	 * Adds a column, or array of column names that would be used for an INSERT INTO statement.
 	 *
-	 * @param   mixed  $columns  A column name, or array of column names.
+	 * @param   array|string  $columns  A column name, or array of column names.
 	 *
 	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
@@ -745,7 +745,7 @@ abstract class DatabaseQuery
 	 * $query->exec('a.*')->exec('b.id');
 	 * $query->exec(array('a.*', 'b.id'));
 	 *
-	 * @param   mixed  $columns  A string or an array of field names.
+	 * @param   array|string  $columns  A string or an array of field names.
 	 *
 	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
@@ -775,10 +775,9 @@ abstract class DatabaseQuery
 	 * Usage:
 	 * $query->select('*')->from('#__a');
 	 *
-	 * @param   mixed   $tables         A string or array of table names.
-	 *                                  This can be a JDatabaseQuery object (or a child of it) when used
-	 *                                  as a subquery in FROM clause along with a value for $subQueryAlias.
-	 * @param   string  $subQueryAlias  Alias used when $tables is a JDatabaseQuery.
+	 * @param   array|string  $tables         A string or array of table names.  This can be a DatabaseQuery object (or a child of it) when used
+	 *                                        as a subquery in FROM clause along with a value for $subQueryAlias.
+	 * @param   string        $subQueryAlias  Alias used when $tables is a DatabaseQuery.
 	 *
 	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
@@ -917,7 +916,7 @@ abstract class DatabaseQuery
 	 * Usage:
 	 * $query->group('id');
 	 *
-	 * @param   mixed  $columns  A string or array of ordering columns.
+	 * @param   array|string  $columns  A string or array of ordering columns.
 	 *
 	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
@@ -943,8 +942,8 @@ abstract class DatabaseQuery
 	 * Usage:
 	 * $query->group('id')->having('COUNT(id) > 5');
 	 *
-	 * @param   mixed   $conditions  A string or array of columns.
-	 * @param   string  $glue        The glue by which to join the conditions. Defaults to AND.
+	 * @param   array|string  $conditions  A string or array of columns.
+	 * @param   string        $glue        The glue by which to join the conditions. Defaults to AND.
 	 *
 	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
@@ -994,7 +993,7 @@ abstract class DatabaseQuery
 	 * $query->insert('#__a')->columns('id, title')->values('1,2')->values('3,4');
 	 * $query->insert('#__a')->columns('id, title')->values(array('1,2', '3,4'));
 	 *
-	 * @param   mixed    $table           The name of the table to insert data into.
+	 * @param   string   $table           The name of the table to insert data into.
 	 * @param   boolean  $incrementField  The name of the field to auto increment.
 	 *
 	 * @return  DatabaseQuery  Returns this object to allow chaining.
@@ -1016,8 +1015,8 @@ abstract class DatabaseQuery
 	 * Usage:
 	 * $query->join('INNER', 'b ON b.id = a.id);
 	 *
-	 * @param   string  $type        The type of join. This string is prepended to the JOIN keyword.
-	 * @param   string  $conditions  A string or array of conditions.
+	 * @param   string        $type        The type of join. This string is prepended to the JOIN keyword.
+	 * @param   array|string  $conditions  A string or array of conditions.
 	 *
 	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
@@ -1113,7 +1112,7 @@ abstract class DatabaseQuery
 	 * $query->order('foo')->order('bar');
 	 * $query->order(array('foo','bar'));
 	 *
-	 * @param   mixed  $columns  A string or array of ordering columns.
+	 * @param   array|string  $columns  A string or array of ordering columns.
 	 *
 	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
@@ -1165,8 +1164,8 @@ abstract class DatabaseQuery
 	 * $query->q('fulltext');
 	 * $query->q(array('option', 'fulltext'));
 	 *
-	 * @param   mixed    $text    A string or an array of strings to quote.
-	 * @param   boolean  $escape  True to escape the string, false to leave it unchanged.
+	 * @param   array|string  $text    A string or an array of strings to quote.
+	 * @param   boolean       $escape  True (default) to escape the string, false to leave it unchanged.
 	 *
 	 * @return  string  The quoted input string.
 	 *
@@ -1196,12 +1195,12 @@ abstract class DatabaseQuery
 	 * $query->quoteName('#__a');
 	 * $query->qn('#__a');
 	 *
-	 * @param   mixed  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
-	 *                        Each type supports dot-notation name.
-	 * @param   mixed  $as    The AS query part associated to $name. It can be string or array, in latter case it has to be
-	 *                        same length of $name; if is null there will not be any AS part for string or array element.
+	 * @param   array|string  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
+	 *                               Each type supports dot-notation name.
+	 * @param   array|string  $as    The AS query part associated to $name. It can be string or array, in latter case it has to be
+	 *                               same length of $name; if is null there will not be any AS part for string or array element.
 	 *
-	 * @return  mixed  The quote wrapped name, same type of $name.
+	 * @return  array|string  The quote wrapped name, same type of $name.
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException if the internal db property is not a valid object.
@@ -1245,7 +1244,7 @@ abstract class DatabaseQuery
 	 * $query->select('a.*')->select('b.id');
 	 * $query->select(array('a.*', 'b.id'));
 	 *
-	 * @param   mixed  $columns  A string or an array of field names.
+	 * @param   array|string  $columns  A string or an array of field names.
 	 *
 	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
@@ -1274,9 +1273,9 @@ abstract class DatabaseQuery
 	 * $query->set('a = 1')->set('b = 2');
 	 * $query->set(array('a = 1', 'b = 2');
 	 *
-	 * @param   mixed   $conditions  A string or array of string conditions.
-	 * @param   string  $glue        The glue by which to join the condition strings. Defaults to ,.
-	 *                               Note that the glue is set on first use and cannot be changed.
+	 * @param   array|string  $conditions  A string or array of string conditions.
+	 * @param   string        $glue        The glue by which to join the condition strings. Defaults to ,.
+	 *                                     Note that the glue is set on first use and cannot be changed.
 	 *
 	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
@@ -1304,7 +1303,7 @@ abstract class DatabaseQuery
 	 * Usage:
 	 * $query->setQuery('select * from #__users');
 	 *
-	 * @param   mixed  $sql  A SQL query string or DatabaseQuery object
+	 * @param   DatabaseQuery|string  $sql  A SQL query string or DatabaseQuery object
 	 *
 	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
@@ -1346,7 +1345,7 @@ abstract class DatabaseQuery
 	 * $query->values('1,2,3')->values('4,5,6');
 	 * $query->values(array('1,2,3', '4,5,6'));
 	 *
-	 * @param   string  $values  A single tuple, or array of tuples.
+	 * @param   array|string  $values  A single tuple, or array of tuples.
 	 *
 	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
@@ -1373,9 +1372,9 @@ abstract class DatabaseQuery
 	 * $query->where('a = 1')->where('b = 2');
 	 * $query->where(array('a = 1', 'b = 2'));
 	 *
-	 * @param   mixed   $conditions  A string or array of where conditions.
-	 * @param   string  $glue        The glue by which to join the conditions. Defaults to AND.
-	 *                               Note that the glue is set on first use and cannot be changed.
+	 * @param   array|string  $conditions  A string or array of where conditions.
+	 * @param   string        $glue        The glue by which to join the conditions. Defaults to AND.
+	 *                                     Note that the glue is set on first use and cannot be changed.
 	 *
 	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
@@ -1428,11 +1427,11 @@ abstract class DatabaseQuery
 	 * $query->union('SELECT name FROM  #__foo','distinct')
 	 * $query->union(array('SELECT name FROM  #__foo', 'SELECT name FROM  #__bar'))
 	 *
-	 * @param   mixed    $query     The Query object or string to union.
-	 * @param   boolean  $distinct  True to only return distinct rows from the union.
-	 * @param   string   $glue      The glue by which to join the conditions.
+	 * @param   DatabaseQuery|string  $query     The DatabaseQuery object or string to union.
+	 * @param   boolean               $distinct  True to only return distinct rows from the union.
+	 * @param   string                $glue      The glue by which to join the conditions.
 	 *
-	 * @return  mixed    The Query object on success or boolean false on failure.
+	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
 	 * @since   1.0
 	 */
@@ -1477,10 +1476,10 @@ abstract class DatabaseQuery
 	 * Usage:
 	 * $query->unionDistinct('SELECT name FROM  #__foo')
 	 *
-	 * @param   mixed   $query  The Query object or string to union.
-	 * @param   string  $glue   The glue by which to join the conditions.
+	 * @param   DatabaseQuery|string  $query  The DatabaseQuery object or string to union.
+	 * @param   string                $glue   The glue by which to join the conditions.
 	 *
-	 * @return  mixed   The Query object on success or boolean false on failure.
+	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
 	 * @since   1.0
 	 */
