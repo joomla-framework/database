@@ -9,7 +9,7 @@
 namespace Joomla\Filter;
 
 /**
- * JFilterInput is a class for filtering input from any data source
+ * InputFilter is a class for filtering input from any data source
  *
  * Forked from the php input filter library by: Daniel Morris <dan@rootcube.com>
  * Original Contributors: Gianpaolo Racca, Ghislain Picard, Marco Wandschneider, Chris Tobin and Andrew Eddie.
@@ -19,9 +19,9 @@ namespace Joomla\Filter;
 class InputFilter
 {
 	/**
-	 * A container for JFilterInput instances.
+	 * A container for InputFilter instances.
 	 *
-	 * @var    array
+	 * @var    InputFilter[]
 	 * @since  1.0
 	 */
 	protected static $instances = array();
@@ -101,7 +101,7 @@ class InputFilter
 	 * The list of the default blacklisted tag attributes. All event handlers implicit.
 	 *
 	 * @var    array
-	 * @since   1.0
+	 * @since  1.0
 	 */
 	public $attrBlacklist = array(
 		'action',
