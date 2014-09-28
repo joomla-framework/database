@@ -18,7 +18,7 @@ interface AuthenticationStrategyInterface
 	/**
 	 * Attempt authentication.
 	 *
-	 * @return  mixed  A string containing a username if authentication is successful, false otherwise.
+	 * @return  string|boolean  A string containing a username if authentication is successful, false otherwise.
 	 *
 	 * @since   1.0
 	 */

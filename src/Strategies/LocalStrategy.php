@@ -22,7 +22,7 @@ class LocalStrategy implements AuthenticationStrategyInterface
 	/**
 	 * The Input object
 	 *
-	 * @var    Input  $input  The input object from which to retrieve the username and password.
+	 * @var    Input
 	 * @since  1.0
 	 */
 	private $input;
@@ -30,7 +30,7 @@ class LocalStrategy implements AuthenticationStrategyInterface
 	/**
 	 * The credential store.
 	 *
-	 * @var    array  $credentialStore  An array of username/hash pairs.
+	 * @var    array
 	 * @since  1.0
 	 */
 	private $credentialStore;
@@ -38,7 +38,7 @@ class LocalStrategy implements AuthenticationStrategyInterface
 	/**
 	 * The last authentication status.
 	 *
-	 * @var    integer  $status  The last status result (use constants from Authentication)
+	 * @var    integer
 	 * @since  1.0
 	 */
 	private $status;
@@ -60,7 +60,7 @@ class LocalStrategy implements AuthenticationStrategyInterface
 	/**
 	 * Attempt to authenticate the username and password pair.
 	 *
-	 * @return  void
+	 * @return  string|boolean  A string containing a username if authentication is successful, false otherwise.
 	 *
 	 * @since   1.0
 	 */
@@ -87,7 +87,7 @@ class LocalStrategy implements AuthenticationStrategyInterface
 			return false;
 		}
 
-		if (\password_verify($password, $hash))
+		if (password_verify($password, $hash))
 		{
 			$this->status = Authentication::SUCCESS;
 

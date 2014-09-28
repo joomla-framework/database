@@ -17,26 +17,36 @@ class Authentication
 {
 	/**
 	 * Authentication was successful.
+	 *
+	 * @since  1.0
 	 */
 	const SUCCESS = 1;
 
 	/**
 	 * Credentials were provided but they were invalid.
+	 *
+	 * @since  1.0
 	 */
 	const INVALID_CREDENTIALS = 2;
 
 	/**
 	 * Credentials were provided but the user did not exist in the credential store.
+	 *
+	 * @since  1.0
 	 */
 	const NO_SUCH_USER = 3;
 
 	/**
 	 * There were no credentials found.
+	 *
+	 * @since  1.0
 	 */
 	const NO_CREDENTIALS = 4;
 
 	/**
 	 * There were partial credentials found but they were not complete.
+	 *
+	 * @since  1.0
 	 */
 	const INCOMPLETE_CREDENTIALS = 5;
 
@@ -49,7 +59,7 @@ class Authentication
 	private $strategies = array();
 
 	/**
-	 * The array of strategies.
+	 * The array of results.
 	 *
 	 * @var    array
 	 * @since  1.0
@@ -76,7 +86,7 @@ class Authentication
 	 *
 	 * @param   array  $strategies  Array of strategies to try - empty to try all strategies.
 	 *
-	 * @return  A string containing a username if authentication is successful, false otherwise.
+	 * @return  string|boolean  A string containing a username if authentication is successful, false otherwise.
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -124,7 +134,7 @@ class Authentication
 	 *
 	 * Use this if you want to get more detailed information about the results of an authentication attempts.
 	 *
-	 * @return  An array containing authentication results.
+	 * @return  array  An array containing authentication results.
 	 *
 	 * @since   1.0
 	 */
