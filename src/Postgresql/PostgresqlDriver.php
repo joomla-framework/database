@@ -441,7 +441,7 @@ class PostgresqlDriver extends DatabaseDriver
 					'Type' => $field->type,
 					'Null' => $field->null,
 					// @todo: Improve query above to return primary key info as well
-					//'Key' => ($field->PK == '1' ? 'PRI' : '')
+					// 'Key' => ($field->PK == '1' ? 'PRI' : '')
 				);
 			}
 		}
