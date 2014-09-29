@@ -86,7 +86,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 		305 => 'HTTP/1.1 305 Use Proxy',
 		306 => 'HTTP/1.1 306 (Unused)',
 		307 => 'HTTP/1.1 307 Temporary Redirect',
-		308 => 'HTTP/1.1 308 Permanent Redirect',
+		308 => 'HTTP/1.1 308 Permanent Redirect'
 	);
 
 	/**
