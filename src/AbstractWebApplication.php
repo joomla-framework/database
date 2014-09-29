@@ -78,14 +78,6 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 * @see    http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
 	 */
 	private $responseMap = array(
-		100 => 'HTTP/1.1 100 Continue',
-		101 => 'HTTP/1.1 101 Switching Protocols',
-		200 => 'HTTP/1.1 200 OK',
-		201 => 'HTTP/1.1 201 Created',
-		202 => 'HTTP/1.1 202 Accepted',
-		203 => 'HTTP/1.1 203 Non-Authoritative Information',
-		204 => 'HTTP/1.1 204 No Content',
-		205 => 'HTTP/1.1 205 Reset Content',
 		300 => 'HTTP/1.1 300 Multiple Choices',
 		301 => 'HTTP/1.1 301 Moved Permanently',
 		302 => 'HTTP/1.1 302 Found',
@@ -95,27 +87,6 @@ abstract class AbstractWebApplication extends AbstractApplication
 		306 => 'HTTP/1.1 306 (Unused)',
 		307 => 'HTTP/1.1 307 Temporary Redirect',
 		308 => 'HTTP/1.1 308 Permanent Redirect',
-		400 => 'HTTP/1.1 400 Bad Request',
-		402 => 'HTTP/1.1 402 Payment Required',
-		403 => 'HTTP/1.1 403 Forbidden',
-		404 => 'HTTP/1.1 404 Not Found',
-		405 => 'HTTP/1.1 405 Method Not Allowed',
-		406 => 'HTTP/1.1 406 Not Acceptable',
-		408 => 'HTTP/1.1 408 Request Timeout',
-		409 => 'HTTP/1.1 409 Conflict',
-		410 => 'HTTP/1.1 410 Gone',
-		411 => 'HTTP/1.1 411 Length Required',
-		413 => 'HTTP/1.1 413 Payload Too Large',
-		414 => 'HTTP/1.1 414 URI Too Long',
-		415 => 'HTTP/1.1 415 Unsupported Media Type',
-		417 => 'HTTP/1.1 417 Expectation Failed',
-		426 => 'HTTP/1.1 426 Upgrade Required',
-		500 => 'HTTP/1.1 500 Internal Server Error',
-		501 => 'HTTP/1.1 501 Not Implemented',
-		502 => 'HTTP/1.1 502 Bad Gateway',
-		503 => 'HTTP/1.1 503 Service Unavailable',
-		504 => 'HTTP/1.1 504 Gateway Timeout',
-		505 => 'HTTP/1.1 505 HTTP Version Not Supported',
 	);
 
 	/**
