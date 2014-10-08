@@ -164,7 +164,7 @@ array:
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testDataEquality()
 	{

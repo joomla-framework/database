@@ -115,7 +115,7 @@ class JRegistryFormatINITest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testDataEquality()
 	{

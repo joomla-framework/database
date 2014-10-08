@@ -23,7 +23,7 @@ class Ini extends AbstractRegistryFormat
 	 * Default options array
 	 *
 	 * @var    array
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected static $options = array(
 		'supportArrayValues' => false,
@@ -77,6 +77,7 @@ class Ini extends AbstractRegistryFormat
 				{
 					$local[] = '';
 				}
+
 				// Add the section line.
 				$local[] = '[' . $key . ']';
 
@@ -98,6 +99,7 @@ class Ini extends AbstractRegistryFormat
 						$local[] = $k . '=' . $this->getValueAsINI($v);
 					}
 				}
+
 				// Add empty line after section if it is not the last one
 				if (0 != --$last)
 				{
@@ -205,9 +207,8 @@ class Ini extends AbstractRegistryFormat
 					$array = true;
 					$array_key = substr($key, $open_brace + 1, -1);
 
-					if (strpos($array_key, '[') !== false || strpos($array_key, ']') !== false)
-
 					// If we have a multi-dimensional array or malformed key
+					if (strpos($array_key, '[') !== false || strpos($array_key, ']') !== false)
 					{
 						// Maybe throw exception?
 						continue;
