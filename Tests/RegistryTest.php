@@ -821,4 +821,25 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 			'Line: ' . __LINE__ . '.'
 		);
 	}
+
+	/**
+	 * Test flatten.
+	 *
+	 * @covers  Joomla\Registry\Registry::flatten
+	 * @since   1.0
+	 */
+	public function testFlatten()
+	{
+		$a = new Registry;
+		$a->set('flower.sunflower', 'light');
+		$a->set('flower.sakura', 'samurai');
+
+		$flatted = $a->flatten();
+
+		$this->assertEquals($flatted['flower.sunflower'], 'light');
+
+		$flatted = $a->flatten('/');
+
+		$this->assertEquals($flatted['flower/sakura'], 'samurai');
+	}
 }
