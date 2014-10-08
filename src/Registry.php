@@ -604,6 +604,8 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 * @param   string  $separator  The key separator.
 	 *
 	 * @return  string[]  Dumped array.
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function flatten($separator = '.')
 	{
@@ -623,6 +625,8 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 * @param   string        $prefix     Last level key prefix.
 	 *
 	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function toFlatten($separator = '.', $data = null, &$array = array(), $prefix = '')
 	{

@@ -825,8 +825,10 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * Test flatten.
 	 *
+	 * @return  void
+	 *
 	 * @covers  Joomla\Registry\Registry::flatten
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testFlatten()
 	{
