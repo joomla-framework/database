@@ -191,7 +191,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Registry\Registry::count
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function testCountable()
 	{
@@ -308,7 +308,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Registry\Registry::getIterator
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function testGetIterator()
 	{
@@ -828,7 +828,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Registry\Registry::flatten
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function testFlatten()
 	{

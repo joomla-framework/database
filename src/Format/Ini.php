@@ -23,7 +23,7 @@ class Ini extends AbstractRegistryFormat
 	 * Default options array
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	protected static $options = array(
 		'supportArrayValues' => false,

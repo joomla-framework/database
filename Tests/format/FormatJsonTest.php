@@ -124,7 +124,7 @@ class JRegistryFormatJSONTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function testDataEquality()
 	{

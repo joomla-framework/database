@@ -86,7 +86,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 * @return  integer  The custom count as an integer.
 	 *
 	 * @link    http://php.net/manual/en/countable.count.php
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function count()
 	{
@@ -253,7 +253,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 * @return  \ArrayIterator  This object represented as an ArrayIterator.
 	 *
 	 * @see     IteratorAggregate::getIterator()
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function getIterator()
 	{
@@ -605,7 +605,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 *
 	 * @return  string[]  Dumped array.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function flatten($separator = '.')
 	{
@@ -626,7 +626,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	protected function toFlatten($separator = '.', $data = null, &$array = array(), $prefix = '')
 	{
