@@ -158,4 +158,22 @@ array:
 ';
 		$this->assertEquals($object, $this->fixture->stringToObject($yaml));
 	}
+
+	/**
+	 * Test input and output data equality.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testDataEquality()
+	{
+		$input = "foo: bar\nquoted: '\"stringwithquotes\"'\nbooleantrue: true\nbooleanfalse: false\nnumericint: 42\nnumericfloat: 3.1415\n" .
+				"section:\n    key: value\narray:\n    nestedarray: { test1: value1 }\n";
+
+		$object = $this->fixture->stringToObject($input);
+		$output = $this->fixture->objectToString($object);
+
+		$this->assertEquals($input, $output, 'Line:' . __LINE__ . ' Input and output data must be equal.');
+	}
 }

@@ -108,4 +108,35 @@ class JRegistryFormatXMLTest extends \PHPUnit_Framework_TestCase
 			$this->equalTo($object)
 		);
 	}
+
+	/**
+	 * Test input and output data equality.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testDataEquality()
+	{
+		$class = AbstractRegistryFormat::getInstance('XML');
+
+		$input = "<?xml version=\"1.0\"?>\n<registry>" .
+			"<node name=\"foo\" type=\"string\">bar</node>" .
+			"<node name=\"booleantrue\" type=\"boolean\">1</node>" .
+			"<node name=\"booleanfalse1\" type=\"boolean\"></node>" .
+			"<node name=\"numericint\" type=\"integer\">42</node>" .
+			"<node name=\"numericfloat\" type=\"double\">3.1415</node>" .
+			"<node name=\"section\" type=\"object\">" .
+			"<node name=\"key\" type=\"string\">value</node>" .
+			"</node>" .
+			"<node name=\"array\" type=\"array\">" .
+			"<node name=\"test1\" type=\"string\">value1</node>" .
+			"</node>" .
+			"</registry>\n";
+
+		$object = $class->stringToObject($input);
+		$output = $class->objectToString($object);
+
+		$this->assertEquals($input, $output, 'Line:' . __LINE__ . ' Input and output data must be equal.');
+	}
 }
