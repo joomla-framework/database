@@ -344,6 +344,43 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test the Joomla\Registry\Registry::loadArray method with flattened arrays
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\Registry\Registry::loadArray
+	 * @since   1.0
+	 */
+	public function testLoadFlattenedArray()
+	{
+		$array = array(
+			'foo.bar'  => 1,
+			'foo.test' => 2,
+			'bar'      => 3
+		);
+		$registry = new Registry;
+		$registry->loadArray($array, true);
+
+		$this->assertThat(
+			$registry->get('foo.bar'),
+			$this->equalTo(1),
+			'Line: ' . __LINE__ . '.'
+		);
+
+		$this->assertThat(
+			$registry->get('foo.test'),
+			$this->equalTo(2),
+			'Line: ' . __LINE__ . '.'
+		);
+
+		$this->assertThat(
+			$registry->get('bar'),
+			$this->equalTo(3),
+			'Line: ' . __LINE__ . '.'
+		);
+	}
+
+	/**
 	 * Test the Joomla\Registry\Registry::loadFile method.
 	 *
 	 * @return  void
@@ -726,10 +763,17 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 	{
 		$a = new Registry;
 		$a->set('foo', 'testsetvalue1');
+		$a->set('bar/foo', 'testsetvalue3', '/');
 
 		$this->assertThat(
 			$a->set('foo', 'testsetvalue2'),
 			$this->equalTo('testsetvalue2'),
+			'Line: ' . __LINE__ . '.'
+		);
+
+		$this->assertThat(
+			$a->set('bar/foo', 'testsetvalue4'),
+			$this->equalTo('testsetvalue4'),
 			'Line: ' . __LINE__ . '.'
 		);
 	}
@@ -843,5 +887,24 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 		$flatted = $a->flatten('/');
 
 		$this->assertEquals($flatted['flower/sakura'], 'samurai');
+	}
+
+	/**
+	 * Test separator operations
+	 *
+	 * @return  void
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	public function testSeparator()
+	{
+		$a = new Registry;
+		$a->separator = '\\';
+		$a->set('Foo\\Bar', 'test1');
+		$a->separator = '/';
+		$a->set('Foo/Baz', 'test2');
+
+		$this->assertEquals($a->get('Foo/Bar'), 'test1');
+		$this->assertEquals($a->get('Foo/Baz'), 'test2');
 	}
 }
