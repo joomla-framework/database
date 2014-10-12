@@ -280,7 +280,7 @@ class Input implements \Serializable, \Countable
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function exists($name)
 	{
