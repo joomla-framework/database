@@ -7,7 +7,7 @@
     "license": "GPL-2.0+",
     "require": {
         "php": ">=5.3.10",
-        "joomla/input": "~1.1.1",
+        "joomla/input": "~1.2",
         "joomla/session": "~1.1",
         "joomla/string": "~1.1",
         "joomla/registry": "~1.1",
