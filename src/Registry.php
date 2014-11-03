@@ -34,6 +34,14 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	protected static $instances = array();
 
 	/**
+	 * Path separator
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	public $separator = '.';
+
+	/**
 	 * Constructor
 	 *
 	 * @param   mixed  $data  The data to bind to the new Registry object.
@@ -144,7 +152,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	public function exists($path)
 	{
 		// Explode the registry path into an array
-		$nodes = explode('.', $path);
+		$nodes = explode($this->separator, $path);
 
 		if ($nodes)
 		{
@@ -191,13 +199,13 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	{
 		$result = $default;
 
-		if (!strpos($path, '.'))
+		if (!strpos($path, $this->separator))
 		{
 			return (isset($this->data->$path) && $this->data->$path !== null && $this->data->$path !== '') ? $this->data->$path : $default;
 		}
 
 		// Explode the registry path into an array
-		$nodes = explode('.', $path);
+		$nodes = explode($this->separator, $path);
 
 		// Initialize the current node to be the registry root.
 		$node = $this->data;
@@ -272,15 +280,27 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	/**
 	 * Load a associative array of values into the default namespace
 	 *
-	 * @param   array  $array  Associative array of value to load
-	 *
+	 * @param   array    $array      Associative array of value to load
+	 * @param   boolean  $flattened  Load from a one-dimensional array
+	 * @param   string   $separator  The key separator
+	 *   
 	 * @return  Registry  Return this object to support chaining.
 	 *
 	 * @since   1.0
 	 */
-	public function loadArray($array)
+	public function loadArray($array, $flattened = false, $separator = null)
 	{
-		$this->bindData($this->data, $array);
+		if (!$flattened)
+		{
+			$this->bindData($this->data, $array);
+		}
+		else
+		{
+			foreach ($array as $k => $v)
+			{
+				$this->set($k, $v, $separator);
+			}
+		}
 
 		return $this;
 	}
@@ -444,23 +464,29 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	/**
 	 * Set a registry value.
 	 *
-	 * @param   string  $path   Registry Path (e.g. joomla.content.showauthor)
-	 * @param   mixed   $value  Value of entry
+	 * @param   string  $path       Registry Path (e.g. joomla.content.showauthor)
+	 * @param   mixed   $value      Value of entry
+	 * @param   string  $separator  The key separator
 	 *
 	 * @return  mixed  The value of the that has been set.
 	 *
 	 * @since   1.0
 	 */
-	public function set($path, $value)
+	public function set($path, $value, $separator = null)
 	{
 		$result = null;
 
+		if (empty($separator))
+		{
+			$separator = $this->separator;
+		}
+
 		/**
 		 * Explode the registry path into an array and remove empty
-		 * nodes that occur as a result of a double dot. ex: joomla..test
+		 * nodes that occur as a result of a double separator. ex: joomla..test
 		 * Finally, re-key the array so they are sequential.
 		 */
-		$nodes = array_values(array_filter(explode('.', $path), 'strlen'));
+		$nodes = array_values(array_filter(explode($separator, $path), 'strlen'));
 
 		if ($nodes)
 		{
@@ -702,9 +728,14 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 *
 	 * @since   1.3.0
 	 */
-	public function flatten($separator = '.')
+	public function flatten($separator = null)
 	{
 		$array = array();
+
+		if (empty($separator))
+		{
+			$separator = $this->separator;
+		}
 
 		$this->toFlatten($separator, $this->data, $array);
 
@@ -723,9 +754,14 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 *
 	 * @since   1.3.0
 	 */
-	protected function toFlatten($separator = '.', $data = null, &$array = array(), $prefix = '')
+	protected function toFlatten($separator = null, $data = null, &$array = array(), $prefix = '')
 	{
 		$data = (array) $data;
+
+		if (empty($separator))
+		{
+			$separator = $this->separator;
+		}
 
 		foreach ($data as $k => $v)
 		{
