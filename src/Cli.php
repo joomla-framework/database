@@ -163,6 +163,7 @@ class Cli extends Input
 					{
 						$value          = isset($out[$key]) ? $out[$key] : true;
 					}
+
 					$out[$key]          = $value;
 				}
 
@@ -204,7 +205,7 @@ class Cli extends Input
 					}
 				}
 			}
-			// plain-arg
+			// Plain-arg
 			else
 			{
 				$this->args[] = $arg;
