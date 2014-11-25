@@ -174,9 +174,8 @@ class Cli extends Input
 					$out[$key]          = $value;
 				}
 			}
-
 			// -k=value -abc
-			else if (substr($arg, 0, 1) === '-')
+			elseif (substr($arg, 0, 1) === '-')
 			{
 				// -k=value
 				if (substr($arg, 2, 1) === '=')
@@ -205,7 +204,6 @@ class Cli extends Input
 					}
 				}
 			}
-
 			// plain-arg
 			else
 			{
