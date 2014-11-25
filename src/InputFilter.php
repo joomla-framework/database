@@ -172,20 +172,20 @@ class InputFilter
 			case 'INTEGER':
 				// Only use the first integer value
 				preg_match('/-?[0-9]+/', (string) $source, $matches);
-				$result = isset($matches[0]) ? (int) $matches[0] : null;
+				$result = isset($matches[0]) ? (int) $matches[0] : 0;
 				break;
 
 			case 'UINT':
 				// Only use the first integer value
 				preg_match('/-?[0-9]+/', (string) $source, $matches);
-				$result = isset($matches[0]) ? abs((int) $matches[0]) : null;
+				$result = isset($matches[0]) ? abs((int) $matches[0]) : 0;
 				break;
 
 			case 'FLOAT':
 			case 'DOUBLE':
 				// Only use the first floating point value
 				preg_match('/-?[0-9]+(\.[0-9]+)?/', (string) $source, $matches);
-				$result = isset($matches[0]) ? (float) $matches[0] : null;
+				$result = isset($matches[0]) ? (float) $matches[0] : 0;
 				break;
 
 			case 'BOOL':
@@ -225,7 +225,7 @@ class InputFilter
 			case 'PATH':
 				$pattern = '/^[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
 				preg_match($pattern, (string) $source, $matches);
-				$result = isset($matches[0]) ? (string) $matches[0] : null;
+				$result = isset($matches[0]) ? (string) $matches[0] : '';
 				break;
 
 			case 'USERNAME':
