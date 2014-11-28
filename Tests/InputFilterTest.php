@@ -102,10 +102,22 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 				-789,
 				'From generic cases'
 			),
+			'int_11' => array(
+				'int',
+				'',
+				0,
+				'From generic cases'
+			),
 			'uint_1' => array(
 				'uint',
 				-789,
 				789,
+				'From generic cases'
+			),
+			'uint_2' => array(
+				'uint',
+				'',
+				0,
 				'From generic cases'
 			),
 			'float_01' => array(
@@ -160,6 +172,12 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 				'float',
 				'abc-12. 456',
 				-12,
+				'From generic cases'
+			),
+			'float_09' => array(
+				'float',
+				'',
+				0,
 				'From generic cases'
 			),
 			'bool_0' => array(
@@ -297,6 +315,12 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 			'path_02' => array(
 				'path',
 				'http://www.fred.com/josephus',
+				'',
+				'From generic cases'
+			),
+			'path_03' => array(
+				'path',
+				'',
 				'',
 				'From generic cases'
 			),
