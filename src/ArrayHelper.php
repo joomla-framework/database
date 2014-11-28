@@ -577,13 +577,15 @@ final class ArrayHelper
 	}
 
 	/**
-	 * Method to recursively convert data to one dimension array.
+	 * Method to recursively convert data to a one dimension array.
 	 *
 	 * @param   array|object  $array      The array or object to convert.
 	 * @param   string        $separator  The key separator.
 	 * @param   string        $prefix     Last level key prefix.
 	 *
 	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public static function flatten($array, $separator = '.', $prefix = '')
 	{

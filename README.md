@@ -372,17 +372,15 @@ $array = array(
     )
 );
 
-// Make nested data flatten and separate by dot (".")
+// Flatten the nested array and separate the keys by a dot (".")
+$flattenend1 = ArrayHelper::flatten($array);
 
-$flatted1 = ArrayHelper::flatten($array);
-
-echo $flatted1['flower.sakura']; // 'samuari'
+echo $flattenend1['flower.sakura']; // 'samuari'
 
 // Custom separator
+$flattenend2 = ArrayHelper::flatten($array, '/');
 
-$flatted2 = ArrayHelper::flatten($array, '/');
-
-echo $flatted2['flower/olive']; // 'peace'
+echo $flattenend2['flower/olive']; // 'peace'
 ```
 
 ## Installation via Composer
