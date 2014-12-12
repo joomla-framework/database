@@ -324,6 +324,12 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 				'',
 				'From generic cases'
 			),
+			'path_04' => array(
+				'path',
+				'/images/system',
+				'/images/system',
+				'From generic cases'
+			),
 			'user_01' => array(
 				'username',
 				'&<f>r%e\'d',
