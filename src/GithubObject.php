@@ -11,8 +11,8 @@ namespace Joomla\Github;
 /**
  * GitHub API object class for the Joomla Framework.
  *
- * @deprecated  Use AbstractGithubObject instead.
  * @since       1.0
+ * @deprecated  Use AbstractGithubObject instead.
  */
 abstract class GithubObject extends AbstractGithubObject
 {

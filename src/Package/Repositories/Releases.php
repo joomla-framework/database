@@ -149,10 +149,10 @@ class Releases extends AbstractPackage
 	/**
 	 * Method to list all releases.
 	 *
-	 * @param   string   $user       The name of the owner of the GitHub repository.
-	 * @param   string   $repo       The name of the GitHub repository.
-	 * @param   integer  $page       The page number from which to get items.
-	 * @param   integer  $limit      The number of items on a page.
+	 * @param   string   $user   The name of the owner of the GitHub repository.
+	 * @param   string   $repo   The name of the GitHub repository.
+	 * @param   integer  $page   The page number from which to get items.
+	 * @param   integer  $limit  The number of items on a page.
 	 *
 	 * @return  array  An associative array of releases keyed by the tag name.
 	 *

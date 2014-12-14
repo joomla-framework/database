@@ -88,7 +88,6 @@ class Repositories extends AbstractPackage
 	 * @param   string  $sort       Sort field. created, updated, pushed, full_name, default: full_name.
 	 * @param   string  $direction  Sort direction. asc or desc, default: when using full_name: asc, otherwise desc.
 	 *
-	 *
 	 * @return  object
 	 *
 	 * @since   1.0
