@@ -28,8 +28,8 @@ class Statuses extends AbstractPackage
 	 * @param   string  $state        The state (pending, success, error or failure).
 	 * @param   string  $targetUrl    Optional target URL.
 	 * @param   string  $description  Optional description for the status.
-	 * @param   string $context A string label to differentiate this status from the status of other systems.
-	 * 							Default: "default"
+	 * @param   string  $context      A string label to differentiate this status from the status of other systems.
+	 * 							      Default: "default"
 	 *
 	 * @throws \InvalidArgumentException
 	 * @throws \DomainException
