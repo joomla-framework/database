@@ -86,7 +86,8 @@ class StatusesTest extends \PHPUnit_Framework_TestCase
 			array(
 				'state' => 'success',
 				'target_url' => 'http://example.com/my_url',
-				'description' => 'Success is the only option - failure is not.'
+				'description' => 'Success is the only option - failure is not.',
+				'context' => 'Joomla/Test'
 			)
 		);
 
@@ -102,7 +103,8 @@ class StatusesTest extends \PHPUnit_Framework_TestCase
 				'6dcb09b5b57875f334f61aebed695e2e4193db5e',
 				'success',
 				'http://example.com/my_url',
-				'Success is the only option - failure is not.'
+				'Success is the only option - failure is not.',
+				'Joomla/Test'
 			),
 			$this->equalTo(json_decode($this->sampleString))
 		);
