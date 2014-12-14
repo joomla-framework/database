@@ -28,15 +28,18 @@ class Statuses extends AbstractPackage
 	 * @param   string  $state        The state (pending, success, error or failure).
 	 * @param   string  $targetUrl    Optional target URL.
 	 * @param   string  $description  Optional description for the status.
+	 * @param   string  $context      A string label to differentiate this status from the status of other systems.
+	 * 							      Default: "default"
 	 *
 	 * @throws \InvalidArgumentException
 	 * @throws \DomainException
 	 *
+	 * @return object
+	 *
 	 * @since   1.0
 	 *
-	 * @return  object
 	 */
-	public function create($user, $repo, $sha, $state, $targetUrl = null, $description = null)
+	public function create($user, $repo, $sha, $state, $targetUrl = null, $description = null, $context = null)
 	{
 		// Build the request path.
 		$path = '/repos/' . $user . '/' . $repo . '/statuses/' . $sha;
@@ -59,6 +62,11 @@ class Statuses extends AbstractPackage
 		if (!is_null($description))
 		{
 			$data['description'] = $description;
+		}
+
+		if (!is_null($context))
+		{
+			$data['context'] = $context;
 		}
 
 		// Send the request.
