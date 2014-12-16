@@ -19,7 +19,11 @@ class TransportTest extends \PHPUnit_Framework_TestCase
 	 * @var    array  Options for the Transport object.
 	 * @since  1.0
 	 */
-	protected $options = array();
+	protected $options = array(
+		'transport.curl'   => array(CURLOPT_SSL_VERIFYPEER => false),
+		'transport.socket' => array('X-Joomla-Test: true'),
+		'transport.stream' => array('ignore_errors' => true)
+	);
 
 	/**
 	 * @var    string  The URL string for the HTTP stub.

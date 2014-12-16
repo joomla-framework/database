@@ -133,6 +133,15 @@ class Socket implements TransportInterface
 			}
 		}
 
+		// Set any custom transport options
+		if (isset($this->options['transport.socket']))
+		{
+			foreach ($this->options['transport.socket'] as $value)
+			{
+				$request[] = $value;
+			}
+		}
+
 		// If we have data to send add it to the request payload.
 		if (!empty($data))
 		{
