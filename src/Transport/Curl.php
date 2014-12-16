@@ -142,6 +142,15 @@ class Curl implements TransportInterface
 		// Follow redirects.
 		$options[CURLOPT_FOLLOWLOCATION] = (bool) (isset($this->options['follow_location']) ? $this->options['follow_location'] : true);
 
+		// Set any custom transport options
+		if (isset($this->options['transport.curl']))
+		{
+			foreach ($this->options['transport.curl'] as $key => $value)
+			{
+				$options[$key] = $value;
+			}
+		}
+
 		// Set the cURL options.
 		curl_setopt_array($ch, $options);
 
