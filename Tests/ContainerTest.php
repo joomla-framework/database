@@ -164,6 +164,39 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test that resolving and alias for a class
+	 * returns the same object instance.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.2.1
+	 */
+	public function testResolveAliasSameAsKey()
+	{
+		$reflection = new \ReflectionClass($this->fixture);
+
+		// Set the foo property directly in the datastore
+		$refProp2 = $reflection->getProperty('dataStore');
+		$refProp2->setAccessible(true);
+		$refProp2->setValue($this->fixture, array('foo' => array(
+			'callback' => function() { return new \stdClass; },
+			'shared' => true,
+			'protected' => true
+		)));
+
+		// Alias bar to foo
+		$refProp = $reflection->getProperty('aliases');
+		$refProp->setAccessible(true);
+		$refProp->setValue($this->fixture, array('bar' => 'foo'));
+
+		$this->assertEquals(
+			$this->fixture->get('foo'),
+			$this->fixture->get('bar'),
+			'When retrieving an alias of a class, both the original and the alias should return the same object instance.'
+		);
+	}
+
+	/**
 	 * Tests the buildObject with no dependencies.
 	 *
 	 * @return  void
@@ -843,7 +876,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 			'When calling exists on an item that has not been set in the container, it should return false.'
 		);
 	}
-	
+
 
 	/**
 	 * Test getRaw
