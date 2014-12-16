@@ -176,20 +176,20 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		$reflection = new \ReflectionClass($this->fixture);
 
 		// Set the foo property directly in the datastore
-		$refProp2 = $reflection->getProperty('dataStore');
-		$refProp2->setAccessible(true);
-		$refProp2->setValue($this->fixture, array('foo' => array(
+		$refProp = $reflection->getProperty('dataStore');
+		$refProp->setAccessible(true);
+		$refProp->setValue($this->fixture, array('foo' => array(
 			'callback' => function() { return new \stdClass; },
 			'shared' => true,
 			'protected' => true
 		)));
 
 		// Alias bar to foo
-		$refProp = $reflection->getProperty('aliases');
-		$refProp->setAccessible(true);
-		$refProp->setValue($this->fixture, array('bar' => 'foo'));
+		$refProp2 = $reflection->getProperty('aliases');
+		$refProp2->setAccessible(true);
+		$refProp2->setValue($this->fixture, array('bar' => 'foo'));
 
-		$this->assertEquals(
+		$this->assertSame(
 			$this->fixture->get('foo'),
 			$this->fixture->get('bar'),
 			'When retrieving an alias of a class, both the original and the alias should return the same object instance.'
