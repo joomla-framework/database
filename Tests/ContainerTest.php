@@ -169,7 +169,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.2.1
+	 * @since   1.3
 	 */
 	public function testResolveAliasSameAsKey()
 	{
