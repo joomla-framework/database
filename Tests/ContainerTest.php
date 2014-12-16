@@ -356,6 +356,37 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test that the extend method also resolves the alias if set.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.3
+	 */
+	public function testExistsResolvesAlias()
+	{
+		$reflection = new \ReflectionClass($this->fixture);
+
+		// Set the foo property directly in the datastore
+		$refProp = $reflection->getProperty('dataStore');
+		$refProp->setAccessible(true);
+		$refProp->setValue($this->fixture, array('foo' => array(
+			'callback' => function() { return new \stdClass; },
+			'shared' => true,
+			'protected' => true
+		)));
+
+		// Alias bar to foo
+		$refProp2 = $reflection->getProperty('aliases');
+		$refProp2->setAccessible(true);
+		$refProp2->setValue($this->fixture, array('bar' => 'foo'));
+
+		$this->assertTrue(
+			$this->fixture->exists('bar'),
+			'Checking if a key exists in the container should resolve aliases as well.'
+		);
+	}
+
+	/**
 	 * Test getting method args
 	 *
 	 * @return  void

@@ -369,6 +369,8 @@ class Container
 	 */
 	public function exists($key)
 	{
+		$key = $this->resolveAlias($key);
+
 		return (bool) $this->getRaw($key);
 	}
 
