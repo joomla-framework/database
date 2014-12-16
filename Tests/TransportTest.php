@@ -22,7 +22,7 @@ class TransportTest extends \PHPUnit_Framework_TestCase
 	protected $options = array(
 		'transport.curl'   => array(CURLOPT_SSL_VERIFYPEER => false),
 		'transport.socket' => array('X-Joomla-Test: true'),
-		'transport.stream' => array('ignore_errors' => false)
+		'transport.stream' => array('ignore_errors' => true)
 	);
 
 	/**
