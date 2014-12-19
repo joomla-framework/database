@@ -13,7 +13,7 @@ namespace BabDev\Renderer;
  *
  * @since  1.0
  */
-class MustacheRenderer extends \Mustache_Engine implements RendererInterface
+class MustacheRenderer implements RendererInterface
 {
 	/**
 	 * Data for output by the renderer
@@ -24,18 +24,21 @@ class MustacheRenderer extends \Mustache_Engine implements RendererInterface
 	private $data = array();
 
 	/**
-	 * Render and return compiled data.
+	 * Rendering engine
 	 *
-	 * @param   string  $template  The template file name
-	 * @param   array   $data      The data to pass to the template
-	 *
-	 * @return  string  Compiled data
+	 * @var    \Mustache_Engine
+	 * @since  1.0
+	 */
+	private $renderer;
+
+	/**
+	 * Constructor
 	 *
 	 * @since   1.0
 	 */
-	public function render($template, array $data = array())
+	public function __construct()
 	{
-		return parent::render($template, $data);
+		$this->renderer = new \Mustache_Engine;
 	}
 
 	/**
@@ -50,19 +53,19 @@ class MustacheRenderer extends \Mustache_Engine implements RendererInterface
 	 */
 	public function addFolder($alias, $directory)
 	{
+		return $this;
 	}
 
 	/**
-	 * Sets file extension for template loader
+	 * Get the rendering engine
 	 *
-	 * @param   string  $extension  Template files extension
-	 *
-	 * @return  MustacheRenderer  Returns self for chaining
+	 * @return  \Mustache_Engine
 	 *
 	 * @since   1.0
 	 */
-	public function setFileExtension($extension)
+	public function getRenderer()
 	{
+		return $this->renderer;
 	}
 
 	/**
@@ -78,7 +81,7 @@ class MustacheRenderer extends \Mustache_Engine implements RendererInterface
 	{
 		try
 		{
-			$this->getLoader()->load($name);
+			$this->getRenderer()->getLoader()->load($name);
 
 			return true;
 		}
@@ -86,6 +89,36 @@ class MustacheRenderer extends \Mustache_Engine implements RendererInterface
 		{
 			return false;
 		}
+	}
+
+	/**
+	 * Render and return compiled data.
+	 *
+	 * @param   string  $template  The template file name
+	 * @param   array   $data      The data to pass to the template
+	 *
+	 * @return  string  Compiled data
+	 *
+	 * @since   1.0
+	 */
+	public function render($template, array $data = array())
+	{
+		return $this->getRenderer()->render($template, $data);
+	}
+
+	/**
+	 * Sets a piece of data
+	 *
+	 * @param   string  $key    Name of variable
+	 * @param   string  $value  Value of variable
+	 *
+	 * @return  MustacheRenderer  Returns self for chaining
+	 *
+	 * @since   1.0
+	 */
+	public function set($key, $value)
+	{
+		return $this;
 	}
 
 	/**
@@ -105,6 +138,20 @@ class MustacheRenderer extends \Mustache_Engine implements RendererInterface
 	}
 
 	/**
+	 * Sets file extension for template loader
+	 *
+	 * @param   string  $extension  Template files extension
+	 *
+	 * @return  MustacheRenderer  Returns self for chaining
+	 *
+	 * @since   1.0
+	 */
+	public function setFileExtension($extension)
+	{
+		return $this;
+	}
+
+	/**
 	 * Unloads data from renderer
 	 *
 	 * @return  MustacheRenderer  Returns self for chaining
@@ -116,19 +163,5 @@ class MustacheRenderer extends \Mustache_Engine implements RendererInterface
 		$this->data = array();
 
 		return $this;
-	}
-
-	/**
-	 * Sets a piece of data
-	 *
-	 * @param   string  $key    Name of variable
-	 * @param   string  $value  Value of variable
-	 *
-	 * @return  MustacheRenderer  Returns self for chaining
-	 *
-	 * @since   1.0
-	 */
-	public function set($key, $value)
-	{
 	}
 }
