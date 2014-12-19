@@ -39,6 +39,15 @@ interface RendererInterface
 	public function pathExists($path);
 
 	/**
+	 * Get the rendering engine
+	 *
+	 * @return  mixed
+	 *
+	 * @since   1.0
+	 */
+	public function getRenderer();
+
+	/**
 	 * Render and return compiled data.
 	 *
 	 * @param   string  $template  The template file name

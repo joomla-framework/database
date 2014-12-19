@@ -15,16 +15,8 @@ use Joomla\Registry\Registry;
  *
  * @since  1.0
  */
-class TwigRenderer extends \Twig_Environment implements RendererInterface
+class TwigRenderer implements RendererInterface
 {
-	/**
-	 * Filesystem loading class
-	 *
-	 * @var    TwigLoader
-	 * @since  1.0
-	 */
-	protected $loader;
-
 	/**
 	 * Configuration array
 	 *
@@ -46,6 +38,14 @@ class TwigRenderer extends \Twig_Environment implements RendererInterface
 	private $data = array();
 
 	/**
+	 * Rendering engine
+	 *
+	 * @var    \Twig_Environment
+	 * @since  1.0
+	 */
+	private $renderer;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param   array  $config  Configuration array
@@ -59,7 +59,58 @@ class TwigRenderer extends \Twig_Environment implements RendererInterface
 		$loader = new TwigLoader($this->config['path']);
 		$loader->setExtension($this->config['extension']);
 
-		parent::__construct($loader, $this->config);
+		$this->renderer = new \Twig_Environment($loader, $this->config);
+	}
+
+	/**
+	 * Add a folder with alias to the renderer
+	 *
+	 * @param   string  $alias      The folder alias
+	 * @param   string  $directory  The folder path
+	 *
+	 * @return  TwigRenderer  Returns self for chaining
+	 *
+	 * @since   1.0
+	 */
+	public function addFolder($alias, $directory)
+	{
+		$this->getRenderer()->getLoader()->addPath($directory, $alias);
+	}
+
+	/**
+	 * Get the rendering engine
+	 *
+	 * @return  \Twig_Environment
+	 *
+	 * @since   1.0
+	 */
+	public function getRenderer()
+	{
+		return $this->renderer;
+	}
+
+	/**
+	 * Checks if folder, folder alias, template or template path exists
+	 *
+	 * @param   string  $path  Full path or part of a path
+	 *
+	 * @return  boolean  True if the path exists
+	 *
+	 * @since   1.0
+	 */
+	public function pathExists($path)
+	{
+		if (!is_dir($path))
+		{
+			throw new \InvalidArgumentException(
+				sprintf(
+					'The %s directory does not exist.',
+					$path
+				)
+			);
+		}
+
+		return $this->getRenderer()->getLoader()->exists($path);
 	}
 
 	/**
@@ -78,53 +129,25 @@ class TwigRenderer extends \Twig_Environment implements RendererInterface
 
 		// TODO Process template name
 
-		return parent::render($template, $data);
+		return $this->getRenderer()->render($template, $data);
 	}
 
 	/**
-	 * Add a folder with alias to the renderer
+	 * Sets a piece of data
 	 *
-	 * @param   string  $alias      The folder alias
-	 * @param   string  $directory  The folder path
+	 * @param   string  $key    Name of variable
+	 * @param   string  $value  Value of variable
 	 *
 	 * @return  TwigRenderer  Returns self for chaining
 	 *
 	 * @since   1.0
 	 */
-	public function addFolder($alias, $directory)
+	public function set($key, $value)
 	{
-		$this->loader->addPath($directory, $alias);
-	}
-
-	/**
-	 * Sets file extension for template loader
-	 *
-	 * @param   string  $extension  Template files extension
-	 *
-	 * @return  TwigRenderer  Returns self for chaining
-	 *
-	 * @since   1.0
-	 */
-	public function setFileExtension($extension)
-	{
-		$this->config['file_extension'] = $extension;
+		// TODO Make use of Joomla\Registry to provide paths
+		$this->data[$key] = $value;
 
 		return $this;
-	}
-
-	/**
-	 * Checks if folder, folder alias, template or template path exists
-	 *
-	 * @param   string  $path  Full path or part of a path
-	 *
-	 * @return  boolean  True if the path exists
-	 *
-	 * @since   1.0
-	 */
-	public function pathExists($path)
-	{
-		// TODO check for directories
-		return $this->loader->exists($path);
 	}
 
 	/**
@@ -144,6 +167,22 @@ class TwigRenderer extends \Twig_Environment implements RendererInterface
 	}
 
 	/**
+	 * Sets file extension for template loader
+	 *
+	 * @param   string  $extension  Template files extension
+	 *
+	 * @return  TwigRenderer  Returns self for chaining
+	 *
+	 * @since   1.0
+	 */
+	public function setFileExtension($extension)
+	{
+		$this->config['extension'] = $extension;
+
+		return $this;
+	}
+
+	/**
 	 * Unloads data from renderer
 	 *
 	 * @return  TwigRenderer  Returns self for chaining
@@ -153,24 +192,6 @@ class TwigRenderer extends \Twig_Environment implements RendererInterface
 	public function unsetData()
 	{
 		$this->data = array();
-
-		return $this;
-	}
-
-	/**
-	 * Sets a piece of data
-	 *
-	 * @param   string  $key    Name of variable
-	 * @param   string  $value  Value of variable
-	 *
-	 * @return  TwigRenderer  Returns self for chaining
-	 *
-	 * @since   1.0
-	 */
-	public function set($key, $value)
-	{
-		// TODO Make use of Joomla\Registry to provide paths
-		$this->data[$key] = $value;
 
 		return $this;
 	}
