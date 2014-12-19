@@ -58,12 +58,12 @@ class MustacheRendererProvider implements ServiceProviderInterface
 				/* @type  \Joomla\Registry\Registry  $config */
 				$config = $container->get('config');
 
-				$loaderOptions = ['extension' => $config->get('template.extension')];
+				$loaderOptions = array('extension' => $config->get('template.extension'));
 
-				$params = [
+				$params = array(
 					'loader'          => new \Mustache_Loader_FilesystemLoader($config->get('template.path'), $loaderOptions),
 					'partials_loader' => new \Mustache_Loader_FilesystemLoader($config->get('template.partials'), $loaderOptions),
-				];
+				);
 
 				$options = array_merge($params, $options);
 
