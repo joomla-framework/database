@@ -16,18 +16,6 @@ namespace BabDev\Renderer;
 interface RendererInterface
 {
 	/**
-	 * Render and return compiled data.
-	 *
-	 * @param   string  $template  The template file name
-	 * @param   array   $data      The data to pass to the template
-	 *
-	 * @return  string  Compiled data
-	 *
-	 * @since   1.0
-	 */
-	public function render($template, array $data = array());
-
-	/**
 	 * Add a folder with alias to the renderer
 	 *
 	 * @param   string  $alias      The folder alias
@@ -38,17 +26,6 @@ interface RendererInterface
 	 * @since   1.0
 	 */
 	public function addFolder($alias, $directory);
-
-	/**
-	 * Sets file extension for template loader
-	 *
-	 * @param   string  $extension  Template files extension
-	 *
-	 * @return  RendererInterface  Returns self for chaining
-	 *
-	 * @since   1.0
-	 */
-	public function setFileExtension($extension);
 
 	/**
 	 * Checks if folder, folder alias, template or template path exists
@@ -62,24 +39,16 @@ interface RendererInterface
 	public function pathExists($path);
 
 	/**
-	 * Loads data from array into the renderer
+	 * Render and return compiled data.
 	 *
-	 * @param   array  $data  Array of variables
+	 * @param   string  $template  The template file name
+	 * @param   array   $data      The data to pass to the template
 	 *
-	 * @return  RendererInterface  Returns self for chaining
-	 *
-	 * @since   1.0
-	 */
-	public function setData($data);
-
-	/**
-	 * Unloads data from renderer
-	 *
-	 * @return  RendererInterface  Returns self for chaining
+	 * @return  string  Compiled data
 	 *
 	 * @since   1.0
 	 */
-	public function unsetData();
+	public function render($template, array $data = array());
 
 	/**
 	 * Sets a piece of data
@@ -92,4 +61,35 @@ interface RendererInterface
 	 * @since   1.0
 	 */
 	public function set($key, $value);
+
+	/**
+	 * Loads data from array into the renderer
+	 *
+	 * @param   array  $data  Array of variables
+	 *
+	 * @return  RendererInterface  Returns self for chaining
+	 *
+	 * @since   1.0
+	 */
+	public function setData($data);
+
+	/**
+	 * Sets file extension for template loader
+	 *
+	 * @param   string  $extension  Template files extension
+	 *
+	 * @return  RendererInterface  Returns self for chaining
+	 *
+	 * @since   1.0
+	 */
+	public function setFileExtension($extension);
+
+	/**
+	 * Unloads data from renderer
+	 *
+	 * @return  RendererInterface  Returns self for chaining
+	 *
+	 * @since   1.0
+	 */
+	public function unsetData();
 }
