@@ -13,16 +13,8 @@ namespace BabDev\Renderer;
  *
  * @since  1.0
  */
-class MustacheRenderer implements RendererInterface
+class MustacheRenderer extends AbstractRenderer implements RendererInterface
 {
-	/**
-	 * Data for output by the renderer
-	 *
-	 * @var    array
-	 * @since  1.0
-	 */
-	private $data = array();
-
 	/**
 	 * Rendering engine
 	 *
@@ -107,37 +99,6 @@ class MustacheRenderer implements RendererInterface
 	}
 
 	/**
-	 * Sets a piece of data
-	 *
-	 * @param   string  $key    Name of variable
-	 * @param   string  $value  Value of variable
-	 *
-	 * @return  MustacheRenderer  Returns self for chaining
-	 *
-	 * @since   1.0
-	 */
-	public function set($key, $value)
-	{
-		return $this;
-	}
-
-	/**
-	 * Loads data from array into the renderer
-	 *
-	 * @param   array  $data  Array of variables
-	 *
-	 * @return  MustacheRenderer  Returns self for chaining
-	 *
-	 * @since   1.0
-	 */
-	public function setData($data)
-	{
-		$this->data = $data;
-
-		return $this;
-	}
-
-	/**
 	 * Sets file extension for template loader
 	 *
 	 * @param   string  $extension  Template files extension
@@ -148,20 +109,6 @@ class MustacheRenderer implements RendererInterface
 	 */
 	public function setFileExtension($extension)
 	{
-		return $this;
-	}
-
-	/**
-	 * Unloads data from renderer
-	 *
-	 * @return  MustacheRenderer  Returns self for chaining
-	 *
-	 * @since   1.0
-	 */
-	public function unsetData()
-	{
-		$this->data = array();
-
 		return $this;
 	}
 }

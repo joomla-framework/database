@@ -15,7 +15,7 @@ use Joomla\Registry\Registry;
  *
  * @since  1.0
  */
-class TwigRenderer implements RendererInterface
+class TwigRenderer extends AbstractRenderer implements RendererInterface
 {
 	/**
 	 * Configuration array
@@ -28,14 +28,6 @@ class TwigRenderer implements RendererInterface
 		'debug'     => false,
 		'extension' => '.twig'
 	);
-
-	/**
-	 * Data for output by the renderer
-	 *
-	 * @var    array
-	 * @since  1.0
-	 */
-	private $data = array();
 
 	/**
 	 * Rendering engine
@@ -100,16 +92,6 @@ class TwigRenderer implements RendererInterface
 	 */
 	public function pathExists($path)
 	{
-		if (!is_dir($path))
-		{
-			throw new \InvalidArgumentException(
-				sprintf(
-					'The %s directory does not exist.',
-					$path
-				)
-			);
-		}
-
 		return $this->getRenderer()->getLoader()->exists($path);
 	}
 
@@ -130,40 +112,6 @@ class TwigRenderer implements RendererInterface
 		// TODO Process template name
 
 		return $this->getRenderer()->render($template, $data);
-	}
-
-	/**
-	 * Sets a piece of data
-	 *
-	 * @param   string  $key    Name of variable
-	 * @param   string  $value  Value of variable
-	 *
-	 * @return  TwigRenderer  Returns self for chaining
-	 *
-	 * @since   1.0
-	 */
-	public function set($key, $value)
-	{
-		// TODO Make use of Joomla\Registry to provide paths
-		$this->data[$key] = $value;
-
-		return $this;
-	}
-
-	/**
-	 * Loads data from array into the renderer
-	 *
-	 * @param   array  $data  Array of variables
-	 *
-	 * @return  TwigRenderer  Returns self for chaining
-	 *
-	 * @since   1.0
-	 */
-	public function setData($data)
-	{
-		$this->data = $data;
-
-		return $this;
 	}
 
 	/**

@@ -18,7 +18,7 @@ use Symfony\Component\Templating\TemplateReferenceInterface;
  *
  * @since  1.0
  */
-class PhpEngineRenderer implements RendererInterface
+class PhpEngineRenderer extends AbstractRenderer implements RendererInterface
 {
 	/**
 	 * Data for output by the renderer
@@ -63,6 +63,7 @@ class PhpEngineRenderer implements RendererInterface
 	public function addFolder($alias, $directory)
 	{
 		// TODO: Implement addFolder() method.
+		return $this;
 	}
 
 	/**
@@ -88,7 +89,7 @@ class PhpEngineRenderer implements RendererInterface
 	 */
 	public function pathExists($path)
 	{
-		return $this->renderer->exists($path);
+		return $this->getRenderer()->exists($path);
 	}
 
 	/**
@@ -105,38 +106,7 @@ class PhpEngineRenderer implements RendererInterface
 	{
 		$data = array_merge($this->data, $data);
 
-		return $this->renderer->render($template, $data);
-	}
-
-	/**
-	 * Sets a piece of data
-	 *
-	 * @param   string  $key    Name of variable
-	 * @param   string  $value  Value of variable
-	 *
-	 * @return  PhpEngineRenderer  Returns self for chaining
-	 *
-	 * @since   1.0
-	 */
-	public function set($key, $value)
-	{
-		// TODO: Implement set() method.
-	}
-
-	/**
-	 * Loads data from array into the renderer
-	 *
-	 * @param   array  $data  Array of variables
-	 *
-	 * @return  PhpEngineRenderer  Returns self for chaining
-	 *
-	 * @since   1.0
-	 */
-	public function setData($data)
-	{
-		$this->data = $data;
-
-		return $this;
+		return $this->getRenderer()->render($template, $data);
 	}
 
 	/**
@@ -151,19 +121,6 @@ class PhpEngineRenderer implements RendererInterface
 	public function setFileExtension($extension)
 	{
 		// TODO: Implement setFileExtension() method.
-	}
-
-	/**
-	 * Unloads data from renderer
-	 *
-	 * @return  PhpEngineRenderer  Returns self for chaining
-	 *
-	 * @since   1.0
-	 */
-	public function unsetData()
-	{
-		$this->data = array();
-
 		return $this;
 	}
 }
