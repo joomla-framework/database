@@ -11,6 +11,7 @@ namespace BabDev\Renderer;
 use Symfony\Component\Templating\Loader\LoaderInterface;
 use Symfony\Component\Templating\PhpEngine;
 use Symfony\Component\Templating\TemplateNameParserInterface;
+use Symfony\Component\Templating\TemplateReferenceInterface;
 
 /**
  * PhpEngine template renderer
@@ -33,33 +34,20 @@ class PhpEngineRenderer implements RendererInterface
 	 * @var    PhpEngine
 	 * @since  1.0
 	 */
-	private $engine;
+	private $renderer;
 
 	/**
 	 * Constructor
 	 *
-	 * @since   1.0
-	 */
-	public function __construct(TemplateNameParserInterface $parser, LoaderInterface $loader)
-	{
-		$this->engine = new PhpEngine($parser, $loader);
-	}
-
-	/**
-	 * Render and return compiled data.
-	 *
-	 * @param   string  $template  The template file name
-	 * @param   array   $data      The data to pass to the template
-	 *
-	 * @return  string  Compiled data
+	 * @param   TemplateNameParserInterface  $parser  Object to parese template names
+	 * @param   LoaderInterface              $loader  Object to direct the engine where to search for templates
+	 * @param   PhpEngine|null               $engine  Optional PhpEngine instance to inject or null for a new object to be created
 	 *
 	 * @since   1.0
 	 */
-	public function render($template, array $data = array())
+	public function __construct(TemplateNameParserInterface $parser, LoaderInterface $loader, PhpEngine $engine = null)
 	{
-		$data = array_merge($this->data, $data);
-
-		return $this->engine->render($template, $data);
+		$this->renderer = is_null($engine) ? new PhpEngine($parser, $loader) : $engine;
 	}
 
 	/**
@@ -78,17 +66,15 @@ class PhpEngineRenderer implements RendererInterface
 	}
 
 	/**
-	 * Sets file extension for template loader
+	 * Get the rendering engine
 	 *
-	 * @param   string  $extension  Template files extension
-	 *
-	 * @return  PhpEngineRenderer  Returns self for chaining
+	 * @return  PhpEngine
 	 *
 	 * @since   1.0
 	 */
-	public function setFileExtension($extension)
+	public function getRenderer()
 	{
-		// TODO: Implement setFileExtension() method.
+		return $this->renderer;
 	}
 
 	/**
@@ -102,7 +88,39 @@ class PhpEngineRenderer implements RendererInterface
 	 */
 	public function pathExists($path)
 	{
-		return $this->engine->exists($path);
+		return $this->renderer->exists($path);
+	}
+
+	/**
+	 * Render and return compiled data.
+	 *
+	 * @param   string|TemplateReferenceInterface  $template  A template name or a TemplateReferenceInterface instance
+	 * @param   array                              $data      The data to pass to the template
+	 *
+	 * @return  string  Compiled data
+	 *
+	 * @since   1.0
+	 */
+	public function render($template, array $data = array())
+	{
+		$data = array_merge($this->data, $data);
+
+		return $this->renderer->render($template, $data);
+	}
+
+	/**
+	 * Sets a piece of data
+	 *
+	 * @param   string  $key    Name of variable
+	 * @param   string  $value  Value of variable
+	 *
+	 * @return  PhpEngineRenderer  Returns self for chaining
+	 *
+	 * @since   1.0
+	 */
+	public function set($key, $value)
+	{
+		// TODO: Implement set() method.
 	}
 
 	/**
@@ -122,6 +140,20 @@ class PhpEngineRenderer implements RendererInterface
 	}
 
 	/**
+	 * Sets file extension for template loader
+	 *
+	 * @param   string  $extension  Template files extension
+	 *
+	 * @return  PhpEngineRenderer  Returns self for chaining
+	 *
+	 * @since   1.0
+	 */
+	public function setFileExtension($extension)
+	{
+		// TODO: Implement setFileExtension() method.
+	}
+
+	/**
 	 * Unloads data from renderer
 	 *
 	 * @return  PhpEngineRenderer  Returns self for chaining
@@ -133,20 +165,5 @@ class PhpEngineRenderer implements RendererInterface
 		$this->data = array();
 
 		return $this;
-	}
-
-	/**
-	 * Sets a piece of data
-	 *
-	 * @param   string  $key    Name of variable
-	 * @param   string  $value  Value of variable
-	 *
-	 * @return  PhpEngineRenderer  Returns self for chaining
-	 *
-	 * @since   1.0
-	 */
-	public function set($key, $value)
-	{
-		// TODO: Implement set() method.
 	}
 }
