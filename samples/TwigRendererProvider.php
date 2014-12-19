@@ -54,13 +54,8 @@ class TwigRendererProvider implements ServiceProviderInterface
 
 		$container->set(
 			'BabDev\Renderer\RendererInterface',
-			function (Container $container) use ($options) {
-				/* @type  \Joomla\Registry\Registry  $config */
-				$config = $container->get('config');
-
-				$loader = new \Twig_Loader_Filesystem($config->get('template.path'));
-
-				$renderer = new TwigRenderer($loader, $options);
+			function () use ($options) {
+				$renderer = new TwigRenderer($options);
 
 				// Set the Lexer object
 				$renderer->setLexer(

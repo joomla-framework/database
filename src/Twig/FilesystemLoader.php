@@ -6,14 +6,14 @@
  * @license    http://www.gnu.org/licenses/lgpl-2.1.txt GNU Lesser General Public License Version 2.1 or Later
  */
 
-namespace BabDev\Renderer;
+namespace BabDev\Renderer\Twig;
 
 /**
  * Twig class for rendering output.
  *
  * @since  1.0
  */
-class TwigLoader extends \Twig_Loader_Filesystem
+class FilesystemLoader extends \Twig_Loader_Filesystem
 {
 	/**
 	 * Extension of template files

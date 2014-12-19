@@ -8,6 +8,8 @@
 
 namespace BabDev\Renderer;
 
+use BabDev\Renderer\Twig\FilesystemLoader;
+
 use Joomla\Registry\Registry;
 
 /**
@@ -48,7 +50,7 @@ class TwigRenderer extends AbstractRenderer implements RendererInterface
 	{
 		$this->config = array_merge($this->config, (array) $config);
 
-		$loader = new TwigLoader($this->config['path']);
+		$loader = new FilesystemLoader($this->config['path']);
 		$loader->setExtension($this->config['extension']);
 
 		$this->renderer = new \Twig_Environment($loader, $this->config);
