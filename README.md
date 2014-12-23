@@ -34,7 +34,8 @@ $uri->setPass('myPass');
 echo $uri->__toString();
 ```
 This will output:
-   myUser:myPass@http://localhost:8888
+
+`myUser:myPass@http://localhost:8888`
 
 If you wanted to add a specific filepath after the host you could use the `setPath()` method:
 
@@ -55,8 +56,8 @@ $uri->setQuery('foo=bar');
 ```
 
 Output:
-   myUser:myPass@http://localhost:8888path/to/file.php?foo=bar
 
+`myUser:myPass@http://localhost:8888path/to/file.php?foo=bar`
 
 ## Installation via Composer
 
