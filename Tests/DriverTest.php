@@ -87,22 +87,6 @@ class DriverTest extends TestDatabase
 	}
 
 	/**
-	 * Test for the Joomla\Database\DatabaseDriver::__call method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function test__callUnknown()
-	{
-		$this->assertThat(
-			$this->instance->foo(),
-			$this->isNull(),
-			'Tests for an unknown method.'
-		);
-	}
-
-	/**
 	 * Test...
 	 *
 	 * @todo Implement test__construct().

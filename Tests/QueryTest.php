@@ -109,12 +109,6 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 			$this->equalTo($this->instance->quoteName('foo')),
 			'Tests the qn alias of quoteName.'
 		);
-
-		$this->assertThat(
-			$this->instance->foo(),
-			$this->isNull(),
-			'Tests for an unknown method.'
-		);
 	}
 
 	/**
