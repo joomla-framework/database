@@ -43,23 +43,6 @@ class PostgresqlImporter extends DatabaseImporter
 	}
 
 	/**
-	 * Get the SQL syntax to add a column.
-	 *
-	 * @param   string             $table  The table name.
-	 * @param   \SimpleXMLElement  $field  The XML field definition.
-	 *
-	 * @return  string
-	 *
-	 * @since   1.0
-	 */
-	protected function getAddColumnSQL($table, \SimpleXMLElement $field)
-	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD COLUMN ' . $this->getColumnSQL($field);
-
-		return $sql;
-	}
-
-	/**
 	 * Get the SQL syntax to add an index.
 	 *
 	 * @param   \SimpleXMLElement  $field  The XML index definition.
@@ -184,8 +167,8 @@ class PostgresqlImporter extends DatabaseImporter
 
 		/* Index section */
 		// Get the lookups for the old and new keys
-		$oldLookup = $this->getIdxLookup($oldKeys);
-		$newLookup = $this->getIdxLookup($newKeys);
+		$oldLookup = $this->getKeyLookup($oldKeys);
+		$newLookup = $this->getKeyLookup($newKeys);
 
 		// Loop through each key in the new structure.
 		foreach ($newLookup as $name => $keys)
@@ -492,9 +475,23 @@ class PostgresqlImporter extends DatabaseImporter
 	 * @return  array  The lookup array. array({key name} => array(object, ...))
 	 *
 	 * @since   1.0
-	 * @throws  \Exception
+	 * @deprecated  2.0  Use {@link getKeyLookup()} instead
 	 */
 	protected function getIdxLookup($keys)
+	{
+		return $this->getKeyLookup($keys);
+	}
+
+	/**
+	 * Get the details list of keys for a table.
+	 *
+	 * @param   array  $keys  An array of objects that comprise the keys for the table.
+	 *
+	 * @return  array  The lookup array. array({key name} => array(object, ...))
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function getKeyLookup($keys)
 	{
 		// First pass, create a lookup of the keys.
 		$lookup = array();

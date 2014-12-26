@@ -428,7 +428,7 @@ class PostgresqlDriver extends DatabaseDriver
 					'Type' => $field->type,
 					'Null' => $field->null,
 					// @todo: Improve query above to return primary key info as well
-					//'Key' => ($field->PK == '1' ? 'PRI' : '')
+					// 'Key' => ($field->PK == '1' ? 'PRI' : '')
 				);
 			}
 		}
@@ -610,7 +610,7 @@ class PostgresqlDriver extends DatabaseDriver
 	{
 		$this->connect();
 		$insertQuery = $this->getQuery(false, true);
-		$table = $insertQuery->__get('insert')->getElements();
+		$table = $insertQuery->insert->getElements();
 
 		/* find sequence column name */
 		$colNameQuery = $this->getQuery(true);
