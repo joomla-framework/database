@@ -14,9 +14,6 @@ use Psr\Log;
  * Joomla Framework Database Driver Class
  *
  * @since  1.0
- *
- * @method  string  q($text, $escape = true)  Alias for quote method
- * @method  string  qn($name, $as = null)     Alias for quoteName method
  */
 abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInterface
 {
@@ -355,35 +352,6 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		}
 
 		return $queries;
-	}
-
-	/**
-	 * Magic method to provide method alias support for quote() and quoteName().
-	 *
-	 * @param   string  $method  The called method.
-	 * @param   array   $args    The array of arguments passed to the method.
-	 *
-	 * @return  string  The aliased method's return value or null.
-	 *
-	 * @since   1.0
-	 */
-	public function __call($method, $args)
-	{
-		if (empty($args))
-		{
-			return;
-		}
-
-		switch ($method)
-		{
-			case 'q':
-				return $this->quote($args[0], isset($args[1]) ? $args[1] : true);
-				break;
-
-			case 'qn':
-				return $this->quoteName($args[0], isset($args[1]) ? $args[1] : null);
-				break;
-		}
 	}
 
 	/**
@@ -1236,6 +1204,21 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	abstract public function lockTable($tableName);
 
 	/**
+	 * Alias for quote method
+	 *
+	 * @param   array|string  $text    A string or an array of strings to quote.
+	 * @param   boolean       $escape  True (default) to escape the string, false to leave it unchanged.
+	 *
+	 * @return  string  The quoted input string.
+	 *
+	 * @since   1.0
+	 */
+	public function q($text, $escape = true)
+	{
+		return $this->quote($text, $escape);
+	}
+
+	/**
 	 * Quotes and optionally escapes a string to database requirements for use in database queries.
 	 *
 	 * @param   array|string  $text    A string or an array of strings to quote.
@@ -1243,7 +1226,6 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 *
 	 * @return  string  The quoted input string.
 	 *
-	 * @note    Accepting an array of strings was added in Platform 12.3.
 	 * @since   1.0
 	 */
 	public function quote($text, $escape = true)
@@ -1257,8 +1239,10 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 			return $text;
 		}
-
-		return '\'' . ($escape ? $this->escape($text) : $text) . '\'';
+		else
+		{
+			return '\'' . ($escape ? $this->escape($text) : $text) . '\'';
+		}
 	}
 
 	/**

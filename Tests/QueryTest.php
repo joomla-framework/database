@@ -88,7 +88,6 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::__call
 	 * @since   1.0
 	 */
 	public function test__call()

@@ -12,10 +12,6 @@ namespace Joomla\Database;
  * Joomla Framework Query Building Class.
  *
  * @since  1.0
- *
- * @method  string  q($text, $escape = true)  Alias for quote method
- * @method  string  qn($name, $as = null)     Alias for quoteName method
- * @method  string  e($text, $extra = false)  Alias for escape method
  */
 abstract class DatabaseQuery
 {
@@ -186,39 +182,6 @@ abstract class DatabaseQuery
 	 * @since  1.0
 	 */
 	protected $union = null;
-
-	/**
-	 * Magic method to provide method alias support for quote() and quoteName().
-	 *
-	 * @param   string  $method  The called method.
-	 * @param   array   $args    The array of arguments passed to the method.
-	 *
-	 * @return  string  The aliased method's return value or null.
-	 *
-	 * @since   1.0
-	 */
-	public function __call($method, $args)
-	{
-		if (empty($args))
-		{
-			return;
-		}
-
-		switch ($method)
-		{
-			case 'q':
-				return $this->quote($args[0], isset($args[1]) ? $args[1] : true);
-				break;
-
-			case 'qn':
-				return $this->quoteName($args[0], isset($args[1]) ? $args[1] : null);
-				break;
-
-			case 'e':
-				return $this->escape($args[0], isset($args[1]) ? $args[1] : false);
-				break;
-		}
-	}
 
 	/**
 	 * Class constructor.
@@ -710,12 +673,28 @@ abstract class DatabaseQuery
 	}
 
 	/**
+	 * Alias for escape method
+	 *
+	 * @param   string   $text   The string to be escaped.
+	 * @param   boolean  $extra  Optional parameter to provide extra escaping.
+	 *
+	 * @return  string  The escaped string.
+	 *
+	 * @since   1.0
+	 * @throws  \RuntimeException if the internal db property is not a valid object.
+	 */
+	public function e($text, $extra = false)
+	{
+		return $this->escape($text, $extra);
+	}
+
+	/**
 	 * Method to escape a string for usage in an SQL statement.
 	 *
 	 * This method is provided for use where the query object is passed to a function for modification.
 	 * If you have direct access to the database object, it is recommended you use the escape method directly.
 	 *
-	 * Note that 'e' is an alias for this method as it is in JDatabaseDatabaseDriver.
+	 * Note that 'e' is an alias for this method as it is in DatabaseDriver.
 	 *
 	 * @param   string   $text   The string to be escaped.
 	 * @param   boolean  $extra  Optional parameter to provide extra escaping.
@@ -1152,6 +1131,22 @@ abstract class DatabaseQuery
 	}
 
 	/**
+	 * Alias for quote method
+	 *
+	 * @param   array|string  $text    A string or an array of strings to quote.
+	 * @param   boolean       $escape  True (default) to escape the string, false to leave it unchanged.
+	 *
+	 * @return  string  The quoted input string.
+	 *
+	 * @since   1.0
+	 * @throws  \RuntimeException if the internal db property is not a valid object.
+	 */
+	public function q($text, $escape = true)
+	{
+		return $this->quote($text, $escape);
+	}
+
+	/**
 	 * Method to quote and optionally escape a string to database requirements for insertion into the database.
 	 *
 	 * This method is provided for use where the query object is passed to a function for modification.
@@ -1180,6 +1175,24 @@ abstract class DatabaseQuery
 		}
 
 		return $this->db->quote($text, $escape);
+	}
+
+	/**
+	 * Alias for quoteName method
+	 *
+	 * @param   array|string  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
+	 *                               Each type supports dot-notation name.
+	 * @param   array|string  $as    The AS query part associated to $name. It can be string or array, in latter case it has to be
+	 *                               same length of $name; if is null there will not be any AS part for string or array element.
+	 *
+	 * @return  array|string  The quote wrapped name, same type of $name.
+	 *
+	 * @since   1.0
+	 * @throws  \RuntimeException if the internal db property is not a valid object.
+	 */
+	public function qn($name, $as = null)
+	{
+		return $this->quoteName($name, $as);
 	}
 
 	/**
