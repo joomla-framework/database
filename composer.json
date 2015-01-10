@@ -10,10 +10,15 @@
         "psr/log": "~1.0"
     },
     "require-dev": {
+        "joomla/di": "~1.0",
+        "joomla/registry": "~1.0",
         "joomla/test": "~1.0",
         "phpunit/phpunit": "4.*",
         "phpunit/dbunit": "~1.2",
         "squizlabs/php_codesniffer": "1.*"
+    },
+    "suggest": {
+        "joomla/di": "To use the Database ServiceProviderInterface objects, install joomla/di."
     },
     "autoload": {
         "psr-4": {
