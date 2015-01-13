@@ -164,6 +164,39 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test that resolving and alias for a class
+	 * returns the same object instance.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.3
+	 */
+	public function testResolveAliasSameAsKey()
+	{
+		$reflection = new \ReflectionClass($this->fixture);
+
+		// Set the foo property directly in the datastore
+		$refProp = $reflection->getProperty('dataStore');
+		$refProp->setAccessible(true);
+		$refProp->setValue($this->fixture, array('foo' => array(
+			'callback' => function() { return new \stdClass; },
+			'shared' => true,
+			'protected' => true
+		)));
+
+		// Alias bar to foo
+		$refProp2 = $reflection->getProperty('aliases');
+		$refProp2->setAccessible(true);
+		$refProp2->setValue($this->fixture, array('bar' => 'foo'));
+
+		$this->assertSame(
+			$this->fixture->get('foo'),
+			$this->fixture->get('bar'),
+			'When retrieving an alias of a class, both the original and the alias should return the same object instance.'
+		);
+	}
+
+	/**
 	 * Tests the buildObject with no dependencies.
 	 *
 	 * @return  void
@@ -319,6 +352,37 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 			{
 				// Noop.
 			}
+		);
+	}
+
+	/**
+	 * Test that the extend method also resolves the alias if set.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.3
+	 */
+	public function testExistsResolvesAlias()
+	{
+		$reflection = new \ReflectionClass($this->fixture);
+
+		// Set the foo property directly in the datastore
+		$refProp = $reflection->getProperty('dataStore');
+		$refProp->setAccessible(true);
+		$refProp->setValue($this->fixture, array('foo' => array(
+			'callback' => function() { return new \stdClass; },
+			'shared' => true,
+			'protected' => true
+		)));
+
+		// Alias bar to foo
+		$refProp2 = $reflection->getProperty('aliases');
+		$refProp2->setAccessible(true);
+		$refProp2->setValue($this->fixture, array('bar' => 'foo'));
+
+		$this->assertTrue(
+			$this->fixture->exists('bar'),
+			'Checking if a key exists in the container should resolve aliases as well.'
 		);
 	}
 
@@ -843,7 +907,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 			'When calling exists on an item that has not been set in the container, it should return false.'
 		);
 	}
-	
+
 
 	/**
 	 * Test getRaw

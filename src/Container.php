@@ -184,6 +184,7 @@ class Container
 	 */
 	public function extend($key, \Closure $callable)
 	{
+		$key = $this->resolveAlias($key);
 		$raw = $this->getRaw($key);
 
 		if (is_null($raw))
@@ -336,6 +337,7 @@ class Container
 	 */
 	public function get($key, $forceNew = false)
 	{
+		$key = $this->resolveAlias($key);
 		$raw = $this->getRaw($key);
 
 		if (is_null($raw))
@@ -367,6 +369,8 @@ class Container
 	 */
 	public function exists($key)
 	{
+		$key = $this->resolveAlias($key);
+
 		return (bool) $this->getRaw($key);
 	}
 
@@ -381,8 +385,6 @@ class Container
 	 */
 	protected function getRaw($key)
 	{
-		$key = $this->resolveAlias($key);
-
 		if (isset($this->dataStore[$key]))
 		{
 			return $this->dataStore[$key];
