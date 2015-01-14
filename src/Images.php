@@ -218,6 +218,7 @@ class Images extends AbstractMediawikiObject
 		{
 			$path .= '&aidir=' . $aidir;
 		}
+
 		if (isset($aisha1))
 		{
 			$path .= '&aisha1=' . $aisha1;
