@@ -126,5 +126,4 @@ abstract class AbstractMediawikiObject
 
 		return $xml;
 	}
-
 }
