@@ -9,6 +9,7 @@
 namespace BabDev\Renderer;
 
 use League\Plates\Engine;
+use League\Plates\Template\Template;
 
 /**
  * Plates class for rendering output.
