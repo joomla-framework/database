@@ -879,19 +879,19 @@ class Language
 
 				if (!preg_match($regex, $line) || in_array($key, $blacklist))
 				{
-					$errors[] = $lineNumber;
+					$errors[] = $lineNumber + 1;
 				}
 			}
 
 			// Check if we encountered any errors.
 			if (count($errors))
 			{
-				$this->errorfiles[$filename] = $filename . '&#160;: error(s) in line(s) ' . implode(', ', $errors);
+				$this->errorfiles[$filename] = $filename . ' - error(s) in line(s) ' . implode(', ', $errors);
 			}
 			elseif ($php_errormsg)
 			{
 				// We didn't find any errors but there's probably a parse notice.
-				$this->errorfiles['PHP' . $filename] = 'PHP parser errors :' . $php_errormsg;
+				$this->errorfiles['PHP' . $filename] = 'PHP parser errors -' . $php_errormsg;
 			}
 
 			$this->debug = true;
