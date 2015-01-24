@@ -92,11 +92,7 @@ class PlatesRenderer extends AbstractRenderer implements RendererInterface
 	 */
 	public function render($template, array $data = array())
 	{
-		$plates = new Template($this->getRenderer());
-
-		// TODO Process template name
-
-		return $plates->render($template, $data);
+		return $this->getRenderer()->render($template, $data);
 	}
 
 	/**
