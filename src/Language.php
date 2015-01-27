@@ -860,7 +860,7 @@ class Language
 			$errors = array();
 
 			// Open the file as a stream.
-			$file = new SplFileObject($filename);
+			$file = new \SplFileObject($filename);
 
 			foreach ($file as $lineNumber => $line)
 			{
