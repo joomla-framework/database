@@ -733,19 +733,6 @@ $github->pulls->comments->edit(':owner', ':repo', ':commentId', ':body');
 $github->pulls->comments->delete(':owner', ':repo', ':commentId');
 ```
 
-### H3
-
-See
-
-```php
-```
-
-#### H4
-
-See
-
-```php
-```
 
 ## TODO
 
