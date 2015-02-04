@@ -1,6 +1,6 @@
 # The Application Package [![Build Status](https://travis-ci.org/joomla-framework/application.png?branch=master)](https://travis-ci.org/joomla-framework/application)
 
-[![Latest Unstable Version](https://poser.pugx.org/leaphly/cart-bundle/v/unstable.svg)](//packagist.org/packages/leaphly/cart-bundle)[![Latest Stable Version](https://poser.pugx.org/joomla/application/v/stable.svg)](https://packagist.org/packages/joomla/application) [![Total Downloads](https://poser.pugx.org/joomla/application/downloads.svg)](https://packagist.org/packages/joomla/application) [![Latest Unstable Version](https://poser.pugx.org/joomla/application/v/unstable.svg)](https://packagist.org/packages/joomla/application) [![License](https://poser.pugx.org/joomla/application/license.svg)](https://packagist.org/packages/joomla/application)
+[![Latest Stable Version](https://poser.pugx.org/joomla/application/v/stable.svg)](https://packagist.org/packages/joomla/application) [![Total Downloads](https://poser.pugx.org/joomla/application/downloads.svg)](https://packagist.org/packages/joomla/application) [![Latest Unstable Version](https://poser.pugx.org/joomla/application/v/unstable.svg)](https://packagist.org/packages/joomla/application) [![License](https://poser.pugx.org/joomla/application/license.svg)](https://packagist.org/packages/joomla/application)
 
 ## Initialising Applications
 
