@@ -4,7 +4,6 @@
 
 ```php
 use Joomla\Filesystem\File;
-use Joomla\Filesystem\Folder;
 
 $file = $this->input->files->get('file');
 
