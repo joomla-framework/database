@@ -1259,13 +1259,14 @@ class Language
 	/**
 	 * Set the language attributes to the given language.
 	 *
-	 * Once called, the language still needs to be loaded using JLanguage::load().
+	 * Once called, the language still needs to be loaded using Language::load().
 	 *
 	 * @param   string  $lang  Language code.
 	 *
 	 * @return  string  Previous value.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Instantiate a new Language object in the new language instead.
 	 */
 	public function setLanguage($lang)
 	{
