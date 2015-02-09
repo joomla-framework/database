@@ -391,6 +391,7 @@ class Language
 	 * @return  string  The transliteration of the string.
 	 *
 	 * @since   1.0
+	 * @throws  \RuntimeException
 	 */
 	public function transliterate($string)
 	{
@@ -400,9 +401,15 @@ class Language
 		}
 
 		$string = Transliterate::utf8_latin_to_ascii($string);
-		$string = String::strtolower($string);
+		$lowercaseString = String::strtolower($string);
 
-		return $string;
+		// String can return false if there isn't a fully valid UTF-8 string entered
+		if ($lowercaseString == false)
+		{
+			throw new \RuntimeException('Invalid UTF-8 was detected in the string "%s"', $lowercaseString);
+		}
+
+		return $lowercaseString;
 	}
 
 	/**
