@@ -411,6 +411,7 @@ class Language
 	 * @return  callable  The transliterator function
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  This method will be removed in version 2.0.
 	 */
 	public function getTransliterator()
 	{
@@ -425,6 +426,7 @@ class Language
 	 * @return  callable  The previous function.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  The transliterator must be set in a language's localise file.
 	 */
 	public function setTransliterator($function)
 	{
@@ -461,6 +463,7 @@ class Language
 	 * @return  callable  Function name or the actual function.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  This method will be removed in version 2.0.
 	 */
 	public function getPluralSuffixesCallback()
 	{
@@ -475,6 +478,7 @@ class Language
 	 * @return  callable  The previous function.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  The plural suffix method must be set in a language's localise file.
 	 */
 	public function setPluralSuffixesCallback($function)
 	{
@@ -490,6 +494,7 @@ class Language
 	 * @return  array  The array of ignored search words.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  This functionality will be removed in version 2.0
 	 */
 	public function getIgnoredSearchWords()
 	{
@@ -509,6 +514,7 @@ class Language
 	 * @return  callable  Function name or the actual function.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  This functionality will be removed in version 2.0
 	 */
 	public function getIgnoredSearchWordsCallback()
 	{
@@ -523,6 +529,7 @@ class Language
 	 * @return  callable  The previous function.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  This functionality will be removed in version 2.0
 	 */
 	public function setIgnoredSearchWordsCallback($function)
 	{
@@ -538,6 +545,7 @@ class Language
 	 * @return  integer  The lower limit integer for length of search words (3 if no value was set for a specific language).
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  This functionality will be removed in version 2.0
 	 */
 	public function getLowerLimitSearchWord()
 	{
@@ -557,6 +565,7 @@ class Language
 	 * @return  callable  Function name or the actual function.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  This functionality will be removed in version 2.0
 	 */
 	public function getLowerLimitSearchWordCallback()
 	{
@@ -571,6 +580,7 @@ class Language
 	 * @return  callable  The previous function.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  This functionality will be removed in version 2.0
 	 */
 	public function setLowerLimitSearchWordCallback($function)
 	{
@@ -586,6 +596,7 @@ class Language
 	 * @return  integer  The upper limit integer for length of search words (20 if no value was set for a specific language).
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  This functionality will be removed in version 2.0
 	 */
 	public function getUpperLimitSearchWord()
 	{
@@ -605,6 +616,7 @@ class Language
 	 * @return  callable  Function name or the actual function.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  This functionality will be removed in version 2.0
 	 */
 	public function getUpperLimitSearchWordCallback()
 	{
@@ -619,6 +631,7 @@ class Language
 	 * @return  callable  The previous function.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  This functionality will be removed in version 2.0
 	 */
 	public function setUpperLimitSearchWordCallback($function)
 	{
@@ -634,6 +647,7 @@ class Language
 	 * @return  integer  The number of characters displayed (200 if no value was set for a specific language).
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  This functionality will be removed in version 2.0
 	 */
 	public function getSearchDisplayedCharactersNumber()
 	{
@@ -653,6 +667,7 @@ class Language
 	 * @return  callable  Function name or the actual function.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  This functionality will be removed in version 2.0
 	 */
 	public function getSearchDisplayedCharactersNumberCallback()
 	{
@@ -667,6 +682,7 @@ class Language
 	 * @return  callable  The previous function.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  This functionality will be removed in version 2.0
 	 */
 	public function setSearchDisplayedCharactersNumberCallback($function)
 	{
