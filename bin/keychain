@@ -16,6 +16,8 @@ foreach (array(__DIR__ . '/../vendor/autoload.php', __DIR__ . '/../../../vendor/
 {
 	if (file_exists($file))
 	{
+		require $file;
+
 		$composerLoaded = true;
 
 		break;
