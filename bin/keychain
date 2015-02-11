@@ -49,13 +49,14 @@ class KeychainManager extends \Joomla\Application\AbstractCliApplication
 	protected $keychain = null;
 
 	/**
-	 * Execute the application
+	 * Method to run the application routines.  Most likely you will want to instantiate a controller
+	 * and execute it, or perform some sort of task directly.
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0
 	 */
-	public function execute()
+	protected function doExecute()
 	{
 		if (!count($this->input->args))
 		{
@@ -111,19 +112,6 @@ class KeychainManager extends \Joomla\Application\AbstractCliApplication
 		}
 
 		$this->close(0);
-	}
-
-	/**
-	 * Method to run the application routines.  Most likely you will want to instantiate a controller
-	 * and execute it, or perform some sort of task directly.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	protected function doExecute()
-	{
-		return;
 	}
 
 	/**
