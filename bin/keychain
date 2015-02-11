@@ -10,14 +10,29 @@
 define('_JEXEC', 1);
 define('JPATH_ROOT', __DIR__);
 
-// Load the Joomla! Framework
-require_once realpath('../vendor/autoload.php');
+$composerLoaded = false;
+
+foreach (array(__DIR__ . '/../vendor/autoload.php', __DIR__ . '/../../../vendor/autoload.php') as $file)
+{
+	if (file_exists($file))
+	{
+		$composerLoaded = true;
+
+		break;
+	}
+}
+
+if (!$composerLoaded)
+{
+	fwrite(STDERR, 'Composer is not properly set up in this project.');
+
+	exit(1);
+}
 
 /**
  * Keychain Manager
  *
- * @package  Joomla.Platform
- * @since    1.0
+ * @since  1.0
  */
 class KeychainManager extends \Joomla\Application\AbstractCliApplication
 {
