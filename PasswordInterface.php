@@ -15,12 +15,37 @@ namespace Joomla\Crypt;
  */
 interface PasswordInterface
 {
+	/**
+	 * Identifier for BCrypt hashed passwords
+	 *
+	 * @var    string
+	 * @since  1.0
+	 */
 	const BLOWFISH = '$2y$';
 
+	/**
+	 * Identifier for legacy Joomla! CMS hashed passwords
+	 *
+	 * @var    string
+	 * @since  1.0
+	 * @deprecated  2.0
+	 */
 	const JOOMLA = 'Joomla';
 
+	/**
+	 * Identifier for PBKDF2 hashed passwords
+	 *
+	 * @var    string
+	 * @since  1.0
+	 */
 	const PBKDF = '$pbkdf$';
 
+	/**
+	 * Identifier for MD5 hashed passwords
+	 *
+	 * @var    string
+	 * @since  1.0
+	 */
 	const MD5 = '$1$';
 
 	/**
