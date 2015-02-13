@@ -21,6 +21,8 @@ interface ProfilerRendererInterface
 	 * @param   ProfilerInterface  $profiler  The profiler to render.
 	 *
 	 * @return  string  The rendered profiler.
+	 *
+	 * @since   1.0
 	 */
 	public function render(ProfilerInterface $profiler);
 }

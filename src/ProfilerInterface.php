@@ -19,6 +19,8 @@ interface ProfilerInterface
 	 * Get the name of this profiler.
 	 *
 	 * @return  string  The name of this profiler.
+	 *
+	 * @since   1.0
 	 */
 	public function getName();
 
@@ -29,6 +31,7 @@ interface ProfilerInterface
 	 *
 	 * @return  ProfilerInterface  This method is chainable.
 	 *
+	 * @since   1.0
 	 * @throws  \InvalidArgumentException  If a point with that name already exists.
 	 */
 	public function mark($name);
@@ -39,6 +42,8 @@ interface ProfilerInterface
 	 * @param   string  $name  The name of the point.
 	 *
 	 * @return  boolean  True if the profiler has marked the point, false otherwise.
+	 *
+	 * @since   1.0
 	 */
 	public function hasPoint($name);
 
@@ -49,6 +54,8 @@ interface ProfilerInterface
 	 * @param   mixed   $default  The default value if the point hasn't been marked.
 	 *
 	 * @return  ProfilePointInterface|mixed  The profile point or the default value.
+	 *
+	 * @since   1.0
 	 */
 	public function getPoint($name, $default = null);
 
@@ -56,6 +63,8 @@ interface ProfilerInterface
 	 * Get the points in this profiler (in the order they were marked).
 	 *
 	 * @return  ProfilePointInterface[]  An array of points in this profiler.
+	 *
+	 * @since   1.0
 	 */
 	public function getPoints();
 
@@ -65,6 +74,8 @@ interface ProfilerInterface
 	 * @param   ProfilerRendererInterface  $renderer  The renderer.
 	 *
 	 * @return  ProfilerInterface  This method is chainable.
+	 *
+	 * @since   1.0
 	 */
 	public function setRenderer(ProfilerRendererInterface $renderer);
 
@@ -72,6 +83,8 @@ interface ProfilerInterface
 	 * Get the currently used renderer in this profiler.
 	 *
 	 * @return  ProfilerRendererInterface  The renderer.
+	 *
+	 * @since   1.0
 	 */
 	public function getRenderer();
 
@@ -79,6 +92,8 @@ interface ProfilerInterface
 	 * Render the profiler.
 	 *
 	 * @return  string  The rendered profiler.
+	 *
+	 * @since   1.0
 	 */
 	public function render();
 }

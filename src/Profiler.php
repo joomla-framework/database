@@ -9,80 +9,77 @@
 namespace Joomla\Profiler;
 
 use Joomla\Profiler\Renderer\DefaultRenderer;
-use InvalidArgumentException;
-use LogicException;
-use ArrayIterator;
-use IteratorAggregate;
-use Countable;
 
 /**
  * Implementation of ProfilerInterface.
  *
  * @since  1.0
  */
-class Profiler implements ProfilerInterface, IteratorAggregate, Countable
+class Profiler implements ProfilerInterface, \IteratorAggregate, \Countable
 {
 	/**
 	 * The name of the profiler.
 	 *
-	 * @var  string
+	 * @var    string
+	 * @since  1.0
 	 */
 	protected $name;
 
 	/**
 	 * An array of profiler points (from the first to last).
 	 *
-	 * @var  ProfilePointInterface[]
+	 * @var    ProfilePointInterface[]
+	 * @since  1.0
 	 */
 	protected $points;
 
 	/**
-	 * A lookup array containing the
-	 * names of the already marked points as keys
-	 * and their indexes in $points as value.
-	 * It is used to quickly find a point
-	 * without having to traverse $points.
+	 * A lookup array containing the names of the already marked points as keys * and their indexes in $points as value.
 	 *
-	 * @var  array
+	 * It is used to quickly find a point without having to traverse $points.
+	 *
+	 * @var    array
+	 * @since  1.0
 	 */
 	protected $lookup = array();
 
 	/**
-	 * A flag to see if we must get
-	 * the real memory usage, or the usage of emalloc().
+	 * A flag to see if we must get the real memory usage, or the usage of emalloc().
 	 *
-	 * @var  boolean
+	 * @var    boolean
+	 * @since  1.0
 	 */
 	protected $memoryRealUsage;
 
 	/**
-	 * The timestamp with microseconds
-	 * when the first point was marked.
+	 * The timestamp with microseconds when the first point was marked.
 	 *
-	 * @var  float
+	 * @var    float
+	 * @since  1.0
 	 */
 	protected $startTimeStamp = 0.0;
 
 	/**
-	 * The memory usage in bytes
-	 * when the first point was marked.
+	 * The memory usage in bytes when the first point was marked.
 	 *
-	 * @var  integer
+	 * @var    integer
+	 * @since  1.0
 	 */
 	protected $startMemoryBytes = 0;
 
 	/**
-	 * The memory peak in bytes during
-	 * the profiler run.
+	 * The memory peak in bytes during the profiler run.
 	 *
-	 * @var  integer
+	 * @var    integer
+	 * @since  1.0
 	 */
 	protected $memoryPeakBytes;
 
 	/**
 	 * The profiler renderer.
 	 *
-	 * @var  ProfilerRendererInterface
+	 * @var    ProfilerRendererInterface
+	 * @since  1.0
 	 */
 	protected $renderer;
 
@@ -94,7 +91,8 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 	 * @param   ProfilePointInterface[]    $points           An array of profile points.
 	 * @param   boolean                    $memoryRealUsage  True to get the real memory usage.
 	 *
-	 * @throws  InvalidArgumentException
+	 * @since   1.0
+	 * @throws  \InvalidArgumentException
 	 */
 	public function __construct($name, ProfilerRendererInterface $renderer = null, array $points = array(), $memoryRealUsage = false)
 	{
@@ -116,14 +114,15 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 
 	/**
 	 * Set the points in this profiler.
-	 * This function is called by the constructor when injecting an array of points
-	 * (mostly for testing purposes).
+	 *
+	 * This function is called by the constructor when injecting an array of points (mostly for testing purposes).
 	 *
 	 * @param   ProfilePointInterface[]  $points  An array of profile points.
 	 *
 	 * @return  void
 	 *
-	 * @throws  InvalidArgumentException
+	 * @since   1.0
+	 * @throws  \InvalidArgumentException
 	 */
 	protected function setPoints(array $points)
 	{
@@ -131,14 +130,14 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 		{
 			if (!($point instanceof ProfilePointInterface))
 			{
-				throw new InvalidArgumentException(
-					'One of the passed point does not implement ProfilePointInterface.'
+				throw new \InvalidArgumentException(
+					'One of the passed points does not implement ProfilePointInterface.'
 				);
 			}
 
 			if (isset($this->lookup[$point->getName()]))
 			{
-				throw new InvalidArgumentException(
+				throw new \InvalidArgumentException(
 					sprintf(
 						'The point %s already exists in the profiler %s.',
 						$point->getName(),
@@ -159,6 +158,8 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 	 * Get the name of this profiler.
 	 *
 	 * @return  string  The name of this profiler.
+	 *
+	 * @since   1.0
 	 */
 	public function getName()
 	{
@@ -172,14 +173,15 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 	 *
 	 * @return  ProfilerInterface  This method is chainable.
 	 *
-	 * @throws  InvalidArgumentException  If the point already exists.
+	 * @since   1.0
+	 * @throws  \InvalidArgumentException  If the point already exists.
 	 */
 	public function mark($name)
 	{
 		// If a point already exists with this name.
 		if (isset($this->lookup[$name]))
 		{
-			throw new InvalidArgumentException(
+			throw new \InvalidArgumentException(
 				sprintf(
 					'A point already exists with the name %s in the profiler %s.',
 					$name,
@@ -224,6 +226,8 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 	 * @param   string  $name  The name of the point.
 	 *
 	 * @return  boolean  True if the profiler has marked the point, false otherwise.
+	 *
+	 * @since   1.0
 	 */
 	public function hasPoint($name)
 	{
@@ -237,6 +241,8 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 	 * @param   mixed   $default  The default value if the point hasn't been marked.
 	 *
 	 * @return  ProfilePointInterface|mixed  The profile point or the default value.
+	 *
+	 * @since   1.0
 	 */
 	public function getPoint($name, $default = null)
 	{
@@ -258,13 +264,14 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 	 *
 	 * @return  float  The elapsed time between these points in seconds.
 	 *
-	 * @throws  LogicException  If the points were not marked.
+	 * @since   1.0
+	 * @throws  \LogicException  If the points were not marked.
 	 */
 	public function getTimeBetween($first, $second)
 	{
 		if (!isset($this->lookup[$first]))
 		{
-			throw new LogicException(
+			throw new \LogicException(
 				sprintf(
 					'The point %s was not marked in the profiler %s.',
 					$first,
@@ -275,7 +282,7 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 
 		if (!isset($this->lookup[$second]))
 		{
-			throw new LogicException(
+			throw new \LogicException(
 				sprintf(
 					'The point %s was not marked in the profiler %s.',
 					$second,
@@ -301,13 +308,14 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 	 *
 	 * @return  integer  The amount of allocated memory between these points in bytes.
 	 *
-	 * @throws  LogicException  If the points were not marked.
+	 * @since   1.0
+	 * @throws  \LogicException  If the points were not marked.
 	 */
 	public function getMemoryBytesBetween($first, $second)
 	{
 		if (!isset($this->lookup[$first]))
 		{
-			throw new LogicException(
+			throw new \LogicException(
 				sprintf(
 					'The point %s was not marked in the profiler %s.',
 					$first,
@@ -318,7 +326,7 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 
 		if (!isset($this->lookup[$second]))
 		{
-			throw new LogicException(
+			throw new \LogicException(
 				sprintf(
 					'The point %s was not marked in the profiler %s.',
 					$second,
@@ -340,6 +348,8 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 	 * Get the memory peak in bytes during the profiler run.
 	 *
 	 * @return  integer  The memory peak in bytes.
+	 *
+	 * @since   1.0
 	 */
 	public function getMemoryPeakBytes()
 	{
@@ -350,6 +360,8 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 	 * Get the points in this profiler (from the first to the last).
 	 *
 	 * @return  ProfilePointInterface[]  An array of points in this profiler.
+	 *
+	 * @since   1.0
 	 */
 	public function getPoints()
 	{
@@ -362,6 +374,8 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 	 * @param   ProfilerRendererInterface  $renderer  The renderer.
 	 *
 	 * @return  Profiler  This method is chainable.
+	 *
+	 * @since   1.0
 	 */
 	public function setRenderer(ProfilerRendererInterface $renderer)
 	{
@@ -374,6 +388,8 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 	 * Get the currently used renderer in this profiler.
 	 *
 	 * @return  ProfilerRendererInterface  The renderer.
+	 *
+	 * @since   1.0
 	 */
 	public function getRenderer()
 	{
@@ -384,6 +400,8 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 	 * Render the profiler.
 	 *
 	 * @return  string  The rendered profiler.
+	 *
+	 * @since   1.0
 	 */
 	public function render()
 	{
@@ -394,6 +412,8 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 	 * Cast the profiler to a string using the renderer.
 	 *
 	 * @return  string  The rendered profiler.
+	 *
+	 * @since   1.0
 	 */
 	public function __toString()
 	{
@@ -403,17 +423,21 @@ class Profiler implements ProfilerInterface, IteratorAggregate, Countable
 	/**
 	 * Get an iterator on the profiler points.
 	 *
-	 * @return  ArrayIterator  An iterator on the profiler points.
+	 * @return  \ArrayIterator  An iterator on the profiler points.
+	 *
+	 * @since   1.0
 	 */
 	public function getIterator()
 	{
-		return new ArrayIterator($this->points);
+		return new \ArrayIterator($this->points);
 	}
 
 	/**
 	 * Count the number of points in this profiler.
 	 *
 	 * @return  integer  The number of points.
+	 *
+	 * @since   1.0
 	 */
 	public function count()
 	{
