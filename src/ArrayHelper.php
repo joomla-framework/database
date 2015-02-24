@@ -585,7 +585,7 @@ final class ArrayHelper
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public static function flatten($array, $separator = '.', $prefix = '')
 	{
