@@ -26,10 +26,11 @@ abstract class Stemmer
 	protected $cache = array();
 
 	/**
-	 * JLanguageStemmer instances.
+	 * Stemmer instances.
 	 *
-	 * @var    array
+	 * @var    Stemmer[]
 	 * @since  1.0
+	 * @deprecated  2.0
 	 */
 	protected static $instances = array();
 
@@ -38,32 +39,17 @@ abstract class Stemmer
 	 *
 	 * @param   string  $adapter  The type of stemmer to load.
 	 *
-	 * @return  Stemmer  A JLanguageStemmer instance.
+	 * @return  Stemmer
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use LanguageFactory::getStemmer() instead
 	 * @throws  RuntimeException on invalid stemmer.
 	 */
 	public static function getInstance($adapter)
 	{
-		// Only create one stemmer for each adapter.
-		if (isset(self::$instances[$adapter]))
-		{
-			return self::$instances[$adapter];
-		}
+		$factory = new LanguageFactory;
 
-		// Setup the adapter for the stemmer.
-		$class = '\\Joomla\\Language\\Stemmer\\' . ucfirst(trim($adapter));
-
-		// Check if a stemmer exists for the adapter.
-		if (!class_exists($class))
-		{
-			// Throw invalid adapter exception.
-			throw new RuntimeException(sprintf('Invalid stemmer type %s', $adapter));
-		}
-
-		self::$instances[$adapter] = new $class;
-
-		return self::$instances[$adapter];
+		return $factory->getStemmer($adapter);
 	}
 
 	/**
