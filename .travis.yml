@@ -4,6 +4,7 @@ php:
   - 5.3
   - 5.4
   - 5.5
+  - 5.6
 
 before_install:
   - sh -e .travis/scripts/apt-get.sh
@@ -11,8 +12,8 @@ before_install:
   - sh -e .travis/scripts/apache2-configure.sh
 
 before_script:
-  - composer self-update
-  - composer update --dev
+  - composer update
 
 script:
-  - phpunit --configuration phpunit.travis.xml
+  - ./vendor/bin/phpunit
+  - ./vendor/bin/phpcs -p --report=full --extensions=php --standard=.travis/phpcs/Joomla/ruleset.xml src/
