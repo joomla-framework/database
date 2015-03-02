@@ -7,7 +7,7 @@ php:
   - 5.6
 
 before_script:
-  - composer update --dev
+  - composer update
   - mysql -e 'create database joomla_ut;'
   - mysql joomla_ut < Tests/Stubs/mysql.sql
   - psql -c 'create database joomla_ut;' -U postgres
