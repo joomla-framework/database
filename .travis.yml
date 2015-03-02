@@ -10,7 +10,7 @@ services:
   - memcached # will start memcached
 
 before_script:
-  - composer update --dev
+  - composer update
   - phpenv config-add build/travis/phpenv/memcached.ini
 
 script:
