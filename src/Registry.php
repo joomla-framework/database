@@ -98,14 +98,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 */
 	public function count()
 	{
-		$i = 0;
-
-		foreach ($this->data as $item)
-		{
-			$i++;
-		}
-
-		return $i++;
+		return count(get_object_vars($this->data));
 	}
 
 	/**
