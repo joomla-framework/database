@@ -489,7 +489,7 @@ class PostgresqlImporter extends DatabaseImporter
 	 *
 	 * @return  array  The lookup array. array({key name} => array(object, ...))
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	protected function getKeyLookup($keys)
 	{
