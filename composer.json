@@ -8,7 +8,7 @@
     "require": {
         "php": ">=5.3.10",
         "joomla/http": "~1.0",
-        "joomla/registry": "~1.0",
+        "joomla/registry": "~2.0@dev",
         "joomla/uri": "~1.0"
     },
     "require-dev": {
