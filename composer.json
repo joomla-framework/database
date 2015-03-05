@@ -8,16 +8,21 @@
     "require": {
         "php": ">=5.3.10",
         "joomla/input": "~1.2",
-        "joomla/session": "~1.1",
-        "joomla/string": "~1.1",
         "joomla/registry": "~1.1",
-        "joomla/uri": "~1.1",
         "psr/log": "~1.0"
     },
     "require-dev": {
         "joomla/test": "~1.1",
+        "joomla/session": "~1.1",
+        "joomla/string": "~1.1",
+        "joomla/uri": "~1.1",
         "phpunit/phpunit": "4.*",
         "squizlabs/php_codesniffer": "1.*"
+    },
+    "suggest": {
+        "joomla/session": "To use AbstractWebApplication with session support, install joomla/session",
+        "joomla/string": "To use AbstractWebApplication, install joomla/string",
+        "joomla/uri": "To use AbstractWebApplication, install joomla/uri"
     },
     "autoload": {
         "psr-4": {
