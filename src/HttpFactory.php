@@ -55,7 +55,7 @@ class HttpFactory
 	 * @since   1.0
 	 * @throws  \InvalidArgumentException
 	 */
-	public static function getAvailableDriver($options, $default = null)
+	public static function getAvailableDriver($options = array(), $default = null)
 	{
 		if (!is_array($options) && !($options instanceof \ArrayAccess))
 		{
