@@ -10,4 +10,4 @@ before_script:
   - composer update --dev
 
 script:
-  - ./vendor/bin/phpcs --report=full --extensions=php --standard=build/phpcs/Joomla/ruleset.xml src/
+  - ./vendor/bin/phpcs --report=full --extensions=php --standard=.travis/phpcs/Joomla/ruleset.xml src/
