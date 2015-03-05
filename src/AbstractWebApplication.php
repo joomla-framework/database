@@ -526,6 +526,11 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 */
 	public function getSession()
 	{
+		if ($this->session === null)
+		{
+			throw new \RuntimeException('A \Joomla\Session\Session object has not been set.');
+		}
+
 		return $this->session;
 	}
 
@@ -776,7 +781,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 
 		if (!$this->input->$method->get($token, '', 'alnum'))
 		{
-			if ($this->session->isNew())
+			if ($this->getSession()->isNew())
 			{
 				// Redirect to login screen.
 				$this->redirect('index.php');
@@ -808,6 +813,6 @@ abstract class AbstractWebApplication extends AbstractApplication
 		// @todo we need the user id somehow here
 		$userId  = 0;
 
-		return md5($this->get('secret') . $userId . $this->session->getToken($forceNew));
+		return md5($this->get('secret') . $userId . $this->getSession()->getToken($forceNew));
 	}
 }
