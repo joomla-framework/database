@@ -230,17 +230,24 @@ final class ArrayHelper
 	/**
 	 * Utility function to return a value from a named array or a specified default
 	 *
-	 * @param   array   $array    A named array
-	 * @param   string  $name     The key to search for
-	 * @param   mixed   $default  The default value to give if no key found
-	 * @param   string  $type     Return type for the variable (INT, FLOAT, STRING, WORD, BOOLEAN, ARRAY)
+	 * @param   array|ArrayAccess  $array    A named array or object that implements ArrayAccess
+	 * @param   string             $name     The key to search for
+	 * @param   mixed              $default  The default value to give if no key found
+	 * @param   string             $type     Return type for the variable (INT, FLOAT, STRING, WORD, BOOLEAN, ARRAY)
 	 *
 	 * @return  mixed  The value from the source array
 	 *
+	 * @throws  InvalidArgumentException
+	 *
 	 * @since   1.0
 	 */
-	public static function getValue(array $array, $name, $default = null, $type = '')
+	public static function getValue($array, $name, $default = null, $type = '')
 	{
+		if (!is_array($array) && !($array instanceof ArrayAccess))
+		{
+			throw new \InvalidArgumentException('The object must be an array or a object that implements ArrayAccess');
+		}
+
 		$result = null;
 
 		if (isset($array[$name]))
