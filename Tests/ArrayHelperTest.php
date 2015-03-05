@@ -1462,7 +1462,7 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers        Joomla\Utilities\ArrayHelper::getValue
-	 * @since         __DEPLOY_VERSION__
+	 * @since         1.3.1
 	 */
 	public function testGetValueWithObjectImplementingArrayAccess()
 	{
@@ -1483,7 +1483,7 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @covers             Joomla\Utilities\ArrayHelper::getValue
 	 * @expectedException  \InvalidArgumentException
-	 * @since              __DEPLOY_VERSION__
+	 * @since              1.3.1
 	 */
 	public function testInvalidArgumentExceptionWithAnObjectNotImplementingArrayAccess()
 	{
