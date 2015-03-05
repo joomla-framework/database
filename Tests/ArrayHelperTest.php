@@ -1487,7 +1487,7 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testInvalidArgumentExceptionWithAnObjectNotImplementingArrayAccess()
 	{
-		$object = new stdClass;
+		$object = new \stdClass;
 		$object->name = "Joe";
 		$object->surname = "Blogs";
 		$object->age = 20;
