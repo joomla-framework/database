@@ -48,7 +48,7 @@ class HttpFactory
 	 * Finds an available TransportInterface object for communication
 	 *
 	 * @param   array|\ArrayAccess  $options  Options for creating TransportInterface object
-	 * @param   mixed               $default  Adapter (string) or queue of adapters (array) to use
+	 * @param   array|string        $default  Adapter (string) or queue of adapters (array) to use
 	 *
 	 * @return  TransportInterface|boolean  Interface sub-class or boolean false if no adapters are available
 	 *
