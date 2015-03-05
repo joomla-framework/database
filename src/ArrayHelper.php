@@ -230,7 +230,7 @@ final class ArrayHelper
 	/**
 	 * Utility function to return a value from a named array or a specified default
 	 *
-	 * @param   array|ArrayAccess  $array    A named array or object that implements ArrayAccess
+	 * @param   array|\ArrayAccess  $array    A named array or object that implements ArrayAccess
 	 * @param   string             $name     The key to search for
 	 * @param   mixed              $default  The default value to give if no key found
 	 * @param   string             $type     Return type for the variable (INT, FLOAT, STRING, WORD, BOOLEAN, ARRAY)
@@ -243,7 +243,7 @@ final class ArrayHelper
 	 */
 	public static function getValue($array, $name, $default = null, $type = '')
 	{
-		if (!is_array($array) && !($array instanceof ArrayAccess))
+		if (!is_array($array) && !($array instanceof \ArrayAccess))
 		{
 			throw new \InvalidArgumentException('The object must be an array or a object that implements ArrayAccess');
 		}
