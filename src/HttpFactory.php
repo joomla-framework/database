@@ -16,19 +16,26 @@ namespace Joomla\Http;
 class HttpFactory
 {
 	/**
-	 * Method to receive Http instance.
+	 * Method to create an Http instance.
 	 *
-	 * @param   array  $options   Client options array.
-	 * @param   mixed  $adapters  Adapter (string) or queue of adapters (array) to use for communication.
+	 * @param   array|\ArrayAccess  $options   Client options array.
+	 * @param   array|string        $adapters  Adapter (string) or queue of adapters (array) to use for communication.
 	 *
-	 * @return  Http  Joomla Http class
-	 *
-	 * @throws  \RuntimeException
+	 * @return  Http
 	 *
 	 * @since   1.0
+	 * @throws  \InvalidArgumentException
+	 * @throws  \RuntimeException
 	 */
 	public static function getHttp($options = array(), $adapters = null)
 	{
+		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		{
+			throw new \InvalidArgumentException(
+				'The options param must be an array or implement the ArrayAccess interface.'
+			);
+		}
+
 		if (!$driver = self::getAvailableDriver($options, $adapters))
 		{
 			throw new \RuntimeException('No transport driver available.');
@@ -38,17 +45,25 @@ class HttpFactory
 	}
 
 	/**
-	 * Finds an available http transport object for communication
+	 * Finds an available TransportInterface object for communication
 	 *
-	 * @param   array  $options  Option for creating http transport object
-	 * @param   mixed  $default  Adapter (string) or queue of adapters (array) to use
+	 * @param   array|\ArrayAccess  $options  Options for creating TransportInterface object
+	 * @param   array|string        $default  Adapter (string) or queue of adapters (array) to use
 	 *
 	 * @return  TransportInterface|boolean  Interface sub-class or boolean false if no adapters are available
 	 *
 	 * @since   1.0
+	 * @throws  \InvalidArgumentException
 	 */
-	public static function getAvailableDriver($options, $default = null)
+	public static function getAvailableDriver($options = array(), $default = null)
 	{
+		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		{
+			throw new \InvalidArgumentException(
+				'The options param must be an array or implement the ArrayAccess interface.'
+			);
+		}
+
 		if (is_null($default))
 		{
 			$availableAdapters = self::getHttpTransports();
@@ -83,7 +98,7 @@ class HttpFactory
 	}
 
 	/**
-	 * Get the http transport handlers
+	 * Get the HTTP transport handlers
 	 *
 	 * @return  array  An array of available transport handlers
 	 *

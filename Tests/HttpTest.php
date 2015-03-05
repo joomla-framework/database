@@ -61,6 +61,18 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the constructor to ensure only arrays or ArrayAccess objects are allowed
+	 *
+	 * @return  void
+	 *
+	 * @expectedException  \InvalidArgumentException
+	 */
+	public function testConstructorDisallowsNonArrayObjects()
+	{
+		new Http(new \stdClass);
+	}
+
+	/**
 	 * Tests the getOption method
 	 *
 	 * @return  void

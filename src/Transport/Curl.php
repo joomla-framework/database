@@ -20,7 +20,9 @@ use Joomla\Uri\UriInterface;
 class Curl implements TransportInterface
 {
 	/**
-	 * @var    array  The client options.
+	 * The client options.
+	 *
+	 * @var    array|\ArrayAccess
 	 * @since  1.0
 	 */
 	protected $options;
@@ -28,10 +30,11 @@ class Curl implements TransportInterface
 	/**
 	 * Constructor. CURLOPT_FOLLOWLOCATION must be disabled when open_basedir or safe_mode are enabled.
 	 *
-	 * @param   array  $options  Client options array.
+	 * @param   array|\ArrayAccess  $options  Client options array.
 	 *
 	 * @see     http://www.php.net/manual/en/function.curl-setopt.php
 	 * @since   1.0
+	 * @throws  \InvalidArgumentException
 	 * @throws  \RuntimeException
 	 */
 	public function __construct($options = array())
@@ -41,11 +44,18 @@ class Curl implements TransportInterface
 			throw new \RuntimeException('Cannot use a cURL transport when curl_init() is not available.');
 		}
 
+		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		{
+			throw new \InvalidArgumentException(
+				'The options param must be an array or implement the ArrayAccess interface.'
+			);
+		}
+
 		$this->options = $options;
 	}
 
 	/**
-	 * Send a request to the server and return a JHttpResponse object with the response.
+	 * Send a request to the server and return a Response object with the response.
 	 *
 	 * @param   string        $method     The HTTP method for sending the request.
 	 * @param   UriInterface  $uri        The URI to the resource to request.

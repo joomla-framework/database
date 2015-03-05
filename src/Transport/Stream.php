@@ -20,7 +20,9 @@ use Joomla\Uri\UriInterface;
 class Stream implements TransportInterface
 {
 	/**
-	 * @var    array  The client options.
+	 * The client options.
+	 *
+	 * @var    array|\ArrayAccess
 	 * @since  1.0
 	 */
 	protected $options;
@@ -28,7 +30,7 @@ class Stream implements TransportInterface
 	/**
 	 * Constructor.
 	 *
-	 * @param   array  $options  Client options object.
+	 * @param   array|\ArrayAccess  $options  Client options array.
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -47,11 +49,18 @@ class Stream implements TransportInterface
 			throw new \RuntimeException('Cannot use a stream transport when "allow_url_fopen" is disabled.');
 		}
 
+		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		{
+			throw new \InvalidArgumentException(
+				'The options param must be an array or implement the ArrayAccess interface.'
+			);
+		}
+
 		$this->options = $options;
 	}
 
 	/**
-	 * Send a request to the server and return a JHttpResponse object with the response.
+	 * Send a request to the server and return a Response object with the response.
 	 *
 	 * @param   string        $method     The HTTP method for sending the request.
 	 * @param   UriInterface  $uri        The URI to the resource to request.
