@@ -70,6 +70,21 @@ class TransportTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the transport constructor to ensure only arrays and ArrayAccess objects are allowed
+	 *
+	 * @param   string  $transportClass  The transport class to test
+	 *
+	 * @return  void
+	 *
+	 * @dataProvider       transportProvider
+	 * @expectedException  \InvalidArgumentException
+	 */
+	public function testConstructorWithBadDataObject($transportClass)
+	{
+		new $transportClass(new \stdClass);
+	}
+
+	/**
 	 * Tests the request method with a get request
 	 *
 	 * @param   string  $transportClass  The transport class to test

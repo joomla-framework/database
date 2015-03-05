@@ -32,6 +32,19 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the getHttp method to ensure only arrays or ArrayAccess objects are allowed
+	 *
+	 * @return  void
+	 *
+	 * @covers             Joomla\Http\HttpFactory::getHttp
+	 * @expectedException  \InvalidArgumentException
+	 */
+	public function testGetHttpDisallowsNonArrayObjects()
+	{
+		HttpFactory::getHttp(new \stdClass);
+	}
+
+	/**
 	 * Tests the getHttp method.
 	 *
 	 * @return  void
@@ -79,6 +92,19 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 			HttpFactory::getAvailableDriver(array(), array('DummyTransport')),
 			'Passing an empty array should return false due to there being no adapters to test'
 		);
+	}
+
+	/**
+	 * Tests the getAvailableDriver method to ensure only arrays or ArrayAccess objects are allowed
+	 *
+	 * @return  void
+	 *
+	 * @covers             Joomla\Http\HttpFactory::getAvailableDriver
+	 * @expectedException  \InvalidArgumentException
+	 */
+	public function testGetAvailableDriverDisallowsNonArrayObjects()
+	{
+		HttpFactory::getAvailableDriver(new \stdClass);
 	}
 
 	/**
