@@ -182,10 +182,8 @@ abstract class String
 		{
 			return utf8_strpos($str, $search);
 		}
-		else
-		{
-			return utf8_strpos($str, $search, $offset);
-		}
+
+		return utf8_strpos($str, $search, $offset);
 	}
 
 	/**
@@ -225,10 +223,8 @@ abstract class String
 		{
 			return utf8_substr($str, $offset);
 		}
-		else
-		{
-			return utf8_substr($str, $offset, $length);
-		}
+
+		return utf8_substr($str, $offset, $length);
 	}
 
 	/**
@@ -311,10 +307,8 @@ abstract class String
 		{
 			return utf8_ireplace($search, $replace, $str);
 		}
-		else
-		{
-			return utf8_ireplace($search, $replace, $str, $count);
-		}
+
+		return utf8_ireplace($search, $replace, $str, $count);
 	}
 
 	/**
@@ -382,18 +376,14 @@ abstract class String
 			{
 				return strcoll(utf8_strtolower($str1), utf8_strtolower($str2));
 			}
-			else
-			{
-				return strcoll(
-					self::transcode(utf8_strtolower($str1), 'UTF-8', $encoding),
-					self::transcode(utf8_strtolower($str2), 'UTF-8', $encoding)
-				);
-			}
+
+			return strcoll(
+				self::transcode(utf8_strtolower($str1), 'UTF-8', $encoding),
+				self::transcode(utf8_strtolower($str2), 'UTF-8', $encoding)
+			);
 		}
-		else
-		{
-			return utf8_strcasecmp($str1, $str2);
-		}
+
+		return utf8_strcasecmp($str1, $str2);
 	}
 
 	/**
@@ -442,15 +432,11 @@ abstract class String
 			{
 				return strcoll($str1, $str2);
 			}
-			else
-			{
-				return strcoll(self::transcode($str1, 'UTF-8', $encoding), self::transcode($str2, 'UTF-8', $encoding));
-			}
+
+			return strcoll(self::transcode($str1, 'UTF-8', $encoding), self::transcode($str2, 'UTF-8', $encoding));
 		}
-		else
-		{
-			return strcmp($str1, $str2);
-		}
+
+		return strcmp($str1, $str2);
 	}
 
 	/**
@@ -475,14 +461,13 @@ abstract class String
 		{
 			return utf8_strcspn($str, $mask);
 		}
-		elseif ($length === false)
+
+		if ($length === false)
 		{
 			return utf8_strcspn($str, $mask, $start);
 		}
-		else
-		{
-			return utf8_strcspn($str, $mask, $start, $length);
-		}
+
+		return utf8_strcspn($str, $mask, $start, $length);
 	}
 
 	/**
@@ -546,14 +531,13 @@ abstract class String
 		{
 			return utf8_strspn($str, $mask);
 		}
-		elseif ($length === null)
+
+		if ($length === null)
 		{
 			return utf8_strspn($str, $mask, $start);
 		}
-		else
-		{
-			return utf8_strspn($str, $mask, $start, $length);
-		}
+
+		return utf8_strspn($str, $mask, $start, $length);
 	}
 
 	/**
@@ -577,10 +561,8 @@ abstract class String
 		{
 			return utf8_substr_replace($str, $repl, $start);
 		}
-		else
-		{
-			return utf8_substr_replace($str, $repl, $start, $length);
-		}
+
+		return utf8_substr_replace($str, $repl, $start, $length);
 	}
 
 	/**
@@ -612,10 +594,8 @@ abstract class String
 		{
 			return utf8_ltrim($str);
 		}
-		else
-		{
-			return utf8_ltrim($str, $charlist);
-		}
+
+		return utf8_ltrim($str, $charlist);
 	}
 
 	/**
@@ -646,10 +626,8 @@ abstract class String
 		{
 			return utf8_rtrim($str);
 		}
-		else
-		{
-			return utf8_rtrim($str, $charlist);
-		}
+
+		return utf8_rtrim($str, $charlist);
 	}
 
 	/**
@@ -680,10 +658,8 @@ abstract class String
 		{
 			return utf8_trim($str);
 		}
-		else
-		{
-			return utf8_trim($str, $charlist);
-		}
+
+		return utf8_trim($str, $charlist);
 	}
 
 	/**
@@ -709,15 +685,13 @@ abstract class String
 		{
 			return utf8_ucfirst($str);
 		}
-		else
-		{
-			if ($newDelimiter === null)
-			{
-				$newDelimiter = $delimiter;
-			}
 
-			return implode($newDelimiter, array_map('utf8_ucfirst', explode($delimiter, $str)));
+		if ($newDelimiter === null)
+		{
+			$newDelimiter = $delimiter;
 		}
+
+		return implode($newDelimiter, array_map('utf8_ucfirst', explode($delimiter, $str)));
 	}
 
 	/**
@@ -838,10 +812,8 @@ abstract class String
 				$str
 			);
 		}
-		else
-		{
-			return $str;
-		}
+
+		return $str;
 	}
 
 	/**
@@ -866,9 +838,7 @@ abstract class String
 				$str
 			);
 		}
-		else
-		{
-			return $str;
-		}
+
+		return $str;
 	}
 }
