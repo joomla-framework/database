@@ -8,8 +8,8 @@
 
 namespace Joomla\Controller;
 
-use Joomla\Application;
-use Joomla\Input;
+use Joomla\Application\AbstractApplication;
+use Joomla\Input\Input;
 
 /**
  * Joomla Framework Controller Interface
@@ -34,7 +34,7 @@ interface ControllerInterface extends \Serializable
 	/**
 	 * Get the application object.
 	 *
-	 * @return  Application\AbstractApplication  The application object.
+	 * @return  AbstractApplication  The application object.
 	 *
 	 * @since   1.0
 	 */
@@ -43,7 +43,7 @@ interface ControllerInterface extends \Serializable
 	/**
 	 * Get the input object.
 	 *
-	 * @return  Input\Input  The input object.
+	 * @return  Input  The input object.
 	 *
 	 * @since   1.0
 	 */
@@ -52,22 +52,22 @@ interface ControllerInterface extends \Serializable
 	/**
 	 * Set the application object.
 	 *
-	 * @param   Application\AbstractApplication  $app  The application object.
+	 * @param   AbstractApplication  $app  The application object.
 	 *
 	 * @return  ControllerInterface  Returns itself to support chaining.
 	 *
 	 * @since   1.0
 	 */
-	public function setApplication(Application\AbstractApplication $app);
+	public function setApplication(AbstractApplication $app);
 
 	/**
 	 * Set the input object.
 	 *
-	 * @param   Input\Input  $input  The input object.
+	 * @param   Input  $input  The input object.
 	 *
 	 * @return  ControllerInterface  Returns itself to support chaining.
 	 *
 	 * @since   1.0
 	 */
-	public function setInput(Input\Input $input);
+	public function setInput(Input $input);
 }

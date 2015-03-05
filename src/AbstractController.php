@@ -9,7 +9,7 @@
 namespace Joomla\Controller;
 
 use Joomla\Input\Input;
-use Joomla\Application;
+use Joomla\Application\AbstractApplication;
 
 /**
  * Joomla Framework Base Controller Class
@@ -21,7 +21,7 @@ abstract class AbstractController implements ControllerInterface
 	/**
 	 * The application object.
 	 *
-	 * @var    Application\AbstractApplication
+	 * @var    AbstractApplication
 	 * @since  1.0
 	 */
 	private $app;
@@ -37,12 +37,12 @@ abstract class AbstractController implements ControllerInterface
 	/**
 	 * Instantiate the controller.
 	 *
-	 * @param   Input                            $input  The input object.
-	 * @param   Application\AbstractApplication  $app    The application object.
+	 * @param   Input                $input  The input object.
+	 * @param   AbstractApplication  $app    The application object.
 	 *
 	 * @since  1.0
 	 */
-	public function __construct(Input $input = null, Application\AbstractApplication $app = null)
+	public function __construct(Input $input = null, AbstractApplication $app = null)
 	{
 		$this->input = $input;
 		$this->app = $app;
@@ -51,7 +51,7 @@ abstract class AbstractController implements ControllerInterface
 	/**
 	 * Get the application object.
 	 *
-	 * @return  Application\AbstractApplication  The application object.
+	 * @return  AbstractApplication  The application object.
 	 *
 	 * @since   1.0
 	 * @throws  \UnexpectedValueException if the application has not been set.
@@ -99,13 +99,13 @@ abstract class AbstractController implements ControllerInterface
 	/**
 	 * Set the application object.
 	 *
-	 * @param   Application\AbstractApplication  $app  The application object.
+	 * @param   AbstractApplication  $app  The application object.
 	 *
 	 * @return  AbstractController  Returns itself to support chaining.
 	 *
 	 * @since   1.0
 	 */
-	public function setApplication(Application\AbstractApplication $app)
+	public function setApplication(AbstractApplication $app)
 	{
 		$this->app = $app;
 
