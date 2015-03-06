@@ -826,7 +826,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 *
 	 * @return  boolean True if the string is all ASCII
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public static function isAscii($str)
 	{
