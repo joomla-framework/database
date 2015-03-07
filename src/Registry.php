@@ -232,7 +232,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 			$found = true;
 		}
 
-		if (!$found || $node == null || $node == '')
+		if (!$found || $node === null || $node === '')
 		{
 			return $default;
 		}
@@ -284,7 +284,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 * @param   array    $array      Associative array of value to load
 	 * @param   boolean  $flattened  Load from a one-dimensional array
 	 * @param   string   $separator  The key separator
-	 *   
+	 *
 	 * @return  Registry  Return this object to support chaining.
 	 *
 	 * @since   1.0
