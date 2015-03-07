@@ -263,6 +263,15 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 		$a->set('foo', 'bar');
 		$this->assertEquals('bar', $a->get('foo'), 'Line: ' . __LINE__ . ' get method should work.');
 		$this->assertNull($a->get('xxx.yyy'), 'Line: ' . __LINE__ . ' get should return null when not found.');
+
+		// Test for when value is 0 - see https://github.com/joomla/jissues/issues/629
+		$a = new Registry;
+		$a->set('foo', 0);
+		$this->assertSame(0, $a->get('foo'));
+
+		$a = new Registry;
+		$a->set('foo.bar', 0);
+		$this->assertSame(0, $a->get('foo.bar'));
 	}
 
 	/**
