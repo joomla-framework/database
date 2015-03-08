@@ -363,7 +363,7 @@ class SqliteDriver extends PdoDriver
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.1
 	 * @throws  \RuntimeException
 	 */
 	public function truncateTable($table)
