@@ -8,7 +8,7 @@
 
 namespace Joomla\Authentication\Strategies;
 
-use Joomla\Authentication\AuthenticationStrategyInterface;
+use Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy;
 use Joomla\Authentication\Authentication;
 use Joomla\Input\Input;
 
@@ -17,7 +17,7 @@ use Joomla\Input\Input;
  *
  * @since  1.0
  */
-class LocalStrategy implements AuthenticationStrategyInterface
+class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 {
 	/**
 	 * The Input object
@@ -26,22 +26,6 @@ class LocalStrategy implements AuthenticationStrategyInterface
 	 * @since  1.0
 	 */
 	private $input;
-
-	/**
-	 * The credential store.
-	 *
-	 * @var    array
-	 * @since  1.0
-	 */
-	private $credentialStore;
-
-	/**
-	 * The last authentication status.
-	 *
-	 * @var    integer
-	 * @since  1.0
-	 */
-	private $status;
 
 	/**
 	 * Strategy Constructor
@@ -54,7 +38,7 @@ class LocalStrategy implements AuthenticationStrategyInterface
 	public function __construct(Input $input, $credentialStore)
 	{
 		$this->input = $input;
-		$this->credentialStore = $credentialStore;
+		$this->setCredentialStore($credentialStore);
 	}
 
 	/**
@@ -76,40 +60,6 @@ class LocalStrategy implements AuthenticationStrategyInterface
 			return false;
 		}
 
-		if (isset($this->credentialStore[$username]))
-		{
-			$hash = $this->credentialStore[$username];
-		}
-		else
-		{
-			$this->status = Authentication::NO_SUCH_USER;
-
-			return false;
-		}
-
-		if (password_verify($password, $hash))
-		{
-			$this->status = Authentication::SUCCESS;
-
-			return $username;
-		}
-		else
-		{
-			$this->status = Authentication::INVALID_CREDENTIALS;
-
-			return false;
-		}
-	}
-
-	/**
-	 * Get the status of the last authentication attempt.
-	 *
-	 * @return  integer  Authentication class constant result.
-	 *
-	 * @since   1.0
-	 */
-	public function getResult()
-	{
-		return $this->status;
+		return $this->doAuthenticate($username, $password);
 	}
 }
