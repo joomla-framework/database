@@ -18,7 +18,7 @@ use Joomla\Input\Input;
  *
  * @since  __DEPLOY_VERSION__
  */
-class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
+class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 {
 	/**
 	 * DatabaseDriver object
