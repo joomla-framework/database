@@ -99,22 +99,21 @@ class Authentication
 		}
 		else
 		{
-			$strategies = (array) $strategies;
+			$strategies      = (array) $strategies;
+			$strategyObjects = array();
 
-			foreach ($strategies AS $strategy)
+			foreach ($strategies as $strategy)
 			{
-				if (isset($this->strategies[$strategy]))
-				{
-					$strategyObjects[$strategy] = $this->strategies[$strategy];
-				}
-				else
+				if (!isset($this->strategies[$strategy]))
 				{
 					throw new \RuntimeException('Authentication Strategy Not Found');
 				}
+
+				$strategyObjects[$strategy] = $this->strategies[$strategy];
 			}
 		}
 
-		foreach ($strategyObjects AS $strategy => $strategyObject)
+		foreach ($strategyObjects as $strategy => $strategyObject)
 		{
 			$username = $strategyObject->authenticate();
 
