@@ -357,6 +357,22 @@ class SqliteDriver extends PdoDriver
 	}
 
 	/**
+	 * Method to truncate a table.
+	 *
+	 * @param   string  $table  The table to truncate
+	 *
+	 * @return  void
+	 *
+	 * @since   1.2.1
+	 * @throws  \RuntimeException
+	 */
+	public function truncateTable($table)
+	{
+		$this->setQuery('DELETE FROM ' . $this->quoteName($table))
+			->execute();
+	}
+
+	/**
 	 * Unlocks tables in the database.
 	 *
 	 * @return  SqliteDriver  Returns this object to support chaining.
