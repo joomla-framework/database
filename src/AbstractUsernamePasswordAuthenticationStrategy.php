@@ -16,14 +16,6 @@ namespace Joomla\Authentication;
 abstract class AbstractUsernamePasswordAuthenticationStrategy implements AuthenticationStrategyInterface
 {
 	/**
-	 * The credential store.
-	 *
-	 * @var    array
-	 * @since  __DEPLOY_VERSION__
-	 */
-	private $credentialStore = array();
-
-	/**
 	 * The last authentication status.
 	 *
 	 * @var    integer
@@ -43,14 +35,16 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
 	 */
 	protected function doAuthenticate($username, $password)
 	{
-		if (!isset($this->credentialStore[$username]))
+		$hashedPassword = $this->getHashedPassword($username);
+
+		if ($hashedPassword === false)
 		{
 			$this->status = Authentication::NO_SUCH_USER;
 
 			return false;
 		}
 
-		if (!$this->verifyPassword($username, $password))
+		if (!$this->verifyPassword($username, $password, $hashedPassword))
 		{
 			$this->status = Authentication::INVALID_CREDENTIALS;
 
@@ -63,16 +57,15 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
 	}
 
 	/**
-	 * Get the credential store.
+	 * Retrieve the hashed password for the specified user.
 	 *
-	 * @return  array
+	 * @param   string  $username  Username to lookup.
+	 *
+	 * @return  string|boolean  Hashed password on success or boolean false on failure.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getCredentialStore()
-	{
-		return $this->credentialStore;
-	}
+	abstract protected function getHashedPassword($username);
 
 	/**
 	 * Get the status of the last authentication attempt.
@@ -87,35 +80,18 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
 	}
 
 	/**
-	 * Set the credential store.
-	 *
-	 * @param   array  $credentialStore  Associative array with the username as the key and hashed password as the value.
-	 *
-	 * @return  AbstractAuthenticationStrategy  Method allows chaining
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function setCredentialStore(array $credentialStore = array())
-	{
-		$this->credentialStore = $credentialStore;
-
-		return $this;
-	}
-
-	/**
 	 * Attempt to verify the username and password pair.
 	 *
-	 * @param   string  $username  The username to authenticate.
-	 * @param   string  $password  The password to attempt authentication with.
+	 * @param   string  $username        The username to authenticate.
+	 * @param   string  $password        The password to attempt authentication with.
+	 * @param   string  $hashedPassword  The hashed password to attempt authentication against.
 	 *
 	 * @return  boolean
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function verifyPassword($username, $password)
+	protected function verifyPassword($username, $password, $hashedPassword)
 	{
-		$hash = $this->credentialStore[$username];
-
-		return password_verify($password, $hash);
+		return password_verify($password, $hashedPassword);
 	}
 }

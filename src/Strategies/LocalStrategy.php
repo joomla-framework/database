@@ -20,6 +20,14 @@ use Joomla\Input\Input;
 class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 {
 	/**
+	 * The credential store.
+	 *
+	 * @var    array
+	 * @since  1.0
+	 */
+	private $credentialStore;
+
+	/**
 	 * The Input object
 	 *
 	 * @var    Input
@@ -38,7 +46,7 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	public function __construct(Input $input, $credentialStore)
 	{
 		$this->input = $input;
-		$this->setCredentialStore($credentialStore);
+		$this->credentialStore = $credentialStore;
 	}
 
 	/**
@@ -61,5 +69,24 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 		}
 
 		return $this->doAuthenticate($username, $password);
+	}
+
+	/**
+	 * Retrieve the hashed password for the specified user.
+	 *
+	 * @param   string  $username  Username to lookup.
+	 *
+	 * @return  string|boolean  Hashed password on success or boolean false on failure.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function getHashedPassword($username)
+	{
+		if (!isset($this->credentialStore[$username]))
+		{
+			return false;
+		}
+
+		return $this->credentialStore[$username];
 	}
 }

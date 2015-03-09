@@ -29,6 +29,14 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	private $db;
 
 	/**
+	 * Database connection options
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $dbOptions;
+
+	/**
 	 * The Input object
 	 *
 	 * @var    Input
@@ -54,14 +62,7 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 		$options['username_column'] = isset($options['username_column']) ? $options['username_column'] : 'username';
 		$options['password_column'] = isset($options['password_column']) ? $options['password_column'] : 'password';
 
-		$store = $this->createCredentialStore($options);
-
-		if (empty($store))
-		{
-			throw new \RuntimeException('The credential store is empty.');
-		}
-
-		$this->setCredentialStore($store);
+		$this->dbOptions = $options;
 	}
 
 	/**
@@ -87,20 +88,28 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	}
 
 	/**
-	 * Creates the credential store.
+	 * Retrieve the hashed password for the specified user.
 	 *
-	 * @param   array  $options  Options for the database connection
+	 * @param   string  $username  Username to lookup.
 	 *
-	 * @return  array
+	 * @return  string|boolean  Hashed password on success or boolean false on failure.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	private function createCredentialStore(array $options)
+	protected function getHashedPassword($username)
 	{
-		return $this->db->setQuery(
+		$password = $this->db->setQuery(
 			$this->db->getQuery(true)
-				->select(array($options['username_column'], $options['password_column']))
-				->from($options['table'])
-		)->loadAssocList($options['username_column'], $options['password_column']);
+				->select($this->dbOptions['password_column'])
+				->from($this->dbOptions['table'])
+				->where($this->dbOptions['username_column'] . ' = ' . $this->db->quote($username))
+		)->loadResult();
+
+		if (!$password)
+		{
+			return false;
+		}
+
+		return $password;
 	}
 }

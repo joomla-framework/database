@@ -58,14 +58,6 @@ class DatabaseStrategyTest extends TestDatabase
 	}
 
 	/**
-	 * @expectedException  \RuntimeException
-	 */
-	public function testEmptyStore()
-	{
-		new DatabaseStrategy($this->input, self::$driver);
-	}
-
-	/**
 	 * Tests the authenticate method with valid credentials.
 	 */
 	public function testValidPassword()
