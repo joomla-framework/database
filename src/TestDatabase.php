@@ -19,7 +19,9 @@ use Joomla\Test\TestHelper;
 abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 {
 	/**
-	 * @var    DatabaseDriver  The active database driver being used for the tests.
+	 * The active database driver being used for the tests.
+	 *
+	 * @var    DatabaseDriver
 	 * @since  1.0
 	 */
 	protected static $driver;
@@ -33,6 +35,11 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 */
 	public static function setUpBeforeClass()
 	{
+		if (!class_exists('\\Joomla\\Database\\DatabaseDriver'))
+		{
+			self::fail('The joomla/database package is not installed, cannot use this test case.');
+		}
+
 		// We always want the default database test case to use an SQLite memory database.
 		$options = array(
 			'driver' => 'sqlite',
@@ -79,8 +86,8 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	/**
 	 * Assigns mock callbacks to methods.
 	 *
-	 * @param   object  $mockObject  The mock object that the callbacks are being assigned to.
-	 * @param   array   $array       An array of methods names to mock with callbacks.
+	 * @param   \PHPUnit_Framework_MockObject_MockObject  $mockObject  The mock object that the callbacks are being assigned to.
+	 * @param   array                                     $array       An array of methods names to mock with callbacks.
 	 *
 	 * @return  void
 	 *
@@ -111,9 +118,10 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	/**
 	 * Assigns mock values to methods.
 	 *
-	 * @param   object  $mockObject  The mock object.
-	 * @param   array   $array       An associative array of methods to mock with return values:<br />
-	 *                               string (method name) => mixed (return value)
+	 * @param   \PHPUnit_Framework_MockObject_MockObject  $mockObject  The mock object.
+	 * @param   array                                     $array       An associative array of methods to mock with
+	 *                                                                 return values:
+	 *                                                                 string (method name) => mixed (return value)
 	 *
 	 * @return  void
 	 *
@@ -142,10 +150,8 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 		{
 			return $this->createDefaultDBConnection(self::$driver->getConnection(), ':memory:');
 		}
-		else
-		{
-			return null;
-		}
+
+		return null;
 	}
 
 	/**

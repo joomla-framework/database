@@ -6,8 +6,13 @@
     "homepage": "https://github.com/joomla-framework/test",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.3.10",
+        "php": ">=5.3.10"
+    },
+    "require-dev": {
         "joomla/database": "~1.0"
+    },
+    "suggest": {
+        "joomla/database": "To use the database test case, install joomla/database"
     },
     "autoload": {
         "psr-4": {
