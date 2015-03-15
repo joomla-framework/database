@@ -115,7 +115,7 @@ abstract class AbstractHtmlView extends AbstractView
 		$file = Path::clean($layout . '.' . $ext);
 
 		// Find the layout file path.
-		$path = Path::find(clone($this->paths), $file);
+		$path = Path::find(clone $this->paths, $file);
 
 		return $path;
 	}
