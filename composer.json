@@ -7,13 +7,16 @@
     "license": "GPL-2.0+",
     "require": {
         "php": ">=5.3.10",
-        "joomla/filesystem": "~1.0",
         "joomla/model": "~1.0"
     },
     "require-dev": {
+        "joomla/filesystem": "~1.0",
         "joomla/test": "~1.0",
         "phpunit/phpunit": "4.*",
         "squizlabs/php_codesniffer": "1.*"
+    },
+    "suggest": {
+        "joomla/filesystem": "To use the AbstractHtmlView, install joomla/filesystem"
     },
     "autoload": {
         "psr-4": {
