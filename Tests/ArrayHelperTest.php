@@ -1457,6 +1457,46 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test get value from an array.
+	 *
+	 * @return  void
+	 *
+	 * @covers        Joomla\Utilities\ArrayHelper::getValue
+	 * @since         1.3.1
+	 */
+	public function testGetValueWithObjectImplementingArrayAccess()
+	{
+		$array = array(
+			'name' => 'Joe',
+			'surname' => 'Blogs',
+			'age' => 20,
+			'address' => null,
+		);
+
+		$arrayObject = new ArrayObject($array);
+
+		$this->assertEquals('Joe', ArrayHelper::getValue($arrayObject, 'name'), 'An object implementing \ArrayAccess should succesfully retrieve the value of an object');
+	}
+
+	/**
+	 * @testdox  Verify that getValue() throws an \InvalidArgumentException when an object is given that doesn't implement \ArrayAccess
+	 *
+	 * @covers             Joomla\Utilities\ArrayHelper::getValue
+	 * @expectedException  \InvalidArgumentException
+	 * @since              1.3.1
+	 */
+	public function testInvalidArgumentExceptionWithAnObjectNotImplementingArrayAccess()
+	{
+		$object = new \stdClass;
+		$object->name = "Joe";
+		$object->surname = "Blogs";
+		$object->age = 20;
+		$object->address = null;
+
+		ArrayHelper::getValue($object, 'string');
+	}
+
+	/**
 	 * Tests the ArrayHelper::invert method.
 	 *
 	 * @param   array   $input     The array being input.
