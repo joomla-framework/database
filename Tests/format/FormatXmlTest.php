@@ -16,7 +16,7 @@ use Joomla\Registry\AbstractRegistryFormat;
 class JRegistryFormatXMLTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * Test the Cml::objectToString method.
+	 * Test the Xml::objectToString method.
 	 *
 	 * @return  void
 	 *
