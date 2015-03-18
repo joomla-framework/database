@@ -23,6 +23,7 @@ interface ViewInterface
 	 * @return  string  The escaped output.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Output escaping will no longer be required by the interface.
 	 */
 	public function escape($output);
 

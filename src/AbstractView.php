@@ -47,6 +47,7 @@ abstract class AbstractView implements ViewInterface
 	 *
 	 * @see     ViewInterface::escape()
 	 * @since   1.0
+	 * @deprecated  2.0  Interface method is deprecated without replacement.
 	 */
 	public function escape($output)
 	{

@@ -15,6 +15,7 @@ use Joomla\Model\ModelInterface;
  * Joomla Framework HTML View Class
  *
  * @since  1.0
+ * @deprecated  2.0  Will become BaseHtmlView in 2.0
  */
 abstract class AbstractHtmlView extends AbstractView
 {
@@ -79,6 +80,7 @@ abstract class AbstractHtmlView extends AbstractView
 	 *
 	 * @see     ViewInterface::escape()
 	 * @since   1.0
+	 * @deprecated  2.0  Interface method is deprecated without replacement.
 	 */
 	public function escape($output)
 	{
