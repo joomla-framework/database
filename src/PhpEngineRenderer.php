@@ -16,7 +16,7 @@ use Symfony\Component\Templating\TemplateReferenceInterface;
 /**
  * PhpEngine template renderer
  *
- * @since  1.0
+ * @since  __DEPLOY_VERSION__
  */
 class PhpEngineRenderer extends AbstractRenderer implements RendererInterface
 {
@@ -24,7 +24,7 @@ class PhpEngineRenderer extends AbstractRenderer implements RendererInterface
 	 * Data for output by the renderer
 	 *
 	 * @var    array
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	private $data = array();
 
@@ -32,7 +32,7 @@ class PhpEngineRenderer extends AbstractRenderer implements RendererInterface
 	 * Rendering engine
 	 *
 	 * @var    PhpEngine
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	private $renderer;
 
@@ -43,7 +43,7 @@ class PhpEngineRenderer extends AbstractRenderer implements RendererInterface
 	 * @param   LoaderInterface              $loader  Object to direct the engine where to search for templates
 	 * @param   PhpEngine|null               $engine  Optional PhpEngine instance to inject or null for a new object to be created
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function __construct(TemplateNameParserInterface $parser, LoaderInterface $loader, PhpEngine $engine = null)
 	{
@@ -56,9 +56,9 @@ class PhpEngineRenderer extends AbstractRenderer implements RendererInterface
 	 * @param   string  $alias      The folder alias
 	 * @param   string  $directory  The folder path
 	 *
-	 * @return  PhpEngineRenderer  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function addFolder($alias, $directory)
 	{
@@ -71,7 +71,7 @@ class PhpEngineRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @return  PhpEngine
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getRenderer()
 	{
@@ -85,7 +85,7 @@ class PhpEngineRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function pathExists($path)
 	{
@@ -100,7 +100,7 @@ class PhpEngineRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function render($template, array $data = array())
 	{
@@ -114,9 +114,9 @@ class PhpEngineRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @param   string  $extension  Template files extension
 	 *
-	 * @return  PhpEngineRenderer  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setFileExtension($extension)
 	{

@@ -11,7 +11,7 @@ namespace Joomla\Renderer;
 /**
  * Rendering interface.
  *
- * @since  1.0
+ * @since  __DEPLOY_VERSION__
  */
 interface RendererInterface
 {
@@ -21,9 +21,9 @@ interface RendererInterface
 	 * @param   string  $alias      The folder alias
 	 * @param   string  $directory  The folder path
 	 *
-	 * @return  RendererInterface  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function addFolder($alias, $directory);
 
@@ -34,7 +34,7 @@ interface RendererInterface
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function pathExists($path);
 
@@ -43,7 +43,7 @@ interface RendererInterface
 	 *
 	 * @return  mixed
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getRenderer();
 
@@ -55,7 +55,7 @@ interface RendererInterface
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function render($template, array $data = array());
 
@@ -65,9 +65,9 @@ interface RendererInterface
 	 * @param   string  $key    Name of variable
 	 * @param   string  $value  Value of variable
 	 *
-	 * @return  RendererInterface  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function set($key, $value);
 
@@ -76,9 +76,9 @@ interface RendererInterface
 	 *
 	 * @param   array  $data  Array of variables
 	 *
-	 * @return  RendererInterface  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setData($data);
 
@@ -87,18 +87,18 @@ interface RendererInterface
 	 *
 	 * @param   string  $extension  Template files extension
 	 *
-	 * @return  RendererInterface  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setFileExtension($extension);
 
 	/**
 	 * Unloads data from renderer
 	 *
-	 * @return  RendererInterface  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function unsetData();
 }

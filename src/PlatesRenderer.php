@@ -13,7 +13,7 @@ use League\Plates\Engine;
 /**
  * Plates class for rendering output.
  *
- * @since  1.0
+ * @since  __DEPLOY_VERSION__
  */
 class PlatesRenderer extends AbstractRenderer implements RendererInterface
 {
@@ -21,7 +21,7 @@ class PlatesRenderer extends AbstractRenderer implements RendererInterface
 	 * Configuration array
 	 *
 	 * @var    array
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	private $config = array(
 		'path'      => null,
@@ -33,7 +33,7 @@ class PlatesRenderer extends AbstractRenderer implements RendererInterface
 	 * Rendering engine
 	 *
 	 * @var    Engine
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	private $renderer;
 
@@ -42,7 +42,7 @@ class PlatesRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @param   array  $config  Configuration array
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function __construct($config = array())
 	{
@@ -57,9 +57,9 @@ class PlatesRenderer extends AbstractRenderer implements RendererInterface
 	 * @param   string  $alias      The folder alias
 	 * @param   string  $directory  The folder path
 	 *
-	 * @return  PlatesRenderer  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function addFolder($alias, $directory)
 	{
@@ -73,7 +73,7 @@ class PlatesRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @return  Engine
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getRenderer()
 	{
@@ -88,7 +88,7 @@ class PlatesRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function render($template, array $data = array())
 	{
@@ -100,9 +100,9 @@ class PlatesRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @param   string  $extension  Template files extension
 	 *
-	 * @return  PlatesRenderer  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setFileExtension($extension)
 	{
@@ -118,7 +118,7 @@ class PlatesRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function pathExists($path)
 	{

@@ -11,7 +11,7 @@ namespace Joomla\Renderer\Twig;
 /**
  * Twig class for rendering output.
  *
- * @since  1.0
+ * @since  __DEPLOY_VERSION__
  */
 class FilesystemLoader extends \Twig_Loader_Filesystem
 {
@@ -19,7 +19,7 @@ class FilesystemLoader extends \Twig_Loader_Filesystem
 	 * Extension of template files
 	 *
 	 * @var    string
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $extension = '';
 
@@ -30,7 +30,7 @@ class FilesystemLoader extends \Twig_Loader_Filesystem
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setExtension($extension)
 	{
@@ -53,7 +53,7 @@ class FilesystemLoader extends \Twig_Loader_Filesystem
 	 *
 	 * @return  string
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 * @throws  \Twig_Error_Loader
 	 */
 	protected function findTemplate($name)
