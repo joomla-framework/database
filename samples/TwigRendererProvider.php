@@ -1,17 +1,16 @@
 <?php
 /**
- * Renderer Package
+ * Part of the Joomla Framework Renderer Package
  *
- * @copyright  Copyright (C) 2014-2015 Michael Babker. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license    http://www.gnu.org/licenses/lgpl-2.1.txt GNU Lesser General Public License Version 2.1 or Later
  */
 
-namespace BabDev\Service;
-
-use BabDev\Renderer\TwigRenderer;
+namespace Joomla\Renderer\Service;
 
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
+use Joomla\Renderer\TwigRenderer;
 
 /**
  * Twig renderer service provider
@@ -53,7 +52,7 @@ class TwigRendererProvider implements ServiceProviderInterface
 		$options = $this->config;
 
 		$container->set(
-			'BabDev\Renderer\RendererInterface',
+			'Joomla\Renderer\RendererInterface',
 			function () use ($options) {
 				$renderer = new TwigRenderer($options);
 
@@ -72,7 +71,7 @@ class TwigRendererProvider implements ServiceProviderInterface
 			true
 		);
 
-		$container->alias('renderer', 'BabDev\Renderer\RendererInterface');
+		$container->alias('renderer', 'Joomla\Renderer\RendererInterface');
 
 		return;
 	}

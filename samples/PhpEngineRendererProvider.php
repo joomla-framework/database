@@ -1,18 +1,16 @@
 <?php
 /**
- * Renderer Package
+ * Part of the Joomla Framework Renderer Package
  *
- * @copyright  Copyright (C) 2014-2015 Michael Babker. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license    http://www.gnu.org/licenses/lgpl-2.1.txt GNU Lesser General Public License Version 2.1 or Later
  */
 
-namespace BabDev\Service;
-
-use BabDev\Renderer\PhpEngineRenderer;
+namespace Joomla\Renderer\Service;
 
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
-
+use Joomla\Renderer\PhpEngineRenderer;
 use Symfony\Component\Templating\Loader\FilesystemLoader;
 use Symfony\Component\Templating\TemplateNameParser;
 
@@ -35,7 +33,7 @@ class PHPRendererProvider implements ServiceProviderInterface
 	public function register(Container $container)
 	{
 		$container->set(
-			'BabDev\Renderer\RendererInterface',
+			'Joomla\Renderer\RendererInterface',
 			function (Container $container) {
 				/* @type  \Joomla\Registry\Registry  $config */
 				$config = $container->get('config');
@@ -48,7 +46,7 @@ class PHPRendererProvider implements ServiceProviderInterface
 			true
 		);
 
-		$container->alias('renderer', 'BabDev\Renderer\RendererInterface');
+		$container->alias('renderer', 'Joomla\Renderer\RendererInterface');
 
 		return;
 	}

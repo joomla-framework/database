@@ -1,12 +1,12 @@
 <?php
 /**
- * Renderer Package
+ * Part of the Joomla Framework Renderer Package
  *
- * @copyright  Copyright (C) 2014-2015 Michael Babker. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license    http://www.gnu.org/licenses/lgpl-2.1.txt GNU Lesser General Public License Version 2.1 or Later
  */
 
-namespace BabDev\Renderer;
+namespace Joomla\Renderer;
 
 /**
  * Rendering interface.
