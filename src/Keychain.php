@@ -91,15 +91,15 @@ class Keychain extends Registry
 			{
 				if (!isset($node->$nodes[$i]) && ($i != $n))
 				{
-					$node->$nodes[$i] = new \stdClass;
+					$node->{$nodes[$i]} = new \stdClass;
 				}
 
-				$node = $node->$nodes[$i];
+				$node = $node->{$nodes[$i]};
 			}
 
 			// Get the old value if exists so we can return it
-			$result = $node->$nodes[$i];
-			unset($node->$nodes[$i]);
+			$result = $node->{$nodes[$i]};
+			unset($node->{$nodes[$i]});
 		}
 
 		return $result;
