@@ -63,14 +63,6 @@ class PostgresqlDriver extends DatabaseDriver
 	protected $concat_operator = '||';
 
 	/**
-	 * Query object returned by getQuery
-	 *
-	 * @var    PostgresqlQuery
-	 * @since  1.0
-	 */
-	protected $queryObject = null;
-
-	/**
 	 * Database object constructor
 	 *
 	 * @param   array  $options  List of options used to configure the connection
@@ -301,44 +293,6 @@ class PostgresqlDriver extends DatabaseDriver
 		$this->connect();
 
 		return pg_num_rows((int) $cur ? $cur : $this->cursor);
-	}
-
-	/**
-	 * Get the current or query, or new DatabaseQuery object.
-	 *
-	 * @param   boolean  $new    False to return the last query set, True to return a new Query object.
-	 * @param   boolean  $asObj  False to return last query as string, true to get Postgresql query object.
-	 *
-	 * @return  PostgresqlQuery  The current query object or a new object extending the Query class.
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	public function getQuery($new = false, $asObj = false)
-	{
-		if ($new)
-		{
-			// Make sure we have a query class for this driver.
-			if (!class_exists('\\Joomla\\Database\\Postgresql\\PostgresqlQuery'))
-			{
-				throw new \RuntimeException('\\Joomla\\Database\\Postgresql\\PostgresqlQuery Class not found.');
-			}
-
-			$this->queryObject = new PostgresqlQuery($this);
-
-			return $this->queryObject;
-		}
-		else
-		{
-			if ($asObj)
-			{
-				return $this->queryObject;
-			}
-			else
-			{
-				return $this->sql;
-			}
-		}
 	}
 
 	/**
@@ -609,7 +563,7 @@ class PostgresqlDriver extends DatabaseDriver
 	public function insertid()
 	{
 		$this->connect();
-		$insertQuery = $this->getQuery(false, true);
+		$insertQuery = $this->getQuery();
 		$table = $insertQuery->insert->getElements();
 
 		/* find sequence column name */
