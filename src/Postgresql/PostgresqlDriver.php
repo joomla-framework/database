@@ -229,22 +229,22 @@ class PostgresqlDriver extends DatabaseDriver
 	/**
 	 * Drops a table from the database.
 	 *
-	 * @param   string   $tableName  The name of the database table to drop.
-	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
+	 * @param   string   $table     The name of the database table to drop.
+	 * @param   boolean  $ifExists  Optionally specify that the table must exist before it is dropped.
 	 *
-	 * @return  boolean	true
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public function dropTable($tableName, $ifExists = true)
+	public function dropTable($table, $ifExists = true)
 	{
 		$this->connect();
 
-		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($tableName));
-		$this->execute();
+		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($table))
+			->execute();
 
-		return true;
+		return $this;
 	}
 
 	/**
@@ -340,14 +340,14 @@ class PostgresqlDriver extends DatabaseDriver
 				END AS "null",
 				CASE WHEN pg_catalog.pg_get_expr(adef.adbin, adef.adrelid, true) IS NOT NULL
 					THEN pg_catalog.pg_get_expr(adef.adbin, adef.adrelid, true)
-				END as "Default",
+				END AS "Default",
 				CASE WHEN pg_catalog.col_description(a.attrelid, a.attnum) IS NULL
 				THEN \'\'
 				ELSE pg_catalog.col_description(a.attrelid, a.attnum)
-				END  AS "comments"
+				END AS "comments"
 			FROM pg_catalog.pg_attribute a
-			LEFT JOIN pg_catalog.pg_attrdef adef ON a.attrelid=adef.adrelid AND a.attnum=adef.adnum
-			LEFT JOIN pg_catalog.pg_type t ON a.atttypid=t.oid
+			LEFT JOIN pg_catalog.pg_attrdef adef ON a.attrelid = adef.adrelid AND a.attnum = adef.adnum
+			LEFT JOIN pg_catalog.pg_type t ON a.atttypid = t.oid
 			WHERE a.attrelid =
 				(SELECT oid FROM pg_catalog.pg_class WHERE relname=' . $this->quote($tableSub) . '
 					AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE
@@ -416,7 +416,7 @@ class PostgresqlDriver extends DatabaseDriver
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
-		if ( in_array($table, $tableList) )
+		if (in_array($table, $tableList))
 		{
 			// Get the details columns information.
 			$this->setQuery('
@@ -431,9 +431,8 @@ class PostgresqlDriver extends DatabaseDriver
 				LEFT JOIN pg_index AS pgIndex ON pgClassFirst.oid=pgIndex.indexrelid
 				WHERE tablename=' . $this->quote($table) . ' ORDER BY indkey'
 			);
-			$keys = $this->loadObjectList();
 
-			return $keys;
+			return $this->loadObjectList();
 		}
 
 		return false;
@@ -451,19 +450,14 @@ class PostgresqlDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$query = $this->getQuery(true);
-		$query->select('table_name')
+		$query = $this->getQuery(true)
+			->select('table_name')
 			->from('information_schema.tables')
-			->where('table_type=' . $this->quote('BASE TABLE'))
-			->where(
-				'table_schema NOT IN (' . $this->quote('pg_catalog') . ', ' . $this->quote('information_schema') . ')'
-			)
+			->where('table_type = ' . $this->quote('BASE TABLE'))
+			->where('table_schema NOT IN (' . $this->quote('pg_catalog') . ', ' . $this->quote('information_schema') . ')')
 			->order('table_name ASC');
 
-		$this->setQuery($query);
-		$tables = $this->loadColumn();
-
-		return $tables;
+		return $this->setQuery($query)->loadColumn();
 	}
 
 	/**
@@ -483,33 +477,39 @@ class PostgresqlDriver extends DatabaseDriver
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
-		if ( in_array($table, $tableList) )
+		if (in_array($table, $tableList))
 		{
-			$name = array('s.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
-							'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option');
-			$as = array('sequence', 'schema', 'table', 'column', 'data_type',
-							'minimum_value', 'maximum_value', 'increment', 'cycle_option');
+			$name = array(
+				's.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
+				'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option'
+			);
+
+			$as = array(
+				'sequence', 'schema', 'table', 'column', 'data_type',
+				'minimum_value', 'maximum_value', 'increment', 'cycle_option'
+			);
 
 			if (version_compare($this->getVersion(), '9.1.0') >= 0)
 			{
 				$name[] .= 'info.start_value';
-				$as[] .= 'start_value';
+				$as[]   .= 'start_value';
 			}
 
 			// Get the details columns information.
-			$query = $this->getQuery(true);
-			$query->select($this->quoteName($name, $as))
+			$query = $this->getQuery(true)
+				->select($this->quoteName($name, $as))
 				->from('pg_class AS s')
-				->leftJoin("pg_depend d ON d.objid=s.oid AND d.classid='pg_class'::regclass AND d.refclassid='pg_class'::regclass")
-				->leftJoin('pg_class t ON t.oid=d.refobjid')
-				->leftJoin('pg_namespace n ON n.oid=t.relnamespace')
-				->leftJoin('pg_attribute a ON a.attrelid=t.oid AND a.attnum=d.refobjsubid')
-				->leftJoin('information_schema.sequences AS info ON info.sequence_name=s.relname')
-				->where("s.relkind='S' AND d.deptype='a' AND t.relname=" . $this->quote($table));
-			$this->setQuery($query);
-			$seq = $this->loadObjectList();
+				->leftJoin(
+					'pg_depend d ON d.objid = s.oid AND d.classid = ' . $this->quote('pg_class')
+					. '::regclass AND d.refclassid = ' . $this->quote('pg_class') . '::regclass'
+				)
+				->leftJoin('pg_class t ON t.oid = d.refobjid')
+				->leftJoin('pg_namespace n ON n.oid = t.relnamespace')
+				->leftJoin('pg_attribute a ON a.attrelid = t.oid AND a.attnum = d.refobjsubid')
+				->leftJoin('information_schema.sequences AS info ON info.sequence_name = s.relname')
+				->where('s.relkind = ' . $this->quote('S') . ' AND d.deptype=' . $this->quote('a') . ' AND t.relname=' . $this->quote($table));
 
-			return $seq;
+			return $this->setQuery($query)->loadObjectList();
 		}
 
 		return false;
@@ -570,21 +570,16 @@ class PostgresqlDriver extends DatabaseDriver
 		$colNameQuery = $this->getQuery(true);
 		$colNameQuery->select('column_default')
 			->from('information_schema.columns')
-			->where(
-				"table_name=" . $this->quote(
-					$this->replacePrefix(str_replace('"', '', $table[0]))
-				), 'AND'
-			)
-			->where("column_default LIKE '%nextval%'");
+			->where('table_name=' . $this->quote($this->replacePrefix(str_replace('"', '', $table[0]))), 'AND')
+			->where('column_default LIKE ' . $this->quote('%nextval%'));
 
-		$this->setQuery($colNameQuery);
-		$colName = $this->loadRow();
+		$colName = $this->setQuery($colNameQuery)->loadRow();
 		$changedColName = str_replace('nextval', 'currval', $colName);
 
-		$insertidQuery = $this->getQuery(true);
-		$insertidQuery->select($changedColName);
-		$this->setQuery($insertidQuery);
-		$insertVal = $this->loadRow();
+		$insertidQuery = $this->getQuery(true)
+			->select($changedColName);
+
+		$insertVal = $this->setQuery($insertidQuery)->loadRow();
 
 		return $insertVal[0];
 	}
@@ -594,7 +589,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 *
 	 * @param   string  $tableName  The name of the table to unlock.
 	 *
-	 * @return  PostgresqlDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -626,6 +621,7 @@ class PostgresqlDriver extends DatabaseDriver
 				'Database query failed (error #{code}): {message}',
 				array('code' => $this->errorNum, 'message' => $this->errorMsg)
 			);
+
 			throw new \RuntimeException($this->errorMsg, $this->errorNum);
 		}
 
@@ -689,21 +685,19 @@ class PostgresqlDriver extends DatabaseDriver
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
-			else
-			// The server was not disconnected.
-			{
-				// Get the error number and message.
-				$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE) . ' ';
-				$this->errorMsg = pg_last_error($this->connection) . "\nSQL=$sql";
 
-				// Throw the normal query exception.
-				$this->log(
-					Log\LogLevel::ERROR,
-					'Database query failed (error #{code}): {message}',
-					array('code' => $this->errorNum, 'message' => $this->errorMsg)
-				);
-				throw new \RuntimeException($this->errorMsg);
-			}
+			// Get the error number and message.
+			$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE) . ' ';
+			$this->errorMsg = pg_last_error($this->connection) . "\nSQL=$sql";
+
+			// Throw the normal query exception.
+			$this->log(
+				Log\LogLevel::ERROR,
+				'Database query failed (error #{code}): {message}',
+				array('code' => $this->errorNum, 'message' => $this->errorMsg)
+			);
+
+			throw new \RuntimeException($this->errorMsg);
 		}
 
 		return $this->cursor;
@@ -717,7 +711,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 * @param   string  $backup    Not used by PostgreSQL.
 	 * @param   string  $prefix    Not used by PostgreSQL.
 	 *
-	 * @return  PostgresqlDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -744,7 +738,7 @@ class PostgresqlDriver extends DatabaseDriver
 					WHERE oid IN (
 						SELECT indexrelid
 						FROM pg_index, pg_class
-						WHERE pg_class.relname=' . $this->quote($oldTable, true) . '
+						WHERE pg_class.relname = ' . $this->quote($oldTable, true) . '
 						AND pg_class.oid=pg_index.indrelid );'
 			);
 
@@ -753,8 +747,9 @@ class PostgresqlDriver extends DatabaseDriver
 			foreach ($oldIndexes as $oldIndex)
 			{
 				$changedIdxName = str_replace($oldTable, $newTable, $oldIndex);
-				$this->setQuery('ALTER INDEX ' . $this->escape($oldIndex) . ' RENAME TO ' . $this->escape($changedIdxName));
-				$this->execute();
+
+				$this->setQuery('ALTER INDEX ' . $this->escape($oldIndex) . ' RENAME TO ' . $this->escape($changedIdxName))
+					->execute();
 			}
 
 			/* Rename sequence */
@@ -776,13 +771,14 @@ class PostgresqlDriver extends DatabaseDriver
 			foreach ($oldSequences as $oldSequence)
 			{
 				$changedSequenceName = str_replace($oldTable, $newTable, $oldSequence);
-				$this->setQuery('ALTER SEQUENCE ' . $this->escape($oldSequence) . ' RENAME TO ' . $this->escape($changedSequenceName));
-				$this->execute();
+
+				$this->setQuery('ALTER SEQUENCE ' . $this->escape($oldSequence) . ' RENAME TO ' . $this->escape($changedSequenceName))
+					->execute();
 			}
 
 			/* Rename table */
-			$this->setQuery('ALTER TABLE ' . $this->escape($oldTable) . ' RENAME TO ' . $this->escape($newTable));
-			$this->execute();
+			$this->setQuery('ALTER TABLE ' . $this->escape($oldTable) . ' RENAME TO ' . $this->escape($newTable))
+				->execute();
 		}
 
 		return true;
@@ -869,6 +865,7 @@ class PostgresqlDriver extends DatabaseDriver
 
 			default:
 				$val = $this->quote($field_value);
+
 				break;
 		}
 
@@ -1132,18 +1129,13 @@ class PostgresqlDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$query = $this->getQuery(true);
-		$query->select('table_name')
+		$query = $this->getQuery(true)
+			->select('table_name')
 			->from('information_schema.tables')
-			->where('table_type=' . $this->quote('BASE TABLE'))
-			->where(
-				'table_schema NOT IN (' . $this->quote('pg_catalog') . ', ' . $this->quote('information_schema') . ' )'
-			);
+			->where('table_type = ' . $this->quote('BASE TABLE'))
+			->where('table_schema NOT IN (' . $this->quote('pg_catalog') . ', ' . $this->quote('information_schema') . ' )');
 
-		$this->setQuery($query);
-		$tableList = $this->loadColumn();
-
-		return $tableList;
+		return $this->setQuery($query)->loadColumn();
 	}
 
 	/**
@@ -1160,9 +1152,7 @@ class PostgresqlDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$query = "SELECT POSITION( $substring IN $string )";
-		$this->setQuery($query);
-		$position = $this->loadRow();
+		$position = $this->setQuery("SELECT POSITION( $substring IN $string )")->loadRow();
 
 		return $position['position'];
 	}
@@ -1178,8 +1168,7 @@ class PostgresqlDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$this->setQuery('SELECT RANDOM()');
-		$random = $this->loadAssoc();
+		$random = $this->setQuery('SELECT RANDOM()')->loadAssoc();
 
 		return $random['random'];
 	}
@@ -1195,9 +1184,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	public function getAlterDbCharacterSet($dbName)
 	{
-		$query = 'ALTER DATABASE ' . $this->quoteName($dbName) . ' SET CLIENT_ENCODING TO ' . $this->quote('UTF8');
-
-		return $query;
+		return 'ALTER DATABASE ' . $this->quoteName($dbName) . ' SET CLIENT_ENCODING TO ' . $this->quote('UTF8');
 	}
 
 	/**
@@ -1312,8 +1299,9 @@ class PostgresqlDriver extends DatabaseDriver
 	public function releaseTransactionSavepoint($savepointName)
 	{
 		$this->connect();
-		$this->setQuery('RELEASE SAVEPOINT ' . $this->quoteName($this->escape($savepointName)));
-		$this->execute();
+
+		$this->setQuery('RELEASE SAVEPOINT ' . $this->quoteName($this->escape($savepointName)))
+			->execute();
 	}
 
 	/**
@@ -1328,15 +1316,16 @@ class PostgresqlDriver extends DatabaseDriver
 	public function transactionSavepoint($savepointName)
 	{
 		$this->connect();
-		$this->setQuery('SAVEPOINT ' . $this->quoteName($this->escape($savepointName)));
-		$this->execute();
+
+		$this->setQuery('SAVEPOINT ' . $this->quoteName($this->escape($savepointName)))
+			->execute();
 	}
 
 	/**
 	 * Unlocks tables in the database, this command does not exist in PostgreSQL,
 	 * it is automatically done on commit or rollback.
 	 *
-	 * @return  PostgresqlDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -1434,8 +1423,6 @@ class PostgresqlDriver extends DatabaseDriver
 		}
 
 		// Set the query and execute the update.
-		$this->setQuery(sprintf($statement, implode(",", $fields), implode(' AND ', $where)));
-
-		return $this->execute();
+		return $this->setQuery(sprintf($statement, implode(",", $fields), implode(' AND ', $where)))->execute();
 	}
 }

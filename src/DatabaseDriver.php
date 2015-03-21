@@ -401,7 +401,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * @param   string   $table     The name of the database table to drop.
 	 * @param   boolean  $ifExists  Optionally specify that the table must exist before it is dropped.
 	 *
-	 * @return  DatabaseDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -774,8 +774,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		}
 
 		// Create the base insert statement.
-		$query = $this->getQuery(true);
-		$query->insert($this->quoteName($table))
+		$query = $this->getQuery(true)
+			->insert($this->quoteName($table))
 			->columns($fields)
 			->values(implode(',', $values));
 
@@ -1151,7 +1151,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 *
 	 * @param   string  $tableName  The name of the table to unlock.
 	 *
-	 * @return  DatabaseDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -1194,10 +1194,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 			return $text;
 		}
-		else
-		{
-			return '\'' . ($escape ? $this->escape($text) : $text) . '\'';
-		}
+
+		return '\'' . ($escape ? $this->escape($text) : $text) . '\'';
 	}
 
 	/**
@@ -1246,29 +1244,27 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 			return $quotedName . $quotedAs;
 		}
-		else
+
+		$fin = array();
+
+		if (is_null($as))
 		{
-			$fin = array();
-
-			if (is_null($as))
+			foreach ($name as $str)
 			{
-				foreach ($name as $str)
-				{
-					$fin[] = $this->quoteName($str);
-				}
+				$fin[] = $this->quoteName($str);
 			}
-			elseif (is_array($name) && (count($name) == count($as)))
-			{
-				$count = count($name);
-
-				for ($i = 0; $i < $count; $i++)
-				{
-					$fin[] = $this->quoteName($name[$i], $as[$i]);
-				}
-			}
-
-			return $fin;
 		}
+		elseif (is_array($name) && (count($name) == count($as)))
+		{
+			$count = count($name);
+
+			for ($i = 0; $i < $count; $i++)
+			{
+				$fin[] = $this->quoteName($name[$i], $as[$i]);
+			}
+		}
+
+		return $fin;
 	}
 
 	/**
@@ -1417,7 +1413,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * @param   string  $backup    Table prefix
 	 * @param   string  $prefix    For the table - used to rename constraints in non-mysql databases
 	 *
-	 * @return  DatabaseDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -1460,7 +1456,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * @param   integer  $offset  The affected row offset to set.
 	 * @param   integer  $limit   The maximum affected rows to set.
 	 *
-	 * @return  DatabaseDriver  This object to support method chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1544,8 +1540,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function truncateTable($table)
 	{
-		$this->setQuery('TRUNCATE TABLE ' . $this->quoteName($table));
-		$this->execute();
+		$this->setQuery('TRUNCATE TABLE ' . $this->quoteName($table))
+			->execute();
 	}
 
 	/**
@@ -1633,9 +1629,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		}
 
 		// Set the query and execute the update.
-		$this->setQuery(sprintf($statement, implode(",", $fields), implode(' AND ', $where)));
-
-		return $this->execute();
+		return $this->setQuery(sprintf($statement, implode(",", $fields), implode(' AND ', $where)))->execute();
 	}
 
 	/**
@@ -1651,7 +1645,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	/**
 	 * Unlocks tables in the database.
 	 *
-	 * @return  DatabaseDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException

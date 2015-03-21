@@ -140,7 +140,7 @@ class DatabaseFactory
 	/**
 	 * Gets an instance of the factory object.
 	 *
-	 * @return  DatabaseFactory
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */

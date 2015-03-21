@@ -20,7 +20,7 @@ class PostgresqlImporter extends DatabaseImporter
 	/**
 	 * Checks if all data and options are in order prior to exporting.
 	 *
-	 * @return  PostgresqlImporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \Exception if an error is encountered.
@@ -244,9 +244,7 @@ class PostgresqlImporter extends DatabaseImporter
 	 */
 	protected function getDropSequenceSQL($name)
 	{
-		$sql = 'DROP SEQUENCE ' . $this->db->quoteName($name);
-
-		return $sql;
+		return 'DROP SEQUENCE ' . $this->db->quoteName($name);
 	}
 
 	/**
@@ -320,10 +318,8 @@ class PostgresqlImporter extends DatabaseImporter
 	 */
 	protected function getChangeColumnSQL($table, \SimpleXMLElement $field)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' ALTER COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' ALTER COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
 			. $this->getAlterColumnSQL($table, $field);
-
-		return $sql;
 	}
 
 	/**
@@ -445,9 +441,7 @@ class PostgresqlImporter extends DatabaseImporter
 	 */
 	protected function getDropIndexSQL($name)
 	{
-		$sql = 'DROP INDEX ' . $this->db->quoteName($name);
-
-		return $sql;
+		return 'DROP INDEX ' . $this->db->quoteName($name);
 	}
 
 	/**
@@ -462,9 +456,7 @@ class PostgresqlImporter extends DatabaseImporter
 	 */
 	protected function getDropPrimaryKeySQL($table, $name)
 	{
-		$sql = 'ALTER TABLE ONLY ' . $this->db->quoteName($table) . ' DROP CONSTRAINT ' . $this->db->quoteName($name);
-
-		return $sql;
+		return 'ALTER TABLE ONLY ' . $this->db->quoteName($table) . ' DROP CONSTRAINT ' . $this->db->quoteName($name);
 	}
 
 	/**
