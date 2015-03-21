@@ -193,6 +193,14 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	private $logger;
 
 	/**
+	 * DatabaseFactory object
+	 *
+	 * @var    DatabaseFactory
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $factory;
+
+	/**
 	 * Get a list of available database connectors.  The list will only be populated with connectors that both
 	 * the class exists and the static test method returns true.  This gives us the ability to have a multitude
 	 * of connector classes that are self-aware as to whether or not they are able to be used on a given system.
@@ -263,6 +271,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		$options['driver']   = (isset($options['driver'])) ? preg_replace('/[^A-Z0-9_\.-]/i', '', $options['driver']) : 'mysqli';
 		$options['database'] = (isset($options['database'])) ? $options['database'] : null;
 		$options['select']   = (isset($options['select'])) ? $options['select'] : true;
+		$options['factory']  = (isset($options['factory'])) ? $options['factory'] : new DatabaseFactory;
 
 		// Get the options signature for the database connector.
 		$signature = md5(serialize($options));
@@ -270,27 +279,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		// If we already have a database connector instance for these options then just use that.
 		if (empty(self::$instances[$signature]))
 		{
-			// Derive the class name from the driver.
-			$class = '\\Joomla\\Database\\' . ucfirst(strtolower($options['driver'])) . '\\' . ucfirst(strtolower($options['driver'])) . 'Driver';
-
-			// If the class still doesn't exist we have nothing left to do but throw an exception.  We did our best.
-			if (!class_exists($class))
-			{
-				throw new \RuntimeException(sprintf('Unable to load Database Driver: %s', $options['driver']));
-			}
-
-			// Create our new DatabaseDriver connector based on the options given.
-			try
-			{
-				$instance = new $class($options);
-			}
-			catch (\RuntimeException $e)
-			{
-				throw new \RuntimeException(sprintf('Unable to connect to the Database: %s', $e->getMessage()));
-			}
-
 			// Set the new connector to the global instances based on signature.
-			self::$instances[$signature] = $instance;
+			self::$instances[$signature] = $options['factory']->getDriver($options['driver'], $options);
 		}
 
 		return self::$instances[$signature];
@@ -372,6 +362,9 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 		// Set class options.
 		$this->options = $options;
+
+		// Register the DatabaseFactory
+		$this->factory = isset($options['factory']) ? $options['factory'] : new DatabaseFactory;
 	}
 
 	/**
@@ -596,21 +589,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function getExporter()
 	{
-		// Derive the class name from the driver.
-		$class = '\\Joomla\\Database\\' . ucfirst($this->name) . '\\' . ucfirst($this->name) . 'Exporter';
-
-		// Make sure we have an exporter class for this driver.
-		if (!class_exists($class))
-		{
-			// If it doesn't exist we are at an impasse so throw an exception.
-			throw new \RuntimeException('Database Exporter not found.');
-		}
-
-		/* @var  $o  DatabaseExporter */
-		$o = new $class;
-		$o->setDbo($this);
-
-		return $o;
+		return $this->factory->getExporter($this->name, $this);
 	}
 
 	/**
@@ -623,21 +602,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function getImporter()
 	{
-		// Derive the class name from the driver.
-		$class = '\\Joomla\\Database\\' . ucfirst($this->name) . '\\' . ucfirst($this->name) . 'Importer';
-
-		// Make sure we have an importer class for this driver.
-		if (!class_exists($class))
-		{
-			// If it doesn't exist we are at an impasse so throw an exception.
-			throw new \RuntimeException('Database Importer not found');
-		}
-
-		/* @var  $o  DatabaseImporter */
-		$o = new $class;
-		$o->setDbo($this);
-
-		return $o;
+		return $this->factory->getImporter($this->name, $this);
 	}
 
 	/**
@@ -654,17 +619,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	{
 		if ($new)
 		{
-			// Derive the class name from the driver.
-			$class = '\\Joomla\\Database\\' . ucfirst($this->name) . '\\' . ucfirst($this->name) . 'Query';
-
-			// Make sure we have a query class for this driver.
-			if (!class_exists($class))
-			{
-				// If it doesn't exist we are at an impasse so throw an exception.
-				throw new \RuntimeException('Database Query Class not found.');
-			}
-
-			return new $class($this);
+			return $this->factory->getQuery($this->name, $this);
 		}
 
 		return $this->sql;
