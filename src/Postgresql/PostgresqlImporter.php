@@ -466,21 +466,6 @@ class PostgresqlImporter extends DatabaseImporter
 	 *
 	 * @return  array  The lookup array. array({key name} => array(object, ...))
 	 *
-	 * @since   1.0
-	 * @deprecated  2.0  Use {@link getKeyLookup()} instead
-	 */
-	protected function getIdxLookup($keys)
-	{
-		return $this->getKeyLookup($keys);
-	}
-
-	/**
-	 * Get the details list of keys for a table.
-	 *
-	 * @param   array  $keys  An array of objects that comprise the keys for the table.
-	 *
-	 * @return  array  The lookup array. array({key name} => array(object, ...))
-	 *
 	 * @since   1.2.0
 	 */
 	protected function getKeyLookup($keys)

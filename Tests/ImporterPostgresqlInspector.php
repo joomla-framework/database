@@ -213,7 +213,7 @@ class ImporterPostgresqlInspector extends \Joomla\Database\Postgresql\Postgresql
 	}
 
 	/**
-	 * Exposes the protected getIdxLookup method.
+	 * Exposes the protected getKeyLookup method.
 	 *
 	 * @param   array  $keys  An array of objects that comprise the indexes for the table.
 	 *
@@ -222,9 +222,9 @@ class ImporterPostgresqlInspector extends \Joomla\Database\Postgresql\Postgresql
 	 * @since   1.0
 	 * @throws	Exception
 	 */
-	public function getIdxLookup($keys)
+	public function getKeyLookup($keys)
 	{
-		return parent::getIdxLookup($keys);
+		return parent::getKeyLookup($keys);
 	}
 
 	/**
