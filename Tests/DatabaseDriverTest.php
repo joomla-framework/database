@@ -6,6 +6,7 @@
 
 namespace Joomla\Database\Tests;
 
+use Joomla\Database\DatabaseDriver;
 use Joomla\Test\TestHelper;
 use Joomla\Test\TestDatabase;
 use Psr\Log;
@@ -13,23 +14,19 @@ use Psr\Log;
 require_once __DIR__ . '/Stubs/nosqldriver.php';
 
 /**
- * Test class for Joomla\Database\DatabaseDriver.
- *
- * @since  1.0
+ * Test class for \Joomla\Database\DatabaseDriver.
  */
 class DatabaseDriverTest extends TestDatabase
 {
 	/**
-	 * @var    \Joomla\Database\DatabaseDriver
-	 * @since  1.0
+	 * @var  DatabaseDriver
 	 */
 	protected $instance;
 
 	/**
 	 * A store to track if logging is working.
 	 *
-	 * @var    array
-	 * @since  1.0
+	 * @var  array
 	 */
 	protected $logs;
 
@@ -41,8 +38,6 @@ class DatabaseDriverTest extends TestDatabase
 	 * @param   array         $context  The context.
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function mockLog($level, $message, $context)
 	{
@@ -55,81 +50,28 @@ class DatabaseDriverTest extends TestDatabase
 
 	/**
 	 * Test for the Joomla\Database\DatabaseDriver::__call method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function test__callQuote()
 	{
-		$this->assertThat(
-			$this->instance->q('foo'),
-			$this->equalTo($this->instance->quote('foo')),
-			'Tests the q alias of quote.'
+		$this->assertEquals(
+			$this->instance->quote('foo'),
+			$this->instance->q('foo')
 		);
 	}
 
 	/**
 	 * Test for the Joomla\Database\DatabaseDriver::__call method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function test__callQuoteName()
 	{
-		$this->assertThat(
-			$this->instance->qn('foo'),
-			$this->equalTo($this->instance->quoteName('foo')),
-			'Tests the qn alias of quoteName.'
+		$this->assertEquals(
+			$this->instance->quoteName('foo'),
+			$this->instance->qn('foo')
 		);
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement test__construct().
-	 *
-	 * @return void
-	 */
-	public function test__construct()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
-	 * Test...
-	 *
-	 * @todo Implement testGetInstance().
-	 *
-	 * @return void
-	 */
-	public function testGetInstance()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
-	 * Test...
-	 *
-	 * @todo Implement test__destruct().
-	 *
-	 * @return void
-	 */
-	public function test__destruct()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
 	 * Tests the Joomla\Database\DatabaseDriver::getConnection method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testGetConnection()
 	{
@@ -138,10 +80,6 @@ class DatabaseDriverTest extends TestDatabase
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::getConnectors method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testGetConnectors()
 	{
@@ -154,10 +92,6 @@ class DatabaseDriverTest extends TestDatabase
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::getCount method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testGetCount()
 	{
@@ -166,10 +100,6 @@ class DatabaseDriverTest extends TestDatabase
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::getDatabase method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testGetDatabase()
 	{
@@ -178,94 +108,67 @@ class DatabaseDriverTest extends TestDatabase
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::getDateFormat method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testGetDateFormat()
 	{
-		$this->assertThat(
-			$this->instance->getDateFormat(),
-			$this->equalTo('Y-m-d H:i:s')
+		$this->assertSame(
+			'Y-m-d H:i:s',
+			$this->instance->getDateFormat()
 		);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::splitSql method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testSplitSql()
 	{
-		$this->assertThat(
-			$this->instance->splitSql('SELECT * FROM #__foo;SELECT * FROM #__bar;'),
-			$this->equalTo(
-				array(
-					'SELECT * FROM #__foo;',
-					'SELECT * FROM #__bar;'
-				)
+		$this->assertSame(
+			array(
+				'SELECT * FROM #__foo;',
+				'SELECT * FROM #__bar;'
 			),
-			'splitSql method should split a string of multiple queries into an array.'
+			$this->instance->splitSql('SELECT * FROM #__foo;SELECT * FROM #__bar;')
 		);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::getPrefix method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testGetPrefix()
 	{
-		$this->assertThat(
-			$this->instance->getPrefix(),
-			$this->equalTo('&')
+		$this->assertSame(
+			'&',
+			$this->instance->getPrefix()
 		);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::getNullDate method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testGetNullDate()
 	{
-		$this->assertThat(
-			$this->instance->getNullDate(),
-			$this->equalTo('1BC')
+		$this->assertSame(
+			'1BC',
+			$this->instance->getNullDate()
 		);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::getMinimum method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testGetMinimum()
 	{
-		$this->assertThat(
-			$this->instance->getMinimum(),
-			$this->equalTo('12.1'),
-			'getMinimum should return a string with the minimum supported database version number'
+		$this->assertSame(
+			'12.1',
+			$this->instance->getMinimum()
 		);
 	}
 
 	/**
 	 * Tests the Driver::log method.
 	 *
-	 * @return  void
-	 *
 	 * @covers  Joomla\Database\DatabaseDriver::log
 	 * @covers  Joomla\Database\DatabaseDriver::setLogger
-	 * @since   1.0
 	 */
 	public function testLog()
 	{
@@ -274,285 +177,203 @@ class DatabaseDriverTest extends TestDatabase
 		$mockLogger = $this->getMock('Psr\Log\AbstractLogger', array('log'), array(), '', false);
 		$mockLogger->expects($this->any())
 			->method('log')
-			->will($this->returnCallback(array($this, 'mockLog')));
+			->willReturnCallback(array($this, 'mockLog'));
 
 		$this->instance->log(Log\LogLevel::DEBUG, 'Debug', array('sql' => true));
 
-		$this->assertEmpty($this->logs, 'Logger not set up yet.');
+		$this->assertEmpty($this->logs);
 
 		// Set the logger and try again.
-
 		$this->instance->setLogger($mockLogger);
-
 		$this->instance->log(Log\LogLevel::DEBUG, 'Debug', array('sql' => true));
 
-		$this->assertEquals(Log\LogLevel::DEBUG, $this->logs[0]['level']);
-		$this->assertEquals('Debug', $this->logs[0]['message']);
-		$this->assertEquals(array('sql' => true), $this->logs[0]['context']);
+		$this->assertSame(Log\LogLevel::DEBUG, $this->logs[0]['level']);
+		$this->assertSame('Debug', $this->logs[0]['message']);
+		$this->assertSame(array('sql' => true), $this->logs[0]['context']);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::isMinimumVersion method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testIsMinimumVersion()
 	{
-		$this->assertThat(
-			$this->instance->isMinimumVersion(),
-			$this->isTrue(),
-			'isMinimumVersion should return a boolean true if the database version is supported by the driver'
-		);
+		$this->assertTrue($this->instance->isMinimumVersion());
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::setDebug method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testSetDebug()
 	{
-		$this->assertThat(
-			$this->instance->setDebug(true),
-			$this->isType('boolean'),
-			'setDebug should return a boolean value containing the previous debug state.'
+		$this->assertInternalType(
+			'boolean',
+			$this->instance->setDebug(true)
 		);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::setQuery method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testSetQuery()
 	{
-		$this->assertThat(
-			$this->instance->setQuery('SELECT * FROM #__dbtest'),
-			$this->isInstanceOf('Joomla\Database\DatabaseDriver'),
-			'setQuery method should return an instance of Joomla\Database\DatabaseDriver.'
+		$this->assertSame(
+			$this->instance,
+			$this->instance->setQuery('SELECT * FROM #__dbtest')
 		);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::replacePrefix method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testReplacePrefix()
 	{
-		$this->assertThat(
-			$this->instance->replacePrefix('SELECT * FROM #__dbtest'),
-			$this->equalTo('SELECT * FROM &dbtest'),
-			'replacePrefix method should return the query string with the #__ prefix replaced by the actual table prefix.'
+		$this->assertSame(
+			'SELECT * FROM &dbtest',
+			$this->instance->replacePrefix('SELECT * FROM #__dbtest')
 		);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::quote method.
 	 *
-	 * @return  void
-	 *
 	 * @covers  Joomla\Database\DatabaseDriver::quote
-	 * @since   1.0
 	 */
 	public function testQuote()
 	{
-		$this->assertThat(
-			$this->instance->quote('test', false),
-			$this->equalTo("'test'"),
-			'Tests the without escaping.'
+		$this->assertSame(
+			"'test'",
+			$this->instance->quote('test', false)
 		);
 
-		$this->assertThat(
-			$this->instance->quote('test'),
-			$this->equalTo("'-test-'"),
-			'Tests the with escaping (default).'
+		$this->assertSame(
+			"'-test-'",
+			$this->instance->quote('test')
 		);
 
-		$this->assertEquals(
+		$this->assertSame(
 			array("'-test1-'", "'-test2-'"),
-			$this->instance->quote(array('test1', 'test2')),
-			'Check that the array is quoted.'
+			$this->instance->quote(array('test1', 'test2'))
 		);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::quote method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testQuoteBooleanTrue()
 	{
-		$this->assertThat(
-			$this->instance->quote(true),
-			$this->equalTo("'-1-'"),
-			'Tests handling of boolean true with escaping (default).'
+		$this->assertSame(
+			"'-1-'",
+			$this->instance->quote(true)
 		);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::quote method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testQuoteBooleanFalse()
 	{
-		$this->assertThat(
-			$this->instance->quote(false),
-			$this->equalTo("'--'"),
-			'Tests handling of boolean false with escaping (default).'
+		$this->assertSame(
+			"'--'",
+			$this->instance->quote(false)
 		);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::quote method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testQuoteNull()
 	{
-		$this->assertThat(
-			$this->instance->quote(null),
-			$this->equalTo("'--'"),
-			'Tests handling of null with escaping (default).'
+		$this->assertSame(
+			"'--'",
+			$this->instance->quote(null)
 		);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::quote method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testQuoteInteger()
 	{
-		$this->assertThat(
-			$this->instance->quote(42),
-			$this->equalTo("'-42-'"),
-			'Tests handling of integer with escaping (default).'
+		$this->assertSame(
+			"'-42-'",
+			$this->instance->quote(42)
 		);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::quote method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testQuoteFloat()
 	{
-		$this->assertThat(
-			$this->instance->quote(3.14),
-			$this->equalTo("'-3.14-'"),
-			'Tests handling of float with escaping (default).'
+		$this->assertSame(
+			"'-3.14-'",
+			$this->instance->quote(3.14)
 		);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::quoteName method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testQuoteName()
 	{
-		$this->assertThat(
-			$this->instance->quoteName('test'),
-			$this->equalTo('[test]'),
-			'Tests the left-right quotes on a string.'
+		$this->assertSame(
+			'[test]',
+			$this->instance->quoteName('test')
 		);
 
-		$this->assertThat(
-			$this->instance->quoteName('a.test'),
-			$this->equalTo('[a].[test]'),
-			'Tests the left-right quotes on a dotted string.'
+		$this->assertSame(
+			'[a].[test]',
+			$this->instance->quoteName('a.test')
 		);
 
-		$this->assertThat(
-			$this->instance->quoteName(array('a', 'test')),
-			$this->equalTo(array('[a]', '[test]')),
-			'Tests the left-right quotes on an array.'
+		$this->assertSame(
+			array('[a]', '[test]'),
+			$this->instance->quoteName(array('a', 'test'))
 		);
 
-		$this->assertThat(
-			$this->instance->quoteName(array('a.b', 'test.quote')),
-			$this->equalTo(array('[a].[b]', '[test].[quote]')),
-			'Tests the left-right quotes on an array.'
+		$this->assertSame(
+			array('[a].[b]', '[test].[quote]'),
+			$this->instance->quoteName(array('a.b', 'test.quote'))
 		);
 
-		$this->assertThat(
-			$this->instance->quoteName(array('a.b', 'test.quote'), array(null, 'alias')),
-			$this->equalTo(array('[a].[b]', '[test].[quote] AS [alias]')),
-			'Tests the left-right quotes on an array.'
+		$this->assertSame(
+			array('[a].[b]', '[test].[quote] AS [alias]'),
+			$this->instance->quoteName(array('a.b', 'test.quote'), array(null, 'alias'))
 		);
 
-		$this->assertThat(
-			$this->instance->quoteName(array('a.b', 'test.quote'), array('alias1', 'alias2')),
-			$this->equalTo(array('[a].[b] AS [alias1]', '[test].[quote] AS [alias2]')),
-			'Tests the left-right quotes on an array.'
+		$this->assertSame(
+			array('[a].[b] AS [alias1]', '[test].[quote] AS [alias2]'),
+			$this->instance->quoteName(array('a.b', 'test.quote'), array('alias1', 'alias2'))
 		);
 
-		$this->assertThat(
-			$this->instance->quoteName((object) array('a', 'test')),
-			$this->equalTo(array('[a]', '[test]')),
-			'Tests the left-right quotes on an object.'
+		$this->assertSame(
+			array('[a]', '[test]'),
+			$this->instance->quoteName((object) array('a', 'test'))
 		);
 
-// 		TestHelper::setValue($this->db, 'nameQuote', '/');
+ 		TestHelper::setValue($this->instance, 'nameQuote', '/');
 
-		$refl = new \ReflectionClass($this->instance);
-		$property = $refl->getProperty('nameQuote');
-		$property->setAccessible(true);
-		$property->setValue($this->instance, '/');
-
-		$this->assertThat(
-			$this->instance->quoteName('test'),
-			$this->equalTo('/test/'),
-			'Tests the uni-quotes on a string.'
+		$this->assertSame(
+			'/test/',
+			$this->instance->quoteName('test')
 		);
 	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::truncateTable method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testTruncateTable()
 	{
-		$this->assertNull(
-			$this->instance->truncateTable('#__dbtest'),
-			'truncateTable should not return anything if successful.'
-		);
+		$this->assertNull($this->instance->truncateTable('#__dbtest'));
 	}
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
-	 *
-	 * @return void
 	 */
 	protected function setUp()
 	{
-		$this->instance = \Joomla\Database\DatabaseDriver::getInstance(
+		$this->instance = DatabaseDriver::getInstance(
 			array(
 				'driver' => 'nosql',
 				'database' => 'europa',
@@ -565,8 +386,6 @@ class DatabaseDriverTest extends TestDatabase
 	 * Tears down the fixture.
 	 *
 	 * This method is called after a test is executed.
-	 *
-	 * @return void
 	 */
 	protected function tearDown()
 	{
