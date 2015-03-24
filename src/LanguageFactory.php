@@ -8,8 +8,6 @@
 
 namespace Joomla\Language;
 
-use Joomla\Language\Localise\En_GBLocalise as DefaultLocalise;
-
 /**
  * Language package factory
  *
@@ -33,7 +31,6 @@ class LanguageFactory
 	 */
 	private static $loadedClasses = array(
 		'language' => array(),
-		'localise' => array(),
 		'stemmer'  => array()
 	);
 
