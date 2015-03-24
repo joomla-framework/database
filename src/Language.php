@@ -29,8 +29,18 @@ class Language
 	 *
 	 * @var    array
 	 * @since  1.0
+	 * @deprecated  2.0
 	 */
 	protected static $languages = array();
+
+	/**
+	 * Cached LanguageFactory object
+	 *
+	 * @var    LanguageFactory
+	 * @since  __DEPLOY_VERSION__
+	 * @deprecated  2.0
+	 */
+	protected static $languageFactory;
 
 	/**
 	 * Debug language, If true, highlights if string isn't found.
@@ -285,27 +295,16 @@ class Language
 	 * @return  Language  The Language object.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use LanguageFactory::getLanguage() instead
 	 */
 	public static function getInstance($lang = null, $debug = false)
 	{
-		if (!isset(self::$languages[$lang . $debug]))
+		if (!isset(self::$languageFactory))
 		{
-			$language = new self($lang, $debug);
-
-			self::$languages[$lang . $debug] = $language;
-
-			/*
-			 * Check if Language was instantiated with a null $lang param;
-			 * if so, retrieve the language code from the object and store
-			 * the instance with the language code as well
-			 */
-			if (is_null($lang))
-			{
-				self::$languages[$language->getLanguage() . $debug] = $language;
-			}
+			self::$languageFactory = new LanguageFactory;
 		}
 
-		return self::$languages[$lang . $debug];
+		return self::$languageFactory->getLanguage($lang, null, $debug);
 	}
 
 	/**
