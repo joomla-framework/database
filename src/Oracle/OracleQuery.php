@@ -55,7 +55,7 @@ class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters.
 	 * @param   array           $driverOptions  Optional driver options to be used.
 	 *
-	 * @return  OracleQuery
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -109,12 +109,10 @@ class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		{
 			return $this->bounded;
 		}
-		else
+
+		if (isset($this->bounded[$key]))
 		{
-			if (isset($this->bounded[$key]))
-			{
-				return $this->bounded[$key];
-			}
+			return $this->bounded[$key];
 		}
 	}
 
@@ -123,7 +121,7 @@ class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	 *
 	 * @param   string  $clause  Optionally, the name of the clause to clear, or nothing to clear the whole query.
 	 *
-	 * @return  OracleQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -195,7 +193,7 @@ class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	 * @param   integer  $limit   The limit for the result set
 	 * @param   integer  $offset  The offset for the result set
 	 *
-	 * @return  OracleQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */

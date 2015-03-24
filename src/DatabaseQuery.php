@@ -353,7 +353,16 @@ abstract class DatabaseQuery
 	 */
 	public function __get($name)
 	{
-		return isset($this->$name) ? $this->$name : null;
+		if (property_exists($this, $name))
+		{
+			return $this->$name;
+		}
+
+		$trace = debug_backtrace();
+		trigger_error(
+			'Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'],
+			E_USER_NOTICE
+		);
 	}
 
 	/**
@@ -368,7 +377,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   mixed  $columns  A string or an array of field names.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -433,7 +442,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $clause  Optionally, the name of the clause to clear, or nothing to clear the whole query.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -551,7 +560,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $columns  A column name, or array of column names.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -588,10 +597,8 @@ abstract class DatabaseQuery
 		{
 			return 'CONCATENATE(' . implode(' || ' . $this->quote($separator) . ' || ', $values) . ')';
 		}
-		else
-		{
-			return 'CONCATENATE(' . implode(' || ', $values) . ')';
-		}
+
+		return 'CONCATENATE(' . implode(' || ', $values) . ')';
 	}
 
 	/**
@@ -655,7 +662,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $table  The name of the table to delete from.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -726,7 +733,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $columns  A string or an array of field names.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -758,7 +765,7 @@ abstract class DatabaseQuery
 	 *                                        as a subquery in FROM clause along with a value for $subQueryAlias.
 	 * @param   string        $subQueryAlias  Alias used when $tables is a DatabaseQuery.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -897,7 +904,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $columns  A string or array of ordering columns.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -924,7 +931,7 @@ abstract class DatabaseQuery
 	 * @param   array|string  $conditions  A string or array of columns.
 	 * @param   string        $glue        The glue by which to join the conditions. Defaults to AND.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -951,15 +958,13 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $condition  The join condition.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
 	public function innerJoin($condition)
 	{
-		$this->join('INNER', $condition);
-
-		return $this;
+		return $this->join('INNER', $condition);
 	}
 
 	/**
@@ -975,7 +980,7 @@ abstract class DatabaseQuery
 	 * @param   string   $table           The name of the table to insert data into.
 	 * @param   boolean  $incrementField  The name of the field to auto increment.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -997,7 +1002,7 @@ abstract class DatabaseQuery
 	 * @param   string        $type        The type of join. This string is prepended to the JOIN keyword.
 	 * @param   array|string  $conditions  A string or array of conditions.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1021,15 +1026,13 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $condition  The join condition.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
 	public function leftJoin($condition)
 	{
-		$this->join('LEFT', $condition);
-
-		return $this;
+		return $this->join('LEFT', $condition);
 	}
 
 	/**
@@ -1093,7 +1096,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $columns  A string or array of ordering columns.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1119,15 +1122,13 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $condition  The join condition.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
 	public function outerJoin($condition)
 	{
-		$this->join('OUTER', $condition);
-
-		return $this;
+		return $this->join('OUTER', $condition);
 	}
 
 	/**
@@ -1236,15 +1237,13 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $condition  The join condition.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
 	public function rightJoin($condition)
 	{
-		$this->join('RIGHT', $condition);
-
-		return $this;
+		return $this->join('RIGHT', $condition);
 	}
 
 	/**
@@ -1259,7 +1258,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $columns  A string or an array of field names.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1290,7 +1289,7 @@ abstract class DatabaseQuery
 	 * @param   string        $glue        The glue by which to join the condition strings. Defaults to ,.
 	 *                                     Note that the glue is set on first use and cannot be changed.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1318,7 +1317,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   DatabaseQuery|string  $sql  A SQL query string or DatabaseQuery object
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1339,7 +1338,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $table  A table to update.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1360,7 +1359,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $values  A single tuple, or array of tuples.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1389,7 +1388,7 @@ abstract class DatabaseQuery
 	 * @param   string        $glue        The glue by which to join the conditions. Defaults to AND.
 	 *                                     Note that the glue is set on first use and cannot be changed.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1444,7 +1443,7 @@ abstract class DatabaseQuery
 	 * @param   boolean               $distinct  True to only return distinct rows from the union.
 	 * @param   string                $glue      The glue by which to join the conditions.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1492,7 +1491,7 @@ abstract class DatabaseQuery
 	 * @param   DatabaseQuery|string  $query  The DatabaseQuery object or string to union.
 	 * @param   string                $glue   The glue by which to join the conditions.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */

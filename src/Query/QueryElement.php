@@ -20,19 +20,25 @@ namespace Joomla\Database\Query;
 class QueryElement
 {
 	/**
-	 * @var    string  The name of the element.
+	 * The name of the element.
+	 *
+	 * @var    string
 	 * @since  1.0
 	 */
 	protected $name = null;
 
 	/**
-	 * @var    array  An array of elements.
+	 * An array of elements.
+	 *
+	 * @var    array
 	 * @since  1.0
 	 */
 	protected $elements = null;
 
 	/**
-	 * @var    string  Glue piece.
+	 * Glue piece.
+	 *
+	 * @var    string
 	 * @since  1.0
 	 */
 	protected $glue = null;
@@ -68,10 +74,8 @@ class QueryElement
 		{
 			return PHP_EOL . substr($this->name, 0, -2) . '(' . implode($this->glue, $this->elements) . ')';
 		}
-		else
-		{
-			return PHP_EOL . $this->name . ' ' . implode($this->glue, $this->elements);
-		}
+
+		return PHP_EOL . $this->name . ' ' . implode($this->glue, $this->elements);
 	}
 
 	/**
