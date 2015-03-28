@@ -8,7 +8,7 @@
 
 namespace Joomla\Utilities;
 
-use Joomla\String\String;
+use Joomla\String\StringHelper;
 
 /**
  * ArrayHelper is an array utility class for doing all sorts of odds and ends with arrays.
@@ -512,11 +512,11 @@ final class ArrayHelper
 					}
 					elseif ($caseSensitive)
 					{
-						$cmp = String::strcmp($va, $vb, $locale);
+						$cmp = StringHelper::strcmp($va, $vb, $locale);
 					}
 					else
 					{
-						$cmp = String::strcasecmp($va, $vb, $locale);
+						$cmp = StringHelper::strcasecmp($va, $vb, $locale);
 					}
 
 					if ($cmp > 0)
