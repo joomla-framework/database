@@ -95,6 +95,11 @@ class Container
 			return $this->aliases[$key];
 		}
 
+		if ($this->parent instanceof Container)
+		{
+			return $this->parent->resolveAlias($key);
+		}
+
 		return $key;
 	}
 
@@ -389,7 +394,15 @@ class Container
 		{
 			return $this->dataStore[$key];
 		}
-		elseif ($this->parent instanceof Container)
+
+		$aliasKey = $this->resolveAlias($key);
+
+		if ($aliasKey != $key && isset($this->dataStore[$aliasKey]))
+		{
+			return $this->dataStore[$aliasKey];
+		}
+
+		if ($this->parent instanceof Container)
 		{
 			return $this->parent->getRaw($key);
 		}

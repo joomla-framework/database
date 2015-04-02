@@ -178,11 +178,18 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		// Set the foo property directly in the datastore
 		$refProp = $reflection->getProperty('dataStore');
 		$refProp->setAccessible(true);
-		$refProp->setValue($this->fixture, array('foo' => array(
-			'callback' => function() { return new \stdClass; },
-			'shared' => true,
-			'protected' => true
-		)));
+		$refProp->setValue(
+			$this->fixture,
+			array(
+				'foo' => array(
+					'callback'  => function() {
+						return (object) array('property' => 'value');
+					},
+					'shared'    => true,
+					'protected' => true
+				)
+			)
+		);
 
 		// Alias bar to foo
 		$refProp2 = $reflection->getProperty('aliases');
@@ -369,11 +376,18 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		// Set the foo property directly in the datastore
 		$refProp = $reflection->getProperty('dataStore');
 		$refProp->setAccessible(true);
-		$refProp->setValue($this->fixture, array('foo' => array(
-			'callback' => function() { return new \stdClass; },
-			'shared' => true,
-			'protected' => true
-		)));
+		$refProp->setValue(
+			$this->fixture,
+			array(
+				'foo' => array(
+					'callback' => function() {
+						return new \stdClass;
+					},
+					'shared' => true,
+					'protected' => true
+				)
+			)
+		);
 
 		// Alias bar to foo
 		$refProp2 = $reflection->getProperty('aliases');
@@ -908,7 +922,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		);
 	}
 
-
 	/**
 	 * Test getRaw
 	 *
@@ -1008,6 +1021,107 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 			$returned,
 			$this->fixture,
 			'When registering a service provider, the container instance should be returned.'
+		);
+	}
+
+	/**
+	 * Test that resolving and alias for a class from a parent container
+	 * returns the same object instance.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.3
+	 */
+	public function testResolveAliasOfParentContainer()
+	{
+		// Create a parent Container object
+		$parent = new Container;
+
+		$reflectionParent = new \ReflectionClass($parent);
+
+		// Set the foo property directly in the datastore
+		$refProp = $reflectionParent->getProperty('dataStore');
+		$refProp->setAccessible(true);
+		$refProp->setValue(
+			$parent,
+			array(
+				'foo' => array(
+					'callback'  => function() {
+						return (object) array('property' => 'value');
+					},
+					'shared'    => true,
+					'protected' => true
+				)
+			)
+		);
+
+		// Alias bar to foo
+		$refProp2 = $reflectionParent->getProperty('aliases');
+		$refProp2->setAccessible(true);
+		$refProp2->setValue($parent, array('bar' => 'foo'));
+
+		// Set a parent container
+		$reflectionChild = new \ReflectionClass($this->fixture);
+
+		$refParent = $reflectionChild->getProperty('parent');
+		$refParent->setAccessible(true);
+		$refParent->setValue($this->fixture, $parent);
+
+		$this->assertSame(
+			$this->fixture->get('foo'),
+			$this->fixture->get('bar'),
+			'When retrieving an alias of a class which calls the parent container, both the original and the alias should return the same object instance.'
+		);
+	}
+
+	/**
+	 * Test that resolving and alias for a class that is not shared from a parent container
+	 * returns the same object instance.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.3
+	 */
+	public function testResolveAliasOfNotSharedKeyFromParentContainer()
+	{
+		// Create a parent Container object
+		$parent = new Container;
+
+		$reflectionParent = new \ReflectionClass($parent);
+
+		// Set the foo property directly in the datastore
+		$refProp = $reflectionParent->getProperty('dataStore');
+		$refProp->setAccessible(true);
+		$refProp->setValue(
+			$parent,
+			array(
+				'foo' => array(
+					'callback'  => function() {
+						return (object) array('property' => 'value');
+					},
+					'shared'    => false,
+					'protected' => false
+				)
+			)
+		);
+
+		// Alias bar to foo
+		$refProp2 = $reflectionParent->getProperty('aliases');
+		$refProp2->setAccessible(true);
+		$refProp2->setValue($parent, array('bar' => 'foo'));
+
+		// Set a parent container
+		$reflectionChild = new \ReflectionClass($this->fixture);
+
+		$refParent = $reflectionChild->getProperty('parent');
+		$refParent->setAccessible(true);
+		$refParent->setValue($this->fixture, $parent);
+
+		$this->assertEquals(
+			$this->fixture->get('foo'),
+			$this->fixture->get('bar'),
+			'When retrieving an alias of a class which calls the parent container, and the key is not shared,'
+			. ' both the original and the alias should return a similar object.'
 		);
 	}
 }
