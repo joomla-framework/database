@@ -178,11 +178,18 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		// Set the foo property directly in the datastore
 		$refProp = $reflection->getProperty('dataStore');
 		$refProp->setAccessible(true);
-		$refProp->setValue($this->fixture, array('foo' => array(
-			'callback' => function() { return new \stdClass; },
-			'shared' => true,
-			'protected' => true
-		)));
+		$refProp->setValue(
+			$this->fixture,
+			array(
+				'foo' => array(
+					'callback'  => function() {
+						return (object) array('property' => 'value');
+					},
+					'shared'    => true,
+					'protected' => true
+				)
+			)
+		);
 
 		// Alias bar to foo
 		$refProp2 = $reflection->getProperty('aliases');
@@ -369,11 +376,18 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 		// Set the foo property directly in the datastore
 		$refProp = $reflection->getProperty('dataStore');
 		$refProp->setAccessible(true);
-		$refProp->setValue($this->fixture, array('foo' => array(
-			'callback' => function() { return new \stdClass; },
-			'shared' => true,
-			'protected' => true
-		)));
+		$refProp->setValue(
+			$this->fixture,
+			array(
+				'foo' => array(
+					'callback' => function() {
+						return new \stdClass;
+					},
+					'shared' => true,
+					'protected' => true
+				)
+			)
+		);
 
 		// Alias bar to foo
 		$refProp2 = $reflection->getProperty('aliases');
@@ -907,7 +921,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 			'When calling exists on an item that has not been set in the container, it should return false.'
 		);
 	}
-
 
 	/**
 	 * Test getRaw
