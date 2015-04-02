@@ -95,6 +95,11 @@ class Container
 			return $this->aliases[$key];
 		}
 
+		if ($this->parent instanceof Container)
+		{
+			return $this->parent->resolveAlias($key);
+		}
+
 		return $key;
 	}
 
