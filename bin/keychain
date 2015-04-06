@@ -94,6 +94,7 @@ class KeychainManager extends \Joomla\Application\AbstractCliApplication
 				break;
 			case 'change':
 				$this->change();
+				break;
 			case 'delete':
 				$this->delete();
 				break;
