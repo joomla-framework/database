@@ -19,7 +19,7 @@ use Joomla\Input\Input;
  * Based on the standard PHP session handling mechanism it provides
  * more advanced features such as expire timeouts.
  *
- * @since  1.0
+ * @since       1.0
  * @deprecated  The joomla/session package is deprecated
  */
 class Session implements \IteratorAggregate
