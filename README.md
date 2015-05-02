@@ -1,4 +1,4 @@
-# The Renderer Package
+# The Renderer Package [![Build Status](https://travis-ci.org/joomla-framework/renderer.svg?branch=master)](https://travis-ci.org/joomla-framework/renderer)
 
 ## Interfaces
 
