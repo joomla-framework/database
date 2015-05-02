@@ -11,6 +11,7 @@
         "joomla/event": "~1.1"
     },
     "require-dev": {
+        "joomla/database": "~1.0",
         "joomla/test": "~1.0",
         "phpunit/phpunit": "4.*",
         "phpunit/dbunit": "~1.2",
