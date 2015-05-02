@@ -13,9 +13,9 @@ services:
 
 before_script:
   - composer update
-  - phpenv config-add build/travis/phpenv/apc.ini
-  - phpenv config-add build/travis/phpenv/memcache.ini
-  - phpenv config-add build/travis/phpenv/memcached.ini
+  - phpenv config-add .travis/phpenv/apc.ini
+  - phpenv config-add .travis/phpenv/memcache.ini
+  - phpenv config-add .travis/phpenv/memcached.ini
 
 script:
   - ./vendor/bin/phpunit
