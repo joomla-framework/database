@@ -7,10 +7,14 @@ php:
   - 5.6
 
 services:
+  - apc
+  - memcache
   - memcached # will start memcached
 
 before_script:
   - composer update
+  - phpenv config-add build/travis/phpenv/apc.ini
+  - phpenv config-add build/travis/phpenv/memcache.ini
   - phpenv config-add build/travis/phpenv/memcached.ini
 
 script:
