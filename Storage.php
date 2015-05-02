@@ -21,7 +21,7 @@ use Joomla\Filter\InputFilter;
 abstract class Storage
 {
 	/**
-	 * @var    array  JSessionStorage instances container.
+	 * @var    Storage[]  Storage instances container.
 	 * @since  1.0
 	 */
 	protected static $instances = array();

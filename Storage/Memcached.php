@@ -19,6 +19,14 @@ use Joomla\Session\Storage;
 class Memcached extends Storage
 {
 	/**
+	 * Container for server data
+	 *
+	 * @var    array
+	 * @since  1.0
+	 */
+	protected $_servers = array();
+
+	/**
 	 * Constructor
 	 *
 	 * @param   array  $options  Optional parameters.
