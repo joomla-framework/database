@@ -13,9 +13,9 @@ use Joomla\Filter\InputFilter;
 /**
  * Custom session storage handler for PHP
  *
- * @see    http://www.php.net/manual/en/function.session-set-save-handler.php
- * @todo   When dropping compatibility with PHP 5.3 use the SessionHandlerInterface and the SessionHandler class
- * @since  1.0
+ * @see         http://www.php.net/manual/en/function.session-set-save-handler.php
+ * @todo        When dropping compatibility with PHP 5.3 use the SessionHandlerInterface and the SessionHandler class
+ * @since       1.0
  * @deprecated  The joomla/session package is deprecated
  */
 abstract class Storage
