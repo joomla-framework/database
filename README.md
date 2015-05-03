@@ -1,4 +1,4 @@
-## The Uri Package [![Build Status](https://travis-ci.org/joomla-framework/uri.png?branch=master)](https://travis-ci.org/joomla-framework/uri)
+## The Uri Package [![Build Status](https://travis-ci.org/joomla-framework/uri.png?branch=master)](https://travis-ci.org/joomla-framework/uri) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/joomla-framework/uri/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/joomla-framework/uri/?branch=master)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/uri/v/stable)](https://packagist.org/packages/joomla/uri)
 [![Total Downloads](https://poser.pugx.org/joomla/uri/downloads)](https://packagist.org/packages/joomla/uri)
