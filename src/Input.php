@@ -276,7 +276,7 @@ class Input implements \Serializable, \Countable
 	/**
 	 * Check if a value name exists.
 	 *
-	 * @param   string  $path  Value name
+	 * @param   string  $name  Value name
 	 *
 	 * @return  boolean
 	 *
