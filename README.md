@@ -1,5 +1,10 @@
 # The Router Package [![Build Status](https://travis-ci.org/joomla-framework/router.png?branch=master)](https://travis-ci.org/joomla-framework/router)
 
+[![Latest Stable Version](https://poser.pugx.org/joomla/router/v/stable)](https://packagist.org/packages/joomla/router)
+[![Total Downloads](https://poser.pugx.org/joomla/router/downloads)](https://packagist.org/packages/joomla/router)
+[![Latest Unstable Version](https://poser.pugx.org/joomla/router/v/unstable)](https://packagist.org/packages/joomla/router)
+[![License](https://poser.pugx.org/joomla/router/license)](https://packagist.org/packages/joomla/router)
+
 ## The standard router
 
 ### Construction
