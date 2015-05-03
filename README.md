@@ -1,5 +1,10 @@
 # The DI Package [![Build Status](https://travis-ci.org/joomla-framework/di.png?branch=master)](https://travis-ci.org/joomla-framework/di)
 
+[![Latest Stable Version](https://poser.pugx.org/joomla/di/v/stable)](https://packagist.org/packages/joomla/di)
+[![Total Downloads](https://poser.pugx.org/joomla/di/downloads)](https://packagist.org/packages/joomla/di)
+[![Latest Unstable Version](https://poser.pugx.org/joomla/di/v/unstable)](https://packagist.org/packages/joomla/di)
+[![License](https://poser.pugx.org/joomla/di/license)](https://packagist.org/packages/joomla/di)
+
 The Dependency Injection package for Joomla provides a simple IoC Container for your application.
 Dependency Injection allows you the developer to control the construction and lifecycle of your objects,
 rather than leaving that control to the classes themselves. Instead of hard coding a class's dependencies
