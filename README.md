@@ -1,5 +1,10 @@
 # The Model Package [![Build Status](https://travis-ci.org/joomla-framework/model.png?branch=master)](https://travis-ci.org/joomla-framework/model)
 
+[![Latest Stable Version](https://poser.pugx.org/joomla/model/v/stable)](https://packagist.org/packages/joomla/model)
+[![Total Downloads](https://poser.pugx.org/joomla/model/downloads)](https://packagist.org/packages/joomla/model)
+[![Latest Unstable Version](https://poser.pugx.org/joomla/model/v/unstable)](https://packagist.org/packages/joomla/model)
+[![License](https://poser.pugx.org/joomla/model/license)](https://packagist.org/packages/joomla/model)
+
 ## Interfaces
 
 ### `Model\ModelInterface`
