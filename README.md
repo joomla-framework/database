@@ -1,5 +1,10 @@
 # The Test Package
 
+[![Latest Stable Version](https://poser.pugx.org/joomla/test/v/stable)](https://packagist.org/packages/joomla/test)
+[![Total Downloads](https://poser.pugx.org/joomla/test/downloads)](https://packagist.org/packages/joomla/test)
+[![Latest Unstable Version](https://poser.pugx.org/joomla/test/v/unstable)](https://packagist.org/packages/joomla/test)
+[![License](https://poser.pugx.org/joomla/test/license)](https://packagist.org/packages/joomla/test)
+
 This package is a collection of tools that make some of the jobs of unit testing easier.
 
 ## TestHelper
