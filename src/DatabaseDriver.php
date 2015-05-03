@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -15,8 +15,8 @@ use Psr\Log;
  *
  * @since  1.0
  *
- * @method  string  q()   q($text, $escape = true)  Alias for quote method
- * @method  string  qn()  qn($name, $as = null)     Alias for quoteName method
+ * @method  string  q($text, $escape = true)  Alias for quote method
+ * @method  string  qn($name, $as = null)     Alias for quoteName method
  */
 abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInterface
 {
@@ -244,11 +244,11 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	}
 
 	/**
-	 * Method to return a Driver instance based on the given options.  There are three global options and then
-	 * the rest are specific to the database driver.  The 'driver' option defines which Driver class is
-	 * used for the connection -- the default is 'mysqli'.  The 'database' option determines which database is to
-	 * be used for the connection.  The 'select' option determines whether the connector should automatically select
-	 * the chosen database.
+	 * Method to return a DatabaseDriver instance based on the given options.
+	 *
+	 * There are three global options and then the rest are specific to the database driver.  The 'driver' option defines which
+	 * DatabaseDriver class is used for the connection -- the default is 'mysqli'.  The 'database' option determines which database is to
+	 * be used for the connection.  The 'select' option determines whether the connector should automatically select the chosen database.
 	 *
 	 * Instances are unique to the given options and new objects are only created when a unique options array is
 	 * passed into the method.  This ensures that we don't end up with unnecessary database connection resources.
@@ -282,7 +282,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 				throw new \RuntimeException(sprintf('Unable to load Database Driver: %s', $options['driver']));
 			}
 
-			// Create our new Driver connector based on the options given.
+			// Create our new DatabaseDriver connector based on the options given.
 			try
 			{
 				$instance = new $class($options);
@@ -673,11 +673,11 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	}
 
 	/**
-	 * Get the current query object or a new Query object.
+	 * Get the current query object or a new DatabaseQuery object.
 	 *
-	 * @param   boolean  $new  False to return the current query object, True to return a new Query object.
+	 * @param   boolean  $new  False to return the current query object, True to return a new DatabaseQuery object.
 	 *
-	 * @return  DatabaseQuery  The current query object or a new object extending the Query class.
+	 * @return  DatabaseQuery  The current query object or a new object extending the DatabaseQuery class.
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -698,10 +698,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 			return new $class($this);
 		}
-		else
-		{
-			return $this->sql;
-		}
+
+		return $this->sql;
 	}
 
 	/**
@@ -890,8 +888,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	}
 
 	/**
-	 * Method to get the first row of the result set from the database query as an associative array
-	 * of ['field_name' => 'row_value'].
+	 * Method to get the first row of the result set from the database query as an associative array of ['field_name' => 'row_value'].
 	 *
 	 * @return  mixed  The return value or null if the query failed.
 	 *
@@ -1241,8 +1238,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	/**
 	 * Quotes and optionally escapes a string to database requirements for use in database queries.
 	 *
-	 * @param   mixed    $text    A string or an array of strings to quote.
-	 * @param   boolean  $escape  True (default) to escape the string, false to leave it unchanged.
+	 * @param   array|string  $text    A string or an array of strings to quote.
+	 * @param   boolean       $escape  True (default) to escape the string, false to leave it unchanged.
 	 *
 	 * @return  string  The quoted input string.
 	 *
@@ -1260,22 +1257,20 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 			return $text;
 		}
-		else
-		{
-			return '\'' . ($escape ? $this->escape($text) : $text) . '\'';
-		}
+
+		return '\'' . ($escape ? $this->escape($text) : $text) . '\'';
 	}
 
 	/**
 	 * Wrap an SQL statement identifier name such as column, table or database names in quotes to prevent injection
 	 * risks and reserved word conflicts.
 	 *
-	 * @param   mixed  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
-	 *                        Each type supports dot-notation name.
-	 * @param   mixed  $as    The AS query part associated to $name. It can be string or array, in latter case it has to be
-	 *                        same length of $name; if is null there will not be any AS part for string or array element.
+	 * @param   array|string  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
+	 *                               Each type supports dot-notation name.
+	 * @param   array|string  $as    The AS query part associated to $name. It can be string or array, in latter case it has to be
+	 *                               same length of $name; if is null there will not be any AS part for string or array element.
 	 *
-	 * @return  mixed  The quote wrapped name, same type of $name.
+	 * @return  array|string  The quote wrapped name, same type of $name.
 	 *
 	 * @since   1.0
 	 */

@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -84,7 +84,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function __destruct()
 	{
-		if (is_callable(array($this->connection, 'close')))
+		if (is_resource($this->connection))
 		{
 			mysqli_close($this->connection);
 		}

@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -40,23 +40,6 @@ class PostgresqlImporter extends DatabaseImporter
 		}
 
 		return $this;
-	}
-
-	/**
-	 * Get the SQL syntax to add a column.
-	 *
-	 * @param   string             $table  The table name.
-	 * @param   \SimpleXMLElement  $field  The XML field definition.
-	 *
-	 * @return  string
-	 *
-	 * @since   1.0
-	 */
-	protected function getAddColumnSQL($table, \SimpleXMLElement $field)
-	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD COLUMN ' . $this->getColumnSQL($field);
-
-		return $sql;
 	}
 
 	/**
@@ -184,8 +167,8 @@ class PostgresqlImporter extends DatabaseImporter
 
 		/* Index section */
 		// Get the lookups for the old and new keys
-		$oldLookup = $this->getIdxLookup($oldKeys);
-		$newLookup = $this->getIdxLookup($newKeys);
+		$oldLookup = $this->getKeyLookup($oldKeys);
+		$newLookup = $this->getKeyLookup($newKeys);
 
 		// Loop through each key in the new structure.
 		foreach ($newLookup as $name => $keys)
@@ -492,9 +475,23 @@ class PostgresqlImporter extends DatabaseImporter
 	 * @return  array  The lookup array. array({key name} => array(object, ...))
 	 *
 	 * @since   1.0
-	 * @throws  \Exception
+	 * @deprecated  2.0  Use {@link getKeyLookup()} instead
 	 */
 	protected function getIdxLookup($keys)
+	{
+		return $this->getKeyLookup($keys);
+	}
+
+	/**
+	 * Get the details list of keys for a table.
+	 *
+	 * @param   array  $keys  An array of objects that comprise the keys for the table.
+	 *
+	 * @return  array  The lookup array. array({key name} => array(object, ...))
+	 *
+	 * @since   1.2.0
+	 */
+	protected function getKeyLookup($keys)
 	{
 		// First pass, create a lookup of the keys.
 		$lookup = array();
