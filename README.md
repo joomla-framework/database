@@ -1,5 +1,10 @@
 ## The OAuth1 Package [![Build Status](https://travis-ci.org/joomla-framework/oauth1.png?branch=master)](https://travis-ci.org/joomla-framework/oauth1)
 
+[![Latest Stable Version](https://poser.pugx.org/joomla/oauth1/v/stable)](https://packagist.org/packages/joomla/oauth1)
+[![Total Downloads](https://poser.pugx.org/joomla/oauth1/downloads)](https://packagist.org/packages/joomla/oauth1)
+[![Latest Unstable Version](https://poser.pugx.org/joomla/oauth1/v/unstable)](https://packagist.org/packages/joomla/oauth1)
+[![License](https://poser.pugx.org/joomla/oauth1/license)](https://packagist.org/packages/joomla/oauth1)
+
 ### Using the OAuth1 Package
 
 The OAuth1 package supports OAuth 1.0 and 1.0a protocol versions. The client facilitates authorised RESTful HTTP requests. You can find the OAuth RFC at [http://tools.ietf.org/html/rfc5849](http://tools.ietf.org/html/rfc5849).
