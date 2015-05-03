@@ -1,5 +1,10 @@
 ## The Uri Package [![Build Status](https://travis-ci.org/joomla-framework/uri.png?branch=master)](https://travis-ci.org/joomla-framework/uri)
 
+[![Latest Stable Version](https://poser.pugx.org/joomla/uri/v/stable)](https://packagist.org/packages/joomla/uri)
+[![Total Downloads](https://poser.pugx.org/joomla/uri/downloads)](https://packagist.org/packages/joomla/uri)
+[![Latest Unstable Version](https://poser.pugx.org/joomla/uri/v/unstable)](https://packagist.org/packages/joomla/uri)
+[![License](https://poser.pugx.org/joomla/uri/license)](https://packagist.org/packages/joomla/uri)
+
 ### Introduction
 
 The Joomla Framework includes a Uri package that allows for manipulating pieces of the Uri string with a number of useful methods to set and get values while dealing with the uri.
