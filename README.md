@@ -1,4 +1,4 @@
-## The OAuth1 Package [![Build Status](https://travis-ci.org/joomla-framework/oauth1.png?branch=master)](https://travis-ci.org/joomla-framework/oauth1)
+## The OAuth1 Package [![Build Status](https://travis-ci.org/joomla-framework/oauth1.png?branch=master)](https://travis-ci.org/joomla-framework/oauth1) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/joomla-framework/oauth1/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/joomla-framework/oauth1/?branch=master)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/oauth1/v/stable)](https://packagist.org/packages/joomla/oauth1)
 [![Total Downloads](https://poser.pugx.org/joomla/oauth1/downloads)](https://packagist.org/packages/joomla/oauth1)
