@@ -1,5 +1,10 @@
 ## The Profiler Package [![Build Status](https://travis-ci.org/joomla-framework/profiler.png?branch=master)](https://travis-ci.org/joomla-framework/profiler)
 
+[![Latest Stable Version](https://poser.pugx.org/joomla/profiler/v/stable)](https://packagist.org/packages/joomla/profiler)
+[![Total Downloads](https://poser.pugx.org/joomla/profiler/downloads)](https://packagist.org/packages/joomla/profiler)
+[![Latest Unstable Version](https://poser.pugx.org/joomla/profiler/v/unstable)](https://packagist.org/packages/joomla/profiler)
+[![License](https://poser.pugx.org/joomla/profiler/license)](https://packagist.org/packages/joomla/profiler)
+
 The Joomla Framework provides you a Profiler to profile the time that it takes to do certain tasks or reach various milestones as your extension runs.
 
 ### Usage
