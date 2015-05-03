@@ -1,5 +1,10 @@
 ## The Keychain Package [![Build Status](https://travis-ci.org/joomla-framework/keychain.png?branch=master)](https://travis-ci.org/joomla-framework/keychain)
 
+[![Latest Stable Version](https://poser.pugx.org/joomla/keychain/v/stable)](https://packagist.org/packages/joomla/keychain)
+[![Total Downloads](https://poser.pugx.org/joomla/keychain/downloads)](https://packagist.org/packages/joomla/keychain)
+[![Latest Unstable Version](https://poser.pugx.org/joomla/keychain/v/unstable)](https://packagist.org/packages/joomla/keychain)
+[![License](https://poser.pugx.org/joomla/keychain/license)](https://packagist.org/packages/joomla/keychain)
+
 The keychain provides a way to securely store sensitive information such as access credentials or any other data.
 
 The system relies on four files:
