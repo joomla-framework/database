@@ -1,5 +1,7 @@
 # The Input Package [![Build Status](https://travis-ci.org/joomla-framework/input.png?branch=master)](https://travis-ci.org/joomla-framework/input)
 
+[![Latest Stable Version](https://poser.pugx.org/joomla/input/v/stable)](https://packagist.org/packages/joomla/input) [![Total Downloads](https://poser.pugx.org/joomla/input/downloads)](https://packagist.org/packages/joomla/input) [![Latest Unstable Version](https://poser.pugx.org/joomla/input/v/unstable)](https://packagist.org/packages/joomla/input) [![License](https://poser.pugx.org/joomla/input/license)](https://packagist.org/packages/joomla/input)
+
 This package comprises of four classes, `Input\Input`and four sub-classes extended from it: `Input\Cli`, `Input\Cookie`, `Input\Files`, and `Input\Json`. An input object is generally owned by the application and explicitly added to an application class as a public property, such as can be found in `Application\AbstractApplication`.
 
 The intent of this package is to abstract out the input source to allow code to be reused in different applications and in different contexts through dependency injection. For example, a controller could inspect the request variables directly using `JRequest`. But suppose there is a requirement to add a web service that carries input as a JSON payload. Instead of writing a second controller to handle the different input source, it would be much easier to inject an input object that is tailored for the type of input source, into the controller.
