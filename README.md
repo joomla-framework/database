@@ -1,5 +1,10 @@
 # The Registry Package [![Build Status](https://travis-ci.org/joomla-framework/registry.png?branch=master)](https://travis-ci.org/joomla-framework/registry)
 
+[![Latest Stable Version](https://poser.pugx.org/joomla/registry/v/stable)](https://packagist.org/packages/joomla/registry)
+[![Total Downloads](https://poser.pugx.org/joomla/registry/downloads)](https://packagist.org/packages/joomla/registry)
+[![Latest Unstable Version](https://poser.pugx.org/joomla/registry/v/unstable)](https://packagist.org/packages/joomla/registry)
+[![License](https://poser.pugx.org/joomla/registry/license)](https://packagist.org/packages/joomla/registry)
+
 ``` php
 use Joomla\Registry\Registry;
 
