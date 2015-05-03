@@ -1,5 +1,10 @@
 # The Database Package [![Build Status](https://travis-ci.org/joomla-framework/database.png?branch=master)](https://travis-ci.org/joomla-framework/database)
 
+[![Latest Stable Version](https://poser.pugx.org/joomla/database/v/stable)](https://packagist.org/packages/joomla/database)
+[![Total Downloads](https://poser.pugx.org/joomla/database/downloads)](https://packagist.org/packages/joomla/database)
+[![Latest Unstable Version](https://poser.pugx.org/joomla/database/v/unstable)](https://packagist.org/packages/joomla/database)
+[![License](https://poser.pugx.org/joomla/database/license)](https://packagist.org/packages/joomla/database)
+
 ## Introduction
 
 The *Database* package is designed to manage the operations of data management through the use of a generic database engine.
