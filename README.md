@@ -1,5 +1,7 @@
 # The Renderer Package [![Build Status](https://travis-ci.org/joomla-framework/renderer.svg?branch=master)](https://travis-ci.org/joomla-framework/renderer)
 
+[![Latest Stable Version](https://poser.pugx.org/joomla/renderer/v/stable)](https://packagist.org/packages/joomla/renderer) [![Total Downloads](https://poser.pugx.org/joomla/renderer/downloads)](https://packagist.org/packages/joomla/renderer) [![Latest Unstable Version](https://poser.pugx.org/joomla/renderer/v/unstable)](https://packagist.org/packages/joomla/renderer) [![License](https://poser.pugx.org/joomla/renderer/license)](https://packagist.org/packages/joomla/renderer)
+
 ## Interfaces
 
 ### `Renderer\RendererInterface`
