@@ -15,8 +15,7 @@
         "squizlabs/php_codesniffer": "1.*"
     },
     "suggest": {
-        "joomla/language": "Required only if you want to use `OutputFilter::stringURLSafe`.",
-        "joomla/string": "Required only if you want to use `OutputFilter::stringURLSafe` and `OutputFilter::stringURLUnicodeSlug`."
+        "joomla/language": "Required only if you want to use `OutputFilter::stringURLSafe`."
     },
     "autoload": {
         "psr-4": {
