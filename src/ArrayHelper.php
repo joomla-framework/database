@@ -224,7 +224,7 @@ final class ArrayHelper
 			if (is_array($subject) && isset($subject[$value_col]))
 			{
 				// Array keys can only be integer or string. Casting will occur as per the PHP Manual.
-				if ($key_col && isset($subject[$key_col]) && is_scalar($subject[$key_col]))
+				if (isset($key_col) && isset($subject[$key_col]) && is_scalar($subject[$key_col]))
 				{
 					$key          = $subject[$key_col];
 					$result[$key] = $subject[$value_col];
