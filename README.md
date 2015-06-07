@@ -1,4 +1,6 @@
-# The Renderer Package
+# The Renderer Package [![Build Status](https://travis-ci.org/joomla-framework/renderer.svg?branch=master)](https://travis-ci.org/joomla-framework/renderer)
+
+[![Latest Stable Version](https://poser.pugx.org/joomla/renderer/v/stable)](https://packagist.org/packages/joomla/renderer) [![Total Downloads](https://poser.pugx.org/joomla/renderer/downloads)](https://packagist.org/packages/joomla/renderer) [![Latest Unstable Version](https://poser.pugx.org/joomla/renderer/v/unstable)](https://packagist.org/packages/joomla/renderer) [![License](https://poser.pugx.org/joomla/renderer/license)](https://packagist.org/packages/joomla/renderer)
 
 ## Interfaces
 
@@ -27,9 +29,9 @@ An example use of the `Renderer\RendererInterface` is provided here.  In this ex
 
 Sample Controller:
 ```php
-namespace BabDev\Controller;
+namespace Joomla\Controller;
 
-use BabDev\Renderer\RendererInterface;
+use Joomla\Renderer\RendererInterface;
 
 use Joomla\Controller\AbstractController;
 use Joomla\DI\ContainerAwareInterface;
@@ -99,12 +101,12 @@ class DefaultController extends AbstractController implements ContainerAwareInte
 	 */
 	protected function initializeModel()
 	{
-		$model = '\\BabDev\\Model\\' . ucfirst($this->getInput()->getWord('view')) . 'Model';
+		$model = '\\Joomla\\Model\\' . ucfirst($this->getInput()->getWord('view')) . 'Model';
 
 		// If a model doesn't exist for our view, revert to the default model
 		if (!class_exists($model))
 		{
-			$model = '\\BabDev\\Model\\DefaultModel';
+			$model = '\\Joomla\\Model\\DefaultModel';
 
 			// If there still isn't a class, panic.
 			if (!class_exists($model))
@@ -129,7 +131,7 @@ class DefaultController extends AbstractController implements ContainerAwareInte
 		$type = $this->getContainer()->get('config')->get('template.renderer');
 
 		// Set the class name for the renderer's service provider
-		$class = '\\BabDev\\Service\\' . ucfirst($type) . 'RendererProvider';
+		$class = '\\Joomla\\Service\\' . ucfirst($type) . 'RendererProvider';
 
 		// Sanity check
 		if (!class_exists($class))
@@ -158,12 +160,12 @@ class DefaultController extends AbstractController implements ContainerAwareInte
 
 		$view   = ucfirst($this->getInput()->getWord('view', $this->defaultView));
 
-		$class = '\\BabDev\\View\\' . $view . 'HtmlView';
+		$class = '\\Joomla\\View\\' . $view . 'HtmlView';
 
 		// Ensure the class exists, fall back to default otherwise
 		if (!class_exists($class))
 		{
-			$class = '\\BabDev\\View\\DefaultHtmlView';
+			$class = '\\Joomla\\View\\DefaultHtmlView';
 
 			// If we still have nothing, abort mission
 			if (!class_exists($class))
@@ -176,7 +178,7 @@ class DefaultController extends AbstractController implements ContainerAwareInte
 		$renderer = $this->initializeRenderer();
 
 		// Instantiate the view now
-		/* @type  \BabDev\View\AbstractHtmlView  $object */
+		/* @type  \Joomla\View\AbstractHtmlView  $object */
 		$object = new $class($model, $renderer);
 
 		// We need to set the layout too
@@ -189,9 +191,9 @@ class DefaultController extends AbstractController implements ContainerAwareInte
 
 The view class in this example is extended from this sample class which extends `\Joomla\View\AbstractView`:
 ```php
-namespace BabDev\View;
+namespace Joomla\View;
 
-use BabDev\Renderer\RendererInterface;
+use Joomla\Renderer\RendererInterface;
 
 use Joomla\Model\ModelInterface;
 use Joomla\View\AbstractView;
@@ -349,9 +351,9 @@ abstract class AbstractHtmlView extends AbstractView
 
 The view class for our view as established in the above sample controller:
 ```php
-namespace BabDev\View;
+namespace Joomla\View;
 
-use BabDev\Model\DefaultModel;
+use Joomla\Model\DefaultModel;
 
 /**
  * HTML view class for the Dashboard
@@ -386,18 +388,8 @@ class DashboardHtmlView extends AbstractHtmlView
 
 ## Installation via Composer
 
-Add `"babdev/renderer": "~1.0"` to the require block in your composer.json and then run `composer install`.
-
-```json
-{
-	"require": {
-		"babdev/renderer": "~1.0"
-	}
-}
-```
-
-Alternatively, you can simply run the following from the command line:
+You can simply run the following from the command line:
 
 ```sh
-composer require babdev/renderer "~1.0"
+composer require joomla/renderer
 ```

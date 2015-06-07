@@ -1,9 +1,9 @@
 {
-    "name": "babdev/renderer",
+    "name": "joomla/renderer",
     "type": "joomla-package",
-    "description": "Provides a common rendering interface for PHP template engines",
-    "keywords": ["joomla", "framework", "renderer", "php"],
-    "homepage": "https://github.com/BabDev/renderer",
+    "description": "Joomla Renderer Package",
+    "keywords": ["joomla", "framework", "renderer"],
+    "homepage": "https://github.com/joomla-framework/renderer",
     "license": "LGPL-2.1+",
     "require": {
         "php": ">=5.3.10"
@@ -23,12 +23,12 @@
     },
     "autoload": {
         "psr-4": {
-            "BabDev\\Renderer\\": "src/"
+            "Joomla\\Renderer\\": "src/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.x-dev"
+            "dev-master": "2.x-dev"
         }
     }
 }

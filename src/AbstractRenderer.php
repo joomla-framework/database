@@ -1,17 +1,17 @@
 <?php
 /**
- * Renderer Package
+ * Part of the Joomla Framework Renderer Package
  *
- * @copyright  Copyright (C) 2014 Roman Kinyakin. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license    http://www.gnu.org/licenses/lgpl-2.1.txt GNU Lesser General Public License Version 2.1 or Later
  */
 
-namespace BabDev\Renderer;
+namespace Joomla\Renderer;
 
 /**
  * Abstract class for templates renderer
  *
- * @since  1.0
+ * @since  __DEPLOY_VERSION__
  */
 abstract class AbstractRenderer implements RendererInterface
 {
@@ -19,7 +19,7 @@ abstract class AbstractRenderer implements RendererInterface
 	 * Data for output by the renderer
 	 *
 	 * @var    array
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $data = array();
 
@@ -29,9 +29,9 @@ abstract class AbstractRenderer implements RendererInterface
 	 * @param   string  $key    Name of variable
 	 * @param   string  $value  Value of variable
 	 *
-	 * @return  AbstractRenderer  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function set($key, $value)
 	{
@@ -46,9 +46,9 @@ abstract class AbstractRenderer implements RendererInterface
 	 *
 	 * @param   array  $data  Array of variables
 	 *
-	 * @return  AbstractRenderer  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setData($data)
 	{
@@ -60,9 +60,9 @@ abstract class AbstractRenderer implements RendererInterface
 	/**
 	 * Unloads data from renderer
 	 *
-	 * @return  AbstractRenderer  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function unsetData()
 	{

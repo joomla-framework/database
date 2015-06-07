@@ -1,21 +1,20 @@
 <?php
 /**
- * Renderer Package
+ * Part of the Joomla Framework Renderer Package
  *
- * @copyright  Copyright (C) 2014 Michael Babker. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license    http://www.gnu.org/licenses/lgpl-2.1.txt GNU Lesser General Public License Version 2.1 or Later
  */
 
-namespace BabDev\Renderer;
+namespace Joomla\Renderer;
 
-use BabDev\Renderer\Twig\FilesystemLoader;
-
+use Joomla\Renderer\Twig\FilesystemLoader;
 use Joomla\Registry\Registry;
 
 /**
  * Twig class for rendering output.
  *
- * @since  1.0
+ * @since  __DEPLOY_VERSION__
  */
 class TwigRenderer extends AbstractRenderer implements RendererInterface
 {
@@ -23,7 +22,7 @@ class TwigRenderer extends AbstractRenderer implements RendererInterface
 	 * Configuration array
 	 *
 	 * @var    array
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	private $config = array(
 		'path'      => null,
@@ -35,7 +34,7 @@ class TwigRenderer extends AbstractRenderer implements RendererInterface
 	 * Rendering engine
 	 *
 	 * @var    \Twig_Environment
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	private $renderer;
 
@@ -44,7 +43,7 @@ class TwigRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @param   array  $config  Configuration array
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function __construct($config = array())
 	{
@@ -62,9 +61,9 @@ class TwigRenderer extends AbstractRenderer implements RendererInterface
 	 * @param   string  $directory  The folder path
 	 * @param   string  $alias      The folder alias
 	 *
-	 * @return  TwigRenderer  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function addFolder($directory, $alias = null)
 	{
@@ -81,7 +80,7 @@ class TwigRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @return  \Twig_Environment
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getRenderer()
 	{
@@ -95,7 +94,7 @@ class TwigRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function pathExists($path)
 	{
@@ -110,7 +109,7 @@ class TwigRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function render($template, array $data = array())
 	{
@@ -126,9 +125,9 @@ class TwigRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @param   string  $extension  Template files extension
 	 *
-	 * @return  TwigRenderer  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setFileExtension($extension)
 	{
@@ -140,9 +139,9 @@ class TwigRenderer extends AbstractRenderer implements RendererInterface
 	/**
 	 * Unloads data from renderer
 	 *
-	 * @return  TwigRenderer  Returns self for chaining
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function unsetData()
 	{

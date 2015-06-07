@@ -5,9 +5,16 @@ php:
   - 5.4
   - 5.5
   - 5.6
+  - 7.0
+  - hhvm
+
+matrix:
+  allow_failures:
+    - php: hhvm
+    - php: 7.0
 
 before_script:
-  - composer update --dev
+  - composer update
 
 script:
-  - ./vendor/bin/phpcs --report=full --extensions=php --standard=build/phpcs/Joomla/ruleset.xml src/
+  - ./vendor/bin/phpcs --report=full --extensions=php --standard=.travis/phpcs/Joomla/ruleset.xml src/
