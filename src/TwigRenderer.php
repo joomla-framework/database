@@ -66,8 +66,13 @@ class TwigRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @since   1.0
 	 */
-	public function addFolder($directory, $alias)
+	public function addFolder($directory, $alias = null)
 	{
+		if ($alias === null)
+		{
+			$alias = \Twig_Loader_Filesystem::MAIN_NAMESPACE;
+		}
+
 		$this->getRenderer()->getLoader()->addPath($directory, $alias);
 	}
 

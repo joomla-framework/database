@@ -43,7 +43,7 @@ class MustacheRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @since   1.0
 	 */
-	public function addFolder($directory, $alias)
+	public function addFolder($directory, $alias = null)
 	{
 		return $this;
 	}

@@ -60,9 +60,15 @@ class PlatesRenderer extends AbstractRenderer implements RendererInterface
 	 * @return  PlatesRenderer  Returns self for chaining
 	 *
 	 * @since   1.0
+	 * @throws  \InvalidArgumentException
 	 */
-	public function addFolder($directory, $alias)
+	public function addFolder($directory, $alias = null)
 	{
+		if ($alias === null)
+		{
+			throw new \InvalidArgumentException('Setting an alias is required in Plates');
+		}
+
 		$this->getRenderer()->addFolder($alias, $directory);
 
 		return $this;

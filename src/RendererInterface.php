@@ -25,7 +25,7 @@ interface RendererInterface
 	 *
 	 * @since   1.0
 	 */
-	public function addFolder($directory, $alias);
+	public function addFolder($directory, $alias = null);
 
 	/**
 	 * Checks if folder, folder alias, template or template path exists

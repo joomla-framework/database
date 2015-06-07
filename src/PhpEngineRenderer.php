@@ -60,7 +60,7 @@ class PhpEngineRenderer extends AbstractRenderer implements RendererInterface
 	 *
 	 * @since   1.0
 	 */
-	public function addFolder($directory, $alias)
+	public function addFolder($directory, $alias = null)
 	{
 		// TODO: Implement addFolder() method.
 		return $this;
