@@ -59,14 +59,14 @@ class TwigRenderer extends AbstractRenderer implements RendererInterface
 	/**
 	 * Add a folder with alias to the renderer
 	 *
-	 * @param   string  $alias      The folder alias
 	 * @param   string  $directory  The folder path
+	 * @param   string  $alias      The folder alias
 	 *
 	 * @return  TwigRenderer  Returns self for chaining
 	 *
 	 * @since   1.0
 	 */
-	public function addFolder($alias, $directory)
+	public function addFolder($directory, $alias)
 	{
 		$this->getRenderer()->getLoader()->addPath($directory, $alias);
 	}
