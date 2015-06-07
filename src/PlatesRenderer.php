@@ -54,15 +54,21 @@ class PlatesRenderer extends AbstractRenderer implements RendererInterface
 	/**
 	 * Add a folder with alias to the renderer
 	 *
-	 * @param   string  $alias      The folder alias
 	 * @param   string  $directory  The folder path
+	 * @param   string  $alias      The folder alias
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  \InvalidArgumentException
 	 */
-	public function addFolder($alias, $directory)
+	public function addFolder($directory, $alias = null)
 	{
+		if ($alias === null)
+		{
+			throw new \InvalidArgumentException('Setting an alias is required in Plates');
+		}
+
 		$this->getRenderer()->addFolder($alias, $directory);
 
 		return $this;

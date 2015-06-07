@@ -18,14 +18,14 @@ interface RendererInterface
 	/**
 	 * Add a folder with alias to the renderer
 	 *
-	 * @param   string  $alias      The folder alias
 	 * @param   string  $directory  The folder path
+	 * @param   string  $alias      The folder alias
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function addFolder($alias, $directory);
+	public function addFolder($directory, $alias = null);
 
 	/**
 	 * Checks if folder, folder alias, template or template path exists
