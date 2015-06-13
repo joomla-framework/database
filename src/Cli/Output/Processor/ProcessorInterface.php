@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Application Package
  *
- * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -18,7 +18,7 @@ interface ProcessorInterface
 	/**
 	 * Process the provided output into a string.
 	 *
-	 * @param   mixed
+	 * @param   string  $output  The string to process.
 	 *
 	 * @return  string
 	 *
