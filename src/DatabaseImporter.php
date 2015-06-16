@@ -82,7 +82,7 @@ abstract class DatabaseImporter
 	/**
 	 * Set the output option for the exporter to XML format.
 	 *
-	 * @return  DatabaseImporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -96,7 +96,7 @@ abstract class DatabaseImporter
 	/**
 	 * Checks if all data and options are in order prior to exporting.
 	 *
-	 * @return  DatabaseImporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \Exception if an error is encountered.
@@ -108,7 +108,7 @@ abstract class DatabaseImporter
 	 *
 	 * @param   mixed  $from  The data source to import.
 	 *
-	 * @return  DatabaseImporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -131,9 +131,7 @@ abstract class DatabaseImporter
 	 */
 	protected function getAddColumnSQL($table, \SimpleXMLElement $field)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD COLUMN ' . $this->getColumnSQL($field);
-
-		return $sql;
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD COLUMN ' . $this->getColumnSQL($field);
 	}
 
 	/**
@@ -148,10 +146,8 @@ abstract class DatabaseImporter
 	 */
 	protected function getChangeColumnSQL($table, \SimpleXMLElement $field)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
 			. $this->getColumnSQL($field);
-
-		return $sql;
 	}
 
 	/**
@@ -166,9 +162,7 @@ abstract class DatabaseImporter
 	 */
 	protected function getDropColumnSQL($table, $name)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP COLUMN ' . $this->db->quoteName($name);
-
-		return $sql;
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP COLUMN ' . $this->db->quoteName($name);
 	}
 
 	/**
@@ -275,8 +269,10 @@ abstract class DatabaseImporter
 						catch (\RuntimeException $e)
 						{
 							$this->addLog('Fail: ' . $this->db->getQuery());
+
 							throw $e;
 						}
+
 						$this->addLog('Pass: ' . $this->db->getQuery());
 					}
 				}
@@ -295,8 +291,10 @@ abstract class DatabaseImporter
 				catch (\RuntimeException $e)
 				{
 					$this->addLog('Fail: ' . $this->db->getQuery());
+
 					throw $e;
 				}
+
 				$this->addLog('Pass: ' . $this->db->getQuery());
 			}
 		}
@@ -307,7 +305,7 @@ abstract class DatabaseImporter
 	 *
 	 * @param   DatabaseDriver  $db  The database connector.
 	 *
-	 * @return  DatabaseImporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -323,7 +321,7 @@ abstract class DatabaseImporter
 	 *
 	 * @param   boolean  $setting  True to export the structure, false to not.
 	 *
-	 * @return  DatabaseImporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */

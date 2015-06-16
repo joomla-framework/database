@@ -29,9 +29,7 @@ class MysqlImporter extends DatabaseImporter
 	 */
 	protected function getAddKeySQL($table, $keys)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD ' . $this->getKeySQL($keys);
-
-		return $sql;
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD ' . $this->getKeySQL($keys);
 	}
 
 	/**
@@ -196,10 +194,8 @@ class MysqlImporter extends DatabaseImporter
 	 */
 	protected function getChangeColumnSQL($table, \SimpleXMLElement $field)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
 			. $this->getColumnSQL($field);
-
-		return $sql;
 	}
 
 	/**
@@ -270,9 +266,7 @@ class MysqlImporter extends DatabaseImporter
 	 */
 	protected function getDropKeySQL($table, $name)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP KEY ' . $this->db->quoteName($name);
-
-		return $sql;
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP KEY ' . $this->db->quoteName($name);
 	}
 
 	/**
@@ -286,9 +280,7 @@ class MysqlImporter extends DatabaseImporter
 	 */
 	protected function getDropPrimaryKeySQL($table)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP PRIMARY KEY';
-
-		return $sql;
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP PRIMARY KEY';
 	}
 
 	/**
@@ -371,15 +363,13 @@ class MysqlImporter extends DatabaseImporter
 			}
 		}
 
-		$sql = $prefix . 'KEY ' . ($kName != 'PRIMARY' ? $this->db->quoteName($kName) : '') . ' (' . implode(',', $kColumns) . ')';
-
-		return $sql;
+		return $prefix . 'KEY ' . ($kName != 'PRIMARY' ? $this->db->quoteName($kName) : '') . ' (' . implode(',', $kColumns) . ')';
 	}
 
 	/**
 	 * Checks if all data and options are in order prior to exporting.
 	 *
-	 * @return  MysqlImporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \Exception if an error is encountered.

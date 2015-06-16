@@ -206,7 +206,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	 *
 	 * @param   string  $clause  Optionally, the name of the clause to clear, or nothing to clear the whole query.
 	 *
-	 * @return  PostgresqlQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -307,10 +307,8 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 		{
 			return implode(' || ' . $this->quote($separator) . ' || ', $values);
 		}
-		else
-		{
-			return implode(' || ', $values);
-		}
+
+		return implode(' || ', $values);
 	}
 
 	/**
@@ -331,7 +329,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	 * @param   string  $table_name  The table to lock
 	 * @param   string  $glue        The glue by which to join the conditions. Defaults to ',' .
 	 *
-	 * @return  PostgresqlQuery  FOR UPDATE query element
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -358,7 +356,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	 * @param   string  $table_name  The table to lock
 	 * @param   string  $glue        The glue by which to join the conditions. Defaults to ',' .
 	 *
-	 * @return  PostgresqlQuery  FOR SHARE query element
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -484,7 +482,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	/**
 	 * Sets the NOWAIT lock on select's output row
 	 *
-	 * @return  PostgresqlQuery  NOWAIT query element
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -492,7 +490,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	{
 		$this->type = 'noWait';
 
-		if ( is_null($this->noWait) )
+		if (is_null($this->noWait))
 		{
 			$this->noWait = new QueryElement('NOWAIT', null);
 		}
@@ -505,7 +503,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	 *
 	 * @param   integer  $limit  Number of rows to return
 	 *
-	 * @return  PostgresqlQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -524,7 +522,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	 *
 	 * @param   integer  $offset  An integer for skipping rows
 	 *
-	 * @return  PostgresqlQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -543,7 +541,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	 *
 	 * @param   mixed  $pkCol  The name of the primary key column.
 	 *
-	 * @return  PostgresqlQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -567,7 +565,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	 * @param   integer  $limit   The limit for the result set
 	 * @param   integer  $offset  The offset for the result set
 	 *
-	 * @return  PostgresqlQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */

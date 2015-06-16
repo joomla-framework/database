@@ -368,6 +368,7 @@ abstract class PdoDriver extends DatabaseDriver
 				'Database query failed (error #{code}): {message}',
 				array('code' => $this->errorNum, 'message' => $this->errorMsg)
 			);
+
 			throw new \RuntimeException($this->errorMsg, $this->errorNum);
 		}
 
@@ -446,27 +447,26 @@ abstract class PdoDriver extends DatabaseDriver
 						'Database query failed (error #{code}): {message}',
 						array('code' => $this->errorNum, 'message' => $this->errorMsg)
 					);
+
 					throw new \RuntimeException($this->errorMsg, $this->errorNum);
 				}
 
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
-			else
-			// The server was not disconnected.
-			{
-				// Get the error number and message from before we tried to reconnect.
-				$this->errorNum = $errorNum;
-				$this->errorMsg = $errorMsg;
 
-				// Throw the normal query exception.
-				$this->log(
-					Log\LogLevel::ERROR,
-					'Database query failed (error #{code}): {message}',
-					array('code' => $this->errorNum, 'message' => $this->errorMsg)
-				);
-				throw new \RuntimeException($this->errorMsg, $this->errorNum);
-			}
+			// Get the error number and message from before we tried to reconnect.
+			$this->errorNum = $errorNum;
+			$this->errorMsg = $errorMsg;
+
+			// Throw the normal query exception.
+			$this->log(
+				Log\LogLevel::ERROR,
+				'Database query failed (error #{code}): {message}',
+				array('code' => $this->errorNum, 'message' => $this->errorMsg)
+			);
+
+			throw new \RuntimeException($this->errorMsg, $this->errorNum);
 		}
 
 		return $this->prepared;
@@ -604,10 +604,8 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			return $this->prepared->rowCount();
 		}
-		else
-		{
-			return 0;
-		}
+
+		return 0;
 	}
 
 	/**
@@ -627,14 +625,13 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			return $cursor->rowCount();
 		}
-		elseif ($this->prepared instanceof \PDOStatement)
+
+		if ($this->prepared instanceof \PDOStatement)
 		{
 			return $this->prepared->rowCount();
 		}
-		else
-		{
-			return 0;
-		}
+
+		return 0;
 	}
 
 	/**
@@ -672,16 +669,15 @@ abstract class PdoDriver extends DatabaseDriver
 	/**
 	 * Sets the SQL statement string for later execution.
 	 *
-	 * @param   mixed    $query          The SQL statement to set either as a JDatabaseQuery object or a string.
-	 * @param   integer  $offset         The affected row offset to set.
-	 * @param   integer  $limit          The maximum affected rows to set.
-	 * @param   array    $driverOptions  The optional PDO driver options
+	 * @param   string|DatabaseQuery  $query   The SQL statement to set either as a DatabaseQuery object or a string.
+	 * @param   integer               $offset  The affected row offset to set.
+	 * @param   integer               $limit   The maximum affected rows to set.
 	 *
-	 * @return  PdoDriver  This object to support method chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
-	public function setQuery($query, $offset = null, $limit = null, $driverOptions = array())
+	public function setQuery($query, $offset = null, $limit = null)
 	{
 		$this->connect();
 
@@ -700,12 +696,10 @@ abstract class PdoDriver extends DatabaseDriver
 
 		$sql = $this->replacePrefix((string) $query);
 
-		$this->prepared = $this->connection->prepare($sql, $driverOptions);
+		$this->prepared = $this->connection->prepare($sql, $this->options['driverOptions']);
 
 		// Store reference to the DatabaseQuery instance:
-		parent::setQuery($query, $offset, $limit);
-
-		return $this;
+		return parent::setQuery($query, $offset, $limit);
 	}
 
 	/**

@@ -141,10 +141,8 @@ class SqlsrvQuery extends DatabaseQuery
 		{
 			return '(' . implode('+' . $this->quote($separator) . '+', $values) . ')';
 		}
-		else
-		{
-			return '(' . implode('+', $values) . ')';
-		}
+
+		return '(' . implode('+', $values) . ')';
 	}
 
 	/**

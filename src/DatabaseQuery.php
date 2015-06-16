@@ -12,10 +12,6 @@ namespace Joomla\Database;
  * Joomla Framework Query Building Class.
  *
  * @since  1.0
- *
- * @method  string  q($text, $escape = true)  Alias for quote method
- * @method  string  qn($name, $as = null)     Alias for quoteName method
- * @method  string  e($text, $extra = false)  Alias for escape method
  */
 abstract class DatabaseQuery
 {
@@ -188,39 +184,6 @@ abstract class DatabaseQuery
 	protected $union = null;
 
 	/**
-	 * Magic method to provide method alias support for quote() and quoteName().
-	 *
-	 * @param   string  $method  The called method.
-	 * @param   array   $args    The array of arguments passed to the method.
-	 *
-	 * @return  string  The aliased method's return value or null.
-	 *
-	 * @since   1.0
-	 */
-	public function __call($method, $args)
-	{
-		if (empty($args))
-		{
-			return;
-		}
-
-		switch ($method)
-		{
-			case 'q':
-				return $this->quote($args[0], isset($args[1]) ? $args[1] : true);
-				break;
-
-			case 'qn':
-				return $this->quoteName($args[0], isset($args[1]) ? $args[1] : null);
-				break;
-
-			case 'e':
-				return $this->escape($args[0], isset($args[1]) ? $args[1] : false);
-				break;
-		}
-	}
-
-	/**
 	 * Class constructor.
 	 *
 	 * @param   DatabaseDriver  $db  The database driver.
@@ -390,7 +353,16 @@ abstract class DatabaseQuery
 	 */
 	public function __get($name)
 	{
-		return isset($this->$name) ? $this->$name : null;
+		if (property_exists($this, $name))
+		{
+			return $this->$name;
+		}
+
+		$trace = debug_backtrace();
+		trigger_error(
+			'Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'],
+			E_USER_NOTICE
+		);
 	}
 
 	/**
@@ -405,7 +377,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   mixed  $columns  A string or an array of field names.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -470,7 +442,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $clause  Optionally, the name of the clause to clear, or nothing to clear the whole query.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -588,7 +560,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $columns  A column name, or array of column names.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -625,10 +597,8 @@ abstract class DatabaseQuery
 		{
 			return 'CONCATENATE(' . implode(' || ' . $this->quote($separator) . ' || ', $values) . ')';
 		}
-		else
-		{
-			return 'CONCATENATE(' . implode(' || ', $values) . ')';
-		}
+
+		return 'CONCATENATE(' . implode(' || ', $values) . ')';
 	}
 
 	/**
@@ -692,7 +662,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $table  The name of the table to delete from.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -710,12 +680,28 @@ abstract class DatabaseQuery
 	}
 
 	/**
+	 * Alias for escape method
+	 *
+	 * @param   string   $text   The string to be escaped.
+	 * @param   boolean  $extra  Optional parameter to provide extra escaping.
+	 *
+	 * @return  string  The escaped string.
+	 *
+	 * @since   1.0
+	 * @throws  \RuntimeException if the internal db property is not a valid object.
+	 */
+	public function e($text, $extra = false)
+	{
+		return $this->escape($text, $extra);
+	}
+
+	/**
 	 * Method to escape a string for usage in an SQL statement.
 	 *
 	 * This method is provided for use where the query object is passed to a function for modification.
 	 * If you have direct access to the database object, it is recommended you use the escape method directly.
 	 *
-	 * Note that 'e' is an alias for this method as it is in JDatabaseDatabaseDriver.
+	 * Note that 'e' is an alias for this method as it is in DatabaseDriver.
 	 *
 	 * @param   string   $text   The string to be escaped.
 	 * @param   boolean  $extra  Optional parameter to provide extra escaping.
@@ -747,7 +733,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $columns  A string or an array of field names.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -779,7 +765,7 @@ abstract class DatabaseQuery
 	 *                                        as a subquery in FROM clause along with a value for $subQueryAlias.
 	 * @param   string        $subQueryAlias  Alias used when $tables is a DatabaseQuery.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -918,7 +904,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $columns  A string or array of ordering columns.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -945,7 +931,7 @@ abstract class DatabaseQuery
 	 * @param   array|string  $conditions  A string or array of columns.
 	 * @param   string        $glue        The glue by which to join the conditions. Defaults to AND.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -972,15 +958,13 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $condition  The join condition.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
 	public function innerJoin($condition)
 	{
-		$this->join('INNER', $condition);
-
-		return $this;
+		return $this->join('INNER', $condition);
 	}
 
 	/**
@@ -996,7 +980,7 @@ abstract class DatabaseQuery
 	 * @param   string   $table           The name of the table to insert data into.
 	 * @param   boolean  $incrementField  The name of the field to auto increment.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1018,7 +1002,7 @@ abstract class DatabaseQuery
 	 * @param   string        $type        The type of join. This string is prepended to the JOIN keyword.
 	 * @param   array|string  $conditions  A string or array of conditions.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1042,15 +1026,13 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $condition  The join condition.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
 	public function leftJoin($condition)
 	{
-		$this->join('LEFT', $condition);
-
-		return $this;
+		return $this->join('LEFT', $condition);
 	}
 
 	/**
@@ -1114,7 +1096,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $columns  A string or array of ordering columns.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1140,15 +1122,29 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $condition  The join condition.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
 	public function outerJoin($condition)
 	{
-		$this->join('OUTER', $condition);
+		return $this->join('OUTER', $condition);
+	}
 
-		return $this;
+	/**
+	 * Alias for quote method
+	 *
+	 * @param   array|string  $text    A string or an array of strings to quote.
+	 * @param   boolean       $escape  True (default) to escape the string, false to leave it unchanged.
+	 *
+	 * @return  string  The quoted input string.
+	 *
+	 * @since   1.0
+	 * @throws  \RuntimeException if the internal db property is not a valid object.
+	 */
+	public function q($text, $escape = true)
+	{
+		return $this->quote($text, $escape);
 	}
 
 	/**
@@ -1180,6 +1176,24 @@ abstract class DatabaseQuery
 		}
 
 		return $this->db->quote($text, $escape);
+	}
+
+	/**
+	 * Alias for quoteName method
+	 *
+	 * @param   array|string  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
+	 *                               Each type supports dot-notation name.
+	 * @param   array|string  $as    The AS query part associated to $name. It can be string or array, in latter case it has to be
+	 *                               same length of $name; if is null there will not be any AS part for string or array element.
+	 *
+	 * @return  array|string  The quote wrapped name, same type of $name.
+	 *
+	 * @since   1.0
+	 * @throws  \RuntimeException if the internal db property is not a valid object.
+	 */
+	public function qn($name, $as = null)
+	{
+		return $this->quoteName($name, $as);
 	}
 
 	/**
@@ -1223,15 +1237,13 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $condition  The join condition.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
 	public function rightJoin($condition)
 	{
-		$this->join('RIGHT', $condition);
-
-		return $this;
+		return $this->join('RIGHT', $condition);
 	}
 
 	/**
@@ -1246,7 +1258,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $columns  A string or an array of field names.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1277,7 +1289,7 @@ abstract class DatabaseQuery
 	 * @param   string        $glue        The glue by which to join the condition strings. Defaults to ,.
 	 *                                     Note that the glue is set on first use and cannot be changed.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1305,7 +1317,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   DatabaseQuery|string  $sql  A SQL query string or DatabaseQuery object
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1326,7 +1338,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $table  A table to update.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1347,7 +1359,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $values  A single tuple, or array of tuples.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1376,7 +1388,7 @@ abstract class DatabaseQuery
 	 * @param   string        $glue        The glue by which to join the conditions. Defaults to AND.
 	 *                                     Note that the glue is set on first use and cannot be changed.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1431,7 +1443,7 @@ abstract class DatabaseQuery
 	 * @param   boolean               $distinct  True to only return distinct rows from the union.
 	 * @param   string                $glue      The glue by which to join the conditions.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1479,7 +1491,7 @@ abstract class DatabaseQuery
 	 * @param   DatabaseQuery|string  $query  The DatabaseQuery object or string to union.
 	 * @param   string                $glue   The glue by which to join the conditions.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */

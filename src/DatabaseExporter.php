@@ -107,7 +107,7 @@ abstract class DatabaseExporter
 	/**
 	 * Set the output option for the exporter to XML format.
 	 *
-	 * @return  DatabaseExporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -141,7 +141,7 @@ abstract class DatabaseExporter
 	/**
 	 * Checks if all data and options are in order prior to exporting.
 	 *
-	 * @return  DatabaseDriver  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \Exception if an error is encountered.
@@ -153,7 +153,7 @@ abstract class DatabaseExporter
 	 *
 	 * @param   mixed  $from  The name of a single table, or an array of the table names to export.
 	 *
-	 * @return  DatabaseExporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \Exception if input is not a string or array.
@@ -200,7 +200,7 @@ abstract class DatabaseExporter
 	 *
 	 * @param   DatabaseDriver  $db  The database connector.
 	 *
-	 * @return  DatabaseExporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -216,7 +216,7 @@ abstract class DatabaseExporter
 	 *
 	 * @param   boolean  $setting  True to export the structure, false to not.
 	 *
-	 * @return  DatabaseExporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */

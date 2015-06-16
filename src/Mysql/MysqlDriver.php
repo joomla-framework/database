@@ -99,7 +99,7 @@ class MysqlDriver extends PdoDriver
 	 */
 	public static function isSupported()
 	{
-		return in_array('mysql', \PDO::getAvailableDrivers());
+		return class_exists('\\PDO') && in_array('mysql', \PDO::getAvailableDrivers());
 	}
 
 	/**
@@ -108,7 +108,7 @@ class MysqlDriver extends PdoDriver
 	 * @param   string   $tableName  The name of the database table to drop.
 	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
 	 *
-	 * @return  MysqlDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -117,9 +117,8 @@ class MysqlDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($tableName));
-
-		$this->execute();
+		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($tableName))
+			->execute();
 
 		return $this;
 	}
@@ -129,7 +128,7 @@ class MysqlDriver extends PdoDriver
 	 *
 	 * @param   string  $database  The name of the database to select for use.
 	 *
-	 * @return  boolean  True if the database was successfully selected.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -138,9 +137,8 @@ class MysqlDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$this->setQuery('USE ' . $this->quoteName($database));
-
-		$this->execute();
+		$this->setQuery('USE ' . $this->quoteName($database))
+			->execute();
 
 		return $this;
 	}
@@ -159,8 +157,7 @@ class MysqlDriver extends PdoDriver
 
 		$tables = $this->getTableList();
 
-		$this->setQuery('SHOW FULL COLUMNS FROM ' . $tables[0]);
-		$array = $this->loadAssocList();
+		$array = $this->setQuery('SHOW FULL COLUMNS FROM ' . $tables[0])->loadAssocList();
 
 		foreach ($array as $field)
 		{
@@ -176,7 +173,7 @@ class MysqlDriver extends PdoDriver
 	/**
 	 * Shows the table CREATE statement that creates the given tables.
 	 *
-	 * @param   mixed  $tables  A table name or a list of table names.
+	 * @param   array|string  $tables  A table name or a list of table names.
 	 *
 	 * @return  array  A list of the create SQL for the tables.
 	 *
@@ -224,9 +221,7 @@ class MysqlDriver extends PdoDriver
 		$result = array();
 
 		// Set the query to get the table fields statement.
-		$this->setQuery('SHOW FULL COLUMNS FROM ' . $this->quoteName($table));
-
-		$fields = $this->loadObjectList();
+		$fields = $this->setQuery('SHOW FULL COLUMNS FROM ' . $this->quoteName($table))->loadObjectList();
 
 		// If we only want the type as the value add just that to the list.
 		if ($typeOnly)
@@ -263,11 +258,7 @@ class MysqlDriver extends PdoDriver
 		$this->connect();
 
 		// Get the details columns information.
-		$this->setQuery('SHOW KEYS FROM ' . $this->quoteName($table));
-
-		$keys = $this->loadObjectList();
-
-		return $keys;
+		return $this->setQuery('SHOW KEYS FROM ' . $this->quoteName($table))->loadObjectList();
 	}
 
 	/**
@@ -283,10 +274,7 @@ class MysqlDriver extends PdoDriver
 		$this->connect();
 
 		// Set the query to get the tables statement.
-		$this->setQuery('SHOW TABLES');
-		$tables = $this->loadColumn();
-
-		return $tables;
+		return $this->setQuery('SHOW TABLES')->loadColumn();
 	}
 
 	/**
@@ -308,14 +296,15 @@ class MysqlDriver extends PdoDriver
 	 *
 	 * @param   string  $table  The name of the table to unlock.
 	 *
-	 * @return  MysqlDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
 	public function lockTable($table)
 	{
-		$this->setQuery('LOCK TABLES ' . $this->quoteName($table) . ' WRITE')->execute();
+		$this->setQuery('LOCK TABLES ' . $this->quoteName($table) . ' WRITE')
+			->execute();
 
 		return $this;
 	}
@@ -328,16 +317,15 @@ class MysqlDriver extends PdoDriver
 	 * @param   string  $backup    Not used by MySQL.
 	 * @param   string  $prefix    Not used by MySQL.
 	 *
-	 * @return  MysqlDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
 	public function renameTable($oldTable, $newTable, $backup = null, $prefix = null)
 	{
-		$this->setQuery('RENAME TABLE ' . $this->quoteName($oldTable) . ' TO ' . $this->quoteName($newTable));
-
-		$this->execute();
+		$this->setQuery('RENAME TABLE ' . $this->quoteName($oldTable) . ' TO ' . $this->quoteName($newTable))
+			->execute();
 
 		return $this;
 	}
@@ -385,14 +373,15 @@ class MysqlDriver extends PdoDriver
 	/**
 	 * Unlocks tables in the database.
 	 *
-	 * @return  MysqlDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
 	public function unlockTables()
 	{
-		$this->setQuery('UNLOCK TABLES')->execute();
+		$this->setQuery('UNLOCK TABLES')
+			->execute();
 
 		return $this;
 	}

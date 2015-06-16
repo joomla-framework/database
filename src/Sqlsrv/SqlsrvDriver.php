@@ -115,6 +115,12 @@ class SqlsrvDriver extends DatabaseDriver
 			return;
 		}
 
+		// Make sure the SQLSRV extension for PHP is installed and enabled.
+		if (!static::isSupported())
+		{
+			throw new \RuntimeException('PHP extension sqlsrv_connect is not available.');
+		}
+
 		// Build the connection configuration array.
 		$config = array(
 			'Database' => $this->options['database'],
@@ -122,12 +128,6 @@ class SqlsrvDriver extends DatabaseDriver
 			'pwd' => $this->options['password'],
 			'CharacterSet' => 'UTF-8',
 			'ReturnDatesAsStrings' => true);
-
-		// Make sure the SQLSRV extension for PHP is installed and enabled.
-		if (!static::isSupported())
-		{
-			throw new \RuntimeException('PHP extension sqlsrv_connect is not available.');
-		}
 
 		// Attempt to connect to the server.
 		if (!($this->connection = @ sqlsrv_connect($this->options['host'], $config)))
@@ -176,11 +176,8 @@ class SqlsrvDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$this->setQuery(
-			'SELECT CONSTRAINT_NAME FROM' . ' INFORMATION_SCHEMA.TABLE_CONSTRAINTS' . ' WHERE TABLE_NAME = ' . $this->quote($tableName)
-		);
-
-		return $this->loadColumn();
+		return $this->setQuery('SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_NAME = ' . $this->quote($tableName))
+			->loadColumn();
 	}
 
 	/**
@@ -200,8 +197,8 @@ class SqlsrvDriver extends DatabaseDriver
 
 		foreach ($constraints as $constraint)
 		{
-			$this->setQuery('sp_rename ' . $constraint . ',' . str_replace($prefix, $backup, $constraint));
-			$this->execute();
+			$this->setQuery('sp_rename ' . $constraint . ',' . str_replace($prefix, $backup, $constraint))
+				->execute();
 		}
 	}
 
@@ -253,7 +250,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 * @param   string   $tableName  The name of the database table to drop.
 	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
 	 *
-	 * @return  SqlsrvDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -261,12 +258,10 @@ class SqlsrvDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$query = $this->getQuery(true);
-
 		if ($ifExists)
 		{
 			$this->setQuery(
-				'IF EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = ' . $query->quote($tableName) . ') DROP TABLE ' . $tableName
+				'IF EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = ' . $this->quote($tableName) . ') DROP TABLE ' . $tableName
 			);
 		}
 		else
@@ -342,7 +337,7 @@ class SqlsrvDriver extends DatabaseDriver
 		// Set the query to get the table fields statement.
 		$this->setQuery(
 			'SELECT column_name as Field, data_type as Type, is_nullable as \'Null\', column_default as \'Default\'' .
-			' FROM information_schema.columns' . ' WHERE table_name = ' . $this->quote($table_temp)
+			' FROM information_schema.columns WHERE table_name = ' . $this->quote($table_temp)
 		);
 		$fields = $this->loadObjectList();
 
@@ -416,10 +411,7 @@ class SqlsrvDriver extends DatabaseDriver
 		$this->connect();
 
 		// Set the query to get the tables statement.
-		$this->setQuery('SELECT name FROM ' . $this->getDatabase() . '.sys.Tables WHERE type = \'U\';');
-		$tables = $this->loadColumn();
-
-		return $tables;
+		return $this->setQuery('SELECT name FROM ' . $this->getDatabase() . '.sys.Tables WHERE type = \'U\';')->loadColumn();
 	}
 
 	/**
@@ -579,6 +571,7 @@ class SqlsrvDriver extends DatabaseDriver
 				'Database query failed (error #{code}): {message}',
 				array('code' => $this->errorNum, 'message' => $this->errorMsg)
 			);
+
 			throw new \RuntimeException($this->errorMsg, $this->errorNum);
 		}
 
@@ -608,14 +601,12 @@ class SqlsrvDriver extends DatabaseDriver
 		$this->errorNum = 0;
 		$this->errorMsg = '';
 
+		$array = array();
+
 		// SQLSrv_num_rows requires a static or keyset cursor.
 		if (strncmp(ltrim(strtoupper($sql)), 'SELECT', strlen('SELECT')) == 0)
 		{
 			$array = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
-		}
-		else
-		{
-			$array = array();
 		}
 
 		// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
@@ -647,28 +638,27 @@ class SqlsrvDriver extends DatabaseDriver
 						'Database query failed (error #{code}): {message}',
 						array('code' => $this->errorNum, 'message' => $this->errorMsg)
 					);
+
 					throw new \RuntimeException($this->errorMsg, $this->errorNum);
 				}
 
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
-			else
-			// The server was not disconnected.
-			{
-				// Get the error number and message.
-				$errors = sqlsrv_errors();
-				$this->errorNum = $errors[0]['SQLSTATE'];
-				$this->errorMsg = $errors[0]['message'] . 'SQL=' . $sql;
 
-				// Throw the normal query exception.
-				$this->log(
-					Log\LogLevel::ERROR,
-					'Database query failed (error #{code}): {message}',
-					array('code' => $this->errorNum, 'message' => $this->errorMsg)
-				);
-				throw new \RuntimeException($this->errorMsg, $this->errorNum);
-			}
+			// Get the error number and message.
+			$errors = sqlsrv_errors();
+			$this->errorNum = $errors[0]['SQLSTATE'];
+			$this->errorMsg = $errors[0]['message'] . 'SQL=' . $sql;
+
+			// Throw the normal query exception.
+			$this->log(
+				Log\LogLevel::ERROR,
+				'Database query failed (error #{code}): {message}',
+				array('code' => $this->errorNum, 'message' => $this->errorMsg)
+			);
+
+			throw new \RuntimeException($this->errorMsg, $this->errorNum);
 		}
 
 		return $this->cursor;
@@ -1034,7 +1024,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 * @param   string  $backup    Table prefix
 	 * @param   string  $prefix    For the table - used to rename constraints in non-mysql databases
 	 *
-	 * @return  SqlsrvDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -1063,7 +1053,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 *
 	 * @param   string  $tableName  The name of the table to lock.
 	 *
-	 * @return  SqlsrvDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -1076,7 +1066,7 @@ class SqlsrvDriver extends DatabaseDriver
 	/**
 	 * Unlocks tables in the database.
 	 *
-	 * @return  SqlsrvDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
