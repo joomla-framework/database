@@ -20,7 +20,7 @@ abstract class DatabaseOracleCase extends TestDatabase
 	 * @var    array  The database driver options for the connection.
 	 * @since  1.0
 	 */
-	private static $options = array('driver' => 'oracle');
+	private static $options = array('driver' => 'oracle', 'prefix' => 'jos_');
 
 	/**
 	 * This method is called before the first test of this test class is run.
