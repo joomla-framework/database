@@ -20,7 +20,7 @@ abstract class DatabasePostgresqlCase extends TestDatabase
 	 * @var    array  The database driver options for the connection.
 	 * @since  1.0
 	 */
-	private static $options = array('driver' => 'postgresql', 'prefix' => 'jos_');
+	private static $options = array('driver' => 'postgresql');
 
 	/**
 	 * This method is called before the first test of this test class is run.
