@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -22,7 +22,7 @@ abstract class PostgresqlCase extends TestDatabase
 	 * @var    array
 	 * @since  1.0
 	 */
-	private static $options = array('driver' => 'postgresql');
+	private static $options = array('driver' => 'postgresql', 'prefix' => 'jos_');
 
 	/**
 	 * This method is called before the first test of this test class is run.

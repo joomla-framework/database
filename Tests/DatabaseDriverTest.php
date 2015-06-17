@@ -234,6 +234,25 @@ class DatabaseDriverTest extends TestDatabase
 	}
 
 	/**
+	 * Tests the Joomla\Database\DatabaseDriver::replacePrefix method with an empty prefix.
+	 */
+	public function testReplacePrefixWithAnEmptyPrefix()
+	{
+		$instance = \Joomla\Database\DatabaseDriver::getInstance(
+			array(
+				'driver' => 'nosql',
+				'database' => 'europa',
+				'prefix' => '',
+			)
+		);
+
+		$this->assertSame(
+			'SELECT * FROM dbtest',
+			$instance->replacePrefix('SELECT * FROM #__dbtest')
+		);
+	}
+
+	/**
 	 * Tests the Joomla\Database\DatabaseDriver::quote method.
 	 *
 	 * @covers  Joomla\Database\DatabaseDriver::quote
