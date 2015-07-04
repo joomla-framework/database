@@ -354,11 +354,11 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	public function __construct($options)
 	{
 		// Initialise object variables.
-		$this->database = (isset($options['database'])) ? $options['database'] : '';
-
+		$this->database    = (isset($options['database'])) ? $options['database'] : '';
+		$this->debug       = (isset($options['debug'])) ? $options['debug'] : false;
 		$this->tablePrefix = (isset($options['prefix'])) ? $options['prefix'] : '';
-		$this->count = 0;
-		$this->errorNum = 0;
+		$this->count       = 0;
+		$this->errorNum    = 0;
 
 		// Set class options.
 		$this->options = $options;

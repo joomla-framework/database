@@ -32,23 +32,12 @@ class DatabaseProvider implements ServiceProviderInterface
 	{
 		$container->share(
 			'Joomla\\Database\\DatabaseDriver',
-			function () use ($container)
+			function (Container $container)
 			{
-				$config = $container->get('config');
+				$config  = $container->get('config');
+				$options = (array) $config->get('database');
 
-				$options = array(
-					'driver' => $config->get('database.driver'),
-					'host' => $config->get('database.host'),
-					'user' => $config->get('database.user'),
-					'password' => $config->get('database.password'),
-					'database' => $config->get('database.name'),
-					'prefix' => $config->get('database.prefix')
-				);
-
-				$db = DatabaseDriver::getInstance($options);
-				$db->setDebug($config->get('database.debug', false));
-
-				return $db;
+				return DatabaseDriver::getInstance($options);
 			}, true
 		);
 	}
