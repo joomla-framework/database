@@ -237,7 +237,6 @@ abstract class DatabaseImporter
 	 */
 	protected function mergeStructure()
 	{
-		$prefix = $this->db->getPrefix();
 		$tables = $this->db->getTableList();
 
 		if ($this->from instanceof \SimpleXMLElement)
@@ -255,8 +254,7 @@ abstract class DatabaseImporter
 		foreach ($xmlTables as $table)
 		{
 			// Convert the magic prefix into the real table name.
-			$tableName = (string) $table['name'];
-			$tableName = preg_replace('|^#__|', $prefix, $tableName);
+			$tableName = $this->getRealTableName((string) $table['name']);
 
 			if (in_array($tableName, $tables))
 			{
