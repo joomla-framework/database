@@ -235,7 +235,7 @@ abstract class DatabaseImporter
 	 * @since   1.0
 	 * @throws  \RuntimeException on error.
 	 */
-	protected function mergeStructure()
+	public function mergeStructure()
 	{
 		$tables = $this->db->getTableList();
 
