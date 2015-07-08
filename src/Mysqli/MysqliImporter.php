@@ -49,8 +49,8 @@ class MysqliImporter extends DatabaseImporter
 	 *
 	 * @return  string
 	 *
-	 * @since   3.4.4
-	 * @throws  RuntimeException
+	 * @since   __DELPOY_VERSION__
+	 * @throws  \RuntimeException
 	 */
 	protected function xmlToCreate(SimpleXMLElement $table)
 	{
@@ -59,7 +59,7 @@ class MysqliImporter extends DatabaseImporter
 
 		if (in_array($tableName, $existingTables))
 		{
-			throw new RuntimeException('The table you are trying to create already exists');
+			throw new \RuntimeException('The table you are trying to create already exists');
 		}
 
 		$createTableStatement = 'CREATE TABLE ' . $this->db->quoteName($tableName) . ' (';
