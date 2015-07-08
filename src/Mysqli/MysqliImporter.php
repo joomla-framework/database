@@ -68,7 +68,7 @@ class MysqliImporter extends DatabaseImporter
 	 */
 	protected function getAlterTableSQL(\SimpleXMLElement $structure)
 	{
-		$table = $this->getRealTableName($structure['name']);
+		$table = $this->db->replacePrefix($structure['name']);
 		$oldFields = $this->db->getTableColumns($table);
 		$oldKeys = $this->db->getTableKeys($table);
 		$alters = array();

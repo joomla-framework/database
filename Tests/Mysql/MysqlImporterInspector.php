@@ -190,20 +190,6 @@ class MysqlImporterInspector extends MysqlImporter
 	}
 
 	/**
-	 * Exposes the protected getRealTableName method.
-	 *
-	 * @param   string  $table  The name of the table.
-	 *
-	 * @return  string	The real name of the table.
-	 *
-	 * @since   1.0
-	 */
-	public function getRealTableName($table)
-	{
-		return parent::getRealTableName($table);
-	}
-
-	/**
 	 * Exposes the protected mergeStructure method.
 	 *
 	 * @return  void
