@@ -15,7 +15,7 @@ use Joomla\Session\Storage;
  *
  * @see         http://www.php.net/manual/en/function.session-set-save-handler.php
  * @since       1.0
- * @deprecated  The joomla/session package is deprecated
+ * @deprecated  2.0  The Storage class chain will be removed
  */
 class None extends Storage
 {
@@ -25,6 +25,7 @@ class None extends Storage
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0
 	 */
 	public function register()
 	{
