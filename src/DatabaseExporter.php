@@ -104,7 +104,7 @@ abstract class DatabaseExporter
 					break;
 			}
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
 			// Do nothing
 		}
