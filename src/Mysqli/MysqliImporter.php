@@ -76,7 +76,7 @@ class MysqliImporter extends DatabaseImporter
 
 		$createTableStatement = rtrim($createTableStatement, ', ');
 
-		$createTableStatement .= ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+		$createTableStatement .= ') DEFAULT CHARSET=utf8';
 
 		return $createTableStatement;
 	}
