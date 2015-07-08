@@ -94,7 +94,7 @@ abstract class DatabaseExporter
 		{
 			// Check everything is ok to run first.
 			$this->check();
-	
+
 			// Get the format.
 			switch ($this->asFormat)
 			{
