@@ -56,7 +56,7 @@ class MysqliExporter extends DatabaseExporter
 		foreach ($this->from as $table)
 		{
 			// Replace the magic prefix if found.
-			$table = $this->getGenericTableName($table);
+			$table = $this->db->replacePrefix($table);
 
 			// Get the details columns information.
 			$fields = $this->db->getTableColumns($table, false);

@@ -177,25 +177,6 @@ abstract class DatabaseExporter
 	}
 
 	/**
-	 * Get the generic name of the table, converting the database prefix to the wildcard string.
-	 *
-	 * @param   string  $table  The name of the table.
-	 *
-	 * @return  string  The name of the table with the database prefix replaced with #__.
-	 *
-	 * @since   1.0
-	 */
-	protected function getGenericTableName($table)
-	{
-		$prefix = $this->db->getPrefix();
-
-		// Replace the magic prefix if found.
-		$table = preg_replace("|^$prefix|", '#__', $table);
-
-		return $table;
-	}
-
-	/**
 	 * Sets the database connector to use for exporting structure and/or data from MySQL.
 	 *
 	 * @param   DatabaseDriver  $db  The database connector.
