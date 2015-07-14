@@ -589,7 +589,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 		 */
 
 		// If PHP_SELF and REQUEST_URI are both populated then we will assume "Apache Mode".
-		if (!empty($this->input->server->getRaw('PHP_SELF'])) && !empty($this->input->server->getRaw('REQUEST_URI')))
+		if (!empty($this->input->server->getRaw('PHP_SELF')) && !empty($this->input->server->getRaw('REQUEST_URI')))
 		{
 			// The URI is built from the HTTP_HOST and REQUEST_URI environment variables in an Apache environment.
 			$uri = $scheme . $this->input->server->getRaw('HTTP_HOST') . $this->input->server->getRaw('REQUEST_URI');
