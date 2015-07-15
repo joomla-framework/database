@@ -605,14 +605,14 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	{
 		if ($https !== null)
 		{
-			$_SERVER['HTTPS'] = $https;
+			$this->instance->input->server->set('HTTPS', $https);
 		}
 
-		$_SERVER['PHP_SELF'] = $phpSelf;
-		$_SERVER['REQUEST_URI'] = $requestUri;
-		$_SERVER['HTTP_HOST'] = $httpHost;
-		$_SERVER['SCRIPT_NAME'] = $scriptName;
-		$_SERVER['QUERY_STRING'] = $queryString;
+		$this->instance->input->server->set('PHP_SELF', $phpSelf);
+		$this->instance->input->server->set('REQUEST_URI', $requestUri);
+		$this->instance->input->server->set('HTTP_HOST', $httpHost);
+		$this->instance->input->server->set('SCRIPT_NAME', $scriptName);
+		$this->instance->input->server->set('QUERY_STRING', $queryString);
 
 		$this->assertThat(
 			TestHelper::invoke($this->instance, 'detectRequestUri'),
@@ -1301,18 +1301,14 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testIsSSLConnection()
 	{
-		unset($_SERVER['HTTPS']);
-
-		$this->assertThat(
-			$this->instance->isSSLConnection(),
-			$this->equalTo(false)
+		$this->assertFalse(
+			$this->instance->isSSLConnection()
 		);
 
-		$_SERVER['HTTPS'] = 'on';
+		$this->instance->input->server->set('HTTPS', 'on');
 
-		$this->assertThat(
-			$this->instance->isSSLConnection(),
-			$this->equalTo(true)
+		$this->assertTrue(
+			$this->instance->isSSLConnection()
 		);
 	}
 

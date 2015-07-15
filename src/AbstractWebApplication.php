@@ -588,22 +588,26 @@ abstract class AbstractWebApplication extends AbstractApplication
 		 * information from Apache or IIS.
 		 */
 
+		$phpSelf = $this->input->server->getString('PHP_SELF', '');
+		$requestUri = $this->input->server->getString('REQUEST_URI', '');
+
 		// If PHP_SELF and REQUEST_URI are both populated then we will assume "Apache Mode".
-		if (!empty($_SERVER['PHP_SELF']) && !empty($_SERVER['REQUEST_URI']))
+		if (!empty($phpSelf) && !empty($requestUri))
 		{
 			// The URI is built from the HTTP_HOST and REQUEST_URI environment variables in an Apache environment.
-			$uri = $scheme . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+			$uri = $scheme . $this->input->server->getString('HTTP_HOST') . $requestUri;
 		}
 		else
 		// If not in "Apache Mode" we will assume that we are in an IIS environment and proceed.
 		{
 			// IIS uses the SCRIPT_NAME variable instead of a REQUEST_URI variable... thanks, MS
-			$uri = $scheme . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
+			$uri = $scheme . $this->input->server->getString('HTTP_HOST') . $this->input->server->getString('SCRIPT_NAME');
+			$queryHost = $this->input->server->getString('QUERY_STRING', '');
 
 			// If the QUERY_STRING variable exists append it to the URI string.
-			if (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']))
+			if (!empty($queryHost))
 			{
-				$uri .= '?' . $_SERVER['QUERY_STRING'];
+				$uri .= '?' . $queryHost;
 			}
 		}
 
@@ -640,7 +644,9 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 */
 	public function isSSLConnection()
 	{
-		return (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off');
+		$serverSSLVar = $this->input->server->getString('HTTPS', '');
+
+		return (!empty($serverSSLVar) && strtolower($serverSSLVar) != 'off');
 	}
 
 	/**
