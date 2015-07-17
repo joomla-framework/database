@@ -705,16 +705,18 @@ abstract class AbstractWebApplication extends AbstractApplication
 			// Start with the requested URI.
 			$uri = new Uri($this->get('uri.request'));
 
+			$requestUri = $this->input->server->getString('REQUEST_URI', '');
+
 			// If we are working from a CGI SAPI with the 'cgi.fix_pathinfo' directive disabled we use PHP_SELF.
-			if (strpos(php_sapi_name(), 'cgi') !== false && !ini_get('cgi.fix_pathinfo') && !empty($_SERVER['REQUEST_URI']))
+			if (strpos(php_sapi_name(), 'cgi') !== false && !ini_get('cgi.fix_pathinfo') && !empty($requestUri))
 			{
 				// We aren't expecting PATH_INFO within PHP_SELF so this should work.
-				$path = dirname($_SERVER['PHP_SELF']);
+				$path = dirname($this->input->server->getString('PHP_SELF', ''));
 			}
 			else
 			// Pretty much everything else should be handled with SCRIPT_NAME.
 			{
-				$path = dirname($_SERVER['SCRIPT_NAME']);
+				$path = dirname($this->input->server->getString('SCRIPT_NAME', ''));
 			}
 		}
 
