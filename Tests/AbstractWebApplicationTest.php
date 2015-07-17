@@ -15,13 +15,6 @@ use Joomla\Test\TestHelper;
 class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * Enable or disable the backup and restoration of the $GLOBALS array.
-	 *
-	 * @var  boolean
-	 */
-	protected $backupGlobals = true;
-
-	/**
 	 * Value for test host.
 	 *
 	 * @var  string
@@ -576,8 +569,6 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRedirect()
 	{
-		$_SERVER['SCRIPT_NAME'] = '/index.php';
-
 		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
 		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(), '', true, true, true, false, true);
 		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(), '', true, true, true, false, true);
@@ -659,8 +650,6 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRedirectWithAdditionalHeaders()
 	{
-		$_SERVER['SCRIPT_NAME'] = '/index.php';
-
 		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
 		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(), '', true, true, true, false, true);
 		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(), '', true, true, true, false, true);
@@ -748,8 +737,6 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRedirectWithHeadersSent()
 	{
-		$_SERVER['SCRIPT_NAME'] = '/index.php';
-
 		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
 		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(), '', true, true, true, false, true);
 
@@ -1307,8 +1294,6 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testLoadSystemUrisWithoutSiteUriSet()
 	{
-		$_SERVER['SCRIPT_NAME'] = '/index.php';
-
 		$mockInput = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
 
 		// Mock the Input object internals
@@ -1372,8 +1357,6 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testLoadSystemUrisWithoutSiteUriWithMediaUriSet()
 	{
-		$_SERVER['SCRIPT_NAME'] = '/index.php';
-
 		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
 		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(array('media_uri' => 'http://cdn.joomla.org/media/')), '', true, true, true, false, true);
 
@@ -1438,8 +1421,6 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testLoadSystemUrisWithoutSiteUriWithRelativeMediaUriSet()
 	{
-		$_SERVER['SCRIPT_NAME'] = '/index.php';
-
 		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
 		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(array('media_uri' => '/media/')), '', true, true, true, false, true);
 
