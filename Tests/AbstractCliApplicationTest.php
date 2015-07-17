@@ -6,111 +6,73 @@
 
 namespace Joomla\Application\Tests;
 
-use Joomla\Application\AbstractCliApplication;
-use Joomla\Registry\Registry;
-use Joomla\Test\TestConfig;
-use Joomla\Test\TestHelper;
-
-include_once __DIR__ . '/Stubs/ConcreteCli.php';
-
 /**
  * Test class for Joomla\Application\AbstractCliApplication.
- *
- * @since  1.0
  */
 class AbstractCliApplicationTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * An instance of the object to test.
-	 *
-	 * @var   AbstractCliApplication
-	 * @since  1.0
-	 */
-	protected $instance;
-
-	/**
-	 * Tests the __construct method.
-	 *
-	 * @return  void
+	 * @testdox  Tests the constructor creates default object instances
 	 *
 	 * @covers  Joomla\Application\AbstractCliApplication::__construct
-	 * @since   1.0
 	 */
-	public function test__construct()
+	public function test__constructDefaultBehaviour()
 	{
-		// @TODO Test that configuration data loaded.
+		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractCliApplication');
 
-		$this->assertGreaterThan(2001, $this->instance->get('execution.datetime'), 'Tests execution.datetime was set.');
-		$this->assertGreaterThan(1, $this->instance->get('execution.timestamp'), 'Tests execution.timestamp was set.');
+		// Validate default objects are created
+		$this->assertAttributeInstanceOf('Joomla\Input\Cli', 'input', $object);
+		$this->assertAttributeInstanceOf('Joomla\Registry\Registry', 'config', $object);
+		$this->assertAttributeInstanceOf('Joomla\Application\Cli\Output\Stdout', 'output', $object);
 
-		// Test dependancy injection.
+		// Validate default configuration data is written
+		$executionDateTime = new \DateTime($object->get('execution.datetime'));
 
-		$mockInput = $this->getMock('Joomla\Input\Cli', array('test'), array(), '', false);
-		$mockInput
-			->expects($this->any())
-			->method('test')
-			->will(
-			$this->returnValue('ok')
-		);
-
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('test'), array(null), '', true);
-
-		$instance = new ConcreteCli($mockInput, $mockConfig);
-
-		$input = TestHelper::getValue($instance, 'input');
-		$this->assertEquals('ok', $input->test());
+		$this->assertSame(date('Y'), $executionDateTime->format('Y'));
 	}
 
 	/**
-	 * Tests the close method.
+	 * @testdox  Tests the correct objects are stored when injected
 	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\Application\AbstractCliApplication::close
-	 * @since   1.0
+	 * @covers  Joomla\Application\AbstractCliApplication::__construct
 	 */
-	public function testClose()
+	public function test__constructDependencyInjection()
 	{
-		// Make sure the application is not already closed.
-		$this->assertSame(
-			$this->instance->closed,
-			null,
-			'Checks the application doesn\'t start closed.'
-		);
+		$mockInput  = $this->getMock('Joomla\Input\Cli');
+		$mockConfig = $this->getMock('Joomla\Registry\Registry');
+		$mockOutput = $this->getMock('Joomla\Application\Cli\Output\Stdout');
+		$object     = $this->getMockForAbstractClass('Joomla\Application\AbstractCliApplication', array($mockInput, $mockConfig, $mockOutput));
 
-		$this->instance->close(3);
-
-		// Make sure the application is closed with code 3.
-		$this->assertSame(
-			$this->instance->closed,
-			3,
-			'Checks the application was closed with exit code 3.'
-		);
+		$this->assertAttributeSame($mockInput, 'input', $object);
+		$this->assertAttributeSame($mockConfig, 'config', $object);
+		$this->assertAttributeSame($mockOutput, 'output', $object);
 	}
 
 	/**
-	 * Setup for testing.
+	 * @testdox  Tests that a default CliOutput object is returned.
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function setUp()
-	{
-		// Get a new ConcreteCli instance.
-		$this->instance = new ConcreteCli;
-	}
-
-	/**
-	 * Test the getOutput() method.
-	 *
-	 * @return void
+	 * @covers  Joomla\Application\AbstractCliApplication::getOutput
 	 */
 	public function testGetOutput()
 	{
-		$this->assertInstanceOf(
-			'Joomla\Application\Cli\Output\Stdout',
-			$this->instance->getOutput()
-		);
+		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractCliApplication');
+
+		$this->assertInstanceOf('Joomla\Application\Cli\Output\Stdout', $object->getOutput());
+	}
+
+	/**
+	 * @testdox  Tests that the application sends output successfully.
+	 *
+	 * @covers  Joomla\Application\AbstractCliApplication::out
+	 */
+	public function testOut()
+	{
+		$mockOutput = $this->getMock('Joomla\Application\Cli\Output\Stdout', array('out'));
+		$mockOutput->expects($this->once())
+			->method('out');
+
+		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractCliApplication', array(null, null, $mockOutput));
+
+		$this->assertSame($object, $object->out('Testing'));
 	}
 }

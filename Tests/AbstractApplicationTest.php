@@ -6,220 +6,144 @@
 
 namespace Joomla\Application\Tests;
 
-use Joomla\Application\AbstractApplication;
-use Joomla\Test\TestHelper;
-use Joomla\Registry\Registry;
-
-require_once __DIR__ . '/Stubs/ConcreteBase.php';
-
 /**
  * Test class for Joomla\Application\AbstractApplication.
- *
- * @since  1.0
  */
 class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * An instance of the object to test.
-	 *
-	 * @var    AbstractApplication
-	 * @since  1.0
-	 */
-	protected $instance;
-
-	/**
-	 * Tests the __construct method.
-	 *
-	 * @return  void
+	 * @testdox  Tests the constructor creates default object instances
 	 *
 	 * @covers  Joomla\Application\AbstractApplication::__construct
-	 * @since   1.0
 	 */
-	public function test__construct()
+	public function test__constructDefaultBehaviour()
 	{
-		$this->assertInstanceOf(
-			'Joomla\\Input\\Input',
-			$this->instance->input,
-			'Input property wrong type'
-		);
+		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication');
 
-		$this->assertInstanceOf(
-			'Joomla\Registry\Registry',
-			TestHelper::getValue($this->instance, 'config'),
-			'Config property wrong type'
-		);
-
-		// Test dependancy injection.
-
-		$mockInput = $this->getMock('Joomla\Input\Input', array('test'), array(), '', false);
-		$mockInput
-			->expects($this->any())
-			->method('test')
-			->will(
-			$this->returnValue('ok')
-		);
-
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('test'), array(null), '', true);
-		$mockConfig
-			->expects($this->any())
-			->method('test')
-			->will(
-			$this->returnValue('ok')
-		);
-
-		$instance = new ConcreteBase($mockInput, $mockConfig);
-
-		$input = TestHelper::getValue($instance, 'input');
-		$this->assertEquals('ok', $input->test());
-
-		$config = TestHelper::getValue($instance, 'config');
-		$this->assertEquals('ok', $config->test());
+		$this->assertAttributeInstanceOf('Joomla\Input\Input', 'input', $object);
+		$this->assertAttributeInstanceOf('Joomla\Registry\Registry', 'config', $object);
 	}
 
 	/**
-	 * Test the close method.
+	 * @testdox  Tests the correct objects are stored when injected
 	 *
-	 * @return  void
+	 * @covers  Joomla\Application\AbstractApplication::__construct
+	 */
+	public function test__constructDependencyInjection()
+	{
+		$mockInput  = $this->getMock('Joomla\Input\Input');
+		$mockConfig = $this->getMock('Joomla\Registry\Registry');
+		$object     = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication', array($mockInput, $mockConfig));
+
+		$this->assertAttributeSame($mockInput, 'input', $object);
+		$this->assertAttributeSame($mockConfig, 'config', $object);
+	}
+
+	/**
+	 * @testdox  Tests that close() exits the application with the given code
 	 *
 	 * @covers  Joomla\Application\AbstractApplication::close
-	 * @since   1.0
 	 */
 	public function testClose()
 	{
-		// Make sure the application is not already closed.
-		$this->assertSame(
-			$this->instance->closed,
-			null,
-			'Checks the application doesn\'t start closed.'
-		);
+		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication', array(), '', false, true, true, array('close'));
+		$object->expects($this->any())
+			->method('close')
+			->willReturnArgument(0);
 
-		$this->instance->close(3);
-
-		// Make sure the application is closed with code 3.
-		$this->assertSame(
-			$this->instance->closed,
-			3,
-			'Checks the application was closed with exit code 3.'
-		);
+		$this->assertSame(3, $object->close(3));
 	}
 
 	/**
-	 * Test the execute method
-	 *
-	 * @return  void
+	 * @testdox  Tests that the application is executed successfully.
 	 *
 	 * @covers  Joomla\Application\AbstractApplication::execute
-	 * @since   1.0
 	 */
 	public function testExecute()
 	{
-		$this->instance->doExecute = false;
+		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication');
+		$object->expects($this->once())
+			->method('doExecute');
 
-		$this->instance->execute();
-
-		$this->assertTrue($this->instance->doExecute);
+		// execute() has no return, with our mock nothing should happen but ensuring that the mock's doExecute() stub is triggered
+		$this->assertNull($object->execute());
 	}
 
 	/**
-	 * Tests the get method.
-	 *
-	 * @return  void
+	 * @testdox  Tests that data is read from the application configuration successfully.
 	 *
 	 * @covers  Joomla\Application\AbstractApplication::get
-	 * @since   1.0
 	 */
 	public function testGet()
 	{
-		$mockInput = $this->getMock('Joomla\Input\Input', array('test'), array(), '', false);
-		$config = new Registry(array('foo' => 'bar'));
+		$mockInput  = $this->getMock('Joomla\Input\Input');
+		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get'), array(array('foo' => 'bar')), '', true, true, true, false, true);
+		$object     = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication', array($mockInput, $mockConfig));
 
-		$instance = new ConcreteBase($mockInput, $config);
-
-		$this->assertEquals('bar', $instance->get('foo', 'car'), 'Checks a known configuration setting is returned.');
-		$this->assertEquals('car', $instance->get('goo', 'car'), 'Checks an unknown configuration setting returns the default.');
+		$this->assertSame('bar', $object->get('foo', 'car'), 'Checks a known configuration setting is returned.');
+		$this->assertSame('car', $object->get('goo', 'car'), 'Checks an unknown configuration setting returns the default.');
 	}
 
 	/**
-	 * Tests the Joomla\Application\AbstractApplication::getLogger for a NullLogger.
+	 * @testdox  Tests that a default LoggerInterface object is returned.
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @covers  Joomla\Application\AbstractApplication::getLogger
 	 */
-	public function testGetNullLogger()
+	public function testGetLogger()
 	{
-		$logger = $this->instance->getLogger();
+		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication');
 
-		$this->assertInstanceOf(
-			'Psr\\Log\\NullLogger',
-			$logger,
-			'When a logger has not been set, an instance of NullLogger should be returned.'
-		);
+		$this->assertInstanceOf('Psr\\Log\\NullLogger', $object->getLogger());
 	}
 
 	/**
-	 * Tests the set method.
-	 *
-	 * @return  void
+	 * @testdox  Tests that data is set to the application configuration successfully.
 	 *
 	 * @covers  Joomla\Application\AbstractApplication::set
-	 * @since   1.0
+	 * @uses    Joomla\Application\AbstractApplication::get
 	 */
 	public function testSet()
 	{
-		$mockInput = $this->getMock('Joomla\Input\Input', array('test'), array(), '', false);
-		$config = new Registry(array('foo' => 'bar'));
+		$mockInput  = $this->getMock('Joomla\Input\Input');
+		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(array('foo' => 'bar')), '', true, true, true, false, true);
+		$object     = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication', array($mockInput, $mockConfig));
 
-		$instance = new ConcreteBase($mockInput, $config);
-
-		$this->assertEquals('bar', $instance->set('foo', 'car'), 'Checks set returns the previous value.');
-
-		$this->assertEquals('car', $instance->get('foo'), 'Checks the new value has been set.');
+		$this->assertEquals('bar', $object->set('foo', 'car'), 'Checks set returns the previous value.');
+		$this->assertEquals('car', $object->get('foo'), 'Checks the new value has been set.');
 	}
 
 	/**
-	 * Tests the set method.
-	 *
-	 * @return  void
+	 * @testdox  Tests that the application configuration is overwritten successfully.
 	 *
 	 * @covers  Joomla\Application\AbstractApplication::setConfiguration
-	 * @since   1.0
 	 */
 	public function testSetConfiguration()
 	{
-		$config = new Registry(array('foo' => 'bar'));
+		$object     = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication');
+		$mockConfig = $this->getMock('Joomla\Registry\Registry');
 
-		$this->assertSame($this->instance, $this->instance->setConfiguration($config), 'Checks chainging.');
-		$this->assertEquals('bar', $this->instance->get('foo'), 'Checks the configuration was set.');
+		// First validate the two objects are different
+		$this->assertAttributeNotSame($mockConfig, 'config', $object);
+
+		// Now inject the config
+		$object->setConfiguration($mockConfig);
+
+		// Now the config objects should match
+		$this->assertAttributeSame($mockConfig, 'config', $object);
 	}
 
 	/**
-	 * Tests the Joomla\Application\AbstractApplication::setLogger and getLogger methods.
-	 *
-	 * @return  void
+	 * @testdox  Tests that a LoggerInterface object is correctly set to the application.
 	 *
 	 * @covers  Joomla\Application\AbstractApplication::setLogger
-	 * @covers  Joomla\Application\AbstractApplication::getLogger
-	 * @since   1.0
 	 */
 	public function testSetLogger()
 	{
-		$mockLogger = $this->getMock('Psr\Log\AbstractLogger', array('log'), array(), '', false);
+		$object     = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication');
+		$mockLogger = $this->getMockForAbstractClass('Psr\Log\AbstractLogger');
 
-		$this->assertSame($this->instance, $this->instance->setLogger($mockLogger), 'Checks chainging.');
-		$this->assertSame($mockLogger, $this->instance->getLogger(), 'Checks the get method.');
-	}
+		$object->setLogger($mockLogger);
 
-	/**
-	 * Setup for testing.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	protected function setUp()
-	{
-		// Create the class object to be tested.
-		$this->instance = new ConcreteBase;
+		$this->assertAttributeSame($mockLogger, 'logger', $object);
 	}
 }

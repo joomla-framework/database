@@ -221,7 +221,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 		$this->setHeader('Content-Type', $this->mimeType . '; charset=' . $this->charSet);
 
 		// If the response is set to uncachable, we need to set some appropriate headers so browsers don't cache the response.
-		if (!$this->response->cachable)
+		if (!$this->allowCache())
 		{
 			// Expires in the past.
 			$this->setHeader('Expires', 'Mon, 1 Jan 2001 00:00:00 GMT', true);
