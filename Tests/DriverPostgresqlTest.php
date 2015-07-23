@@ -875,13 +875,13 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	}
 
 	/**
-	 * Test setUTF function
+	 * Test setUtf function
 	 *
 	 * @return   void
 	 */
-	public function testSetUTF()
+	public function testSetUtf()
 	{
-		$this->assertThat(self::$driver->setUTF(), $this->equalTo(0), __LINE__);
+		$this->assertThat(self::$driver->setUtf(), $this->equalTo(0), __LINE__);
 	}
 
 	/**
