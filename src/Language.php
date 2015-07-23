@@ -1093,7 +1093,7 @@ class Language
 	 *
 	 * @since   1.0
 	 */
-	public function isRTL()
+	public function isRtl()
 	{
 		return (bool) $this->metadata['rtl'];
 	}
@@ -1216,7 +1216,7 @@ class Language
 
 		if (is_file("$path/$file"))
 		{
-			$result = self::parseXMLLanguageFile("$path/$file");
+			$result = self::parseXmlLanguageFile("$path/$file");
 		}
 
 		if (empty($result))
@@ -1364,7 +1364,7 @@ class Language
 
 			try
 			{
-				$metadata = self::parseXMLLanguageFile($file->getRealPath());
+				$metadata = self::parseXmlLanguageFile($file->getRealPath());
 
 				if ($metadata)
 				{
@@ -1392,7 +1392,7 @@ class Language
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public static function parseXMLLanguageFile($path)
+	public static function parseXmlLanguageFile($path)
 	{
 		if (!is_readable($path))
 		{
