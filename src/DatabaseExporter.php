@@ -85,20 +85,28 @@ abstract class DatabaseExporter
 	 * @return  string
 	 *
 	 * @since   1.0
-	 * @throws  \Exception if an error is encountered.
 	 */
 	public function __toString()
 	{
-		// Check everything is ok to run first.
-		$this->check();
+		$buffer = '';
 
-		// Get the format.
-		switch ($this->asFormat)
+		try
 		{
-			case 'xml':
-			default:
-				$buffer = $this->buildXml();
-				break;
+			// Check everything is ok to run first.
+			$this->check();
+
+			// Get the format.
+			switch ($this->asFormat)
+			{
+				case 'xml':
+				default:
+					$buffer = $this->buildXml();
+					break;
+			}
+		}
+		catch (\Exception $e)
+		{
+			// Do nothing
 		}
 
 		return $buffer;
