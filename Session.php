@@ -886,7 +886,7 @@ class Session implements \IteratorAggregate
 		}
 
 		// Sync the session maxlifetime
-		ini_set('session.gc_maxlifetime', $this->expire);
+		ini_set('session.gc_maxlifetime', $this->getExpire());
 
 		return true;
 	}
@@ -921,10 +921,10 @@ class Session implements \IteratorAggregate
 		}
 
 		// Check if session has expired
-		if ($this->expire)
+		if ($this->getExpire())
 		{
 			$curTime = $this->get('session.timer.now', 0);
-			$maxTime = $this->get('session.timer.last', 0) + $this->expire;
+			$maxTime = $this->get('session.timer.last', 0) + $this->getExpire();
 
 			// Empty session variables
 			if ($maxTime < $curTime)
