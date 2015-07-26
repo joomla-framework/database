@@ -6,171 +6,150 @@
 
 namespace Joomla\Controller\Tests;
 
-use Joomla\Application\Tests\Mocker as ApplicationMocker;
 use Joomla\Input\Input;
-use Joomla\Input\Cookie as InputCookie;
-use Joomla\Test\TestHelper;
-
-require_once __DIR__ . '/Stubs/BaseController.php';
 
 /**
  * Tests for the Joomla\Controller\AbstractController class.
- *
- * @since  1.0
  */
-class BaseTest extends \PHPUnit_Framework_TestCase
+class AbstractControllerTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var    \Joomla\Controller\AbstractController
-	 * @since  1.0
+	 * Object being tested
+	 *
+	 * @var  \Joomla\Controller\AbstractController
 	 */
 	private $instance;
 
 	/**
-	 * Tests the __construct method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\Controller\AbstractController::__construct
-	 * @covers  Joomla\Controller\AbstractController::getInput
-	 * @covers  Joomla\Controller\AbstractController::getApplication
-	 * @since   1.0
+	 * {@inheritdoc}
 	 */
-	public function test__construct()
+	protected function setUp()
 	{
-		$app = TestHelper::getValue($this->instance, 'app');
+		parent::setUp();
 
-		// New controller with no dependancies.
-		$this->assertAttributeEmpty('input', $this->instance);
-		$this->assertAttributeEmpty('app', $this->instance);
-
-		// New controller with dependancies
-		$appMocker = new ApplicationMocker($this);
-		$mockApp = $appMocker->createMockBase();
-		$mockInput = $this->getMock('Joomla\Input\Input');
-
-		$instance = new BaseController($mockInput, $mockApp);
-		$this->assertSame($mockInput, $instance->getInput());
-		$this->assertSame($mockApp, $instance->getApplication());
+		$this->instance = $this->getMockForAbstractClass('Joomla\Controller\AbstractController');
 	}
 
 	/**
-	 * Tests the getApplication method for a known exception
+	 * @testdox  Tests the controller is instantiated correctly
 	 *
-	 * @return  void
-	 *
-	 * @covers             Joomla\Controller\AbstractController::getApplication
-	 * @expectedException  \UnexpectedValueException
-	 * @since              1.0
+	 * @covers  Joomla\Controller\AbstractController::__construct
 	 */
-	public function testGetApplication_exception()
+	public function test__constructDefaultBehaviour()
+	{
+		$object = $this->getMockForAbstractClass('Joomla\Controller\AbstractController');
+
+		// Both class attributes should be null
+		$this->assertAttributeNotInstanceOf('Joomla\Application\AbstractApplication', 'app', $object);
+		$this->assertAttributeNotInstanceOf('Joomla\Input\Input', 'input', $object);
+	}
+
+	/**
+	 * @testdox  Tests the controller is instantiated correctly
+	 *
+	 * @covers  Joomla\Controller\AbstractController::__construct
+	 */
+	public function test__constructDependencyInjection()
+	{
+		$mockInput = $this->getMock('Joomla\Input\Input');
+		$mockApp   = $this->getMock('Joomla\Application\AbstractApplication');
+		$object    = $this->getMockForAbstractClass('Joomla\Controller\AbstractController', array($mockInput, $mockApp));
+
+		$this->assertAttributeSame($mockInput, 'input', $object);
+		$this->assertAttributeSame($mockApp, 'app', $object);
+	}
+
+	/**
+	 * @testdox  Tests the controller throws an UnexpectedValueException if the application is not registered
+	 *
+	 * @covers  Joomla\Controller\AbstractController::getApplication
+	 * @expectedException  \UnexpectedValueException
+	 */
+	public function testGetApplicationThrowsAnException()
 	{
 		$this->instance->getApplication();
 	}
 
 	/**
-	 * Tests the getInput method for a known exception
+	 * @testdox  Tests the controller throws an UnexpectedValueException if the input object is not registered
 	 *
-	 * @return  void
-	 *
-	 * @covers             Joomla\Controller\AbstractController::getInput
+	 * @covers  Joomla\Controller\AbstractController::getInput
 	 * @expectedException  \UnexpectedValueException
-	 * @since              1.0
 	 */
-	public function testGetInput_exception()
+	public function testGetInputThrowsAnException()
 	{
 		$this->instance->getInput();
 	}
 
 	/**
-	 * Tests the serialize method.
-	 *
-	 * @return  void
+	 * @testdox  Tests the controller is serialized correctly
 	 *
 	 * @covers  Joomla\Controller\AbstractController::serialize
-	 * @since   1.0
+	 * @uses    Joomla\Controller\AbstractController::setInput
 	 */
-	public function testSerialise()
+	public function testSerialize()
 	{
-		$this->instance->setInput(new InputCookie);
+		$mockInput = $this->getMock('Joomla\Input\Input', array(), array(), '', false, true, true, false, true);
 
-		$this->assertContains('C:19:"Joomla\Input\Cookie"', $this->instance->serialize());
+		$this->instance->setInput($mockInput);
+
+		$this->assertContains('C:19:"Mock_Input_', $this->instance->serialize());
 	}
 
 	/**
-	 * Tests the unserialize method.
-	 *
-	 * @return  void
+	 * @testdox  Tests the controller is unserialized correctly
 	 *
 	 * @covers  Joomla\Controller\AbstractController::unserialize
-	 * @since   1.0
+	 * @uses    Joomla\Controller\AbstractController::getInput
 	 */
-	public function testUnserialise()
+	public function testUnserialize()
 	{
-		$input = serialize(new Input);
+		// Use a real Input object for this test
+		$input = new Input;
 
-		$this->assertSame($this->instance, $this->instance->unserialize($input), 'Checks chaining and target method.');
-		$this->assertInstanceOf('\Joomla\Input\Input', $this->instance->getInput());
+		$serialized = serialize($input);
+
+		$this->assertSame($this->instance, $this->instance->unserialize($serialized), 'Checks chaining and target method.');
+
+		$this->assertInstanceOf('Joomla\Input\Input', $this->instance->getInput());
 	}
 
 	/**
-	 * Tests the unserialize method for an expected exception.
-	 *
-	 * @return  void
+	 * @testdox  Tests the controller throws an UnexpectedValueException when the serialized string is not an Input object
 	 *
 	 * @covers  Joomla\Controller\AbstractController::unserialize
-	 * @since   1.0
-	 *
 	 * @expectedException  UnexpectedValueException
 	 */
-	public function testUnserialise_exception()
+	public function testUnserializeThrowsAnException()
 	{
 		$this->instance->unserialize('s:7:"default";');
 	}
 
 	/**
-	 * Tests the setApplication method.
+	 * @testdox  Tests an application object is injected into the controller and retrieved correctly
 	 *
-	 * @return  void
-	 *
+	 * @covers  Joomla\Controller\AbstractController::getApplication
 	 * @covers  Joomla\Controller\AbstractController::setApplication
-	 * @since   1.0
 	 */
-	public function testSetApplication()
+	public function testSetAndGetApplication()
 	{
-		$appMocker = new ApplicationMocker($this);
-		$mockApp = $appMocker->createMockBase();
+		$mockApp = $this->getMock('Joomla\Application\AbstractApplication');
 
 		$this->instance->setApplication($mockApp);
 		$this->assertSame($mockApp, $this->instance->getApplication());
 	}
 
 	/**
-	 * Tests the setInput method.
+	 * @testdox  Tests an input object is injected into the controller and retrieved correctly
 	 *
-	 * @return  void
-	 *
+	 * @covers  Joomla\Controller\AbstractController::getInput
 	 * @covers  Joomla\Controller\AbstractController::setInput
-	 * @since   1.0
 	 */
-	public function testSetInput()
+	public function testSetAndGetInput()
 	{
-		$input = new InputCookie;
-		$this->instance->setInput($input);
-		$this->assertSame($input, $this->instance->getInput());
-	}
+		$mockInput = $this->getMock('Joomla\Input\Input');
 
-	/**
-	 * Setup the tests.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	protected function setUp()
-	{
-		parent::setUp();
-
-		$this->instance = new BaseController;
+		$this->instance->setInput($mockInput);
+		$this->assertSame($mockInput, $this->instance->getInput());
 	}
 }
