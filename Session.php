@@ -153,7 +153,7 @@ class Session implements \IteratorAggregate
 
 		$this->_setCookieParams();
 
-		$this->state = 'inactive';
+		$this->setState('inactive');
 	}
 
 	/**
@@ -266,7 +266,7 @@ class Session implements \IteratorAggregate
 		{
 			if ($forceExpire)
 			{
-				$this->state = 'expired';
+				$this->setState('expired');
 			}
 
 			return false;
@@ -548,7 +548,7 @@ class Session implements \IteratorAggregate
 
 		$this->_start();
 
-		$this->state = 'active';
+		$this->setState('active');
 
 		// Initialise the session
 		$this->_setCounter();
@@ -647,7 +647,7 @@ class Session implements \IteratorAggregate
 		session_unset();
 		session_destroy();
 
-		$this->state = 'destroyed';
+		$this->setState('destroyed');
 
 		return true;
 	}
@@ -673,12 +673,12 @@ class Session implements \IteratorAggregate
 		// Re-register the session handler after a session has been destroyed, to avoid PHP bug
 		$this->store->register();
 
-		$this->state = 'restart';
+		$this->setState('restart');
 
 		// Regenerate session id
 		session_regenerate_id(true);
 		$this->_start();
-		$this->state = 'active';
+		$this->setState('active');
 
 		$this->_validate();
 		$this->_setCounter();
@@ -739,6 +739,38 @@ class Session implements \IteratorAggregate
 	public function close()
 	{
 		session_write_close();
+	}
+
+	/**
+	 * Set the session expiration
+	 *
+	 * @param   integer  $expire  Maximum age of unused session in minutes
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function setExpire($expire)
+	{
+		$this->expire = $expire;
+
+		return $this;
+	}
+
+	/**
+	 * Set the session state
+	 *
+	 * @param   string  $state  Internal state
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function setState($state)
+	{
+		$this->state = $state;
+
+		return $this;
 	}
 
 	/**
@@ -861,7 +893,7 @@ class Session implements \IteratorAggregate
 		// Set expire time
 		if (isset($options['expire']))
 		{
-			$this->expire = $options['expire'];
+			$this->setExpire($options['expire']);
 		}
 
 		// Get security options
@@ -912,7 +944,7 @@ class Session implements \IteratorAggregate
 		// Allow to restart a session
 		if ($restart)
 		{
-			$this->state = 'active';
+			$this->setState('active');
 
 			$this->set('session.client.address', null);
 			$this->set('session.client.forwarded', null);
@@ -929,7 +961,7 @@ class Session implements \IteratorAggregate
 			// Empty session variables
 			if ($maxTime < $curTime)
 			{
-				$this->state = 'expired';
+				$this->setState('expired');
 
 				return false;
 			}
@@ -952,7 +984,7 @@ class Session implements \IteratorAggregate
 			}
 			elseif ($_SERVER['REMOTE_ADDR'] !== $ip)
 			{
-				$this->state = 'error';
+				$this->setState('error');
 
 				return false;
 			}
