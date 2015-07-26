@@ -757,7 +757,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	protected function setExpire($expire)
 	{
@@ -773,7 +773,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	protected function setState($state)
 	{
@@ -854,7 +854,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @return  boolean  True on success
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	protected function setCounter()
 	{
@@ -884,7 +884,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @return  boolean  True on success
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	protected function setTimers()
 	{
@@ -925,7 +925,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @return  boolean  True on success
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	protected function setOptions(array $options)
 	{
@@ -1010,7 +1010,7 @@ class Session implements \IteratorAggregate
 	 * @return  boolean  True on success
 	 *
 	 * @see     http://shiflett.org/articles/the-truth-about-sessions
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	protected function validate($restart = false)
 	{
