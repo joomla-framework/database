@@ -296,7 +296,7 @@ class Session implements \IteratorAggregate
 	 */
 	public function getName()
 	{
-		if ($this->state === 'destroyed')
+		if ($this->getState() === 'destroyed')
 		{
 			// @TODO : raise error
 			return null;
@@ -314,7 +314,7 @@ class Session implements \IteratorAggregate
 	 */
 	public function getId()
 	{
-		if ($this->state === 'destroyed')
+		if ($this->getState() === 'destroyed')
 		{
 			return null;
 		}
@@ -375,7 +375,7 @@ class Session implements \IteratorAggregate
 	 */
 	public function isActive()
 	{
-		return (bool) ($this->state == 'active');
+		return (bool) ($this->getState() == 'active');
 	}
 
 	/**
@@ -424,7 +424,7 @@ class Session implements \IteratorAggregate
 		// Add prefix to namespace to avoid collisions
 		$namespace = '__' . $namespace;
 
-		if ($this->state !== 'active' && $this->state !== 'expired')
+		if ($this->getState() !== 'active' && $this->getState() !== 'expired')
 		{
 			// @TODO :: generated error here
 			$error = null;
@@ -456,7 +456,7 @@ class Session implements \IteratorAggregate
 		// Add prefix to namespace to avoid collisions
 		$namespace = '__' . $namespace;
 
-		if ($this->state !== 'active')
+		if ($this->getState() !== 'active')
 		{
 			// @TODO :: generated error here
 			return null;
@@ -491,7 +491,7 @@ class Session implements \IteratorAggregate
 		// Add prefix to namespace to avoid collisions.
 		$namespace = '__' . $namespace;
 
-		if ($this->state !== 'active')
+		if ($this->getState() !== 'active')
 		{
 			// @TODO :: generated error here
 			return null;
@@ -515,7 +515,7 @@ class Session implements \IteratorAggregate
 		// Add prefix to namespace to avoid collisions
 		$namespace = '__' . $namespace;
 
-		if ($this->state !== 'active')
+		if ($this->getState() !== 'active')
 		{
 			// @TODO :: generated error here
 			return null;
@@ -541,7 +541,7 @@ class Session implements \IteratorAggregate
 	 */
 	public function start()
 	{
-		if ($this->state === 'active')
+		if ($this->getState() === 'active')
 		{
 			return;
 		}
@@ -575,7 +575,7 @@ class Session implements \IteratorAggregate
 	protected function _start()
 	{
 		// Start session if not started
-		if ($this->state === 'restart')
+		if ($this->getState() === 'restart')
 		{
 			session_regenerate_id(true);
 		}
@@ -583,7 +583,7 @@ class Session implements \IteratorAggregate
 		{
 			$session_name = session_name();
 
-			// Get the JInputCookie object
+			// Get the Joomla\Input\Cookie object
 			$cookie = $this->input->cookie;
 
 			if (is_null($cookie->get($session_name)))
@@ -629,7 +629,7 @@ class Session implements \IteratorAggregate
 	public function destroy()
 	{
 		// Session was already destroyed
-		if ($this->state === 'destroyed')
+		if ($this->getState() === 'destroyed')
 		{
 			return true;
 		}
@@ -664,7 +664,7 @@ class Session implements \IteratorAggregate
 	{
 		$this->destroy();
 
-		if ($this->state !== 'destroyed')
+		if ($this->getState() !== 'destroyed')
 		{
 			// @TODO :: generated error here
 			return false;
@@ -695,7 +695,7 @@ class Session implements \IteratorAggregate
 	 */
 	public function fork()
 	{
-		if ($this->state !== 'active')
+		if ($this->getState() !== 'active')
 		{
 			// @TODO :: generated error here
 			return false;
