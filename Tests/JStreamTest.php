@@ -18,6 +18,10 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 */
 	protected $object;
 
+	private $fileName = "FILE_NAME";
+	private $writePrefix = "WRITE_PREFIX";
+	private $readPrefix = "READ_PREFIX";
+
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
@@ -28,7 +32,7 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
-		$this->object = new Stream;
+		$this->object = new Stream($this->writePrefix, $this->readPrefix);
 	}
 
 	/**
@@ -423,17 +427,62 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test...
-	 *
-	 * @todo Implement test_getFilename().
+	 * Test _getFilename method.
 	 *
 	 * @return void
 	 */
-	public function test_getFilename()
+	public function test_getFilenameBaseCase()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
+		$this->assertEquals(
+			$this->fileName,
+			$this->object->_getFilename($this->fileName, "w", false, true),
+			'Line:' . __LINE__ . ' _getFilename should return unmodified filename when use_prefix is false.'
+		);
+	}
+
+	/**
+	 * Test _getFilename method.
+	 *
+	 * @return void
+	 */
+	public function test_getFilenameUseOfReadAndWritePrefix()
+	{
+		$this->assertEquals(
+			$this->writePrefix . $this->fileName,
+			$this->object->_getFilename($this->fileName, "w", true, true),
+			'Line:' . __LINE__ . ' _getFilename should add write prefix if present.'
+		);
+
+		$this->assertEquals(
+			$this->readPrefix . $this->fileName,
+			$this->object->_getFilename($this->fileName, "r", true, true),
+			'Line:' . __LINE__ . ' _getFilename should add read prefix if present.'
+		);
+	}
+
+	/**
+	 * Test _getFilename method.
+	 *
+	 * @return void
+	 */
+	public function test_getFilenameReplaceJPATH_ROOTWithAbsoluteFilename()
+	{
+		$this->assertEquals(
+			$this->writePrefix . $this->fileName,
+			$this->object->_getFilename($this->fileName, "w", true, false),
+			'Line:' . __LINE__ . ' _getFilename should replace JPATH_ROOT and add write prefix if present.'
+		);
+
+		$this->assertEquals(
+			$this->readPrefix . '/Tests/' . $this->fileName,
+			$this->object->_getFilename(__DIR__ . '/' . $this->fileName, "r", true, false),
+			'Line:' . __LINE__ . ' _getFilename should replace JPATH_ROOT and add read prefix if present.'
+		);
+
+		$this->assertEquals(
+			$this->writePrefix . '/Tests/' . __DIR__ . '/' . $this->fileName,
+			$this->object->_getFilename(__DIR__ . '/' . __DIR__ . '/' . $this->fileName, "w", true, false),
+			'Line:' . __LINE__ . ' _getFilename should replace JPATH_ROOT from start only.'
 		);
 	}
 
