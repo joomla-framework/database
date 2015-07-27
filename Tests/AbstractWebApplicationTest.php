@@ -1134,7 +1134,7 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 			self::$headers,
 			array(
 				array('foo: bar', true, null),
-				array('Status: 200', null, 200)
+				array('HTTP/1.1 200', null, 200)
 			)
 		);
 	}
