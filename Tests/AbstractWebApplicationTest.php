@@ -1507,17 +1507,17 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @testdox  Tests the application correctly detects if a SSL connection is active
 	 *
-	 * @covers  Joomla\Application\AbstractWebApplication::isSSLConnection
+	 * @covers  Joomla\Application\AbstractWebApplication::isSslConnection
 	 */
-	public function testIsSSLConnection()
+	public function testisSslConnection()
 	{
 		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractWebApplication');
 
-		$this->assertFalse($object->isSSLConnection());
+		$this->assertFalse($object->isSslConnection());
 
 		$object->input->server->set('HTTPS', 'on');
 
-		$this->assertTrue($object->isSSLConnection());
+		$this->assertTrue($object->isSslConnection());
 	}
 
 	/**
