@@ -93,6 +93,8 @@ class Authentication
 	 */
 	public function authenticate($strategies = array())
 	{
+		$strategyObjects = array();
+
 		if (empty($strategies))
 		{
 			$strategyObjects = $this->strategies;
@@ -111,6 +113,11 @@ class Authentication
 
 				$strategyObjects[$strategy] = $this->strategies[$strategy];
 			}
+		}
+
+		if (empty($strategyObjects))
+		{
+			throw new \RuntimeException('No strategies have been set');
 		}
 
 		foreach ($strategyObjects as $strategy => $strategyObject)
