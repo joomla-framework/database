@@ -93,6 +93,8 @@ class Authentication
 	 */
 	public function authenticate($strategies = array())
 	{
+		$strategyObjects = array();
+
 		if (empty($strategies))
 		{
 			$strategyObjects = $this->strategies;
@@ -112,6 +114,11 @@ class Authentication
 					throw new \RuntimeException('Authentication Strategy Not Found');
 				}
 			}
+		}
+
+		if (empty($strategyObjects))
+		{
+			throw new \RuntimeException('No strategies have been set');
 		}
 
 		foreach ($strategyObjects AS $strategy => $strategyObject)
