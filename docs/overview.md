@@ -72,7 +72,7 @@ and obtained via a ```Joomla\Input\Input``` object.  The database details can be
 use Joomla\Database\DatabaseDriver;
 
 $options = array(
-	'table'           => '#__users', // Name of the database table the user data is stored in
+	'database_table'  => '#__users', // Name of the database table the user data is stored in
 	'username_column' => 'username', // Name of the column in the database containing usernames
 	'password_column' => 'password', // Name of the column in the database containing passwords
 )
