@@ -78,7 +78,7 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 *
 	 * @return  string|boolean  Hashed password on success or boolean false on failure.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.0
 	 */
 	protected function getHashedPassword($username)
 	{

@@ -16,7 +16,7 @@ use Joomla\Input\Input;
 /**
  * Joomla Framework Database Strategy Authentication class
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.1.0
  */
 class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 {
@@ -24,7 +24,7 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 * DatabaseDriver object
 	 *
 	 * @var    DatabaseDriver
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.1.0
 	 */
 	private $db;
 
@@ -32,7 +32,7 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 * Database connection options
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.1.0
 	 */
 	private $dbOptions;
 
@@ -40,7 +40,7 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 * The Input object
 	 *
 	 * @var    Input
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.1.0
 	 */
 	private $input;
 
@@ -51,7 +51,7 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 * @param   DatabaseDriver  $database  DatabaseDriver for retrieving user credentials.
 	 * @param   array           $options   Optional options array for configuring the credential storage connection.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.0
 	 */
 	public function __construct(Input $input, DatabaseDriver $database, array $options = array())
 	{
@@ -70,7 +70,7 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 *
 	 * @return  string|boolean  A string containing a username if authentication is successful, false otherwise.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.0
 	 */
 	public function authenticate()
 	{
@@ -94,7 +94,7 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 *
 	 * @return  string|boolean  Hashed password on success or boolean false on failure.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.0
 	 */
 	protected function getHashedPassword($username)
 	{

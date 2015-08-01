@@ -11,7 +11,7 @@ namespace Joomla\Authentication;
 /**
  * Abstract AuthenticationStrategy for username/password based authentication
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.1.0
  */
 abstract class AbstractUsernamePasswordAuthenticationStrategy implements AuthenticationStrategyInterface
 {
@@ -19,7 +19,7 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
 	 * The last authentication status.
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.1.0
 	 */
 	protected $status;
 
@@ -31,7 +31,7 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
 	 *
 	 * @return  string|boolean  A string containing a username if authentication is successful, false otherwise.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.0
 	 */
 	protected function doAuthenticate($username, $password)
 	{
@@ -63,7 +63,7 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
 	 *
 	 * @return  string|boolean  Hashed password on success or boolean false on failure.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.0
 	 */
 	abstract protected function getHashedPassword($username);
 
@@ -72,7 +72,7 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
 	 *
 	 * @return  integer  Authentication class constant result.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.0
 	 */
 	public function getResult()
 	{
@@ -88,7 +88,7 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.1.0
 	 */
 	protected function verifyPassword($username, $password, $hashedPassword)
 	{
