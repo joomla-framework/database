@@ -1,11 +1,11 @@
 # Using the Authentication Package
 
 The authentication package provides a decoupled authentication system for providing authentication in your 
-application.  Authentication strategies are swappable.  Currently only a simple local strategy is supported.
+application.  Authentication strategies are swappable.
 
 Authentication would generally be performed in your application by doing the following:
 
-```
+```php
 $credentialStore = array(
 	'user1' => '$2y$12$QjSH496pcT5CEbzjD/vtVeH03tfHKFy36d4J0Ltp3lRtee9HDxY3K',
 	'user2' => '$2y$12$QjSH496pcT5CEbzjD/vtVeH03tfHKFy36d4J0Ltp3lsdgnasdfasd'
@@ -38,15 +38,14 @@ Attempts authentication.  Uses all strategies if the array is empty, or a subset
 
 Gets a hashed array of strategies and authentication results.
 
-```
+```php
 $authentication->getResults();
 
-/** Might return:
- array(
- 	'local' => Authentication::SUCCESS,
- 	'strategy2' => Authentication::MISSING_CREDENTIALS
- )
-**/
+// Might return
+array(
+	'local' => Authentication::SUCCESS,
+	'strategy2' => Authentication::MISSING_CREDENTIALS
+)
 ```
 
 
@@ -54,13 +53,33 @@ $authentication->getResults();
 
 Provides authentication support for local credentials obtained from a ```Joomla\Input\Input``` object.
 
-```
+```php
 $credentialStore = array(
 	'jimbob' => 'agdj4345235',		// username and password hash
 	'joe' => 'sdgjrly435235'		// username and password hash
 )
 
 $strategy = new Authentication\Strategies\LocalStrategy($input, $credentialStore);
+```
+
+
+## class `Authentication\Stragies\DatabaseStrategy`
+
+Provides authentication support for user credentials stored in a ```Joomla\Database\DatabaseDriver``` object
+and obtained via a ```Joomla\Input\Input``` object.  The database details can be configured via an options array:
+
+```php
+use Joomla\Database\DatabaseDriver;
+
+$options = array(
+	'database_table'  => '#__users', // Name of the database table the user data is stored in
+	'username_column' => 'username', // Name of the column in the database containing usernames
+	'password_column' => 'password', // Name of the column in the database containing passwords
+)
+
+$database = DatabaseDriver::getInstance();
+
+$strategy = new Authentication\Strategies\Database($input, $database, $options);
 ```
 
 

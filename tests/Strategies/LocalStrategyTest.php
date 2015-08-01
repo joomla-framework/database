@@ -4,25 +4,19 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Authentication\Tests;
+namespace Joomla\Authentication\Tests\Strategies;
 
 use Joomla\Authentication\Strategies\LocalStrategy;
 use Joomla\Authentication\Authentication;
 use Joomla\Input\Input;
 
 /**
- * Test class for Authentication
- *
- * @since  1.0
+ * Test class for Joomla\Authentication\Strategies\LocalStrategy
  */
 class LocalStrategyTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	protected function setUp()
 	{
@@ -31,16 +25,12 @@ class LocalStrategyTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * Tests the authenticate method with valid credentials.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testValidPassword()
 	{
 		$this->input->expects($this->any())
 			->method('get')
-			->will($this->returnArgument(0));
+			->willReturnArgument(0);
 
 		$credentialStore = array(
 			'username' => '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJG'
@@ -55,16 +45,12 @@ class LocalStrategyTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * Tests the authenticate method with invalid credentials.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testInvalidPassword()
 	{
 		$this->input->expects($this->any())
 			->method('get')
-			->will($this->returnArgument(0));
+			->willReturnArgument(0);
 
 		$credentialStore = array(
 			'username' => '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH'
@@ -79,16 +65,12 @@ class LocalStrategyTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * Tests the authenticate method with no credentials provided.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testNoPassword()
 	{
 		$this->input->expects($this->any())
 			->method('get')
-			->will($this->returnValue(false));
+			->willReturn(false);
 
 		$credentialStore = array(
 			'username' => '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH'
@@ -103,16 +85,12 @@ class LocalStrategyTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * Tests the authenticate method with credentials for an unknown user.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testUserNotExist()
 	{
 		$this->input->expects($this->any())
 			->method('get')
-			->will($this->returnArgument(0));
+			->willReturnArgument(0);
 
 		$credentialStore = array(
 			'jimbob' => '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH'
