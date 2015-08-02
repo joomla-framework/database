@@ -18,7 +18,7 @@ class Factory
 	/**
 	 * Format instances container - for backward compatibility with AbstractRegistryFormat::getInstance().
 	 *
-	 * @var    array
+	 * @var    FormatInterface[]
 	 * @since  __DEPLOY_VERSION__
 	 * @deprecated  2.0  Object caching will no longer be supported
 	 */
@@ -30,7 +30,7 @@ class Factory
 	 * @param   string  $type     The format to load
 	 * @param   array   $options  Additional options to configure the object
 	 *
-	 * @return  AbstractRegistryFormat  Registry format handler
+	 * @return  FormatInterface  Registry format handler
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \InvalidArgumentException

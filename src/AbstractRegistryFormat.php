@@ -17,7 +17,7 @@ namespace Joomla\Registry;
 abstract class AbstractRegistryFormat implements FormatInterface
 {
 	/**
-	 * @var    array  Format instances container.
+	 * @var    AbstractRegistryFormat[]  Format instances container.
 	 * @since  1.0
 	 * @deprecated  2.0  Object caching will no longer be supported
 	 */
