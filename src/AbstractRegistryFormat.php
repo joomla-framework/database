@@ -38,6 +38,6 @@ abstract class AbstractRegistryFormat implements FormatInterface
 	 */
 	public static function getInstance($type, array $options = array())
 	{
-		return Factory::getFormat($type);
+		return Factory::getFormat($type, $options);
 	}
 }
