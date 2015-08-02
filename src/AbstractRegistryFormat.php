@@ -11,7 +11,7 @@ namespace Joomla\Registry;
 /**
  * Abstract Format for Registry
  *
- * @since  1.0
+ * @since       1.0
  * @deprecated  2.0  Format objects should directly implement the FormatInterface
  */
 abstract class AbstractRegistryFormat implements FormatInterface
