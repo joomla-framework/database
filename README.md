@@ -292,6 +292,13 @@ $registry = new Registry(array(
 $registry->loadString('<data><value name="foo" type="string">bar</value></data>, 'xml');
 ```
 
+## Custom Formats
+To load your own custom format you must implement the `Joomla\Registry\FormatInterface`. This can then be loaded through the `Joomla\Registry\Factory` class. To load a custom format not provided by Joomla then you can load it by using
+
+`Factory::getFormat($type, $options)`
+
+In this scenario `$type` contains the format (and class) name. Whilst `$options` is an array with the key `format_namespace` which contains the namespace that the format is in. 
+
 ## Installation via Composer
 
 Add `"joomla/registry": "~1.0"` to the require block in your composer.json and then run `composer install`.
