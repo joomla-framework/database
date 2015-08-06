@@ -58,8 +58,8 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 */
 	public function authenticate()
 	{
-		$username = $this->input->get('username', false);
-		$password = $this->input->get('password', false);
+		$username = $this->input->get('username', false, 'username');
+		$password = $this->input->get('password', false, 'raw');
 
 		if (!$username || !$password)
 		{
