@@ -26,10 +26,7 @@ class Releases extends AbstractPackage
 	 * @param   string   $repo             The name of the GitHub repository.
 	 * @param   string   $tagName          The name of the tag.
 	 * @param   string   $targetCommitish  The commitish value that determines where the Git tag is created from.
-	 * @param   string   $name             The branch (or git ref) you want your changes pulled into. This
-	 *                                     should be an existing branch on the current repository. You cannot
-	 *                                     submit a pull request to one repo that requests a merge to a base
-	 *                                     of another repo.
+	 * @param   string   $name             The name of the release.
 	 * @param   string   $body             Text describing the contents of the tag.
 	 * @param   boolean  $draft            True to create a draft (unpublished) release, false to create a published one.
 	 * @param   boolean  $preRelease       True to identify the release as a prerelease. false to identify the release as a full release.
