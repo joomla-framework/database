@@ -127,7 +127,7 @@ class Releases extends AbstractPackage
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.
-	 * @param   string  $ref   The reference to get.
+	 * @param   string  $ref   Valid values are: 'latest', to get latest release. 'tag/2.0.24' for geting Release by tag. Or Release Id, for example: '1643513'
 	 *
 	 * @return  object
 	 *
