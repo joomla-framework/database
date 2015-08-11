@@ -65,7 +65,6 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 *
 	 * @var    Session
 	 * @since  1.0
-	 * @deprecated  2.0  The joomla/session package will no longer be required by this class
 	 */
 	private $session;
 
@@ -521,7 +520,6 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 * @return  Session  The session object
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  The joomla/session package will no longer be required by this class
 	 */
 	public function getSession()
 	{
@@ -657,7 +655,6 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 * @return  AbstractWebApplication  Returns itself to support chaining.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  The joomla/session package will no longer be required by this class
 	 */
 	public function setSession(Session $session)
 	{
@@ -780,7 +777,6 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 * @return  boolean  True if found and valid, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	public function checkToken($method = 'post')
 	{
@@ -813,7 +809,6 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 * @return  string  Hashed var name
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	public function getFormToken($forceNew = false)
 	{
