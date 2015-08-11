@@ -820,8 +820,23 @@ class Session implements \IteratorAggregate
 	 * @return  string  Generated token
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use createToken instead
 	 */
 	protected function _createToken($length = 32)
+	{
+		return $this->createToken($length);
+	}
+
+	/**
+	 * Create a token-string
+	 *
+	 * @param   integer  $length  Length of string
+	 *
+	 * @return  string  Generated token
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function createToken($length = 32)
 	{
 		static $chars = '0123456789abcdef';
 		$max = strlen($chars) - 1;
