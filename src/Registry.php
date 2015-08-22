@@ -30,6 +30,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 *
 	 * @var    array
 	 * @since  1.0
+	 * @deprecated  2.0  Object caching will no longer be supported
 	 */
 	protected static $instances = array();
 
@@ -251,6 +252,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 *
 	 * @return  Registry  The Registry object.
 	 *
+	 * @deprecated  2.0  Instantiate a new Registry instance instead
 	 * @since   1.0
 	 */
 	public static function getInstance($id)
