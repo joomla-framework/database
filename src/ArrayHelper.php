@@ -201,26 +201,38 @@ final class ArrayHelper
 	/**
 	 * Extracts a column from an array of arrays or objects
 	 *
-	 * @param   array   $array  The source array
-	 * @param   string  $index  The index of the column or name of object property
+	 * @param   array   $array     The source array
+	 * @param   string  $valueCol  The index of the column or name of object property to be used as value
+	 * @param   string  $keyCol    The index of the column or name of object property to be used as key
 	 *
 	 * @return  array  Column of values from the source array
 	 *
 	 * @since   1.0
+	 * @see     http://php.net/manual/en/language.types.array.php
 	 */
-	public static function getColumn(array $array, $index)
+	public static function getColumn(array $array, $valueCol, $keyCol = null)
 	{
 		$result = array();
 
 		foreach ($array as $item)
 		{
-			if (is_array($item) && isset($item[$index]))
+			// Convert object to array
+			$subject = is_object($item) ? static::fromObject($item) : $item;
+
+			// We process array (and object already converted to array) only.
+			// Only if the value column exists in this item
+			if (is_array($subject) && isset($subject[$valueCol]))
 			{
-				$result[] = $item[$index];
-			}
-			elseif (is_object($item) && isset($item->$index))
-			{
-				$result[] = $item->$index;
+				// Array keys can only be integer or string. Casting will occur as per the PHP Manual.
+				if (isset($keyCol) && isset($subject[$keyCol]) && is_scalar($subject[$keyCol]))
+				{
+					$key          = $subject[$keyCol];
+					$result[$key] = $subject[$valueCol];
+				}
+				else
+				{
+					$result[] = $subject[$valueCol];
+				}
 			}
 		}
 

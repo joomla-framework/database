@@ -249,10 +249,30 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 				)
 				),
 				2,
+				null,
 				array(
 					3, 8, 13, 18
 				),
 				'Should get column #2'
+			),
+			'generic array with key' => array(
+				array(
+					array(
+						1, 2, 3, 4, 5
+					), array(
+					6, 7, 8, 9, 10
+				), array(
+					11, 12, 13, 14, 15
+				), array(
+					16, 17, 18, 19, 20
+				)
+				),
+				2,
+				0,
+				array(
+					1 => 3, 6 => 8, 11 => 13, 16 => 18
+				),
+				'Should get column #2 with column #0 as keys'
 			),
 			'associative array' => array(
 				array(
@@ -270,10 +290,33 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 					)
 				),
 				'four',
+				null,
 				array(
 					4, 9, 14, 19
 				),
 				'Should get column \'four\''
+			),
+			'associative array with key' => array(
+				array(
+					array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				'four',
+				'one',
+				array(
+					1 => 4, 6 => 9, 11 => 14, 16 => 19
+				),
+				'Should get column \'four\' with keys from column \'one\''
 			),
 			'object array' => array(
 				array(
@@ -291,10 +334,99 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 					)
 				),
 				'four',
+				null,
 				array(
 					4, 9, 14, 19
 				),
 				'Should get column \'four\''
+			),
+			'object array with key' => array(
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					(object) array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				'four',
+				'one',
+				array(
+					1 => 4, 6 => 9, 11 => 14, 16 => 19
+				),
+				'Should get column \'four\' with keys from column \'one\''
+			),
+			'object array with invalid key' => array(
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					(object) array(
+						'one' => array('array is invalid for key'), 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				'four',
+				'one',
+				array(
+					1 => 4, 9, 11 => 14, 16 => 19
+				),
+				'Should get column \'four\' with keys from column \'one\' and invalid key should introduce an automatic index'
+			),
+			'object array with one missing key' => array(
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					(object) array(
+						'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				'four',
+				'one',
+				array(
+					1 => 4, 9, 11 => 14, 16 => 19
+				),
+				'Should get column \'four\' with keys from column \'one\' and the missing key should introduce an automatic index'
+			),
+			'object array with one missing value' => array(
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					(object) array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'five' => 10
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				'four',
+				'one',
+				array(
+					1 => 4, 11 => 14, 16 => 19
+				),
+				'Should get column \'four\' with keys from column \'one\' and item with missing value should be skipped'
 			),
 		);
 	}
@@ -1409,10 +1541,11 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test pulling data from a single column (by index or association).
 	 *
-	 * @param   array   $input    Input array
-	 * @param   mixed   $index    Column to pull, either by association or number
-	 * @param   array   $expect   The expected results
-	 * @param   string  $message  The failure message
+	 * @param   array   $input     Input array
+	 * @param   string  $valueCol  The index of the column or name of object property to be used as value
+	 * @param   string  $keyCol    The index of the column or name of object property to be used as key
+	 * @param   array   $expect    The expected results
+	 * @param   string  $message   The failure message
 	 *
 	 * @return  void
 	 *
@@ -1420,9 +1553,9 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 	 * @covers        Joomla\Utilities\ArrayHelper::getColumn
 	 * @since         1.0
 	 */
-	public function testGetColumn($input, $index, $expect, $message)
+	public function testGetColumn($input, $valueCol, $keyCol, $expect, $message)
 	{
-		$this->assertEquals($expect, ArrayHelper::getColumn($input, $index), $message);
+		$this->assertEquals($expect, ArrayHelper::getColumn($input, $valueCol, $keyCol), $message);
 	}
 
 	/**
