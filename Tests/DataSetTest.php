@@ -63,20 +63,6 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the Joomla\Data\DataSet::__construct method with scalar input.
-	 *
-	 * @return  void
-	 *
-	 * @covers             Joomla\Data\DataSet::__construct
-	 * @expectedException  \PHPUnit_Framework_Error
-	 * @since           1.0
-	 */
-	public function test__construct_scalar()
-	{
-		new Data\DataSet('foo');
-	}
-
-	/**
 	 * Tests the Joomla\Data\DataSet::__call method.
 	 *
 	 * @return  void
