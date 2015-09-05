@@ -994,32 +994,6 @@ class ImporterPostgresqlTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since  1.0
 	 */
-	public function testSetDboWithBadInput()
-	{
-		$instance	= new ImporterPostgresqlInspector;
-
-		try
-		{
-			$instance->setDbo(new \stdClass);
-		}
-		catch (\PHPUnit_Framework_Error $e)
-		{
-			// Expecting the error, so just ignore it.
-			return;
-		}
-
-		$this->fail(
-			'setDbo requires a JDatabaseDriverPostgresql object and should throw an exception.'
-		);
-	}
-
-	/**
-	 * Tests the setDbo method with the wrong type of class.
-	 *
-	 * @return void
-	 *
-	 * @since  1.0
-	 */
 	public function testSetDboWithGoodInput()
 	{
 		$instance = new ImporterPostgresqlInspector;
