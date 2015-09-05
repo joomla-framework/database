@@ -16,7 +16,7 @@ use Joomla\Filesystem\Support\StringController;
  * This class allows you to use a PHP string in the same way that
  * you would normally use a regular stream wrapper
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.3.0
  */
 class StringWrapper
 {
@@ -24,7 +24,7 @@ class StringWrapper
 	 * The current string
 	 *
 	 * @var   string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	protected $currentString;
 
@@ -32,7 +32,7 @@ class StringWrapper
 	 * The path
 	 *
 	 * @var   string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	protected $path;
 
@@ -40,7 +40,7 @@ class StringWrapper
 	 * The mode
 	 *
 	 * @var   string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	protected $mode;
 
@@ -48,7 +48,7 @@ class StringWrapper
 	 * Enter description here ...
 	 *
 	 * @var   string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	protected $options;
 
@@ -56,7 +56,7 @@ class StringWrapper
 	 * Enter description here ...
 	 *
 	 * @var   string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	protected $openedPath;
 
@@ -64,7 +64,7 @@ class StringWrapper
 	 * Current position
 	 *
 	 * @var   integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	protected $pos;
 
@@ -72,7 +72,7 @@ class StringWrapper
 	 * Length of the string
 	 *
 	 * @var   string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	protected $len;
 
@@ -80,7 +80,7 @@ class StringWrapper
 	 * Statistics for a file
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 * @see    http://us.php.net/manual/en/function.stat.php
 	 */
 	protected $stat;
@@ -95,7 +95,7 @@ class StringWrapper
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function stream_open($path, $mode, $options, &$opened_path)
 	{
@@ -119,7 +119,7 @@ class StringWrapper
 	 * @return  array
 	 *
 	 * @see     http://www.php.net/manual/en/streamwrapper.stream-stat.php
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function stream_stat()
 	{
@@ -135,7 +135,7 @@ class StringWrapper
 	 * @return  array
 	 *
 	 * @see     http://php.net/manual/en/streamwrapper.url-stat.php
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function url_stat($path, $flags = 0)
 	{
@@ -169,7 +169,7 @@ class StringWrapper
 	 * @return  string
 	 *
 	 * @see     http://www.php.net/manual/en/streamwrapper.stream-read.php
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function stream_read($count)
 	{
@@ -186,7 +186,7 @@ class StringWrapper
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 * @note    Updating the string is not supported.
 	 */
 	public function stream_write($data)
@@ -200,7 +200,7 @@ class StringWrapper
 	 *
 	 * @return  integer  The position
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function stream_tell()
 	{
@@ -212,7 +212,7 @@ class StringWrapper
 	 *
 	 * @return  boolean  True if at end of field.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function stream_eof()
 	{
@@ -232,7 +232,7 @@ class StringWrapper
 	 *
 	 * @return  boolean  True on success.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function stream_seek($offset, $whence)
 	{
@@ -271,7 +271,7 @@ class StringWrapper
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 * @note    Data storage is not supported
 	 */
 	public function stream_flush()
