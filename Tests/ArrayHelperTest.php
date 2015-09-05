@@ -223,6 +223,23 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 				),
 				true
 			),
+			'Array with nested arrays and object.' => array(
+				array(
+					'foo' => $common,
+					'bar' => (object) array(
+						'goo' => $common,
+					),
+				),
+				null,
+				null,
+				array(
+					'foo' => $common,
+					'bar' => array(
+						'goo' => $common,
+					),
+				),
+				true
+			),
 		);
 	}
 
