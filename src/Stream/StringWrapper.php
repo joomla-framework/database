@@ -281,4 +281,8 @@ class StringWrapper
 	}
 }
 
-stream_wrapper_register('string', '\\Joomla\\Filesystem\\Stream\\StringWrapper') or die('\\Joomla\\Filesystem\\Stream\\StringWrapper Wrapper Registration Failed');
+if (!stream_wrapper_register('string', '\\Joomla\\Filesystem\\Stream\\StringWrapper'))
+{
+	die('\\Joomla\\Filesystem\\Stream\\StringWrapper Wrapper Registration Failed');
+}
+
