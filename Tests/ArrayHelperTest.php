@@ -1541,11 +1541,11 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Test pulling data from a single column (by index or association).
 	 *
-	 * @param   array   $input      Input array
-	 * @param   string  $value_col  The index of the column or name of object property to be used as value
-	 * @param   string  $key_col    The index of the column or name of object property to be used as key
-	 * @param   array   $expect     The expected results
-	 * @param   string  $message    The failure message
+	 * @param   array   $input     Input array
+	 * @param   string  $valueCol  The index of the column or name of object property to be used as value
+	 * @param   string  $keyCol    The index of the column or name of object property to be used as key
+	 * @param   array   $expect    The expected results
+	 * @param   string  $message   The failure message
 	 *
 	 * @return  void
 	 *
@@ -1553,9 +1553,9 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 	 * @covers        Joomla\Utilities\ArrayHelper::getColumn
 	 * @since         1.0
 	 */
-	public function testGetColumn($input, $value_col, $key_col, $expect, $message)
+	public function testGetColumn($input, $valueCol, $keyCol, $expect, $message)
 	{
-		$this->assertEquals($expect, ArrayHelper::getColumn($input, $value_col, $key_col), $message);
+		$this->assertEquals($expect, ArrayHelper::getColumn($input, $valueCol, $keyCol), $message);
 	}
 
 	/**
