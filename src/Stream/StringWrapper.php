@@ -285,4 +285,3 @@ if (!stream_wrapper_register('string', '\\Joomla\\Filesystem\\Stream\\StringWrap
 {
 	die('\\Joomla\\Filesystem\\Stream\\StringWrapper Wrapper Registration Failed');
 }
-
