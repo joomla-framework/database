@@ -13,7 +13,7 @@ use Joomla\Http\Response;
 /**
  * Exception representing an unexpected response
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.2.0
  */
 class UnexpectedResponseException extends \DomainException
 {
@@ -21,7 +21,7 @@ class UnexpectedResponseException extends \DomainException
 	 * The Response object.
 	 *
 	 * @var    Response
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.2.0
 	 */
 	private $response;
 
@@ -33,7 +33,7 @@ class UnexpectedResponseException extends \DomainException
 	 * @param   integer     $code      The Exception code.
 	 * @param   \Exception  $previous  The previous exception used for the exception chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function __construct(Response $response, $message = '', $code = 0, \Exception $previous = null)
 	{
@@ -47,7 +47,7 @@ class UnexpectedResponseException extends \DomainException
 	 *
 	 * @return  Response
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function getResponse()
 	{

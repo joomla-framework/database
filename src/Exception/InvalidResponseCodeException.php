@@ -11,7 +11,7 @@ namespace Joomla\Http\Exception;
 /**
  * Exception representing an invalid or undefined HTTP response code
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.2.0
  */
 class InvalidResponseCodeException extends \UnexpectedValueException
 {
