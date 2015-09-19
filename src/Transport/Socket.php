@@ -8,6 +8,7 @@
 
 namespace Joomla\Http\Transport;
 
+use Joomla\Http\Exception\InvalidResponseCodeException;
 use Joomla\Http\TransportInterface;
 use Joomla\Http\Response;
 use Joomla\Uri\UriInterface;
@@ -191,6 +192,7 @@ class Socket implements TransportInterface
 	 *
 	 * @since   1.0
 	 * @throws  \UnexpectedValueException
+	 * @throws  InvalidResponseCodeException
 	 */
 	protected function getResponse($content)
 	{
@@ -222,7 +224,7 @@ class Socket implements TransportInterface
 		else
 		// No valid response code was detected.
 		{
-			throw new \UnexpectedValueException('No HTTP response code found.');
+			throw new InvalidResponseCodeException('No HTTP response code found.');
 		}
 
 		// Add the response headers to the response object.
