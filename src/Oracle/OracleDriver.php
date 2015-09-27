@@ -94,11 +94,6 @@ class OracleDriver extends PdoDriver
 	 */
 	public function connect()
 	{
-		if ($this->connection)
-		{
-			return;
-		}
-
 		parent::connect();
 
 		if (isset($this->options['schema']))
