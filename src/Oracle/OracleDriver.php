@@ -94,7 +94,7 @@ class OracleDriver extends PdoDriver
 	 */
 	public function connect()
 	{
-		if ($this->connection)
+		if ($this->getConnection())
 		{
 			return;
 		}
@@ -457,7 +457,7 @@ class OracleDriver extends PdoDriver
 	 *
 	 * @since   1.0
 	 */
-	public function setUTF()
+	public function setUtf()
 	{
 		return false;
 	}

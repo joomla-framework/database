@@ -177,7 +177,9 @@ class MysqliDriver extends DatabaseDriver
 		// Attempt to connect to the server.
 		if (!$this->connection)
 		{
-			throw new \RuntimeException('Could not connect to MySQL.');
+			$this->log(Log\LogLevel::ERROR, 'Could not connect to MySQL: ' . mysqli_connect_error());
+
+			throw new \RuntimeException('Could not connect to MySQL.', mysqli_connect_errno());
 		}
 
 		// Set sql_mode to non_strict mode
@@ -190,7 +192,7 @@ class MysqliDriver extends DatabaseDriver
 		}
 
 		// Set charactersets (needed for MySQL 4.1.2+).
-		$this->setUTF();
+		$this->setUtf();
 	}
 
 	/**
@@ -640,7 +642,7 @@ class MysqliDriver extends DatabaseDriver
 	 *
 	 * @since   1.0
 	 */
-	public function setUTF()
+	public function setUtf()
 	{
 		$this->connect();
 
