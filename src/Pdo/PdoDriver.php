@@ -115,7 +115,7 @@ abstract class PdoDriver extends DatabaseDriver
 		}
 
 		// Make sure the PDO extension for PHP is installed and enabled.
-		if (!self::isSupported())
+		if (!static::isSupported())
 		{
 			throw new \RuntimeException('PDO Extension is not available.', 1);
 		}
@@ -298,7 +298,11 @@ abstract class PdoDriver extends DatabaseDriver
 		}
 		catch (\PDOException $e)
 		{
-			throw new \RuntimeException('Could not connect to PDO' . ': ' . $e->getMessage(), 2, $e);
+			$message = 'Could not connect to PDO: ' . $e->getMessage();
+
+			$this->log(Log\LogLevel::ERROR, $message);
+
+			throw new \RuntimeException($message, $e->getCode(), $e);
 		}
 	}
 
