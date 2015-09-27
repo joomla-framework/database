@@ -177,7 +177,7 @@ class MysqliDriver extends DatabaseDriver
 		// Attempt to connect to the server.
 		if (!$this->connection)
 		{
-			$this->log('error', 'Could not connect to MySQL: ' . mysqli_connect_error());
+			$this->log(Log\LogLevel::ERROR, 'Could not connect to MySQL: ' . mysqli_connect_error());
 
 			throw new \RuntimeException('Could not connect to MySQL.', mysqli_connect_errno());
 		}

@@ -132,7 +132,7 @@ class SqlsrvDriver extends DatabaseDriver
 		// Attempt to connect to the server.
 		if (!($this->connection = @ sqlsrv_connect($this->options['host'], $config)))
 		{
-			$this->log('error', 'Could not connect to SQL Server', array('errors' => sqlsrv_errors()));
+			$this->log(Log\LogLevel::ERROR, 'Could not connect to SQL Server', array('errors' => sqlsrv_errors()));
 
 			throw new \RuntimeException('Could not connect to SQL Server');
 		}

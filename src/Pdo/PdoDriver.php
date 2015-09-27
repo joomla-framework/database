@@ -300,7 +300,7 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			$message = 'Could not connect to PDO: ' . $e->getMessage();
 
-			$this->log('error', $message);
+			$this->log(Log\LogLevel::ERROR, $message);
 
 			throw new \RuntimeException($message, $e->getCode(), $e);
 		}
