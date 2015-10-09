@@ -235,7 +235,7 @@ $app->setHeader('status', '401 Auhtorization required', true);
 
 Will result in response containing header
 ```
-Status Code: 401 Auhtorization required
+Status Code: 401 Authorization required
 ```
 
 ## Command Line Applications
