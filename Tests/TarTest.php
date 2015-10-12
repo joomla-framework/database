@@ -7,148 +7,60 @@
 namespace Joomla\Archive\Tests;
 
 use Joomla\Archive\Tar as ArchiveTar;
-use Joomla\Test\TestHelper;
 
 /**
  * Test class for Joomla\Archive\Tar.
- *
- * @since  1.0
  */
-class TarTest extends \PHPUnit_Framework_TestCase
+class TarTest extends ArchiveTestCase
 {
 	/**
-	 * Output directory
+	 * @testdox  The tar adapter is instantiated correctly
 	 *
-	 * @var    string
-	 * @since  1.0
-	 */
-	protected static $outputPath;
-
-	/**
-	 * Input directory
-	 *
-	 * @var    string
-	 * @since  1.1.3
-	 */
-	protected static $inputPath;
-
-	/**
-	 * Object under test
-	 *
-	 * @var    ArchiveTar
-	 * @since  1.0
-	 */
-	protected $object;
-
-	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	protected function setUp()
-	{
-		parent::setUp();
-
-		self::$inputPath = __DIR__ . '/testdata';
-		self::$outputPath = __DIR__ . '/output';
-
-		if (!is_dir(self::$outputPath))
-		{
-			mkdir(self::$outputPath, 0777);
-		}
-
-		$this->object = new ArchiveTar;
-	}
-
-	/**
-	 * Tear down the fixture.
-	 *
-	 * This method is called after a test is executed.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.1.3
-	 */
-	protected function tearDown()
-	{
-		if (is_dir(self::$outputPath))
-		{
-			rmdir(self::$outputPath);
-		}
-
-		parent::tearDown();
-	}
-
-	/**
-	 * Tests the constructor.
-	 *
-	 * @covers  Joomla\Archive\Tar::__construct
-	 *
-	 * @return  void
-	 *
-	 * @since   1.1.3
+	 * @covers   Joomla\Archive\Tar::__construct
 	 */
 	public function test__construct()
 	{
 		$object = new ArchiveTar;
 
-		$this->assertEmpty(
-			TestHelper::getValue($object, 'options')
-		);
+		$this->assertAttributeEmpty('options', $object);
 
 		$options = array('foo' => 'bar');
 		$object = new ArchiveTar($options);
 
-		$this->assertEquals(
-			$options,
-			TestHelper::getValue($object, 'options')
-		);
+		$this->assertAttributeSame($options, 'options', $object);
 	}
 
 	/**
-	 * Tests the extract Method.
+	 * @testdox  An archive can be extracted
 	 *
-	 * @covers  Joomla\Archive\Tar::extract
-	 * @covers  Joomla\Archive\Tar::getTarInfo
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @covers   Joomla\Archive\Tar::extract
+	 * @covers   Joomla\Archive\Tar::getTarInfo
 	 */
 	public function testExtract()
 	{
 		if (!ArchiveTar::isSupported())
 		{
 			$this->markTestSkipped('Tar files can not be extracted.');
-
-			return;
 		}
 
-		$this->object->extract(self::$inputPath . '/logo.tar', self::$outputPath);
-		$this->assertFileExists(self::$outputPath . '/logo-tar.png');
+		$object = new ArchiveTar;
 
-		if (is_file(self::$outputPath . '/logo-tar.png'))
+		$object->extract($this->inputPath . '/logo.tar', $this->outputPath);
+		$this->assertFileExists($this->outputPath . '/logo-tar.png');
+
+		if (is_file($this->outputPath . '/logo-tar.png'))
 		{
-			unlink(self::$outputPath . '/logo-tar.png');
+			unlink($this->outputPath . '/logo-tar.png');
 		}
 	}
 
 	/**
-	 * Tests the isSupported Method.
+	 * @testdox  The adapter detects if the environment is supported
 	 *
-	 * @covers  Joomla\Archive\Tar::isSupported
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @covers   Joomla\Archive\Tar::isSupported
 	 */
 	public function testIsSupported()
 	{
-		$this->assertTrue(
-			ArchiveTar::isSupported()
-		);
+		$this->assertTrue(ArchiveTar::isSupported());
 	}
 }

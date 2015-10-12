@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -8,93 +8,54 @@ namespace Joomla\Archive\Tests;
 
 use Joomla\Archive\Archive as Archive;
 use Joomla\Archive\Zip as ArchiveZip;
-use Joomla\Archive\Tar as ArchiveTar;
-use Joomla\Archive\Gzip as ArchiveGzip;
-use Joomla\Archive\Bzip2 as ArchiveBzip2;
 
 /**
  * Test class for Joomla\Archive\Archive.
- *
- * @since  1.0
  */
-class ArchiveTest extends \PHPUnit_Framework_TestCase
+class ArchiveTest extends ArchiveTestCase
 {
 	/**
 	 * Object under test
 	 *
-	 * @var    Archive
-	 * @since  1.0
+	 * @var  Archive
 	 */
 	protected $fixture;
 
 	/**
-	 * Output directory
-	 *
-	 * @var    string
-	 * @since  1.0
-	 */
-	protected static $outputPath;
-
-	/**
-	 * Input directory
-	 *
-	 * @var    string
-	 * @since  1.1.3
-	 */
-	protected static $inputPath;
-
-	/**
 	 * Sets up the fixture.
-	 *
-	 * This method is called before a test is executed.
-	 *
-	 * @return  mixed
-	 *
-	 * @since   1.0
 	 */
 	protected function setUp()
 	{
 		parent::setUp();
 
-		self::$inputPath = __DIR__ . '/testdata';
-		self::$outputPath = __DIR__ . '/output';
-
-		if (!is_dir(self::$outputPath))
-		{
-			mkdir(self::$outputPath, 0777);
-		}
-
 		$this->fixture = new Archive;
 	}
 
 	/**
-	 * Tear down the fixture.
+	 * Data provider for retrieving adapters.
 	 *
-	 * This method is called after a test is executed.
-	 *
-	 * @return  mixed
-	 *
-	 * @since   1.1.3
+	 * @return  array
 	 */
-	protected function tearDown()
+	public function dataAdapters()
 	{
-		if (is_dir(self::$outputPath))
-		{
-			rmdir(self::$outputPath);
-		}
-
-		parent::tearDown();
+		// Adapter Type, Expected Exception
+		return array(
+			array('Zip', false),
+			array('Tar', false),
+			array('Gzip', false),
+			array('Bzip2', false),
+			array('Unknown', true),
+		);
 	}
 
 	/**
-	 * Test data for extracting ZIP : testExtract.
+	 * Data provider for extracting archives.
 	 *
-	 * @return  void
-	 *
-	 * @since   1.1.3
+	 * @return  array
 	 */
 	public function dataExtract()
 	{
+		// Filename, Adapter Type, Extracted Filename, Output is a File
 		return array(
 			array('logo.zip', 'Zip', 'logo-zip.png', false),
 			array('logo.tar', 'Tar', 'logo-tar.png', false),
@@ -106,33 +67,35 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests extracting ZIP.
+	 * @testdox  The Archive object is instantiated correctly
 	 *
-	 * @param   string  $filename           Name of the file to extract
-	 * @param   string  $adapterType        Type of adaptar that will be used
-	 * @param   string  $extractedFilename  Name of the file to extracted file
-	 * @param   bool    $isOutputFile       Whether output is a dirctory or file
+	 * @covers   Joomla\Archive\Archive::__construct
+	 */
+	public function test__construct()
+	{
+		$options = array('tmp_path' => __DIR__);
+
+		$fixture = new Archive($options);
+
+		$this->assertAttributeSame($options, 'options', $fixture);
+	}
+
+	/**
+	 * @testdox  Archives can be extracted
 	 *
-	 * @return  void
+	 * @param   string   $filename           Name of the file to extract
+	 * @param   string   $adapterType        Type of adaptar that will be used
+	 * @param   string   $extractedFilename  Name of the file to extracted file
+	 * @param   boolean  $isOutputFile       Whether output is a dirctory or file
 	 *
-	 * @covers  Joomla\Archive\Archive::extract
-	 * @dataProvider dataExtract
-	 * @since   1.0
+	 * @covers        Joomla\Archive\Archive::extract
+	 * @dataProvider  dataExtract
 	 */
 	public function testExtract($filename, $adapterType, $extractedFilename, $isOutputFile = false)
 	{
-		if (!is_dir(self::$outputPath))
-		{
-			$this->markTestSkipped("Couldn't create folder.");
-
-			return;
-		}
-
-		if (!is_writable(self::$outputPath) || !is_writable($this->fixture->options['tmp_path']))
+		if (!is_writable($this->outputPath) || !is_writable($this->fixture->options['tmp_path']))
 		{
 			$this->markTestSkipped("Folder not writable.");
-
-			return;
 		}
 
 		$adapter = "Joomla\\Archive\\$adapterType";
@@ -140,158 +103,76 @@ class ArchiveTest extends \PHPUnit_Framework_TestCase
 		if (!$adapter::isSupported())
 		{
 			$this->markTestSkipped($adapterType . ' files can not be extracted.');
-
-			return;
 		}
 
-		$outputPath = self::$outputPath . ($isOutputFile ? "/$extractedFilename" : '');
+		$outputPath = $this->outputPath . ($isOutputFile ? "/$extractedFilename" : '');
 
 		$this->assertTrue(
-			$this->fixture->extract(self::$inputPath . "/$filename", $outputPath)
+			$this->fixture->extract($this->inputPath . "/$filename", $outputPath)
 		);
 
-		$this->assertFileExists(self::$outputPath . "/$extractedFilename");
+		$this->assertFileExists($this->outputPath . "/$extractedFilename");
 
-		@unlink(self::$outputPath . "/$extractedFilename");
+		@unlink($this->outputPath . "/$extractedFilename");
 	}
 
 	/**
-	 * Tests extracting ZIP.
+	 * @testdox  Extracting an unknown archive type throws an Exception
 	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\Archive\Archive::extract
+	 * @covers   Joomla\Archive\Archive::extract
 	 * @expectedException  \InvalidArgumentException
-	 * @since   1.0
 	 */
 	public function testExtractUnknown()
 	{
-		if (!is_dir(self::$outputPath))
-		{
-			$this->markTestSkipped("Couldn't create folder.");
-
-			return;
-		}
-
 		$this->fixture->extract(
-			self::$inputPath . '/logo.dat',
-			self::$outputPath
+			$this->inputPath . '/logo.dat',
+			$this->outputPath
 		);
 	}
 
 	/**
-	 * Tests getting adapter.
+	 * @testdox  Adapters can be retrieved
 	 *
-	 * @return  mixed
+	 * @param   string   $adapterType        Type of adapter to load
+	 * @param   boolean  $expectedException  Flag if an Exception is expected
 	 *
-	 * @covers  Joomla\Archive\Archive::getAdapter
-	 * @since   1.0
+	 * @covers        Joomla\Archive\Archive::getAdapter
+	 * @dataProvider  dataAdapters
 	 */
-	public function testGetAdapter()
+	public function testGetAdapter($adapterType, $expectedException)
 	{
-		$zip = $this->fixture->getAdapter('zip');
-		$this->assertInstanceOf('Joomla\\Archive\\Zip', $zip);
-
-		$bzip2 = $this->fixture->getAdapter('bzip2');
-		$this->assertInstanceOf('Joomla\\Archive\\Bzip2', $bzip2);
-
-		$gzip = $this->fixture->getAdapter('gzip');
-		$this->assertInstanceOf('Joomla\\Archive\\Gzip', $gzip);
-
-		$tar = $this->fixture->getAdapter('tar');
-		$this->assertInstanceOf('Joomla\\Archive\\Tar', $tar);
-	}
-
-	/**
-	 * Test getAdapter exception.
-	 *
-	 * @return  void
-	 *
-	 * @covers             Joomla\Archive\Archive::getAdapter
-	 * @expectedException  \InvalidArgumentException
-	 * @since              1.0
-	 */
-	public function testGetAdapterException()
-	{
-		$this->fixture->getAdapter('unknown');
-	}
-
-	/**
-	 * Test getAdapter exception message.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetAdapterExceptionMessage()
-	{
-		try
+		if ($expectedException)
 		{
-			$this->fixture->getAdapter('unknown');
+			$this->setExpectedException('InvalidArgumentException');
 		}
 
-		catch (\InvalidArgumentException $e)
-		{
-			$this->assertEquals(
-				'Archive adapter "unknown" (class "Joomla\\Archive\\Unknown") not found or supported.',
-				$e->getMessage()
-			);
-		}
+		$adapter = $this->fixture->getAdapter($adapterType);
+
+		$this->assertInstanceOf('Joomla\\Archive\\' . $adapterType, $adapter);
 	}
 
 	/**
-	 * Test setAdapter.
+	 * @testdox  Adapters can be set to the Archive
 	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\Archive\Archive::setAdapter
-	 *
-	 * @since   1.1.3
+	 * @covers   Joomla\Archive\Archive::setAdapter
 	 */
 	public function testSetAdapter()
 	{
-		$class = 'Joomla\\Archive\\Zip';
-		$this->assertInstanceOf(
-			'Joomla\\Archive\\Archive',
-			$this->fixture->setAdapter('zip', new $class)
+		$this->assertSame(
+			$this->fixture,
+			$this->fixture->setAdapter('zip', new ArchiveZip),
+			'The setAdapter method should return the current object.'
 		);
 	}
 
 	/**
-	 * Test setAdapter exception.
-	 *
-	 * @return  void
+	 * @testdox  Setting an unknown adapter throws an Exception
 	 *
 	 * @covers             Joomla\Archive\Archive::setAdapter
 	 * @expectedException  \InvalidArgumentException
-	 * @since              1.0
 	 */
 	public function testSetAdapterUnknownException()
 	{
 		$this->fixture->setAdapter('unknown', 'unknown-class');
-	}
-
-	/**
-	 * Test setAdapter exception message.
-	 *
-	 * @return  void
-	 *
-	 * @covers             Joomla\Archive\Archive::setAdapter
-	 * @since   1.0
-	 */
-	public function testSetAdapterExceptionMessage()
-	{
-		try
-		{
-			$this->fixture->setAdapter('unknown', 'FooArchiveAdapter');
-		}
-
-		catch (\InvalidArgumentException $e)
-		{
-			$this->assertEquals(
-				'Archive adapter "unknown" (class "FooArchiveAdapter") not found.',
-				$e->getMessage()
-			);
-		}
 	}
 }
