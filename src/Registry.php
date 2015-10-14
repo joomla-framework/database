@@ -252,8 +252,8 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 *
 	 * @return  Registry  The Registry object.
 	 *
-	 * @deprecated  2.0  Instantiate a new Registry instance instead
 	 * @since   1.0
+	 * @deprecated  2.0  Instantiate a new Registry instance instead
 	 */
 	public static function getInstance($id)
 	{
