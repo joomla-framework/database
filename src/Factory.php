@@ -11,7 +11,7 @@ namespace Joomla\Registry;
 /**
  * Factory class to fetch Registry objects
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.5.0
  */
 class Factory
 {
@@ -19,7 +19,7 @@ class Factory
 	 * Format instances container - for backward compatibility with AbstractRegistryFormat::getInstance().
 	 *
 	 * @var    FormatInterface[]
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 * @deprecated  2.0  Object caching will no longer be supported
 	 */
 	protected static $formatInstances = array();
@@ -32,7 +32,7 @@ class Factory
 	 *
 	 * @return  FormatInterface  Registry format handler
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \InvalidArgumentException
 	 */
 	public static function getFormat($type, array $options = array())

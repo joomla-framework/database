@@ -11,7 +11,7 @@ namespace Joomla\Registry;
 /**
  * Interface defining a format object
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.5.0
  */
 interface FormatInterface
 {
@@ -23,7 +23,7 @@ interface FormatInterface
 	 *
 	 * @return  string  Formatted string.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function objectToString($object, $options = null);
 
@@ -35,7 +35,7 @@ interface FormatInterface
 	 *
 	 * @return  object  Data Object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function stringToObject($data, array $options = array());
 }
