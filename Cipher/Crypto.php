@@ -11,7 +11,7 @@ namespace Joomla\Crypt;
 /**
  * Joomla cipher for encryption, decryption and key generation via the php-encryption library.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.3.0
  */
 class Cipher_Crypto implements CipherInterface
 {
@@ -23,7 +23,7 @@ class Cipher_Crypto implements CipherInterface
 	 *
 	 * @return  string  The decrypted data string.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 * @throws  \InvalidArgumentException
 	 * @throws  \RuntimeException
 	 */
@@ -62,7 +62,7 @@ class Cipher_Crypto implements CipherInterface
 	 *
 	 * @return  string  The encrypted data string.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 * @throws  \InvalidArgumentException
 	 * @throws  \RuntimeException
 	 */
@@ -96,7 +96,7 @@ class Cipher_Crypto implements CipherInterface
 	 *
 	 * @return  Key
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 * @throws  \RuntimeException
 	 */
 	public function generateKey(array $options = array())
