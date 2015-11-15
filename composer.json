@@ -6,13 +6,17 @@
     "homepage": "https://github.com/joomla-framework/crypt",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.3.10"
+        "php": ">=5.3.10",
+        "symfony/polyfill-php56": "~1.0"
     },
     "target-dir": "Joomla/Crypt",
     "autoload": {
         "psr-0": {
             "Joomla\\Crypt": ""
-        }
+        },
+        "files": [
+            "lib/Crypto.php"
+        ]
     },
     "extra": {
         "branch-alias": {
