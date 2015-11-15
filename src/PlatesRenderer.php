@@ -128,6 +128,14 @@ class PlatesRenderer extends AbstractRenderer implements RendererInterface
 	 */
 	public function pathExists($path)
 	{
-		return $this->getRenderer()->pathExists($path);
+		$renderer = $this->getRenderer();
+
+		// The pathExists method was removed at 3.0
+		if (method_exists($renderer, 'pathExists'))
+		{
+			return $this->getRenderer()->pathExists($path);
+		}
+
+		return $this->getRenderer()->exists($path);
 	}
 }
