@@ -11,7 +11,8 @@ namespace Joomla\Crypt;
 /**
  * Joomla Framework Password Hashing Interface
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Use PHP 5.5's native password hashing API
  */
 interface PasswordInterface
 {
@@ -20,6 +21,7 @@ interface PasswordInterface
 	 *
 	 * @var    string
 	 * @since  1.0
+	 * @deprecated  2.0  Use PHP 5.5's native password hashing API
 	 */
 	const BLOWFISH = '$2y$';
 
@@ -37,6 +39,7 @@ interface PasswordInterface
 	 *
 	 * @var    string
 	 * @since  1.0
+	 * @deprecated  2.0  Use PHP 5.5's native password hashing API
 	 */
 	const PBKDF = '$pbkdf$';
 
@@ -45,6 +48,7 @@ interface PasswordInterface
 	 *
 	 * @var    string
 	 * @since  1.0
+	 * @deprecated  2.0  Use PHP 5.5's native password hashing API
 	 */
 	const MD5 = '$1$';
 
@@ -57,6 +61,7 @@ interface PasswordInterface
 	 * @return  string  The hashed password.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use PHP 5.5's native password hashing API
 	 */
 	public function create($password, $type = null);
 
@@ -69,6 +74,7 @@ interface PasswordInterface
 	 * @return  boolean  True if the password is valid, false otherwise.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use PHP 5.5's native password hashing API
 	 */
 	public function verify($password, $hash);
 
@@ -80,6 +86,7 @@ interface PasswordInterface
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use PHP 5.5's native password hashing API
 	 */
 	public function setDefaultType($type);
 
@@ -89,6 +96,7 @@ interface PasswordInterface
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use PHP 5.5's native password hashing API
 	 */
 	public function getDefaultType();
 }
