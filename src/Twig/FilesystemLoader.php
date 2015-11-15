@@ -58,6 +58,9 @@ class FilesystemLoader extends \Twig_Loader_Filesystem
 	 */
 	protected function findTemplate($name)
 	{
+		// For Twig 2.x support, add to method signature when dropping 1.x support
+		$throw = func_num_args() > 1 ? func_get_arg(1) : true;
+
 		$parts = explode('.', $name);
 
 		$extension = count($parts > 1) ? '.' . end($parts) : '';
@@ -67,6 +70,6 @@ class FilesystemLoader extends \Twig_Loader_Filesystem
 			$name .= $this->extension;
 		}
 
-		return parent::findTemplate($name);
+		return parent::findTemplate($name, $throw);
 	}
 }
