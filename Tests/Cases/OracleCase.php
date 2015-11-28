@@ -22,7 +22,7 @@ abstract class OracleCase extends TestDatabase
 	 * @var    array
 	 * @since  1.0
 	 */
-	private static $options = array('driver' => 'oracle', 'prefix' => 'jos_');
+	private static $options = array('driver' => 'oracle');
 
 	/**
 	 * This method is called before the first test of this test class is run.

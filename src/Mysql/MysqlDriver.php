@@ -84,6 +84,11 @@ class MysqlDriver extends PdoDriver
 	 */
 	public function connect()
 	{
+		if ($this->getConnection())
+		{
+			return;
+		}
+
 		parent::connect();
 
 		$this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);

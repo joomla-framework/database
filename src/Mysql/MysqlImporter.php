@@ -27,9 +27,9 @@ class MysqlImporter extends DatabaseImporter
 	 *
 	 * @since   1.0
 	 */
-	protected function getAddKeySQL($table, $keys)
+	protected function getAddKeySql($table, $keys)
 	{
-		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD ' . $this->getKeySQL($keys);
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD ' . $this->getKeySql($keys);
 	}
 
 	/**
@@ -41,7 +41,7 @@ class MysqlImporter extends DatabaseImporter
 	 *
 	 * @since   1.0
 	 */
-	protected function getAlterTableSQL(\SimpleXMLElement $structure)
+	protected function getAlterTableSql(\SimpleXMLElement $structure)
 	{
 		// Initialise variables.
 		$table = $this->getRealTableName($structure['name']);
@@ -69,7 +69,7 @@ class MysqlImporter extends DatabaseImporter
 
 				if ($change)
 				{
-					$alters[] = $this->getChangeColumnSQL($table, $field);
+					$alters[] = $this->getChangeColumnSql($table, $field);
 				}
 
 				// Unset this field so that what we have left are fields that need to be removed.
@@ -78,7 +78,7 @@ class MysqlImporter extends DatabaseImporter
 			else
 			{
 				// The field is new.
-				$alters[] = $this->getAddColumnSQL($table, $field);
+				$alters[] = $this->getAddColumnSql($table, $field);
 			}
 		}
 
@@ -86,7 +86,7 @@ class MysqlImporter extends DatabaseImporter
 		foreach ($oldFields as $name => $column)
 		{
 			// Delete the column.
-			$alters[] = $this->getDropColumnSQL($table, $name);
+			$alters[] = $this->getDropColumnSql($table, $name);
 		}
 
 		// Get the lookups for the old and new keys.
@@ -152,8 +152,8 @@ class MysqlImporter extends DatabaseImporter
 
 				if (!$same)
 				{
-					$alters[] = $this->getDropKeySQL($table, $name);
-					$alters[] = $this->getAddKeySQL($table, $keys);
+					$alters[] = $this->getDropKeySql($table, $name);
+					$alters[] = $this->getAddKeySql($table, $keys);
 				}
 
 				// Unset this field so that what we have left are fields that need to be removed.
@@ -162,7 +162,7 @@ class MysqlImporter extends DatabaseImporter
 			else
 			{
 				// This is a new key.
-				$alters[] = $this->getAddKeySQL($table, $keys);
+				$alters[] = $this->getAddKeySql($table, $keys);
 			}
 		}
 
@@ -171,11 +171,11 @@ class MysqlImporter extends DatabaseImporter
 		{
 			if (strtoupper($name) == 'PRIMARY')
 			{
-				$alters[] = $this->getDropPrimaryKeySQL($table);
+				$alters[] = $this->getDropPrimaryKeySql($table);
 			}
 			else
 			{
-				$alters[] = $this->getDropKeySQL($table, $name);
+				$alters[] = $this->getDropKeySql($table, $name);
 			}
 		}
 
@@ -192,10 +192,10 @@ class MysqlImporter extends DatabaseImporter
 	 *
 	 * @since   1.0
 	 */
-	protected function getChangeColumnSQL($table, \SimpleXMLElement $field)
+	protected function getChangeColumnSql($table, \SimpleXMLElement $field)
 	{
 		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
-			. $this->getColumnSQL($field);
+			. $this->getColumnSql($field);
 	}
 
 	/**
@@ -207,7 +207,7 @@ class MysqlImporter extends DatabaseImporter
 	 *
 	 * @since   1.0
 	 */
-	protected function getColumnSQL(\SimpleXMLElement $field)
+	protected function getColumnSql(\SimpleXMLElement $field)
 	{
 		// Initialise variables.
 		// TODO Incorporate into parent class and use $this.
@@ -264,7 +264,7 @@ class MysqlImporter extends DatabaseImporter
 	 *
 	 * @since   1.0
 	 */
-	protected function getDropKeySQL($table, $name)
+	protected function getDropKeySql($table, $name)
 	{
 		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP KEY ' . $this->db->quoteName($name);
 	}
@@ -278,7 +278,7 @@ class MysqlImporter extends DatabaseImporter
 	 *
 	 * @since   1.0
 	 */
-	protected function getDropPrimaryKeySQL($table)
+	protected function getDropPrimaryKeySql($table)
 	{
 		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP PRIMARY KEY';
 	}
@@ -329,7 +329,7 @@ class MysqlImporter extends DatabaseImporter
 	 *
 	 * @since   1.0
 	 */
-	protected function getKeySQL($columns)
+	protected function getKeySql($columns)
 	{
 		// TODO Error checking on array and element types.
 

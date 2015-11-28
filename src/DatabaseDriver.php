@@ -706,7 +706,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 *
 	 * @since   1.0
 	 */
-	public function hasUTFSupport()
+	public function hasUtfSupport()
 	{
 		return $this->utf;
 	}
@@ -1490,7 +1490,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 *
 	 * @since   1.0
 	 */
-	abstract public function setUTF();
+	abstract public function setUtf();
 
 	/**
 	 * Method to commit a transaction.

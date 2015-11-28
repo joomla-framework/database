@@ -22,7 +22,7 @@ abstract class MysqlCase extends TestDatabase
 	 * @var    array
 	 * @since  1.0
 	 */
-	private static $options = array('driver' => 'mysql', 'prefix' => 'jos_');
+	private static $options = array('driver' => 'mysql');
 
 	/**
 	 * This method is called before the first test of this test class is run.

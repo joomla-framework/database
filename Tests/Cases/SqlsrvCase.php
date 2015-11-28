@@ -22,7 +22,7 @@ abstract class SqlsrvCase extends TestDatabase
 	 * @var    array
 	 * @since  1.0
 	 */
-	private static $options = array('driver' => 'sqlsrv', 'prefix' => 'jos_');
+	private static $options = array('driver' => 'sqlsrv');
 
 	/**
 	 * This method is called before the first test of this test class is run.

@@ -51,9 +51,9 @@ class PostgresqlImporterInspector extends PostgresqlImporter
 	 *
 	 * @since   1.0
 	 */
-	public function getAddColumnSQL($table, \SimpleXMLElement $field)
+	public function getAddColumnSql($table, \SimpleXMLElement $field)
 	{
-		return parent::getAddColumnSQL($table, $field);
+		return parent::getAddColumnSql($table, $field);
 	}
 
 	/**
@@ -65,9 +65,9 @@ class PostgresqlImporterInspector extends PostgresqlImporter
 	 *
 	 * @since   1.0
 	 */
-	public function getAddIndexSQL(\SimpleXMLElement $field)
+	public function getAddIndexSql(\SimpleXMLElement $field)
 	{
-		return parent::getAddIndexSQL($field);
+		return parent::getAddIndexSql($field);
 	}
 
 	/**
@@ -79,9 +79,9 @@ class PostgresqlImporterInspector extends PostgresqlImporter
 	 *
 	 * @since   1.0
 	 */
-	public function getAddSequenceSQL(\SimpleXMLElement $structure)
+	public function getAddSequenceSql(\SimpleXMLElement $structure)
 	{
-		return parent::getAddSequenceSQL($structure);
+		return parent::getAddSequenceSql($structure);
 	}
 
 	/**
@@ -93,9 +93,9 @@ class PostgresqlImporterInspector extends PostgresqlImporter
 	 *
 	 * @since   1.0
 	 */
-	public function getAlterTableSQL(\SimpleXMLElement $structure)
+	public function getAlterTableSql(\SimpleXMLElement $structure)
 	{
-		return parent::getAlterTableSQL($structure);
+		return parent::getAlterTableSql($structure);
 	}
 
 	/**
@@ -108,9 +108,9 @@ class PostgresqlImporterInspector extends PostgresqlImporter
 	 *
 	 * @since   1.0
 	 */
-	public function getChangeColumnSQL($table, \SimpleXMLElement $field)
+	public function getChangeColumnSql($table, \SimpleXMLElement $field)
 	{
-		return parent::getChangeColumnSQL($table, $field);
+		return parent::getChangeColumnSql($table, $field);
 	}
 
 	/**
@@ -122,9 +122,9 @@ class PostgresqlImporterInspector extends PostgresqlImporter
 	 *
 	 * @since   1.0
 	 */
-	public function getColumnSQL(\SimpleXMLElement $field)
+	public function getColumnSql(\SimpleXMLElement $field)
 	{
-		return parent::getColumnSQL($field);
+		return parent::getColumnSql($field);
 	}
 
 	/**
@@ -136,9 +136,9 @@ class PostgresqlImporterInspector extends PostgresqlImporter
 	 *
 	 * @since   1.0
 	 */
-	public function getChangeSequenceSQL(\SimpleXMLElement $structure)
+	public function getChangeSequenceSql(\SimpleXMLElement $structure)
 	{
-		return parent::getChangeSequenceSQL($structure);
+		return parent::getChangeSequenceSql($structure);
 	}
 
 	/**
@@ -151,9 +151,9 @@ class PostgresqlImporterInspector extends PostgresqlImporter
 	 *
 	 * @since   1.0
 	 */
-	public function getDropColumnSQL($table, $name)
+	public function getDropColumnSql($table, $name)
 	{
-		return parent::getDropColumnSQL($table, $name);
+		return parent::getDropColumnSql($table, $name);
 	}
 
 	/**
@@ -166,9 +166,9 @@ class PostgresqlImporterInspector extends PostgresqlImporter
 	 *
 	 * @since   1.0
 	 */
-	public function getDropKeySQL($table, $name)
+	public function getDropKeySql($table, $name)
 	{
-		return parent::getDropKeySQL($table, $name);
+		return parent::getDropKeySql($table, $name);
 	}
 
 	/**
@@ -181,9 +181,9 @@ class PostgresqlImporterInspector extends PostgresqlImporter
 	 *
 	 * @since   1.0
 	 */
-	public function getDropPrimaryKeySQL($table, $name)
+	public function getDropPrimaryKeySql($table, $name)
 	{
-		return parent::getDropPrimaryKeySQL($table, $name);
+		return parent::getDropPrimaryKeySql($table, $name);
 	}
 
 	/**
@@ -195,9 +195,9 @@ class PostgresqlImporterInspector extends PostgresqlImporter
 	 *
 	 * @since   1.0
 	 */
-	public function getDropIndexSQL($name)
+	public function getDropIndexSql($name)
 	{
-		return parent::getDropIndexSQL($name);
+		return parent::getDropIndexSql($name);
 	}
 
 	/**
@@ -209,9 +209,9 @@ class PostgresqlImporterInspector extends PostgresqlImporter
 	 *
 	 * @since   1.0
 	 */
-	public function getDropSequenceSQL($name)
+	public function getDropSequenceSql($name)
 	{
-		return parent::getDropSequenceSQL($name);
+		return parent::getDropSequenceSql($name);
 	}
 
 	/**

@@ -264,7 +264,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function dataGetAlterTableSQL()
+	public function dataGetAlterTableSql()
 	{
 		$f1 = '<field Field="id" Type="integer" Null="NO" Default="nextval(\'jos_dbtest_id_seq\'::regclass)" ' .
 			'Comments="" />';
@@ -413,7 +413,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function dataGetColumnSQL()
+	public function dataGetColumnSql()
 	{
 		$sample = array(
 			'xml-id-field' => '<field Field="id" Type="integer" Null="NO" Default="nextval(\'jos_dbtest_id_seq\'::regclass)" Comments="" />',
@@ -607,7 +607,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function testGetAddColumnSQL()
+	public function testGetAddColumnSql()
 	{
 		$instance = new PostgresqlImporterInspector;
 		$instance->setDbo($this->dbo);
@@ -618,7 +618,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 			'xml-int-defnum' => '<field Field="title" Type="integer" Null="NO" Default="0" Comments="" />',);
 
 		$this->assertThat(
-			$instance->getAddColumnSQL(
+			$instance->getAddColumnSql(
 				'jos_test',
 				new \SimpleXmlElement($sample['xml-title-field'])
 			),
@@ -630,7 +630,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 
 		// Test a field with a default value
 		$this->assertThat(
-			$instance->getAddColumnSQL(
+			$instance->getAddColumnSql(
 				'jos_test',
 				new \SimpleXmlElement($sample['xml-title-def'])
 			),
@@ -642,7 +642,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 
 		// Test a field with a numeric default value
 		$this->assertThat(
-			$instance->getAddColumnSQL(
+			$instance->getAddColumnSql(
 				'jos_test',
 				new \SimpleXmlElement($sample['xml-int-defnum'])
 			),
@@ -660,7 +660,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function testGetAddSequenceSQL()
+	public function testGetAddSequenceSql()
 	{
 		$instance = new PostgresqlImporterInspector;
 		$instance->setDbo($this->dbo);
@@ -669,7 +669,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 			'Type="bigint" Start_Value="1" Min_Value="1" Max_Value="9223372036854775807" Increment="1" Cycle_option="NO" /> ';
 
 		$this->assertThat(
-			$instance->getAddSequenceSQL(
+			$instance->getAddSequenceSql(
 				new \SimpleXmlElement($xmlIdSeq)
 			),
 			$this->equalTo(
@@ -686,7 +686,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function testGetAddIndexSQL()
+	public function testGetAddIndexSql()
 	{
 		$xmlIndex = '<key Index="jos_dbtest_idx_name" is_primary="FALSE" is_unique="FALSE" ' .
 			'Query="CREATE INDEX jos_dbtest_idx_name ON jos_dbtest USING btree (name)" />';
@@ -697,7 +697,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
-			$instance->getAddIndexSQL(
+			$instance->getAddIndexSql(
 					new \SimpleXmlElement($xmlIndex)
 			),
 			$this->equalTo(
@@ -707,7 +707,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 		);
 
 		$this->assertThat(
-			$instance->getAddIndexSQL(
+			$instance->getAddIndexSql(
 					new \SimpleXmlElement($xmlPrimaryKey)
 			),
 			$this->equalTo(
@@ -730,13 +730,13 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @dataProvider dataGetAlterTableSQL
 	 */
-	public function testGetAlterTableSQL($structure, $expected, $message)
+	public function testGetAlterTableSql($structure, $expected, $message)
 	{
 		$instance = new PostgresqlImporterInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
-			$instance->getAlterTableSQL(
+			$instance->getAlterTableSql(
 				$structure
 			),
 			$this->equalTo(
@@ -755,7 +755,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function testGetChangeColumnSQL()
+	public function testGetChangeColumnSql()
 	{
 		$xmlTitleField = '<field Field="title" Type="character varying(50)" Null="NO" Default="NULL" Comments="" />';
 
@@ -763,7 +763,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
-			$instance->getChangeColumnSQL(
+			$instance->getChangeColumnSql(
 				'jos_test',
 				new \SimpleXmlElement($xmlTitleField)
 			),
@@ -783,7 +783,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function testGetChangeSequenceSQL()
+	public function testGetChangeSequenceSql()
 	{
 		$xmlIdSeq = '<sequence Name="jos_dbtest_id_seq" Schema="public" Table="jos_dbtest" Column="id" ' .
 			'Type="bigint" Start_Value="1" Min_Value="1" Max_Value="9223372036854775807" Increment="1" Cycle_option="NO" /> ';
@@ -792,7 +792,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
-			$instance->getChangeSequenceSQL(
+			$instance->getChangeSequenceSql(
 				new \SimpleXmlElement($xmlIdSeq)
 			),
 			$this->equalTo(
@@ -815,13 +815,13 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @dataProvider dataGetColumnSQL
 	 */
-	public function testGetColumnSQL($field, $expected, $message)
+	public function testGetColumnSql($field, $expected, $message)
 	{
 		$instance	= new PostgresqlImporterInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
-			strtolower($instance->getColumnSQL($field)),
+			strtolower($instance->getColumnSql($field)),
 			$this->equalTo(strtolower($expected)),
 			$message
 		);
@@ -834,13 +834,13 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function testGetDropColumnSQL()
+	public function testGetDropColumnSql()
 	{
 		$instance = new PostgresqlImporterInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
-			$instance->getDropColumnSQL(
+			$instance->getDropColumnSql(
 				'jos_test',
 				'title'
 			),
@@ -858,13 +858,13 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function testGetDropIndexSQL()
+	public function testGetDropIndexSql()
 	{
 		$instance = new PostgresqlImporterInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
-			$instance->getDropIndexSQL(
+			$instance->getDropIndexSql(
 				'idx_title'
 			),
 			$this->equalTo(
@@ -881,13 +881,13 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function testGetDropPrimaryKeySQL()
+	public function testGetDropPrimaryKeySql()
 	{
 		$instance = new PostgresqlImporterInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
-			$instance->getDropPrimaryKeySQL(
+			$instance->getDropPrimaryKeySql(
 				'jos_test', 'idx_jos_test_pkey'
 			),
 			$this->equalTo(
@@ -904,13 +904,13 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function testGetDropSequenceSQL()
+	public function testGetDropSequenceSql()
 	{
 		$instance = new PostgresqlImporterInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
-			$instance->getDropSequenceSQL(
+			$instance->getDropSequenceSql(
 				'idx_jos_test_seq'
 			),
 			$this->equalTo(
