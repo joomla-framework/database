@@ -266,6 +266,11 @@ class WebClient
 			$this->browser = self::FIREFOX;
 			$patternBrowser = 'Firefox';
 		}
+		elseif (stripos($userAgent, 'OPR') !== false)
+		{
+			$this->browser = self::OPERA;
+			$patternBrowser = 'OPR';
+		}
 		elseif (stripos($userAgent, 'Chrome') !== false)
 		{
 			$this->browser = self::CHROME;
