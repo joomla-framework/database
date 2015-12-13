@@ -33,14 +33,6 @@ else
 }
 
 /**
- * Include the utf8 package
- */
-if (!defined('UTF8'))
-{
-	require_once __DIR__ . '/phputf8/utf8.php';
-}
-
-/**
  * String handling class for utf-8 data
  * Wraps the phputf8 library
  * All functions assume the validity of utf-8 strings.
