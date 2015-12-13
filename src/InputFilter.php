@@ -96,7 +96,7 @@ class InputFilter
 		'script',
 		'style',
 		'title',
-		'xml'
+		'xml',
 	);
 
 	/**
@@ -110,7 +110,7 @@ class InputFilter
 		'background',
 		'codebase',
 		'dynsrc',
-		'lowsrc'
+		'lowsrc',
 	);
 
 	/**
@@ -168,27 +168,69 @@ class InputFilter
 	 */
 	public function clean($source, $type = 'string')
 	{
-		// Handle the type constraint
+		// Handle the type constraint cases
 		switch (strtoupper($type))
 		{
 			case 'INT':
 			case 'INTEGER':
-				// Only use the first integer value
-				preg_match('/-?[0-9]+/', (string) $source, $matches);
-				$result = isset($matches[0]) ? (int) $matches[0] : 0;
+				$pattern = '/[-+]?[0-9]+/';
+
+				if (is_array($source))
+				{
+					// Itterate through the array
+					foreach ($source as $eachString)
+					{
+						preg_match($pattern, (string) $eachString, $matches);
+						$result[] = isset($matches[0]) ? (int) $matches[0] : 0;
+					}
+				}
+				else
+				{
+					preg_match($pattern, (string) $source, $matches);
+					$result = isset($matches[0]) ? (int) $matches[0] : 0;
+				}
+
 				break;
 
 			case 'UINT':
-				// Only use the first integer value
-				preg_match('/-?[0-9]+/', (string) $source, $matches);
-				$result = isset($matches[0]) ? abs((int) $matches[0]) : 0;
+				$pattern = '/[-+]?[0-9]+/';
+
+				if (is_array($source))
+				{
+					// Itterate through the array
+					foreach ($source as $eachString)
+					{
+						preg_match($pattern, (string) $eachString, $matches);
+						$result[] = isset($matches[0]) ? abs((int) $matches[0]) : 0;
+					}
+				}
+				else
+				{
+					preg_match($pattern, (string) $source, $matches);
+					$result = isset($matches[0]) ? abs((int) $matches[0]) : 0;
+				}
+
 				break;
 
 			case 'FLOAT':
 			case 'DOUBLE':
-				// Only use the first floating point value
-				preg_match('/-?[0-9]+(\.[0-9]+)?/', (string) $source, $matches);
-				$result = isset($matches[0]) ? (float) $matches[0] : 0;
+				$pattern = '/[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?/';
+
+				if (is_array($source))
+				{
+					// Itterate through the array
+					foreach ($source as $eachString)
+					{
+						preg_match($pattern, (string) $eachString, $matches);
+						$result[] = isset($matches[0]) ? (float) $matches[0] : 0;
+					}
+				}
+				else
+				{
+					preg_match($pattern, (string) $source, $matches);
+					$result = isset($matches[0]) ? (float) $matches[0] : 0;
+				}
+
 				break;
 
 			case 'BOOL':
@@ -227,8 +269,23 @@ class InputFilter
 
 			case 'PATH':
 				$pattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
-				preg_match($pattern, (string) $source, $matches);
-				$result = isset($matches[0]) ? (string) $matches[0] : '';
+
+				if (is_array($source))
+				{
+					// Itterate through the array
+					foreach ($source as $eachString)
+					{
+						preg_match($pattern, (string) $eachString, $matches);
+
+						$result[] = isset($matches[0]) ? (string) $matches[0] : '';
+					}
+				}
+				else
+				{
+					preg_match($pattern, $source, $matches);
+					$result = isset($matches[0]) ? (string) $matches[0] : '';
+				}
+
 				break;
 
 			case 'TRIM':
@@ -270,7 +327,7 @@ class InputFilter
 					}
 					else
 					{
-						// Not an array or string.. return the passed parameter
+						// Not an array or string... return the passed parameter
 						$result = $source;
 					}
 				}
