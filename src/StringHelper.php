@@ -40,11 +40,6 @@ if (!defined('UTF8'))
 	require_once __DIR__ . '/phputf8/utf8.php';
 }
 
-if (!function_exists('utf8_strcasecmp'))
-{
-	require_once __DIR__ . '/phputf8/strcasecmp.php';
-}
-
 /**
  * String handling class for utf-8 data
  * Wraps the phputf8 library
@@ -353,6 +348,11 @@ abstract class StringHelper
 	 */
 	public static function strcasecmp($str1, $str2, $locale = false)
 	{
+		if (!function_exists('utf8_strcasecmp'))
+		{
+			require_once __DIR__ . '/phputf8/strcasecmp.php';
+		}
+
 		if ($locale)
 		{
 			// Get current locale
