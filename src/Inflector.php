@@ -157,7 +157,7 @@ class Inflector
 	 */
 	private function getCachedPlural($singular)
 	{
-		$singular = String::strtolower($singular);
+		$singular = StringHelper::strtolower($singular);
 
 		// Check if the word is in cache.
 		if (isset($this->cache[$singular]))
@@ -179,7 +179,7 @@ class Inflector
 	 */
 	private function getCachedSingular($plural)
 	{
-		$plural = String::strtolower($plural);
+		$plural = StringHelper::strtolower($plural);
 
 		return array_search($plural, $this->cache);
 	}
@@ -226,7 +226,7 @@ class Inflector
 	 */
 	private function setCache($singular, $plural = null)
 	{
-		$singular = String::strtolower($singular);
+		$singular = StringHelper::strtolower($singular);
 
 		if ($plural === null)
 		{
@@ -234,7 +234,7 @@ class Inflector
 		}
 		else
 		{
-			$plural = String::strtolower($plural);
+			$plural = StringHelper::strtolower($plural);
 		}
 
 		$this->cache[$singular] = $plural;
