@@ -833,7 +833,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @return  string  Generated token
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.1
 	 */
 	protected function createToken($length = 32)
 	{
