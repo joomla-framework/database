@@ -150,11 +150,8 @@ class Curl implements TransportInterface
 		// Link: http://the-stickman.com/web-development/php-and-curl-disabling-100-continue-header/
 		$options[CURLOPT_HTTPHEADER][] = 'Expect:';
 
-		/*
-		 * Follow redirects if server config allows
-		 * @deprecated  safe_mode is removed in PHP 5.4, check will be dropped when PHP 5.3 support is dropped
-		 */
-		if (!ini_get('safe_mode') && !ini_get('open_basedir'))
+		// Follow redirects if server config allows
+		if ($this->redirectsAllowed())
 		{
 			$options[CURLOPT_FOLLOWLOCATION] = (bool) isset($this->options['follow_location']) ? $this->options['follow_location'] : true;
 		}
@@ -266,5 +263,33 @@ class Curl implements TransportInterface
 	public static function isSupported()
 	{
 		return function_exists('curl_version') && curl_version();
+	}
+
+	/**
+	 * Check if redirects are allowed
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	private function redirectsAllowed()
+	{
+		// There are no issues on PHP 5.6 and later
+		if (version_compare(PHP_VERSION, '5.6', '>='))
+		{
+			return true;
+		}
+
+		// For PHP 5.3, redirects are not allowed if safe_mode and open_basedir are enabled
+		if (PHP_MAJOR_VERSION === 5 && PHP_MINOR_VERSION === 3)
+		{
+			if (!ini_get('safe_mode') && !ini_get('open_basedir'))
+			{
+				return true;
+			}
+		}
+
+		// For PHP 5.4 and 5.5, we only need to check if open_basedir is disabled
+		return !ini_get('open_basedir');
 	}
 }
