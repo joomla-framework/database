@@ -270,7 +270,7 @@ class Curl implements TransportInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.1
 	 */
 	private function redirectsAllowed()
 	{
