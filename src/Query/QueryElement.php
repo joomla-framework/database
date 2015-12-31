@@ -112,9 +112,9 @@ class QueryElement
 	 *
 	 * @param   string  $name  Name of the element.
 	 *
-	 * @return  JDatabaseQueryElement  Returns this object to allow chaining.
+	 * @return  DatabaseQueryElement  Returns this object to allow chaining.
 	 *
-	 * @since   1.3
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setName($name)
 	{
