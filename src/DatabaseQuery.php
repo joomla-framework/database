@@ -1460,7 +1460,6 @@ abstract class DatabaseQuery
 		return $this->extendWhere('AND', $conditions, $glue);
 	}
 
-
 	/**
 	 * Method to provide deep copy support to nested objects and arrays when cloning.
 	 *
