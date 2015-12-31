@@ -1407,17 +1407,17 @@ abstract class DatabaseQuery
 	 * @param   mixed   $conditions  A string or array of WHERE conditions.
 	 * @param   string  $innerGlue   The glue by which to join the conditions. Defaults to AND.
 	 *
-	 * @return  JDatabaseQuery  Returns this object to allow chaining.
+	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
-	 * @since   1.3
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function extendWhere($outerGlue, $conditions, $innerGlue = 'AND')
 	{
 		// Replace the current WHERE with a new one which has the old one as an unnamed child.
-		$this->where = new JDatabaseQueryElement('WHERE', $this->where->setName('()'), " $outerGlue ");
+		$this->where = new Query\QueryElement('WHERE', $this->where->setName('()'), " $outerGlue ");
 
 		// Append the new conditions as a new unnamed child.
-		$this->where->append(new JDatabaseQueryElement('()', $conditions, " $innerGlue "));
+		$this->where->append(new Query\QueryElement('()', $conditions, " $innerGlue "));
 
 		return $this;
 	}
@@ -1432,9 +1432,9 @@ abstract class DatabaseQuery
 	 * @param   mixed   $conditions  A string or array of WHERE conditions.
 	 * @param   string  $glue        The glue by which to join the conditions. Defaults to AND.
 	 *
-	 * @return  JDatabaseQuery  Returns this object to allow chaining.
+	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
-	 * @since   1.3
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function orWhere($conditions, $glue = 'AND')
 	{
@@ -1451,9 +1451,9 @@ abstract class DatabaseQuery
 	 * @param   mixed   $conditions  A string or array of WHERE conditions.
 	 * @param   string  $glue        The glue by which to join the conditions. Defaults to OR.
 	 *
-	 * @return  JDatabaseQuery  Returns this object to allow chaining.
+	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
-	 * @since   1.3
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function andWhere($conditions, $glue = 'OR')
 	{
