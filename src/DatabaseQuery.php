@@ -1419,7 +1419,7 @@ abstract class DatabaseQuery
 	 * @param   mixed   $conditions  A string or array of WHERE conditions.
 	 * @param   string  $innerGlue   The glue by which to join the conditions. Defaults to AND.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.3.0
 	 */
@@ -1444,7 +1444,7 @@ abstract class DatabaseQuery
 	 * @param   mixed   $conditions  A string or array of WHERE conditions.
 	 * @param   string  $glue        The glue by which to join the conditions. Defaults to AND.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.3.0
 	 */
@@ -1463,7 +1463,7 @@ abstract class DatabaseQuery
 	 * @param   mixed   $conditions  A string or array of WHERE conditions.
 	 * @param   string  $glue        The glue by which to join the conditions. Defaults to OR.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.3.0
 	 */

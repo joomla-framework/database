@@ -116,7 +116,7 @@ class QueryElement
 	 *
 	 * @param   string  $name  Name of the element.
 	 *
-	 * @return  QueryElement  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.3.0
 	 */
