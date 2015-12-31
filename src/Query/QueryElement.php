@@ -114,7 +114,7 @@ class QueryElement
 	 *
 	 * @return  QueryElement  Returns this object to allow chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function setName($name)
 	{
