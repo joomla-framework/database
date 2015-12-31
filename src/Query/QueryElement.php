@@ -112,6 +112,22 @@ class QueryElement
 	}
 
 	/**
+	 * Sets the name of this element.
+	 *
+	 * @param   string  $name  Name of the element.
+	 *
+	 * @return  QueryElement  Returns this object to allow chaining.
+	 *
+	 * @since   1.3.0
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
+
+		return $this;
+	}
+
+	/**
 	 * Method to provide deep copy support to nested objects and arrays
 	 * when cloning.
 	 *
