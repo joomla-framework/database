@@ -177,7 +177,9 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					// Itterate through the array
+					$result = array();
+
+					// Iterate through the array
 					foreach ($source as $eachString)
 					{
 						preg_match($pattern, (string) $eachString, $matches);
@@ -197,7 +199,9 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					// Itterate through the array
+					$result = array();
+
+					// Iterate through the array
 					foreach ($source as $eachString)
 					{
 						preg_match($pattern, (string) $eachString, $matches);
@@ -218,7 +222,9 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					// Itterate through the array
+					$result = array();
+
+					// Iterate through the array
 					foreach ($source as $eachString)
 					{
 						preg_match($pattern, (string) $eachString, $matches);
@@ -239,28 +245,121 @@ class InputFilter
 				break;
 
 			case 'WORD':
-				$result = (string) preg_replace('/[^A-Z_]/i', '', $source);
+				$pattern = '/[^A-Z_]/i';
+
+				if (is_array($source))
+				{
+					$result = array();
+
+					// Iterate through the array
+					foreach ($source as $eachString)
+					{
+						$result[] = (string) preg_replace($pattern, '', $eachString);
+					}
+				}
+				else
+				{
+					$result = (string) preg_replace($pattern, '', $source);
+				}
+
 				break;
 
 			case 'ALNUM':
-				$result = (string) preg_replace('/[^A-Z0-9]/i', '', $source);
+				$pattern = '/[^A-Z0-9]/i';
+
+				if (is_array($source))
+				{
+					$result = array();
+
+					// Iterate through the array
+					foreach ($source as $eachString)
+					{
+						$result[] = (string) preg_replace($pattern, '', $eachString);
+					}
+				}
+				else
+				{
+					$result = (string) preg_replace($pattern, '', $source);
+				}
+
 				break;
 
 			case 'CMD':
-				$result = (string) preg_replace('/[^A-Z0-9_\.-]/i', '', $source);
-				$result = ltrim($result, '.');
+				$pattern = '/[^A-Z0-9_\.-]/i';
+
+				if (is_array($source))
+				{
+					$result = array();
+
+					// Iterate through the array
+					foreach ($source as $eachString)
+					{
+						$cleaned  = (string) preg_replace($pattern, '', $eachString);
+						$result[] = ltrim($cleaned, '.');
+					}
+				}
+				else
+				{
+					$result = (string) preg_replace($pattern, '', $source);
+					$result = ltrim($result, '.');
+				}
+
 				break;
 
 			case 'BASE64':
-				$result = (string) preg_replace('/[^A-Z0-9\/+=]/i', '', $source);
+				$pattern = '/[^A-Z0-9\/+=]/i';
+
+				if (is_array($source))
+				{
+					$result = array();
+
+					// Iterate through the array
+					foreach ($source as $eachString)
+					{
+						$result[] = (string) preg_replace($pattern, '', $eachString);
+					}
+				}
+				else
+				{
+					$result = (string) preg_replace($pattern, '', $source);
+				}
+
 				break;
 
 			case 'STRING':
-				$result = (string) $this->remove($this->decode((string) $source));
+				if (is_array($source))
+				{
+					$result = array();
+
+					// Iterate through the array
+					foreach ($source as $eachString)
+					{
+						$result[] = (string) $this->remove($this->decode((string) $eachString));
+					}
+				}
+				else
+				{
+					$result = (string) $this->remove($this->decode((string) $source));
+				}
+
 				break;
 
 			case 'HTML':
-				$result = (string) $this->remove((string) $source);
+				if (is_array($source))
+				{
+					$result = array();
+
+					// Iterate through the array
+					foreach ($source as $eachString)
+					{
+						$result[] = (string) $this->remove((string) $eachString);
+					}
+				}
+				else
+				{
+					$result = (string) $this->remove((string) $source);
+				}
+
 				break;
 
 			case 'ARRAY':
@@ -272,11 +371,12 @@ class InputFilter
 
 				if (is_array($source))
 				{
-					// Itterate through the array
+					$result = array();
+
+					// Iterate through the array
 					foreach ($source as $eachString)
 					{
 						preg_match($pattern, (string) $eachString, $matches);
-
 						$result[] = isset($matches[0]) ? (string) $matches[0] : '';
 					}
 				}
@@ -289,13 +389,45 @@ class InputFilter
 				break;
 
 			case 'TRIM':
-				$result = (string) trim($source);
-				$result = StringHelper::trim($result, chr(0xE3) . chr(0x80) . chr(0x80));
-				$result = StringHelper::trim($result, chr(0xC2) . chr(0xA0));
+				if (is_array($source))
+				{
+					$result = array();
+
+					// Iterate through the array
+					foreach ($source as $eachString)
+					{
+						$cleaned  = (string) trim($eachString);
+						$cleaned  = StringHelper::trim($cleaned, chr(0xE3) . chr(0x80) . chr(0x80));
+						$result[] = StringHelper::trim($cleaned, chr(0xC2) . chr(0xA0));
+					}
+				}
+				else
+				{
+					$result = (string) trim($source);
+					$result = StringHelper::trim($result, chr(0xE3) . chr(0x80) . chr(0x80));
+					$result = StringHelper::trim($result, chr(0xC2) . chr(0xA0));
+				}
+
 				break;
 
 			case 'USERNAME':
-				$result = (string) preg_replace('/[\x00-\x1F\x7F<>"\'%&]/', '', $source);
+				$pattern = '/[\x00-\x1F\x7F<>"\'%&]/';
+
+				if (is_array($source))
+				{
+					$result = array();
+
+					// Iterate through the array
+					foreach ($source as $eachString)
+					{
+						$result[] = (string) preg_replace($pattern, '', $eachString);
+					}
+				}
+				else
+				{
+					$result = (string) preg_replace($pattern, '', $source);
+				}
+
 				break;
 
 			case 'RAW':
