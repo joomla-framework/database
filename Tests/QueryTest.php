@@ -1548,9 +1548,9 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 
 		// Add more columns but specify different glue.
 		// Note that the change of glue is ignored.
-		$this->_instance->where(array('faz = 4', 'gaz = 5'), 'OR');
+		$this->instance->where(array('faz = 4', 'gaz = 5'), 'OR');
 		$this->assertThat(
-			trim(TestReflection::getValue($this->_instance, 'where')),
+			trim(TestHelper::getValue($this->instance, 'where')),
 			$this->equalTo('WHERE foo = 1 AND bar = 2 AND goo = 3 AND faz = 4 AND gaz = 5'),
 			'Tests rendered value after third use, array input and different glue.'
 		);
@@ -1582,13 +1582,13 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 	public function testExtendWhere()
 	{
 		$this->assertThat(
-			$this->_instance->where('foo = 1')->extendWhere('ABC', 'bar = 2'),
-			$this->identicalTo($this->_instance),
+			$this->instance->where('foo = 1')->extendWhere('ABC', 'bar = 2'),
+			$this->identicalTo($this->instance),
 			'Tests chaining.'
 		);
 
 		$this->assertThat(
-			trim(TestReflection::getValue($this->_instance, 'where')),
+			trim(TestHelper::getValue($this->instance, 'where')),
 			$this->equalTo('WHERE '
 				. PHP_EOL . '(foo = 1) ABC '
 				. PHP_EOL . '(bar = 2)'),
@@ -1596,9 +1596,9 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 		);
 
 		// Add another set of where conditions.
-		$this->_instance->extendWhere('XYZ', array('baz = 3', 'goo = 4'));
+		$this->instance->extendWhere('XYZ', array('baz = 3', 'goo = 4'));
 		$this->assertThat(
-			trim(TestReflection::getValue($this->_instance, 'where')),
+			trim(TestHelper::getValue($this->instance, 'where')),
 			$this->equalTo('WHERE '
 				. PHP_EOL . '('
 				. PHP_EOL . '(foo = 1) ABC '
@@ -1608,9 +1608,9 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 		);
 
 		// Add another set of where conditions with some different glue.
-		$this->_instance->extendWhere('STU', array('faz = 5', 'gaz = 6'), 'VWX');
+		$this->instance->extendWhere('STU', array('faz = 5', 'gaz = 6'), 'VWX');
 		$this->assertThat(
-			trim(TestReflection::getValue($this->_instance, 'where')),
+			trim(TestHelper::getValue($this->instance, 'where')),
 			$this->equalTo('WHERE '
 				. PHP_EOL . '('
 				. PHP_EOL . '('
@@ -1632,13 +1632,13 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 	public function testOrWhere()
 	{
 		$this->assertThat(
-			$this->_instance->where('foo = 1')->orWhere('bar = 2'),
-			$this->identicalTo($this->_instance),
+			$this->instance->where('foo = 1')->orWhere('bar = 2'),
+			$this->identicalTo($this->instance),
 			'Tests chaining.'
 		);
 
 		$this->assertThat(
-			trim(TestReflection::getValue($this->_instance, 'where')),
+			trim(TestHelper::getValue($this->instance, 'where')),
 			$this->equalTo('WHERE '
 				. PHP_EOL . '(foo = 1) OR '
 				. PHP_EOL . '(bar = 2)'),
@@ -1646,9 +1646,9 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 		);
 
 		// Add another set of where conditions.
-		$this->_instance->orWhere(array('baz = 3', 'goo = 4'));
+		$this->instance->orWhere(array('baz = 3', 'goo = 4'));
 		$this->assertThat(
-			trim(TestReflection::getValue($this->_instance, 'where')),
+			trim(TestHelper::getValue($this->instance, 'where')),
 			$this->equalTo('WHERE '
 				. PHP_EOL . '('
 				. PHP_EOL . '(foo = 1) OR '
@@ -1658,9 +1658,9 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 		);
 
 		// Add another set of where conditions with some different glue.
-		$this->_instance->orWhere(array('faz = 5', 'gaz = 6'), 'XOR');
+		$this->instance->orWhere(array('faz = 5', 'gaz = 6'), 'XOR');
 		$this->assertThat(
-			trim(TestReflection::getValue($this->_instance, 'where')),
+			trim(TestHelper::getValue($this->instance, 'where')),
 			$this->equalTo('WHERE '
 				. PHP_EOL . '('
 				. PHP_EOL . '('
@@ -1682,13 +1682,13 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 	public function testAndWhere()
 	{
 		$this->assertThat(
-			$this->_instance->where('foo = 1')->andWhere('bar = 2'),
-			$this->identicalTo($this->_instance),
+			$this->instance->where('foo = 1')->andWhere('bar = 2'),
+			$this->identicalTo($this->instance),
 			'Tests chaining.'
 		);
 
 		$this->assertThat(
-			trim(TestReflection::getValue($this->_instance, 'where')),
+			trim(TestHelper::getValue($this->instance, 'where')),
 			$this->equalTo('WHERE '
 				. PHP_EOL . '(foo = 1) AND '
 				. PHP_EOL . '(bar = 2)'),
@@ -1696,9 +1696,9 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 		);
 
 		// Add another set of where conditions.
-		$this->_instance->andWhere(array('baz = 3', 'goo = 4'));
+		$this->instance->andWhere(array('baz = 3', 'goo = 4'));
 		$this->assertThat(
-			trim(TestReflection::getValue($this->_instance, 'where')),
+			trim(TestHelper::getValue($this->instance, 'where')),
 			$this->equalTo('WHERE '
 				. PHP_EOL . '('
 				. PHP_EOL . '(foo = 1) AND '
@@ -1708,9 +1708,9 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 		);
 
 		// Add another set of where conditions with some different glue.
-		$this->_instance->andWhere(array('faz = 5', 'gaz = 6'), 'XOR');
+		$this->instance->andWhere(array('faz = 5', 'gaz = 6'), 'XOR');
 		$this->assertThat(
-			trim(TestReflection::getValue($this->_instance, 'where')),
+			trim(TestHelper::getValue($this->instance, 'where')),
 			$this->equalTo('WHERE '
 				. PHP_EOL . '('
 				. PHP_EOL . '('
