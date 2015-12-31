@@ -1573,11 +1573,11 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the JDatabaseQuery::extendWhere method.
+	 * Tests the \Joomla\Database\DatabaseQuery::extendWhere method.
 	 *
 	 * @return  void
 	 *
-	 * @since   1.3
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testExtendWhere()
 	{
@@ -1623,11 +1623,11 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the JDatabaseQuery::orWhere method.
+	 * Tests the \Joomla\Database\DatabaseQuery::orWhere method.
 	 *
 	 * @return  void
 	 *
-	 * @since   1.3
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testOrWhere()
 	{
@@ -1673,11 +1673,11 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the JDatabaseQuery::andWhere method.
+	 * Tests the \Joomla\Database\DatabaseQuery::andWhere method.
 	 *
 	 * @return  void
 	 *
-	 * @since   1.3
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testAndWhere()
 	{
