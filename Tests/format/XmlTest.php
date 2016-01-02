@@ -6,26 +6,22 @@
 
 namespace Joomla\Registry\Tests\Format;
 
-use Joomla\Registry\AbstractRegistryFormat;
+use Joomla\Registry\Format\Xml;
 
 /**
- * Test class for Xml.
- *
- * @since  1.0
+ * Test class for \Joomla\Registry\Format\Xml.
  */
-class JRegistryFormatXMLTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * Test the Xml::objectToString method.
+	 * @testdox  A data object is converted to a string
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @covers   Joomla\Registry\Format\Xml::objectToString
 	 */
-	public function testObjectToString()
+	public function testADataObjectIsConvertedToAString()
 	{
-		$class = AbstractRegistryFormat::getInstance('XML');
-		$options = null;
+		$class = new Xml;
+
 		$object = new \stdClass;
 		$object->foo = 'bar';
 		$object->quoted = '"stringwithquotes"';
@@ -60,22 +56,18 @@ class JRegistryFormatXMLTest extends \PHPUnit_Framework_TestCase
 			"</registry>\n";
 
 		// Test basic object to string.
-		$this->assertXmlStringEqualsXmlString(
-			$class->objectToString($object, $options),
-			$string
-		);
+		$this->assertSame($string, $class->objectToString($object));
 	}
 
 	/**
-	 * Test the Xml::stringToObject method.
+	 * @testdox  A string is converted to a data object
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @covers   Joomla\Registry\Format\Xml::stringToObject
 	 */
-	public function testStringToObject()
+	public function testAStringIsConvertedToADataObject()
 	{
-		$class = AbstractRegistryFormat::getInstance('XML');
+		$class = new Xml;
+
 		$object = new \stdClass;
 		$object->foo = 'bar';
 		$object->booleantrue = true;
@@ -103,22 +95,18 @@ class JRegistryFormatXMLTest extends \PHPUnit_Framework_TestCase
 			"</registry>\n";
 
 		// Test basic object to string.
-		$this->assertThat(
-			$class->stringToObject($string),
-			$this->equalTo($object)
-		);
+		$this->assertEquals($object, $class->stringToObject($string));
 	}
 
 	/**
-	 * Test input and output data equality.
+	 * @testdox  Validate data equality in converted objects
 	 *
-	 * @return  void
-	 *
-	 * @since   1.3.0
+	 * @covers   Joomla\Registry\Format\Xml::objectToString
+	 * @covers   Joomla\Registry\Format\Xml::stringToObject
 	 */
-	public function testDataEquality()
+	public function testDataEqualityInConvertedObjects()
 	{
-		$class = AbstractRegistryFormat::getInstance('XML');
+		$class = new Xml;
 
 		// Check for different PHP behavior of displaying boolean false in XML.
 		$checkFalse = '<check/>' == simplexml_load_string('<test/>')->addChild('check', false)->asXML()
@@ -142,6 +130,6 @@ class JRegistryFormatXMLTest extends \PHPUnit_Framework_TestCase
 		$object = $class->stringToObject($input);
 		$output = $class->objectToString($object);
 
-		$this->assertEquals($input, $output, 'Line:' . __LINE__ . ' Input and output data must be equal.');
+		$this->assertEquals($input, $output, 'Input and output data must be equal.');
 	}
 }

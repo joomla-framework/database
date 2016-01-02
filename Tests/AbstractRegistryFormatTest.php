@@ -9,9 +9,7 @@ namespace Joomla\Registry\Tests;
 use Joomla\Registry\AbstractRegistryFormat;
 
 /**
- * Test class for AbstractRegistryFormat.
- *
- * @since  1.0
+ * Test class for \Joomla\Registry\AbstractRegistryFormat.
  */
 class AbstractRegistryFormatTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,8 +17,6 @@ class AbstractRegistryFormatTest extends \PHPUnit_Framework_TestCase
 	 * Data provider for testGetInstance
 	 *
 	 * @return  array
-	 *
-	 * @since   1.0
 	 */
 	public function seedTestGetInstance()
 	{
@@ -34,33 +30,26 @@ class AbstractRegistryFormatTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test the AbstractRegistryFormat::getInstance method.
+	 * @testdox  An instance of the format object is returned in the specified type.
 	 *
-	 * @param   string  $format  The format to load
+	 * @param    string  $format  The format to load
 	 *
-	 * @return  void
-	 *
+	 * @covers   Joomla\Registry\AbstractRegistryFormat::getInstance
 	 * @dataProvider  seedTestGetInstance
-	 * @since         1.0
 	 */
 	public function testGetInstance($format)
 	{
 		$class = '\\Joomla\\Registry\\Format\\' . $format;
 
 		$object = AbstractRegistryFormat::getInstance($format);
-		$this->assertThat(
-			$object instanceof $class,
-			$this->isTrue()
-		);
+		$this->assertInstanceOf('Joomla\Registry\Format\\' . $format, AbstractRegistryFormat::getInstance($format));
 	}
 
 	/**
-	 * Test getInstance with a non-existent format.
+	 * @testdox  An Exception is thrown when retrieving a non-existing format.
 	 *
-	 * @return  void
-	 *
+	 * @covers   Joomla\Registry\AbstractRegistryFormat::getInstance
 	 * @expectedException  \InvalidArgumentException
-	 * @since              1.0
 	 */
 	public function testGetInstanceNonExistent()
 	{

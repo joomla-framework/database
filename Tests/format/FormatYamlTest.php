@@ -6,42 +6,35 @@
 
 namespace Joomla\Registry\Tests\Format;
 
-use Joomla\Registry\AbstractRegistryFormat;
+use Joomla\Registry\Format\Yaml;
 
 /**
- * Test class for Yaml.
- *
- * @since  1.0
+ * Test class for \Joomla\Registry\Format\Yaml.
  */
-class FormatYamlTest extends \PHPUnit_Framework_TestCase
+class YamlTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * Object being tested
 	 *
-	 * @var    Joomla\Registry\Format\Yaml
-	 * @since  1.0
+	 * @var  Yaml
 	 */
-	protected $fixture;
+	private $fixture;
 
 	/**
 	 * Sets up the fixture, for example, open a network connection.
 	 * This method is called before a test is executed.
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function setUp()
 	{
-		$this->fixture = AbstractRegistryFormat::getInstance('Yaml');
+		$this->fixture = new Yaml;
 	}
 
 	/**
-	 * Test the __construct method
+	 * @testdox  The formatter is instantiated correctly
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @covers   Joomla\Registry\Format\Yaml::__construct
 	 */
 	public function testConstruct()
 	{
@@ -50,13 +43,11 @@ class FormatYamlTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test the objectToString method with an object as input.
+	 * @testdox  A data object is converted to a string
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @covers   Joomla\Registry\Format\Yaml::objectToString
 	 */
-	public function testObjectToStringWithObject()
+	public function testADataObjectIsConvertedToAString()
 	{
 		$object = (object) array(
 			'foo' => 'bar',
@@ -88,13 +79,11 @@ array:
 	}
 
 	/**
-	 * Test the objectToString method with an array as input.
+	 * @testdox  An array is converted to a string
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @covers   Joomla\Registry\Format\Yaml::objectToString
 	 */
-	public function testObjectToStringWithArray()
+	public function testAnArrayIsConvertedToAString()
 	{
 		$object = array(
 			'foo' => 'bar',
@@ -126,13 +115,11 @@ array:
 	}
 
 	/**
-	 * Test the stringToObject method.
+	 * @testdox  A string is converted to a data object
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @covers   Joomla\Registry\Format\Yaml::stringToObject
 	 */
-	public function testStringToObject()
+	public function testAStringIsConvertedToADataObject()
 	{
 		$object = (object) array(
 			'foo' => 'bar',
@@ -160,13 +147,12 @@ array:
 	}
 
 	/**
-	 * Test input and output data equality.
+	 * @testdox  Validate data equality in converted objects
 	 *
-	 * @return  void
-	 *
-	 * @since   1.3.0
+	 * @covers   Joomla\Registry\Format\Yaml::objectToString
+	 * @covers   Joomla\Registry\Format\Yaml::stringToObject
 	 */
-	public function testDataEquality()
+	public function testDataEqualityInConvertedObjects()
 	{
 		$input = "foo: bar\nquoted: '\"stringwithquotes\"'\nbooleantrue: true\nbooleanfalse: false\nnumericint: 42\nnumericfloat: 3.1415\n" .
 				"section:\n    key: value\narray:\n    nestedarray: { test1: value1 }\n";
@@ -174,6 +160,6 @@ array:
 		$object = $this->fixture->stringToObject($input);
 		$output = $this->fixture->objectToString($object);
 
-		$this->assertEquals($input, $output, 'Line:' . __LINE__ . ' Input and output data must be equal.');
+		$this->assertEquals($input, $output, 'Input and output data must be equal.');
 	}
 }

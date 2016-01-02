@@ -6,25 +6,22 @@
 
 namespace Joomla\Registry\Tests\Format;
 
-use Joomla\Registry\AbstractRegistryFormat;
+use Joomla\Registry\Format\Ini;
 
 /**
- * Test class for Ini.
- *
- * @since  1.0
+ * Test class for \Joomla\Registry\Format\Ini.
  */
-class JRegistryFormatINITest extends \PHPUnit_Framework_TestCase
+class IniTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * Test the Ini::objectToString method.
+	 * @testdox  A data object is converted to a string
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @covers   Joomla\Registry\Format\Ini::getValueAsINI
+	 * @covers   Joomla\Registry\Format\Ini::objectToString
 	 */
-	public function testObjectToString()
+	public function testADataObjectIsConvertedToAString()
 	{
-		$class = AbstractRegistryFormat::getInstance('INI');
+		$class = new Ini;
 
 		$object = new \stdClass;
 		$object->foo = 'bar';
@@ -37,22 +34,21 @@ class JRegistryFormatINITest extends \PHPUnit_Framework_TestCase
 
 		// Test basic object to string.
 		$string = $class->objectToString($object, array('processSections' => true));
-		$this->assertThat(
-			trim($string),
-			$this->equalTo("foo=\"bar\"\nbooleantrue=true\nbooleanfalse=false\nnumericint=42\nnumericfloat=3.1415\n\n[section]\nkey=\"value\"")
+
+		$this->assertSame(
+			"foo=\"bar\"\nbooleantrue=true\nbooleanfalse=false\nnumericint=42\nnumericfloat=3.1415\n\n[section]\nkey=\"value\"",
+			trim($string)
 		);
 	}
 
 	/**
-	 * Test the Ini::stringToObject method.
+	 * @testdox  A string is converted to a data object
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @covers   Joomla\Registry\Format\Ini::stringToObject
 	 */
-	public function testStringToObject()
+	public function testAStringIsConvertedToADataObject()
 	{
-		$class = AbstractRegistryFormat::getInstance('INI');
+		$class = new Ini;
 
 		$string2 = "[section]\nfoo=bar";
 
@@ -63,32 +59,18 @@ class JRegistryFormatINITest extends \PHPUnit_Framework_TestCase
 		$object2->section = $object1;
 
 		// Test INI format string without sections.
-		$object = $class->stringToObject($string2, array('processSections' => false));
-		$this->assertThat(
-			$object,
-			$this->equalTo($object1)
-		);
+		$this->assertEquals($class->stringToObject($string2, array('processSections' => false)), $object1);
 
 		// Test INI format string with sections.
-		$object = $class->stringToObject($string2, array('processSections' => true));
-		$this->assertThat(
-			$object,
-			$this->equalTo($object2)
-		);
+		$this->assertEquals($class->stringToObject($string2, array('processSections' => true)), $object2);
 
 		// Test empty string
-		$this->assertThat(
-			$class->stringToObject(null),
-			$this->equalTo(new \stdClass)
-		);
+		$this->assertEquals(new \stdClass, $class->stringToObject(null));
 
 		$string3 = "[section]\nfoo=bar\n;Testcomment\nkey=value\n\n/brokenkey=)brokenvalue";
 		$object2->section->key = 'value';
 
-		$this->assertThat(
-			$class->stringToObject($string3, array('processSections' => true)),
-			$this->equalTo($object2)
-		);
+		$this->assertEquals($class->stringToObject($string3, array('processSections' => true)), $object2);
 
 		$string4 = "boolfalse=false\nbooltrue=true\nkeywithoutvalue\nnumericfloat=3.1415\nnumericint=42\nkey=\"value\"";
 		$object3 = new \stdClass;
@@ -98,28 +80,21 @@ class JRegistryFormatINITest extends \PHPUnit_Framework_TestCase
 		$object3->numericint = 42;
 		$object3->key = 'value';
 
-		$this->assertThat(
-			$class->stringToObject($string4),
-			$this->equalTo($object3)
-		);
+		$this->assertEquals($class->stringToObject($string4), $object3);
 
 		// Trigger the cache - Doing this only to achieve 100% code coverage. ;-)
-		$this->assertThat(
-			$class->stringToObject($string4),
-			$this->equalTo($object3)
-		);
+		$this->assertEquals($class->stringToObject($string4), $object3);
 	}
 
 	/**
-	 * Test input and output data equality.
+	 * @testdox  Validate data equality in converted objects
 	 *
-	 * @return  void
-	 *
-	 * @since   1.3.0
+	 * @covers   Joomla\Registry\Format\Ini::objectToString
+	 * @covers   Joomla\Registry\Format\Ini::stringToObject
 	 */
-	public function testDataEquality()
+	public function testDataEqualityInConvertedObjects()
 	{
-		$class = AbstractRegistryFormat::getInstance('INI');
+		$class = new Ini;
 
 		$input = "[section1]\nboolfalse=false\nbooltrue=true\nnumericfloat=3.1415\nnumericint=42\nkey=\"value\"\n" .
 			"arrayitem[]=\"item1\"\narrayitem[]=\"item2\"\n\n" .
@@ -128,6 +103,6 @@ class JRegistryFormatINITest extends \PHPUnit_Framework_TestCase
 		$object = $class->stringToObject($input, array('processSections' => true, 'supportArrayValues' => true));
 		$output = $class->objectToString($object, array('processSections' => true, 'supportArrayValues' => true));
 
-		$this->assertEquals($input, $output, 'Line:' . __LINE__ . ' Input and output data must be equal.');
+		$this->assertEquals($input, $output, 'Input and output data must be equal.');
 	}
 }

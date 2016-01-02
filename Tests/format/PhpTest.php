@@ -6,25 +6,21 @@
 
 namespace Joomla\Registry\Tests\Format;
 
-use Joomla\Registry\AbstractRegistryFormat;
+use Joomla\Registry\Format\Php;
 
 /**
- * Test class for Php.
- *
- * @since  1.0
+ * Test class for \Joomla\Registry\Format\Php.
  */
-class JRegistryFormatPHPTest extends \PHPUnit_Framework_TestCase
+class PhpTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * Test the Php::objectToString method.
+	 * @testdox  A data object is converted to a string
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @covers   Joomla\Registry\Format\Php::objectToString
 	 */
-	public function testObjectToString()
+	public function testADataObjectIsConvertedToAString()
 	{
-		$class = AbstractRegistryFormat::getInstance('PHP');
+		$class = new Php;
 		$options = array('class' => 'myClass');
 		$object = new \stdClass;
 		$object->foo = 'bar';
@@ -33,8 +29,6 @@ class JRegistryFormatPHPTest extends \PHPUnit_Framework_TestCase
 		$object->booleanfalse = false;
 		$object->numericint = 42;
 		$object->numericfloat = 3.1415;
-
-		// The PHP registry format does not support nested objects
 		$object->section = new \stdClass;
 		$object->section->key = 'value';
 		$object->array = array('nestedarray' => array('test1' => 'value1'));
@@ -50,22 +44,18 @@ class JRegistryFormatPHPTest extends \PHPUnit_Framework_TestCase
 			"\tpublic \$section = array(\"key\" => \"value\");\n" .
 			"\tpublic \$array = array(\"nestedarray\" => array(\"test1\" => \"value1\"));\n" .
 			"}\n?>";
-		$this->assertThat(
-			$class->objectToString($object, $options),
-			$this->equalTo($string)
-		);
+
+		$this->assertSame($string, $class->objectToString($object, $options));
 	}
 
 	/**
-	 * Test the Php::objectToString method.
+	 * @testdox  A data object is converted to a string with no specified class
 	 *
-	 * @return  void
-	 *
-	 * @since   1.5.1
+	 * @covers   Joomla\Registry\Format\Php::objectToString
 	 */
-	public function testObjectToStringNoClass()
+	public function testADataObjectIsConvertedToAStringWithNoSpecifiedClass()
 	{
-		$class = AbstractRegistryFormat::getInstance('PHP');
+		$class = new Php;
 		$object = new \stdClass;
 		$object->foo = 'bar';
 		$object->quoted = '"stringwithquotes"';
@@ -90,22 +80,18 @@ class JRegistryFormatPHPTest extends \PHPUnit_Framework_TestCase
 			"\tpublic \$section = array(\"key\" => \"value\");\n" .
 			"\tpublic \$array = array(\"nestedarray\" => array(\"test1\" => \"value1\"));\n" .
 			"}\n?>";
-		$this->assertThat(
-			$class->objectToString($object),
-			$this->equalTo($string)
-		);
+
+		$this->assertSame($string, $class->objectToString($object));
 	}
 
 	/**
-	 * Test the Php::objectToString method with a PHP namespace in the options.
+	 * @testdox  A data object is converted to a string with a namespace
 	 *
-	 * @return  void
-	 *
-	 * @since   1.3.0
+	 * @covers   Joomla\Registry\Format\Php::objectToString
 	 */
-	public function testObjectToStringNamespace()
+	public function testADataObjectIsConvertedToAStringWithANamespace()
 	{
-		$class = AbstractRegistryFormat::getInstance('PHP');
+		$class = new Php;
 		$options = array('class' => 'myClass', 'namespace' => 'Joomla\\Registry\\Test');
 		$object = new \stdClass;
 		$object->foo = 'bar';
@@ -132,39 +118,34 @@ class JRegistryFormatPHPTest extends \PHPUnit_Framework_TestCase
 			"\tpublic \$section = array(\"key\" => \"value\");\n" .
 			"\tpublic \$array = array(\"nestedarray\" => array(\"test1\" => \"value1\"));\n" .
 			"}\n?>";
-		$this->assertThat(
-			$class->objectToString($object, $options),
-			$this->equalTo($string)
-		);
+
+		$this->assertSame($string, $class->objectToString($object, $options));
 	}
 
 	/**
-	 * Test the Php::stringToObject method.
+	 * @testdox  A string is converted to a data object
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @covers   Joomla\Registry\Format\Php::stringToObject
 	 */
-	public function testStringToObject()
+	public function testAStringIsConvertedToADataObject()
 	{
-		$class = AbstractRegistryFormat::getInstance('PHP');
+		$class = new Php;
 
 		// This method is not implemented in the class. The test is to achieve 100% code coverage
 		$this->assertTrue($class->stringToObject(''));
 	}
 
 	/**
-	 * Test input and output data equality.
+	 * @testdox  Validate data equality in converted objects
 	 *
-	 * @return  void
-	 *
-	 * @since   1.3.0
+	 * @covers   Joomla\Registry\Format\Php::objectToString
+	 * @covers   Joomla\Registry\Format\Php::stringToObject
 	 */
-	public function testDataEquality()
+	public function testDataEqualityInConvertedObjects()
 	{
-		$this->MarkTestIncomplete('Method is not implemented in the class');
+		$this->markTestIncomplete('Method is not implemented in the class');
 
-		$class = AbstractRegistryFormat::getInstance('PHP');
+		$class = new Php;
 
 		$input = "<?php\n" .
 			"class myClass {\n" .
@@ -181,6 +162,6 @@ class JRegistryFormatPHPTest extends \PHPUnit_Framework_TestCase
 		$object = $class->stringToObject($input);
 		$output = $class->objectToString($object);
 
-		$this->assertEquals($input, $output, 'Line:' . __LINE__ . ' Input and output data must be equal.');
+		$this->assertEquals($input, $output, 'Input and output data must be equal.');
 	}
 }
