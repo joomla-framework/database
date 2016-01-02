@@ -16,6 +16,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @testdox  A data object is converted to a string
 	 *
+	 * @covers   Joomla\Registry\Format\Xml::getXmlChildren
 	 * @covers   Joomla\Registry\Format\Xml::objectToString
 	 */
 	public function testADataObjectIsConvertedToAString()
@@ -62,6 +63,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @testdox  A string is converted to a data object
 	 *
+	 * @covers   Joomla\Registry\Format\Xml::getValueFromNode
 	 * @covers   Joomla\Registry\Format\Xml::stringToObject
 	 */
 	public function testAStringIsConvertedToADataObject()
