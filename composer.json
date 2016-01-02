@@ -14,7 +14,7 @@
     "require-dev": {
         "symfony/yaml": "~2.0|~3.0",
         "joomla/test": "~1.0",
-        "phpunit/phpunit": "4.*",
+        "phpunit/phpunit": "~4.8|~5.0",
         "squizlabs/php_codesniffer": "1.*"
     },
     "suggest": {
