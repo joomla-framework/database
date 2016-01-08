@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Filter Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -74,9 +74,7 @@ class OutputFilter
 			"#$regex#i",
 			function($m)
 			{
-				$rx = '&(?!amp;)';
-
-				return preg_replace('#' . $rx . '#', '&amp;', $m[0]);
+				return preg_replace('#&(?!amp;)#', '&amp;', $m[0]);
 			},
 			$input
 		);
@@ -97,8 +95,7 @@ class OutputFilter
 		// Remove any '-' from the string since they will be used as concatenaters
 		$str = str_replace('-', ' ', $string);
 
-		$lang = Language::getInstance();
-		$str = $lang->transliterate($str);
+		$str = Language::getInstance()->transliterate($str);
 
 		// Trim white spaces at beginning and end of alias and make lowercase
 		$str = trim(StringHelper::strtolower($str));
@@ -154,8 +151,7 @@ class OutputFilter
 	 * @return  string  Processed string.
 	 *
 	 * @since   1.0
-	 *
-	 * @todo There must be a better way???
+	 * @todo    There must be a better way???
 	 */
 	public static function ampReplace($text)
 	{

@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Filter Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -25,6 +25,7 @@ class InputFilter
 	 *
 	 * @var    InputFilter[]
 	 * @since  1.0
+	 * @deprecated  2.0
 	 */
 	protected static $instances = array();
 
@@ -114,7 +115,7 @@ class InputFilter
 	);
 
 	/**
-	 * Constructor for inputFilter class. Only first parameter is required.
+	 * Constructor for InputFilter class.
 	 *
 	 * @param   array    $tagsArray   List of user-defined tags
 	 * @param   array    $attrArray   List of user-defined attributes
