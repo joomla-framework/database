@@ -43,7 +43,7 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 				'From generic cases'
 			),
 			'integer' => array(
-				'int',
+				'integer',
 				$input,
 				123456789,
 				'From generic cases'
@@ -282,6 +282,12 @@ class InputFilterTest extends \PHPUnit_Framework_TestCase
 				true,
 				'From generic cases'
 			),
+			'bool_8' => array(
+				'bool',
+				array('false', null, true, false, 1, 0, ''),
+				array(true, false, true, false, true, false, false),
+				'From generic cases'
+				),
 			'word_01' => array(
 				'word',
 				$input,
