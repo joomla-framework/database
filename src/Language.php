@@ -819,17 +819,9 @@ class Language
 
 		if ($strings)
 		{
-			if (is_array($strings))
-			{
-				// Sort the underlying heap by key values to optimize merging
-				ksort($strings, SORT_STRING);
-				$this->strings = array_merge($this->strings, $strings);
-			}
-
 			if (is_array($strings) && count($strings))
 			{
-				// Do not bother with ksort here.  Since the originals were sorted, PHP will already have chosen the best heap.
-				$this->strings = array_merge($this->strings, $this->override);
+				$this->strings = array_replace($this->strings, $strings, $this->override);
 				$result = true;
 			}
 		}
@@ -1346,41 +1338,39 @@ class Language
 	 *
 	 * @since   1.0
 	 */
-	public static function parseLanguageFiles($dir = null)
-	{
-		$languages = array();
+    public static function parseLanguageFiles($dir = null)
+    {
+        $languages = array();
 
-		$iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir));
+        // Search main language directory for subdirectories
+        foreach (glob($dir . '/*', GLOB_NOSORT | GLOB_ONLYDIR) as $directory)
+        {
+            // But only directories with lang code format
+            if (preg_match('#/[a-z]{2,3}-[A-Z]{2}$#', $directory))
+            {
+                $dirPathParts = pathinfo($directory);
+                $file         = $directory . '/' . $dirPathParts['filename'] . '.xml';
 
-		foreach ($iterator as $file)
-		{
-			$langs    = array();
-			$fileName = $file->getFilename();
+                if (!is_file($file))
+                {
+                    continue;
+                }
+                try
+                {
+                    // Get installed language metadata from xml file and merge it with lang array
+                    if ($metadata = self::parseXMLLanguageFile($file))
+                    {
+                        $languages = array_replace($languages, array($dirPathParts['filename'] => $metadata));
+                    }
+                }
+                catch (\RuntimeException $e)
+                {
+                }
+            }
+        }
 
-			if (!$file->isFile() || !preg_match("/^([-_A-Za-z]*)\.xml$/", $fileName))
-			{
-				continue;
-			}
-
-			try
-			{
-				$metadata = self::parseXmlLanguageFile($file->getRealPath());
-
-				if ($metadata)
-				{
-					$lang = str_replace('.xml', '', $fileName);
-					$langs[$lang] = $metadata;
-				}
-
-				$languages = array_merge($languages, $langs);
-			}
-			catch (\RuntimeException $e)
-			{
-			}
-		}
-
-		return $languages;
-	}
+        return $languages;
+    }
 
 	/**
 	 * Parse XML file for language information.
