@@ -1338,8 +1338,8 @@ class Language
 	 *
 	 * @since   1.0
 	 */
-    public static function parseLanguageFiles($dir = null)
-    {
+	public static function parseLanguageFiles($dir = null)
+	{
 		$languages = array();
 
 		// Search main language directory for subdirectories
@@ -1355,6 +1355,7 @@ class Language
 				{
 					continue;
 				}
+
 				try
 				{
 					// Get installed language metadata from xml file and merge it with lang array
