@@ -103,7 +103,6 @@ class Profiler implements ProfilerInterface, \IteratorAggregate, \Countable
 		{
 			$this->points = array();
 		}
-
 		else
 		{
 			$this->setPoints($points);
@@ -442,5 +441,40 @@ class Profiler implements ProfilerInterface, \IteratorAggregate, \Countable
 	public function count()
 	{
 		return count($this->points);
+	}
+
+	/**
+	 * Creates a profile point with the specified starting time and memory.
+	 *
+	 * This method will only add a point if no other points have been added as the ProfilePointInterface objects created before changing
+	 * the start point would result in inaccurate measurements.
+	 *
+	 * @param   float    $timeStamp    Unix timestamp in microseconds when the profiler should start measuring time.
+	 * @param   integer  $memoryBytes  Memory amount in bytes when the profiler should start measuring memory.
+	 *
+	 * @return  ProfilerInterface  This method is chainable.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function setStart($timeStamp = 0.0, $memoryBytes = 0)
+	{
+		if (!empty($this->points))
+		{
+			throw new \RuntimeException('The start point cannot be adjusted after points are added to the profiler.');
+		}
+
+		$this->startTimeStamp   = $timeStamp;
+		$this->startMemoryBytes = $memoryBytes;
+
+		$point = new ProfilePoint('start');
+
+		// Store the point.
+		$this->points[] = $point;
+
+		// Add it in the lookup table.
+		$this->lookup[$point->getName()] = count($this->points) - 1;
+
+		return $this;
 	}
 }
