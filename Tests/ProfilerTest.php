@@ -474,6 +474,45 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the setStart method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Profiler\Profiler::setStart
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testSetStart()
+	{
+		$time   = microtime(true);
+		$memory = memory_get_usage(false);
+
+		$this->instance->setStart($time, $memory);
+
+		$this->assertAttributeSame($time, 'startTimeStamp', $this->instance);
+		$this->assertAttributeSame($memory, 'startMemoryBytes', $this->instance);
+		$this->assertCount(1, $this->instance);
+	}
+
+	/**
+	 * Tests the setStart method exception, when
+	 * a point has already been added.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Profiler\Profiler::setStart
+	 * @expectedException  \RuntimeException
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testSetStartForException()
+	{
+		$time   = microtime(true);
+		$memory = memory_get_usage(false);
+
+		$this->instance->mark('test');
+		$this->instance->setStart($time, $memory);
+	}
+
+	/**
 	 * Setup the tests.
 	 *
 	 * @return  void
