@@ -7,97 +7,86 @@
 namespace Joomla\Profiler\Tests;
 
 use Joomla\Profiler\ProfilePoint;
-use Joomla\Test\TestHelper;
 
 /**
- * Tests for the ProfilePoint class.
- *
- * @since  1.0
+ * Tests for the \Joomla\Profiler\ProfilePoint class.
  */
 class ProfilePointTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * Tests the constructor.
+	 * @var  ProfilePoint
+	 */
+	private $instance;
+
+	/**
+	 * Sets up the fixture, for example, opens a network connection.
+	 * This method is called before a test is executed.
 	 *
 	 * @return  void
-	 *
+	 */
+	protected function setUp()
+	{
+		parent::setUp();
+
+		$this->instance = new ProfilePoint('test');
+	}
+
+	/**
 	 * @covers  \Joomla\Profiler\ProfilePoint::__construct
-	 * @since   1.0
+	 * @uses    \Joomla\Profiler\ProfilePoint::getMemoryBytes
+	 * @uses    \Joomla\Profiler\ProfilePoint::getName
+	 * @uses    \Joomla\Profiler\ProfilePoint::getTime
 	 */
-	public function test__construct()
+	public function testThePointIsInstantiatedCorrectly()
 	{
-		$point = new ProfilePoint('test');
-		$this->assertEquals('test', TestHelper::getValue($point, 'name'));
-		$this->assertSame(0.0, TestHelper::getValue($point, 'time'));
-		$this->assertSame(0, TestHelper::getValue($point, 'memoryBytes'));
+		$this->assertSame('test', $this->instance->getName());
+		$this->assertSame(0.0, $this->instance->getTime());
+		$this->assertSame(0, $this->instance->getMemoryBytes());
+	}
 
+	/**
+	 * @covers  \Joomla\Profiler\ProfilePoint::__construct
+	 * @uses    \Joomla\Profiler\ProfilePoint::getMemoryBytes
+	 * @uses    \Joomla\Profiler\ProfilePoint::getName
+	 * @uses    \Joomla\Profiler\ProfilePoint::getTime
+	 */
+	public function testThePointIsInstantiatedCorrectlyWithInjectedDependencies()
+	{
 		$point = new ProfilePoint('foo', '1', '1048576');
-		$this->assertEquals('foo', TestHelper::getValue($point, 'name'));
-		$this->assertSame(1.0, TestHelper::getValue($point, 'time'));
-		$this->assertSame(1048576, TestHelper::getValue($point, 'memoryBytes'));
+		$this->assertSame('foo', $point->getName());
+		$this->assertSame(1.0, $point->getTime());
+		$this->assertSame(1048576, $point->getMemoryBytes());
 	}
 
 	/**
-	 * Tests the getName method.
-	 *
-	 * @return  void
-	 *
 	 * @covers  \Joomla\Profiler\ProfilePoint::getName
-	 * @since   1.0
 	 */
-	public function testGetName()
+	public function testThePointNameIsReturned()
 	{
-		$profilePoint = new ProfilePoint('test');
-		$this->assertEquals($profilePoint->getName(), 'test');
+		$this->assertEquals($this->instance->getName(), 'test');
 	}
 
 	/**
-	 * Tests the getTime method.
-	 *
-	 * @return  void
-	 *
 	 * @covers  \Joomla\Profiler\ProfilePoint::getTime
-	 * @since   1.0
 	 */
-	public function testGetTime()
+	public function testThePointTimeIsReturned()
 	{
-		$profilePoint = new ProfilePoint('test', 0, 0);
-		$this->assertEquals($profilePoint->getTime(), 0);
-
-		$profilePoint = new ProfilePoint('test', 1.5, 0);
-		$this->assertEquals($profilePoint->getTime(), 1.5);
+		$this->assertEquals($this->instance->getTime(), 0.0);
 	}
 
 	/**
-	 * Tests the getMemoryBytes method.
-	 *
-	 * @return  void
-	 *
 	 * @covers  \Joomla\Profiler\ProfilePoint::getMemoryBytes
-	 * @since   1.0
 	 */
-	public function testGetMemoryBytes()
+	public function testThePointMemoryIsReturnedInBytes()
 	{
-		$profilePoint = new ProfilePoint('test', 0, 0);
-		$this->assertEquals($profilePoint->getMemoryBytes(), 0);
-
-		$profilePoint = new ProfilePoint('test', 0, 1048576);
-		$this->assertEquals($profilePoint->getMemoryBytes(), 1048576);
+		$this->assertEquals($this->instance->getMemoryBytes(), 0);
 	}
 
 	/**
-	 * Tests the getMemoryMegaBytes method.
-	 *
-	 * @return  void
-	 *
 	 * @covers  \Joomla\Profiler\ProfilePoint::getMemoryMegaBytes
-	 * @since   1.0
 	 */
-	public function testGetMemoryMegaBytes()
+	public function testThePointMemoryIsReturnedInMegabytes()
 	{
-		$profilePoint = new ProfilePoint('test', 0, 0);
-		$this->assertEquals($profilePoint->getMemoryMegaBytes(), 0);
-
 		$profilePoint = new ProfilePoint('test', 0, 1048576);
 		$this->assertEquals($profilePoint->getMemoryMegaBytes(), 1);
 	}

@@ -11,32 +11,37 @@ use Joomla\Profiler\ProfilePoint;
 use Joomla\Profiler\Profiler;
 
 /**
- * Tests for the DefaultRenderer class.
- *
- * @since  1.0
+ * Tests for the \Joomla\Profiler\Renderer\DefaultRenderer class.
  */
 class DefaultRendererTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var    \Joomla\Profiler\Renderer\DefaultRenderer
-	 * @since  1.0
+	 * @var  DefaultRenderer
 	 */
 	private $instance;
 
 	/**
-	 * Tests the render method.
+	 * Sets up the fixture, for example, opens a network connection.
+	 * This method is called before a test is executed.
 	 *
 	 * @return  void
-	 *
-	 * @covers  \Joomla\Profiler\Renderer\DefaultRenderer::render
-	 * @since   1.0
 	 */
-	public function testRender()
+	protected function setUp()
+	{
+		parent::setUp();
+
+		$this->instance = new DefaultRenderer;
+	}
+
+	/**
+	 * @covers  \Joomla\Profiler\Renderer\DefaultRenderer::render
+	 */
+	public function testTheProfilePointsAreRenderedCorrectly()
 	{
 		// Create a few points.
-		$first = new ProfilePoint('first');
+		$first  = new ProfilePoint('first');
 		$second = new ProfilePoint('second', 1.5, 1048576);
-		$third = new ProfilePoint('third', 2.5, 2097152);
+		$third  = new ProfilePoint('third', 2.5, 2097152);
 		$fourth = new ProfilePoint('fourth', 3, 1572864);
 
 		// Create a profiler and inject the points.
@@ -51,31 +56,10 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the render method with an empty profiler.
-	 *
-	 * @return  void
-	 *
 	 * @covers  \Joomla\Profiler\Renderer\DefaultRenderer::render
-	 * @since   1.0
 	 */
-	public function testRenderEmpty()
+	public function testTheRendererHandlesAnEmptyDataSet()
 	{
-		$profiler = new Profiler('test');
-
-		$this->assertEmpty($this->instance->render($profiler));
-	}
-
-	/**
-	 * Setup the tests.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	protected function setUp()
-	{
-		parent::setUp();
-
-		$this->instance = new DefaultRenderer;
+		$this->assertEmpty($this->instance->render(new Profiler('test')));
 	}
 }
