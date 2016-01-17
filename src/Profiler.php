@@ -443,4 +443,22 @@ class Profiler implements ProfilerInterface, \IteratorAggregate, \Countable
 	{
 		return count($this->points);
 	}
+
+	/**
+	 * Sets the start time and start memory.
+	 *
+	 * @param   float  $startTimeStamp    Unix timestamp in microseconds for setting the Profiler start time.
+	 * @param   int    $startMemoryBytes  Memory amount in bytes for setting the Profiler start memory.
+	 *
+	 * @return  Profiler  This method is chainable.
+	 *
+	 * @since   1.1
+	 */
+	public function setStart($startTimeStamp = 0, $startMemoryBytes = 0)
+	{
+		$this->startTimeStamp   = (float) $startTimeStamp;
+		$this->startMemoryBytes = (int) $startMemoryBytes / 1048576;
+
+		return $this;
+	}
 }
