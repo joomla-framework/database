@@ -33,6 +33,21 @@ class CryptCipherCryptoTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Prepares the environment before running a test.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	protected function setUp()
+	{
+		// The real class can't be autoloaded
+		require_once __DIR__ . '/../../Cipher/Crypto.php';
+
+		parent::setUp();
+	}
+
+	/**
 	 * Test data for processing
 	 *
 	 * @return  array

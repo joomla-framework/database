@@ -31,6 +31,10 @@ class Cipher3DESTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
+		// The real class can't be autoloaded
+		require_once __DIR__ . '/../../Cipher/Mcrypt.php';
+		require_once __DIR__ . '/../../Cipher/3DES.php';
+
 		parent::setUp();
 
 		// Only run the test if mcrypt is loaded.

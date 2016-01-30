@@ -31,6 +31,10 @@ class CipherBlowfishTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
+		// The real class can't be autoloaded
+		require_once __DIR__ . '/../../Cipher/Blowfish.php';
+		require_once __DIR__ . '/../../Cipher/Mcrypt.php';
+
 		parent::setUp();
 
 		// Only run the test if mcrypt is loaded.

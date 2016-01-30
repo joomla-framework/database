@@ -31,6 +31,9 @@ class CipherSimpleTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
+		// The real class can't be autoloaded
+		require_once __DIR__ . '/../../Cipher/Simple.php';
+
 		parent::setUp();
 
 		$this->cipher = new Cipher_Simple;
