@@ -20,7 +20,9 @@
         },
         "files": [
             "src/phputf8/utf8.php",
+            "src/phputf8/ord.php",
             "src/phputf8/str_ireplace.php",
+            "src/phputf8/str_pad.php",
             "src/phputf8/str_split.php",
             "src/phputf8/strcasecmp.php",
             "src/phputf8/strcspn.php",
