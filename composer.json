@@ -6,17 +6,17 @@
     "homepage": "https://github.com/joomla-framework/model",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.3.10",
+        "php": ">=5.3.10|>=7.0",
         "joomla/registry": "~1.0"
-    },
-    "suggest": {
-        "joomla/database": "Allows using database models"
     },
     "require-dev": {
         "joomla/test": "~1.0",
         "joomla/database": "~1.0",
-        "phpunit/phpunit": "4.*",
+        "phpunit/phpunit": "~4.8|~5.0",
         "squizlabs/php_codesniffer": "1.*"
+    },
+    "suggest": {
+        "joomla/database": "Allows using database models"
     },
     "autoload": {
         "psr-4": {
