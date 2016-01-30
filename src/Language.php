@@ -8,7 +8,7 @@
 
 namespace Joomla\Language;
 
-use Joomla\String\String;
+use Joomla\String\StringHelper;
 
 /**
  * Allows for quoting in language .ini files.
@@ -400,7 +400,7 @@ class Language
 		}
 
 		$string = Transliterate::utf8_latin_to_ascii($string);
-		$lowercaseString = String::strtolower($string);
+		$lowercaseString = StringHelper::strtolower($string);
 
 		// String can return false if there isn't a fully valid UTF-8 string entered
 		if ($lowercaseString == false)
