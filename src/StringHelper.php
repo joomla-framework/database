@@ -152,7 +152,7 @@ abstract class StringHelper
 	 * @return  integer Unicode ordinal for the character
 	 *
 	 * @see     http://www.php.net/ord
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public static function ord($chr)
 	{
@@ -322,7 +322,7 @@ abstract class StringHelper
 	 * @return  string
 	 *
 	 * @see     http://www.php.net/str_pad
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public static function str_pad($input, $length, $padStr = ' ', $type = STR_PAD_RIGHT)
 	{
