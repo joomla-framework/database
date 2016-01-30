@@ -76,7 +76,7 @@ abstract class StringHelper
 	 */
 	public static function increment($string, $style = 'default', $n = 0)
 	{
-		$styleSpec = isset(self::$incrementStyles[$style]) ? self::$incrementStyles[$style] : self::$incrementStyles['default'];
+		$styleSpec = isset(static::$incrementStyles[$style]) ? static::$incrementStyles[$style] : static::$incrementStyles['default'];
 
 		// Regular expression search and replace patterns.
 		if (is_array($styleSpec[0]))
@@ -141,11 +141,6 @@ abstract class StringHelper
 	 */
 	public static function is_ascii($str)
 	{
-		if (!function_exists('utf8_is_ascii'))
-		{
-			require_once __DIR__ . '/phputf8/utils/ascii.php';
-		}
-
 		return utf8_is_ascii($str);
 	}
 
@@ -288,11 +283,6 @@ abstract class StringHelper
 	 */
 	public static function str_ireplace($search, $replace, $str, $count = null)
 	{
-		if (!function_exists('utf8_ireplace'))
-		{
-			require_once __DIR__ . '/phputf8/str_ireplace.php';
-		}
-
 		if ($count === false)
 		{
 			return utf8_ireplace($search, $replace, $str);
@@ -315,11 +305,6 @@ abstract class StringHelper
 	 */
 	public static function str_split($str, $split_len = 1)
 	{
-		if (!function_exists('utf8_str_split'))
-		{
-			require_once __DIR__ . '/phputf8/str_split.php';
-		}
-
 		return utf8_str_split($str, $split_len);
 	}
 
@@ -340,11 +325,6 @@ abstract class StringHelper
 	 */
 	public static function strcasecmp($str1, $str2, $locale = false)
 	{
-		if (!function_exists('utf8_strcasecmp'))
-		{
-			require_once __DIR__ . '/phputf8/strcasecmp.php';
-		}
-
 		if ($locale)
 		{
 			// Get current locale
@@ -376,8 +356,8 @@ abstract class StringHelper
 			}
 
 			return strcoll(
-				self::transcode(utf8_strtolower($str1), 'UTF-8', $encoding),
-				self::transcode(utf8_strtolower($str2), 'UTF-8', $encoding)
+				static::transcode(utf8_strtolower($str1), 'UTF-8', $encoding),
+				static::transcode(utf8_strtolower($str2), 'UTF-8', $encoding)
 			);
 		}
 
@@ -431,7 +411,7 @@ abstract class StringHelper
 				return strcoll($str1, $str2);
 			}
 
-			return strcoll(self::transcode($str1, 'UTF-8', $encoding), self::transcode($str2, 'UTF-8', $encoding));
+			return strcoll(static::transcode($str1, 'UTF-8', $encoding), static::transcode($str2, 'UTF-8', $encoding));
 		}
 
 		return strcmp($str1, $str2);
@@ -453,11 +433,6 @@ abstract class StringHelper
 	 */
 	public static function strcspn($str, $mask, $start = null, $length = null)
 	{
-		if (!function_exists('utf8_strcspn'))
-		{
-			require_once __DIR__ . '/phputf8/strcspn.php';
-		}
-
 		if ($start === false && $length === false)
 		{
 			return utf8_strcspn($str, $mask);
@@ -487,11 +462,6 @@ abstract class StringHelper
 	 */
 	public static function stristr($str, $search)
 	{
-		if (!function_exists('utf8_stristr'))
-		{
-			require_once __DIR__ . '/phputf8/stristr.php';
-		}
-
 		return utf8_stristr($str, $search);
 	}
 
@@ -508,11 +478,6 @@ abstract class StringHelper
 	 */
 	public static function strrev($str)
 	{
-		if (!function_exists('utf8_strrev'))
-		{
-			require_once __DIR__ . '/phputf8/strrev.php';
-		}
-
 		return utf8_strrev($str);
 	}
 
@@ -532,11 +497,6 @@ abstract class StringHelper
 	 */
 	public static function strspn($str, $mask, $start = null, $length = null)
 	{
-		if (!function_exists('utf8_strspn'))
-		{
-			require_once __DIR__ . '/phputf8/strspn.php';
-		}
-
 		if ($start === null && $length === null)
 		{
 			return utf8_strspn($str, $mask);
@@ -598,11 +558,6 @@ abstract class StringHelper
 			return $str;
 		}
 
-		if (!function_exists('utf8_ltrim'))
-		{
-			require_once __DIR__ . '/phputf8/trim.php';
-		}
-
 		if ($charlist === false)
 		{
 			return utf8_ltrim($str);
@@ -631,11 +586,6 @@ abstract class StringHelper
 		if (empty($charlist) && $charlist !== false)
 		{
 			return $str;
-		}
-
-		if (!function_exists('utf8_rtrim'))
-		{
-			require_once __DIR__ . '/phputf8/trim.php';
 		}
 
 		if ($charlist === false)
@@ -668,11 +618,6 @@ abstract class StringHelper
 			return $str;
 		}
 
-		if (!function_exists('utf8_trim'))
-		{
-			require_once __DIR__ . '/phputf8/trim.php';
-		}
-
 		if ($charlist === false)
 		{
 			return utf8_trim($str);
@@ -698,11 +643,6 @@ abstract class StringHelper
 	 */
 	public static function ucfirst($str, $delimiter = null, $newDelimiter = null)
 	{
-		if (!function_exists('utf8_ucfirst'))
-		{
-			require_once __DIR__ . '/phputf8/ucfirst.php';
-		}
-
 		if ($delimiter === null)
 		{
 			return utf8_ucfirst($str);
@@ -729,11 +669,6 @@ abstract class StringHelper
 	 */
 	public static function ucwords($str)
 	{
-		if (!function_exists('utf8_ucwords'))
-		{
-			require_once __DIR__ . '/phputf8/ucwords.php';
-		}
-
 		return utf8_ucwords($str);
 	}
 
@@ -784,11 +719,6 @@ abstract class StringHelper
 	 */
 	public static function valid($str)
 	{
-		if (!function_exists('utf8_is_valid'))
-		{
-			require_once __DIR__ . '/phputf8/utils/validation.php';
-		}
-
 		return utf8_is_valid($str);
 	}
 
@@ -813,11 +743,6 @@ abstract class StringHelper
 	 */
 	public static function compliant($str)
 	{
-		if (!function_exists('utf8_compliant'))
-		{
-			require_once __DIR__ . '/phputf8/utils/validation.php';
-		}
-
 		return utf8_compliant($str);
 	}
 
