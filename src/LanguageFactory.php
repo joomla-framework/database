@@ -11,7 +11,7 @@ namespace Joomla\Language;
 /**
  * Language package factory
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.3.0
  */
 class LanguageFactory
 {
@@ -19,7 +19,7 @@ class LanguageFactory
 	 * Application's default language
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	private $defaultLanguage = 'en-GB';
 
@@ -27,7 +27,7 @@ class LanguageFactory
 	 * Container with a list of loaded classes grouped by object type
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	private static $loadedClasses = array(
 		'language' => array(),
@@ -39,7 +39,7 @@ class LanguageFactory
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function getDefaultLanguage()
 	{
@@ -55,7 +55,7 @@ class LanguageFactory
 	 *
 	 * @return  Language
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function getLanguage($lang = null, $path = null, $debug = false)
 	{
@@ -74,7 +74,7 @@ class LanguageFactory
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function getLanguageDirectory()
 	{
@@ -89,7 +89,7 @@ class LanguageFactory
 	 * @return  Stemmer
 	 *
 	 * @note    As of 2.0, this method will throw a RuntimeException if objects do not extend the Stemmer class
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 * @throws  \RuntimeException on invalid stemmer
 	 */
 	public function getStemmer($adapter)
@@ -125,7 +125,7 @@ class LanguageFactory
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function setDefaultLanguage($language)
 	{

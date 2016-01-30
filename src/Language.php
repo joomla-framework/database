@@ -37,7 +37,7 @@ class Language
 	 * Cached LanguageFactory object
 	 *
 	 * @var    LanguageFactory
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 * @deprecated  2.0
 	 */
 	protected static $languageFactory;
