@@ -132,10 +132,7 @@ class FilesystemHelperTest extends PHPUnit_Framework_TestCase
 	{
 		$streams = Helper::getJStreams();
 
-		$this->assertEquals(
-			array('StringWrapper', 'String'),
-			$streams
-		);
+		$this->assertTrue(in_array('StringWrapper', Helper::getJStreams()));
 	}
 
 	/**
