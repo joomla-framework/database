@@ -6,15 +6,15 @@
     "homepage": "https://github.com/joomla-framework/database",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.3.10",
+        "php": ">=5.3.10|>=7.0",
         "psr/log": "~1.0"
     },
     "require-dev": {
         "joomla/di": "~1.0",
         "joomla/registry": "~1.0",
         "joomla/test": "~1.0",
-        "phpunit/phpunit": "4.*",
-        "phpunit/dbunit": "~1.2",
+        "phpunit/phpunit": "~4.8|~5.0",
+        "phpunit/dbunit": "~1.3",
         "squizlabs/php_codesniffer": "1.*"
     },
     "suggest": {
