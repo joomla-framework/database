@@ -1,17 +1,35 @@
 language: php
 
-php:
-  - 5.3
-  - 5.4
-  - 5.5
-  - 5.6
+sudo: false
+
+env:
+  global:
+    - RUN_PHPCS="no"
+    - RUN_SCRUTINIZER="no"
+    - COMPOSER_FLAGS=""
+    - PHPUNIT_FLAGS=""
+
+matrix:
+  include:
+    - php: 5.3
+    - php: 5.3
+      env: COMPOSER_FLAGS="--prefer-lowest"
+    - php: 5.4
+    - php: 5.5
+    - php: 5.6
+      env: RUN_PHPCS="yes" RUN_SCRUTINIZER="yes" PHPUNIT_FLAGS="--coverage-clover .travis/logs/clover.xml"
+    - php: 7.0
+    - php: hhvm
+  allow_failures:
+    - php: hhvm
 
 before_script:
-  - composer update
+  - composer self-update
+  - composer update $COMPOSER_FLAGS
 
 script:
-  - mkdir -p .travis/logs
-  - vendor/bin/phpunit --coverage-clover .travis/logs/clover.xml
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover .travis/logs/clover.xml
-  - vendor/bin/phpcs -p --report=full --extensions=php --standard=.travis/phpcs/Joomla/ruleset.xml src/
+  - if [ "RUN_SCRUTINIZER" == "yes" ]; then mkdir -p .travis/logs; fi;
+  - vendor/bin/phpunit $PHPUNIT_FLAGS
+  - if [ "RUN_SCRUTINIZER" == "yes" ]; then wget https://scrutinizer-ci.com/ocular.phar; fi;
+  - if [ "RUN_SCRUTINIZER" == "yes" ]; then php ocular.phar code-coverage:upload --format=php-clover .travis/logs/clover.xml; fi;
+  - if [ "$RUN_PHPCS" == "yes" ]; then vendor/bin/phpcs -p --report=full --extensions=php --standard=.travis/phpcs/Joomla/ruleset.xml src/; fi;

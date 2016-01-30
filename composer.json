@@ -6,14 +6,14 @@
     "homepage": "https://github.com/joomla-framework/authentication",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.3.10"
+        "php": ">=5.3.10|>=7.0"
     },
     "require-dev": {
         "ircmaxell/password-compat": "~1.0",
         "joomla/database": "~1.0",
         "joomla/input": "~1.0",
         "joomla/test": "~1.0",
-        "phpunit/phpunit": "4.*",
+        "phpunit/phpunit": "~4.8|~5.0",
         "phpunit/dbunit": "~1.3",
         "squizlabs/php_codesniffer": "1.*"
     },
