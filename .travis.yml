@@ -1,7 +1,5 @@
 language: php
 
-sudo: false
-
 env:
   global:
     - RUN_PHPCS="no"
