@@ -28,8 +28,8 @@ before_script:
   - composer update $COMPOSER_FLAGS
 
 script:
-  - if [ "RUN_SCRUTINIZER" == "yes" ]; then mkdir -p .travis/logs; fi;
+  - if [ "$RUN_SCRUTINIZER" == "yes" ]; then mkdir -p .travis/logs; fi;
   - vendor/bin/phpunit $PHPUNIT_FLAGS
-  - if [ "RUN_SCRUTINIZER" == "yes" ]; then wget https://scrutinizer-ci.com/ocular.phar; fi;
-  - if [ "RUN_SCRUTINIZER" == "yes" ]; then php ocular.phar code-coverage:upload --format=php-clover .travis/logs/clover.xml; fi;
+  - if [ "$RUN_SCRUTINIZER" == "yes" ]; then wget https://scrutinizer-ci.com/ocular.phar; fi;
+  - if [ "$RUN_SCRUTINIZER" == "yes" ]; then php ocular.phar code-coverage:upload --format=php-clover .travis/logs/clover.xml; fi;
   - if [ "$RUN_PHPCS" == "yes" ]; then vendor/bin/phpcs -p --report=full --extensions=php --standard=.travis/phpcs/Joomla/ruleset.xml src/; fi;
