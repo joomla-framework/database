@@ -242,7 +242,22 @@ class InputFilter
 
 			case 'BOOL':
 			case 'BOOLEAN':
-				$result = (bool) $source;
+
+				if (is_array($source))
+				{
+					$result = array();
+
+					// Iterate through the array
+					foreach ($source as $eachString)
+					{
+						$result[] = (bool) $eachString;
+					}
+				}
+				else
+				{
+					$result = (bool) $source;
+				}
+
 				break;
 
 			case 'WORD':
