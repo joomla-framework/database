@@ -52,7 +52,7 @@ class AbstractControllerTest extends \PHPUnit_Framework_TestCase
 	public function test__constructDependencyInjection()
 	{
 		$mockInput = $this->getMock('Joomla\Input\Input');
-		$mockApp   = $this->getMock('Joomla\Application\AbstractApplication');
+		$mockApp   = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication');
 		$object    = $this->getMockForAbstractClass('Joomla\Controller\AbstractController', array($mockInput, $mockApp));
 
 		$this->assertAttributeSame($mockInput, 'input', $object);
@@ -89,7 +89,10 @@ class AbstractControllerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSerialize()
 	{
-		$mockInput = $this->getMock('Joomla\Input\Input', array(), array(), '', false, true, true, false, true);
+		$mockInput = $this->getMockBuilder('Joomla\Input\Input')
+			->enableOriginalConstructor()
+			->enableProxyingToOriginalMethods()
+			->getMock();
 
 		$this->instance->setInput($mockInput);
 
@@ -133,7 +136,7 @@ class AbstractControllerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetAndGetApplication()
 	{
-		$mockApp = $this->getMock('Joomla\Application\AbstractApplication');
+		$mockApp = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication');
 
 		$this->instance->setApplication($mockApp);
 		$this->assertSame($mockApp, $this->instance->getApplication());
