@@ -10,7 +10,7 @@
         "joomla/string": "~1.3"
     },
     "require-dev": {
-        "joomla/language": "~1.0",
+        "joomla/language": "~1.3",
         "phpunit/phpunit": "~4.8|~5.0",
         "squizlabs/php_codesniffer": "1.*"
     },
