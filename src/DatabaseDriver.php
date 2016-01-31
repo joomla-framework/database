@@ -1450,6 +1450,8 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 		}
 
 		// Set the query and execute the update.
-		return $this->setQuery(sprintf($statement, implode(",", $fields), implode(' AND ', $where)))->execute();
+		$this->setQuery(sprintf($statement, implode(",", $fields), implode(' AND ', $where)))->execute();
+
+		return true;
 	}
 }
