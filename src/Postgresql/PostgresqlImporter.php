@@ -67,7 +67,7 @@ class PostgresqlImporter extends DatabaseImporter
 	 */
 	protected function getAlterTableSql(\SimpleXMLElement $structure)
 	{
-		$table = $this->getRealTableName($structure['name']);
+		$table = $this->db->replacePrefix($structure['name']);
 		$oldFields = $this->db->getTableColumns($table);
 		$oldKeys = $this->db->getTableKeys($table);
 		$oldSequence = $this->db->getTableSequences($table);

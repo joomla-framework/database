@@ -764,25 +764,6 @@ class ImporterMySqlTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the getRealTableName method with the wrong type of class.
-	 *
-	 * @return void
-	 *
-	 * @since  1.0
-	 */
-	public function testGetRealTableName()
-	{
-		$instance = new MysqlImporterInspector;
-		$instance->setDbo($this->dbo);
-
-		$this->assertThat(
-			$instance->getRealTableName('#__test'),
-			$this->equalTo('jos_test'),
-			'getRealTableName should return the name of the table with #__ converted to the database prefix.'
-		);
-	}
-
-	/**
 	 * Tests the setDbo method with the wrong type of class.
 	 *
 	 * @return void

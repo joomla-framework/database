@@ -54,18 +54,4 @@ class MysqlExporterInspector extends MysqlExporter
 	{
 		return parent::buildXmlStructure();
 	}
-
-	/**
-	 * Exposes the protected getGenericTableName method.
-	 *
-	 * @param   string  $table  The name of a table.
-	 *
-	 * @return  string  The name of the table with the database prefix replaced with #__.
-	 *
-	 * @since   1.0
-	 */
-	public function getGenericTableName($table)
-	{
-		return parent::getGenericTableName($table);
-	}
 }

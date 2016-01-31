@@ -560,25 +560,6 @@ class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the method getGenericTableName method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetGenericTableName()
-	{
-		$instance = new PostgresqlExporterInspector;
-		$instance->setDbo($this->dbo);
-
-		$this->assertThat(
-			$instance->getGenericTableName('jos_test'),
-			$this->equalTo('#__test'),
-			'The testGetGenericTableName should replace the database prefix with #__.'
-		);
-	}
-
-	/**
 	 * Tests the setDbo method with the wrong type of class.
 	 *
 	 * @return void

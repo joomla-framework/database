@@ -204,25 +204,6 @@ abstract class DatabaseImporter
 	}
 
 	/**
-	 * Get the real name of the table, converting the prefix wildcard string if present.
-	 *
-	 * @param   string  $table  The name of the table.
-	 *
-	 * @return  string	The real name of the table.
-	 *
-	 * @since   1.0
-	 */
-	protected function getRealTableName($table)
-	{
-		$prefix = $this->db->getPrefix();
-
-		// Replace the magic prefix if found.
-		$table = preg_replace('|^#__|', $prefix, $table);
-
-		return $table;
-	}
-
-	/**
 	 * Merges the incoming structure definition with the existing structure.
 	 *
 	 * @return  void
