@@ -454,7 +454,7 @@ class Profiler implements ProfilerInterface, \IteratorAggregate, \Countable
 	 *
 	 * @return  ProfilerInterface  This method is chainable.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 * @throws  \RuntimeException
 	 */
 	public function setStart($timeStamp = 0.0, $memoryBytes = 0)
