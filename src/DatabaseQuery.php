@@ -13,7 +13,7 @@ namespace Joomla\Database;
  *
  * @since  1.0
  */
-abstract class DatabaseQuery
+abstract class DatabaseQuery implements QueryInterface
 {
 	/**
 	 * The database driver.

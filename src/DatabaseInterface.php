@@ -140,11 +140,11 @@ interface DatabaseInterface
 	public function getNumRows($cursor = null);
 
 	/**
-	 * Get the current query object or a new DatabaseQuery object.
+	 * Get the current query object or a new QueryInterface object.
 	 *
-	 * @param   boolean  $new  False to return the current query object, True to return a new DatabaseQuery object.
+	 * @param   boolean  $new  False to return the current query object, True to return a new QueryInterface object.
 	 *
-	 * @return  DatabaseQuery
+	 * @return  QueryInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \RuntimeException
