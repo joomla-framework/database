@@ -574,16 +574,6 @@ class SqlsrvDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		if (!is_resource($this->connection))
-		{
-			$this->log(
-				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}',
-				array('code' => $this->errorNum, 'message' => $this->errorMsg)
-			);
-			throw new \RuntimeException($this->errorMsg, $this->errorNum);
-		}
-
 		// Take a local copy so that we don't modify the original query and cause issues later
 		$sql = $this->replacePrefix((string) $this->sql);
 
