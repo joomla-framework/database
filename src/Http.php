@@ -110,7 +110,7 @@ class Http
 	 *
 	 * @since   1.0
 	 */
-	public function options($url, array $headers = null, $timeout = null)
+	public function options($url, array $headers = array(), $timeout = null)
 	{
 		return $this->makeTransportRequest('OPTIONS', $url, null, $headers, $timeout);
 	}
@@ -126,7 +126,7 @@ class Http
 	 *
 	 * @since   1.0
 	 */
-	public function head($url, array $headers = null, $timeout = null)
+	public function head($url, array $headers = array(), $timeout = null)
 	{
 		return $this->makeTransportRequest('HEAD', $url, null, $headers, $timeout);
 	}
@@ -142,7 +142,7 @@ class Http
 	 *
 	 * @since   1.0
 	 */
-	public function get($url, array $headers = null, $timeout = null)
+	public function get($url, array $headers = array(), $timeout = null)
 	{
 		return $this->makeTransportRequest('GET', $url, null, $headers, $timeout);
 	}
@@ -159,7 +159,7 @@ class Http
 	 *
 	 * @since   1.0
 	 */
-	public function post($url, $data, array $headers = null, $timeout = null)
+	public function post($url, $data, array $headers = array(), $timeout = null)
 	{
 		return $this->makeTransportRequest('POST', $url, $data, $headers, $timeout);
 	}
@@ -176,7 +176,7 @@ class Http
 	 *
 	 * @since   1.0
 	 */
-	public function put($url, $data, array $headers = null, $timeout = null)
+	public function put($url, $data, array $headers = array(), $timeout = null)
 	{
 		return $this->makeTransportRequest('PUT', $url, $data, $headers, $timeout);
 	}
@@ -193,7 +193,7 @@ class Http
 	 *
 	 * @since   1.0
 	 */
-	public function delete($url, array $headers = null, $timeout = null, $data = null)
+	public function delete($url, array $headers = array(), $timeout = null, $data = null)
 	{
 		return $this->makeTransportRequest('DELETE', $url, $data, $headers, $timeout);
 	}
@@ -209,7 +209,7 @@ class Http
 	 *
 	 * @since   1.0
 	 */
-	public function trace($url, array $headers = null, $timeout = null)
+	public function trace($url, array $headers = array(), $timeout = null)
 	{
 		return $this->makeTransportRequest('TRACE', $url, null, $headers, $timeout);
 	}
@@ -226,7 +226,7 @@ class Http
 	 *
 	 * @since   1.0
 	 */
-	public function patch($url, $data, array $headers = null, $timeout = null)
+	public function patch($url, $data, array $headers = array(), $timeout = null)
 	{
 		return $this->makeTransportRequest('PATCH', $url, $data, $headers, $timeout);
 	}
@@ -244,7 +244,7 @@ class Http
 	 *
 	 * @since   1.0
 	 */
-	protected function makeTransportRequest($method, $url, $data = null, array $headers = null, $timeout = null)
+	protected function makeTransportRequest($method, $url, $data = null, array $headers = array(), $timeout = null)
 	{
 		// Look for headers set in the options.
 		if (isset($this->options['headers']))
