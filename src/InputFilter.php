@@ -516,14 +516,13 @@ class InputFilter
 	 */
 	protected function remove($source)
 	{
-		$loopCounter = 0;
-
 		// Iteration provides nested tag protection
-		while ($source != $this->cleanTags($source))
+		do
 		{
+			$temp = $source;
 			$source = $this->cleanTags($source);
-			$loopCounter++;
 		}
+		while ($temp != $source);
 
 		return $source;
 	}
