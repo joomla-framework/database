@@ -522,6 +522,7 @@ class InputFilter
 			$temp = $source;
 			$source = $this->cleanTags($source);
 		}
+
 		while ($temp != $source);
 
 		return $source;
