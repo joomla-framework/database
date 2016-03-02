@@ -31,9 +31,16 @@ class Json extends AbstractRegistryFormat
 	public function objectToString($object, $options = array())
 	{
 		$bitmask = isset($options['bitmask']) ? $options['bitmask'] : 0;
-		$depth   = isset($options['depth']) ? $options['depth'] : 512;
 
-		return StringHelper::unicode_to_utf8(json_encode($object, $bitmask, $depth));
+		// The depth parameter is only present as of PHP 5.5
+		if (version_compare(PHP_VERSION, '5.5', '>='))
+		{
+			$depth = isset($options['depth']) ? $options['depth'] : 512;
+
+			return StringHelper::unicode_to_utf8(json_encode($object, $bitmask, $depth));
+		}
+
+		return StringHelper::unicode_to_utf8(json_encode($object, $bitmask));
 	}
 
 	/**
