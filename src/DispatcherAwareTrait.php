@@ -11,7 +11,7 @@ namespace Joomla\Event;
 /**
  * Defines the trait for a Dispatcher Aware Class.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.2.0
  */
 trait DispatcherAwareTrait
 {
@@ -19,7 +19,7 @@ trait DispatcherAwareTrait
 	 * Event Dispatcher
 	 *
 	 * @var    DispatcherInterface
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.2.0
 	 */
 	private $dispatcher;
 
@@ -28,7 +28,7 @@ trait DispatcherAwareTrait
 	 *
 	 * @return  DispatcherInterface
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 * @throws  \UnexpectedValueException May be thrown if the dispatcher has not been set.
 	 */
 	public function getDispatcher()
@@ -48,7 +48,7 @@ trait DispatcherAwareTrait
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function setDispatcher(DispatcherInterface $dispatcher)
 	{
