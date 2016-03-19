@@ -182,9 +182,6 @@ class MysqliDriver extends DatabaseDriver
 			throw new \RuntimeException('Could not connect to MySQL.', mysqli_connect_errno());
 		}
 
-		// Set sql_mode to non_strict mode
-		mysqli_query($this->connection, "SET @@SESSION.sql_mode = '';");
-
 		// If auto-select is enabled select the given database.
 		if ($this->options['select'] && !empty($this->options['database']))
 		{
