@@ -187,6 +187,98 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	}
 
 	/**
+	 * Gets an array of keys, existing in objects
+	 * 
+	 * @param   string  $type  Selection type 'all' or 'common'
+	 * 
+	 * @throws  Exception
+	 * 
+	 * @return  array   Array of keys
+	 */
+
+	public function getObjectsKeys($type = 'all')
+	{
+		$keys = null;
+
+		if ($type == 'all')
+		{
+			$function = 'array_merge';
+		}
+		elseif ($type == 'common')
+		{
+			$function = 'array_intersect_key';
+		}
+		else
+		{
+			throw new \Exception("Unknown selection type: " . $type);
+		}
+
+		if (version_compare(PHP_VERSION, '5.4.0', '<'))
+		{
+			foreach ($this->objects as $object)
+			{
+				$object_vars = json_decode(json_encode($object->jsonSerialize()), true);
+				$keys = (is_null($keys)) ? $object_vars : $function($keys, $object_vars);
+			}
+		}
+		else
+		{
+			foreach ($this->objects as $object)
+			{
+				
+				$object_vars = json_decode(json_encode($object), true);
+				$keys = (is_null($keys)) ? $object_vars : $function($keys, $object_vars);
+			}
+		}
+
+		return array_keys($keys);
+	}
+
+	/**
+	 * Gets all objects as an array
+	 *
+	 * @param   boolean  $associative  Option to set return mode: associative or numeric array.
+	 * @param   string   $k            Unlimited optional property names to extract from objects.
+	 * 
+	 * @return  array    Returns an array according to defined options.
+	 *
+	 * @since   1.0
+	 */
+	public function toArray($associative = true, $k = null)
+	{
+		$keys = func_get_args();
+		$associative = array_shift($keys);
+
+		if (empty($keys))
+		{
+			$keys = $this->getObjectsKeys();
+		}
+
+		$return = array();
+
+		$i = 0;
+
+		foreach ($this->objects as $key => $object)
+		{
+			$array_item = array();
+
+			$key = ($associative) ? $key : $i++;
+
+			$j = 0;
+
+			foreach ($keys as $property)
+			{
+				$property_key = ($associative) ? $property : $j++;
+				$array_item[$property_key] = (isset($object->$property)) ? $object->$property : null;
+			}
+
+			$return[$key] = $array_item;
+		}
+
+		return $return;
+	}
+
+	/**
 	 * Gets the number of data objects in the set.
 	 *
 	 * @return  integer  The number of objects.
