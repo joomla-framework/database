@@ -27,7 +27,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	/**
 	 * The iterator objects.
 	 *
-	 * @var    array
+	 * @var    DataObject[]
 	 * @since  1.0
 	 */
 	private $objects = array();
@@ -188,14 +188,14 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 
 	/**
 	 * Gets an array of keys, existing in objects
-	 * 
+	 *
 	 * @param   string  $type  Selection type 'all' or 'common'
-	 * 
-	 * @throws  Exception
-	 * 
+	 *
 	 * @return  array   Array of keys
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \InvalidArgumentException
 	 */
-
 	public function getObjectsKeys($type = 'all')
 	{
 		$keys = null;
@@ -210,25 +210,21 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 		}
 		else
 		{
-			throw new \Exception("Unknown selection type: " . $type);
+			throw new \InvalidArgumentException("Unknown selection type: $type");
 		}
 
-		if (version_compare(PHP_VERSION, '5.4.0', '<'))
+		foreach ($this->objects as $object)
 		{
-			foreach ($this->objects as $object)
+			if (version_compare(PHP_VERSION, '5.4.0', '<'))
 			{
 				$object_vars = json_decode(json_encode($object->jsonSerialize()), true);
-				$keys = (is_null($keys)) ? $object_vars : $function($keys, $object_vars);
 			}
-		}
-		else
-		{
-			foreach ($this->objects as $object)
+			else
 			{
-				
 				$object_vars = json_decode(json_encode($object), true);
-				$keys = (is_null($keys)) ? $object_vars : $function($keys, $object_vars);
 			}
+
+			$keys = (is_null($keys)) ? $object_vars : $function($keys, $object_vars);
 		}
 
 		return array_keys($keys);
@@ -239,14 +235,14 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	 *
 	 * @param   boolean  $associative  Option to set return mode: associative or numeric array.
 	 * @param   string   $k            Unlimited optional property names to extract from objects.
-	 * 
+	 *
 	 * @return  array    Returns an array according to defined options.
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function toArray($associative = true, $k = null)
 	{
-		$keys = func_get_args();
+		$keys        = func_get_args();
 		$associative = array_shift($keys);
 
 		if (empty($keys))
@@ -268,7 +264,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 
 			foreach ($keys as $property)
 			{
-				$property_key = ($associative) ? $property : $j++;
+				$property_key              = ($associative) ? $property : $j++;
 				$array_item[$property_key] = (isset($object->$property)) ? $object->$property : null;
 			}
 

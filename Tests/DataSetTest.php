@@ -148,7 +148,7 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Data\DataSet::toArray
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetObjectsKeys()
 	{
@@ -162,7 +162,7 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertThat(
 			$instance->getObjectsKeys(),
-			$this->equalTo(array('foo','bar','baz','quz'))
+			$this->equalTo(array('foo',' bar', 'baz', 'quz'))
 		);
 
 		$this->assertThat(
