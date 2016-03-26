@@ -162,7 +162,7 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertThat(
 			$instance->getObjectsKeys(),
-			$this->equalTo(array('foo',' bar', 'baz', 'quz'))
+			$this->equalTo(array('foo', 'bar', 'baz', 'quz'))
 		);
 
 		$this->assertThat(
