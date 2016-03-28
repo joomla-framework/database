@@ -9,7 +9,7 @@
         "php": ">=5.3.10|>=7.0",
         "joomla/filter": "~1.0",
         "joomla/event": "~1.1",
-        "paragonie/random_compat": "~1.0"
+        "paragonie/random_compat": "~1.0|~2.0"
     },
     "require-dev": {
         "joomla/database": "~1.0",
