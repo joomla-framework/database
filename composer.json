@@ -21,7 +21,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Joomla\\OAuth1\\": "src/",
+            "Joomla\\OAuth1\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Joomla\\OAuth1\\Tests\\": "Tests/"
         }
     },
