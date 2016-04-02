@@ -361,6 +361,34 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the Joomla\Data\DataSet::walk method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\Data\DataSet::walk
+	 * @since   1.0
+	 */
+	public function testWalk()
+	{
+		$instance = new Data\DataSet;
+		$instance['key1'] = new Data\DataObject(array('foo' => 'bar'));
+		$instance['key2'] = new Data\DataObject(array('foo' => 'qux'));
+
+		$instance->walk(
+			function(&$object, $key)
+			{
+				$object->old = $object->foo;
+				$object->foo = 'new-value';
+			}
+		);
+
+		$this->assertEquals('bar', $instance->old['key1']);
+		$this->assertEquals('qux', $instance->old['key2']);
+		$this->assertEquals('new-value', $instance->foo['key1']);
+		$this->assertEquals('new-value', $instance->foo['key2']);
+	}
+
+	/**
 	 * Tests the Joomla\Data\DataSet::next method.
 	 *
 	 * @return  void
