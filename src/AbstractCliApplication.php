@@ -8,7 +8,6 @@
 
 namespace Joomla\Application;
 
-use Joomla\Application\Cli\CliOutput;
 use Joomla\Input;
 use Joomla\Registry\Registry;
 
@@ -22,7 +21,7 @@ abstract class AbstractCliApplication extends AbstractApplication
 	/**
 	 * Output object
 	 *
-	 * @var    CliOutput
+	 * @var    Cli\CliOutput
 	 * @since  1.0
 	 */
 	protected $output;
@@ -38,18 +37,18 @@ abstract class AbstractCliApplication extends AbstractApplication
 	/**
 	 * Class constructor.
 	 *
-	 * @param   Input\Cli  $input   An optional argument to provide dependency injection for the application's
-	 *                              input object.  If the argument is a InputCli object that object will become
-	 *                              the application's input object, otherwise a default input object is created.
-	 * @param   Registry   $config  An optional argument to provide dependency injection for the application's
-	 *                              config object.  If the argument is a Registry object that object will become
-	 *                              the application's config object, otherwise a default config object is created.
-	 *
-	 * @param   CliOutput  $output  The output handler.
+	 * @param   Input\Cli      $input     An optional argument to provide dependency injection for the application's
+	 *                                    input object.  If the argument is a InputCli object that object will become
+	 *                                    the application's input object, otherwise a default input object is created.
+	 * @param   Registry       $config    An optional argument to provide dependency injection for the application's
+	 *                                    config object.  If the argument is a Registry object that object will become
+	 *                                    the application's config object, otherwise a default config object is created.
+	 * @param   Cli\CliOutput  $output    The output handler.
+	 * @param   Cli\CliInput   $cliInput  The CLI input handler.
 	 *
 	 * @since   1.0
 	 */
-	public function __construct(Input\Cli $input = null, Registry $config = null, CliOutput $output = null)
+	public function __construct(Input\Cli $input = null, Registry $config = null, Cli\CliOutput $output = null, Cli\CliInput $cliInput = null)
 	{
 		// Close the application if we are not executed from the command line.
 		// @codeCoverageIgnoreStart
@@ -60,10 +59,10 @@ abstract class AbstractCliApplication extends AbstractApplication
 
 		// @codeCoverageIgnoreEnd
 
-		$this->output = ($output instanceof CliOutput) ? $output : new Cli\Output\Stdout;
+		$this->output = ($output instanceof Cli\CliOutput) ? $output : new Cli\Output\Stdout;
 
-		// Set the Cli input object.
-		$this->cliInput = new Cli\CliInput;
+		// Set the CLI input object.
+		$this->cliInput = ($output instanceof Cli\CliInput) ? $cliInput : new Cli\CliInput;
 
 		// Call the constructor as late as possible (it runs `initialise`).
 		parent::__construct($input instanceof Input\Input ? $input : new Input\Cli, $config);
@@ -79,7 +78,7 @@ abstract class AbstractCliApplication extends AbstractApplication
 	/**
 	 * Get an output object.
 	 *
-	 * @return  CliOutput
+	 * @return  Cli\CliOutput
 	 *
 	 * @since   1.0
 	 */
@@ -89,9 +88,9 @@ abstract class AbstractCliApplication extends AbstractApplication
 	}
 
 	/**
-	 * Get an cli input object.
+	 * Get a CLI input object.
 	 *
-	 * @return  CliInput
+	 * @return  Cli\CliInput
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -127,6 +126,6 @@ abstract class AbstractCliApplication extends AbstractApplication
 	 */
 	public function in()
 	{
-		return $this->cliInput->in();
+		return $this->getCliInput()->in();
 	}
 }
