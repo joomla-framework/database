@@ -1406,6 +1406,7 @@ class Language
 
 		$metadata = array();
 
+		/** @var \SimpleXMLElement $child */
 		foreach ($xml->metadata->children() as $child)
 		{
 			$metadata[$child->getName()] = (string) $child;
