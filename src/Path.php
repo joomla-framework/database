@@ -231,8 +231,8 @@ class Path
 
 		// Try to find a writable directory
 		$dir = is_writable('/tmp') ? '/tmp' : false;
-		$dir = (!$dir && is_writable($ssp)) ? $ssp : false;
-		$dir = (!$dir && is_writable($jtp)) ? $jtp : false;
+		$dir = (!$dir && is_writable($ssp)) ? $ssp : $dir;
+		$dir = (!$dir && is_writable($jtp)) ? $jtp : $dir;
 
 		if ($dir)
 		{
