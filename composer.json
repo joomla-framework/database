@@ -24,7 +24,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Joomla\\Application\\": "src/",
+            "Joomla\\Application\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Joomla\\Application\\Tests\\": "Tests/"
         }
     },
