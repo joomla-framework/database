@@ -19,7 +19,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Joomla\\Filter\\": "src/",
+            "Joomla\\Filter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Joomla\\Filter\\Tests\\": "Tests/"
         }
     },
