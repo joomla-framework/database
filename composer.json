@@ -15,8 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Joomla\\String\\": "src/",
-            "Joomla\\String\\Tests\\": "Tests/"
+            "Joomla\\String\\": "src/"
         },
         "files": [
             "src/phputf8/utf8.php",
@@ -35,6 +34,11 @@
             "src/phputf8/utils/ascii.php",
             "src/phputf8/utils/validation.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Joomla\\String\\Tests\\": "Tests/"
+        }
     },
     "extra": {
         "branch-alias": {
