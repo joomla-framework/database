@@ -35,7 +35,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	/**
 	 * The class constructor.
 	 *
-	 * @param   array  $objects  An array of Data\Object objects to bind to the data set.
+	 * @param   DataObject[]  $objects  An array of DataObject objects to bind to the data set.
 	 *
 	 * @since   1.0
 	 * @throws  \InvalidArgumentException if an object is not an instance of Data\Object.
@@ -416,22 +416,23 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	 * 
 	 * @param   callable  $funcname  Callback function.  
 	 * 
-	 * @return  boolean   Returns TRUE on success or FALSE on failure.
+	 * @return  boolean
 	 * 
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \InvalidArgumentException
 	 */
 	public function walk($funcname)
 	{
 		if (!is_callable($funcname))
 		{
-			$message = 'Joomla\\Data\\DataSet::walk() expects parameter 1 to be a valid callback';
+			$message = __METHOD__ . '() expects parameter 1 to be a valid callback';
 
 			if (is_string($funcname))
 			{
 				$message .= sprintf(', function \'%s\' not found or invalid function name', $funcname);
 			}
 
-			throw new \Exception($message);
+			throw new \InvalidArgumentException($message);
 		}
 
 		foreach ($this->objects as $key => $object)

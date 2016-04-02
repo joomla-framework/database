@@ -366,7 +366,7 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Data\DataSet::walk
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testWalk()
 	{
