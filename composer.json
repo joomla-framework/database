@@ -18,7 +18,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Joomla\\Keychain\\": "src/",
+            "Joomla\\Keychain\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Joomla\\Keychain\\Tests\\": "Tests/"
         }
     },
