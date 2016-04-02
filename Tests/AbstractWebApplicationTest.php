@@ -563,6 +563,87 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @testdox  Tests that the application redirects successfully with the legacy behavior.
+	 *
+	 * @covers  Joomla\Application\AbstractWebApplication::redirect
+	 */
+	public function testRedirectLegacyBehavior()
+	{
+		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
+		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(), '', true, true, true, false, true);
+		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(), '', true, true, true, false, true);
+
+		// Mock the Input object internals
+		$mockServerInput = $this->getMock(
+			'Joomla\Input\Input',
+			array('get', 'set'),
+			array(
+				array(
+					'HTTP_HOST'   => self::TEST_HTTP_HOST,
+					'REQUEST_URI' => self::TEST_REQUEST_URI,
+					'SCRIPT_NAME' => '/index.php'
+				)
+			),
+			'',
+			true,
+			true,
+			true,
+			false,
+			true
+		);
+
+		$inputInternals = array(
+			'server' => $mockServerInput
+		);
+
+		TestHelper::setValue($mockInput, 'inputs', $inputInternals);
+
+		// Mock the client internals to show engine has been detected.
+		TestHelper::setValue(
+			$mockClient,
+			'detection',
+			array('engine' => true)
+		);
+		TestHelper::setValue(
+			$mockClient,
+			'engine',
+			WebClient::GECKO
+		);
+
+		$object = $this->getMockForAbstractClass(
+			'Joomla\Application\AbstractWebApplication',
+			array($mockInput, $mockConfig, $mockClient),
+			'',
+			true,
+			true,
+			true,
+			array('checkHeadersSent', 'close', 'header')
+		);
+
+		$object->expects($this->once())
+			->method('close');
+		$object->expects($this->any())
+			->method('checkHeadersSent')
+			->willReturn(false);
+		$object->expects($this->any())
+			->method('header')
+			->willReturnCallback(array($this, 'mockHeader'));
+
+		$url = 'index.php';
+
+		$object->redirect($url, false);
+
+		$this->assertSame(
+			self::$headers,
+			array(
+				array('HTTP/1.1 303 See other', true, null),
+				array('Location: http://' . self::TEST_HTTP_HOST . "/$url", true, null),
+				array('Content-Type: text/html; charset=utf-8', true, null),
+			)
+		);
+	}
+
+	/**
 	 * @testdox  Tests that the application redirects successfully.
 	 *
 	 * @covers  Joomla\Application\AbstractWebApplication::redirect
@@ -1530,7 +1611,9 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	public function testGetFormToken()
 	{
 		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractWebApplication');
-		$mockSession = $this->getMock('Joomla\\Session\\Session');
+		$mockSession = $this->getMockBuilder('Joomla\\Session\\Session')
+			->disableOriginalConstructor()
+			->getMock();
 
 		$object->setSession($mockSession);
 		$object->set('secret', 'abc');
