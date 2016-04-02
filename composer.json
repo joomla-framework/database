@@ -20,7 +20,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Joomla\\View\\": "src/",
+            "Joomla\\View\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Joomla\\View\\Tests\\": "Tests/"
         }
     },
