@@ -18,7 +18,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Joomla\\Mediawiki\\": "src/",
+            "Joomla\\Mediawiki\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Joomla\\Mediawiki\\Tests\\": "Tests/"
         }
     }
