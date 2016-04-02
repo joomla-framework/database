@@ -71,9 +71,9 @@ abstract class AbstractWebApplication extends AbstractApplication
 	/**
 	 * A map of integer HTTP 1.1 response codes to the full HTTP Status for the headers.
 	 *
-	 * @var    object
-	 * @since  1.0
-	 * @see    http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 * @see    https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
 	 */
 	private $responseMap = array(
 		300 => 'HTTP/1.1 300 Multiple Choices',
