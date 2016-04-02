@@ -17,7 +17,11 @@
     },
     "autoload": {
     	"psr-4": {
-            "Joomla\\Router\\": "src/",
+            "Joomla\\Router\\": "src/"
+    	}
+    },
+    "autoload-dev": {
+    	"psr-4": {
             "Joomla\\Router\\Tests\\": "Tests/"
     	}
     },
