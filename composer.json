@@ -22,7 +22,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Joomla\\Registry\\": "src/",
+            "Joomla\\Registry\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Joomla\\Registry\\Tests\\": "Tests/"
         }
     },
