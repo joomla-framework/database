@@ -17,7 +17,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Joomla\\Language\\": "src/",
+            "Joomla\\Language\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Joomla\\Language\\Tests\\": "Tests/"
         }
     },
