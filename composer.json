@@ -18,7 +18,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Joomla\\Github\\": "src/",
+            "Joomla\\Github\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Joomla\\Github\\Tests\\": "Tests/"
         }
     },
