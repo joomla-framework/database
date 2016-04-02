@@ -148,7 +148,7 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Data\DataSet::toArray
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function testGetObjectsKeys()
 	{
@@ -366,7 +366,7 @@ class DataSetTest extends \PHPUnit_Framework_TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Data\DataSet::walk
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function testWalk()
 	{

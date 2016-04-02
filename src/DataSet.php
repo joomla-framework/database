@@ -193,7 +193,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	 *
 	 * @return  array   Array of keys
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 * @throws  \InvalidArgumentException
 	 */
 	public function getObjectsKeys($type = 'all')
@@ -238,7 +238,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	 *
 	 * @return  array    Returns an array according to defined options.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public function toArray($associative = true, $k = null)
 	{
@@ -418,7 +418,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	 * 
 	 * @return  boolean
 	 * 
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 * @throws  \InvalidArgumentException
 	 */
 	public function walk($funcname)
