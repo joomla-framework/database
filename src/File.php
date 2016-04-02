@@ -84,24 +84,17 @@ class File
 
 		if ($use_streams)
 		{
-			$stream = Stream::getStream();
-
-			if (!$stream->copy($src, $dest))
-			{
-				throw new FilesystemException(sprintf('%1$s(%2$s, %3$s): %4$s', __METHOD__, $src, $dest, $stream->getError()));
-			}
+			Stream::getStream()->copy($src, $dest);
 
 			return true;
 		}
-		else
+
+		if (!@ copy($src, $dest))
 		{
-			if (!@ copy($src, $dest))
-			{
-				throw new FilesystemException(__METHOD__ . ': Copy failed.');
-			}
-
-			return true;
+			throw new FilesystemException(__METHOD__ . ': Copy failed.');
 		}
+
+		return true;
 	}
 
 	/**
@@ -168,24 +161,17 @@ class File
 
 		if ($use_streams)
 		{
-			$stream = Stream::getStream();
-
-			if (!$stream->move($src, $dest))
-			{
-				throw new FilesystemException(__METHOD__ . ': ' . $stream->getError());
-			}
+			Stream::getStream()->move($src, $dest);
 
 			return true;
 		}
-		else
+
+		if (!@ rename($src, $dest))
 		{
-			if (!@ rename($src, $dest))
-			{
-				throw new FilesystemException(__METHOD__ . ': Rename failed.');
-			}
-
-			return true;
+			throw new FilesystemException(__METHOD__ . ': Rename failed.');
 		}
+
+		return true;
 	}
 
 	/**
@@ -198,7 +184,6 @@ class File
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
-	 * @throws  FilesystemException
 	 */
 	public static function write($file, &$buffer, $use_streams = false)
 	{
@@ -217,20 +202,14 @@ class File
 			// Beef up the chunk size to a meg
 			$stream->set('chunksize', (1024 * 1024));
 
-			if (!$stream->writeFile($file, $buffer))
-			{
-				throw new FilesystemException(sprintf('%1$s(%2$s): %3$s', __METHOD__, $file, $stream->getError()));
-			}
+			$stream->writeFile($file, $buffer);
 
 			return true;
 		}
-		else
-		{
-			$file = Path::clean($file);
-			$ret = is_int(file_put_contents($file, $buffer)) ? true : false;
 
-			return $ret;
-		}
+		$file = Path::clean($file);
+
+		return is_int(file_put_contents($file, $buffer));
 	}
 
 	/**
@@ -260,35 +239,22 @@ class File
 
 		if ($use_streams)
 		{
-			$stream = Stream::getStream();
-
-			if (!$stream->upload($src, $dest))
-			{
-				throw new FilesystemException(__METHOD__ . ': ' . $stream->getError());
-			}
+			Stream::getStream()->upload($src, $dest);
 
 			return true;
 		}
-		else
+
+		if (is_writeable($baseDir) && move_uploaded_file($src, $dest))
 		{
-			if (is_writeable($baseDir) && move_uploaded_file($src, $dest))
+			// Short circuit to prevent file permission errors
+			if (Path::setPermissions($dest))
 			{
-				// Short circuit to prevent file permission errors
-				if (Path::setPermissions($dest))
-				{
-					return true;
-				}
-				else
-				{
-					throw new FilesystemException(__METHOD__ . ': Failed to change file permissions.');
-				}
-			}
-			else
-			{
-				throw new FilesystemException(__METHOD__ . ': Failed to move file.');
+				return true;
 			}
 
-			return false;
+			throw new FilesystemException(__METHOD__ . ': Failed to change file permissions.');
 		}
+
+		throw new FilesystemException(__METHOD__ . ': Failed to move file.');
 	}
 }

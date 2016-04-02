@@ -8,6 +8,8 @@
 
 namespace Joomla\Filesystem;
 
+use Joomla\Filesystem\Exception\FilesystemException;
+
 /**
  * Joomla! Stream Interface
  *
@@ -95,7 +97,7 @@ class Stream
 	/**
 	 * File Handle
 	 *
-	 * @var    array
+	 * @var    resource
 	 * @since  1.0
 	 */
 	protected $fh;
@@ -208,16 +210,16 @@ class Stream
 	 * @return  boolean
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
-	public function open($filename, $mode = 'r', $use_include_path = false, $context = null,
-		$use_prefix = false, $relative = false, $detectprocessingmode = false)
+	public function open($filename, $mode = 'r', $use_include_path = false, $context = null, $use_prefix = false, $relative = false,
+		$detectprocessingmode = false)
 	{
 		$filename = $this->_getFilename($filename, $mode, $use_prefix, $relative);
 
 		if (!$filename)
 		{
-			throw new \RuntimeException('Filename not set');
+			throw new FilesystemException('Filename not set');
 		}
 
 		$this->filename = $filename;
@@ -301,7 +303,7 @@ class Stream
 
 		if (!$this->fh)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before
@@ -320,13 +322,13 @@ class Stream
 	 * @return  boolean
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function close()
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		// Capture PHP errors
@@ -352,13 +354,11 @@ class Stream
 
 		if (!$res)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
-		else
-		{
-			// Reset this
-			$this->fh = null;
-		}
+
+		// Reset this
+		$this->fh = null;
 
 		// If we wrote, chmod the file after it's closed
 		if ($this->openmode[0] == 'w')
@@ -379,13 +379,13 @@ class Stream
 	 * @return  boolean
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function eof()
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		// Capture PHP errors
@@ -408,7 +408,7 @@ class Stream
 
 		if ($php_errormsg)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before
@@ -424,13 +424,13 @@ class Stream
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function filesize()
 	{
 		if (!$this->filename)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		// Capture PHP errors
@@ -457,13 +457,11 @@ class Stream
 				if ($tmp_error)
 				{
 					// Use the php_errormsg from before
-					throw new \RuntimeException($tmp_error);
+					throw new FilesystemException($tmp_error);
 				}
-				else
-				{
-					// Error but nothing from php? How strange! Create our own
-					throw new \RuntimeException('Failed to get file size. This may not work for all streams.');
-				}
+
+				// Error but nothing from php? How strange! Create our own
+				throw new FilesystemException('Failed to get file size. This may not work for all streams.');
 			}
 			else
 			{
@@ -492,13 +490,13 @@ class Stream
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function gets($length = 0)
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		// Capture PHP errors
@@ -521,7 +519,7 @@ class Stream
 
 		if (!$res)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before
@@ -542,7 +540,7 @@ class Stream
 	 *
 	 * @see     http://php.net/manual/en/function.fread.php
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function read($length = 0)
 	{
@@ -564,7 +562,7 @@ class Stream
 
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		$retval = false;
@@ -596,28 +594,26 @@ class Stream
 
 			if (!$res)
 			{
-				throw new \RuntimeException($php_errormsg);
+				throw new FilesystemException($php_errormsg);
+			}
+
+			if (!$retval)
+			{
+				$retval = '';
+			}
+
+			$retval .= $res;
+
+			if (!$this->eof())
+			{
+				$len = strlen($res);
+				$remaining -= $len;
 			}
 			else
 			{
-				if (!$retval)
-				{
-					$retval = '';
-				}
-
-				$retval .= $res;
-
-				if (!$this->eof())
-				{
-					$len = strlen($res);
-					$remaining -= $len;
-				}
-				else
-				{
-					// If it's the end of the file then we've nothing left to read; reset remaining and len
-					$remaining = 0;
-					$length = strlen($retval);
-				}
+				// If it's the end of the file then we've nothing left to read; reset remaining and len
+				$remaining = 0;
+				$length = strlen($retval);
 			}
 		}
 
@@ -642,13 +638,13 @@ class Stream
 	 *
 	 * @see     http://php.net/manual/en/function.fseek.php
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function seek($offset, $whence = SEEK_SET)
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		// Capture PHP errors
@@ -672,7 +668,7 @@ class Stream
 		// Seek, interestingly, returns 0 on success or -1 on failure.
 		if ($res == -1)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before
@@ -688,13 +684,13 @@ class Stream
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function tell()
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		// Capture PHP errors
@@ -718,7 +714,7 @@ class Stream
 		// May return 0 so check if it's really false
 		if ($res === false)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before
@@ -747,13 +743,13 @@ class Stream
 	 *
 	 * @see     http://php.net/manual/en/function.fwrite.php
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function write(&$string, $length = 0, $chunk = 0)
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		// If the length isn't set, set it to the length of the string.
@@ -787,12 +783,12 @@ class Stream
 			if ($res === false)
 			{
 				// Returned error
-				throw new \RuntimeException($php_errormsg);
+				throw new FilesystemException($php_errormsg);
 			}
 			elseif ($res === 0)
 			{
 				// Wrote nothing?
-				throw new \RuntimeException('Warning: No data written');
+				throw new FilesystemException('Warning: No data written');
 			}
 			else
 			{
@@ -820,7 +816,7 @@ class Stream
 	 * @return  boolean
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function chmod($filename = '', $mode = 0)
 	{
@@ -828,7 +824,7 @@ class Stream
 		{
 			if (!isset($this->filename) || !$this->filename)
 			{
-				throw new \RuntimeException('Filename not set');
+				throw new FilesystemException('Filename not set');
 			}
 
 			$filename = $this->filename;
@@ -862,7 +858,7 @@ class Stream
 		// Seek, interestingly, returns 0 on success or -1 on failure
 		if (!$res)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before.
@@ -879,13 +875,13 @@ class Stream
 	 *
 	 * @see     http://php.net/manual/en/function.stream-get-meta-data.php
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function get_meta_data()
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		return stream_get_meta_data($this->fh);
@@ -992,7 +988,7 @@ class Stream
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function applyContextToStream()
 	{
@@ -1008,7 +1004,7 @@ class Stream
 
 			if (!$retval)
 			{
-				throw new \RuntimeException($php_errormsg);
+				throw new FilesystemException($php_errormsg);
 			}
 
 			// Restore error tracking to what it was before
@@ -1030,7 +1026,7 @@ class Stream
 	 *
 	 * @see     http://php.net/manual/en/function.stream-filter-append.php
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function appendFilter($filtername, $read_write = STREAM_FILTER_READ, $params = array())
 	{
@@ -1047,12 +1043,10 @@ class Stream
 
 			if (!$res && $php_errormsg)
 			{
-				throw new \RuntimeException($php_errormsg);
+				throw new FilesystemException($php_errormsg);
 			}
-			else
-			{
-				$this->filters[] = &$res;
-			}
+
+			$this->filters[] = &$res;
 
 			// Restore error tracking to what it was before.
 			ini_set('track_errors', $track_errors);
@@ -1072,7 +1066,7 @@ class Stream
 	 *
 	 * @see     http://php.net/manual/en/function.stream-filter-prepend.php
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function prependFilter($filtername, $read_write = STREAM_FILTER_READ, $params = array())
 	{
@@ -1089,13 +1083,11 @@ class Stream
 			if (!$res && $php_errormsg)
 			{
 				// Set the error msg
-				throw new \RuntimeException($php_errormsg);
+				throw new FilesystemException($php_errormsg);
 			}
-			else
-			{
-				array_unshift($res, '');
-				$res[0] = &$this->filters;
-			}
+
+			array_unshift($res, '');
+			$res[0] = &$this->filters;
 
 			// Restore error tracking to what it was before.
 			ini_set('track_errors', $track_errors);
@@ -1114,7 +1106,7 @@ class Stream
 	 * @return  boolean   Result of operation
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function removeFilter(&$resource, $byindex = false)
 	{
@@ -1134,7 +1126,7 @@ class Stream
 
 		if ($res && $php_errormsg)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before.
@@ -1155,7 +1147,7 @@ class Stream
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function copy($src, $dest, $context = null, $use_prefix = true, $relative = false)
 	{
@@ -1189,12 +1181,10 @@ class Stream
 
 		if (!$res && $php_errormsg)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
-		else
-		{
-			$this->chmod($chmodDest);
-		}
+
+		$this->chmod($chmodDest);
 
 		// Restore error tracking to what it was before
 		ini_set('track_errors', $track_errors);
@@ -1214,7 +1204,7 @@ class Stream
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function move($src, $dest, $context = null, $use_prefix = true, $relative = false)
 	{
@@ -1244,7 +1234,7 @@ class Stream
 
 		if (!$res && $php_errormsg)
 		{
-			throw new \RuntimeException($php_errormsg());
+			throw new FilesystemException($php_errormsg);
 		}
 
 		$this->chmod($dest);
@@ -1266,7 +1256,7 @@ class Stream
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function delete($filename, $context = null, $use_prefix = true, $relative = false)
 	{
@@ -1295,7 +1285,7 @@ class Stream
 
 		if (!$res && $php_errormsg)
 		{
-			throw new \RuntimeException($php_errormsg());
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before.
@@ -1316,7 +1306,7 @@ class Stream
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function upload($src, $dest, $context = null, $use_prefix = true, $relative = false)
 	{
@@ -1325,10 +1315,8 @@ class Stream
 			// Make sure it's an uploaded file
 			return $this->copy($src, $dest, $context, $use_prefix, $relative);
 		}
-		else
-		{
-			throw new \RuntimeException('Not an uploaded file.');
-		}
+
+		throw new FilesystemException('Not an uploaded file.');
 	}
 
 	/**
