@@ -8,9 +8,9 @@
 
 namespace Joomla\Application;
 
-use Joomla\Registry\Registry;
-use Joomla\Input;
 use Joomla\Application\Cli\CliOutput;
+use Joomla\Input;
+use Joomla\Registry\Registry;
 
 /**
  * Base class for a Joomla! command line application.
@@ -20,14 +20,18 @@ use Joomla\Application\Cli\CliOutput;
 abstract class AbstractCliApplication extends AbstractApplication
 {
 	/**
-	 * @var    CliOutput  Output object
+	 * Output object
+	 *
+	 * @var    CliOutput
 	 * @since  1.0
 	 */
 	protected $output;
 
 	/**
-	 * @var    CliInput   Cli Input object
-	 * @since  1.2
+	 * CLI Input object
+	 *
+	 * @var    Cli\CliInput
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $cliInput;
 
@@ -89,7 +93,7 @@ abstract class AbstractCliApplication extends AbstractApplication
 	 *
 	 * @return  CliInput
 	 *
-	 * @since   1.2
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getCliInput()
 	{
