@@ -14,7 +14,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Joomla\\Event\\": "src/",
+            "Joomla\\Event\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Joomla\\Event\\Tests\\": "Tests/"
         }
     },
