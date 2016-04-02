@@ -23,7 +23,7 @@
             "Joomla\\Model\\": "src/"
         }
     },
-    "autoload": {
+    "autoload-dev": {
         "psr-4": {
             "Joomla\\Model\\Tests\\": "Tests/"
         }
