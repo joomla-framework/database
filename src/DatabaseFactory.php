@@ -20,6 +20,7 @@ class DatabaseFactory
 	 *
 	 * @var    DatabaseFactory
 	 * @since  1.0
+	 * @deprecated  2.0  Instantiate a new factory object as needed
 	 */
 	private static $instance = null;
 
@@ -143,6 +144,7 @@ class DatabaseFactory
 	 * @return  DatabaseFactory
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Instantiate a new factory object as needed
 	 */
 	public static function getInstance()
 	{
@@ -188,6 +190,7 @@ class DatabaseFactory
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Instantiate a new factory object as needed
 	 */
 	public static function setInstance(DatabaseFactory $instance = null)
 	{
