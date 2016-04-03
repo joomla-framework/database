@@ -45,14 +45,14 @@ class MysqliImporter extends DatabaseImporter
 	/**
 	 * Get the SQL syntax to add a table.
 	 *
-	 * @param   SimpleXMLElement  $table  The table information.
+	 * @param   \SimpleXMLElement  $table  The table information.
 	 *
 	 * @return  string
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \RuntimeException
 	 */
-	protected function xmlToCreate(SimpleXMLElement $table)
+	protected function xmlToCreate(\SimpleXMLElement $table)
 	{
 		$existingTables = $this->db->getTableList();
 		$tableName = (string) $table['name'];
