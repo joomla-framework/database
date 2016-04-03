@@ -162,20 +162,7 @@ class MysqlDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$tables = $this->getTableList();
-
-		$this->setQuery('SHOW FULL COLUMNS FROM ' . $tables[0]);
-		$array = $this->loadAssocList();
-
-		foreach ($array as $field)
-		{
-			if (!is_null($field['Collation']))
-			{
-				return $field['Collation'];
-			}
-		}
-
-		return null;
+		return $this->setQuery('SELECT @@collation_database;')->loadResult();
 	}
 
 	/**
