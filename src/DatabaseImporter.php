@@ -329,4 +329,16 @@ abstract class DatabaseImporter
 
 		return $this;
 	}
+
+	/**
+	 * Get the SQL syntax to add a table.
+	 *
+	 * @param   \SimpleXMLElement  $table  The table information.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	abstract protected function xmlToCreate(\SimpleXMLElement $table);
 }
