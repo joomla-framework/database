@@ -16,15 +16,6 @@ namespace Joomla\Database;
 class DatabaseFactory
 {
 	/**
-	 * Contains the current Factory instance
-	 *
-	 * @var    DatabaseFactory
-	 * @since  1.0
-	 * @deprecated  2.0  Instantiate a new factory object as needed
-	 */
-	private static $instance = null;
-
-	/**
 	 * Method to return a DatabaseDriver instance based on the given options.
 	 *
 	 * There are three global options and then the rest are specific to the database driver. The 'database' option determines which database is to
@@ -134,24 +125,6 @@ class DatabaseFactory
 	}
 
 	/**
-	 * Gets an instance of the factory object.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 * @deprecated  2.0  Instantiate a new factory object as needed
-	 */
-	public static function getInstance()
-	{
-		if (!self::$instance)
-		{
-			self::setInstance(new static);
-		}
-
-		return self::$instance;
-	}
-
-	/**
 	 * Get the current query object or a new Query object.
 	 *
 	 * @param   string          $name  Name of the driver you want an query object for.
@@ -175,20 +148,5 @@ class DatabaseFactory
 		}
 
 		return new $class($db);
-	}
-
-	/**
-	 * Gets an instance of a factory object to return on subsequent calls of getInstance.
-	 *
-	 * @param   DatabaseFactory  $instance  A Factory object.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 * @deprecated  2.0  Instantiate a new factory object as needed
-	 */
-	public static function setInstance(DatabaseFactory $instance = null)
-	{
-		self::$instance = $instance;
 	}
 }
