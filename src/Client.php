@@ -209,7 +209,7 @@ class Client
 	 * @param   string  $method   The method with which to send the request
 	 * @param   int     $timeout  The timeout for the request
 	 *
-	 * @return  string  The URL.
+	 * @return  \Joomla\Http\Response  The http response object.
 	 *
 	 * @since   1.0
 	 * @throws  InvalidArgumentException
