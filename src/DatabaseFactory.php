@@ -29,7 +29,7 @@ class DatabaseFactory
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public function getDriver($name = 'mysqli', $options = array())
+	public function getDriver($name = 'mysqli', array $options = [])
 	{
 		// Sanitize the database connector options.
 		$options['driver']   = preg_replace('/[^A-Z0-9_\.-]/i', '', $name);
@@ -45,7 +45,7 @@ class DatabaseFactory
 			throw new \RuntimeException(sprintf('Unable to load Database Driver: %s', $options['driver']));
 		}
 
-		// Create our new Driver connector based on the options given.
+		// Create our new DatabaseDriver connector based on the options given.
 		try
 		{
 			return new $class($options);
@@ -122,6 +122,35 @@ class DatabaseFactory
 		}
 
 		return $o;
+	}
+
+	/**
+	 * Get a new iterator on the current query.
+	 *
+	 * @param   string          $name    Name of the driver you want an iterator for.
+	 * @param   DatabaseDriver  $db      DatabaseDriver instance with the query to be iterated.
+	 * @param   string          $column  An optional column to use as the iterator key.
+	 * @param   string          $class   The class of object that is returned.
+	 *
+	 * @return  DatabaseIterator
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function getIterator($name, DatabaseDriver $db, $column = null, $class = '\\stdClass')
+	{
+		// Derive the class name from the driver.
+		$iteratorClass = __NAMESPACE__ . '\\' . ucfirst($name) . '\\' . ucfirst($name) . 'Iterator';
+
+		// Make sure we have an iterator class for this driver.
+		if (!class_exists($iteratorClass))
+		{
+			// If it doesn't exist we are at an impasse so throw an exception.
+			throw new \RuntimeException(sprintf('Class *%s* is not defined', $iteratorClass));
+		}
+
+		// Return a new iterator
+		return new $iteratorClass($db->execute(), $column, $class);
 	}
 
 	/**

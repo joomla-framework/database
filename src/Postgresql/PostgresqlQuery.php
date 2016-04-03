@@ -22,7 +22,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	/**
 	 * The FOR UPDATE element used in "FOR UPDATE" lock
 	 *
-	 * @var    object
+	 * @var    QueryElement
 	 * @since  1.0
 	 */
 	protected $forUpdate = null;
@@ -30,7 +30,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	/**
 	 * The FOR SHARE element used in "FOR SHARE" lock
 	 *
-	 * @var    object
+	 * @var    QueryElement
 	 * @since  1.0
 	 */
 	protected $forShare = null;
@@ -38,7 +38,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	/**
 	 * The NOWAIT element used in "FOR SHARE" and "FOR UPDATE" lock
 	 *
-	 * @var    object
+	 * @var    QueryElement
 	 * @since  1.0
 	 */
 	protected $noWait = null;
@@ -46,7 +46,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	/**
 	 * The LIMIT element
 	 *
-	 * @var    object
+	 * @var    QueryElement
 	 * @since  1.0
 	 */
 	protected $limit = null;
@@ -54,7 +54,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	/**
 	 * The OFFSET element
 	 *
-	 * @var    object
+	 * @var    QueryElement
 	 * @since  1.0
 	 */
 	protected $offset = null;
@@ -62,7 +62,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	/**
 	 * The RETURNING element of INSERT INTO
 	 *
-	 * @var    object
+	 * @var    QueryElement
 	 * @since  1.0
 	 */
 	protected $returning = null;
@@ -578,8 +578,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	}
 
 	/**
-	 * Method to modify a query already in string format with the needed
-	 * additions to make the query limited to a particular number of
+	 * Method to modify a query already in string format with the needed additions to make the query limited to a particular number of
 	 * results, or start at a particular offset.
 	 *
 	 * @param   string   $query   The query in string format

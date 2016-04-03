@@ -27,10 +27,10 @@ class OracleDriver extends PdoDriver
 	public $name = 'oracle';
 
 	/**
-	 * The character(s) used to quote SQL statement names such as table names or field names,
-	 * etc.  The child classes should define this as necessary.  If a single character string the
-	 * same character is used for both sides of the quoted name, else the first character will be
-	 * used for the opening quote and the second for the closing quote.
+	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
+	 *
+	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
+	 * opening quote and the second for the closing quote.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -60,13 +60,13 @@ class OracleDriver extends PdoDriver
 	 *
 	 * @since   1.0
 	 */
-	public function __construct($options)
+	public function __construct(array $options)
 	{
-		$options['driver'] = 'oci';
-		$options['charset']    = (isset($options['charset'])) ? $options['charset']   : 'AL32UTF8';
+		$options['driver']     = 'oci';
+		$options['charset']    = (isset($options['charset'])) ? $options['charset'] : 'AL32UTF8';
 		$options['dateformat'] = (isset($options['dateformat'])) ? $options['dateformat'] : 'RRRR-MM-DD HH24:MI:SS';
 
-		$this->charset = $options['charset'];
+		$this->charset    = $options['charset'];
 		$this->dateformat = $options['dateformat'];
 
 		// Finalize initialisation
@@ -80,8 +80,7 @@ class OracleDriver extends PdoDriver
 	 */
 	public function __destruct()
 	{
-		$this->freeResult();
-		unset($this->connection);
+		$this->disconnect();
 	}
 
 	/**
@@ -208,7 +207,7 @@ class OracleDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$result = array();
+		$result = [];
 
 		/** @type OracleQuery $query */
 		$query = $this->getQuery(true)
@@ -245,7 +244,7 @@ class OracleDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$columns = array();
+		$columns = [];
 
 		/** @type OracleQuery $query */
 		$query = $this->getQuery(true);
@@ -414,19 +413,8 @@ class OracleDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$this->setQuery("ALTER SESSION SET NLS_DATE_FORMAT = '$dateFormat'");
-
-		if (!$this->execute())
-		{
-			return false;
-		}
-
-		$this->setQuery("ALTER SESSION SET NLS_TIMESTAMP_FORMAT = '$dateFormat'");
-
-		if (!$this->execute())
-		{
-			return false;
-		}
+		$this->setQuery("ALTER SESSION SET NLS_DATE_FORMAT = '$dateFormat'")->execute();
+		$this->setQuery("ALTER SESSION SET NLS_TIMESTAMP_FORMAT = '$dateFormat'")->execute();
 
 		$this->dateformat = $dateFormat;
 
@@ -651,12 +639,9 @@ class OracleDriver extends PdoDriver
 		else
 		{
 			$savepoint = 'SP_' . ($this->transactionDepth - 1);
-			$this->setQuery('ROLLBACK TO SAVEPOINT ' . $this->quoteName($savepoint));
+			$this->setQuery('ROLLBACK TO SAVEPOINT ' . $this->quoteName($savepoint))->execute();
 
-			if ($this->execute())
-			{
-				$this->transactionDepth--;
-			}
+			$this->transactionDepth--;
 		}
 	}
 
@@ -681,12 +666,9 @@ class OracleDriver extends PdoDriver
 		else
 		{
 			$savepoint = 'SP_' . $this->transactionDepth;
-			$this->setQuery('SAVEPOINT ' . $this->quoteName($savepoint));
+			$this->setQuery('SAVEPOINT ' . $this->quoteName($savepoint))->execute();
 
-			if ($this->execute())
-			{
-				$this->transactionDepth++;
-			}
+			$this->transactionDepth++;
 		}
 	}
 }

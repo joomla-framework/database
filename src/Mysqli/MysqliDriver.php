@@ -20,6 +20,14 @@ use Psr\Log;
 class MysqliDriver extends DatabaseDriver
 {
 	/**
+	 * The database connection resource.
+	 *
+	 * @var    \mysqli
+	 * @since  1.0
+	 */
+	protected $connection;
+
+	/**
 	 * The name of the database driver.
 	 *
 	 * @var    string
@@ -28,10 +36,10 @@ class MysqliDriver extends DatabaseDriver
 	public $name = 'mysqli';
 
 	/**
-	 * The character(s) used to quote SQL statement names such as table names or field names,
-	 * etc. The child classes should define this as necessary.  If a single character string the
-	 * same character is used for both sides of the quoted name, else the first character will be
-	 * used for the opening quote and the second for the closing quote.
+	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
+	 *
+	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
+	 * opening quote and the second for the closing quote.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -39,8 +47,7 @@ class MysqliDriver extends DatabaseDriver
 	protected $nameQuote = '`';
 
 	/**
-	 * The null or zero representation of a timestamp for the database driver.  This should be
-	 * defined in child classes to hold the appropriate value for the engine.
+	 * The null or zero representation of a timestamp for the database driver.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -62,16 +69,16 @@ class MysqliDriver extends DatabaseDriver
 	 *
 	 * @since   1.0
 	 */
-	public function __construct($options)
+	public function __construct(array $options)
 	{
 		// Get some basic values from the options.
-		$options['host'] = (isset($options['host'])) ? $options['host'] : 'localhost';
-		$options['user'] = (isset($options['user'])) ? $options['user'] : 'root';
+		$options['host']     = (isset($options['host'])) ? $options['host'] : 'localhost';
+		$options['user']     = (isset($options['user'])) ? $options['user'] : 'root';
 		$options['password'] = (isset($options['password'])) ? $options['password'] : '';
 		$options['database'] = (isset($options['database'])) ? $options['database'] : '';
-		$options['select'] = (isset($options['select'])) ? (bool) $options['select'] : true;
-		$options['port'] = null;
-		$options['socket'] = null;
+		$options['select']   = (isset($options['select'])) ? (bool) $options['select'] : true;
+		$options['port']     = null;
+		$options['socket']   = null;
 
 		// Finalize initialisation.
 		parent::__construct($options);
@@ -84,10 +91,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function __destruct()
 	{
-		if (is_resource($this->connection))
-		{
-			mysqli_close($this->connection);
-		}
+		$this->disconnect();
 	}
 
 	/**
@@ -243,7 +247,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public static function isSupported()
 	{
-		return (function_exists('mysqli_connect'));
+		return function_exists('mysqli_connect');
 	}
 
 	/**
@@ -341,7 +345,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$result = array();
+		$result = [];
 
 		// Sanitize input to an array and iterate over the list.
 		settype($tables, 'array');
@@ -373,7 +377,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$result = array();
+		$result = [];
 
 		// Set the query to get the table fields statement.
 		$fields = $this->setQuery('SHOW FULL COLUMNS FROM ' . $this->quoteName($this->escape($table)))->loadObjectList();
@@ -508,7 +512,7 @@ class MysqliDriver extends DatabaseDriver
 			$this->log(
 				Log\LogLevel::DEBUG,
 				'{sql}',
-				array('sql' => $sql, 'category' => 'databasequery', 'trace' => debug_backtrace())
+				['sql' => $sql, 'category' => 'databasequery', 'trace' => debug_backtrace()]
 			);
 		}
 
@@ -540,7 +544,7 @@ class MysqliDriver extends DatabaseDriver
 					$this->log(
 						Log\LogLevel::ERROR,
 						'Database query failed (error #{code}): {message}',
-						array('code' => $this->errorNum, 'message' => $this->errorMsg)
+						['code' => $this->errorNum, 'message' => $this->errorMsg]
 					);
 
 					throw new \RuntimeException($this->errorMsg, $this->errorNum);
@@ -554,7 +558,7 @@ class MysqliDriver extends DatabaseDriver
 			$this->log(
 				Log\LogLevel::ERROR,
 				'Database query failed (error #{code}): {message}',
-				array('code' => $this->errorNum, 'message' => $this->errorMsg)
+				['code' => $this->errorNum, 'message' => $this->errorMsg]
 			);
 
 			throw new \RuntimeException($this->errorMsg, $this->errorNum);
@@ -621,7 +625,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		return $this->connection->set_charset('utf8');
+		return mysqli_set_charset($this->connection, 'utf8');
 	}
 
 	/**

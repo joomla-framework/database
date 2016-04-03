@@ -11,9 +11,7 @@ namespace Joomla\Database\Query;
 /**
  * Joomla Database Query Preparable Interface.
  *
- * Adds bind/unbind methods as well as a getBounded() method
- * to retrieve the stored bounded variables on demand prior to
- * query execution.
+ * Adds bind/unbind methods as well as a getBounded() method to retrieve the stored bounded variables on demand prior to query execution.
  *
  * @since  1.0
  */
@@ -35,11 +33,10 @@ interface PreparableInterface
 	 *
 	 * @since   1.0
 	 */
-	public function bind($key = null, &$value = null, $dataType = \PDO::PARAM_STR, $length = 0, $driverOptions = array());
+	public function bind($key = null, &$value = null, $dataType = \PDO::PARAM_STR, $length = 0, $driverOptions = []);
 
 	/**
-	 * Retrieves the bound parameters array when key is null and returns it by reference. If a key is provided then that item is
-	 * returned.
+	 * Retrieves the bound parameters array when key is null and returns it by reference. If a key is provided then that item is returned.
 	 *
 	 * @param   mixed  $key  The bounded variable key to retrieve.
 	 *

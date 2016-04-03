@@ -27,10 +27,10 @@ class SqliteDriver extends PdoDriver
 	public $name = 'sqlite';
 
 	/**
-	 * The character(s) used to quote SQL statement names such as table names or field names,
-	 * etc. The child classes should define this as necessary.  If a single character string the
-	 * same character is used for both sides of the quoted name, else the first character will be
-	 * used for the opening quote and the second for the closing quote.
+	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
+	 *
+	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
+	 * opening quote and the second for the closing quote.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -44,8 +44,7 @@ class SqliteDriver extends PdoDriver
 	 */
 	public function __destruct()
 	{
-		$this->freeResult();
-		unset($this->connection);
+		$this->disconnect();
 	}
 
 	/**
@@ -152,7 +151,7 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$columns = array();
+		$columns = [];
 
 		$fieldCasing = $this->getOption(\PDO::ATTR_CASE);
 
@@ -175,13 +174,13 @@ class SqliteDriver extends PdoDriver
 			{
 				// Do some dirty translation to MySQL output.
 				// TODO: Come up with and implement a standard across databases.
-				$columns[$field->NAME] = (object) array(
-					'Field' => $field->NAME,
-					'Type' => $field->TYPE,
-					'Null' => ($field->NOTNULL == '1' ? 'NO' : 'YES'),
+				$columns[$field->NAME] = (object) [
+					'Field'   => $field->NAME,
+					'Type'    => $field->TYPE,
+					'Null'    => ($field->NOTNULL == '1' ? 'NO' : 'YES'),
 					'Default' => $field->DFLT_VALUE,
-					'Key' => ($field->PK == '1' ? 'PRI' : '')
-				);
+					'Key'     => ($field->PK == '1' ? 'PRI' : '')
+				];
 			}
 		}
 
@@ -204,7 +203,7 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$keys = array();
+		$keys = [];
 
 		$fieldCasing = $this->getOption(\PDO::ATTR_CASE);
 
@@ -422,12 +421,9 @@ class SqliteDriver extends PdoDriver
 		else
 		{
 			$savepoint = 'SP_' . ($this->transactionDepth - 1);
-			$this->setQuery('ROLLBACK TO ' . $this->quoteName($savepoint));
+			$this->setQuery('ROLLBACK TO ' . $this->quoteName($savepoint))->execute();
 
-			if ($this->execute())
-			{
-				$this->transactionDepth--;
-			}
+			$this->transactionDepth--;
 		}
 	}
 
@@ -452,12 +448,9 @@ class SqliteDriver extends PdoDriver
 		else
 		{
 			$savepoint = 'SP_' . $this->transactionDepth;
-			$this->setQuery('SAVEPOINT ' . $this->quoteName($savepoint));
+			$this->setQuery('SAVEPOINT ' . $this->quoteName($savepoint))->execute();
 
-			if ($this->execute())
-			{
-				$this->transactionDepth++;
-			}
+			$this->transactionDepth++;
 		}
 	}
 }

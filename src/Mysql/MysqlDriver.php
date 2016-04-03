@@ -28,10 +28,10 @@ class MysqlDriver extends PdoDriver
 	public $name = 'mysql';
 
 	/**
-	 * The character(s) used to quote SQL statement names such as table names or field names,
-	 * etc. The child classes should define this as necessary.  If a single character string the
-	 * same character is used for both sides of the quoted name, else the first character will be
-	 * used for the opening quote and the second for the closing quote.
+	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
+	 *
+	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
+	 * opening quote and the second for the closing quote.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -39,8 +39,7 @@ class MysqlDriver extends PdoDriver
 	protected $nameQuote = '`';
 
 	/**
-	 * The null or zero representation of a timestamp for the database driver.  This should be
-	 * defined in child classes to hold the appropriate value for the engine.
+	 * The null or zero representation of a timestamp for the database driver.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -62,7 +61,7 @@ class MysqlDriver extends PdoDriver
 	 *
 	 * @since   1.0
 	 */
-	public function __construct($options)
+	public function __construct(array $options)
 	{
 		// Get some basic values from the options.
 		$options['driver']	= 'mysql';
@@ -178,16 +177,14 @@ class MysqlDriver extends PdoDriver
 		$this->connect();
 
 		// Initialise variables.
-		$result = array();
+		$result = [];
 
 		// Sanitize input to an array and iterate over the list.
 		settype($tables, 'array');
 
 		foreach ($tables as $table)
 		{
-			$this->setQuery('SHOW CREATE TABLE ' . $this->quoteName($table));
-
-			$row = $this->loadRow();
+			$row = $this->setQuery('SHOW CREATE TABLE ' . $this->quoteName($table))->loadRow();
 
 			// Populate the result array based on the create statements.
 			$result[$table] = $row[1];
@@ -211,7 +208,7 @@ class MysqlDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$result = array();
+		$result = [];
 
 		// Set the query to get the table fields statement.
 		$fields = $this->setQuery('SHOW FULL COLUMNS FROM ' . $this->quoteName($table))->loadObjectList();
@@ -334,8 +331,7 @@ class MysqlDriver extends PdoDriver
 	 *
 	 * Method body is as implemented by the Zend Framework
 	 *
-	 * Note: Using query objects with bound variables is
-	 * preferable to the below.
+	 * Note: Using query objects with bound variables is preferable to the below.
 	 *
 	 * @param   string   $text   The string to be escaped.
 	 * @param   boolean  $extra  Unused optional parameter to provide extra escaping.

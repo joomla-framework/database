@@ -29,7 +29,7 @@ abstract class DatabaseExporter
 	 * @var    array
 	 * @since  1.0
 	 */
-	protected $cache = array();
+	protected $cache = ['columns' => [], 'keys' => []];
 
 	/**
 	 * The database connector to use for exporting structure and/or data.
@@ -37,7 +37,7 @@ abstract class DatabaseExporter
 	 * @var    DatabaseDriver
 	 * @since  1.0
 	 */
-	protected $db = null;
+	protected $db;
 
 	/**
 	 * An array input sources (table names).
@@ -45,15 +45,15 @@ abstract class DatabaseExporter
 	 * @var    array
 	 * @since  1.0
 	 */
-	protected $from = array();
+	protected $from = [];
 
 	/**
 	 * An array of options for the exporter.
 	 *
-	 * @var    object
+	 * @var    \stdClass
 	 * @since  1.0
 	 */
-	protected $options = null;
+	protected $options;
 
 	/**
 	 * Constructor.
@@ -65,8 +65,6 @@ abstract class DatabaseExporter
 	public function __construct()
 	{
 		$this->options = new \stdClass;
-
-		$this->cache = array('columns' => array(), 'keys' => array());
 
 		// Set up the class defaults:
 
@@ -164,13 +162,13 @@ abstract class DatabaseExporter
 	 * @return  $this
 	 *
 	 * @since   1.0
-	 * @throws  \Exception if input is not a string or array.
+	 * @throws  \InvalidArgumentException
 	 */
 	public function from($from)
 	{
 		if (is_string($from))
 		{
-			$this->from = array($from);
+			$this->from = [$from];
 		}
 		elseif (is_array($from))
 		{
@@ -178,7 +176,7 @@ abstract class DatabaseExporter
 		}
 		else
 		{
-			throw new \Exception('The exporter requires either a single table name or array of table names');
+			throw new \InvalidArgumentException('The exporter requires either a single table name or array of table names');
 		}
 
 		return $this;

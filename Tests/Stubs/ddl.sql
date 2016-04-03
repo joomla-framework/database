@@ -5,10 +5,10 @@
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_assets`
+-- Table structure for table `assets`
 --
 
-CREATE TABLE `jos_assets` (
+CREATE TABLE `assets` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `parent_id` INTEGER NOT NULL DEFAULT '0',
   `lft` INTEGER NOT NULL DEFAULT '0',
@@ -20,16 +20,16 @@ CREATE TABLE `jos_assets` (
   CONSTRAINT `idx_assets_name` UNIQUE (`name`)
 );
 
-CREATE INDEX `idx_assets_left_right` ON `jos_assets` (`lft`,`rgt`);
-CREATE INDEX `idx_assets_parent_id` ON `jos_assets` (`parent_id`);
+CREATE INDEX `idx_assets_left_right` ON `assets` (`lft`,`rgt`);
+CREATE INDEX `idx_assets_parent_id` ON `assets` (`parent_id`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_categories`
+-- Table structure for table `categories`
 --
 
-CREATE TABLE `jos_categories` (
+CREATE TABLE `categories` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `asset_id` INTEGER NOT NULL DEFAULT '0',
   `parent_id` INTEGER NOT NULL DEFAULT '0',
@@ -58,21 +58,21 @@ CREATE TABLE `jos_categories` (
   `language` TEXT NOT NULL DEFAULT ''
 );
 
-CREATE INDEX `idx_categories_lookup` ON `jos_categories` (`extension`,`published`,`access`);
-CREATE INDEX `idx_categories_access` ON `jos_categories` (`access`);
-CREATE INDEX `idx_categories_checkout` ON `jos_categories` (`checked_out`);
-CREATE INDEX `idx_categories_path` ON `jos_categories` (`path`);
-CREATE INDEX `idx_categories_left_right` ON `jos_categories` (`lft`,`rgt`);
-CREATE INDEX `idx_categories_alias` ON `jos_categories` (`alias`);
-CREATE INDEX `idx_categories_language` ON `jos_categories` (`language`);
+CREATE INDEX `idx_categories_lookup` ON `categories` (`extension`,`published`,`access`);
+CREATE INDEX `idx_categories_access` ON `categories` (`access`);
+CREATE INDEX `idx_categories_checkout` ON `categories` (`checked_out`);
+CREATE INDEX `idx_categories_path` ON `categories` (`path`);
+CREATE INDEX `idx_categories_left_right` ON `categories` (`lft`,`rgt`);
+CREATE INDEX `idx_categories_alias` ON `categories` (`alias`);
+CREATE INDEX `idx_categories_language` ON `categories` (`language`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_content`
+-- Table structure for table `content`
 --
 
-CREATE TABLE `jos_content` (
+CREATE TABLE `content` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `asset_id` INTEGER NOT NULL DEFAULT '0',
   `title` TEXT NOT NULL DEFAULT '',
@@ -109,22 +109,22 @@ CREATE TABLE `jos_content` (
   `xreference` TEXT NOT NULL DEFAULT ''
 );
 
-CREATE INDEX `idx_content_access` ON `jos_content` (`access`);
-CREATE INDEX `idx_content_checkout` ON `jos_content` (`checked_out`);
-CREATE INDEX `idx_content_state` ON `jos_content` (`state`);
-CREATE INDEX `idx_content_catid` ON `jos_content` (`catid`);
-CREATE INDEX `idx_content_createdby` ON `jos_content` (`created_by`);
-CREATE INDEX `idx_content_featured_catid` ON `jos_content` (`featured`,`catid`);
-CREATE INDEX `idx_content_language` ON `jos_content` (`language`);
-CREATE INDEX `idx_content_xreference` ON `jos_content` (`xreference`);
+CREATE INDEX `idx_content_access` ON `content` (`access`);
+CREATE INDEX `idx_content_checkout` ON `content` (`checked_out`);
+CREATE INDEX `idx_content_state` ON `content` (`state`);
+CREATE INDEX `idx_content_catid` ON `content` (`catid`);
+CREATE INDEX `idx_content_createdby` ON `content` (`created_by`);
+CREATE INDEX `idx_content_featured_catid` ON `content` (`featured`,`catid`);
+CREATE INDEX `idx_content_language` ON `content` (`language`);
+CREATE INDEX `idx_content_xreference` ON `content` (`xreference`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_core_log_searches`
+-- Table structure for table `core_log_searches`
 --
 
-CREATE TABLE `jos_core_log_searches` (
+CREATE TABLE `core_log_searches` (
   `search_term` TEXT NOT NULL DEFAULT '',
   `hits` INTEGER NOT NULL DEFAULT '0'
 );
@@ -132,10 +132,10 @@ CREATE TABLE `jos_core_log_searches` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_extensions`
+-- Table structure for table `extensions`
 --
 
-CREATE TABLE `jos_extensions` (
+CREATE TABLE `extensions` (
   `extension_id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` TEXT NOT NULL DEFAULT '',
   `type` TEXT NOT NULL DEFAULT '',
@@ -155,17 +155,17 @@ CREATE TABLE `jos_extensions` (
   `state` INTEGER DEFAULT '0'
 );
 
-CREATE INDEX `idx_extensions_client_id` ON `jos_extensions` (`element`,`client_id`);
-CREATE INDEX `idx_extensions_folder_client_id` ON `jos_extensions` (`element`,`folder`,`client_id`);
-CREATE INDEX `idx_extensions_lookup` ON `jos_extensions` (`type`,`element`,`folder`,`client_id`);
+CREATE INDEX `idx_extensions_client_id` ON `extensions` (`element`,`client_id`);
+CREATE INDEX `idx_extensions_folder_client_id` ON `extensions` (`element`,`folder`,`client_id`);
+CREATE INDEX `idx_extensions_lookup` ON `extensions` (`type`,`element`,`folder`,`client_id`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_languages`
+-- Table structure for table `languages`
 --
 
-CREATE TABLE `jos_languages` (
+CREATE TABLE `languages` (
   `lang_id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `lang_code` TEXT NOT NULL DEFAULT '',
   `title` TEXT NOT NULL DEFAULT '',
@@ -183,15 +183,15 @@ CREATE TABLE `jos_languages` (
   CONSTRAINT `idx_languages_lang_code` UNIQUE (`lang_code`)
 );
 
-CREATE INDEX `idx_languages_ordering` ON `jos_languages` (`ordering`);
+CREATE INDEX `idx_languages_ordering` ON `languages` (`ordering`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_log_entries`
+-- Table structure for table `log_entries`
 --
 
-CREATE TABLE `jos_log_entries` (
+CREATE TABLE `log_entries` (
   `priority` INTEGER DEFAULT NULL,
   `message` TEXT DEFAULT NULL,
   `date` TEXT DEFAULT NULL,
@@ -201,10 +201,10 @@ CREATE TABLE `jos_log_entries` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_menu`
+-- Table structure for table `menu`
 --
 
-CREATE TABLE `jos_menu` (
+CREATE TABLE `menu` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `menutype` TEXT NOT NULL DEFAULT '',
   `title` TEXT NOT NULL DEFAULT '',
@@ -233,20 +233,20 @@ CREATE TABLE `jos_menu` (
   CONSTRAINT `idx_menu_lookup` UNIQUE (`client_id`,`parent_id`,`alias`)
 );
 
-CREATE INDEX `idx_menu_componentid` ON `jos_menu` (`component_id`,`menutype`,`published`,`access`);
-CREATE INDEX `idx_menu_menutype` ON `jos_menu` (`menutype`);
-CREATE INDEX `idx_menu_left_right` ON `jos_menu` (`lft`,`rgt`);
-CREATE INDEX `idx_menu_alias` ON `jos_menu` (`alias`);
-CREATE INDEX `idx_menu_path` ON `jos_menu` (`path`);
-CREATE INDEX `idx_menu_language` ON `jos_menu` (`language`);
+CREATE INDEX `idx_menu_componentid` ON `menu` (`component_id`,`menutype`,`published`,`access`);
+CREATE INDEX `idx_menu_menutype` ON `menu` (`menutype`);
+CREATE INDEX `idx_menu_left_right` ON `menu` (`lft`,`rgt`);
+CREATE INDEX `idx_menu_alias` ON `menu` (`alias`);
+CREATE INDEX `idx_menu_path` ON `menu` (`path`);
+CREATE INDEX `idx_menu_language` ON `menu` (`language`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_menu_types`
+-- Table structure for table `menu_types`
 --
 
-CREATE TABLE `jos_menu_types` (
+CREATE TABLE `menu_types` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `menutype` TEXT NOT NULL DEFAULT '',
   `title` TEXT NOT NULL DEFAULT '',
@@ -257,10 +257,10 @@ CREATE TABLE `jos_menu_types` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_modules`
+-- Table structure for table `modules`
 --
 
-CREATE TABLE `jos_modules` (
+CREATE TABLE `modules` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `title` TEXT NOT NULL DEFAULT '',
   `note` TEXT NOT NULL DEFAULT '',
@@ -280,17 +280,17 @@ CREATE TABLE `jos_modules` (
   `language` TEXT NOT NULL DEFAULT ''
 );
 
-CREATE INDEX `idx_modules_viewable` ON `jos_modules` (`published`,`access`);
-CREATE INDEX `idx_modules_published` ON `jos_modules` (`module`,`published`);
-CREATE INDEX `idx_modules_language` ON `jos_modules` (`language`);
+CREATE INDEX `idx_modules_viewable` ON `modules` (`published`,`access`);
+CREATE INDEX `idx_modules_published` ON `modules` (`module`,`published`);
+CREATE INDEX `idx_modules_language` ON `modules` (`language`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_modules_menu`
+-- Table structure for table `modules_menu`
 --
 
-CREATE TABLE `jos_modules_menu` (
+CREATE TABLE `modules_menu` (
   `moduleid` INTEGER NOT NULL DEFAULT '0',
   `menuid` INTEGER NOT NULL DEFAULT '0',
   CONSTRAINT `idx_modules_menu` PRIMARY KEY (`moduleid`,`menuid`)
@@ -299,10 +299,10 @@ CREATE TABLE `jos_modules_menu` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_schemas`
+-- Table structure for table `schemas`
 --
 
-CREATE TABLE `jos_schemas` (
+CREATE TABLE `schemas` (
   `extension_id` INTEGER NOT NULL,
   `version_id` TEXT NOT NULL DEFAULT '',
   CONSTRAINT `idx_schemas` PRIMARY KEY (`extension_id`,`version_id`)
@@ -311,10 +311,10 @@ CREATE TABLE `jos_schemas` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_session`
+-- Table structure for table `session`
 --
 
-CREATE TABLE `jos_session` (
+CREATE TABLE `session` (
   `session_id` TEXT NOT NULL DEFAULT '',
   `client_id` INTEGER NOT NULL DEFAULT '0',
   `guest` INTEGER DEFAULT '1',
@@ -326,17 +326,17 @@ CREATE TABLE `jos_session` (
   CONSTRAINT `idx_session` PRIMARY KEY (`session_id`)
 );
 
-CREATE INDEX `idx_session_whosonline` ON `jos_session` (`guest`,`usertype`);
-CREATE INDEX `idx_session_user` ON `jos_session` (`userid`);
-CREATE INDEX `idx_session_time` ON `jos_session` (`time`);
+CREATE INDEX `idx_session_whosonline` ON `session` (`guest`,`usertype`);
+CREATE INDEX `idx_session_user` ON `session` (`userid`);
+CREATE INDEX `idx_session_time` ON `session` (`time`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_updates`
+-- Table structure for table `updates`
 --
 
-CREATE TABLE `jos_updates` (
+CREATE TABLE `updates` (
   `update_id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `update_site_id` INTEGER DEFAULT '0',
   `extension_id` INTEGER DEFAULT '0',
@@ -355,10 +355,10 @@ CREATE TABLE `jos_updates` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_update_categories`
+-- Table structure for table `update_categories`
 --
 
-CREATE TABLE `jos_update_categories` (
+CREATE TABLE `update_categories` (
   `categoryid` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` TEXT DEFAULT '',
   `description` TEXT NOT NULL DEFAULT '',
@@ -369,10 +369,10 @@ CREATE TABLE `jos_update_categories` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_update_sites`
+-- Table structure for table `update_sites`
 --
 
-CREATE TABLE `jos_update_sites` (
+CREATE TABLE `update_sites` (
   `update_site_id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` TEXT DEFAULT '',
   `type` TEXT DEFAULT '',
@@ -383,10 +383,10 @@ CREATE TABLE `jos_update_sites` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_update_sites_extensions`
+-- Table structure for table `update_sites_extensions`
 --
 
-CREATE TABLE `jos_update_sites_extensions` (
+CREATE TABLE `update_sites_extensions` (
   `update_site_id` INTEGER NOT NULL DEFAULT '0',
   `extension_id` INTEGER NOT NULL DEFAULT '0',
   CONSTRAINT  `idx_update_sites_extensions` PRIMARY KEY (`update_site_id`,`extension_id`)
@@ -395,10 +395,10 @@ CREATE TABLE `jos_update_sites_extensions` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_usergroups`
+-- Table structure for table `usergroups`
 --
 
-CREATE TABLE `jos_usergroups` (
+CREATE TABLE `usergroups` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `parent_id` INTEGER NOT NULL DEFAULT '0',
   `lft` INTEGER NOT NULL DEFAULT '0',
@@ -407,17 +407,17 @@ CREATE TABLE `jos_usergroups` (
   CONSTRAINT `idx_usergroups_parent_title_lookup` UNIQUE (`parent_id`,`title`)
 );
 
-CREATE INDEX `idx_usergroups_title_lookup` ON `jos_usergroups` (`title`);
-CREATE INDEX `idx_usergroups_adjacency_lookup` ON `jos_usergroups` (`parent_id`);
-CREATE INDEX `idx_usergroups_nested_set_lookup` ON `jos_usergroups` (`lft`,`rgt`);
+CREATE INDEX `idx_usergroups_title_lookup` ON `usergroups` (`title`);
+CREATE INDEX `idx_usergroups_adjacency_lookup` ON `usergroups` (`parent_id`);
+CREATE INDEX `idx_usergroups_nested_set_lookup` ON `usergroups` (`lft`,`rgt`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_users`
+-- Table structure for table `users`
 --
 
-CREATE TABLE `jos_users` (
+CREATE TABLE `users` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `name` TEXT NOT NULL DEFAULT '',
   `username` TEXT NOT NULL DEFAULT '',
@@ -432,19 +432,19 @@ CREATE TABLE `jos_users` (
   `params` TEXT NOT NULL DEFAULT ''
 );
 
-CREATE INDEX `idx_users_usertype` ON `jos_users` (`usertype`);
-CREATE INDEX `idx_users_name` ON `jos_users` (`name`);
-CREATE INDEX `idx_users_block` ON `jos_users` (`block`);
-CREATE INDEX `idx_users_username` ON `jos_users` (`username`);
-CREATE INDEX `idx_users_email` ON `jos_users` (`email`);
+CREATE INDEX `idx_users_usertype` ON `users` (`usertype`);
+CREATE INDEX `idx_users_name` ON `users` (`name`);
+CREATE INDEX `idx_users_block` ON `users` (`block`);
+CREATE INDEX `idx_users_username` ON `users` (`username`);
+CREATE INDEX `idx_users_email` ON `users` (`email`);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_user_profiles`
+-- Table structure for table `user_profiles`
 --
 
-CREATE TABLE `jos_user_profiles` (
+CREATE TABLE `user_profiles` (
   `user_id` INTEGER NOT NULL,
   `profile_key` TEXT NOT NULL DEFAULT '',
   `profile_value` TEXT NOT NULL DEFAULT '',
@@ -455,10 +455,10 @@ CREATE TABLE `jos_user_profiles` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_user_usergroup_map`
+-- Table structure for table `user_usergroup_map`
 --
 
-CREATE TABLE `jos_user_usergroup_map` (
+CREATE TABLE `user_usergroup_map` (
   `user_id` INTEGER NOT NULL DEFAULT '0',
   `group_id` INTEGER NOT NULL DEFAULT '0',
   CONSTRAINT `idx_user_usergroup_map` PRIMARY KEY (`user_id`,`group_id`)
@@ -467,10 +467,10 @@ CREATE TABLE `jos_user_usergroup_map` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jos_viewlevels`
+-- Table structure for table `viewlevels`
 --
 
-CREATE TABLE `jos_viewlevels` (
+CREATE TABLE `viewlevels` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `title` TEXT NOT NULL DEFAULT '',
   `ordering` INTEGER NOT NULL DEFAULT '0',
@@ -480,7 +480,7 @@ CREATE TABLE `jos_viewlevels` (
 
 
 
-CREATE TABLE `jos_dbtest` (
+CREATE TABLE `dbtest` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `title` TEXT NOT NULL DEFAULT '',
   `start_date` TEXT NOT NULL DEFAULT '',
@@ -488,7 +488,7 @@ CREATE TABLE `jos_dbtest` (
 );
 
 
-CREATE TABLE `jos_dbtest_composite` (
+CREATE TABLE `dbtest_composite` (
   `id1` INTEGER NOT NULL DEFAULT '0',
   `id2` INTEGER NOT NULL DEFAULT '0',
   `title` TEXT NOT NULL DEFAULT '',

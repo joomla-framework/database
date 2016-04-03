@@ -35,8 +35,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface
 	protected $limit;
 
 	/**
-	 * Method to modify a query already in string format with the needed
-	 * additions to make the query limited to a particular number of
+	 * Method to modify a query already in string format with the needed additions to make the query limited to a particular number of
 	 * results, or start at a particular offset.
 	 *
 	 * @param   string   $query   The query in string format

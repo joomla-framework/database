@@ -114,7 +114,7 @@ class MysqliDriverTest extends MysqliCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->delete();
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		self::$driver->setQuery($query);
 
 		self::$driver->execute();
@@ -181,7 +181,7 @@ class MysqliDriverTest extends MysqliCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('*');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		$query->where('description = ' . self::$driver->quote('one'));
 		self::$driver->setQuery($query);
 
@@ -218,7 +218,7 @@ class MysqliDriverTest extends MysqliCase
 		$tableCol = array('id' => 'int unsigned', 'title' => 'varchar', 'start_date' => 'datetime', 'description' => 'text');
 
 		$this->assertThat(
-			self::$driver->getTableColumns('jos_dbtest'),
+			self::$driver->getTableColumns('dbtest'),
 			$this->equalTo($tableCol),
 			__LINE__
 		);
@@ -269,7 +269,7 @@ class MysqliDriverTest extends MysqliCase
 		$description->Comment    = '';
 
 		$this->assertThat(
-			self::$driver->getTableColumns('jos_dbtest', false),
+			self::$driver->getTableColumns('dbtest', false),
 			$this->equalTo(
 				array(
 					'id' => $id,
@@ -365,7 +365,7 @@ class MysqliDriverTest extends MysqliCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('title');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadAssoc();
 
@@ -383,7 +383,7 @@ class MysqliDriverTest extends MysqliCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('title');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadAssocList();
 
@@ -412,7 +412,7 @@ class MysqliDriverTest extends MysqliCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('title');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadColumn();
 
@@ -430,7 +430,7 @@ class MysqliDriverTest extends MysqliCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('*');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		$query->where('description=' . self::$driver->quote('three'));
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadObject();
@@ -455,7 +455,7 @@ class MysqliDriverTest extends MysqliCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('*');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		$query->order('id');
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadObjectList();
@@ -508,7 +508,7 @@ class MysqliDriverTest extends MysqliCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('id');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		$query->where('title=' . self::$driver->quote('Testing2'));
 
 		self::$driver->setQuery($query);
@@ -528,7 +528,7 @@ class MysqliDriverTest extends MysqliCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('*');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		$query->where('description=' . self::$driver->quote('three'));
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadRow();
@@ -549,7 +549,7 @@ class MysqliDriverTest extends MysqliCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('*');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		$query->where('description=' . self::$driver->quote('one'));
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadRowList();
@@ -568,16 +568,16 @@ class MysqliDriverTest extends MysqliCase
 	 */
 	public function testRenameTable()
 	{
-		$newTableName = 'bak_jos_dbtest';
+		$newTableName = 'bak_dbtest';
 
-		self::$driver->renameTable('jos_dbtest', $newTableName);
+		self::$driver->renameTable('dbtest', $newTableName);
 
 		// Check name change
 		$tableList = self::$driver->getTableList();
 		$this->assertThat(in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
 
 		// Restore initial state
-		self::$driver->renameTable($newTableName, 'jos_dbtest');
+		self::$driver->renameTable($newTableName, 'dbtest');
 	}
 
 	/**
@@ -589,7 +589,9 @@ class MysqliDriverTest extends MysqliCase
 	 */
 	public function testExecute()
 	{
-		self::$driver->setQuery("REPLACE INTO `jos_dbtest` SET `id` = 5, `title` = 'testTitle'");
+		self::$driver->setQuery(
+			"REPLACE INTO `dbtest` SET `id` = 5, `title` = 'testTitle', `start_date` = '1980-04-18 00:00:00', `description` = 'Testing'"
+		);
 
 		$this->assertThat(self::$driver->execute(), $this->isTrue(), __LINE__);
 

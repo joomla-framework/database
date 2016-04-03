@@ -23,7 +23,7 @@ abstract class DatabaseImporter
 	 * @var    array
 	 * @since  1.0
 	 */
-	protected $cache = array();
+	protected $cache = ['columns' => [], 'keys' => []];
 
 	/**
 	 * The database connector to use for exporting structure and/or data.
@@ -31,7 +31,7 @@ abstract class DatabaseImporter
 	 * @var    DatabaseDriver
 	 * @since  1.0
 	 */
-	protected $db = null;
+	protected $db;
 
 	/**
 	 * The input source.
@@ -39,7 +39,7 @@ abstract class DatabaseImporter
 	 * @var    mixed
 	 * @since  1.0
 	 */
-	protected $from = array();
+	protected $from = [];
 
 	/**
 	 * The type of input format.
@@ -52,23 +52,21 @@ abstract class DatabaseImporter
 	/**
 	 * An array of options for the exporter.
 	 *
-	 * @var    object
+	 * @var    \stdClass
 	 * @since  1.0
 	 */
-	protected $options = null;
+	protected $options;
 
 	/**
 	 * Constructor.
 	 *
-	 * Sets up the default options for the exporter.
+	 * Sets up the default options for the importer.
 	 *
 	 * @since   1.0
 	 */
 	public function __construct()
 	{
 		$this->options = new \stdClass;
-
-		$this->cache = array('columns' => array(), 'keys' => array());
 
 		// Set up the class defaults:
 
@@ -78,11 +76,11 @@ abstract class DatabaseImporter
 		// Export as XML.
 		$this->asXml();
 
-		// Default destination is a string using $output = (string) $exporter;
+		// Default destination is a string using $output = (string) $importer;
 	}
 
 	/**
-	 * Set the output option for the exporter to XML format.
+	 * Set the output option for the importer to XML format.
 	 *
 	 * @return  $this
 	 *
@@ -96,12 +94,12 @@ abstract class DatabaseImporter
 	}
 
 	/**
-	 * Checks if all data and options are in order prior to exporting.
+	 * Checks if all data and options are in order prior to importer.
 	 *
 	 * @return  $this
 	 *
 	 * @since   1.0
-	 * @throws  \Exception if an error is encountered.
+	 * @throws  \RuntimeException
 	 */
 	abstract public function check();
 
@@ -131,7 +129,7 @@ abstract class DatabaseImporter
 	 *
 	 * @since   1.0
 	 */
-	protected function getAddColumnSQL($table, \SimpleXMLElement $field)
+	protected function getAddColumnSql($table, \SimpleXMLElement $field)
 	{
 		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD COLUMN ' . $this->getColumnSQL($field);
 	}
@@ -146,7 +144,7 @@ abstract class DatabaseImporter
 	 *
 	 * @since   1.0
 	 */
-	protected function getChangeColumnSQL($table, \SimpleXMLElement $field)
+	protected function getChangeColumnSql($table, \SimpleXMLElement $field)
 	{
 		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
 			. $this->getColumnSQL($field);
@@ -179,7 +177,7 @@ abstract class DatabaseImporter
 	protected function getKeyLookup($keys)
 	{
 		// First pass, create a lookup of the keys.
-		$lookup = array();
+		$lookup = [];
 
 		foreach ($keys as $key)
 		{
@@ -194,7 +192,7 @@ abstract class DatabaseImporter
 
 			if (empty($lookup[$kName]))
 			{
-				$lookup[$kName] = array();
+				$lookup[$kName] = [];
 			}
 
 			$lookup[$kName][] = $key;
@@ -317,7 +315,7 @@ abstract class DatabaseImporter
 	/**
 	 * Sets an internal option to merge the structure based on the input data.
 	 *
-	 * @param   boolean  $setting  True to export the structure, false to not.
+	 * @param   boolean  $setting  True to import the structure, false to not.
 	 *
 	 * @return  $this
 	 *

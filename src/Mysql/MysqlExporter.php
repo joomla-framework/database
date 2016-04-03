@@ -27,7 +27,7 @@ class MysqlExporter extends DatabaseExporter
 	 */
 	protected function buildXml()
 	{
-		$buffer = array();
+		$buffer = [];
 
 		$buffer[] = '<?xml version="1.0"?>';
 		$buffer[] = '<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
@@ -51,7 +51,7 @@ class MysqlExporter extends DatabaseExporter
 	 */
 	protected function buildXmlStructure()
 	{
-		$buffer = array();
+		$buffer = [];
 
 		foreach ($this->from as $table)
 		{
@@ -91,20 +91,20 @@ class MysqlExporter extends DatabaseExporter
 	 * @return  $this
 	 *
 	 * @since   1.0
-	 * @throws  \Exception if an error is encountered.
+	 * @throws  \RuntimeException
 	 */
 	public function check()
 	{
 		// Check if the db connector has been set.
 		if (!($this->db instanceof MysqlDriver))
 		{
-			throw new \Exception('Database connection wrong type.');
+			throw new \RuntimeException('Database connection wrong type.');
 		}
 
 		// Check if the tables have been specified.
 		if (empty($this->from))
 		{
-			throw new \Exception('ERROR: No Tables Specified');
+			throw new \RuntimeException('ERROR: No Tables Specified');
 		}
 
 		return $this;

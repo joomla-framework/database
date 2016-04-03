@@ -1,8 +1,8 @@
 --
--- Table: jos_assets
+-- Table: assets
 --
-DROP TABLE IF EXISTS "jos_assets" CASCADE;
-CREATE TABLE "jos_assets" (
+DROP TABLE IF EXISTS "assets" CASCADE;
+CREATE TABLE "assets" (
   -- Primary Key
   "id" serial NOT NULL,
   -- Nested set parent.
@@ -22,23 +22,23 @@ CREATE TABLE "jos_assets" (
   PRIMARY KEY ("id"),
   CONSTRAINT "idx_asset_name" UNIQUE ("name")
 );
-CREATE INDEX "jos_assets_idx_lft_rgt" on "jos_assets" ("lft", "rgt");
-CREATE INDEX "jos_assets_idx_parent_id" on "jos_assets" ("parent_id");
+CREATE INDEX "assets_idx_lft_rgt" on "assets" ("lft", "rgt");
+CREATE INDEX "assets_idx_parent_id" on "assets" ("parent_id");
 
-COMMENT ON COLUMN "jos_assets"."id" IS 'Primary Key';
-COMMENT ON COLUMN "jos_assets"."parent_id" IS 'Nested set parent.';
-COMMENT ON COLUMN "jos_assets"."lft" IS 'Nested set lft.';
-COMMENT ON COLUMN "jos_assets"."rgt" IS 'Nested set rgt.';
-COMMENT ON COLUMN "jos_assets"."level" IS 'The cached level in the nested tree.';
-COMMENT ON COLUMN "jos_assets"."name" IS 'The unique name for the asset.\n';
-COMMENT ON COLUMN "jos_assets"."title" IS 'The descriptive title for the asset.';
-COMMENT ON COLUMN "jos_assets"."rules" IS 'JSON encoded access control.';
+COMMENT ON COLUMN "assets"."id" IS 'Primary Key';
+COMMENT ON COLUMN "assets"."parent_id" IS 'Nested set parent.';
+COMMENT ON COLUMN "assets"."lft" IS 'Nested set lft.';
+COMMENT ON COLUMN "assets"."rgt" IS 'Nested set rgt.';
+COMMENT ON COLUMN "assets"."level" IS 'The cached level in the nested tree.';
+COMMENT ON COLUMN "assets"."name" IS 'The unique name for the asset.\n';
+COMMENT ON COLUMN "assets"."title" IS 'The descriptive title for the asset.';
+COMMENT ON COLUMN "assets"."rules" IS 'JSON encoded access control.';
 
 --
--- Table: jos_categories
+-- Table: categories
 --
-DROP TABLE IF EXISTS "jos_categories" CASCADE;
-CREATE TABLE "jos_categories" (
+DROP TABLE IF EXISTS "categories" CASCADE;
+CREATE TABLE "categories" (
   "id" serial NOT NULL,
   -- FK to the #__assets table.
   "asset_id" integer DEFAULT 0 NOT NULL,
@@ -71,24 +71,24 @@ CREATE TABLE "jos_categories" (
   "language" character(7) NOT NULL,
   PRIMARY KEY ("id")
 );
-CREATE INDEX "jos_categories_cat_idx" on "jos_categories" ("extension", "published", "access");
-CREATE INDEX "jos_categories_idx_access" on "jos_categories" ("access");
-CREATE INDEX "jos_categories_idx_checkout" on "jos_categories" ("checked_out");
-CREATE INDEX "jos_categories_idx_path" on "jos_categories" ("path");
-CREATE INDEX "jos_categories_idx_left_right" on "jos_categories" ("lft", "rgt");
-CREATE INDEX "jos_categories_idx_alias" on "jos_categories" ("alias");
-CREATE INDEX "jos_categories_idx_language" on "jos_categories" ("language");
+CREATE INDEX "categories_cat_idx" on "categories" ("extension", "published", "access");
+CREATE INDEX "categories_idx_access" on "categories" ("access");
+CREATE INDEX "categories_idx_checkout" on "categories" ("checked_out");
+CREATE INDEX "categories_idx_path" on "categories" ("path");
+CREATE INDEX "categories_idx_left_right" on "categories" ("lft", "rgt");
+CREATE INDEX "categories_idx_alias" on "categories" ("alias");
+CREATE INDEX "categories_idx_language" on "categories" ("language");
 
-COMMENT ON COLUMN "jos_categories"."asset_id" IS 'FK to the #__assets table.';
-COMMENT ON COLUMN "jos_categories"."metadesc" IS 'The meta description for the page.';
-COMMENT ON COLUMN "jos_categories"."metakey" IS 'The meta keywords for the page.';
-COMMENT ON COLUMN "jos_categories"."metadata" IS 'JSON encoded metadata properties.';
+COMMENT ON COLUMN "categories"."asset_id" IS 'FK to the #__assets table.';
+COMMENT ON COLUMN "categories"."metadesc" IS 'The meta description for the page.';
+COMMENT ON COLUMN "categories"."metakey" IS 'The meta keywords for the page.';
+COMMENT ON COLUMN "categories"."metadata" IS 'JSON encoded metadata properties.';
 
 --
--- Table: jos_content
+-- Table: content
 --
-DROP TABLE IF EXISTS "jos_content" CASCADE;
-CREATE TABLE "jos_content" (
+DROP TABLE IF EXISTS "content" CASCADE;
+CREATE TABLE "content" (
   "id" serial NOT NULL,
   -- FK to the #__assets table.
   "asset_id" integer DEFAULT 0 NOT NULL,
@@ -129,34 +129,34 @@ CREATE TABLE "jos_content" (
   "xreference" character varying(50) NOT NULL,
   PRIMARY KEY ("id")
 );
-CREATE INDEX "jos_content_idx_access" on "jos_content" ("access");
-CREATE INDEX "jos_content_idx_checkout" on "jos_content" ("checked_out");
-CREATE INDEX "jos_content_idx_state" on "jos_content" ("state");
-CREATE INDEX "jos_content_idx_catid" on "jos_content" ("catid");
-CREATE INDEX "jos_content_idx_createdby" on "jos_content" ("created_by");
-CREATE INDEX "jos_content_idx_featured_catid" on "jos_content" ("featured", "catid");
-CREATE INDEX "jos_content_idx_language" on "jos_content" ("language");
-CREATE INDEX "jos_content_idx_xreference" on "jos_content" ("xreference");
+CREATE INDEX "content_idx_access" on "content" ("access");
+CREATE INDEX "content_idx_checkout" on "content" ("checked_out");
+CREATE INDEX "content_idx_state" on "content" ("state");
+CREATE INDEX "content_idx_catid" on "content" ("catid");
+CREATE INDEX "content_idx_createdby" on "content" ("created_by");
+CREATE INDEX "content_idx_featured_catid" on "content" ("featured", "catid");
+CREATE INDEX "content_idx_language" on "content" ("language");
+CREATE INDEX "content_idx_xreference" on "content" ("xreference");
 
-COMMENT ON COLUMN "jos_content"."asset_id" IS 'FK to the #__assets table.';
-COMMENT ON COLUMN "jos_content"."featured" IS 'Set if article is featured.';
-COMMENT ON COLUMN "jos_content"."language" IS 'The language code for the article.';
-COMMENT ON COLUMN "jos_content"."xreference" IS 'A reference to enable linkages to external data sets.';
+COMMENT ON COLUMN "content"."asset_id" IS 'FK to the #__assets table.';
+COMMENT ON COLUMN "content"."featured" IS 'Set if article is featured.';
+COMMENT ON COLUMN "content"."language" IS 'The language code for the article.';
+COMMENT ON COLUMN "content"."xreference" IS 'A reference to enable linkages to external data sets.';
 
 --
--- Table: jos_core_log_searches
+-- Table: core_log_searches
 --
-DROP TABLE IF EXISTS "jos_core_log_searches" CASCADE;
-CREATE TABLE "jos_core_log_searches" (
+DROP TABLE IF EXISTS "core_log_searches" CASCADE;
+CREATE TABLE "core_log_searches" (
   "search_term" character varying(128) DEFAULT '' NOT NULL,
   "hits" integer DEFAULT 0 NOT NULL
 );
 
 --
--- Table: jos_extensions
+-- Table: extensions
 --
-DROP TABLE IF EXISTS "jos_extensions" CASCADE;
-CREATE TABLE "jos_extensions" (
+DROP TABLE IF EXISTS "extensions" CASCADE;
+CREATE TABLE "extensions" (
   "extension_id" serial NOT NULL,
   "name" character varying(100) NOT NULL,
   "type" character varying(20) NOT NULL,
@@ -176,15 +176,15 @@ CREATE TABLE "jos_extensions" (
   "state" bigint DEFAULT 0,
   PRIMARY KEY ("extension_id")
 );
-CREATE INDEX "jos_extensions_element_clientid" on "jos_extensions" ("element", "client_id");
-CREATE INDEX "jos_extensions_element_folder_clientid" on "jos_extensions" ("element", "folder", "client_id");
-CREATE INDEX "jos_extensions_extension" on "jos_extensions" ("type", "element", "folder", "client_id");
+CREATE INDEX "extensions_element_clientid" on "extensions" ("element", "client_id");
+CREATE INDEX "extensions_element_folder_clientid" on "extensions" ("element", "folder", "client_id");
+CREATE INDEX "extensions_extension" on "extensions" ("type", "element", "folder", "client_id");
 
 --
--- Table: jos_languages
+-- Table: languages
 --
-DROP TABLE IF EXISTS "jos_languages" CASCADE;
-CREATE TABLE "jos_languages" (
+DROP TABLE IF EXISTS "languages" CASCADE;
+CREATE TABLE "languages" (
   "lang_id" serial NOT NULL,
   "lang_code" character(7) NOT NULL,
   "title" character varying(50) NOT NULL,
@@ -200,10 +200,10 @@ CREATE TABLE "jos_languages" (
 );
 
 --
--- Table: jos_log_entries
+-- Table: log_entries
 --
-DROP TABLE IF EXISTS "jos_log_entries" CASCADE;
-CREATE TABLE "jos_log_entries" (
+DROP TABLE IF EXISTS "log_entries" CASCADE;
+CREATE TABLE "log_entries" (
   "priority" bigint DEFAULT NULL,
   "message" character varying(512) DEFAULT NULL,
   "date" timestamp without time zone DEFAULT NULL,
@@ -211,10 +211,10 @@ CREATE TABLE "jos_log_entries" (
 );
 
 --
--- Table: jos_menu
+-- Table: menu
 --
-DROP TABLE IF EXISTS "jos_menu" CASCADE;
-CREATE TABLE "jos_menu" (
+DROP TABLE IF EXISTS "menu" CASCADE;
+CREATE TABLE "menu" (
   "id" serial NOT NULL,
   -- The type of menu this item belongs to. FK to #__menu_types.menutype
   "menutype" character varying(24) NOT NULL,
@@ -263,40 +263,40 @@ CREATE TABLE "jos_menu" (
   PRIMARY KEY ("id"),
   CONSTRAINT "idx_client_id_parent_id_alias" UNIQUE ("client_id", "parent_id", "alias")
 );
-CREATE INDEX "jos_menu_idx_componentid" on "jos_menu" ("component_id", "menutype", "published", "access");
-CREATE INDEX "jos_menu_idx_menutype" on "jos_menu" ("menutype");
-CREATE INDEX "jos_menu_idx_left_right" on "jos_menu" ("lft", "rgt");
-CREATE INDEX "jos_menu_idx_alias" on "jos_menu" ("alias");
-CREATE INDEX "jos_menu_idx_path" on "jos_menu" ("path");
+CREATE INDEX "menu_idx_componentid" on "menu" ("component_id", "menutype", "published", "access");
+CREATE INDEX "menu_idx_menutype" on "menu" ("menutype");
+CREATE INDEX "menu_idx_left_right" on "menu" ("lft", "rgt");
+CREATE INDEX "menu_idx_alias" on "menu" ("alias");
+CREATE INDEX "menu_idx_path" on "menu" ("path");
 -- path(333));
-CREATE INDEX "jos_menu_idx_language" on "jos_menu" ("language");
+CREATE INDEX "menu_idx_language" on "menu" ("language");
 
-COMMENT ON COLUMN "jos_menu"."menutype" IS 'The type of menu this item belongs to. FK to #__menu_types.menutype';
-COMMENT ON COLUMN "jos_menu"."title" IS 'The display title of the menu item.';
-COMMENT ON COLUMN "jos_menu"."alias" IS 'The SEF alias of the menu item.';
-COMMENT ON COLUMN "jos_menu"."path" IS 'The computed path of the menu item based on the alias field.';
-COMMENT ON COLUMN "jos_menu"."link" IS 'The actually link the menu item refers to.';
-COMMENT ON COLUMN "jos_menu"."type" IS 'The type of link: Component, URL, Alias, Separator';
-COMMENT ON COLUMN "jos_menu"."published" IS 'The published state of the menu link.';
-COMMENT ON COLUMN "jos_menu"."parent_id" IS 'The parent menu item in the menu tree.';
-COMMENT ON COLUMN "jos_menu"."level" IS 'The relative level in the tree.';
-COMMENT ON COLUMN "jos_menu"."component_id" IS 'FK to #__extensions.id';
-COMMENT ON COLUMN "jos_menu"."ordering" IS 'The relative ordering of the menu item in the tree.';
-COMMENT ON COLUMN "jos_menu"."checked_out" IS 'FK to #__users.id';
-COMMENT ON COLUMN "jos_menu"."checked_out_time" IS 'The time the menu item was checked out.';
-COMMENT ON COLUMN "jos_menu"."browserNav" IS 'The click behaviour of the link.';
-COMMENT ON COLUMN "jos_menu"."access" IS 'The access level required to view the menu item.';
-COMMENT ON COLUMN "jos_menu"."img" IS 'The image of the menu item.';
-COMMENT ON COLUMN "jos_menu"."params" IS 'JSON encoded data for the menu item.';
-COMMENT ON COLUMN "jos_menu"."lft" IS 'Nested set lft.';
-COMMENT ON COLUMN "jos_menu"."rgt" IS 'Nested set rgt.';
-COMMENT ON COLUMN "jos_menu"."home" IS 'Indicates if this menu item is the home or default page.';
+COMMENT ON COLUMN "menu"."menutype" IS 'The type of menu this item belongs to. FK to #__menu_types.menutype';
+COMMENT ON COLUMN "menu"."title" IS 'The display title of the menu item.';
+COMMENT ON COLUMN "menu"."alias" IS 'The SEF alias of the menu item.';
+COMMENT ON COLUMN "menu"."path" IS 'The computed path of the menu item based on the alias field.';
+COMMENT ON COLUMN "menu"."link" IS 'The actually link the menu item refers to.';
+COMMENT ON COLUMN "menu"."type" IS 'The type of link: Component, URL, Alias, Separator';
+COMMENT ON COLUMN "menu"."published" IS 'The published state of the menu link.';
+COMMENT ON COLUMN "menu"."parent_id" IS 'The parent menu item in the menu tree.';
+COMMENT ON COLUMN "menu"."level" IS 'The relative level in the tree.';
+COMMENT ON COLUMN "menu"."component_id" IS 'FK to #__extensions.id';
+COMMENT ON COLUMN "menu"."ordering" IS 'The relative ordering of the menu item in the tree.';
+COMMENT ON COLUMN "menu"."checked_out" IS 'FK to #__users.id';
+COMMENT ON COLUMN "menu"."checked_out_time" IS 'The time the menu item was checked out.';
+COMMENT ON COLUMN "menu"."browserNav" IS 'The click behaviour of the link.';
+COMMENT ON COLUMN "menu"."access" IS 'The access level required to view the menu item.';
+COMMENT ON COLUMN "menu"."img" IS 'The image of the menu item.';
+COMMENT ON COLUMN "menu"."params" IS 'JSON encoded data for the menu item.';
+COMMENT ON COLUMN "menu"."lft" IS 'Nested set lft.';
+COMMENT ON COLUMN "menu"."rgt" IS 'Nested set rgt.';
+COMMENT ON COLUMN "menu"."home" IS 'Indicates if this menu item is the home or default page.';
 
 --
--- Table: jos_menu_types
+-- Table: menu_types
 --
-DROP TABLE IF EXISTS "jos_menu_types" CASCADE;
-CREATE TABLE "jos_menu_types" (
+DROP TABLE IF EXISTS "menu_types" CASCADE;
+CREATE TABLE "menu_types" (
   "id" serial NOT NULL,
   "menutype" character varying(24) NOT NULL,
   "title" character varying(48) NOT NULL,
@@ -306,10 +306,10 @@ CREATE TABLE "jos_menu_types" (
 );
 
 --
--- Table: jos_modules
+-- Table: modules
 --
-DROP TABLE IF EXISTS "jos_modules" CASCADE;
-CREATE TABLE "jos_modules" (
+DROP TABLE IF EXISTS "modules" CASCADE;
+CREATE TABLE "modules" (
   "id" serial NOT NULL,
   "title" character varying(100) DEFAULT '' NOT NULL,
   "note" character varying(255) DEFAULT '' NOT NULL,
@@ -329,35 +329,35 @@ CREATE TABLE "jos_modules" (
   "language" character(7) NOT NULL,
   PRIMARY KEY ("id")
 );
-CREATE INDEX "jos_modules_published" on "jos_modules" ("published", "access");
-CREATE INDEX "jos_modules_newsfeeds" on "jos_modules" ("module", "published");
-CREATE INDEX "jos_modules_idx_language" on "jos_modules" ("language");
+CREATE INDEX "modules_published" on "modules" ("published", "access");
+CREATE INDEX "modules_newsfeeds" on "modules" ("module", "published");
+CREATE INDEX "modules_idx_language" on "modules" ("language");
 
 --
--- Table: jos_modules_menu
+-- Table: modules_menu
 --
-DROP TABLE IF EXISTS "jos_modules_menu" CASCADE;
-CREATE TABLE "jos_modules_menu" (
+DROP TABLE IF EXISTS "modules_menu" CASCADE;
+CREATE TABLE "modules_menu" (
   "moduleid" bigint DEFAULT 0 NOT NULL,
   "menuid" bigint DEFAULT 0 NOT NULL,
   PRIMARY KEY ("moduleid", "menuid")
 );
 
 --
--- Table: jos_schemas
+-- Table: schemas
 --
-DROP TABLE IF EXISTS "jos_schemas" CASCADE;
-CREATE TABLE "jos_schemas" (
+DROP TABLE IF EXISTS "schemas" CASCADE;
+CREATE TABLE "schemas" (
   "extension_id" bigint NOT NULL,
   "version_id" character varying(20) NOT NULL,
   PRIMARY KEY ("extension_id", "version_id")
 );
 
 --
--- Table: jos_session
+-- Table: session
 --
-DROP TABLE IF EXISTS "jos_session" CASCADE;
-CREATE TABLE "jos_session" (
+DROP TABLE IF EXISTS "session" CASCADE;
+CREATE TABLE "session" (
   "session_id" character varying(32) DEFAULT '' NOT NULL,
   "client_id" smallint DEFAULT 0 NOT NULL,
   "guest" smallint DEFAULT 1,
@@ -368,19 +368,19 @@ CREATE TABLE "jos_session" (
   "usertype" character varying(50) DEFAULT '',
   PRIMARY KEY ("session_id")
 );
-CREATE INDEX "jos_session_whosonline" on "jos_session" ("guest", "usertype");
-CREATE INDEX "jos_session_userid" on "jos_session" ("userid");
-CREATE INDEX "jos_session_time" on "jos_session" ("time");
+CREATE INDEX "session_whosonline" on "session" ("guest", "usertype");
+CREATE INDEX "session_userid" on "session" ("userid");
+CREATE INDEX "session_time" on "session" ("time");
 
 --
--- Table: jos_updates
+-- Table: updates
 --
 
--- Comments: 
+-- Comments:
 -- Available Updates
 --
-DROP TABLE IF EXISTS "jos_updates" CASCADE;
-CREATE TABLE "jos_updates" (
+DROP TABLE IF EXISTS "updates" CASCADE;
+CREATE TABLE "updates" (
   "update_id" serial NOT NULL,
   "update_site_id" bigint DEFAULT 0,
   "extension_id" bigint DEFAULT 0,
@@ -396,17 +396,17 @@ CREATE TABLE "jos_updates" (
   "detailsurl" text NOT NULL,
   PRIMARY KEY ("update_id")
 );
-COMMENT ON TABLE "jos_updates" IS 'Available Updates';
+COMMENT ON TABLE "updates" IS 'Available Updates';
 
 --
--- Table: jos_update_categories
+-- Table: update_categories
 --
 
--- Comments: 
+-- Comments:
 -- Update Categories
 --
-DROP TABLE IF EXISTS "jos_update_categories" CASCADE;
-CREATE TABLE "jos_update_categories" (
+DROP TABLE IF EXISTS "update_categories" CASCADE;
+CREATE TABLE "update_categories" (
   "categoryid" serial NOT NULL,
   "name" character varying(20) DEFAULT '',
   "description" text NOT NULL,
@@ -414,17 +414,17 @@ CREATE TABLE "jos_update_categories" (
   "updatesite" bigint DEFAULT 0,
   PRIMARY KEY ("categoryid")
 );
-COMMENT ON TABLE "jos_update_categories" IS 'Update Categories';
+COMMENT ON TABLE "update_categories" IS 'Update Categories';
 
 --
--- Table: jos_update_sites
+-- Table: update_sites
 --
 
--- Comments: 
+-- Comments:
 -- Update Sites
 --
-DROP TABLE IF EXISTS "jos_update_sites" CASCADE;
-CREATE TABLE "jos_update_sites" (
+DROP TABLE IF EXISTS "update_sites" CASCADE;
+CREATE TABLE "update_sites" (
   "update_site_id" serial NOT NULL,
   "name" character varying(100) DEFAULT '',
   "type" character varying(20) DEFAULT '',
@@ -432,28 +432,28 @@ CREATE TABLE "jos_update_sites" (
   "enabled" bigint DEFAULT 0,
   PRIMARY KEY ("update_site_id")
 );
-COMMENT ON TABLE "jos_update_sites" IS 'Update Sites';
+COMMENT ON TABLE "update_sites" IS 'Update Sites';
 
 --
--- Table: jos_update_sites_extensions
+-- Table: update_sites_extensions
 --
 
--- Comments: 
+-- Comments:
 -- Links extensions to update sites
 --
-DROP TABLE IF EXISTS "jos_update_sites_extensions" CASCADE;
-CREATE TABLE "jos_update_sites_extensions" (
+DROP TABLE IF EXISTS "update_sites_extensions" CASCADE;
+CREATE TABLE "update_sites_extensions" (
   "update_site_id" bigint DEFAULT 0 NOT NULL,
   "extension_id" bigint DEFAULT 0 NOT NULL,
   PRIMARY KEY ("update_site_id", "extension_id")
 );
-COMMENT ON TABLE "jos_update_sites_extensions" IS 'Links extensions to update sites';
+COMMENT ON TABLE "update_sites_extensions" IS 'Links extensions to update sites';
 
 --
--- Table: jos_usergroups
+-- Table: usergroups
 --
-DROP TABLE IF EXISTS "jos_usergroups" CASCADE;
-CREATE TABLE "jos_usergroups" (
+DROP TABLE IF EXISTS "usergroups" CASCADE;
+CREATE TABLE "usergroups" (
   -- Primary Key
   "id" serial NOT NULL,
   -- Adjacency List Reference Id
@@ -466,20 +466,20 @@ CREATE TABLE "jos_usergroups" (
   PRIMARY KEY ("id"),
   CONSTRAINT "idx_usergroup_parent_title_lookup" UNIQUE ("parent_id", "title")
 );
-CREATE INDEX "jos_usergroups_idx_usergroup_title_lookup" on "jos_usergroups" ("title");
-CREATE INDEX "jos_usergroups_idx_usergroup_adjacency_lookup" on "jos_usergroups" ("parent_id");
-CREATE INDEX "jos_usergroups_idx_usergroup_nested_set_lookup" on "jos_usergroups" ("lft", "rgt");
+CREATE INDEX "usergroups_idx_usergroup_title_lookup" on "usergroups" ("title");
+CREATE INDEX "usergroups_idx_usergroup_adjacency_lookup" on "usergroups" ("parent_id");
+CREATE INDEX "usergroups_idx_usergroup_nested_set_lookup" on "usergroups" ("lft", "rgt");
 
-COMMENT ON COLUMN "jos_usergroups"."id" IS 'Primary Key';
-COMMENT ON COLUMN "jos_usergroups"."parent_id" IS 'Adjacency List Reference Id';
-COMMENT ON COLUMN "jos_usergroups"."lft" IS 'Nested set lft.';
-COMMENT ON COLUMN "jos_usergroups"."rgt" IS 'Nested set rgt.';
+COMMENT ON COLUMN "usergroups"."id" IS 'Primary Key';
+COMMENT ON COLUMN "usergroups"."parent_id" IS 'Adjacency List Reference Id';
+COMMENT ON COLUMN "usergroups"."lft" IS 'Nested set lft.';
+COMMENT ON COLUMN "usergroups"."rgt" IS 'Nested set rgt.';
 
 --
--- Table: jos_users
+-- Table: users
 --
-DROP TABLE IF EXISTS "jos_users" CASCADE;
-CREATE TABLE "jos_users" (
+DROP TABLE IF EXISTS "users" CASCADE;
+CREATE TABLE "users" (
   "id" serial NOT NULL,
   "name" character varying(255) DEFAULT '' NOT NULL,
   "username" character varying(150) DEFAULT '' NOT NULL,
@@ -494,34 +494,34 @@ CREATE TABLE "jos_users" (
   "params" text NOT NULL,
   PRIMARY KEY ("id")
 );
-CREATE INDEX "jos_users_usertype" on "jos_users" ("usertype");
-CREATE INDEX "jos_users_idx_name" on "jos_users" ("name");
-CREATE INDEX "jos_users_idx_block" on "jos_users" ("block");
-CREATE INDEX "jos_users_username" on "jos_users" ("username");
-CREATE INDEX "jos_users_email" on "jos_users" ("email");
+CREATE INDEX "users_usertype" on "users" ("usertype");
+CREATE INDEX "users_idx_name" on "users" ("name");
+CREATE INDEX "users_idx_block" on "users" ("block");
+CREATE INDEX "users_username" on "users" ("username");
+CREATE INDEX "users_email" on "users" ("email");
 
 --
--- Table: jos_user_profiles
+-- Table: user_profiles
 --
 
--- Comments: 
+-- Comments:
 -- Simple user profile storage table
 --
-DROP TABLE IF EXISTS "jos_user_profiles" CASCADE;
-CREATE TABLE "jos_user_profiles" (
+DROP TABLE IF EXISTS "user_profiles" CASCADE;
+CREATE TABLE "user_profiles" (
   "user_id" bigint NOT NULL,
   "profile_key" character varying(100) NOT NULL,
   "profile_value" character varying(255) NOT NULL,
   "ordering" bigint DEFAULT 0 NOT NULL,
   CONSTRAINT "idx_user_id_profile_key" UNIQUE ("user_id", "profile_key")
 );
-COMMENT ON TABLE "jos_user_profiles" IS 'Simple user profile storage table';
+COMMENT ON TABLE "user_profiles" IS 'Simple user profile storage table';
 
 --
--- Table: jos_user_usergroup_map
+-- Table: user_usergroup_map
 --
-DROP TABLE IF EXISTS "jos_user_usergroup_map" CASCADE;
-CREATE TABLE "jos_user_usergroup_map" (
+DROP TABLE IF EXISTS "user_usergroup_map" CASCADE;
+CREATE TABLE "user_usergroup_map" (
   -- Foreign Key to #__users.id
   "user_id" integer DEFAULT 0 NOT NULL,
   -- Foreign Key to #__usergroups.id
@@ -529,14 +529,14 @@ CREATE TABLE "jos_user_usergroup_map" (
   PRIMARY KEY ("user_id", "group_id")
 );
 
-COMMENT ON COLUMN "jos_user_usergroup_map"."user_id" IS 'Foreign Key to #__users.id';
-COMMENT ON COLUMN "jos_user_usergroup_map"."group_id" IS 'Foreign Key to #__usergroups.id';
+COMMENT ON COLUMN "user_usergroup_map"."user_id" IS 'Foreign Key to #__users.id';
+COMMENT ON COLUMN "user_usergroup_map"."group_id" IS 'Foreign Key to #__usergroups.id';
 
 --
--- Table: jos_viewlevels
+-- Table: viewlevels
 --
-DROP TABLE IF EXISTS "jos_viewlevels" CASCADE;
-CREATE TABLE "jos_viewlevels" (
+DROP TABLE IF EXISTS "viewlevels" CASCADE;
+CREATE TABLE "viewlevels" (
   -- Primary Key
   "id" serial NOT NULL,
   "title" character varying(100) DEFAULT '' NOT NULL,
@@ -547,14 +547,14 @@ CREATE TABLE "jos_viewlevels" (
   CONSTRAINT "idx_assetgroup_title_lookup" UNIQUE ("title")
 );
 
-COMMENT ON COLUMN "jos_viewlevels"."id" IS 'Primary Key';
-COMMENT ON COLUMN "jos_viewlevels"."rules" IS 'JSON encoded access control.';
+COMMENT ON COLUMN "viewlevels"."id" IS 'Primary Key';
+COMMENT ON COLUMN "viewlevels"."rules" IS 'JSON encoded access control.';
 
 --
--- Table: jos_dbtest
+-- Table: dbtest
 --
-DROP TABLE IF EXISTS "jos_dbtest" CASCADE;
-CREATE TABLE "jos_dbtest" (
+DROP TABLE IF EXISTS "dbtest" CASCADE;
+CREATE TABLE "dbtest" (
   "id" serial NOT NULL,
   "title" character varying(50) NOT NULL,
   "start_date" timestamp without time zone NOT NULL,

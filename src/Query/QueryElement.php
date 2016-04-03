@@ -25,7 +25,7 @@ class QueryElement
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected $name = null;
+	protected $name;
 
 	/**
 	 * An array of elements.
@@ -33,7 +33,7 @@ class QueryElement
 	 * @var    array
 	 * @since  1.0
 	 */
-	protected $elements = null;
+	protected $elements = [];
 
 	/**
 	 * Glue piece.
@@ -41,7 +41,7 @@ class QueryElement
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected $glue = null;
+	protected $glue;
 
 	/**
 	 * Constructor.
@@ -54,7 +54,6 @@ class QueryElement
 	 */
 	public function __construct($name, $elements, $glue = ',')
 	{
-		$this->elements = array();
 		$this->name = $name;
 		$this->glue = $glue;
 
@@ -95,14 +94,14 @@ class QueryElement
 		}
 		else
 		{
-			$this->elements = array_merge($this->elements, array($elements));
+			$this->elements = array_merge($this->elements, [$elements]);
 		}
 	}
 
 	/**
 	 * Gets the elements of this element.
 	 *
-	 * @return  string
+	 * @return  array
 	 *
 	 * @since   1.0
 	 */
@@ -128,8 +127,7 @@ class QueryElement
 	}
 
 	/**
-	 * Method to provide deep copy support to nested objects and arrays
-	 * when cloning.
+	 * Method to provide deep copy support to nested objects and arrays when cloning.
 	 *
 	 * @return  void
 	 *

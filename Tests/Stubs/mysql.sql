@@ -8,12 +8,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-# Dump of table jos_dbtest
+# Dump of table dbtest
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `jos_dbtest`;
+DROP TABLE IF EXISTS `dbtest`;
 
-CREATE TABLE `jos_dbtest` (
+CREATE TABLE `dbtest` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(50) NOT NULL,
   `start_date` datetime NOT NULL,

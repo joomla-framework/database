@@ -454,22 +454,22 @@ abstract class DatabaseQuery implements QueryInterface
 		{
 			case 'select':
 				$this->select = null;
-				$this->type = null;
+				$this->type   = null;
 				break;
 
 			case 'delete':
 				$this->delete = null;
-				$this->type = null;
+				$this->type   = null;
 				break;
 
 			case 'update':
 				$this->update = null;
-				$this->type = null;
+				$this->type   = null;
 				break;
 
 			case 'insert':
-				$this->insert = null;
-				$this->type = null;
+				$this->insert             = null;
+				$this->type               = null;
 				$this->autoIncrementField = null;
 				break;
 
@@ -521,7 +521,7 @@ abstract class DatabaseQuery implements QueryInterface
 
 			case 'limit':
 				$this->offset = 0;
-				$this->limit = 0;
+				$this->limit  = 0;
 				break;
 
 			case 'union':
@@ -529,26 +529,26 @@ abstract class DatabaseQuery implements QueryInterface
 				break;
 
 			default:
-				$this->type = null;
-				$this->select = null;
-				$this->delete = null;
-				$this->update = null;
-				$this->insert = null;
-				$this->from = null;
-				$this->join = null;
-				$this->set = null;
-				$this->where = null;
-				$this->group = null;
-				$this->having = null;
-				$this->order = null;
-				$this->columns = null;
-				$this->values = null;
+				$this->type               = null;
+				$this->select             = null;
+				$this->delete             = null;
+				$this->update             = null;
+				$this->insert             = null;
+				$this->from               = null;
+				$this->join               = null;
+				$this->set                = null;
+				$this->where              = null;
+				$this->group              = null;
+				$this->having             = null;
+				$this->order              = null;
+				$this->columns            = null;
+				$this->values             = null;
 				$this->autoIncrementField = null;
-				$this->exec = null;
-				$this->call = null;
-				$this->union = null;
-				$this->offset = 0;
-				$this->limit = 0;
+				$this->exec               = null;
+				$this->call               = null;
+				$this->union              = null;
+				$this->offset             = 0;
+				$this->limit              = 0;
 				break;
 		}
 
@@ -984,7 +984,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @since   1.0
 	 */
-	public function insert($table, $incrementField=false)
+	public function insert($table, $incrementField = false)
 	{
 		$this->type = 'insert';
 		$this->insert = new Query\QueryElement('INSERT INTO', $table);
@@ -1010,7 +1010,7 @@ abstract class DatabaseQuery implements QueryInterface
 	{
 		if (is_null($this->join))
 		{
-			$this->join = array();
+			$this->join = [];
 		}
 
 		$this->join[] = new Query\QueryElement(strtoupper($type) . ' JOIN', $conditions);
@@ -1077,7 +1077,7 @@ abstract class DatabaseQuery implements QueryInterface
 			throw new \RuntimeException('JLIB_DATABASE_ERROR_INVALID_DB_OBJECT');
 		}
 
-		$result = $this->db->getNullDate($quoted);
+		$result = $this->db->getNullDate();
 
 		if ($quoted)
 		{

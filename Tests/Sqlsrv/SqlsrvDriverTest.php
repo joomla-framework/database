@@ -102,13 +102,12 @@ class SqlsrvDriverTest extends SqlsrvCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @todo    Implement testGetAffectedRows().
 	 */
 	public function testGetAffectedRows()
 	{
 		$query = self::$driver->getQuery(true);
 		$query->delete();
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		self::$driver->setQuery($query);
 
 		self::$driver->execute();
@@ -275,7 +274,7 @@ class SqlsrvDriverTest extends SqlsrvCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('title');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadAssoc();
 
@@ -293,7 +292,7 @@ class SqlsrvDriverTest extends SqlsrvCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('title');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadAssocList();
 
@@ -322,7 +321,7 @@ class SqlsrvDriverTest extends SqlsrvCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('title');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadColumn();
 
@@ -340,7 +339,7 @@ class SqlsrvDriverTest extends SqlsrvCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('*');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		$query->where('description=' . self::$driver->quote('three'));
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadObject();
@@ -365,7 +364,7 @@ class SqlsrvDriverTest extends SqlsrvCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('*');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		$query->order('id');
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadObjectList();
@@ -418,7 +417,7 @@ class SqlsrvDriverTest extends SqlsrvCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('id');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		$query->where('title=' . self::$driver->quote('Testing2'));
 
 		self::$driver->setQuery($query);
@@ -438,7 +437,7 @@ class SqlsrvDriverTest extends SqlsrvCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('*');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		$query->where('description=' . self::$driver->quote('three'));
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadRow();
@@ -459,7 +458,7 @@ class SqlsrvDriverTest extends SqlsrvCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('*');
-		$query->from('jos_dbtest');
+		$query->from('dbtest');
 		$query->where('description=' . self::$driver->quote('one'));
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadRowList();
@@ -479,7 +478,7 @@ class SqlsrvDriverTest extends SqlsrvCase
 	public function testExecute()
 	{
 		self::$driver->setQuery(
-			"INSERT INTO [jos_dbtest] ([title],[start_date],[description]) VALUES ('testTitle','2013-04-01 00:00:00.000','description')"
+			"INSERT INTO [dbtest] ([title],[start_date],[description]) VALUES ('testTitle','2013-04-01 00:00:00.000','description')"
 		);
 
 		$this->assertNotEquals(self::$driver->execute(), false, __LINE__);
@@ -494,16 +493,16 @@ class SqlsrvDriverTest extends SqlsrvCase
 	 */
 	public function testRenameTable()
 	{
-		$newTableName = 'bak_jos_dbtest';
+		$newTableName = 'bak_dbtest';
 
-		self::$driver->renameTable('jos_dbtest', $newTableName);
+		self::$driver->renameTable('dbtest', $newTableName);
 
 		// Check name change
 		$tableList = self::$driver->getTableList();
 		$this->assertThat(in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
 
 		// Restore initial state
-		self::$driver->renameTable($newTableName, 'jos_dbtest');
+		self::$driver->renameTable($newTableName, 'dbtest');
 	}
 
 	/**
