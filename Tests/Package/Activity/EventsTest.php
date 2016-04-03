@@ -95,7 +95,7 @@ class EventsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/events', 0, 0)
+			->with('/events')
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -118,7 +118,7 @@ class EventsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with($path, 0, 0)
+			->with($path)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -141,7 +141,7 @@ class EventsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with($path, 0, 0)
+			->with($path)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -164,7 +164,7 @@ class EventsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with($path, 0, 0)
+			->with($path)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -187,7 +187,7 @@ class EventsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with($path, 0, 0)
+			->with($path)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -210,7 +210,7 @@ class EventsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with($path, 0, 0)
+			->with($path)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -233,7 +233,7 @@ class EventsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with($path, 0, 0)
+			->with($path)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -256,7 +256,7 @@ class EventsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with($path, 0, 0)
+			->with($path)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -279,7 +279,7 @@ class EventsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with($path, 0, 0)
+			->with($path)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -302,7 +302,7 @@ class EventsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with($path, 0, 0)
+			->with($path)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
