@@ -182,9 +182,6 @@ class MysqliDriver extends DatabaseDriver
 			throw new \RuntimeException('Could not connect to MySQL.', mysqli_connect_errno());
 		}
 
-		// Set sql_mode to non_strict mode
-		mysqli_query($this->connection, "SET @@SESSION.sql_mode = '';");
-
 		// If auto-select is enabled select the given database.
 		if ($this->options['select'] && !empty($this->options['database']))
 		{
@@ -504,17 +501,6 @@ class MysqliDriver extends DatabaseDriver
 	public function execute()
 	{
 		$this->connect();
-
-		if (!is_object($this->connection))
-		{
-			$this->log(
-				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}',
-				array('code' => $this->errorNum, 'message' => $this->errorMsg)
-			);
-
-			throw new \RuntimeException($this->errorMsg, $this->errorNum);
-		}
 
 		// Take a local copy so that we don't modify the original query and cause issues later
 		$sql = $this->replacePrefix((string) $this->sql);
