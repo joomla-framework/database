@@ -20,22 +20,20 @@ class DatabaseFactory
 	 *
 	 * @var    DatabaseFactory
 	 * @since  1.0
+	 * @deprecated  2.0  Instantiate a new factory object as needed
 	 */
 	private static $instance = null;
 
 	/**
-	 * Method to return a Driver instance based on the given options. There are three global options and then
-	 * the rest are specific to the database driver. The 'database' option determines which database is to
-	 * be used for the connection. The 'select' option determines whether the connector should automatically select
-	 * the chosen database.
+	 * Method to return a DatabaseDriver instance based on the given options.
 	 *
-	 * Instances are unique to the given options and new objects are only created when a unique options array is
-	 * passed into the method.  This ensures that we don't end up with unnecessary database connection resources.
+	 * There are three global options and then the rest are specific to the database driver. The 'database' option determines which database is to
+	 * be used for the connection. The 'select' option determines whether the connector should automatically select the chosen database.
 	 *
 	 * @param   string  $name     Name of the database driver you'd like to instantiate
 	 * @param   array   $options  Parameters to be passed to the database driver.
 	 *
-	 * @return  DatabaseDriver  A database driver object.
+	 * @return  DatabaseDriver
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -48,7 +46,7 @@ class DatabaseFactory
 		$options['select']   = (isset($options['select'])) ? $options['select'] : true;
 
 		// Derive the class name from the driver.
-		$class = '\\Joomla\\Database\\' . ucfirst(strtolower($options['driver'])) . '\\' . ucfirst(strtolower($options['driver'])) . 'Driver';
+		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($options['driver'])) . '\\' . ucfirst(strtolower($options['driver'])) . 'Driver';
 
 		// If the class still doesn't exist we have nothing left to do but throw an exception.  We did our best.
 		if (!class_exists($class))
@@ -59,23 +57,21 @@ class DatabaseFactory
 		// Create our new Driver connector based on the options given.
 		try
 		{
-			$instance = new $class($options);
+			return new $class($options);
 		}
 		catch (\RuntimeException $e)
 		{
-			throw new \RuntimeException(sprintf('Unable to connect to the Database: %s', $e->getMessage()));
+			throw new \RuntimeException(sprintf('Unable to connect to the Database: %s', $e->getMessage()), $e->getCode(), $e);
 		}
-
-		return $instance;
 	}
 
 	/**
 	 * Gets an exporter class object.
 	 *
 	 * @param   string          $name  Name of the driver you want an exporter for.
-	 * @param   DatabaseDriver  $db    Optional Driver instance
+	 * @param   DatabaseDriver  $db    Optional DatabaseDriver instance to inject into the exporter.
 	 *
-	 * @return  DatabaseExporter  An exporter object.
+	 * @return  DatabaseExporter
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -83,7 +79,7 @@ class DatabaseFactory
 	public function getExporter($name, DatabaseDriver $db = null)
 	{
 		// Derive the class name from the driver.
-		$class = '\\Joomla\\Database\\' . ucfirst(strtolower($name)) . '\\' . ucfirst(strtolower($name)) . 'Exporter';
+		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($name)) . '\\' . ucfirst(strtolower($name)) . 'Exporter';
 
 		// Make sure we have an exporter class for this driver.
 		if (!class_exists($class))
@@ -92,7 +88,7 @@ class DatabaseFactory
 			throw new \RuntimeException('Database Exporter not found.');
 		}
 
-		/* @var  $o  DatabaseExporter */
+		/** @var $o DatabaseExporter */
 		$o = new $class;
 
 		if ($db instanceof DatabaseDriver)
@@ -107,9 +103,9 @@ class DatabaseFactory
 	 * Gets an importer class object.
 	 *
 	 * @param   string          $name  Name of the driver you want an importer for.
-	 * @param   DatabaseDriver  $db    Optional Driver instance
+	 * @param   DatabaseDriver  $db    Optional DatabaseDriver instance to inject into the importer.
 	 *
-	 * @return  DatabaseImporter  An importer object.
+	 * @return  DatabaseImporter
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -117,7 +113,7 @@ class DatabaseFactory
 	public function getImporter($name, DatabaseDriver $db = null)
 	{
 		// Derive the class name from the driver.
-		$class = '\\Joomla\\Database\\' . ucfirst(strtolower($name)) . '\\' . ucfirst(strtolower($name)) . 'Importer';
+		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($name)) . '\\' . ucfirst(strtolower($name)) . 'Importer';
 
 		// Make sure we have an importer class for this driver.
 		if (!class_exists($class))
@@ -126,7 +122,7 @@ class DatabaseFactory
 			throw new \RuntimeException('Database importer not found.');
 		}
 
-		/* @var  $o  DatabaseImporter */
+		/** @var $o DatabaseImporter */
 		$o = new $class;
 
 		if ($db instanceof DatabaseDriver)
@@ -143,6 +139,7 @@ class DatabaseFactory
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Instantiate a new factory object as needed
 	 */
 	public static function getInstance()
 	{
@@ -160,7 +157,7 @@ class DatabaseFactory
 	 * @param   string          $name  Name of the driver you want an query object for.
 	 * @param   DatabaseDriver  $db    Optional Driver instance
 	 *
-	 * @return  DatabaseQuery  The current query object or a new object extending the Query class.
+	 * @return  DatabaseQuery
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -168,7 +165,7 @@ class DatabaseFactory
 	public function getQuery($name, DatabaseDriver $db = null)
 	{
 		// Derive the class name from the driver.
-		$class = '\\Joomla\\Database\\' . ucfirst(strtolower($name)) . '\\' . ucfirst(strtolower($name)) . 'Query';
+		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($name)) . '\\' . ucfirst(strtolower($name)) . 'Query';
 
 		// Make sure we have a query class for this driver.
 		if (!class_exists($class))
@@ -188,6 +185,7 @@ class DatabaseFactory
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Instantiate a new factory object as needed
 	 */
 	public static function setInstance(DatabaseFactory $instance = null)
 	{
