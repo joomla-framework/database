@@ -30,7 +30,7 @@ abstract class AbstractCliApplication extends AbstractApplication
 	 * CLI Input object
 	 *
 	 * @var    Cli\CliInput
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.6.0
 	 */
 	protected $cliInput;
 
@@ -88,7 +88,7 @@ abstract class AbstractCliApplication extends AbstractApplication
 	 *
 	 * @return  Cli\CliInput
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 */
 	public function getCliInput()
 	{
