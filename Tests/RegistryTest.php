@@ -7,6 +7,7 @@
 namespace Joomla\Registry\Tests;
 
 use Joomla\Registry\Registry;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Test class for \Joomla\Registry\Registry.
@@ -252,6 +253,29 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 		$a->set('foo.bar', 0);
 
 		$this->assertSame(0, $a->get('foo.bar'), 'The Registry correctly handles when a nested key has a value of 0');
+	}
+
+	/**
+	 * @testdox  The Registry correctly handles assignments for class instances.
+	 *
+	 * @covers   Joomla\Registry\Registry::get
+	 * @covers   Joomla\Registry\Registry::set
+	 * @ticket   https://github.com/joomla-framework/registry/issues/8
+	 */
+	public function testTheRegistryCorrectlyHandlesAssignmentsForClassInstances()
+	{
+		// Only using the Yaml object here as it's pulled in as a package dependency
+		$yaml = new Yaml;
+
+		$a = new Registry;
+		$a->set('yaml', $yaml);
+
+		$this->assertSame($yaml, $a->get('yaml'), 'The Registry correctly handles when a top level key is an instance of a class');
+
+		$a = new Registry;
+		$a->set('nested.yaml', $yaml);
+
+		$this->assertSame($yaml, $a->get('nested.yaml'), 'The Registry correctly handles when a nested key is an instance of a class');
 	}
 
 	/**
