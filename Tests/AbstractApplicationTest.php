@@ -18,10 +18,20 @@ class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test__constructDefaultBehaviour()
 	{
+		$startTime      = time();
+		$startMicrotime = microtime(true);
+
 		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication');
 
 		$this->assertAttributeInstanceOf('Joomla\Input\Input', 'input', $object);
 		$this->assertAttributeInstanceOf('Joomla\Registry\Registry', 'config', $object);
+
+		// Validate default configuration data is written
+		$executionDateTime = new \DateTime($object->get('execution.datetime'));
+
+		$this->assertSame(date('Y'), $executionDateTime->format('Y'));
+		$this->assertGreaterThanOrEqual($startTime, $object->get('execution.timestamp'));
+		$this->assertGreaterThanOrEqual($startMicrotime, $object->get('execution.microtimestamp'));
 	}
 
 	/**

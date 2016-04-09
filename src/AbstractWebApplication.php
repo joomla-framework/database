@@ -117,10 +117,6 @@ abstract class AbstractWebApplication extends AbstractApplication
 
 		// Set the system URIs.
 		$this->loadSystemUris();
-
-		// Set the execution datetime and timestamp;
-		$this->set('execution.datetime', gmdate('Y-m-d H:i:s'));
-		$this->set('execution.timestamp', time());
 	}
 
 	/**
