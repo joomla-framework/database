@@ -20,15 +20,10 @@ class AbstractCliApplicationTest extends \PHPUnit_Framework_TestCase
 	{
 		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractCliApplication');
 
-		// Validate default objects are created
+		// Validate default objects unique to the CLI application are created
 		$this->assertAttributeInstanceOf('Joomla\Input\Cli', 'input', $object);
-		$this->assertAttributeInstanceOf('Joomla\Registry\Registry', 'config', $object);
 		$this->assertAttributeInstanceOf('Joomla\Application\Cli\Output\Stdout', 'output', $object);
-
-		// Validate default configuration data is written
-		$executionDateTime = new \DateTime($object->get('execution.datetime'));
-
-		$this->assertSame(date('Y'), $executionDateTime->format('Y'));
+		$this->assertAttributeInstanceOf('Joomla\Application\Cli\CliInput', 'cliInput', $object);
 	}
 
 	/**
@@ -38,14 +33,19 @@ class AbstractCliApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test__constructDependencyInjection()
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Cli');
-		$mockConfig = $this->getMock('Joomla\Registry\Registry');
-		$mockOutput = $this->getMock('Joomla\Application\Cli\Output\Stdout');
-		$object     = $this->getMockForAbstractClass('Joomla\Application\AbstractCliApplication', array($mockInput, $mockConfig, $mockOutput));
+		$mockInput    = $this->getMock('Joomla\Input\Cli');
+		$mockConfig   = $this->getMock('Joomla\Registry\Registry');
+		$mockOutput   = $this->getMock('Joomla\Application\Cli\Output\Stdout');
+		$mockCliInput = $this->getMock('Joomla\Application\Cli\CliInput');
+
+		$object = $this->getMockForAbstractClass(
+			'Joomla\Application\AbstractCliApplication', array($mockInput, $mockConfig, $mockOutput, $mockCliInput)
+		);
 
 		$this->assertAttributeSame($mockInput, 'input', $object);
 		$this->assertAttributeSame($mockConfig, 'config', $object);
 		$this->assertAttributeSame($mockOutput, 'output', $object);
+		$this->assertAttributeSame($mockCliInput, 'cliInput', $object);
 	}
 
 	/**
@@ -58,6 +58,18 @@ class AbstractCliApplicationTest extends \PHPUnit_Framework_TestCase
 		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractCliApplication');
 
 		$this->assertInstanceOf('Joomla\Application\Cli\Output\Stdout', $object->getOutput());
+	}
+
+	/**
+	 * @testdox  Tests that a default CliInput object is returned.
+	 *
+	 * @covers  Joomla\Application\AbstractCliApplication::getCliInput
+	 */
+	public function testGetCliInput()
+	{
+		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractCliApplication');
+
+		$this->assertInstanceOf('Joomla\Application\Cli\CliInput', $object->getCliInput());
 	}
 
 	/**

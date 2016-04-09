@@ -99,15 +99,8 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	{
 		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractWebApplication');
 
-		// Validate default objects are created
-		$this->assertAttributeInstanceOf('Joomla\Input\Input', 'input', $object);
-		$this->assertAttributeInstanceOf('Joomla\Registry\Registry', 'config', $object);
+		// Validate default objects unique to the web application are created
 		$this->assertAttributeInstanceOf('Joomla\Application\Web\WebClient', 'client', $object);
-
-		// Validate default configuration data is written
-		$executionDateTime = new \DateTime($object->get('execution.datetime'));
-
-		$this->assertSame(date('Y'), $executionDateTime->format('Y'));
 	}
 
 	/**

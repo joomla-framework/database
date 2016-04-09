@@ -62,7 +62,7 @@ abstract class AbstractCliApplication extends AbstractApplication
 		$this->output = ($output instanceof Cli\CliOutput) ? $output : new Cli\Output\Stdout;
 
 		// Set the CLI input object.
-		$this->cliInput = ($output instanceof Cli\CliInput) ? $cliInput : new Cli\CliInput;
+		$this->cliInput = ($cliInput instanceof Cli\CliInput) ? $cliInput : new Cli\CliInput;
 
 		// Call the constructor as late as possible (it runs `initialise`).
 		parent::__construct($input instanceof Input\Input ? $input : new Input\Cli, $config);
