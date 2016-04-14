@@ -8,6 +8,7 @@
 
 namespace Joomla\Http\Transport;
 
+use Composer\CaBundle\CaBundle;
 use Joomla\Http\Exception\InvalidResponseCodeException;
 use Joomla\Http\TransportInterface;
 use Joomla\Http\Response;
@@ -145,7 +146,27 @@ class Stream implements TransportInterface
 		}
 
 		// Create the stream context for the request.
-		$context = stream_context_create(array('http' => $options));
+		$streamOptions = array(
+			'http' => $options,
+			'ssl' => array(
+				'verify_peer'  => true,
+				'verify_depth' => 5,
+			)
+		);
+
+		// The cacert may be a file or path
+		$certpath = isset($this->options['stream.certpath']) ? $this->options['stream.certpath'] : CaBundle::getSystemCaRootBundlePath();
+
+		if (is_dir($certpath))
+		{
+			$streamOptions['ssl']['capath'] = $certpath;
+		}
+		else
+		{
+			$streamOptions['ssl']['cafile'] = $certpath;
+		}
+
+		$context = stream_context_create($streamOptions);
 
 		// Capture PHP errors
 		$php_errormsg = '';
