@@ -37,10 +37,10 @@ class Json extends AbstractRegistryFormat
 		{
 			$depth = isset($options['depth']) ? $options['depth'] : 512;
 
-			return StringHelper::unicode_to_utf8(json_encode($object, $bitmask, $depth));
+			return json_encode($object, $bitmask, $depth);
 		}
 
-		return StringHelper::unicode_to_utf8(json_encode($object, $bitmask));
+		return json_encode($object, $bitmask);
 	}
 
 	/**
