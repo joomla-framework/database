@@ -29,6 +29,8 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 		$object->booleanfalse = false;
 		$object->numericint = 42;
 		$object->numericfloat = 3.1415;
+		// A string that looks like an unicode sequence, should remain what it is: a string
+		$object->unicodesequence = '\u0000';
 
 		// The PHP registry format does not support nested objects
 		$object->section = new \stdClass;
@@ -38,9 +40,14 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 		$string = '{"foo":"bar","quoted":"\"stringwithquotes\"",' .
 			'"booleantrue":true,"booleanfalse":false,' .
 			'"numericint":42,"numericfloat":3.1415,' .
+			'"unicodesequence":"\\\\u0000",' .
 			'"section":{"key":"value"},' .
 			'"array":{"nestedarray":{"test1":"value1"}}' .
 			'}';
+
+		$decoded = json_decode($class->objectToString($object));
+		// Ensures that the generated string respects the json syntax
+		$this->assertNotEquals($decoded, null);
 
 		// Test basic object to string.
 		$this->assertSame($string, $class->objectToString($object));
