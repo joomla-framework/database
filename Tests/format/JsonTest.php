@@ -29,6 +29,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 		$object->booleanfalse = false;
 		$object->numericint = 42;
 		$object->numericfloat = 3.1415;
+
 		// A string that looks like an unicode sequence, should remain what it is: a string
 		$object->unicodesequence = '\u0000';
 
@@ -46,8 +47,17 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 			'}';
 
 		$decoded = json_decode($class->objectToString($object));
+
 		// Ensures that the generated string respects the json syntax
-		$this->assertNotEquals($decoded, null);
+		$errorMsg = 'JSON error decoding string.  Code: ' . json_last_error();
+
+		// If PHP 5.5 grab the last error message too
+		if (version_compare(PHP_VERSION, '5.5', 'ge'))
+		{
+			$errorMsg .= '; Message: ' . json_last_error_msg();
+		}
+
+		$this->assertNotNull($decoded, $errorMsg);
 
 		// Test basic object to string.
 		$this->assertSame($string, $class->objectToString($object));
