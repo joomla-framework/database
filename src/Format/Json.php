@@ -9,7 +9,6 @@
 namespace Joomla\Registry\Format;
 
 use Joomla\Registry\AbstractRegistryFormat;
-use Joomla\String\StringHelper;
 
 /**
  * JSON format handler for Registry.
