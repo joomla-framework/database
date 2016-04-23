@@ -209,22 +209,68 @@ class DriverTest extends TestDatabase
 	}
 
 	/**
+	 * Data provider for splitSql test cases
+	 *
+	 * @return  array
+	 */
+	public function dataSplitSql()
+	{
+		// Order: SQL string to process; Expected result
+		return array(
+			'simple string' => array(
+				'SELECT * FROM #__foo;SELECT * FROM #__bar;',
+				array(
+					'SELECT * FROM #__foo;',
+					'SELECT * FROM #__bar;',
+				),
+			),
+			'string with -- style comments' => array(
+				<<<SQL
+--
+-- A test comment
+--
+
+ALTER TABLE `#__foo` MODIFY `text_column` varchar(150) NOT NULL;
+
+ALTER TABLE `#__bar` MODIFY `text_column` varchar(150) NOT NULL;
+SQL
+				,
+				array(
+					<<<SQL
+--
+-- A test comment
+--
+
+ALTER TABLE `#__foo` MODIFY `text_column` varchar(150) NOT NULL;
+SQL
+					,
+					<<<SQL
+
+
+ALTER TABLE `#__bar` MODIFY `text_column` varchar(150) NOT NULL;
+SQL
+					,
+				)
+			)
+		);
+	}
+
+	/**
 	 * Tests the Joomla\Database\DatabaseDriver::splitSql method.
+	 *
+	 * @param   string  $sql       The SQL string to process
+	 * @param   array   $expected  The expected result
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @dataProvider  dataSplitSql
 	 */
-	public function testSplitSql()
+	public function testSplitSql($sql, array $expected)
 	{
-		$this->assertThat(
-			$this->instance->splitSql('SELECT * FROM #__foo;SELECT * FROM #__bar;'),
-			$this->equalTo(
-				array(
-					'SELECT * FROM #__foo;',
-					'SELECT * FROM #__bar;'
-				)
-			),
+		$this->assertEquals(
+			$expected,
+			$this->instance->splitSql($sql),
 			'splitSql method should split a string of multiple queries into an array.'
 		);
 	}
