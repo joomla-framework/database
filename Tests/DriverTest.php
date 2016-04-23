@@ -236,14 +236,7 @@ ALTER TABLE `#__bar` MODIFY `text_column` varchar(150) NOT NULL;
 SQL
 				,
 				array(
-					<<<SQL
---
--- A test comment
---
-
-ALTER TABLE `#__foo` MODIFY `text_column` varchar(150) NOT NULL;
-SQL
-					,
+					'ALTER TABLE `#__foo` MODIFY `text_column` varchar(150) NOT NULL;',
 					'ALTER TABLE `#__bar` MODIFY `text_column` varchar(150) NOT NULL;',
 				)
 			),
@@ -256,6 +249,28 @@ SQL
 				,
 				array(
 					'INSERT INTO `#__foo` (`column_one`, `column_two`);',
+				),
+			),
+			'string with C style comments' => array(
+				<<<SQL
+/*
+ * A test comment
+ */
+
+ALTER TABLE `#__foo` MODIFY `text_column` varchar(150) NOT NULL;
+
+ALTER TABLE `#__bar` MODIFY `text_column` varchar(150) NOT NULL;
+SQL
+				,
+				array(
+					'ALTER TABLE `#__foo` MODIFY `text_column` varchar(150) NOT NULL;',
+					'ALTER TABLE `#__bar` MODIFY `text_column` varchar(150) NOT NULL;',
+				),
+			),
+			'string with MySQL specific C style comments' => array(
+				'CREATE /*!32302 TEMPORARY */ TABLE t (a INT);',
+				array(
+					'CREATE /*!32302 TEMPORARY */ TABLE t (a INT);',
 				),
 			),
 		);
