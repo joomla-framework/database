@@ -297,6 +297,36 @@ SQL
 	}
 
 	/**
+	 * Tests the Joomla\Database\DatabaseDriver::getName method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testGetName()
+	{
+		$this->assertThat(
+			$this->instance->getName(),
+			$this->equalTo('nosql')
+		);
+	}
+
+	/**
+	 * Tests the Joomla\Database\DatabaseDriver::getServerType method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testGetServerType()
+	{
+		$this->assertThat(
+			$this->instance->getServerType(),
+			$this->equalTo('nosql')
+		);
+	}
+
+	/**
 	 * Tests the Joomla\Database\DatabaseDriver::getPrefix method.
 	 *
 	 * @return  void

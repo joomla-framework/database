@@ -34,7 +34,15 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * @var    string
 	 * @since  1.0
 	 */
-	public $name;
+	protected $name;
+
+	/**
+	 * The type of the database server family supported by this driver.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	public $serverType;
 
 	/**
 	 * The database connection resource.
@@ -459,6 +467,32 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	}
 
 	/**
+	 * Magic method to access properties of the database driver.
+	 *
+	 * @param   string  $name  The name of the property.
+	 *
+	 * @return  mixed   A value if the property name is valid, null otherwise.
+	 *
+	 * @since       __DEPLOY_VERSION__
+	 * @deprecated  2.0  This is a B/C proxy since $this->name was previously public
+	 */
+	public function __get($name)
+	{
+		switch ($name)
+		{
+			case 'name':
+				return $this->getName();
+
+			default:
+				$trace = debug_backtrace();
+				trigger_error(
+					'Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'],
+					E_USER_NOTICE
+				);
+		}
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param   array  $options  List of options used to configure the connection
@@ -653,6 +687,80 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	public function getMinimum()
 	{
 		return static::$dbMinimum;
+	}
+
+	/**
+	 * Get the name of the database driver.
+	 *
+	 * If $this->name is not set it will try guessing the driver name from the class name.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getName()
+	{
+		if (empty($this->name))
+		{
+			$reflect = new \ReflectionClass($this);
+
+			$this->name = strtolower(str_replace('Driver', '', $reflect->getShortName()));
+		}
+
+		return $this->name;
+	}
+
+	/**
+	 * Get the server family type.
+	 *
+	 * If $this->serverType is not set it will attempt guessing the server family type from the driver name. If this is not possible the driver
+	 * name will be returned instead.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getServerType()
+	{
+		if (empty($this->serverType))
+		{
+			$name = $this->getName();
+
+			if (stristr($name, 'mysql') !== false)
+			{
+				$this->serverType = 'mysql';
+			}
+			elseif (stristr($name, 'postgre') !== false)
+			{
+				$this->serverType = 'postgresql';
+			}
+			elseif (stristr($name, 'oracle') !== false)
+			{
+				$this->serverType = 'oracle';
+			}
+			elseif (stristr($name, 'sqlite') !== false)
+			{
+				$this->serverType = 'sqlite';
+			}
+			elseif (stristr($name, 'sqlsrv') !== false)
+			{
+				$this->serverType = 'mssql';
+			}
+			elseif (stristr($name, 'sqlazure') !== false)
+			{
+				$this->serverType = 'mssql';
+			}
+			elseif (stristr($name, 'mssql') !== false)
+			{
+				$this->serverType = 'mssql';
+			}
+			else
+			{
+				$this->serverType = $name;
+			}
+		}
+
+		return $this->serverType;
 	}
 
 	/**
