@@ -350,7 +350,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			if (($current == ';' && !$open) || $i == $end - 1)
 			{
 				$query = substr($sql, $start, ($i - $start + 1));
-				$queries[] = preg_replace('/^\s*#(?!__)[\s\S]+?[\n\r]/', '', $query);
+				$queries[] = trim(preg_replace('/^\s*#(?!__)[\s\S]+?[\n\r]/', '', $query));
 				$start = $i + 1;
 			}
 		}

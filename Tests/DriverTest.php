@@ -244,12 +244,7 @@ SQL
 ALTER TABLE `#__foo` MODIFY `text_column` varchar(150) NOT NULL;
 SQL
 					,
-					<<<SQL
-
-
-ALTER TABLE `#__bar` MODIFY `text_column` varchar(150) NOT NULL;
-SQL
-					,
+					'ALTER TABLE `#__bar` MODIFY `text_column` varchar(150) NOT NULL;',
 				)
 			),
 			'string with # style comments' => array(
@@ -260,11 +255,7 @@ INSERT INTO `#__foo` (`column_one`, `column_two`);
 SQL
 				,
 				array(
-					<<<SQL
-
-INSERT INTO `#__foo` (`column_one`, `column_two`);
-SQL
-					,
+					'INSERT INTO `#__foo` (`column_one`, `column_two`);',
 				),
 			),
 		);
@@ -286,7 +277,7 @@ SQL
 		$this->assertEquals(
 			$expected,
 			$this->instance->splitSql($sql),
-			'splitSql method should split a string of multiple queries into an array.'
+			'splitSql method should split a string of queries into an array.'
 		);
 	}
 
