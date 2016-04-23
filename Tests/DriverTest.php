@@ -251,7 +251,22 @@ ALTER TABLE `#__bar` MODIFY `text_column` varchar(150) NOT NULL;
 SQL
 					,
 				)
-			)
+			),
+			'string with # style comments' => array(
+				<<<SQL
+# A test comment
+
+INSERT INTO `#__foo` (`column_one`, `column_two`);
+SQL
+				,
+				array(
+					<<<SQL
+
+INSERT INTO `#__foo` (`column_one`, `column_two`);
+SQL
+					,
+				),
+			),
 		);
 	}
 
