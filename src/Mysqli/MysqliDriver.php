@@ -688,7 +688,7 @@ class MysqliDriver extends DatabaseDriver
 		$this->connect();
 
 		// Which charset should I use, plain utf8 or multibyte utf8mb4?
-		$charset = $this->options['utf8mb4'] ? 'utf8mb4' : 'utf8';
+		$charset = $this->utf8mb4 && $this->options['utf8mb4'] ? 'utf8mb4' : 'utf8';
 
 		$result = @$this->connection->set_charset($charset);
 
@@ -698,7 +698,7 @@ class MysqliDriver extends DatabaseDriver
 		 * can not be sure if the server actually does support UTF-8 Multibyte (i.e. it's MySQL 5.5.3 or later). Since the utf8mb4 charset is
 		 * undefined in this case we catch the error and determine that utf8mb4 is not supported!
 		 */
-		if (!$result && $this->utf8mb4)
+		if (!$result && $this->utf8mb4 && $this->options['utf8mb4'])
 		{
 			$this->utf8mb4 = false;
 			$result        = @$this->connection->set_charset('utf8');
