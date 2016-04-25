@@ -154,6 +154,7 @@ class NormaliseTest extends \PHPUnit_Framework_TestCase
 			array('myFooBar', 'my foo bar'),
 			array('myFooBar', 'my foo-bar'),
 			array('myFooBar', 'my foo_bar'),
+			array('abc3def4', '1abc3def4'),
 		);
 	}
 
