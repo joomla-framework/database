@@ -51,7 +51,7 @@ class MysqlDriver extends PdoDriver
 	 * True if the database engine supports UTF-8 Multibyte (utf8mb4) character encoding.
 	 *
 	 * @var    boolean
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	protected $utf8mb4 = false;
 
@@ -155,7 +155,7 @@ class MysqlDriver extends PdoDriver
 	 *
 	 * @return  string  The converted query
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function convertUtf8mb4QueryToUtf8($query)
 	{

@@ -40,7 +40,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * The type of the database server family supported by this driver.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	public $serverType;
 
@@ -473,7 +473,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 *
 	 * @return  mixed   A value if the property name is valid, null otherwise.
 	 *
-	 * @since       __DEPLOY_VERSION__
+	 * @since       1.4.0
 	 * @deprecated  2.0  This is a B/C proxy since $this->name was previously public
 	 */
 	public function __get($name)
@@ -696,7 +696,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getName()
 	{
@@ -718,7 +718,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getServerType()
 	{
