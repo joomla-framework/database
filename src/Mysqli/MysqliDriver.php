@@ -28,6 +28,14 @@ class MysqliDriver extends DatabaseDriver
 	public $name = 'mysqli';
 
 	/**
+	 * The database connection resource.
+	 *
+	 * @var    mysqli
+	 * @since  1.0
+	 */
+	protected $connection;
+
+	/**
 	 * The character(s) used to quote SQL statement names such as table names or field names,
 	 * etc. The child classes should define this as necessary.  If a single character string the
 	 * same character is used for both sides of the quoted name, else the first character will be
@@ -48,6 +56,14 @@ class MysqliDriver extends DatabaseDriver
 	protected $nullDate = '0000-00-00 00:00:00';
 
 	/**
+	 * True if the database engine supports UTF-8 Multibyte (utf8mb4) character encoding.
+	 *
+	 * @var    boolean
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $utf8mb4 = false;
+
+	/**
 	 * The minimum supported database version.
 	 *
 	 * @var    string
@@ -65,13 +81,14 @@ class MysqliDriver extends DatabaseDriver
 	public function __construct($options)
 	{
 		// Get some basic values from the options.
-		$options['host'] = (isset($options['host'])) ? $options['host'] : 'localhost';
-		$options['user'] = (isset($options['user'])) ? $options['user'] : 'root';
+		$options['host']     = (isset($options['host'])) ? $options['host'] : 'localhost';
+		$options['user']     = (isset($options['user'])) ? $options['user'] : 'root';
 		$options['password'] = (isset($options['password'])) ? $options['password'] : '';
 		$options['database'] = (isset($options['database'])) ? $options['database'] : '';
-		$options['select'] = (isset($options['select'])) ? (bool) $options['select'] : true;
-		$options['port'] = null;
-		$options['socket'] = null;
+		$options['select']   = (isset($options['select'])) ? (bool) $options['select'] : true;
+		$options['port']     = null;
+		$options['socket']   = null;
+		$options['utf8mb4']  = (isset($options['utf8mb4'])) ? (bool) $options['utf8mb4'] : false;
 
 		// Finalize initialisation.
 		parent::__construct($options);
@@ -188,8 +205,41 @@ class MysqliDriver extends DatabaseDriver
 			$this->select($this->options['database']);
 		}
 
+		$this->utf8mb4 = $this->serverClaimsUtf8mb4Support();
+
 		// Set charactersets (needed for MySQL 4.1.2+).
-		$this->setUtf();
+		$this->utf = $this->setUtf();
+	}
+
+	/**
+	 * Automatically downgrade a CREATE TABLE or ALTER TABLE query from utf8mb4 (UTF-8 Multibyte) to plain utf8.
+	 *
+	 * Used when the server doesn't support UTF-8 Multibyte.
+	 *
+	 * @param   string  $query  The query to convert
+	 *
+	 * @return  string  The converted query
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function convertUtf8mb4QueryToUtf8($query)
+	{
+		if ($this->utf8mb4)
+		{
+			return $query;
+		}
+
+		// If it's not an ALTER TABLE or CREATE TABLE command there's nothing to convert
+		$beginningOfQuery = substr($query, 0, 12);
+		$beginningOfQuery = strtoupper($beginningOfQuery);
+
+		if (!in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE')))
+		{
+			return $query;
+		}
+
+		// Replace utf8mb4 with utf8
+		return str_replace('utf8mb4', 'utf8', $query);
 	}
 
 	/**
@@ -628,9 +678,33 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function setUtf()
 	{
+		// If UTF is not supported return false immediately
+		if (!$this->utf)
+		{
+			return false;
+		}
+
+		// Make sure we're connected to the server
 		$this->connect();
 
-		return $this->connection->set_charset('utf8');
+		// Which charset should I use, plain utf8 or multibyte utf8mb4?
+		$charset = $this->utf8mb4 && $this->options['utf8mb4'] ? 'utf8mb4' : 'utf8';
+
+		$result = @$this->connection->set_charset($charset);
+
+		/*
+		 * If I could not set the utf8mb4 charset then the server doesn't support utf8mb4 despite claiming otherwise. This happens on old MySQL
+		 * server versions (less than 5.5.3) using the mysqlnd PHP driver. Since mysqlnd masks the server version and reports only its own we
+		 * can not be sure if the server actually does support UTF-8 Multibyte (i.e. it's MySQL 5.5.3 or later). Since the utf8mb4 charset is
+		 * undefined in this case we catch the error and determine that utf8mb4 is not supported!
+		 */
+		if (!$result && $this->utf8mb4 && $this->options['utf8mb4'])
+		{
+			$this->utf8mb4 = false;
+			$result        = @$this->connection->set_charset('utf8');
+		}
+
+		return $result;
 	}
 
 	/**
@@ -796,5 +870,34 @@ class MysqliDriver extends DatabaseDriver
 		$this->setQuery('UNLOCK TABLES')->execute();
 
 		return $this;
+	}
+
+	/**
+	 * Does the database server claim to have support for UTF-8 Multibyte (utf8mb4) collation?
+	 *
+	 * libmysql supports utf8mb4 since 5.5.3 (same version as the MySQL server). mysqlnd supports utf8mb4 since 5.0.9.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	private function serverClaimsUtf8mb4Support()
+	{
+		$client_version = mysqli_get_client_info();
+		$server_version = $this->getVersion();
+
+		if (version_compare($server_version, '5.5.3', '<'))
+		{
+			return false;
+		}
+
+		if (strpos($client_version, 'mysqlnd') !== false)
+		{
+			$client_version = preg_replace('/^\D+([\d.]+).*/', '$1', $client_version);
+
+			return version_compare($client_version, '5.0.9', '>=');
+		}
+
+		return version_compare($client_version, '5.5.3', '>=');
 	}
 }
