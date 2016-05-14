@@ -29,7 +29,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 * Flag if the Registry data object has been initialized
 	 *
 	 * @var    boolean
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.2
 	 */
 	protected $initialized = false;
 
