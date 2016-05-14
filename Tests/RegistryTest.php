@@ -51,6 +51,35 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @testdox  A Registry instance instantiated with a string of data is correctly manipulated
+	 *
+	 * @covers   Joomla\Registry\Registry::__construct
+	 * @covers   Joomla\Registry\Registry::def
+	 * @covers   Joomla\Registry\Registry::get
+	 * @covers   Joomla\Registry\Registry::set
+	 */
+	public function testARegistryInstanceInstantiatedWithAStringOfDataIsCorrectlyManipulated()
+	{
+		$a = new Registry(json_encode(array('foo' => 'bar', 'goo' => 'car', 'nested' => array('foo' => 'bar', 'goo' => 'car'))));
+
+		// Check top level values
+		$this->assertSame('bar', $a->get('foo'));
+		$this->assertSame('bar', $a->def('foo'));
+		$this->assertSame('far', $a->set('foo', 'far'));
+
+		// Check nested values
+		$this->assertSame('bar', $a->get('nested.foo'));
+		$this->assertSame('bar', $a->def('nested.foo'));
+		$this->assertSame('far', $a->set('nested.foo', 'far'));
+
+		// Check adding a new nested object
+		$a->set('new.nested', array('foo' => 'bar', 'goo' => 'car'));
+		$this->assertSame('bar', $a->get('new.nested.foo'));
+		$this->assertSame('bar', $a->def('new.nested.foo'));
+		$this->assertSame('far', $a->set('new.nested.foo', 'far'));
+	}
+
+	/**
 	 * @testdox  A Registry instance can be cloned
 	 *
 	 * @covers   Joomla\Registry\Registry::__clone
