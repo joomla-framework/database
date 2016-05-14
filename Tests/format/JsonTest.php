@@ -111,13 +111,19 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 			$object2,
 			'The JSON string should covert into an object with sections.'
 		);
+	}
 
-		/**
-		 * Test for bad input
-		 * Everything that is not starting with { is handled by
-		 * Format\Ini, which we test seperately
-		 */
-		$this->assertNull($class->stringToObject('{key:\'value\''));
+	/**
+	 * @testdox  A malformed JSON string causes an Exception to be thrown
+	 *
+	 * @covers   Joomla\Registry\Format\Json::stringToObject
+	 * @expectedException  \RuntimeException
+	 */
+	public function testAMalformedJsonStringCausesAnExceptionToBeThrown()
+	{
+		$class = new Json;
+
+		$class->stringToObject('{key:\'value\'');
 	}
 
 	/**
