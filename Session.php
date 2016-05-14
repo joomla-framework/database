@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Session Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -601,7 +601,7 @@ class Session implements \IteratorAggregate
 				if ($session_clean)
 				{
 					session_id($session_clean);
-					$cookie->set($session_name, '', time() - 3600);
+					$cookie->set($session_name, '', 1);
 				}
 			}
 		}
@@ -649,7 +649,7 @@ class Session implements \IteratorAggregate
 		 */
 		if (isset($_COOKIE[session_name()]))
 		{
-			setcookie(session_name(), '', time() - 42000, $this->cookie_path, $this->cookie_domain);
+			$this->input->cookie(session_name(), '', 1);
 		}
 
 		session_unset();
