@@ -199,12 +199,15 @@ final class ArrayHelper
 	 *
 	 * @param   array   $array     The source array
 	 * @param   string  $valueCol  The index of the column or name of object property to be used as value
+	 *                             It may also be NULL to return complete arrays or objects (this is
+	 *                             useful together with <var>$keyCol</var> to reindex the array).
 	 * @param   string  $keyCol    The index of the column or name of object property to be used as key
 	 *
 	 * @return  array  Column of values from the source array
 	 *
 	 * @since   1.0
 	 * @see     http://php.net/manual/en/language.types.array.php
+	 * @see     http://php.net/manual/en/function.array-column.php
 	 */
 	public static function getColumn(array $array, $valueCol, $keyCol = null)
 	{
@@ -217,19 +220,22 @@ final class ArrayHelper
 
 			/*
 			 * We process arrays (and objects already converted to array)
-			 * Only if the value column exists in this item
+			 * Only if the value column (if required) exists in this item
 			 */
-			if (is_array($subject) && isset($subject[$valueCol]))
+			if (is_array($subject) && (!isset($valueCol) || isset($subject[$valueCol])))
 			{
+				// Use whole $item if valueCol is null, else use the value column.
+				$value = isset($valueCol) ? $subject[$valueCol] : $item;
+
 				// Array keys can only be integer or string. Casting will occur as per the PHP Manual.
 				if (isset($keyCol) && isset($subject[$keyCol]) && is_scalar($subject[$keyCol]))
 				{
 					$key          = $subject[$keyCol];
-					$result[$key] = $subject[$valueCol];
+					$result[$key] = $value;
 				}
 				else
 				{
-					$result[] = $subject[$valueCol];
+					$result[] = $value;
 				}
 			}
 		}
