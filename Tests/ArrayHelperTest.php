@@ -63,7 +63,7 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 				// String   Regex to select only some attributes
 				null,
 				// String   The expected return value
-				null,
+				array(),
 				// Boolean  Use function defaults (true) or full argument list
 				true
 			),
