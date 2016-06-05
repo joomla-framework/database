@@ -118,16 +118,111 @@ class DatabaseDriverTest extends TestDatabase
 	}
 
 	/**
-	 * Tests the Joomla\Database\DatabaseDriver::splitSql method.
+	 * Data provider for splitSql test cases
+	 *
+	 * @return  array
 	 */
-	public function testSplitSql()
+	public function dataSplitSql()
 	{
-		$this->assertSame(
-			array(
-				'SELECT * FROM #__foo;',
-				'SELECT * FROM #__bar;'
+		// Order: SQL string to process; Expected result
+		return array(
+			'simple string' => array(
+				'SELECT * FROM #__foo;SELECT * FROM #__bar;',
+				array(
+					'SELECT * FROM #__foo;',
+					'SELECT * FROM #__bar;',
+				),
 			),
-			$this->instance->splitSql('SELECT * FROM #__foo;SELECT * FROM #__bar;')
+			'string with -- style comments' => array(
+				<<<SQL
+--
+-- A test comment
+--
+
+ALTER TABLE `#__foo` MODIFY `text_column` varchar(150) NOT NULL;
+
+ALTER TABLE `#__bar` MODIFY `text_column` varchar(150) NOT NULL;
+SQL
+				,
+				array(
+					'ALTER TABLE `#__foo` MODIFY `text_column` varchar(150) NOT NULL;',
+					'ALTER TABLE `#__bar` MODIFY `text_column` varchar(150) NOT NULL;',
+				)
+			),
+			'string with # style comments' => array(
+				<<<SQL
+# A test comment
+
+INSERT INTO `#__foo` (`column_one`, `column_two`);
+SQL
+				,
+				array(
+					'INSERT INTO `#__foo` (`column_one`, `column_two`);',
+				),
+			),
+			'string with C style comments' => array(
+				<<<SQL
+/*
+ * A test comment
+ */
+
+ALTER TABLE `#__foo` MODIFY `text_column` varchar(150) NOT NULL;
+
+ALTER TABLE `#__bar` MODIFY `text_column` varchar(150) NOT NULL;
+SQL
+				,
+				array(
+					'ALTER TABLE `#__foo` MODIFY `text_column` varchar(150) NOT NULL;',
+					'ALTER TABLE `#__bar` MODIFY `text_column` varchar(150) NOT NULL;',
+				),
+			),
+			'string with MySQL specific C style comments' => array(
+				'CREATE /*!32302 TEMPORARY */ TABLE t (a INT);',
+				array(
+					'CREATE /*!32302 TEMPORARY */ TABLE t (a INT);',
+				),
+			),
+		);
+	}
+
+	/**
+	 * Tests the Joomla\Database\DatabaseDriver::splitSql method.
+	 *
+	 * @param   string  $sql       The SQL string to process
+	 * @param   array   $expected  The expected result
+	 *
+	 * @return  void
+	 *
+	 * @dataProvider  dataSplitSql
+	 */
+	public function testSplitSql($sql, array $expected)
+	{
+		$this->assertEquals(
+			$expected,
+			$this->instance->splitSql($sql),
+			'splitSql method should split a string of queries into an array.'
+		);
+	}
+
+	/**
+	 * Tests the Joomla\Database\DatabaseDriver::getName method.
+	 */
+	public function testGetName()
+	{
+		$this->assertThat(
+			$this->instance->getName(),
+			$this->equalTo('nosql')
+		);
+	}
+
+	/**
+	 * Tests the Joomla\Database\DatabaseDriver::getServerType method.
+	 */
+	public function testGetServerType()
+	{
+		$this->assertThat(
+			$this->instance->getServerType(),
+			$this->equalTo('nosql')
 		);
 	}
 

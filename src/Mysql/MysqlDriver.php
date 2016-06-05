@@ -47,6 +47,14 @@ class MysqlDriver extends PdoDriver
 	protected $nullDate = '0000-00-00 00:00:00';
 
 	/**
+	 * True if the database engine supports UTF-8 Multibyte (utf8mb4) character encoding.
+	 *
+	 * @var    boolean
+	 * @since  1.4.0
+	 */
+	protected $utf8mb4 = false;
+
+	/**
 	 * The minimum supported database version.
 	 *
 	 * @var    string
@@ -69,6 +77,13 @@ class MysqlDriver extends PdoDriver
 
 		$this->charset = $options['charset'];
 
+		/*
+		 * Pre-populate the UTF-8 Multibyte compatibility flag. Unfortunately PDO won't report the server version unless we're connected to it,
+		 * and we cannot connect to it unless we know if it supports utf8mb4, which requires us knowing the server version. Because of this
+		 * chicken and egg issue, we _assume_ it's supported and we'll just catch any problems at connection time.
+		 */
+		$this->utf8mb4 = $options['charset'] == 'utf8mb4';
+
 		// Finalize initialisation.
 		parent::__construct($options);
 	}
@@ -88,10 +103,77 @@ class MysqlDriver extends PdoDriver
 			return;
 		}
 
-		parent::connect();
+		try
+		{
+			// Try to connect to MySQL
+			parent::connect();
+		}
+		catch (\RuntimeException $e)
+		{
+			// If the connection failed, but not because of the wrong character set, then bubble up the exception.
+			if (!$this->utf8mb4)
+			{
+				throw $e;
+			}
+
+			/*
+			 * Otherwise, try connecting again without using utf8mb4 and see if maybe that was the problem. If the connection succeeds, then we
+			 * will have learned that the client end of the connection does not support utf8mb4.
+  			 */
+			$this->utf8mb4 = false;
+			$this->options['charset'] = 'utf8';
+
+			parent::connect();
+		}
+
+		if ($this->utf8mb4)
+		{
+			// At this point we know the client supports utf8mb4.  Now we must check if the server supports utf8mb4 as well.
+			$serverVersion = $this->connection->getAttribute(\PDO::ATTR_SERVER_VERSION);
+			$this->utf8mb4 = version_compare($serverVersion, '5.5.3', '>=');
+
+			if (!$this->utf8mb4)
+			{
+				// Reconnect with the utf8 character set.
+				parent::disconnect();
+				$this->options['charset'] = 'utf8';
+				parent::connect();
+			}
+		}
 
 		$this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 		$this->connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+	}
+
+	/**
+	 * Automatically downgrade a CREATE TABLE or ALTER TABLE query from utf8mb4 (UTF-8 Multibyte) to plain utf8.
+	 *
+	 * Used when the server doesn't support UTF-8 Multibyte.
+	 *
+	 * @param   string  $query  The query to convert
+	 *
+	 * @return  string  The converted query
+	 *
+	 * @since   1.4.0
+	 */
+	public function convertUtf8mb4QueryToUtf8($query)
+	{
+		if ($this->hasUTF8mb4Support())
+		{
+			return $query;
+		}
+
+		// If it's not an ALTER TABLE or CREATE TABLE command there's nothing to convert
+		$beginningOfQuery = substr($query, 0, 12);
+		$beginningOfQuery = strtoupper($beginningOfQuery);
+
+		if (!in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE')))
+		{
+			return $query;
+		}
+
+		// Replace utf8mb4 with utf8
+		return str_replace('utf8mb4', 'utf8', $query);
 	}
 
 	/**

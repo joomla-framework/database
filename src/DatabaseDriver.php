@@ -32,7 +32,15 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	 * @var    string
 	 * @since  1.0
 	 */
-	public $name;
+	protected $name;
+
+	/**
+	 * The type of the database server family supported by this driver.
+	 *
+	 * @var    string
+	 * @since  1.4.0
+	 */
+	public $serverType;
 
 	/**
 	 * The database connection resource.
@@ -296,18 +304,28 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	 */
 	public static function splitSql($sql)
 	{
-		$start   = 0;
-		$open    = false;
-		$char    = '';
-		$end     = strlen($sql);
-		$queries = [];
+		$start     = 0;
+		$open      = false;
+		$comment   = false;
+		$endString = '';
+		$end       = strlen($sql);
+		$queries   = [];
+		$query     = '';
 
 		for ($i = 0; $i < $end; $i++)
 		{
-			$current = substr($sql, $i, 1);
+			$current      = substr($sql, $i, 1);
+			$current2     = substr($sql, $i, 2);
+			$current3     = substr($sql, $i, 3);
+			$lenEndString = strlen($endString);
+			$testEnd      = substr($sql, $i, $lenEndString);
 
-			if (($current == '"' || $current == '\''))
+			if ($current == '"' || $current == "'" || $current2 == '--'
+				|| ($current2 == '/*' && $current3 != '/*!' && $current3 != '/*+')
+				|| ($current == '#' && $current3 != '#__')
+				|| ($comment && $testEnd == $endString))
 			{
+				// Check if quoted with previous backslash
 				$n = 2;
 
 				while (substr($sql, $i - $n + 1, 1) == '\\' && $n < $i)
@@ -315,32 +333,120 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 					$n++;
 				}
 
+				// Not quoted
 				if ($n % 2 == 0)
 				{
 					if ($open)
 					{
-						if ($current == $char)
+						if ($testEnd == $endString)
 						{
-							$open = false;
-							$char = '';
+							if ($comment)
+							{
+								$comment = false;
+
+								if ($lenEndString > 1)
+								{
+									$i += ($lenEndString - 1);
+									$current = substr($sql, $i, 1);
+								}
+
+								$start = $i + 1;
+							}
+
+							$open      = false;
+							$endString = '';
 						}
 					}
 					else
 					{
 						$open = true;
-						$char = $current;
+
+						if ($current2 == '--')
+						{
+							$endString = "\n";
+							$comment   = true;
+						}
+						elseif ($current2 == '/*')
+						{
+							$endString = '*/';
+							$comment   = true;
+						}
+						elseif ($current == '#')
+						{
+							$endString = "\n";
+							$comment   = true;
+						}
+						else
+						{
+							$endString = $current;
+						}
+
+						if ($comment && $start < $i)
+						{
+							$query = $query . substr($sql, $start, ($i - $start));
+						}
 					}
 				}
 			}
 
-			if (($current == ';' && !$open) || $i == $end - 1)
+			if ($comment)
 			{
-				$queries[] = substr($sql, $start, ($i - $start + 1));
 				$start = $i + 1;
 			}
+
+			if (($current == ';' && !$open) || $i == $end - 1)
+			{
+				if ($start <= $i)
+				{
+					$query = $query . substr($sql, $start, ($i - $start + 1));
+				}
+
+				$query = trim($query);
+
+				if ($query)
+				{
+					if (($i == $end - 1) && ($current != ';'))
+					{
+						$query = $query . ';';
+					}
+
+					$queries[] = $query;
+				}
+
+				$query = '';
+				$start = $i + 1;
+			}
+
+			$endComment = false;
 		}
 
 		return $queries;
+	}
+
+	/**
+	 * Magic method to access properties of the database driver.
+	 *
+	 * @param   string  $name  The name of the property.
+	 *
+	 * @return  mixed   A value if the property name is valid, null otherwise.
+	 *
+	 * @since       1.4.0
+	 * @deprecated  2.0  This is a B/C proxy since $this->name was previously public
+	 */
+	public function __get($name)
+	{
+		switch ($name)
+		{
+			case 'name':
+				return $this->getName();
+
+			default:
+				$trace = debug_backtrace();
+				trigger_error(
+					'Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'],
+					E_USER_NOTICE
+				);
+		}
 	}
 
 	/**
@@ -482,6 +588,80 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	public function getMinimum()
 	{
 		return static::$dbMinimum;
+	}
+
+	/**
+	 * Get the name of the database driver.
+	 *
+	 * If $this->name is not set it will try guessing the driver name from the class name.
+	 *
+	 * @return  string
+	 *
+	 * @since   1.4.0
+	 */
+	public function getName()
+	{
+		if (empty($this->name))
+		{
+			$reflect = new \ReflectionClass($this);
+
+			$this->name = strtolower(str_replace('Driver', '', $reflect->getShortName()));
+		}
+
+		return $this->name;
+	}
+
+	/**
+	 * Get the server family type.
+	 *
+	 * If $this->serverType is not set it will attempt guessing the server family type from the driver name. If this is not possible the driver
+	 * name will be returned instead.
+	 *
+	 * @return  string
+	 *
+	 * @since   1.4.0
+	 */
+	public function getServerType()
+	{
+		if (empty($this->serverType))
+		{
+			$name = $this->getName();
+
+			if (stristr($name, 'mysql') !== false)
+			{
+				$this->serverType = 'mysql';
+			}
+			elseif (stristr($name, 'postgre') !== false)
+			{
+				$this->serverType = 'postgresql';
+			}
+			elseif (stristr($name, 'oracle') !== false)
+			{
+				$this->serverType = 'oracle';
+			}
+			elseif (stristr($name, 'sqlite') !== false)
+			{
+				$this->serverType = 'sqlite';
+			}
+			elseif (stristr($name, 'sqlsrv') !== false)
+			{
+				$this->serverType = 'mssql';
+			}
+			elseif (stristr($name, 'sqlazure') !== false)
+			{
+				$this->serverType = 'mssql';
+			}
+			elseif (stristr($name, 'mssql') !== false)
+			{
+				$this->serverType = 'mssql';
+			}
+			else
+			{
+				$this->serverType = $name;
+			}
+		}
+
+		return $this->serverType;
 	}
 
 	/**

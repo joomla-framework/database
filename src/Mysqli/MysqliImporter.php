@@ -49,7 +49,7 @@ class MysqliImporter extends DatabaseImporter
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \RuntimeException
 	 */
 	protected function xmlToCreate(\SimpleXMLElement $table)

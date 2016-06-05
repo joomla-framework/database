@@ -71,6 +71,9 @@ abstract class MysqlCase extends TestDatabase
 				case 'pass':
 					self::$options['password'] = $v;
 					break;
+				case 'charset':
+					self::$options['charset'] = $v;
+					break;
 			}
 		}
 
