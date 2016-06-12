@@ -204,6 +204,37 @@ class Gists extends AbstractPackage
 	}
 
 	/**
+	 * Method to list forks of a gist.
+	 *
+	 * @param   integer  $gistId  The gist number.
+	 * @param   integer  $page    The page number from which to get items.
+	 * @param   integer  $limit   The number of items on a page.
+	 *
+	 * @return  array
+	 *
+	 * @since   1.0
+	 * @throws  \DomainException
+	 */
+	public function getForkList($gistId, $page = 0, $limit = 0)
+	{
+		// Build the request path.
+		$path = '/gists/' . (int) $gistId . '/forks';
+
+		// Send the request.
+		$response = $this->client->get($this->fetchUrl($path, $page, $limit));
+
+		// Validate the response code.
+		if ($response->code != 200)
+		{
+			// Decode the error response and throw an exception.
+			$error = json_decode($response->body);
+			throw new \DomainException($error->message, $response->code);
+		}
+
+		return json_decode($response->body);
+	}
+
+	/**
 	 * Method to list gists.  If a user is authenticated it will return the user's gists, otherwise
 	 * it will return all public gists.
 	 *

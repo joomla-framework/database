@@ -738,6 +738,60 @@ class GistsTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the getForkList method
+	 *
+	 * @return void
+	 */
+	public function testGetForkList()
+	{
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/gists/523/forks')
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->getForkList(523),
+			$this->equalTo(json_decode($this->sampleString))
+		);
+	}
+
+	/**
+	 * Tests the getForkList method - simulated failure
+	 *
+	 * @return void
+	 */
+	public function testGetForkListFailure()
+	{
+		$exception = false;
+
+		$this->response->code = 500;
+		$this->response->body = $this->errorString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/gists/523/forks')
+			->will($this->returnValue($this->response));
+
+		try
+		{
+			$this->object->getForkList(523);
+		}
+		catch (\DomainException $e)
+		{
+			$exception = true;
+
+			$this->assertThat(
+				$e->getMessage(),
+				$this->equalTo(json_decode($this->errorString)->message)
+			);
+		}
+		$this->assertTrue($exception);
+	}
+
+	/**
 	 * Tests the getList method
 	 *
 	 * @return void

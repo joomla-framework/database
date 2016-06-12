@@ -20,6 +20,7 @@ use Joomla\Github\AbstractPackage;
  * @documentation http://developer.github.com/v3/repos/downloads
  *
  * @since  1.0
+ * @deprecated  The Releases API should be used instead
  */
 class Downloads extends AbstractPackage
 {

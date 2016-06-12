@@ -95,4 +95,24 @@ class Statuses extends AbstractPackage
 		// Send the request.
 		return $this->processResponse($this->client->get($this->fetchUrl($path)));
 	}
+
+	/**
+	 * Method to get the combined Status for a specific Ref.
+	 *
+	 * @param   string  $user  The name of the owner of the GitHub repository.
+	 * @param   string  $repo  The name of the GitHub repository.
+	 * @param   string  $sha   SHA1 for which to get the combined status.
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getCombinedStatus($user, $repo, $sha)
+	{
+		// Build the request path.
+		$path = '/repos/' . $user . '/' . $repo . '/commits/' . $sha . '/status';
+
+		// Send the request.
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
+	}
 }

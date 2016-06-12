@@ -98,6 +98,37 @@ class Commits extends AbstractPackage
 	}
 
 	/**
+	 * Method to get the SHA-1 of a commit reference
+	 *
+	 * @param   string  $user  The name of the owner of the GitHub repository.
+	 * @param   string  $repo  The name of the GitHub repository.
+	 * @param   string  $ref   The commit reference
+	 *
+	 * @throws \DomainException
+	 * @since   1.0
+	 *
+	 * @return  array
+	 */
+	public function getSha($user, $repo, $ref)
+	{
+		// Build the request path.
+		$path = '/repos/' . $user . '/' . $repo . '/commits/' . $ref;
+
+		// Send the request.
+		$response = $this->client->get($this->fetchUrl($path));
+
+		// Validate the response code.
+		if ($response->code != 200)
+		{
+			// Decode the error response and throw an exception.
+			$error = json_decode($response->body);
+			throw new \DomainException($error->message, $response->code);
+		}
+
+		return $response->body;
+	}
+
+	/**
 	 * Method to get a diff for two commits.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.

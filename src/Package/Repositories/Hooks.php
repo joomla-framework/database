@@ -24,10 +24,31 @@ class Hooks extends AbstractPackage
 	 *
 	 * @var    array
 	 * @since  1.0
+	 * @see    https://developer.github.com/webhooks/#events
 	 */
 	protected $events = array(
-		'push', 'issues', 'issue_comment', 'commit_comment', 'pull_request', 'pull_request_review_comment', 'gollum',
-		'watch', 'download', 'fork', 'fork_apply', 'member', 'public', 'team_add', 'status'
+		'*',
+		'commit_comment',
+		'create',
+		'delete',
+		'deployment',
+		'deployment_status',
+		'fork',
+		'gollum',
+		'issue_comment',
+		'issues',
+		'member',
+		'membership',
+		'page_build',
+		'public',
+		'pull_request_review_comment',
+		'pull_request',
+		'push',
+		'repository',
+		'release',
+		'status',
+		'team_add',
+		'watch',
 	);
 
 	/**
@@ -202,11 +223,34 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
+	 * Method to trigger a ping event for a hook
+	 *
+	 * @param   string   $user  The name of the owner of the GitHub repository.
+	 * @param   string   $repo  The name of the GitHub repository.
+	 * @param   integer  $id    ID of the hook to ping
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function ping($user, $repo, $id)
+	{
+		// Build the request path.
+		$path = '/repos/' . $user . '/' . $repo . '/hooks/' . $id . '/pings';
+
+		return $this->processResponse(
+			$this->client->post($this->fetchUrl($path), json_encode('')),
+			204
+		);
+	}
+
+	/**
 	 * Method to test a hook against the latest repository commit
 	 *
 	 * @param   string   $user  The name of the owner of the GitHub repository.
 	 * @param   string   $repo  The name of the GitHub repository.
-	 * @param   integer  $id    ID of the hook to delete
+	 * @param   integer  $id    ID of the hook to test
 	 *
 	 * @return  object
 	 *

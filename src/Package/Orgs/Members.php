@@ -232,4 +232,123 @@ class Members extends AbstractPackage
 			204
 		);
 	}
+
+	/**
+	 * Get organization membership
+	 *
+	 * In order to get a user's membership with an organization, the authenticated user must be an organization owner.
+	 *
+	 * @param   string  $org   The name of the organization.
+	 * @param   string  $user  The name of the user.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getMembership($org, $user)
+	{
+		// Build the request path.
+		$path = '/orgs/' . $org . '/memberships/' . $user;
+
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
+	}
+
+	/**
+	 * Add or update organization membership
+	 *
+	 * In order to create or update a user's membership with an organization, the authenticated user must be an organization owner.
+	 *
+	 * @param   string  $org   The name of the organization.
+	 * @param   string  $user  The name of the user.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function updateMembership($org, $user)
+	{
+		// Build the request path.
+		$path = '/orgs/' . $org . '/memberships/' . $user;
+
+		return $this->processResponse($this->client->put($this->fetchUrl($path)));
+	}
+
+	/**
+	 * Remove organization membership
+	 *
+	 * In order to remove a user's membership with an organization, the authenticated user must be an organization owner.
+	 *
+	 * @param   string  $org   The name of the organization.
+	 * @param   string  $user  The name of the user.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function removeMembership($org, $user)
+	{
+		// Build the request path.
+		$path = '/orgs/' . $org . '/memberships/' . $user;
+
+		return $this->processResponse(
+			$this->client->delete($this->fetchUrl($path)),
+			204
+		);
+	}
+
+	/**
+	 * List your organization memberships
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function listMemberships()
+	{
+		// Build the request path.
+		$path = '/user/memberships/orgs';
+
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
+	}
+
+	/**
+	 * Get your organization membership
+	 *
+	 * @param   string  $org  The name of the organization.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function listOrganizationMembership($org)
+	{
+		// Build the request path.
+		$path = '/user/memberships/orgs/' . $org;
+
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
+	}
+
+	/**
+	 * Get your organization membership
+	 *
+	 * @param   string  $org    The name of the organization.
+	 * @param   string  $state  The state that the membership should be in.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function editOrganizationMembership($org, $state)
+	{
+		// The API only accepts $state == 'active' at present
+		if ($state != 'active')
+		{
+			throw new \InvalidArgumentException('The state must be "active".');
+		}
+
+		// Build the request path.
+		$path = '/user/memberships/orgs/' . $org;
+
+		return $this->processResponse($this->client->patch($this->fetchUrl($path), array('state' => $state)));
+	}
 }

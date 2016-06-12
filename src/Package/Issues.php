@@ -218,10 +218,40 @@ class Issues extends AbstractPackage
 		// Build the request path.
 		$path = '/issues';
 
-		// TODO Implement the filtering options.
+		$uri = new Uri($this->fetchUrl($path, $page, $limit));
+
+		if ($filter)
+		{
+			$uri->setVar('filter', $filter);
+		}
+
+		if ($state)
+		{
+			$uri->setVar('state', $state);
+		}
+
+		if ($labels)
+		{
+			$uri->setVar('labels', $labels);
+		}
+
+		if ($sort)
+		{
+			$uri->setVar('sort', $sort);
+		}
+
+		if ($direction)
+		{
+			$uri->setVar('direction', $direction);
+		}
+
+		if ($since)
+		{
+			$uri->setVar('since', $since->format(\DateTime::ISO8601));
+		}
 
 		// Send the request.
-		$response = $this->client->get($this->fetchUrl($path, $page, $limit));
+		$response = $this->client->get((string) $uri);
 
 		// Validate the response code.
 		if ($response->code != 200)
