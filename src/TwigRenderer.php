@@ -9,7 +9,6 @@
 namespace Joomla\Renderer;
 
 use Joomla\Renderer\Twig\FilesystemLoader;
-use Joomla\Registry\Registry;
 
 /**
  * Twig class for rendering output.
