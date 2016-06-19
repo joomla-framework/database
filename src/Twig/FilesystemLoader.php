@@ -63,7 +63,7 @@ class FilesystemLoader extends \Twig_Loader_Filesystem
 
 		$parts = explode('.', $name);
 
-		$extension = count($parts > 1) ? '.' . end($parts) : '';
+		$extension = count($parts) > 1 ? '.' . end($parts) : '';
 
 		if ($extension != $this->extension)
 		{

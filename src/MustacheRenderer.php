@@ -75,7 +75,7 @@ class MustacheRenderer extends AbstractRenderer implements RendererInterface
 	{
 		try
 		{
-			$this->getRenderer()->getLoader()->load($name);
+			$this->getRenderer()->getLoader()->load($path);
 
 			return true;
 		}
