@@ -20,38 +20,6 @@ use Joomla\Github\AbstractPackage;
 class Hooks extends AbstractPackage
 {
 	/**
-	 * Array containing the allowed hook events
-	 *
-	 * @var    array
-	 * @since  1.0
-	 * @see    https://developer.github.com/webhooks/#events
-	 */
-	protected $events = array(
-		'*',
-		'commit_comment',
-		'create',
-		'delete',
-		'deployment',
-		'deployment_status',
-		'fork',
-		'gollum',
-		'issue_comment',
-		'issues',
-		'member',
-		'membership',
-		'page_build',
-		'public',
-		'pull_request_review_comment',
-		'pull_request',
-		'push',
-		'repository',
-		'release',
-		'status',
-		'team_add',
-		'watch',
-	);
-
-	/**
 	 * Method to create a hook on a repository.
 	 *
 	 * @param   string   $user    The name of the owner of the GitHub repository.

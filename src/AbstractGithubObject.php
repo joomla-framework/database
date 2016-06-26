@@ -38,6 +38,38 @@ abstract class AbstractGithubObject
 	protected $package = '';
 
 	/**
+	 * Array containing the allowed hook events
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 * @see    https://developer.github.com/webhooks/#events
+	 */
+	protected $events = array(
+		'*',
+		'commit_comment',
+		'create',
+		'delete',
+		'deployment',
+		'deployment_status',
+		'fork',
+		'gollum',
+		'issue_comment',
+		'issues',
+		'member',
+		'membership',
+		'page_build',
+		'public',
+		'pull_request_review_comment',
+		'pull_request',
+		'push',
+		'repository',
+		'release',
+		'status',
+		'team_add',
+		'watch',
+	);
+
+	/**
 	 * Constructor.
 	 *
 	 * @param   Registry  $options  GitHub options object.
