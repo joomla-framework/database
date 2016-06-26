@@ -104,10 +104,10 @@ class Commits extends AbstractPackage
 	 * @param   string  $repo  The name of the GitHub repository.
 	 * @param   string  $ref   The commit reference
 	 *
-	 * @throws \DomainException
-	 * @since   1.0
-	 *
 	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
 	 */
 	public function getSha($user, $repo, $ref)
 	{

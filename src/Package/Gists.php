@@ -212,7 +212,7 @@ class Gists extends AbstractPackage
 	 *
 	 * @return  array
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 * @throws  \DomainException
 	 */
 	public function getForkList($gistId, $page = 0, $limit = 0)
