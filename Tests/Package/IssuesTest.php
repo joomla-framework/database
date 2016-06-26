@@ -830,7 +830,7 @@ class IssuesTest extends \PHPUnit_Framework_TestCase
 			->with('/repos/joomla/joomla-platform/issues/523/lock')
 			->will($this->returnValue($this->response));
 
-		$this->object->unlock('joomla', 'joomla-platform', 523);
+		$this->object->lock('joomla', 'joomla-platform', 523);
 	}
 
 	/**
@@ -844,7 +844,7 @@ class IssuesTest extends \PHPUnit_Framework_TestCase
 		$this->response->body = $this->sampleString;
 
 		$this->client->expects($this->once())
-			->method('put')
+			->method('delete')
 			->with('/repos/joomla/joomla-platform/issues/523/lock')
 			->will($this->returnValue($this->response));
 
@@ -867,7 +867,7 @@ class IssuesTest extends \PHPUnit_Framework_TestCase
 		$this->response->body = $this->errorString;
 
 		$this->client->expects($this->once())
-			->method('put')
+			->method('delete')
 			->with('/repos/joomla/joomla-platform/issues/523/lock')
 			->will($this->returnValue($this->response));
 
