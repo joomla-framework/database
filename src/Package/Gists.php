@@ -157,21 +157,10 @@ class Gists extends AbstractPackage
 	public function fork($gistId)
 	{
 		// Build the request path.
-		$path = '/gists/' . (int) $gistId . '/fork';
+		$path = '/gists/' . (int) $gistId . '/forks';
 
 		// Send the request.
-		// TODO: Verify change
-		$response = $this->client->post($this->fetchUrl($path), '');
-
-		// Validate the response code.
-		if ($response->code != 201)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->post($this->fetchUrl($path), ''), 201);
 	}
 
 	/**
@@ -201,6 +190,27 @@ class Gists extends AbstractPackage
 		}
 
 		return json_decode($response->body);
+	}
+
+	/**
+	 * Method to list commits of a gist.
+	 *
+	 * @param   integer  $gistId  The gist number.
+	 * @param   integer  $page    The page number from which to get items.
+	 * @param   integer  $limit   The number of items on a page.
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function getCommitList($gistId, $page = 0, $limit = 0)
+	{
+		// Build the request path.
+		$path = '/gists/' . (int) $gistId . '/commits';
+
+		// Send the request.
+		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
 	}
 
 	/**
@@ -354,6 +364,26 @@ class Gists extends AbstractPackage
 		}
 
 		return json_decode($response->body);
+	}
+
+	/**
+	 * Method to get a revision of a gist.
+	 *
+	 * @param   integer  $gistId  The gist number.
+	 * @param   string   $sha     The SHA for the revision to get.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function getRevision($gistId, $sha)
+	{
+		// Build the request path.
+		$path = '/gists/' . (int) $gistId . '/' . $sha;
+
+		// Send the request.
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
 	}
 
 	/**
