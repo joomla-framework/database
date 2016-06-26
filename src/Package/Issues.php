@@ -346,4 +346,44 @@ class Issues extends AbstractPackage
 
 		return json_decode($response->body);
 	}
+
+	/**
+	 * Method to lock an issue.
+	 *
+	 * @param   string   $user     The name of the owner of the GitHub repository.
+	 * @param   string   $repo     The name of the GitHub repository.
+	 * @param   integer  $issueId  The issue number.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function lock($user, $repo, $issueId)
+	{
+		// Build the request path.
+		$path = "/repos/$user/$repo/issues/" . (int) $issueId . '/lock';
+
+		return $this->processResponse($this->client->put($this->fetchUrl($path), array()), 204);
+	}
+
+	/**
+	 * Method to unlock an issue.
+	 *
+	 * @param   string   $user     The name of the owner of the GitHub repository.
+	 * @param   string   $repo     The name of the GitHub repository.
+	 * @param   integer  $issueId  The issue number.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function unlock($user, $repo, $issueId)
+	{
+		// Build the request path.
+		$path = "/repos/$user/$repo/issues/" . (int) $issueId . '/lock';
+
+		return $this->processResponse($this->client->delete($this->fetchUrl($path)), 204);
+	}
 }

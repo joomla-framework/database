@@ -791,4 +791,86 @@ class IssuesTest extends \PHPUnit_Framework_TestCase
 
 		$this->object->getListByRepository('joomla', 'joomla-platform');
 	}
+
+	/**
+	 * Tests the lock method
+	 *
+	 * @return void
+	 */
+	public function testLock()
+	{
+		$this->response->code = 204;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('put')
+			->with('/repos/joomla/joomla-platform/issues/523/lock')
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->lock('joomla', 'joomla-platform', 523),
+			$this->equalTo(json_decode($this->sampleString))
+		);
+	}
+
+	/**
+	 * Tests the lock method - failure
+	 *
+	 * @expectedException  \DomainException
+	 *
+	 * @return void
+	 */
+	public function testLockFailure()
+	{
+		$this->response->code = 500;
+		$this->response->body = $this->errorString;
+
+		$this->client->expects($this->once())
+			->method('put')
+			->with('/repos/joomla/joomla-platform/issues/523/lock')
+			->will($this->returnValue($this->response));
+
+		$this->object->unlock('joomla', 'joomla-platform', 523);
+	}
+
+	/**
+	 * Tests the unlock method
+	 *
+	 * @return void
+	 */
+	public function testUnlock()
+	{
+		$this->response->code = 204;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('put')
+			->with('/repos/joomla/joomla-platform/issues/523/lock')
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->unlock('joomla', 'joomla-platform', 523),
+			$this->equalTo(json_decode($this->sampleString))
+		);
+	}
+
+	/**
+	 * Tests the unlock method - failure
+	 *
+	 * @expectedException  \DomainException
+	 *
+	 * @return void
+	 */
+	public function testUnlockFailure()
+	{
+		$this->response->code = 500;
+		$this->response->body = $this->errorString;
+
+		$this->client->expects($this->once())
+			->method('put')
+			->with('/repos/joomla/joomla-platform/issues/523/lock')
+			->will($this->returnValue($this->response));
+
+		$this->object->unlock('joomla', 'joomla-platform', 523);
+	}
 }
