@@ -32,7 +32,7 @@ class MysqliDriver extends DatabaseDriver
 	/**
 	 * The database connection resource.
 	 *
-	 * @var    mysqli
+	 * @var    \mysqli
 	 * @since  1.0
 	 */
 	protected $connection;
@@ -205,16 +205,18 @@ class MysqliDriver extends DatabaseDriver
 			throw new \RuntimeException('The MySQLi extension is not available');
 		}
 
-		$this->connection = @mysqli_connect(
+		$this->connection = mysqli_init();
+
+		// Attempt to connect to the server.
+		$connected = $this->connection->real_connect(
 			$this->options['host'], $this->options['user'], $this->options['password'], null, $this->options['port'], $this->options['socket']
 		);
 
-		// Attempt to connect to the server.
-		if (!$this->connection)
+		if (!$connected)
 		{
-			$this->log(Log\LogLevel::ERROR, 'Could not connect to MySQL: ' . mysqli_connect_error());
+			$this->log(Log\LogLevel::ERROR, 'Could not connect to MySQL: ' . $this->connection->connect_error);
 
-			throw new \RuntimeException('Could not connect to MySQL.', mysqli_connect_errno());
+			throw new \RuntimeException('Could not connect to MySQL.', $this->connection->connect_errno);
 		}
 
 		// If auto-select is enabled select the given database.
@@ -603,14 +605,41 @@ class MysqliDriver extends DatabaseDriver
 			{
 				$bounded =& $this->sql->getBounded();
 
-				foreach ($bounded as $key => $obj)
+				if (count($bounded))
 				{
-					$this->prepared->bind_param($obj->dataType, $obj->value);
+					$params     = array();
+					$typeString = '';
+
+					foreach ($bounded as $key => $obj)
+					{
+						// Add the type to the type string
+						$typeString .= $obj->dataType;
+
+						// And add the value as an additional param
+						$params[] = $obj->value;
+					}
+
+					// Make everything references for call_user_func_array()
+					$bindParams = array();
+					$bindParams[] = &$typeString;
+
+					for ($i = 0; $i < count($params); $i++)
+					{
+						$bindParams[] = &$params[$i];
+					}
+
+					call_user_func_array(array($this->prepared, 'bind_param'), $bindParams);
 				}
 			}
 
 			$this->executed = $this->prepared->execute();
 			$this->cursor   = $this->prepared->get_result();
+
+			// If the query was successful and we did not get a cursor, then set this to true (mimics mysql_query() return)
+			if ($this->executed && !$this->cursor)
+			{
+				$this->cursor = true;
+			}
 		}
 
 		// If an error occurred handle it.
@@ -732,7 +761,9 @@ class MysqliDriver extends DatabaseDriver
 			$query->setLimit($limit, $offset);
 		}
 
-		$this->prepared = mysqli_prepare($this->connection, $this->replacePrefix((string) $query));
+		$sql = $this->replacePrefix((string) $query);
+
+		$this->prepared = $this->connection->prepare($sql);
 
 		// Store reference to the DatabaseQuery instance
 		return parent::setQuery($query, $offset, $limit);

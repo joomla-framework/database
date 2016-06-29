@@ -10,13 +10,14 @@ namespace Joomla\Database\Mysqli;
 
 use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Query\LimitableInterface;
+use Joomla\Database\Query\PreparableInterface;
 
 /**
  * MySQLi Query Building Class.
  *
  * @since  1.0
  */
-class MysqliQuery extends DatabaseQuery implements LimitableInterface
+class MysqliQuery extends DatabaseQuery implements LimitableInterface, PreparableInterface
 {
 	/**
 	 * The offset for the result set.
