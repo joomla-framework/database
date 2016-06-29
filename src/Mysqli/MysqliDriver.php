@@ -121,7 +121,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		if (is_resource($this->connection))
 		{
-			mysqli_close($this->connection);
+			$this->connection->close();
 		}
 	}
 
@@ -274,7 +274,7 @@ class MysqliDriver extends DatabaseDriver
 		// Close the connection.
 		if (is_callable($this->connection, 'close'))
 		{
-			mysqli_close($this->connection);
+			$this->connection->close();
 		}
 
 		$this->connection = null;
@@ -294,7 +294,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$result = mysqli_real_escape_string($this->getConnection(), $text);
+		$result = $this->connection->real_escape_string($text);
 
 		if ($extra)
 		{
@@ -313,7 +313,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public static function isSupported()
 	{
-		return (function_exists('mysqli_connect'));
+		return function_exists('mysqli_connect');
 	}
 
 	/**
@@ -327,7 +327,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		if (is_object($this->connection))
 		{
-			return mysqli_ping($this->connection);
+			return $this->connection->ping();
 		}
 
 		return false;
@@ -366,7 +366,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		return mysqli_affected_rows($this->connection);
+		return $this->connection->affected_rows();
 	}
 
 	/**
@@ -522,7 +522,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		return mysqli_get_server_info($this->connection);
+		return $this->connection->get_server_info();
 	}
 
 	/**
@@ -537,7 +537,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		return mysqli_insert_id($this->connection);
+		return $this->connection->insert_id();
 	}
 
 	/**
@@ -645,8 +645,8 @@ class MysqliDriver extends DatabaseDriver
 		// If an error occurred handle it.
 		if (!$this->executed)
 		{
-			$this->errorNum = (int) mysqli_errno($this->connection);
-			$this->errorMsg = (string) mysqli_error($this->connection) . "\n-- SQL --\n" . $sql;
+			$this->errorNum = (int) $this->connection->errno;
+			$this->errorMsg = (string) $this->connection->error . "\n-- SQL --\n" . $sql;
 
 			// Check if the server was disconnected.
 			if (!$this->connected())
@@ -725,7 +725,7 @@ class MysqliDriver extends DatabaseDriver
 			return false;
 		}
 
-		if (!mysqli_select_db($this->connection, $database))
+		if (!$this->connection->select_db($database))
 		{
 			throw new \RuntimeException('Could not connect to database.');
 		}
@@ -823,7 +823,7 @@ class MysqliDriver extends DatabaseDriver
 		{
 			$this->connect();
 
-			if (mysqli_commit($this->connection))
+			if ($this->connection->commit())
 			{
 				$this->transactionDepth = 0;
 			}
@@ -850,7 +850,7 @@ class MysqliDriver extends DatabaseDriver
 		{
 			$this->connect();
 
-			if (mysqli_rollback($this->connection))
+			if ($this->connection->rollback())
 			{
 				$this->transactionDepth = 0;
 			}
@@ -881,7 +881,7 @@ class MysqliDriver extends DatabaseDriver
 		$this->connect();
 
 		// Disallow auto commit
-		mysqli_autocommit($this->connection, false);
+		$this->connection->autocommit(false);
 
 		if (!$asSavepoint || !$this->transactionDepth)
 		{
@@ -916,13 +916,13 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$cursor = @mysqli_query($this->connection, $sql);
+		$cursor = $this->connection->query($sql);
 
 		// If an error occurred handle it.
 		if (!$cursor)
 		{
-			$this->errorNum = (int) mysqli_errno($this->connection);
-			$this->errorMsg = (string) mysqli_error($this->connection) . "\n-- SQL --\n" . $sql;
+			$this->errorNum = (int) $this->connection->errno;
+			$this->errorMsg = (string) $this->connection->error . "\n-- SQL --\n" . $sql;
 
 			// Check if the server was disconnected.
 			if (!$this->connected())
