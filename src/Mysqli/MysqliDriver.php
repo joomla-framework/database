@@ -736,9 +736,9 @@ class MysqliDriver extends DatabaseDriver
 	/**
 	 * Sets the SQL statement string for later execution.
 	 *
-	 * @param   DatabaseQuery|string    $query          The SQL statement to set either as a DatabaseQuery object or a string.
-	 * @param   integer                 $offset         The affected row offset to set.
-	 * @param   integer                 $limit          The maximum affected rows to set.
+	 * @param   DatabaseQuery|string  $query   The SQL statement to set either as a DatabaseQuery object or a string.
+	 * @param   integer               $offset  The affected row offset to set.
+	 * @param   integer               $limit   The maximum affected rows to set.
 	 *
 	 * @return  MysqliDriver  This object to support method chaining.
 	 *
