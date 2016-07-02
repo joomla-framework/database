@@ -186,7 +186,7 @@ class MysqlDriver extends PdoDriver
 	 */
 	public static function isSupported()
 	{
-		return in_array('mysql', \PDO::getAvailableDrivers());
+		return class_exists('\\PDO') && in_array('mysql', \PDO::getAvailableDrivers());
 	}
 
 	/**
@@ -361,20 +361,6 @@ class MysqlDriver extends PdoDriver
 		$tables = $this->loadColumn();
 
 		return $tables;
-	}
-
-	/**
-	 * Get the version of the database connector.
-	 *
-	 * @return  string  The database connector version.
-	 *
-	 * @since   1.0
-	 */
-	public function getVersion()
-	{
-		$this->connect();
-
-		return $this->getOption(\PDO::ATTR_SERVER_VERSION);
 	}
 
 	/**
