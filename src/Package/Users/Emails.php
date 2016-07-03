@@ -11,7 +11,7 @@ namespace Joomla\Github\Package\Users;
 use Joomla\Github\AbstractPackage;
 
 /**
- * GitHub API References class for the Joomla Framework.
+ * GitHub API Emails class for the Joomla Framework.
  *
  * Management of email addresses via the API requires that you are authenticated
  * through basic auth or OAuth with the user scope.
@@ -25,17 +25,9 @@ class Emails extends AbstractPackage
 	/**
 	 * List email addresses for a user.
 	 *
-	 * Future response:
-	 * In the final version of the API, this method will return an array of hashes
-	 * with extended information for each email address indicating if the address
-	 * has been verified and if it’s the user’s primary email address for GitHub.
+	 * @return  object
 	 *
-	 * Until API v3 is finalized, use the application/vnd.github.v3 media type
-	 * to get this response format.
-	 *
-	 * @since  1.0
-	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function getList()
 	{
@@ -52,9 +44,9 @@ class Emails extends AbstractPackage
 	 *
 	 * @param   string|array  $email  The email address(es).
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function add($email)
 	{
@@ -72,9 +64,9 @@ class Emails extends AbstractPackage
 	 *
 	 * @param   string|array  $email  The email address(es).
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function delete($email)
 	{
