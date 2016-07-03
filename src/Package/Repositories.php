@@ -17,6 +17,7 @@ use Joomla\Github\AbstractPackage;
  *
  * @documentation  http://developer.github.com/v3/repos
  *
+ * @property-read  Repositories\Branches       $branches       GitHub API object for branches.
  * @property-read  Repositories\Collaborators  $collaborators  GitHub API object for collaborators.
  * @property-read  Repositories\Comments       $comments       GitHub API object for comments.
  * @property-read  Repositories\Commits        $commits        GitHub API object for commits.
@@ -302,7 +303,9 @@ class Repositories extends AbstractPackage
 	 * @param   string   $repo   Repository name.
 	 * @param   boolean  $anon   Set to 1 or true to include anonymous contributors in results.
 	 *
-	 * @return object
+	 * @return  object
+	 *
+	 * @since   1.0
 	 */
 	public function getListContributors($owner, $repo, $anon = false)
 	{
@@ -326,7 +329,9 @@ class Repositories extends AbstractPackage
 	 * @param   string  $owner  Repository owner.
 	 * @param   string  $repo   Repository name.
 	 *
-	 * @return object
+	 * @return  object
+	 *
+	 * @since   1.0
 	 */
 	public function getListLanguages($owner, $repo)
 	{
@@ -345,7 +350,9 @@ class Repositories extends AbstractPackage
 	 * @param   string  $owner  Repository owner.
 	 * @param   string  $repo   Repository name.
 	 *
-	 * @return object
+	 * @return  object
+	 *
+	 * @since   1.0
 	 */
 	public function getListTeams($owner, $repo)
 	{
@@ -364,7 +371,9 @@ class Repositories extends AbstractPackage
 	 * @param   string  $owner  Repository owner.
 	 * @param   string  $repo   Repository name.
 	 *
-	 * @return object
+	 * @return  object
+	 *
+	 * @since   1.0
 	 */
 	public function getListTags($owner, $repo)
 	{
@@ -383,17 +392,14 @@ class Repositories extends AbstractPackage
 	 * @param   string  $owner  Repository owner.
 	 * @param   string  $repo   Repository name.
 	 *
-	 * @return object
+	 * @return  object
+	 *
+	 * @since   1.0
+	 * @deprecated  2.0  Use Joomla\Github\Package\Repositories\Branches::getListBranches() instead
 	 */
 	public function getListBranches($owner, $repo)
 	{
-		// Build the request path.
-		$path = '/repos/' . $owner . '/' . $repo . '/branches';
-
-		// Send the request.
-		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path))
-		);
+		return $this->branches->getListBranches($owner, $repo);
 	}
 
 	/**
@@ -403,17 +409,14 @@ class Repositories extends AbstractPackage
 	 * @param   string  $repo    Repository name.
 	 * @param   string  $branch  Branch name.
 	 *
-	 * @return object
+	 * @return  object
+	 *
+	 * @since   1.0
+	 * @deprecated  2.0  Use Joomla\Github\Package\Repositories\Branches::getBranch() instead
 	 */
 	public function getBranch($owner, $repo, $branch)
 	{
-		// Build the request path.
-		$path = '/repos/' . $owner . '/' . $repo . '/branches/' . $branch;
-
-		// Send the request.
-		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path))
-		);
+		return $this->branches->getBranch($owner, $repo, $branch);
 	}
 
 	/**
@@ -424,7 +427,9 @@ class Repositories extends AbstractPackage
 	 * @param   string  $owner  Repository owner.
 	 * @param   string  $repo   Repository name.
 	 *
-	 * @return object
+	 * @return  object
+	 *
+	 * @since   1.0
 	 */
 	public function delete($owner, $repo)
 	{
