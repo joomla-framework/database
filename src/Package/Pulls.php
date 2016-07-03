@@ -16,6 +16,8 @@ use Joomla\Github\AbstractPackage;
  * @documentation http://developer.github.com/v3/pulls
  *
  * @since  1.0
+ *
+ * @property-read  Pulls\Comments  $comments  GitHub API object for comments.
  */
 class Pulls extends AbstractPackage
 {

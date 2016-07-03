@@ -17,6 +17,7 @@ use Joomla\Github\AbstractPackage;
  *
  * @documentation  http://developer.github.com/v3/orgs/
  *
+ * @property-read  Orgs\Hooks    $hooks    GitHub API object for hooks.
  * @property-read  Orgs\Members  $members  GitHub API object for members.
  * @property-read  Orgs\Teams    $teams    GitHub API object for teams.
  */

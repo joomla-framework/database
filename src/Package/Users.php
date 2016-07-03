@@ -16,6 +16,10 @@ use Joomla\Github\AbstractPackage;
  * @documentation http://developer.github.com/v3/repos/users
  *
  * @since  1.0
+ *
+ * @property-read  Users\Emails     $emails     GitHub API object for emails.
+ * @property-read  Users\Followers  $followers  GitHub API object for followers.
+ * @property-read  Users\Keys       $keys       GitHub API object for keys.
  */
 class Users extends AbstractPackage
 {

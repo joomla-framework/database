@@ -30,8 +30,8 @@ use Joomla\Github\AbstractPackage;
  * @property-read  Repositories\Merging        $merging        GitHub API object for merging.
  * @property-read  Repositories\Pages          $pages          GitHub API object for pages.
  * @property-read  Repositories\Releases       $releases       GitHub API object for releases.
- * @property-read  Repositories\Statuses       $statuses       GitHub API object for statuses.
  * @property-read  Repositories\Statistics     $statistics     GitHub API object for statistics.
+ * @property-read  Repositories\Statuses       $statuses       GitHub API object for statuses.
  */
 class Repositories extends AbstractPackage
 {
