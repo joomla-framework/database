@@ -203,7 +203,7 @@ class Comments extends AbstractPackage
 	public function getListForRepo($user, $repo, $page = 0, $limit = 0)
 	{
 		// Build the request path.
-		$path = "/repos/$user/$repo/pulls//comments";
+		$path = "/repos/$user/$repo/pulls/comments";
 
 		// Send the request.
 		return $this->processResponse(
