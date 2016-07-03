@@ -58,6 +58,28 @@ class Releases extends AbstractPackage
 	}
 
 	/**
+	 * Delete a release.
+	 *
+	 * @param   string   $owner      The name of the owner of the GitHub repository.
+	 * @param   string   $repo       The name of the GitHub repository.
+	 * @param   integer  $releaseId  The release id.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function delete($owner, $repo, $releaseId)
+	{
+		// Build the request path.
+		$path = '/repos/' . $user . '/' . $repo . '/releases/' . (int) $releaseId;
+
+		return $this->processResponse(
+			$this->client->delete($this->fetchUrl($path)),
+			204
+		);
+	}
+
+	/**
 	 * Method to update a release.
 	 *
 	 * @param   string   $user             The name of the owner of the GitHub repository.
@@ -175,5 +197,100 @@ class Releases extends AbstractPackage
 		}
 
 		return $releases;
+	}
+
+	/**
+	 * Method to list all assets for a release.
+	 *
+	 * @param   string   $user       The name of the owner of the GitHub repository.
+	 * @param   string   $repo       The name of the GitHub repository.
+	 * @param   integer  $releaseId  The release id.
+	 * @param   integer  $page       The page number from which to get items.
+	 * @param   integer  $limit      The number of items on a page.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getListAssets($user, $repo, $releaseId, $page = 0, $limit = 0)
+	{
+		// Build the request path.
+		$path = '/repos/' . $user . '/' . $repo . '/releases/' . (int) $releaseId . '/assets';
+
+		// Send the request.
+		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
+	}
+
+	/**
+	 * Method to get an asset for a release.
+	 *
+	 * @param   string   $user     The name of the owner of the GitHub repository.
+	 * @param   string   $repo     The name of the GitHub repository.
+	 * @param   integer  $assetId  The asset id.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getAsset($user, $repo, $assetId)
+	{
+		// Build the request path.
+		$path = '/repos/' . $user . '/' . $repo . '/releases/assets/' . (int) $assetId;
+
+		// Send the request.
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
+	}
+
+	/**
+	 * Method to edit an asset for a release.
+	 *
+	 * @param   string   $user     The name of the owner of the GitHub repository.
+	 * @param   string   $repo     The name of the GitHub repository.
+	 * @param   integer  $assetId  The asset id.
+	 * @param   string   $name     The file name of the asset.
+	 * @param   string   $label    An alternate short description of the asset. Used in place of the filename.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function editAsset($user, $repo, $assetId, $name, $label = '')
+	{
+		// Build the request path.
+		$path = '/repos/' . $user . '/' . $repo . '/releases/assets/' . (int) $assetId;
+
+		$data = array(
+			'name' => $name,
+		);
+
+		if ($label)
+		{
+			$data['label'] = $label;
+		}
+
+		// Send the request.
+		return $this->processResponse($this->client->patch($this->fetchUrl($path), json_encode($data)));
+	}
+
+	/**
+	 * Method to delete an asset for a release.
+	 *
+	 * @param   string   $user     The name of the owner of the GitHub repository.
+	 * @param   string   $repo     The name of the GitHub repository.
+	 * @param   integer  $assetId  The asset id.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function deleteAsset($user, $repo, $assetId)
+	{
+		// Build the request path.
+		$path = '/repos/' . $user . '/' . $repo . '/releases/assets/' . (int) $assetId;
+
+		// Send the request.
+		$this->processResponse($this->client->delete($this->fetchUrl($path)), 204);
+
+		return true;
 	}
 }
