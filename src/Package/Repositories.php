@@ -22,6 +22,7 @@ use Joomla\Github\AbstractPackage;
  * @property-read  Repositories\Comments       $comments       GitHub API object for comments.
  * @property-read  Repositories\Commits        $commits        GitHub API object for commits.
  * @property-read  Repositories\Contents       $contents       GitHub API object for contents.
+ * @property-read  Repositories\Deployments    $deployments    GitHub API object for deployments.
  * @property-read  Repositories\Downloads      $downloads      GitHub API object for downloads.
  * @property-read  Repositories\Forks          $forks          GitHub API object for forks.
  * @property-read  Repositories\Hooks          $hooks          GitHub API object for hooks.
