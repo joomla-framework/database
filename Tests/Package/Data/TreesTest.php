@@ -83,7 +83,7 @@ class TreesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/git/trees/12345', 0, 0)
+			->with('/repos/joomla/joomla-platform/git/trees/12345', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -104,7 +104,7 @@ class TreesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/git/trees/12345?recursive=1', 0, 0)
+			->with('/repos/joomla/joomla-platform/git/trees/12345?recursive=1', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -125,7 +125,7 @@ class TreesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/repos/joomla/joomla-platform/git/trees', '{"tree":"12345","base_tree":"678"}', 0, 0)
+			->with('/repos/joomla/joomla-platform/git/trees', '{"tree":"12345","base_tree":"678"}', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

@@ -83,7 +83,7 @@ class WatchingTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/subscribers', 0, 0)
+			->with('/repos/joomla/joomla-platform/subscribers', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -104,7 +104,7 @@ class WatchingTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/user/subscriptions', 0, 0)
+			->with('/user/subscriptions', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -125,7 +125,7 @@ class WatchingTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/users/joomla/subscriptions', 0, 0)
+			->with('/users/joomla/subscriptions', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -146,7 +146,7 @@ class WatchingTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/subscription', 0, 0)
+			->with('/repos/joomla/joomla-platform/subscription', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -167,7 +167,7 @@ class WatchingTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('put')
-			->with('/repos/joomla/joomla-platform/subscription', '{"subscribed":true,"ignored":false}', 0, 0)
+			->with('/repos/joomla/joomla-platform/subscription', '{"subscribed":true,"ignored":false}', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -188,7 +188,7 @@ class WatchingTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('delete')
-			->with('/repos/joomla/joomla-platform/subscription', 0, 0)
+			->with('/repos/joomla/joomla-platform/subscription', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -209,7 +209,7 @@ class WatchingTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/user/subscriptions/joomla/joomla-platform', 0, 0)
+			->with('/user/subscriptions/joomla/joomla-platform', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -230,7 +230,7 @@ class WatchingTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/user/subscriptions/joomla/joomla-platform', 0, 0)
+			->with('/user/subscriptions/joomla/joomla-platform', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -252,7 +252,7 @@ class WatchingTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/user/subscriptions/joomla/joomla-platform', 0, 0)
+			->with('/user/subscriptions/joomla/joomla-platform', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->object->check('joomla', 'joomla-platform');
@@ -270,7 +270,7 @@ class WatchingTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('put')
-			->with('/user/subscriptions/joomla/joomla-platform', '', 0, 0)
+			->with('/user/subscriptions/joomla/joomla-platform', '', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -291,7 +291,7 @@ class WatchingTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('delete')
-			->with('/user/subscriptions/joomla/joomla-platform', 0, 0)
+			->with('/user/subscriptions/joomla/joomla-platform', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

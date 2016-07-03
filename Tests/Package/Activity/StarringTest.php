@@ -83,7 +83,7 @@ class StarringTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/stargazers', 0, 0)
+			->with('/repos/joomla/joomla-platform/stargazers', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -104,7 +104,7 @@ class StarringTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/user/starred', 0, 0)
+			->with('/user/starred', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -125,7 +125,7 @@ class StarringTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/user/starred/joomla/joomla-platform', 0, 0)
+			->with('/user/starred/joomla/joomla-platform', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -146,7 +146,7 @@ class StarringTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/user/starred/joomla/joomla-platform', 0, 0)
+			->with('/user/starred/joomla/joomla-platform', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -168,7 +168,7 @@ class StarringTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/user/starred/joomla/joomla-platform', 0, 0)
+			->with('/user/starred/joomla/joomla-platform', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -189,7 +189,7 @@ class StarringTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('put')
-			->with('/user/starred/joomla/joomla-platform', '', 0, 0)
+			->with('/user/starred/joomla/joomla-platform', '', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -210,7 +210,7 @@ class StarringTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('delete')
-			->with('/user/starred/joomla/joomla-platform', 0, 0)
+			->with('/user/starred/joomla/joomla-platform', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

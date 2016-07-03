@@ -83,7 +83,7 @@ class BlobsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/git/blobs/12345', 0, 0)
+			->with('/repos/joomla/joomla-platform/git/blobs/12345', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -104,7 +104,7 @@ class BlobsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/repos/joomla/joomla-platform/git/blobs', '{"content":"Hello w\u00f6rld","encoding":"utf-8"}', 0, 0)
+			->with('/repos/joomla/joomla-platform/git/blobs', '{"content":"Hello w\u00f6rld","encoding":"utf-8"}', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

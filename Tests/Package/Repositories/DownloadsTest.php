@@ -119,18 +119,7 @@ class DownloadsTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCreate()
 	{
-		$this->response->code = 201;
-		$this->response->body = $this->sampleString;
-
-		$this->client->expects($this->once())
-			->method('post')
-			->with('/repos/joomla/joomla-platform/downloads')
-			->will($this->returnValue($this->response));
-
-		$this->assertThat(
-			$this->object->create('joomla', 'joomla-platform', 'aaa.zip', 1234, 'Description', 'content_type'),
-			$this->equalTo(json_decode($this->sampleString))
-		);
+		$this->assertTrue($this->object->create('joomla', 'joomla-platform', 'aaa.zip', 1234, 'Description', 'content_type'));
 	}
 
 	/**
@@ -140,17 +129,10 @@ class DownloadsTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testUpload()
 	{
-		$this->response->code = 201;
-		$this->response->body = true;
-
-		$this->client->expects($this->once())
-			->method('post')
-			->with('https://github.s3.amazonaws.com/')
-			->will($this->returnValue($this->response));
-
-		$this->assertThat(
-			$this->object->upload('joomla', 'joomla-platform', 123, 'a/b/aaa.zip', 'acl', 201, 'aaa.zip', '123abc', '123abc', '123abc', 'content_type', '@aaa.zip'),
-			$this->equalTo($this->response->body)
+		$this->assertTrue(
+			$this->object->upload(
+				'joomla', 'joomla-platform', 123, 'a/b/aaa.zip', 'acl', 201, 'aaa.zip', '123abc', '123abc', '123abc', 'content_type', '@aaa.zip'
+			)
 		);
 	}
 

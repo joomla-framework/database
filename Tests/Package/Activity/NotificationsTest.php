@@ -84,7 +84,7 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/notifications?&all=1&participating=1', 0, 0)
+			->with('/notifications?&all=1&participating=1', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -105,7 +105,7 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/notifications?&all=1&participating=1', 0, 0)
+			->with('/repos/joomla/joomla-platform/notifications?&all=1&participating=1', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -126,7 +126,7 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('put')
-			->with('/notifications', '{"unread":true,"read":true}', 0, 0)
+			->with('/notifications', '{"unread":true,"read":true}', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -150,7 +150,7 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('put')
-			->with('/notifications', $data, 0, 0)
+			->with('/notifications', $data, array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -173,7 +173,7 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('put')
-			->with('/repos/joomla/joomla-platform/notifications', $data, 0, 0)
+			->with('/repos/joomla/joomla-platform/notifications', $data, array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -197,7 +197,7 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('put')
-			->with('/repos/joomla/joomla-platform/notifications', $data, 0, 0)
+			->with('/repos/joomla/joomla-platform/notifications', $data, array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -218,7 +218,7 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/notifications/threads/1', 0, 0)
+			->with('/notifications/threads/1', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -239,7 +239,7 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('patch')
-			->with('/notifications/threads/1', '{"unread":true,"read":true}', 0, 0)
+			->with('/notifications/threads/1', '{"unread":true,"read":true}', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -260,7 +260,7 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/notifications/threads/1/subscription', 0, 0)
+			->with('/notifications/threads/1/subscription', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -281,7 +281,7 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('put')
-			->with('/notifications/threads/1/subscription', '{"subscribed":true,"ignored":false}', 0, 0)
+			->with('/notifications/threads/1/subscription', '{"subscribed":true,"ignored":false}', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -302,7 +302,7 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('delete')
-			->with('/notifications/threads/1/subscription', 0, 0)
+			->with('/notifications/threads/1/subscription', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

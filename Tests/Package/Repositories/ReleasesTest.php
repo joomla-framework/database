@@ -83,7 +83,7 @@ class ReleasesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/releases/12345', 0, 0)
+			->with('/repos/joomla/joomla-platform/releases/12345', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -105,7 +105,7 @@ class ReleasesTest extends \PHPUnit_Framework_TestCase
 		$data = '{"tag_name":"0.1","target_commitish":"targetCommitish","name":"master","body":"New release","draft":false,"prerelease":false}';
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/repos/joomla/joomla-platform/releases', $data, 0, 0)
+			->with('/repos/joomla/joomla-platform/releases', $data, array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -127,7 +127,7 @@ class ReleasesTest extends \PHPUnit_Framework_TestCase
 		$data = '{"tag_name":"0.1","target_commitish":"targetCommitish","name":"master","body":"New release","draft":false,"prerelease":false}';
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/repos/joomla/joomla-platform/releases', $data, 0, 0)
+			->with('/repos/joomla/joomla-platform/releases', $data, array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -151,7 +151,7 @@ class ReleasesTest extends \PHPUnit_Framework_TestCase
 		$data = '{"tag_name":"tagName","target_commitish":"targetCommitish","name":"name","body":"body","draft":"draft","prerelease":"preRelease"}';
 		$this->client->expects($this->once())
 			->method('patch')
-			->with('/repos/joomla/joomla-platform/releases/' . $releaseId, $data, 0, 0)
+			->with('/repos/joomla/joomla-platform/releases/' . $releaseId, $data, array(), 0)
 
 			->will($this->returnValue($this->response));
 
@@ -180,7 +180,7 @@ class ReleasesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/releases', 0, 0)
+			->with('/repos/joomla/joomla-platform/releases', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

@@ -83,7 +83,7 @@ class EventsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/issues/1/events', 0, 0)
+			->with('/repos/joomla/joomla-platform/issues/1/events', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -104,7 +104,7 @@ class EventsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/issues/1/comments', 0, 0)
+			->with('/repos/joomla/joomla-platform/issues/1/comments', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -125,7 +125,7 @@ class EventsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/issues/events/1', 0, 0)
+			->with('/repos/joomla/joomla-platform/issues/events/1', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
