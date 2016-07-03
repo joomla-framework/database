@@ -17,7 +17,7 @@ use Joomla\Github\AbstractPackage;
  * If you want to get source tarballs you should use
  * http://developer.github.com/v3/repos/contents/#get-archive-link instead.
  *
- * @documentation http://developer.github.com/v3/repos/downloads
+ * @documentation  https://developer.github.com/v3/repos/downloads
  *
  * @since  1.0
  * @deprecated  The Releases API should be used instead
@@ -30,9 +30,10 @@ class Downloads extends AbstractPackage
 	 * @param   string  $owner  The name of the owner of the GitHub repository.
 	 * @param   string  $repo   The name of the GitHub repository.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
+	 * @deprecated  The Releases API should be used instead
 	 */
 	public function getList($owner, $repo)
 	{
@@ -52,9 +53,10 @@ class Downloads extends AbstractPackage
 	 * @param   string   $repo   The name of the GitHub repository.
 	 * @param   integer  $id     The id of the download.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
+	 * @deprecated  The Releases API should be used instead
 	 */
 	public function get($owner, $repo, $id)
 	{
@@ -79,35 +81,15 @@ class Downloads extends AbstractPackage
 	 * @param   string  $description   The description.
 	 * @param   string  $content_type  The content type.
 	 *
-	 * @since  1.0
+	 * @return  boolean
 	 *
-	 * @return object
+	 * @note    This API endpoint no longer exists at GitHub
+	 * @since   1.0
+	 * @deprecated  The Releases API should be used instead
 	 */
 	public function create($owner, $repo, $name, $size, $description = '', $content_type = '')
 	{
-		// Build the request path.
-		$path = '/repos/' . $owner . '/' . $repo . '/downloads';
-
-		$data = array(
-			'name' => $name,
-			'size' => $size
-		);
-
-		if ($description)
-		{
-			$data['description'] = $description;
-		}
-
-		if ($content_type)
-		{
-			$data['content_type'] = $content_type;
-		}
-
-		// Send the request.
-		return $this->processResponse(
-			$this->client->post($this->fetchUrl($path), $data),
-			201
-		);
+		return true;
 	}
 
 	/**
@@ -148,33 +130,15 @@ class Downloads extends AbstractPackage
 	 * @param   string  $file                   Local file. Example assumes the file existing in the directory
 	 *                                          where you are running the curl command. Yes, the @ matters.
 	 *
-	 * @since  1.0
+	 * @return  boolean
 	 *
-	 * @return boolean
+	 * @note    This API endpoint no longer exists at GitHub
+	 * @since   1.0
+	 * @deprecated  The Releases API should be used instead
 	 */
 	public function upload($key, $acl, $success_action_status, $filename, $awsAccessKeyId, $policy, $signature, $content_type, $file)
 	{
-		// Build the request path.
-		$url = 'https://github.s3.amazonaws.com/';
-
-		$data = array(
-			'key'                   => $key,
-			'acl'                   => $acl,
-			'success_action_status' => (int) $success_action_status,
-			'Filename'              => $filename,
-			'AWSAccessKeyId'        => $awsAccessKeyId,
-			'Policy'                => $policy,
-			'Signature'             => $signature,
-			'Content-Type'          => $content_type,
-			'file'                  => $file
-		);
-
-		// Send the request.
-		$response = $this->client->post($url, $data);
-
-		// @todo Process the response..
-
-		return (201 == $response->code) ? true : false;
+		return true;
 	}
 
 	/**
@@ -184,9 +148,10 @@ class Downloads extends AbstractPackage
 	 * @param   string   $repo   The name of the GitHub repository.
 	 * @param   integer  $id     The id of the download.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
+	 * @deprecated  The Releases API should be used instead
 	 */
 	public function delete($owner, $repo, $id)
 	{
