@@ -187,4 +187,27 @@ class Comments extends AbstractPackage
 			$this->client->get($this->fetchUrl($path, $page, $limit))
 		);
 	}
+
+	/**
+	 * Method to get the list of comments on a repository's pull requests.
+	 *
+	 * @param   string   $user   The name of the owner of the GitHub repository.
+	 * @param   string   $repo   The name of the GitHub repository.
+	 * @param   integer  $page   The page number from which to get items.
+	 * @param   integer  $limit  The number of items on a page.
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getListForRepo($user, $repo, $page = 0, $limit = 0)
+	{
+		// Build the request path.
+		$path = "/repos/$user/$repo/pulls//comments";
+
+		// Send the request.
+		return $this->processResponse(
+			$this->client->get($this->fetchUrl($path, $page, $limit))
+		);
+	}
 }
