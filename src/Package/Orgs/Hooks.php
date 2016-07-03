@@ -235,7 +235,7 @@ class Hooks extends AbstractPackage
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function delete($id)
+	public function delete($org, $id)
 	{
 		// Build the request path.
 		$path = "/orgs/$org/hooks/$id";
