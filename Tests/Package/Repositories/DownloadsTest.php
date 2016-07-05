@@ -116,23 +116,27 @@ class DownloadsTest extends \PHPUnit_Framework_TestCase
 	 * Tests the Create method.
 	 *
 	 * @return  void
+	 *
+	 * @expectedException  \RuntimeException
+	 * @expectedExceptionMessage  The GitHub API no longer supports creating downloads. The Releases API should be used instead.
 	 */
 	public function testCreate()
 	{
-		$this->assertTrue($this->object->create('joomla', 'joomla-platform', 'aaa.zip', 1234, 'Description', 'content_type'));
+		$this->object->create('joomla', 'joomla-platform', 'aaa.zip', 1234, 'Description', 'content_type');
 	}
 
 	/**
 	 * Tests the Upload method.
 	 *
 	 * @return  void
+	 *
+	 * @expectedException  \RuntimeException
+	 * @expectedExceptionMessage  The GitHub API no longer supports creating downloads. The Releases API should be used instead.
 	 */
 	public function testUpload()
 	{
-		$this->assertTrue(
-			$this->object->upload(
-				'joomla', 'joomla-platform', 123, 'a/b/aaa.zip', 'acl', 201, 'aaa.zip', '123abc', '123abc', '123abc', 'content_type', '@aaa.zip'
-			)
+		$this->object->upload(
+			'joomla', 'joomla-platform', 123, 'a/b/aaa.zip', 'acl', 201, 'aaa.zip', '123abc', '123abc', '123abc', 'content_type', '@aaa.zip'
 		);
 	}
 
