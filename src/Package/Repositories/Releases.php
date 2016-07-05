@@ -166,6 +166,48 @@ class Releases extends AbstractPackage
 	}
 
 	/**
+	 * Method to get the latest release.
+	 *
+	 * View the latest published full release for the repository.
+	 * Draft releases and prereleases are not returned by this endpoint.
+	 *
+	 * @param   string  $user  The name of the owner of the GitHub repository.
+	 * @param   string  $repo  The name of the GitHub repository.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getLatest($user, $repo)
+	{
+		// Build the request path.
+		$path = "/repos/$user/$repo/releases/latest";
+
+		// Send the request.
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
+	}
+
+	/**
+	 * Method to get a release by tag name.
+	 *
+	 * @param   string  $user  The name of the owner of the GitHub repository.
+	 * @param   string  $repo  The name of the GitHub repository.
+	 * @param   string  $tag   The name of the tag.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getByTag($user, $repo, $tag)
+	{
+		// Build the request path.
+		$path = "/repos/$user/$repo/releases/tags/$tag";
+
+		// Send the request.
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
+	}
+
+	/**
 	 * Method to list all releases.
 	 *
 	 * @param   string   $user   The name of the owner of the GitHub repository.
