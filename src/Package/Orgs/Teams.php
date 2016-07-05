@@ -361,14 +361,13 @@ class Teams extends AbstractPackage
 	 *
 	 * @param   integer  $id    The team id.
 	 * @param   string   $user  The name of the user.
-	 * @param   string   $role  The role the user should have on the team. Can be either 'member' or 'maintainer'.
 	 *
 	 * @return  object
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \UnexpectedValueException
 	 */
-	public function removeTeamMembership($id, $user, $role = 'member')
+	public function removeTeamMembership($id, $user)
 	{
 		// Build the request path.
 		$path = "/teams/$id/memberships/$user";

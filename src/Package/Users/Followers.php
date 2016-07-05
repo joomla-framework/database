@@ -66,7 +66,7 @@ class Followers extends AbstractPackage
 	 *
 	 * @param   string  $user  The name of the user.
 	 *
-	 * @return  object
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  \UnexpectedValueException
@@ -102,7 +102,7 @@ class Followers extends AbstractPackage
 	 * @param   string  $user    The name of the user.
 	 * @param   string  $target  The name of the user to check is being followed.
 	 *
-	 * @return  object
+	 * @return  boolean
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \UnexpectedValueException

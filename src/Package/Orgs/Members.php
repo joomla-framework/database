@@ -260,17 +260,29 @@ class Members extends AbstractPackage
 	 *
 	 * @param   string  $org   The name of the organization.
 	 * @param   string  $user  The name of the user.
+	 * @param   string  $role  The role to give the user in the organization. Can be either 'member' or 'admin'.
 	 *
 	 * @return  object
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function updateMembership($org, $user)
+	public function updateMembership($org, $user, $role = 'member')
 	{
-		// Build the request path.
-		$path = '/orgs/' . $org . '/memberships/' . $user;
+		$allowedRoles = array('member', 'admin');
 
-		return $this->processResponse($this->client->put($this->fetchUrl($path)));
+		if (!in_array($role, $allowedRoles))
+		{
+			throw new \InvalidArgumentException(sprintf("The user's role must be: %s", implode(', ', $allowedRoles)));
+		}
+
+		// Build the request path.
+		$path = "/orgs/$org/memberships/$user";
+
+		$data = array(
+			'role' => $role,
+		);
+
+		return $this->processResponse($this->client->put($this->fetchUrl($path), json_encode($data)));
 	}
 
 	/**

@@ -44,13 +44,14 @@ class Hooks extends AbstractPackage
 	/**
 	 * Get hook.
 	 *
-	 * @param   integer  $id  The hook id.
+	 * @param   string   $org  The name of the organization.
+	 * @param   integer  $id   The hook id.
 	 *
 	 * @return  object
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function get($id)
+	public function get($org, $id)
 	{
 		// Build the request path.
 		$path = "/orgs/$org/hooks/" . (int) $id;

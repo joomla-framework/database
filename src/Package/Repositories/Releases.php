@@ -71,7 +71,7 @@ class Releases extends AbstractPackage
 	public function delete($owner, $repo, $releaseId)
 	{
 		// Build the request path.
-		$path = '/repos/' . $user . '/' . $repo . '/releases/' . (int) $releaseId;
+		$path = '/repos/' . $owner . '/' . $repo . '/releases/' . (int) $releaseId;
 
 		return $this->processResponse(
 			$this->client->delete($this->fetchUrl($path)),

@@ -397,11 +397,11 @@ class Repositories extends AbstractPackage
 	 * @return  object
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  Use Joomla\Github\Package\Repositories\Branches::getListBranches() instead
+	 * @deprecated  2.0  Use Joomla\Github\Package\Repositories\Branches::getList() instead
 	 */
 	public function getListBranches($owner, $repo)
 	{
-		return $this->branches->getListBranches($owner, $repo);
+		return $this->branches->getList($owner, $repo);
 	}
 
 	/**
@@ -414,11 +414,11 @@ class Repositories extends AbstractPackage
 	 * @return  object
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  Use Joomla\Github\Package\Repositories\Branches::getBranch() instead
+	 * @deprecated  2.0  Use Joomla\Github\Package\Repositories\Branches::get() instead
 	 */
 	public function getBranch($owner, $repo, $branch)
 	{
-		return $this->branches->getBranch($owner, $repo, $branch);
+		return $this->branches->get($owner, $repo, $branch);
 	}
 
 	/**
