@@ -252,6 +252,31 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the Create method.
+	 *
+	 * @return void
+	 */
+	public function testCreateWithOrg()
+	{
+		$this->response->code = 201;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('post')
+			->with('/orgs/joomla.org/repos',
+				'{"name":"joomla-test","description":"","homepage":"","private":false,"has_issues":false,'
+					. '"has_wiki":false,"has_downloads":false,"team_id":0,"auto_init":false,"gitignore_template":""}',
+				array(), 0
+			)
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->create('joomla-test', 'joomla.org'),
+			$this->equalTo(json_decode($this->response->body))
+		);
+	}
+
+	/**
 	 * Tests the Get method.
 	 *
 	 * @return void

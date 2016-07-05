@@ -188,4 +188,155 @@ class ReleasesTest extends \PHPUnit_Framework_TestCase
 			$this->equalTo($releases)
 		);
 	}
+
+	/**
+	 * Tests the delete method
+	 *
+	 * @return  void
+	 */
+	public function testDelete()
+	{
+		$this->response->code = 204;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('delete')
+			->with('/repos/joomla/joomla-platform/releases/123')
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->delete('joomla', 'joomla-platform', '123'),
+			$this->equalTo(json_decode($this->response->body))
+		);
+	}
+
+	/**
+	 * Tests the getLatest method.
+	 *
+	 * @return  void
+	 */
+	public function testGetLatest()
+	{
+		$this->response->code = 200;
+		$this->response->body = '[]';
+
+		$releases = array();
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/repos/joomla/joomla-platform/releases/latest', array(), 0)
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->getLatest('joomla', 'joomla-platform'),
+			$this->equalTo($releases)
+		);
+	}
+
+	/**
+	 * Tests the getByTag method
+	 *
+	 * @return  void
+	 */
+	public function testGetByTag()
+	{
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/repos/joomla/joomla-platform/releases/tags/{tag}', array(), 0)
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->getByTag('joomla', 'joomla-platform', '{tag}'),
+			$this->equalTo(json_decode($this->response->body))
+		);
+	}
+
+	/**
+	 * Tests the getListAssets method
+	 *
+	 * @return  void
+	 */
+	public function testGetListAssets()
+	{
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/repos/joomla/joomla-platform/releases/123/assets', array(), 0)
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->getListAssets('joomla', 'joomla-platform', 123),
+			$this->equalTo(json_decode($this->response->body))
+		);
+	}
+
+	/**
+	 * Tests the getAsset method
+	 *
+	 * @return  void
+	 */
+	public function testGetAsset()
+	{
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/repos/joomla/joomla-platform/releases/assets/123', array(), 0)
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->getAsset('joomla', 'joomla-platform', 123),
+			$this->equalTo(json_decode($this->response->body))
+		);
+	}
+
+	/**
+	 * Tests the editAsset method
+	 *
+	 * @return  void
+	 */
+	public function testEditAsset()
+	{
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
+
+		$data = '{"name":"{name}","label":"{label}"}';
+
+		$this->client->expects($this->once())
+			->method('patch')
+			->with('/repos/joomla/joomla-platform/releases/assets/123', $data, array(), 0)
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->editAsset('joomla', 'joomla-platform', 123, '{name}', '{label}'),
+			$this->equalTo(json_decode($this->response->body))
+		);
+	}
+
+	/**
+	 * Tests the deleteAsset method
+	 *
+	 * @return  void
+	 */
+	public function testDeleteAsset()
+	{
+		$this->response->code = 204;
+		$this->response->body = true;
+
+		$this->client->expects($this->once())
+			->method('delete')
+			->with('/repos/joomla/joomla-platform/releases/assets/123', array(), 0)
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->deleteAsset('joomla', 'joomla-platform', 123),
+			$this->equalTo($this->response->body)
+		);
+	}
 }
