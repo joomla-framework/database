@@ -85,11 +85,12 @@ class Downloads extends AbstractPackage
 	 *
 	 * @note    This API endpoint no longer exists at GitHub
 	 * @since   1.0
+	 * @throws  \RuntimeException
 	 * @deprecated  The Releases API should be used instead
 	 */
 	public function create($owner, $repo, $name, $size, $description = '', $content_type = '')
 	{
-		return true;
+		throw new \RuntimeException('The GitHub API no longer supports creating downloads. The Releases API should be used instead.');
 	}
 
 	/**
@@ -134,11 +135,12 @@ class Downloads extends AbstractPackage
 	 *
 	 * @note    This API endpoint no longer exists at GitHub
 	 * @since   1.0
+	 * @throws  \RuntimeException
 	 * @deprecated  The Releases API should be used instead
 	 */
 	public function upload($key, $acl, $success_action_status, $filename, $awsAccessKeyId, $policy, $signature, $content_type, $file)
 	{
-		return true;
+		throw new \RuntimeException('The GitHub API no longer supports creating downloads. The Releases API should be used instead.');
 	}
 
 	/**
