@@ -41,7 +41,7 @@ class Branches extends AbstractPackage
 	}
 
 	/**
-	 * Get a Branch.
+	 * Get Branch.
 	 *
 	 * @param   string  $owner   Repository owner.
 	 * @param   string  $repo    Repository name.

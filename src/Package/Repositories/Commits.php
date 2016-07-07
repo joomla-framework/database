@@ -21,7 +21,7 @@ use Joomla\Date\Date;
 class Commits extends AbstractPackage
 {
 	/**
-	 * Method to list commits for a repository.
+	 * List commits on a repository.
 	 *
 	 * A special note on pagination: Due to the way Git works, commits are paginated based on SHA
 	 * instead of page number.
@@ -67,7 +67,7 @@ class Commits extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a single commit for a repository.
+	 * Get a single commit.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.
@@ -98,7 +98,7 @@ class Commits extends AbstractPackage
 	}
 
 	/**
-	 * Method to get the SHA-1 of a commit reference
+	 * Get the SHA-1 of a commit reference.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.
@@ -129,7 +129,7 @@ class Commits extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a diff for two commits.
+	 * Compare two commits.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.

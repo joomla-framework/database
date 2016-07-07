@@ -164,7 +164,7 @@ class Members extends AbstractPackage
 	 * @throws \UnexpectedValueException
 	 * @since  1.0
 	 *
-	 * @return object
+	 * @return boolean
 	 */
 	public function checkPublic($org, $user)
 	{
@@ -341,7 +341,7 @@ class Members extends AbstractPackage
 	}
 
 	/**
-	 * Get your organization membership
+	 * Edit your organization membership
 	 *
 	 * @param   string  $org    The name of the organization.
 	 * @param   string  $state  The state that the membership should be in.

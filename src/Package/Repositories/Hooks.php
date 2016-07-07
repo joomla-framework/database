@@ -20,7 +20,7 @@ use Joomla\Github\AbstractPackage;
 class Hooks extends AbstractPackage
 {
 	/**
-	 * Method to create a hook on a repository.
+	 * Create a hook.
 	 *
 	 * @param   string   $user    The name of the owner of the GitHub repository.
 	 * @param   string   $repo    The name of the GitHub repository.
@@ -60,7 +60,7 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Method to delete a hook
+	 * Delete a hook
 	 *
 	 * @param   string   $user  The name of the owner of the GitHub repository.
 	 * @param   string   $repo  The name of the GitHub repository.
@@ -83,7 +83,7 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Method to edit a hook.
+	 * Edit a hook.
 	 *
 	 * @param   string   $user          The name of the owner of the GitHub repository.
 	 * @param   string   $repo          The name of the GitHub repository.
@@ -148,7 +148,7 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Method to get details about a single hook for the repository.
+	 * Get single hook.
 	 *
 	 * @param   string   $user  The name of the owner of the GitHub repository.
 	 * @param   string   $repo  The name of the GitHub repository.
@@ -170,7 +170,7 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Method to list hooks for a repository.
+	 * List hooks.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.
@@ -191,7 +191,7 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Method to trigger a ping event for a hook
+	 * Ping a hook.
 	 *
 	 * @param   string   $user  The name of the owner of the GitHub repository.
 	 * @param   string   $repo  The name of the GitHub repository.
@@ -214,7 +214,7 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Method to test a hook against the latest repository commit
+	 * Test a `push` hook.
 	 *
 	 * @param   string   $user  The name of the owner of the GitHub repository.
 	 * @param   string   $repo  The name of the GitHub repository.

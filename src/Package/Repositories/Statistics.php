@@ -96,7 +96,7 @@ class Statistics  extends AbstractPackage
 	}
 
 	/**
-	 * Get the weekly commit count for the repo owner and everyone else.
+	 * Get the weekly commit count for the repository owner and everyone else.
 	 *
 	 * Returns the total commit counts for the "owner" and total commit counts in "all". "all" is everyone combined,
 	 * including the owner in the last 52 weeks.

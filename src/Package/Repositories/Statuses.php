@@ -20,7 +20,7 @@ use Joomla\Github\AbstractPackage;
 class Statuses extends AbstractPackage
 {
 	/**
-	 * Method to create a status.
+	 * Create a Status.
 	 *
 	 * @param   string  $user         The name of the owner of the GitHub repository.
 	 * @param   string  $repo         The name of the GitHub repository.
@@ -77,7 +77,7 @@ class Statuses extends AbstractPackage
 	}
 
 	/**
-	 * Method to list statuses for an SHA.
+	 * List Statuses for a specific Ref.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.
@@ -97,7 +97,7 @@ class Statuses extends AbstractPackage
 	}
 
 	/**
-	 * Method to get the combined Status for a specific Ref.
+	 * Get the combined Status for a specific Ref.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.

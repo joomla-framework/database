@@ -40,7 +40,7 @@ class Pages extends AbstractPackage
 	}
 
 	/**
-	 * List Pages builds in a repository.
+	 * List Pages builds.
 	 *
 	 * @param   string   $owner  The name of the owner of the GitHub repository.
 	 * @param   string   $repo   The name of the GitHub repository.
@@ -62,7 +62,7 @@ class Pages extends AbstractPackage
 	}
 
 	/**
-	 * Get the latest Pages build.
+	 * List latest Pages build.
 	 *
 	 * @param   string  $owner  The name of the owner of the GitHub repository.
 	 * @param   string  $repo   The name of the GitHub repository.

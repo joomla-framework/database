@@ -20,7 +20,7 @@ use Joomla\Github\AbstractPackage;
 class Forks extends AbstractPackage
 {
 	/**
-	 * Method to fork a repository.
+	 * Create a fork.
 	 *
 	 * @param   string  $owner  The name of the owner of the GitHub repository.
 	 * @param   string  $repo   The name of the GitHub repository.
@@ -52,7 +52,7 @@ class Forks extends AbstractPackage
 	}
 
 	/**
-	 * Method to list forks for a repository.
+	 * List forks.
 	 *
 	 * @param   string   $owner  The name of the owner of the GitHub repository.
 	 * @param   string   $repo   The name of the GitHub repository.

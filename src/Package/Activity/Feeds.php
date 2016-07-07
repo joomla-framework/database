@@ -20,7 +20,7 @@ use Joomla\Github\AbstractPackage;
 class Feeds extends AbstractPackage
 {
 	/**
-	 * List feeds.
+	 * List Feeds.
 	 *
 	 * @return  object
 	 *
