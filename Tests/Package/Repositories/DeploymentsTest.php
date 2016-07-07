@@ -108,7 +108,7 @@ class DeploymentsTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertThat(
 			$this->object->create(
-				'{owner}', '{repo}', '{ref}', '{task}', '{automerge}', ['{requiredContexts}'],
+				'{owner}', '{repo}', '{ref}', '{task}', '{automerge}', array('{requiredContexts}'),
 				'{payload}', '{environment}', '{description}'
 			),
 			$this->equalTo(json_decode($this->sampleString))
