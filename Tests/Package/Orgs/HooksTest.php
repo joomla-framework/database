@@ -161,7 +161,7 @@ class HooksTest extends \PHPUnit_Framework_TestCase
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
-			$this->object->edit('{org}', '{url}', 'json', '{secret}', 1, ['create'], true),
+			$this->object->edit('{org}', '{url}', 'json', '{secret}', 1, array('create'), true),
 			$this->equalTo(json_decode($this->sampleString))
 		);
 	}
@@ -187,7 +187,7 @@ class HooksTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testEditFailure2()
 	{
-		$this->object->edit('{org}', '{url}', 'json', '{secret}', 1, ['{invalid}']);
+		$this->object->edit('{org}', '{url}', 'json', '{secret}', 1, array('{invalid}'));
 	}
 
 	/**
