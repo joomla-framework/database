@@ -82,7 +82,7 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/repos/joomla/joomla-platform/pulls/1/comments', '{"body":"The Body","commit_id":"123abc","path":"a\/b\/c","position":456}', 0, 0)
+			->with('/repos/joomla/joomla-platform/pulls/1/comments', '{"body":"The Body","commit_id":"123abc","path":"a\/b\/c","position":456}', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -103,7 +103,7 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/repos/joomla/joomla-platform/pulls/1/comments', '{"body":"The Body","in_reply_to":456}', 0, 0)
+			->with('/repos/joomla/joomla-platform/pulls/1/comments', '{"body":"The Body","in_reply_to":456}', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -124,7 +124,7 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('delete')
-			->with('/repos/joomla/joomla-platform/pulls/comments/456', 0, 0)
+			->with('/repos/joomla/joomla-platform/pulls/comments/456', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -145,7 +145,7 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('patch')
-			->with('/repos/joomla/joomla-platform/pulls/comments/456', '{"body":"Hello"}', 0, 0)
+			->with('/repos/joomla/joomla-platform/pulls/comments/456', '{"body":"Hello"}', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -166,7 +166,7 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/pulls/comments/456', 0, 0)
+			->with('/repos/joomla/joomla-platform/pulls/comments/456', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -187,7 +187,7 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/pulls/456/comments', 0, 0)
+			->with('/repos/joomla/joomla-platform/pulls/456/comments', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

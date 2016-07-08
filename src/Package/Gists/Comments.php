@@ -20,7 +20,7 @@ use Joomla\Github\AbstractPackage;
 class Comments extends AbstractPackage
 {
 	/**
-	 * Method to create a comment on a gist.
+	 * Create a comment.
 	 *
 	 * @param   integer  $gistId  The gist number.
 	 * @param   string   $body    The comment body text.
@@ -57,7 +57,7 @@ class Comments extends AbstractPackage
 	}
 
 	/**
-	 * Method to delete a comment on a gist.
+	 * Delete a comment.
 	 *
 	 * @param   integer  $commentId  The id of the comment to delete.
 	 *
@@ -84,7 +84,7 @@ class Comments extends AbstractPackage
 	}
 
 	/**
-	 * Method to update a comment on a gist.
+	 * Edit a comment.
 	 *
 	 * @param   integer  $commentId  The id of the comment to update.
 	 * @param   string   $body       The new body text for the comment.
@@ -121,7 +121,7 @@ class Comments extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a specific comment on a gist.
+	 * Get a single comment.
 	 *
 	 * @param   integer  $commentId  The comment id to get.
 	 *
@@ -150,7 +150,7 @@ class Comments extends AbstractPackage
 	}
 
 	/**
-	 * Method to get the list of comments on a gist.
+	 * List comments on a gist.
 	 *
 	 * @param   integer  $gistId  The gist number.
 	 * @param   integer  $page    The page number from which to get items.

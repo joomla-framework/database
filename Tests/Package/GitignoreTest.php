@@ -80,7 +80,7 @@ class GitignoreTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/gitignore/templates', 0, 0)
+			->with('/gitignore/templates', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

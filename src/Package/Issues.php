@@ -28,7 +28,7 @@ use Joomla\Uri\Uri;
 class Issues extends AbstractPackage
 {
 	/**
-	 * Method to create an issue.
+	 * Create an issue.
 	 *
 	 * @param   string   $user       The name of the owner of the GitHub repository.
 	 * @param   string   $repo       The name of the GitHub repository.
@@ -80,7 +80,7 @@ class Issues extends AbstractPackage
 	}
 
 	/**
-	 * Method to update an issue.
+	 * Edit an issue.
 	 *
 	 * @param   string   $user       The name of the owner of the GitHub repository.
 	 * @param   string   $repo       The name of the GitHub repository.
@@ -102,7 +102,7 @@ class Issues extends AbstractPackage
 		// Build the request path.
 		$path = '/repos/' . $user . '/' . $repo . '/issues/' . (int) $issueId;
 
-		// Craete the data object.
+		// Create the data object.
 		$data = new \stdClass;
 
 		// If a title is set add it to the data object.
@@ -165,7 +165,7 @@ class Issues extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a single issue.
+	 * Get a single issue.
 	 *
 	 * @param   string   $user     The name of the owner of the GitHub repository.
 	 * @param   string   $repo     The name of the GitHub repository.
@@ -196,7 +196,7 @@ class Issues extends AbstractPackage
 	}
 
 	/**
-	 * Method to list an authenticated user's issues.
+	 * List issues.
 	 *
 	 * @param   string   $filter     The filter type: assigned, created, mentioned, subscribed.
 	 * @param   string   $state      The optional state to filter requests by. [open, closed]
@@ -218,10 +218,40 @@ class Issues extends AbstractPackage
 		// Build the request path.
 		$path = '/issues';
 
-		// TODO Implement the filtering options.
+		$uri = new Uri($this->fetchUrl($path, $page, $limit));
+
+		if ($filter)
+		{
+			$uri->setVar('filter', $filter);
+		}
+
+		if ($state)
+		{
+			$uri->setVar('state', $state);
+		}
+
+		if ($labels)
+		{
+			$uri->setVar('labels', $labels);
+		}
+
+		if ($sort)
+		{
+			$uri->setVar('sort', $sort);
+		}
+
+		if ($direction)
+		{
+			$uri->setVar('direction', $direction);
+		}
+
+		if ($since)
+		{
+			$uri->setVar('since', $since->format(\DateTime::ISO8601));
+		}
 
 		// Send the request.
-		$response = $this->client->get($this->fetchUrl($path, $page, $limit));
+		$response = $this->client->get((string) $uri);
 
 		// Validate the response code.
 		if ($response->code != 200)
@@ -235,7 +265,7 @@ class Issues extends AbstractPackage
 	}
 
 	/**
-	 * Method to list issues.
+	 * List issues for a repository.
 	 *
 	 * @param   string   $user       The name of the owner of the GitHub repository.
 	 * @param   string   $repo       The name of the GitHub repository.
@@ -315,5 +345,45 @@ class Issues extends AbstractPackage
 		}
 
 		return json_decode($response->body);
+	}
+
+	/**
+	 * Lock an issue.
+	 *
+	 * @param   string   $user     The name of the owner of the GitHub repository.
+	 * @param   string   $repo     The name of the GitHub repository.
+	 * @param   integer  $issueId  The issue number.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function lock($user, $repo, $issueId)
+	{
+		// Build the request path.
+		$path = "/repos/$user/$repo/issues/" . (int) $issueId . '/lock';
+
+		return $this->processResponse($this->client->put($this->fetchUrl($path), array()), 204);
+	}
+
+	/**
+	 * Unlock an issue.
+	 *
+	 * @param   string   $user     The name of the owner of the GitHub repository.
+	 * @param   string   $repo     The name of the GitHub repository.
+	 * @param   integer  $issueId  The issue number.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function unlock($user, $repo, $issueId)
+	{
+		// Build the request path.
+		$path = "/repos/$user/$repo/issues/" . (int) $issueId . '/lock';
+
+		return $this->processResponse($this->client->delete($this->fetchUrl($path)), 204);
 	}
 }

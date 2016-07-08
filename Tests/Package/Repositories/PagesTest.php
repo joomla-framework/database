@@ -1,41 +1,41 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Github\Tests;
 
-use Joomla\Github\Package\Repositories\Downloads;
+use Joomla\Github\Package\Repositories\Pages;
 use Joomla\Registry\Registry;
 
 /**
- * Test class for Downloads.
+ * Test class for Pages.
  *
  * @since  1.0
  */
-class DownloadsTest extends \PHPUnit_Framework_TestCase
+class PagesTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var    Registry  Options for the GitHub object.
-	 * @since  1.0
+	 * @since  11.4
 	 */
 	protected $options;
 
 	/**
 	 * @var    \PHPUnit_Framework_MockObject_MockObject  Mock client object.
-	 * @since  1.0
+	 * @since  11.4
 	 */
 	protected $client;
 
 	/**
 	 * @var    \Joomla\Http\Response  Mock response object.
-	 * @since  1.0
+	 * @since  12.3
 	 */
 	protected $response;
 
 	/**
-	 * @var Downloads
+	 * @var Pages
 	 */
 	protected $object;
 
@@ -67,7 +67,28 @@ class DownloadsTest extends \PHPUnit_Framework_TestCase
 		$this->client   = $this->getMock('\\Joomla\\Github\\Http', array('get', 'post', 'delete', 'patch', 'put'));
 		$this->response = $this->getMock('\\Joomla\\Http\\Response');
 
-		$this->object = new Downloads($this->options, $this->client);
+		$this->object = new Pages($this->options, $this->client);
+	}
+
+	/**
+	 * Tests the GetInfo method.
+	 *
+	 * @return  void
+	 */
+	public function testGetInfo()
+	{
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/repos/{owner}/{repo}/pages')
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->getInfo('{owner}', '{repo}'),
+			$this->equalTo(json_decode($this->sampleString))
+		);
 	}
 
 	/**
@@ -82,81 +103,32 @@ class DownloadsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/downloads')
+			->with('/repos/{owner}/{repo}/pages/builds')
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
-			$this->object->getList('joomla', 'joomla-platform'),
+			$this->object->getList('{owner}', '{repo}'),
 			$this->equalTo(json_decode($this->sampleString))
 		);
 	}
 
 	/**
-	 * Tests the Get method.
+	 * Tests the GetLatest method.
 	 *
 	 * @return  void
 	 */
-	public function testGet()
+	public function testGetLatest()
 	{
 		$this->response->code = 200;
 		$this->response->body = $this->sampleString;
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/downloads/123abc')
+			->with('/repos/{owner}/{repo}/pages/builds/latest')
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
-			$this->object->get('joomla', 'joomla-platform', '123abc'),
-			$this->equalTo(json_decode($this->sampleString))
-		);
-	}
-
-	/**
-	 * Tests the Create method.
-	 *
-	 * @return  void
-	 *
-	 * @expectedException  \RuntimeException
-	 * @expectedExceptionMessage  The GitHub API no longer supports creating downloads. The Releases API should be used instead.
-	 */
-	public function testCreate()
-	{
-		$this->object->create('joomla', 'joomla-platform', 'aaa.zip', 1234, 'Description', 'content_type');
-	}
-
-	/**
-	 * Tests the Upload method.
-	 *
-	 * @return  void
-	 *
-	 * @expectedException  \RuntimeException
-	 * @expectedExceptionMessage  The GitHub API no longer supports creating downloads. The Releases API should be used instead.
-	 */
-	public function testUpload()
-	{
-		$this->object->upload(
-			'joomla', 'joomla-platform', 123, 'a/b/aaa.zip', 'acl', 201, 'aaa.zip', '123abc', '123abc', '123abc', 'content_type', '@aaa.zip'
-		);
-	}
-
-	/**
-	 * Tests the Delete method.
-	 *
-	 * @return  void
-	 */
-	public function testDelete()
-	{
-		$this->response->code = 204;
-		$this->response->body = $this->sampleString;
-
-		$this->client->expects($this->once())
-			->method('delete')
-			->with('/repos/joomla/joomla-platform/downloads/123')
-			->will($this->returnValue($this->response));
-
-		$this->assertThat(
-			$this->object->delete('joomla', 'joomla-platform', 123),
+			$this->object->getLatest('{owner}', '{repo}'),
 			$this->equalTo(json_decode($this->sampleString))
 		);
 	}

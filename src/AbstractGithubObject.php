@@ -38,6 +38,38 @@ abstract class AbstractGithubObject
 	protected $package = '';
 
 	/**
+	 * Array containing the allowed hook events
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 * @see    https://developer.github.com/webhooks/#events
+	 */
+	protected $events = array(
+		'*',
+		'commit_comment',
+		'create',
+		'delete',
+		'deployment',
+		'deployment_status',
+		'fork',
+		'gollum',
+		'issue_comment',
+		'issues',
+		'member',
+		'membership',
+		'page_build',
+		'public',
+		'pull_request_review_comment',
+		'pull_request',
+		'push',
+		'repository',
+		'release',
+		'status',
+		'team_add',
+		'watch',
+	);
+
+	/**
 	 * Constructor.
 	 *
 	 * @param   Registry  $options  GitHub options object.
@@ -69,7 +101,7 @@ abstract class AbstractGithubObject
 	 */
 	protected function fetchUrl($path, $page = 0, $limit = 0)
 	{
-		// Get a new Uri object fousing the api url and given path.
+		// Get a new Uri object focusing the api url and given path.
 		$uri = new Uri($this->options->get('api.url') . $path);
 
 		if ($this->options->get('gh.token', false))

@@ -17,13 +17,14 @@ use Joomla\Github\AbstractPackage;
  *
  * @documentation  http://developer.github.com/v3/orgs/
  *
+ * @property-read  Orgs\Hooks    $hooks    GitHub API object for hooks.
  * @property-read  Orgs\Members  $members  GitHub API object for members.
  * @property-read  Orgs\Teams    $teams    GitHub API object for teams.
  */
 class Orgs extends AbstractPackage
 {
 	/**
-	 * List User Organizations.
+	 * List user organizations.
 	 *
 	 * If a user name is given, public and private organizations for the authenticated user will be listed.
 	 *
@@ -47,7 +48,7 @@ class Orgs extends AbstractPackage
 	}
 
 	/**
-	 * Get an Organization.
+	 * Get an organization.
 	 *
 	 * @param   string  $org  The organization name.
 	 *
@@ -67,7 +68,7 @@ class Orgs extends AbstractPackage
 	}
 
 	/**
-	 * Edit an Organization.
+	 * Edit an organization.
 	 *
 	 * @param   string  $org           The organization name.
 	 * @param   string  $billingEmail  Billing email address. This address is not publicized.

@@ -96,7 +96,7 @@ class UsersTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/users/joomla', 0, 0)
+			->with('/users/joomla', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -118,7 +118,7 @@ class UsersTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/users/nonexistentuser', 0, 0)
+			->with('/users/nonexistentuser', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -170,7 +170,7 @@ class UsersTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/user', 0, 0)
+			->with('/user', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -193,7 +193,7 @@ class UsersTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/user', 0, 0)
+			->with('/user', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -230,7 +230,7 @@ class UsersTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/users', 0, 0)
+			->with('/users', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -302,7 +302,7 @@ class UsersTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('patch')
-			->with('/user', $input, 0, 0)
+			->with('/user', $input, array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -345,7 +345,7 @@ class UsersTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('patch')
-			->with('/user', $input, 0, 0)
+			->with('/user', $input, array(), 0)
 			->will($this->returnValue($this->response));
 
 		// $this->object->edit($name, $email, $blog, $company, $location, $hireable, $bio);

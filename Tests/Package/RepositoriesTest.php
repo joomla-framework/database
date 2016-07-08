@@ -82,7 +82,7 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/user/repos?type=all&sort=full_name&direction=asc', 0, 0)
+			->with('/user/repos?type=all&sort=full_name&direction=asc', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -139,7 +139,7 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/users/joomla/repos?type=all&sort=full_name&direction=asc', 0, 0)
+			->with('/users/joomla/repos?type=all&sort=full_name&direction=asc', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -196,7 +196,7 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/orgs/joomla/repos?type=all', 0, 0)
+			->with('/orgs/joomla/repos?type=all', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -217,7 +217,7 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repositories', 0, 0)
+			->with('/repositories', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -241,12 +241,37 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 			->with('/user/repos',
 				'{"name":"joomla-test","description":"","homepage":"","private":false,"has_issues":false,'
 					. '"has_wiki":false,"has_downloads":false,"team_id":0,"auto_init":false,"gitignore_template":""}',
-				0, 0
+				array(), 0
 			)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
 			$this->object->create('joomla-test'),
+			$this->equalTo(json_decode($this->response->body))
+		);
+	}
+
+	/**
+	 * Tests the Create method.
+	 *
+	 * @return void
+	 */
+	public function testCreateWithOrg()
+	{
+		$this->response->code = 201;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('post')
+			->with('/orgs/joomla.org/repos',
+				'{"name":"joomla-test","description":"","homepage":"","private":false,"has_issues":false,'
+					. '"has_wiki":false,"has_downloads":false,"team_id":0,"auto_init":false,"gitignore_template":""}',
+				array(), 0
+			)
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->create('joomla-test', 'joomla.org'),
 			$this->equalTo(json_decode($this->response->body))
 		);
 	}
@@ -263,7 +288,7 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-cms', 0, 0)
+			->with('/repos/joomla/joomla-cms', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -296,9 +321,10 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('patch')
-			->with('/repos/joomla/joomla-test',
-				'{"name":"joomla-test-1","description":"","homepage":"","private":false,"has_issues":false,'
-					. '"has_wiki":false,"has_downloads":false,"default_branch":""}', 0
+			->with(
+				'/repos/joomla/joomla-test',
+				'{"name":"joomla-test-1","description":"","homepage":"","private":false,"has_issues":false,"has_wiki":false,"has_downloads":false,"default_branch":""}',
+				array()
 			)
 			->will($this->returnValue($this->response));
 
@@ -320,7 +346,7 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-cms/contributors', 0, 0)
+			->with('/repos/joomla/joomla-cms/contributors', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -341,7 +367,7 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-cms/languages', 0, 0)
+			->with('/repos/joomla/joomla-cms/languages', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -362,7 +388,7 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-cms/teams', 0, 0)
+			->with('/repos/joomla/joomla-cms/teams', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -383,7 +409,7 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-cms/tags', 0, 0)
+			->with('/repos/joomla/joomla-cms/tags', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -404,7 +430,7 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-cms/branches', 0, 0)
+			->with('/repos/joomla/joomla-cms/branches', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -425,7 +451,7 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-cms/branches/master', 0, 0)
+			->with('/repos/joomla/joomla-cms/branches/master', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -446,7 +472,7 @@ class RepositoriesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('delete')
-			->with('/repos/joomla/joomla-cms', 0, 0)
+			->with('/repos/joomla/joomla-cms', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

@@ -86,7 +86,7 @@ class MarkdownTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/markdown', $data, 0, 0)
+			->with('/markdown', $data, array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -137,7 +137,7 @@ class MarkdownTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/markdown', $data, 0, 0)
+			->with('/markdown', $data, array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

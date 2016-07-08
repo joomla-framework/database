@@ -20,7 +20,7 @@ use Joomla\Github\AbstractPackage;
 class Statuses extends AbstractPackage
 {
 	/**
-	 * Method to create a status.
+	 * Create a Status.
 	 *
 	 * @param   string  $user         The name of the owner of the GitHub repository.
 	 * @param   string  $repo         The name of the GitHub repository.
@@ -42,7 +42,7 @@ class Statuses extends AbstractPackage
 	public function create($user, $repo, $sha, $state, $targetUrl = null, $description = null, $context = null)
 	{
 		// Build the request path.
-		$path = '/repos/' . $user . '/' . $repo . '/statuses/' . $sha;
+		$path = "/repos/$user/$repo/statuses/$sha";
 
 		if (!in_array($state, array('pending', 'success', 'error', 'failure')))
 		{
@@ -77,7 +77,7 @@ class Statuses extends AbstractPackage
 	}
 
 	/**
-	 * Method to list statuses for an SHA.
+	 * List Statuses for a specific Ref.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.
@@ -90,7 +90,27 @@ class Statuses extends AbstractPackage
 	public function getList($user, $repo, $sha)
 	{
 		// Build the request path.
-		$path = '/repos/' . $user . '/' . $repo . '/statuses/' . $sha;
+		$path = "/repos/$user/$repo/statuses/$sha";
+
+		// Send the request.
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
+	}
+
+	/**
+	 * Get the combined Status for a specific Ref.
+	 *
+	 * @param   string  $user  The name of the owner of the GitHub repository.
+	 * @param   string  $repo  The name of the GitHub repository.
+	 * @param   string  $sha   SHA1 for which to get the combined status.
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getCombinedStatus($user, $repo, $sha)
+	{
+		// Build the request path.
+		$path = "/repos/$user/$repo/commits/$sha/status";
 
 		// Send the request.
 		return $this->processResponse($this->client->get($this->fetchUrl($path)));

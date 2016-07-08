@@ -20,18 +20,7 @@ use Joomla\Github\AbstractPackage;
 class Hooks extends AbstractPackage
 {
 	/**
-	 * Array containing the allowed hook events
-	 *
-	 * @var    array
-	 * @since  1.0
-	 */
-	protected $events = array(
-		'push', 'issues', 'issue_comment', 'commit_comment', 'pull_request', 'pull_request_review_comment', 'gollum',
-		'watch', 'download', 'fork', 'fork_apply', 'member', 'public', 'team_add', 'status'
-	);
-
-	/**
-	 * Method to create a hook on a repository.
+	 * Create a hook.
 	 *
 	 * @param   string   $user    The name of the owner of the GitHub repository.
 	 * @param   string   $repo    The name of the GitHub repository.
@@ -71,7 +60,7 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Method to delete a hook
+	 * Delete a hook
 	 *
 	 * @param   string   $user  The name of the owner of the GitHub repository.
 	 * @param   string   $repo  The name of the GitHub repository.
@@ -94,7 +83,7 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Method to edit a hook.
+	 * Edit a hook.
 	 *
 	 * @param   string   $user          The name of the owner of the GitHub repository.
 	 * @param   string   $repo          The name of the GitHub repository.
@@ -159,7 +148,7 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Method to get details about a single hook for the repository.
+	 * Get single hook.
 	 *
 	 * @param   string   $user  The name of the owner of the GitHub repository.
 	 * @param   string   $repo  The name of the GitHub repository.
@@ -181,7 +170,7 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Method to list hooks for a repository.
+	 * List hooks.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.
@@ -202,11 +191,34 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Method to test a hook against the latest repository commit
+	 * Ping a hook.
 	 *
 	 * @param   string   $user  The name of the owner of the GitHub repository.
 	 * @param   string   $repo  The name of the GitHub repository.
-	 * @param   integer  $id    ID of the hook to delete
+	 * @param   integer  $id    ID of the hook to ping
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function ping($user, $repo, $id)
+	{
+		// Build the request path.
+		$path = '/repos/' . $user . '/' . $repo . '/hooks/' . $id . '/pings';
+
+		return $this->processResponse(
+			$this->client->post($this->fetchUrl($path), json_encode('')),
+			204
+		);
+	}
+
+	/**
+	 * Test a `push` hook.
+	 *
+	 * @param   string   $user  The name of the owner of the GitHub repository.
+	 * @param   string   $repo  The name of the GitHub repository.
+	 * @param   integer  $id    ID of the hook to test
 	 *
 	 * @return  object
 	 *

@@ -20,7 +20,7 @@ use Joomla\Github\AbstractPackage;
 class Labels extends AbstractPackage
 {
 	/**
-	 * Method to get the list of labels on a repo.
+	 * List all labels for this repository.
 	 *
 	 * @param   string  $owner  The name of the owner of the GitHub repository.
 	 * @param   string  $repo   The name of the GitHub repository.
@@ -41,7 +41,7 @@ class Labels extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a specific label on a repo.
+	 * Get a single label.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.
@@ -63,7 +63,7 @@ class Labels extends AbstractPackage
 	}
 
 	/**
-	 * Method to create a label on a repo.
+	 * Create a label.
 	 *
 	 * @param   string  $owner  The name of the owner of the GitHub repository.
 	 * @param   string  $repo   The name of the GitHub repository.
@@ -103,7 +103,7 @@ class Labels extends AbstractPackage
 	}
 
 	/**
-	 * Method to delete a label on a repo.
+	 * Delete a label.
 	 *
 	 * @param   string  $owner  The name of the owner of the GitHub repository.
 	 * @param   string  $repo   The name of the GitHub repository.
@@ -126,7 +126,7 @@ class Labels extends AbstractPackage
 	}
 
 	/**
-	 * Method to update a label on a repo.
+	 * Update a label.
 	 *
 	 * @param   string  $user   The name of the owner of the GitHub repository.
 	 * @param   string  $repo   The name of the GitHub repository.

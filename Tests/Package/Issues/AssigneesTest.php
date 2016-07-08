@@ -103,7 +103,7 @@ class AssigneesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/' . $this->owner . '/' . $this->repo . '/assignees', 0, 0)
+			->with('/repos/' . $this->owner . '/' . $this->repo . '/assignees', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -130,7 +130,7 @@ class AssigneesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/' . $this->owner . '/' . $this->repo . '/assignees/' . $assignee, 0, 0)
+			->with('/repos/' . $this->owner . '/' . $this->repo . '/assignees/' . $assignee, array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -157,7 +157,7 @@ class AssigneesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/' . $this->owner . '/' . $this->repo . '/assignees/' . $assignee, 0, 0)
+			->with('/repos/' . $this->owner . '/' . $this->repo . '/assignees/' . $assignee, array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -186,7 +186,7 @@ class AssigneesTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/' . $this->owner . '/' . $this->repo . '/assignees/' . $assignee, 0, 0)
+			->with('/repos/' . $this->owner . '/' . $this->repo . '/assignees/' . $assignee, array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

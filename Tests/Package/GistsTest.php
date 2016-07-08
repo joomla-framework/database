@@ -65,7 +65,7 @@ class GistsTest extends \PHPUnit_Framework_TestCase
 
 		$this->options  = new Registry;
 		$this->client = $this->getMock('\\Joomla\\Github\\Http', array('get', 'post', 'delete', 'patch', 'put'));
-		$this->response = $this->getMock('JHttpResponse');
+		$this->response = $this->getMock('\\Joomla\\Http\\Response');
 
 		$this->object = new Gists($this->options, $this->client);
 	}
@@ -533,7 +533,7 @@ class GistsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/gists/523/fork')
+			->with('/gists/523/forks')
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -556,7 +556,7 @@ class GistsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/gists/523/fork')
+			->with('/gists/523/forks')
 			->will($this->returnValue($this->response));
 
 		try
@@ -724,6 +724,114 @@ class GistsTest extends \PHPUnit_Framework_TestCase
 		try
 		{
 			$this->object->comments->getList(523);
+		}
+		catch (\DomainException $e)
+		{
+			$exception = true;
+
+			$this->assertThat(
+				$e->getMessage(),
+				$this->equalTo(json_decode($this->errorString)->message)
+			);
+		}
+		$this->assertTrue($exception);
+	}
+
+	/**
+	 * Tests the getCommitList method
+	 *
+	 * @return void
+	 */
+	public function testGetCommitList()
+	{
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/gists/523/commits')
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->getCommitList(523),
+			$this->equalTo(json_decode($this->sampleString))
+		);
+	}
+
+	/**
+	 * Tests the getCommitList method - simulated failure
+	 *
+	 * @return void
+	 */
+	public function testGetCommitListFailure()
+	{
+		$exception = false;
+
+		$this->response->code = 500;
+		$this->response->body = $this->errorString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/gists/523/commits')
+			->will($this->returnValue($this->response));
+
+		try
+		{
+			$this->object->getCommitList(523);
+		}
+		catch (\DomainException $e)
+		{
+			$exception = true;
+
+			$this->assertThat(
+				$e->getMessage(),
+				$this->equalTo(json_decode($this->errorString)->message)
+			);
+		}
+		$this->assertTrue($exception);
+	}
+
+	/**
+	 * Tests the getForkList method
+	 *
+	 * @return void
+	 */
+	public function testGetForkList()
+	{
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/gists/523/forks')
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->getForkList(523),
+			$this->equalTo(json_decode($this->sampleString))
+		);
+	}
+
+	/**
+	 * Tests the getForkList method - simulated failure
+	 *
+	 * @return void
+	 */
+	public function testGetForkListFailure()
+	{
+		$exception = false;
+
+		$this->response->code = 500;
+		$this->response->body = $this->errorString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/gists/523/forks')
+			->will($this->returnValue($this->response));
+
+		try
+		{
+			$this->object->getForkList(523);
 		}
 		catch (\DomainException $e)
 		{
@@ -940,6 +1048,60 @@ class GistsTest extends \PHPUnit_Framework_TestCase
 		try
 		{
 			$this->object->getListStarred();
+		}
+		catch (\DomainException $e)
+		{
+			$exception = true;
+
+			$this->assertThat(
+				$e->getMessage(),
+				$this->equalTo(json_decode($this->errorString)->message)
+			);
+		}
+		$this->assertTrue($exception);
+	}
+
+	/**
+	 * Tests the getRevision method
+	 *
+	 * @return void
+	 */
+	public function testGetRevision()
+	{
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/gists/523/a1b2c3')
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->getRevision(523, 'a1b2c3'),
+			$this->equalTo(json_decode($this->sampleString))
+		);
+	}
+
+	/**
+	 * Tests the getRevision method - simulated failure
+	 *
+	 * @return void
+	 */
+	public function testGetRevisionFailure()
+	{
+		$exception = false;
+
+		$this->response->code = 500;
+		$this->response->body = $this->errorString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/gists/523/a1b2c3')
+			->will($this->returnValue($this->response));
+
+		try
+		{
+			$this->object->getRevision(523, 'a1b2c3');
 		}
 		catch (\DomainException $e)
 		{

@@ -26,9 +26,9 @@ class Keys extends AbstractPackage
 	 *
 	 * @param   string  $user  The name of the user.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function getListUser($user)
 	{
@@ -47,9 +47,9 @@ class Keys extends AbstractPackage
 	 * Management of public keys via the API requires that you are authenticated
 	 * through basic auth, or OAuth with the ‘user’ scope.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function getList()
 	{
@@ -66,9 +66,9 @@ class Keys extends AbstractPackage
 	 *
 	 * @param   integer  $id  The id of the key.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function get($id)
 	{
@@ -86,9 +86,9 @@ class Keys extends AbstractPackage
 	 * @param   string  $title  The title of the key.
 	 * @param   string  $key    The key.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function create($title, $key)
 	{
@@ -113,9 +113,9 @@ class Keys extends AbstractPackage
 	 * @param   string   $title  The title of the key.
 	 * @param   string   $key    The key.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function edit($id, $title, $key)
 	{
@@ -137,9 +137,9 @@ class Keys extends AbstractPackage
 	 *
 	 * @param   integer  $id  The id of the key.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function delete($id)
 	{

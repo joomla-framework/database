@@ -20,7 +20,7 @@ use Joomla\Github\AbstractPackage;
 class Comments extends AbstractPackage
 {
 	/**
-	 * Method to get a list of commit comments for a repository.
+	 * List commit comments for a repository.
 	 *
 	 * @param   string   $user   The name of the owner of the GitHub repository.
 	 * @param   string   $repo   The name of the GitHub repository.
@@ -43,7 +43,7 @@ class Comments extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a list of comments for a single commit for a repository.
+	 * List comments for a single commit.
 	 *
 	 * @param   string   $user   The name of the owner of the GitHub repository.
 	 * @param   string   $repo   The name of the GitHub repository.
@@ -67,7 +67,7 @@ class Comments extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a single comment on a commit.
+	 * Get a single commit comment.
 	 *
 	 * @param   string   $user  The name of the owner of the GitHub repository.
 	 * @param   string   $repo  The name of the GitHub repository.
@@ -89,7 +89,7 @@ class Comments extends AbstractPackage
 	}
 
 	/**
-	 * Method to edit a comment on a commit.
+	 * Update a commit comment.
 	 *
 	 * @param   string  $user     The name of the owner of the GitHub repository.
 	 * @param   string  $repo     The name of the GitHub repository.
@@ -118,7 +118,7 @@ class Comments extends AbstractPackage
 	}
 
 	/**
-	 * Method to delete a comment on a commit.
+	 * Delete a commit comment.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.
@@ -141,7 +141,7 @@ class Comments extends AbstractPackage
 	}
 
 	/**
-	 * Method to create a comment on a commit.
+	 * Create a commit comment.
 	 *
 	 * @param   string   $user      The name of the owner of the GitHub repository.
 	 * @param   string   $repo      The name of the GitHub repository.

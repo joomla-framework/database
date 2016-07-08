@@ -83,7 +83,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/labels', 0, 0)
+			->with('/repos/joomla/joomla-platform/labels', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -104,7 +104,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/labels/1', 0, 0)
+			->with('/repos/joomla/joomla-platform/labels/1', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -125,7 +125,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/repos/joomla/joomla-platform/labels', '{"name":"foobar","color":"red"}', 0, 0)
+			->with('/repos/joomla/joomla-platform/labels', '{"name":"foobar","color":"red"}', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -147,7 +147,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/repos/joomla/joomla-platform/labels', '{"name":"foobar","color":"red"}', 0, 0)
+			->with('/repos/joomla/joomla-platform/labels', '{"name":"foobar","color":"red"}', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -168,7 +168,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('patch')
-			->with('/repos/joomla/joomla-platform/labels/foobar', '{"name":"boofaz","color":"red"}', 0, 0)
+			->with('/repos/joomla/joomla-platform/labels/foobar', '{"name":"boofaz","color":"red"}', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -189,7 +189,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('delete')
-			->with('/repos/joomla/joomla-platform/labels/foobar', 0, 0)
+			->with('/repos/joomla/joomla-platform/labels/foobar', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -210,7 +210,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/issues/1/labels', 0, 0)
+			->with('/repos/joomla/joomla-platform/issues/1/labels', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -231,7 +231,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/repos/joomla/joomla-platform/issues/1/labels', '["A","B"]', 0, 0)
+			->with('/repos/joomla/joomla-platform/issues/1/labels', '["A","B"]', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -252,7 +252,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('delete')
-			->with('/repos/joomla/joomla-platform/issues/1/labels/foobar', 0, 0)
+			->with('/repos/joomla/joomla-platform/issues/1/labels/foobar', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -273,7 +273,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('put')
-			->with('/repos/joomla/joomla-platform/issues/1/labels', '["A","B"]', 0, 0)
+			->with('/repos/joomla/joomla-platform/issues/1/labels', '["A","B"]', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -294,7 +294,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('delete')
-			->with('/repos/joomla/joomla-platform/issues/1/labels', 0, 0)
+			->with('/repos/joomla/joomla-platform/issues/1/labels', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -315,7 +315,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/milestones/1/labels', 0, 0)
+			->with('/repos/joomla/joomla-platform/milestones/1/labels', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

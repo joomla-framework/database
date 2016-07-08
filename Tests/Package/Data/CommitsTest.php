@@ -83,7 +83,7 @@ class CommitsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/git/commits/12345', 0, 0)
+			->with('/repos/joomla/joomla-platform/git/commits/12345', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -104,7 +104,7 @@ class CommitsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/repos/joomla/joomla-platform/git/commits', '{"message":"My Message","tree":"12345","parents":[]}', 0, 0)
+			->with('/repos/joomla/joomla-platform/git/commits', '{"message":"My Message","tree":"12345","parents":[]}', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

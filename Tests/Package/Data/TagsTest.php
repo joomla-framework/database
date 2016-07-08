@@ -83,7 +83,7 @@ class TagsTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/git/tags/12345', 0, 0)
+			->with('/repos/joomla/joomla-platform/git/tags/12345', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -105,7 +105,7 @@ class TagsTest extends \PHPUnit_Framework_TestCase
 		$data = '{"tag":"0.1","message":"Message","object":"12345","type":"commit","tagger":{"name":"elkuku","email":"email@example.com","date":"123456789"}}';
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/repos/joomla/joomla-platform/git/tags', $data, 0, 0)
+			->with('/repos/joomla/joomla-platform/git/tags', $data, array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

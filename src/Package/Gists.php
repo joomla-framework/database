@@ -22,7 +22,7 @@ use Joomla\Github\AbstractPackage;
 class Gists extends AbstractPackage
 {
 	/**
-	 * Method to create a gist.
+	 * Create a gist.
 	 *
 	 * @param   mixed    $files        Either an array of file paths or a single file path as a string.
 	 * @param   boolean  $public       True if the gist should be public.
@@ -62,7 +62,7 @@ class Gists extends AbstractPackage
 	}
 
 	/**
-	 * Method to delete a gist.
+	 * Delete a gist.
 	 *
 	 * @param   integer  $gistId  The gist number.
 	 *
@@ -89,7 +89,7 @@ class Gists extends AbstractPackage
 	}
 
 	/**
-	 * Method to update a gist.
+	 * Edit a gist.
 	 *
 	 * @param   integer  $gistId       The gist number.
 	 * @param   mixed    $files        Either an array of file paths or a single file path as a string.
@@ -106,7 +106,7 @@ class Gists extends AbstractPackage
 		// Build the request path.
 		$path = '/gists/' . (int) $gistId;
 
-		// Craete the data object.
+		// Create the data object.
 		$data = new \stdClass;
 
 		// If a description is set add it to the data object.
@@ -145,7 +145,7 @@ class Gists extends AbstractPackage
 	}
 
 	/**
-	 * Method to fork a gist.
+	 * Fork a gist.
 	 *
 	 * @param   integer  $gistId  The gist number.
 	 *
@@ -157,25 +157,14 @@ class Gists extends AbstractPackage
 	public function fork($gistId)
 	{
 		// Build the request path.
-		$path = '/gists/' . (int) $gistId . '/fork';
+		$path = '/gists/' . (int) $gistId . '/forks';
 
 		// Send the request.
-		// TODO: Verify change
-		$response = $this->client->post($this->fetchUrl($path), '');
-
-		// Validate the response code.
-		if ($response->code != 201)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->post($this->fetchUrl($path), ''), 201);
 	}
 
 	/**
-	 * Method to get a single gist.
+	 * Get a single gist.
 	 *
 	 * @param   integer  $gistId  The gist number.
 	 *
@@ -204,7 +193,61 @@ class Gists extends AbstractPackage
 	}
 
 	/**
-	 * Method to list gists.  If a user is authenticated it will return the user's gists, otherwise
+	 * List gist commits.
+	 *
+	 * @param   integer  $gistId  The gist number.
+	 * @param   integer  $page    The page number from which to get items.
+	 * @param   integer  $limit   The number of items on a page.
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function getCommitList($gistId, $page = 0, $limit = 0)
+	{
+		// Build the request path.
+		$path = '/gists/' . (int) $gistId . '/commits';
+
+		// Send the request.
+		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
+	}
+
+	/**
+	 * List gist forks.
+	 *
+	 * @param   integer  $gistId  The gist number.
+	 * @param   integer  $page    The page number from which to get items.
+	 * @param   integer  $limit   The number of items on a page.
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function getForkList($gistId, $page = 0, $limit = 0)
+	{
+		// Build the request path.
+		$path = '/gists/' . (int) $gistId . '/forks';
+
+		// Send the request.
+		$response = $this->client->get($this->fetchUrl($path, $page, $limit));
+
+		// Validate the response code.
+		if ($response->code != 200)
+		{
+			// Decode the error response and throw an exception.
+			$error = json_decode($response->body);
+			throw new \DomainException($error->message, $response->code);
+		}
+
+		return json_decode($response->body);
+	}
+
+	/**
+	 * List gists.
+	 *
+	 * If a user is authenticated it will return the user's gists, otherwise
 	 * it will return all public gists.
 	 *
 	 * @param   integer  $page   The page number from which to get items.
@@ -235,7 +278,7 @@ class Gists extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a list of gists belonging to a given user.
+	 * List a user’s gists.
 	 *
 	 * @param   string   $user   The name of the GitHub user from which to list gists.
 	 * @param   integer  $page   The page number from which to get items.
@@ -266,7 +309,7 @@ class Gists extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a list of all public gists.
+	 * List all public gists.
 	 *
 	 * @param   integer  $page   The page number from which to get items.
 	 * @param   integer  $limit  The number of items on a page.
@@ -296,7 +339,7 @@ class Gists extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a list of the authenticated users' starred gists.
+	 * List starred gists.
 	 *
 	 * @param   integer  $page   The page number from which to get items.
 	 * @param   integer  $limit  The number of items on a page.
@@ -326,7 +369,27 @@ class Gists extends AbstractPackage
 	}
 
 	/**
-	 * Method to check if a gist has been starred.
+	 * Get a specific revision of a gist.
+	 *
+	 * @param   integer  $gistId  The gist number.
+	 * @param   string   $sha     The SHA for the revision to get.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function getRevision($gistId, $sha)
+	{
+		// Build the request path.
+		$path = '/gists/' . (int) $gistId . '/' . $sha;
+
+		// Send the request.
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
+	}
+
+	/**
+	 * Check if a gist is starred.
 	 *
 	 * @param   integer  $gistId  The gist number.
 	 *
@@ -361,7 +424,7 @@ class Gists extends AbstractPackage
 	}
 
 	/**
-	 * Method to star a gist.
+	 * Star a gist.
 	 *
 	 * @param   integer  $gistId  The gist number.
 	 *
@@ -388,7 +451,7 @@ class Gists extends AbstractPackage
 	}
 
 	/**
-	 * Method to star a gist.
+	 * Unstar a gist.
 	 *
 	 * @param   integer  $gistId  The gist number.
 	 *

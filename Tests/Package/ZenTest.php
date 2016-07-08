@@ -70,7 +70,7 @@ class ZenTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/zen', 0, 0)
+			->with('/zen', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -93,7 +93,7 @@ class ZenTest extends \PHPUnit_Framework_TestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/zen', 0, 0)
+			->with('/zen', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

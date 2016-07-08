@@ -27,9 +27,9 @@ class Teams extends AbstractPackage
 	 *
 	 * @param   string  $org  The name of the organization.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function getList($org)
 	{
@@ -46,9 +46,9 @@ class Teams extends AbstractPackage
 	 *
 	 * @param   integer  $id  The team id.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function get($id)
 	{
@@ -68,16 +68,15 @@ class Teams extends AbstractPackage
 	 * @param   string  $org         The name of the organization.
 	 * @param   string  $name        The name of the team.
 	 * @param   array   $repoNames   Repository names.
-	 * @param   string  $permission  The permission.
+	 * @param   string  $permission  The permission. (Deprecated)
 	 *                               pull - team members can pull, but not push to or administer these repositories. Default
 	 *                               push - team members can pull and push, but not administer these repositories.
 	 *                               admin - team members can pull, push and administer these repositories.
 	 *
-	 * @throws \UnexpectedValueException
+	 * @return  object
 	 *
-	 * @since  1.0
-	 *
-	 * @return object
+	 * @since   1.0
+	 * @throws  \UnexpectedValueException
 	 */
 	public function create($org, $name, array $repoNames = array(), $permission = '')
 	{
@@ -116,15 +115,15 @@ class Teams extends AbstractPackage
 	 *
 	 * @param   integer  $id          The team id.
 	 * @param   string   $name        The name of the team.
-	 * @param   string   $permission  The permission.
+	 * @param   string   $permission  The permission. (Deprecated)
 	 *                                pull - team members can pull, but not push to or administer these repositories. Default
 	 *                                push - team members can pull and push, but not administer these repositories.
 	 *                                admin - team members can pull, push and administer these repositories.
 	 *
-	 * @throws \UnexpectedValueException
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
+	 * @throws  \UnexpectedValueException
 	 */
 	public function edit($id, $name, $permission = '')
 	{
@@ -157,9 +156,9 @@ class Teams extends AbstractPackage
 	 *
 	 * @param   integer  $id  The team id.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function delete($id)
 	{
@@ -179,9 +178,9 @@ class Teams extends AbstractPackage
 	 *
 	 * @param   integer  $id  The team id.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function getListMembers($id)
 	{
@@ -201,10 +200,11 @@ class Teams extends AbstractPackage
 	 * @param   integer  $id    The team id.
 	 * @param   string   $user  The name of the user.
 	 *
-	 * @throws \UnexpectedValueException
-	 * @since  1.0
+	 * @return  boolean
 	 *
-	 * @return object
+	 * @since   1.0
+	 * @throws  \UnexpectedValueException
+	 * @deprecated  Use getTeamMembership() instead
 	 */
 	public function isMember($id, $user)
 	{
@@ -240,9 +240,10 @@ class Teams extends AbstractPackage
 	 * @param   integer  $id    The team id.
 	 * @param   string   $user  The name of the user.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
+	 * @deprecated  Use addTeamMembership() instead
 	 */
 	public function addMember($id, $user)
 	{
@@ -265,9 +266,10 @@ class Teams extends AbstractPackage
 	 * @param   integer  $id    The team id.
 	 * @param   string   $user  The name of the user.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
+	 * @deprecated  Use removeTeamMembership() instead
 	 */
 	public function removeMember($id, $user)
 	{
@@ -281,13 +283,106 @@ class Teams extends AbstractPackage
 	}
 
 	/**
+	 * Get team membership
+	 *
+	 * In order to get a user's membership with a team, the team must be visible to the authenticated user.
+	 *
+	 * @param   integer  $id    The team id.
+	 * @param   string   $user  The name of the user.
+	 *
+	 * @return  string|boolean  The state the user's membership is in or boolean false if the user is not a member.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \UnexpectedValueException
+	 */
+	public function getTeamMembership($id, $user)
+	{
+		// Build the request path.
+		$path = "/teams/$id/memberships/$user";
+
+		$response = $this->client->get($this->fetchUrl($path));
+
+		switch ($response->code)
+		{
+			case 200 :
+				// Response if user is an active member or pending membership
+				$body = json_decode($response->body);
+
+				return $body->state;
+
+			case 404 :
+				// Response if user is not a member
+				return false;
+
+			default :
+				throw new \UnexpectedValueException('Unexpected response code: ' . $response->code);
+		}
+	}
+
+	/**
+	 * Add team membership
+	 *
+	 * If the user is already a member of the team's organization, this endpoint will add the user to the team.
+	 * In order to add a membership between an organization member and a team, the authenticated user must be
+	 * an organization owner or a maintainer of the team.
+	 *
+	 * @param   integer  $id    The team id.
+	 * @param   string   $user  The name of the user.
+	 * @param   string   $role  The role the user should have on the team. Can be either 'member' or 'maintainer'.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \UnexpectedValueException
+	 */
+	public function addTeamMembership($id, $user, $role = 'member')
+	{
+		// Build the request path.
+		$path = "/teams/$id/memberships/$user";
+
+		if (false == in_array($role, array('member', 'maintainer')))
+		{
+			throw new \UnexpectedValueException('Roles must be either "member" or "maintainer".');
+		}
+
+		$data = array(
+			'role' => $role,
+		);
+
+		return $this->processResponse($this->client->put($this->fetchUrl($path), $data));
+	}
+
+	/**
+	 * Remove team membership
+	 *
+	 * In order to remove a membership between a user and a team, the authenticated user must have 'admin' permissions to the team
+	 * or be an owner of the organization that the team is associated with.
+	 * NOTE: This does not delete the user, it just removes their membership from the team.
+	 *
+	 * @param   integer  $id    The team id.
+	 * @param   string   $user  The name of the user.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \UnexpectedValueException
+	 */
+	public function removeTeamMembership($id, $user)
+	{
+		// Build the request path.
+		$path = "/teams/$id/memberships/$user";
+
+		return $this->processResponse($this->client->delete($this->fetchUrl($path)), 204);
+	}
+
+	/**
 	 * List team repos.
 	 *
 	 * @param   integer  $id  The team id.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function getListRepos($id)
 	{
@@ -300,16 +395,16 @@ class Teams extends AbstractPackage
 	}
 
 	/**
-	 * Check if the repo is managed by this team.
+	 * Check if a team manages a repository.
 	 *
 	 * @param   integer  $id     The team id.
 	 * @param   string   $owner  The owner of the GitHub repository.
 	 * @param   string   $repo   The name of the GitHub repository.
 	 *
-	 * @throws \UnexpectedValueException
-	 * @since  1.0
+	 * @return  boolean
 	 *
-	 * @return object
+	 * @since   1.0
+	 * @throws  \UnexpectedValueException
 	 */
 	public function checkRepo($id, $owner, $repo)
 	{
@@ -337,7 +432,7 @@ class Teams extends AbstractPackage
 	}
 
 	/**
-	 * Add team repo.
+	 * Add or update team repository.
 	 *
 	 * In order to add a repo to a team, the authenticated user must be an owner of the
 	 * org that the team is associated with. Also, the repo must be owned by the organization,
@@ -350,9 +445,9 @@ class Teams extends AbstractPackage
 	 * @param   string   $org   The name of the organization of the GitHub repository.
 	 * @param   string   $repo  The name of the GitHub repository.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function addRepo($id, $org, $repo)
 	{
@@ -366,7 +461,7 @@ class Teams extends AbstractPackage
 	}
 
 	/**
-	 * Remove team repo.
+	 * Remove team repository.
 	 *
 	 * In order to remove a repo from a team, the authenticated user must be an owner
 	 * of the org that the team is associated with. NOTE: This does not delete the
@@ -376,9 +471,9 @@ class Teams extends AbstractPackage
 	 * @param   string   $owner  The name of the owner of the GitHub repository.
 	 * @param   string   $repo   The name of the GitHub repository.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function removeRepo($id, $owner, $repo)
 	{
@@ -388,6 +483,29 @@ class Teams extends AbstractPackage
 		return $this->processResponse(
 			$this->client->delete($this->fetchUrl($path)),
 			204
+		);
+	}
+
+	/**
+	 * List user teams.
+	 *
+	 * List all of the teams across all of the organizations to which the authenticated user belongs.
+	 * This method requires user, repo, or read:org scope when authenticating via OAuth.
+	 *
+	 * @param   integer  $page   The page number from which to get items.
+	 * @param   integer  $limit  The number of items on a page.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getUserTeams($page = 0, $limit = 0)
+	{
+		// Build the request path.
+		$path = '/user/teams';
+
+		return $this->processResponse(
+			$this->client->get($this->fetchUrl($path, $page, $limit))
 		);
 	}
 }

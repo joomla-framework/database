@@ -11,7 +11,7 @@ namespace Joomla\Github\Package\Users;
 use Joomla\Github\AbstractPackage;
 
 /**
- * GitHub API References class for the Joomla Framework.
+ * GitHub API Followers class for the Joomla Framework.
  *
  * @documentation http://developer.github.com/v3/repos/users/followers
  *
@@ -24,9 +24,9 @@ class Followers extends AbstractPackage
 	 *
 	 * @param   string  $user  The name of the user. If not set the current authenticated user will be used.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function getList($user = '')
 	{
@@ -45,9 +45,9 @@ class Followers extends AbstractPackage
 	 *
 	 * @param   string  $user  The name of the user. If not set the current authenticated user will be used.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function getListFollowedBy($user = '')
 	{
@@ -66,10 +66,10 @@ class Followers extends AbstractPackage
 	 *
 	 * @param   string  $user  The name of the user.
 	 *
-	 * @throws \UnexpectedValueException
-	 * @since  1.0
+	 * @return  boolean
 	 *
-	 * @return boolean
+	 * @since   1.0
+	 * @throws  \UnexpectedValueException
 	 */
 	public function check($user)
 	{
@@ -97,6 +97,42 @@ class Followers extends AbstractPackage
 	}
 
 	/**
+	 * Check if one user follows another.
+	 *
+	 * @param   string  $user    The name of the user.
+	 * @param   string  $target  The name of the user to check is being followed.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \UnexpectedValueException
+	 */
+	public function checkUserFollowing($user, $target)
+	{
+		// Build the request path.
+		$path = "/user/$user/following/$target";
+
+		$response = $this->client->get($this->fetchUrl($path));
+
+		switch ($response->code)
+		{
+			case '204' :
+				// User is following the target
+				return true;
+				break;
+
+			case '404' :
+				// User is not following the target
+				return false;
+				break;
+
+			default :
+				throw new \UnexpectedValueException('Unexpected response code: ' . $response->code);
+				break;
+		}
+	}
+
+	/**
 	 * Follow a user.
 	 *
 	 * Following a user requires the user to be logged in and authenticated with
@@ -104,9 +140,9 @@ class Followers extends AbstractPackage
 	 *
 	 * @param   string  $user  The name of the user.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function follow($user)
 	{
@@ -127,9 +163,9 @@ class Followers extends AbstractPackage
 	 *
 	 * @param   string  $user  The name of the user.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function unfollow($user)
 	{

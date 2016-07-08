@@ -338,7 +338,7 @@ class Authorization extends AbstractPackage
 		// Send the request.
 		return $this->processResponse(
 			$this->client->post($uri, $data, $headers),
-			200, false
+			200
 		);
 	}
 }

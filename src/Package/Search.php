@@ -31,6 +31,7 @@ class Search extends AbstractPackage
 	 *
 	 * @since   1.0
 	 * @throws  \UnexpectedValueException
+	 * @deprecated  The legacy API is deprecated
 	 */
 	public function issues($owner, $repo, $state, $keyword)
 	{
@@ -63,6 +64,7 @@ class Search extends AbstractPackage
 	 * @return  object
 	 *
 	 * @since   1.0
+	 * @deprecated  The legacy API is deprecated
 	 */
 	public function repositories($keyword, $language = '', $start_page = 0)
 	{
@@ -89,6 +91,7 @@ class Search extends AbstractPackage
 	 * @return  object
 	 *
 	 * @since   1.0
+	 * @deprecated  The legacy API is deprecated
 	 */
 	public function users($keyword, $start_page = 0)
 	{
@@ -116,6 +119,7 @@ class Search extends AbstractPackage
 	 * @return  object
 	 *
 	 * @since   1.0
+	 * @deprecated  The legacy API is deprecated
 	 */
 	public function email($email)
 	{

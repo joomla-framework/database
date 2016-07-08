@@ -46,6 +46,12 @@ use Joomla\Github\AbstractPackage;
  *
  * It might seem complex, but it’s actually pretty simple when you understand the model and it opens up a ton of things
  * you could potentially do with the API.
+ *
+ * @property-read  Data\Blobs    $blobs    GitHub API object for blobs.
+ * @property-read  Data\Commits  $commits  GitHub API object for commits.
+ * @property-read  Data\Refs     $refs     GitHub API object for refs.
+ * @property-read  Data\Tags     $tags     GitHub API object for tags.
+ * @property-read  Data\Trees    $trees    GitHub API object for trees.
  */
 class Data extends AbstractPackage
 {

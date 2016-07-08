@@ -16,11 +16,13 @@ use Joomla\Github\AbstractPackage;
  * @documentation http://developer.github.com/v3/pulls
  *
  * @since  1.0
+ *
+ * @property-read  Pulls\Comments  $comments  GitHub API object for comments.
  */
 class Pulls extends AbstractPackage
 {
 	/**
-	 * Method to create a pull request.
+	 * Create a pull request.
 	 *
 	 * @param   string  $user   The name of the owner of the GitHub repository.
 	 * @param   string  $repo   The name of the GitHub repository.
@@ -112,7 +114,7 @@ class Pulls extends AbstractPackage
 	}
 
 	/**
-	 * Method to update a pull request.
+	 * Update a pull request.
 	 *
 	 * @param   string   $user    The name of the owner of the GitHub repository.
 	 * @param   string   $repo    The name of the GitHub repository.
@@ -131,7 +133,7 @@ class Pulls extends AbstractPackage
 		// Build the request path.
 		$path = '/repos/' . $user . '/' . $repo . '/pulls/' . (int) $pullId;
 
-		// Craete the data object.
+		// Create the data object.
 		$data = new \stdClass;
 
 		// If a title is set add it to the data object.
@@ -170,7 +172,7 @@ class Pulls extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a single pull request.
+	 * Get a single pull request.
 	 *
 	 * @param   string   $user    The name of the owner of the GitHub repository.
 	 * @param   string   $repo    The name of the GitHub repository.
@@ -201,7 +203,7 @@ class Pulls extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a list of commits for a pull request.
+	 * List commits on a pull request.
 	 *
 	 * @param   string   $user    The name of the owner of the GitHub repository.
 	 * @param   string   $repo    The name of the GitHub repository.
@@ -234,7 +236,7 @@ class Pulls extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a list of files for a pull request.
+	 * List pull requests files.
 	 *
 	 * @param   string   $user    The name of the owner of the GitHub repository.
 	 * @param   string   $repo    The name of the GitHub repository.
@@ -267,7 +269,7 @@ class Pulls extends AbstractPackage
 	}
 
 	/**
-	 * Method to list pull requests.
+	 * List pull requests.
 	 *
 	 * @param   string   $user   The name of the owner of the GitHub repository.
 	 * @param   string   $repo   The name of the GitHub repository.
@@ -306,7 +308,7 @@ class Pulls extends AbstractPackage
 	}
 
 	/**
-	 * Method to check if a pull request has been merged.
+	 * Get if a pull request has been merged.
 	 *
 	 * @param   string   $user    The name of the owner of the GitHub repository.
 	 * @param   string   $repo    The name of the GitHub repository.
@@ -343,7 +345,7 @@ class Pulls extends AbstractPackage
 	}
 
 	/**
-	 * Method to merge a pull request.
+	 * Merge a pull request (Merge Button).
 	 *
 	 * @param   string   $user     The name of the owner of the GitHub repository.
 	 * @param   string   $repo     The name of the GitHub repository.
