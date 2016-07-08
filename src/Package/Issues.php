@@ -28,7 +28,7 @@ use Joomla\Uri\Uri;
 class Issues extends AbstractPackage
 {
 	/**
-	 * Method to create an issue.
+	 * Create an issue.
 	 *
 	 * @param   string   $user       The name of the owner of the GitHub repository.
 	 * @param   string   $repo       The name of the GitHub repository.
@@ -80,7 +80,7 @@ class Issues extends AbstractPackage
 	}
 
 	/**
-	 * Method to update an issue.
+	 * Edit an issue.
 	 *
 	 * @param   string   $user       The name of the owner of the GitHub repository.
 	 * @param   string   $repo       The name of the GitHub repository.
@@ -102,7 +102,7 @@ class Issues extends AbstractPackage
 		// Build the request path.
 		$path = '/repos/' . $user . '/' . $repo . '/issues/' . (int) $issueId;
 
-		// Craete the data object.
+		// Create the data object.
 		$data = new \stdClass;
 
 		// If a title is set add it to the data object.
@@ -165,7 +165,7 @@ class Issues extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a single issue.
+	 * Get a single issue.
 	 *
 	 * @param   string   $user     The name of the owner of the GitHub repository.
 	 * @param   string   $repo     The name of the GitHub repository.
@@ -196,7 +196,7 @@ class Issues extends AbstractPackage
 	}
 
 	/**
-	 * Method to list an authenticated user's issues.
+	 * List issues.
 	 *
 	 * @param   string   $filter     The filter type: assigned, created, mentioned, subscribed.
 	 * @param   string   $state      The optional state to filter requests by. [open, closed]
@@ -265,7 +265,7 @@ class Issues extends AbstractPackage
 	}
 
 	/**
-	 * Method to list issues.
+	 * List issues for a repository.
 	 *
 	 * @param   string   $user       The name of the owner of the GitHub repository.
 	 * @param   string   $repo       The name of the GitHub repository.
@@ -348,7 +348,7 @@ class Issues extends AbstractPackage
 	}
 
 	/**
-	 * Method to lock an issue.
+	 * Lock an issue.
 	 *
 	 * @param   string   $user     The name of the owner of the GitHub repository.
 	 * @param   string   $repo     The name of the GitHub repository.
@@ -368,7 +368,7 @@ class Issues extends AbstractPackage
 	}
 
 	/**
-	 * Method to unlock an issue.
+	 * Unlock an issue.
 	 *
 	 * @param   string   $user     The name of the owner of the GitHub repository.
 	 * @param   string   $repo     The name of the GitHub repository.

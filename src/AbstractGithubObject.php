@@ -101,7 +101,7 @@ abstract class AbstractGithubObject
 	 */
 	protected function fetchUrl($path, $page = 0, $limit = 0)
 	{
-		// Get a new Uri object fousing the api url and given path.
+		// Get a new Uri object focusing the api url and given path.
 		$uri = new Uri($this->options->get('api.url') . $path);
 
 		if ($this->options->get('gh.token', false))

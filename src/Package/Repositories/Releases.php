@@ -20,7 +20,7 @@ use Joomla\Github\AbstractPackage;
 class Releases extends AbstractPackage
 {
 	/**
-	 * Method to create a release.
+	 * Create a release.
 	 *
 	 * @param   string   $user             The name of the owner of the GitHub repository.
 	 * @param   string   $repo             The name of the GitHub repository.
@@ -80,7 +80,7 @@ class Releases extends AbstractPackage
 	}
 
 	/**
-	 * Method to update a release.
+	 * Edit a release.
 	 *
 	 * @param   string   $user             The name of the owner of the GitHub repository.
 	 * @param   string   $repo             The name of the GitHub repository.
@@ -145,7 +145,7 @@ class Releases extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a single release.
+	 * Get a single release.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.
@@ -166,7 +166,7 @@ class Releases extends AbstractPackage
 	}
 
 	/**
-	 * Method to get the latest release.
+	 * Get the latest release.
 	 *
 	 * View the latest published full release for the repository.
 	 * Draft releases and prereleases are not returned by this endpoint.
@@ -188,7 +188,7 @@ class Releases extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a release by tag name.
+	 * Get a release by tag name.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.
@@ -208,7 +208,7 @@ class Releases extends AbstractPackage
 	}
 
 	/**
-	 * Method to list all releases.
+	 * List releases for a repository.
 	 *
 	 * @param   string   $user   The name of the owner of the GitHub repository.
 	 * @param   string   $repo   The name of the GitHub repository.
@@ -242,7 +242,7 @@ class Releases extends AbstractPackage
 	}
 
 	/**
-	 * Method to list all assets for a release.
+	 * List assets for a release.
 	 *
 	 * @param   string   $user       The name of the owner of the GitHub repository.
 	 * @param   string   $repo       The name of the GitHub repository.
@@ -264,7 +264,7 @@ class Releases extends AbstractPackage
 	}
 
 	/**
-	 * Method to get an asset for a release.
+	 * Get a single release asset.
 	 *
 	 * @param   string   $user     The name of the owner of the GitHub repository.
 	 * @param   string   $repo     The name of the GitHub repository.
@@ -284,7 +284,7 @@ class Releases extends AbstractPackage
 	}
 
 	/**
-	 * Method to edit an asset for a release.
+	 * Edit a release asset.
 	 *
 	 * @param   string   $user     The name of the owner of the GitHub repository.
 	 * @param   string   $repo     The name of the GitHub repository.
@@ -315,7 +315,7 @@ class Releases extends AbstractPackage
 	}
 
 	/**
-	 * Method to delete an asset for a release.
+	 * Delete a release asset.
 	 *
 	 * @param   string   $user     The name of the owner of the GitHub repository.
 	 * @param   string   $repo     The name of the GitHub repository.

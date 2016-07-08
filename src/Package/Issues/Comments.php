@@ -24,7 +24,7 @@ use Joomla\Date\Date;
 class Comments extends AbstractPackage
 {
 	/**
-	 * Method to get the list of comments on an issue.
+	 * List comments on an issue.
 	 *
 	 * @param   string   $owner    The name of the owner of the GitHub repository.
 	 * @param   string   $repo     The name of the GitHub repository.
@@ -49,7 +49,7 @@ class Comments extends AbstractPackage
 	}
 
 	/**
-	 * Method to get the list of comments in a repository.
+	 * List comments in a repository.
 	 *
 	 * @param   string  $owner      The name of the owner of the GitHub repository.
 	 * @param   string  $repo       The name of the GitHub repository.
@@ -99,7 +99,7 @@ class Comments extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a single comment.
+	 * Get a single comment.
 	 *
 	 * @param   string   $owner  The name of the owner of the GitHub repository.
 	 * @param   string   $repo   The name of the GitHub repository.
@@ -119,7 +119,7 @@ class Comments extends AbstractPackage
 	}
 
 	/**
-	 * Method to update a comment on an issue.
+	 * Edit a comment.
 	 *
 	 * @param   string   $user       The name of the owner of the GitHub repository.
 	 * @param   string   $repo       The name of the GitHub repository.
@@ -150,7 +150,7 @@ class Comments extends AbstractPackage
 	}
 
 	/**
-	 * Method to create a comment on an issue.
+	 * Create a comment.
 	 *
 	 * @param   string   $user     The name of the owner of the GitHub repository.
 	 * @param   string   $repo     The name of the GitHub repository.
@@ -182,7 +182,7 @@ class Comments extends AbstractPackage
 	}
 
 	/**
-	 * Method to delete a comment on an issue.
+	 * Delete a comment.
 	 *
 	 * @param   string   $user       The name of the owner of the GitHub repository.
 	 * @param   string   $repo       The name of the GitHub repository.

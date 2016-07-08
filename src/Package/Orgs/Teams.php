@@ -200,7 +200,7 @@ class Teams extends AbstractPackage
 	 * @param   integer  $id    The team id.
 	 * @param   string   $user  The name of the user.
 	 *
-	 * @return  object
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  \UnexpectedValueException
@@ -395,13 +395,13 @@ class Teams extends AbstractPackage
 	}
 
 	/**
-	 * Check if the repo is managed by this team.
+	 * Check if a team manages a repository.
 	 *
 	 * @param   integer  $id     The team id.
 	 * @param   string   $owner  The owner of the GitHub repository.
 	 * @param   string   $repo   The name of the GitHub repository.
 	 *
-	 * @return  object
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  \UnexpectedValueException
@@ -432,7 +432,7 @@ class Teams extends AbstractPackage
 	}
 
 	/**
-	 * Add team repo.
+	 * Add or update team repository.
 	 *
 	 * In order to add a repo to a team, the authenticated user must be an owner of the
 	 * org that the team is associated with. Also, the repo must be owned by the organization,
@@ -461,7 +461,7 @@ class Teams extends AbstractPackage
 	}
 
 	/**
-	 * Remove team repo.
+	 * Remove team repository.
 	 *
 	 * In order to remove a repo from a team, the authenticated user must be an owner
 	 * of the org that the team is associated with. NOTE: This does not delete the

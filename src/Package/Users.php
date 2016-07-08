@@ -45,7 +45,7 @@ class Users extends AbstractPackage
 	}
 
 	/**
-	 * Get the current authenticated user.
+	 * Get the authenticated user.
 	 *
 	 * @return  mixed
 	 *
@@ -64,14 +64,14 @@ class Users extends AbstractPackage
 	}
 
 	/**
-	 * Update a user.
+	 * Update the authenticated user.
 	 *
 	 * @param   string  $name      The full name
 	 * @param   string  $email     The email
 	 * @param   string  $blog      The blog
 	 * @param   string  $company   The company
 	 * @param   string  $location  The location
-	 * @param   string  $hireable  If he is unemplayed :P
+	 * @param   string  $hireable  If he is unemployed :P
 	 * @param   string  $bio       The biometrical DNA fingerprint (or smthng...)
 	 *
 	 * @return  mixed

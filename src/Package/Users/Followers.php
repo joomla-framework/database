@@ -97,7 +97,7 @@ class Followers extends AbstractPackage
 	}
 
 	/**
-	 * Check if a user is following a specified user.
+	 * Check if one user follows another.
 	 *
 	 * @param   string  $user    The name of the user.
 	 * @param   string  $target  The name of the user to check is being followed.
@@ -110,7 +110,6 @@ class Followers extends AbstractPackage
 	public function checkUserFollowing($user, $target)
 	{
 		// Build the request path.
-		// /users/:username/following/:target_user
 		$path = "/user/$user/following/$target";
 
 		$response = $this->client->get($this->fetchUrl($path));

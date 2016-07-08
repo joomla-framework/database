@@ -20,7 +20,7 @@ use Joomla\Github\AbstractPackage;
 class Milestones extends AbstractPackage
 {
 	/**
-	 * Method to get the list of milestones for a repo.
+	 * List milestones for a repository.
 	 *
 	 * @param   string   $user       The name of the owner of the GitHub repository.
 	 * @param   string   $repo       The name of the GitHub repository.
@@ -59,7 +59,7 @@ class Milestones extends AbstractPackage
 	}
 
 	/**
-	 * Method to get a specific milestone.
+	 * Get a single milestone.
 	 *
 	 * @param   string   $user         The name of the owner of the GitHub repository.
 	 * @param   string   $repo         The name of the GitHub repository.
@@ -90,7 +90,7 @@ class Milestones extends AbstractPackage
 	}
 
 	/**
-	 * Method to create a milestone for a repository.
+	 * Create a milestone.
 	 *
 	 * @param   string   $user         The name of the owner of the GitHub repository.
 	 * @param   string   $repo         The name of the GitHub repository.
@@ -146,7 +146,7 @@ class Milestones extends AbstractPackage
 	}
 
 	/**
-	 * Method to update a milestone.
+	 * Update a milestone.
 	 *
 	 * @param   string   $user         The name of the owner of the GitHub repository.
 	 * @param   string   $repo         The name of the GitHub repository.
@@ -206,7 +206,7 @@ class Milestones extends AbstractPackage
 	}
 
 	/**
-	 * Method to delete a milestone.
+	 * Delete a milestone.
 	 *
 	 * @param   string   $user         The name of the owner of the GitHub repository.
 	 * @param   string   $repo         The name of the GitHub repository.

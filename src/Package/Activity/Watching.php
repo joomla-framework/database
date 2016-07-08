@@ -138,7 +138,7 @@ class Watching extends AbstractPackage
 	 * @param   string  $owner  Repository owner.
 	 * @param   string  $repo   Repository name.
 	 *
-	 * @return  object
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  \UnexpectedValueException

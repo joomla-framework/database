@@ -20,7 +20,7 @@ use Joomla\Github\AbstractPackage;
 class Collaborators extends AbstractPackage
 {
 	/**
-	 * List.
+	 * List collaborators.
 	 *
 	 * When authenticating as an organization owner of an organization-owned repository, all organization
 	 * owners are included in the list of collaborators. Otherwise, only users with access to the repository
@@ -44,7 +44,7 @@ class Collaborators extends AbstractPackage
 	}
 
 	/**
-	 * Test if a user is a collaborator.
+	 * Check if a user is a collaborator.
 	 *
 	 * @param   string  $owner  The name of the owner of the GitHub repository.
 	 * @param   string  $repo   The name of the GitHub repository.
@@ -79,7 +79,7 @@ class Collaborators extends AbstractPackage
 	}
 
 	/**
-	 * Add collaborator.
+	 * Add user as a collaborator.
 	 *
 	 * @param   string  $owner  The name of the owner of the GitHub repository.
 	 * @param   string  $repo   The name of the GitHub repository.
@@ -101,7 +101,7 @@ class Collaborators extends AbstractPackage
 	}
 
 	/**
-	 * Remove collaborator.
+	 * Remove user as a collaborator.
 	 *
 	 * @param   string  $owner  The name of the owner of the GitHub repository.
 	 * @param   string  $repo   The name of the GitHub repository.

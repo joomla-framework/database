@@ -21,7 +21,7 @@ use Joomla\Uri\Uri;
 class Deployments extends AbstractPackage
 {
 	/**
-	 * List deployments in a repository.
+	 * List Deployments.
 	 *
 	 * @param   string   $owner        The name of the owner of the GitHub repository.
 	 * @param   string   $repo         The name of the GitHub repository.
@@ -69,7 +69,7 @@ class Deployments extends AbstractPackage
 	}
 
 	/**
-	 * Create a deployment.
+	 * Create a Deployment.
 	 *
 	 * @param   string      $owner             The name of the owner of the GitHub repository.
 	 * @param   string      $repo              The name of the GitHub repository.
@@ -145,7 +145,7 @@ class Deployments extends AbstractPackage
 	}
 
 	/**
-	 * List statuses for a deployment.
+	 * List Deployment Statuses.
 	 *
 	 * @param   string   $owner  The name of the owner of the GitHub repository.
 	 * @param   string   $repo   The name of the GitHub repository.
@@ -168,7 +168,7 @@ class Deployments extends AbstractPackage
 	}
 
 	/**
-	 * Create a status for a deployment.
+	 * Create a Deployment Status.
 	 *
 	 * @param   string   $owner        The name of the owner of the GitHub repository.
 	 * @param   string   $repo         The name of the GitHub repository.

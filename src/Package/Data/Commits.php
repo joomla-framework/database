@@ -20,7 +20,7 @@ use Joomla\Github\AbstractPackage;
 class Commits extends AbstractPackage
 {
 	/**
-	 * Get a single commit.
+	 * Get a Commit.
 	 *
 	 * @param   string  $owner  The name of the owner of the GitHub repository.
 	 * @param   string  $repo   The name of the GitHub repository.
@@ -39,7 +39,7 @@ class Commits extends AbstractPackage
 	}
 
 	/**
-	 * Method to create a commit.
+	 * Create a Commit.
 	 *
 	 * @param   string  $owner    The name of the owner of the GitHub repository.
 	 * @param   string  $repo     The name of the GitHub repository.

@@ -97,9 +97,9 @@ class Events extends AbstractPackage
 	}
 
 	/**
-	 * List public events for an organisation.
+	 * List public events for an organization.
 	 *
-	 * @param   string  $org  Organisation.
+	 * @param   string  $org  Organization.
 	 *
 	 * @return  object
 	 *

@@ -21,7 +21,7 @@ use Joomla\Github\AbstractPackage;
 class Refs extends AbstractPackage
 {
 	/**
-	 * Method to get a reference.
+	 * Get a Reference.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.
@@ -52,7 +52,7 @@ class Refs extends AbstractPackage
 	}
 
 	/**
-	 * Method to list references for a repository.
+	 * Get all References.
 	 *
 	 * @param   string   $user       The name of the owner of the GitHub repository.
 	 * @param   string   $repo       The name of the GitHub repository.
@@ -85,7 +85,7 @@ class Refs extends AbstractPackage
 	}
 
 	/**
-	 * Method to create a ref.
+	 * Create a Reference.
 	 *
 	 * @param   string  $user  The name of the owner of the GitHub repository.
 	 * @param   string  $repo  The name of the GitHub repository.
@@ -125,7 +125,7 @@ class Refs extends AbstractPackage
 	}
 
 	/**
-	 * Method to update a reference.
+	 * Update a Reference.
 	 *
 	 * @param   string   $user   The name of the owner of the GitHub repository.
 	 * @param   string   $repo   The name of the GitHub repository.
@@ -143,7 +143,7 @@ class Refs extends AbstractPackage
 		// Build the request path.
 		$path = '/repos/' . $user . '/' . $repo . '/git/refs/' . $ref;
 
-		// Craete the data object.
+		// Create the data object.
 		$data = new \stdClass;
 
 		// If a title is set add it to the data object.

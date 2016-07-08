@@ -159,7 +159,7 @@ class Repositories extends AbstractPackage
 	}
 
 	/**
-	 * List all repositories.
+	 * List all public repositories.
 	 *
 	 * This provides a dump of every repository, in the order that they were created.
 	 *
@@ -237,7 +237,7 @@ class Repositories extends AbstractPackage
 	}
 
 	/**
-	 * Get a repository.
+	 * Get.
 	 *
 	 * @param   string  $owner  Repository owner.
 	 * @param   string  $repo   Repository name.
@@ -258,7 +258,7 @@ class Repositories extends AbstractPackage
 	}
 
 	/**
-	 * Edit a repository.
+	 * Edit.
 	 *
 	 * @param   string   $owner           Repository owner.
 	 * @param   string   $repo            Repository name.

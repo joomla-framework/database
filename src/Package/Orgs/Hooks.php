@@ -42,7 +42,7 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Get hook.
+	 * Get single hook.
 	 *
 	 * @param   string   $org  The name of the organization.
 	 * @param   integer  $id   The hook id.
@@ -62,7 +62,7 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Create hook.
+	 * Create a hook.
 	 *
 	 * @param   string   $org          The name of the organization.
 	 * @param   string   $url          The URL to which the payloads will be delivered.
@@ -205,7 +205,7 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Trigger a ping event for a hook
+	 * Ping a hook.
 	 *
 	 * @param   string   $org  The name of the organization
 	 * @param   integer  $id   ID of the hook to ping
@@ -227,7 +227,7 @@ class Hooks extends AbstractPackage
 	}
 
 	/**
-	 * Delete hook.
+	 * Delete a hook.
 	 *
 	 * @param   string   $org  The name of the organization
 	 * @param   integer  $id   ID of the hook to delete
