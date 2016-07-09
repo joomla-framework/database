@@ -211,6 +211,12 @@ final class ArrayHelper
 	 */
 	public static function getColumn(array $array, $valueCol, $keyCol = null)
 	{
+		// As of PHP 7, array_column() supports an array of objects so we'll use that
+		if (PHP_VERSION_ID >= 70000)
+		{
+			return array_column($array, $valueCol, $keyCol);
+		}
+
 		$result = array();
 
 		foreach ($array as $item)
