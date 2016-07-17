@@ -39,9 +39,9 @@ class Statistics  extends AbstractPackage
 	 * @param   string  $owner  The owner of the repository.
 	 * @param   string  $repo   The repository name.
 	 *
-	 * @since   1.0
-	 *
 	 * @return  object
+	 *
+	 * @since   1.0
 	 */
 	public function getListContributors($owner, $repo)
 	{
@@ -61,9 +61,9 @@ class Statistics  extends AbstractPackage
 	 * @param   string  $owner  The owner of the repository.
 	 * @param   string  $repo   The repository name.
 	 *
-	 * @since   1.0
-	 *
 	 * @return  object
+	 *
+	 * @since   1.0
 	 */
 	public function getActivityData($owner, $repo)
 	{
@@ -82,9 +82,9 @@ class Statistics  extends AbstractPackage
 	 * @param   string  $owner  The owner of the repository.
 	 * @param   string  $repo   The repository name.
 	 *
-	 * @since   1.0
-	 *
 	 * @return  object
+	 *
+	 * @since   1.0
 	 */
 	public function getCodeFrequency($owner, $repo)
 	{
@@ -107,9 +107,9 @@ class Statistics  extends AbstractPackage
 	 * @param   string  $owner  The owner of the repository.
 	 * @param   string  $repo   The repository name.
 	 *
-	 * @since   1.0
-	 *
 	 * @return  object
+	 *
+	 * @since   1.0
 	 */
 	public function getParticipation($owner, $repo)
 	{
@@ -136,9 +136,9 @@ class Statistics  extends AbstractPackage
 	 * @param   string  $owner  The owner of the repository.
 	 * @param   string  $repo   The repository name.
 	 *
-	 * @since   1.0
-	 *
 	 * @return  object
+	 *
+	 * @since   1.0
 	 */
 	public function getPunchCard($owner, $repo)
 	{

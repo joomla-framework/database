@@ -25,10 +25,10 @@ class Comments extends AbstractPackage
 	 * @param   integer  $gistId  The gist number.
 	 * @param   string   $body    The comment body text.
 	 *
-	 * @throws \DomainException
-	 * @since  1.0
-	 *
 	 * @return  object
+	 *
+	 * @since   1.0
+	 * @throws  \DomainException
 	 */
 	public function create($gistId, $body)
 	{
@@ -43,17 +43,7 @@ class Comments extends AbstractPackage
 		);
 
 		// Send the request.
-		$response = $this->client->post($this->fetchUrl($path), $data);
-
-		// Validate the response code.
-		if ($response->code != 201)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->post($this->fetchUrl($path), $data), 201);
 	}
 
 	/**
@@ -61,10 +51,10 @@ class Comments extends AbstractPackage
 	 *
 	 * @param   integer  $commentId  The id of the comment to delete.
 	 *
-	 * @throws \DomainException
-	 * @since  1.0
-	 *
 	 * @return  void
+	 *
+	 * @since   1.0
+	 * @throws  \DomainException
 	 */
 	public function delete($commentId)
 	{
@@ -72,15 +62,7 @@ class Comments extends AbstractPackage
 		$path = '/gists/comments/' . (int) $commentId;
 
 		// Send the request.
-		$response = $this->client->delete($this->fetchUrl($path));
-
-		// Validate the response code.
-		if ($response->code != 204)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
+		$this->processResponse($this->client->delete($this->fetchUrl($path)), 204);
 	}
 
 	/**
@@ -89,10 +71,10 @@ class Comments extends AbstractPackage
 	 * @param   integer  $commentId  The id of the comment to update.
 	 * @param   string   $body       The new body text for the comment.
 	 *
-	 * @throws \DomainException
-	 * @since  1.0
-	 *
 	 * @return  object
+	 *
+	 * @since   1.0
+	 * @throws  \DomainException
 	 */
 	public function edit($commentId, $body)
 	{
@@ -107,17 +89,7 @@ class Comments extends AbstractPackage
 		);
 
 		// Send the request.
-		$response = $this->client->patch($this->fetchUrl($path), $data);
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->patch($this->fetchUrl($path), $data));
 	}
 
 	/**
@@ -125,10 +97,10 @@ class Comments extends AbstractPackage
 	 *
 	 * @param   integer  $commentId  The comment id to get.
 	 *
-	 * @throws \DomainException
-	 * @since  1.0
-	 *
 	 * @return  object
+	 *
+	 * @since   1.0
+	 * @throws  \DomainException
 	 */
 	public function get($commentId)
 	{
@@ -136,17 +108,7 @@ class Comments extends AbstractPackage
 		$path = '/gists/comments/' . (int) $commentId;
 
 		// Send the request.
-		$response = $this->client->get($this->fetchUrl($path));
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
 	}
 
 	/**
@@ -156,10 +118,10 @@ class Comments extends AbstractPackage
 	 * @param   integer  $page    The page number from which to get items.
 	 * @param   integer  $limit   The number of items on a page.
 	 *
-	 * @throws \DomainException
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return  array
+	 * @since   1.0
+	 * @throws  \DomainException
 	 */
 	public function getList($gistId, $page = 0, $limit = 0)
 	{
@@ -167,16 +129,6 @@ class Comments extends AbstractPackage
 		$path = '/gists/' . (int) $gistId . '/comments';
 
 		// Send the request.
-		$response = $this->client->get($this->fetchUrl($path, $page, $limit));
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
 	}
 }

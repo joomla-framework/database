@@ -9,6 +9,7 @@
 namespace Joomla\Github\Package;
 
 use Joomla\Github\AbstractPackage;
+use Joomla\Http\Exception\UnexpectedResponseException;
 
 /**
  * GitHub API Gists class for the Joomla Framework.
@@ -48,17 +49,7 @@ class Gists extends AbstractPackage
 		);
 
 		// Send the request.
-		$response = $this->client->post($this->fetchUrl($path), $data);
-
-		// Validate the response code.
-		if ($response->code != 201)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->post($this->fetchUrl($path), $data), 201);
 	}
 
 	/**
@@ -77,15 +68,7 @@ class Gists extends AbstractPackage
 		$path = '/gists/' . (int) $gistId;
 
 		// Send the request.
-		$response = $this->client->delete($this->fetchUrl($path));
-
-		// Validate the response code.
-		if ($response->code != 204)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
+		$this->processResponse($this->client->delete($this->fetchUrl($path)), 204);
 	}
 
 	/**
@@ -131,17 +114,7 @@ class Gists extends AbstractPackage
 		$data = json_encode($data);
 
 		// Send the request.
-		$response = $this->client->patch($this->fetchUrl($path), $data);
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->patch($this->fetchUrl($path), $data));
 	}
 
 	/**
@@ -179,17 +152,7 @@ class Gists extends AbstractPackage
 		$path = '/gists/' . (int) $gistId;
 
 		// Send the request.
-		$response = $this->client->get($this->fetchUrl($path));
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
 	}
 
 	/**
@@ -231,17 +194,7 @@ class Gists extends AbstractPackage
 		$path = '/gists/' . (int) $gistId . '/forks';
 
 		// Send the request.
-		$response = $this->client->get($this->fetchUrl($path, $page, $limit));
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
 	}
 
 	/**
@@ -264,17 +217,7 @@ class Gists extends AbstractPackage
 		$path = '/gists';
 
 		// Send the request.
-		$response = $this->client->get($this->fetchUrl($path, $page, $limit));
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
 	}
 
 	/**
@@ -295,17 +238,7 @@ class Gists extends AbstractPackage
 		$path = '/users/' . $user . '/gists';
 
 		// Send the request.
-		$response = $this->client->get($this->fetchUrl($path, $page, $limit));
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
 	}
 
 	/**
@@ -325,17 +258,7 @@ class Gists extends AbstractPackage
 		$path = '/gists/public';
 
 		// Send the request.
-		$response = $this->client->get($this->fetchUrl($path, $page, $limit));
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
 	}
 
 	/**
@@ -355,17 +278,7 @@ class Gists extends AbstractPackage
 		$path = '/gists/starred';
 
 		// Send the request.
-		$response = $this->client->get($this->fetchUrl($path, $page, $limit));
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
 	}
 
 	/**
@@ -396,7 +309,7 @@ class Gists extends AbstractPackage
 	 * @return  boolean  True if gist is starred
 	 *
 	 * @since   1.0
-	 * @throws  \DomainException
+	 * @throws  UnexpectedResponseException
 	 */
 	public function isStarred($gistId)
 	{
@@ -411,16 +324,16 @@ class Gists extends AbstractPackage
 		{
 			return true;
 		}
-		elseif ($response->code == 404)
+
+		if ($response->code == 404)
 		{
 			return false;
 		}
-		else
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
+
+		// Decode the error response and throw an exception.
+		$error = json_decode($response->body);
+		$message = isset($error->message) ? $error->message : 'Invalid response received from GitHub.';
+		throw new UnexpectedResponseException($response, $message, $response->code);
 	}
 
 	/**
@@ -439,15 +352,7 @@ class Gists extends AbstractPackage
 		$path = '/gists/' . (int) $gistId . '/star';
 
 		// Send the request.
-		$response = $this->client->put($this->fetchUrl($path), '');
-
-		// Validate the response code.
-		if ($response->code != 204)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
+		$this->processResponse($this->client->put($this->fetchUrl($path), ''), 204);
 	}
 
 	/**
@@ -466,15 +371,7 @@ class Gists extends AbstractPackage
 		$path = '/gists/' . (int) $gistId . '/star';
 
 		// Send the request.
-		$response = $this->client->delete($this->fetchUrl($path));
-
-		// Validate the response code.
-		if ($response->code != 204)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
+		$this->processResponse($this->client->delete($this->fetchUrl($path)), 204);
 	}
 
 	/**
@@ -497,14 +394,12 @@ class Gists extends AbstractPackage
 			if (!is_numeric($key))
 			{
 				// If the key isn't numeric, then we are dealing with a file whose content has been supplied
-
 				$data[$key] = array('content' => $file);
 			}
 			elseif (!file_exists($file))
 			{
 				// Otherwise, we have been given a path and we have to load the content
 				// Verify that the each file exists.
-
 				throw new \InvalidArgumentException('The file ' . $file . ' does not exist.');
 			}
 			else

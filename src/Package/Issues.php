@@ -67,17 +67,7 @@ class Issues extends AbstractPackage
 		);
 
 		// Send the request.
-		$response = $this->client->post($this->fetchUrl($path), $data);
-
-		// Validate the response code.
-		if ($response->code != 201)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->post($this->fetchUrl($path), $data), 201);
 	}
 
 	/**
@@ -152,17 +142,7 @@ class Issues extends AbstractPackage
 		$data = json_encode($data);
 
 		// Send the request.
-		$response = $this->client->patch($this->fetchUrl($path), $data);
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->patch($this->fetchUrl($path), $data));
 	}
 
 	/**
@@ -183,17 +163,7 @@ class Issues extends AbstractPackage
 		$path = '/repos/' . $user . '/' . $repo . '/issues/' . (int) $issueId;
 
 		// Send the request.
-		$response = $this->client->get($this->fetchUrl($path));
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
 	}
 
 	/**
@@ -252,17 +222,7 @@ class Issues extends AbstractPackage
 		}
 
 		// Send the request.
-		$response = $this->client->get((string) $uri);
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->get((string) $uri));
 	}
 
 	/**
@@ -335,17 +295,7 @@ class Issues extends AbstractPackage
 		}
 
 		// Send the request.
-		$response = $this->client->get((string) $uri);
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->get((string) $uri));
 	}
 
 	/**

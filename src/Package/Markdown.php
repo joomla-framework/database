@@ -9,6 +9,7 @@
 namespace Joomla\Github\Package;
 
 use Joomla\Github\AbstractPackage;
+use Joomla\Http\Exception\UnexpectedResponseException;
 
 /**
  * GitHub API Markdown class.
@@ -29,7 +30,7 @@ class Markdown extends AbstractPackage
 	 * @return  string  Formatted HTML
 	 *
 	 * @since   1.0
-	 * @throws  \DomainException
+	 * @throws  UnexpectedResponseException
 	 * @throws  \InvalidArgumentException
 	 */
 	public function render($text, $mode = 'gfm', $context = null)
@@ -64,8 +65,8 @@ class Markdown extends AbstractPackage
 		{
 			// Decode the error response and throw an exception.
 			$error = json_decode($response->body);
-			$message = (isset($error->message)) ? $error->message : 'Error: ' . $response->code;
-			throw new \DomainException($message, $response->code);
+			$message = isset($error->message) ? $error->message : 'Invalid response received from GitHub.';
+			throw new UnexpectedResponseException($response, $message, $response->code);
 		}
 
 		return $response->body;

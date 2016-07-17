@@ -65,7 +65,7 @@ class EmojisTest extends \PHPUnit_Framework_TestCase
 
 		$this->options  = new Registry;
 		$this->client = $this->getMock('\\Joomla\\Github\\Http', array('get', 'post', 'delete', 'patch', 'put'));
-		$this->response = $this->getMock('JHttpResponse');
+		$this->response = $this->getMock('\\Joomla\\Http\\Response');
 
 		$this->object = new Emojis($this->options, $this->client);
 	}

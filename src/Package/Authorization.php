@@ -9,6 +9,7 @@
 namespace Joomla\Github\Package;
 
 use Joomla\Github\AbstractPackage;
+use Joomla\Http\Exception\UnexpectedResponseException;
 use Joomla\Uri\Uri;
 
 /**
@@ -42,17 +43,7 @@ class Authorization extends AbstractPackage
 		);
 
 		// Send the request.
-		$response = $this->client->post($this->fetchUrl($path), $data);
-
-		// Validate the response code.
-		if ($response->code != 201)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->post($this->fetchUrl($path), $data), 201);
 	}
 
 	/**
@@ -71,17 +62,7 @@ class Authorization extends AbstractPackage
 		$path = '/authorizations/' . $id;
 
 		// Send the request.
-		$response = $this->client->delete($this->fetchUrl($path));
-
-		// Validate the response code.
-		if ($response->code != 204)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->delete($this->fetchUrl($path)), 204);
 	}
 
 	/**
@@ -146,17 +127,7 @@ class Authorization extends AbstractPackage
 		);
 
 		// Send the request.
-		$response = $this->client->patch($this->fetchUrl($path), $data);
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->patch($this->fetchUrl($path), $data));
 	}
 
 	/**
@@ -176,17 +147,7 @@ class Authorization extends AbstractPackage
 		$path = '/authorizations/' . $id;
 
 		// Send the request.
-		$response = $this->client->get($this->fetchUrl($path));
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
 	}
 
 	/**
@@ -204,17 +165,7 @@ class Authorization extends AbstractPackage
 		$path = '/authorizations';
 
 		// Send the request.
-		$response = $this->client->get($this->fetchUrl($path));
-
-		// Validate the response code.
-		if ($response->code != 200)
-		{
-			// Decode the error response and throw an exception.
-			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
-		}
-
-		return json_decode($response->body);
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
 	}
 
 	/**
@@ -224,7 +175,7 @@ class Authorization extends AbstractPackage
 	 *                  `limit` property will be false.
 	 *
 	 * @since   1.0
-	 * @throws  \DomainException
+	 * @throws  UnexpectedResponseException
 	 */
 	public function getRateLimit()
 	{
@@ -245,7 +196,7 @@ class Authorization extends AbstractPackage
 
 			// Decode the error response and throw an exception.
 			$error = json_decode($response->body);
-			throw new \DomainException($error->message, $response->code);
+			throw new UnexpectedResponseException($response, $error->message, $response->code);
 		}
 
 		return json_decode($response->body);

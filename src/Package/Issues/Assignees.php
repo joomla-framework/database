@@ -9,6 +9,7 @@
 namespace Joomla\Github\Package\Issues;
 
 use Joomla\Github\AbstractPackage;
+use Joomla\Http\Exception\UnexpectedResponseException;
 
 /**
  * GitHub API Assignees class for the Joomla Framework.
@@ -72,7 +73,7 @@ class Assignees extends AbstractPackage
 				return true;
 			}
 
-			throw new \DomainException('Invalid response: ' . $response->code);
+			throw new UnexpectedResponseException($response, 'Invalid response: ' . $response->code);
 		}
 		catch (\DomainException $e)
 		{
