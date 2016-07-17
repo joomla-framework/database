@@ -87,6 +87,7 @@ class IssuesTest extends \PHPUnit_Framework_TestCase
 		$issue->milestone = '11.5';
 		$issue->labels = array('TestLabel');
 		$issue->body = 'These are my changes - please review them';
+		$issue->assignees = array('joomla');
 
 		$this->client->expects($this->once())
 			->method('post')
@@ -94,7 +95,7 @@ class IssuesTest extends \PHPUnit_Framework_TestCase
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
-			$this->object->create('joomla', 'joomla-platform', 'My issue', 'These are my changes - please review them', 'JoeUser', '11.5', array('TestLabel')),
+			$this->object->create('joomla', 'joomla-platform', 'My issue', 'These are my changes - please review them', 'JoeUser', '11.5', array('TestLabel'), array('joomla')),
 			$this->equalTo(json_decode($this->sampleString))
 		);
 	}
@@ -117,13 +118,14 @@ class IssuesTest extends \PHPUnit_Framework_TestCase
 		$issue->milestone = '11.5';
 		$issue->labels = array();
 		$issue->body = 'These are my changes - please review them';
+		$issue->assignees = array('joomla');
 
 		$this->client->expects($this->once())
 			->method('post')
 			->with('/repos/joomla/joomla-platform/issues', json_encode($issue))
 			->will($this->returnValue($this->response));
 
-		$this->object->create('joomla', 'joomla-platform', 'My issue', 'These are my changes - please review them', 'JoeUser', '11.5', array());
+		$this->object->create('joomla', 'joomla-platform', 'My issue', 'These are my changes - please review them', 'JoeUser', '11.5', array(), array('joomla'));
 	}
 
 	/**
