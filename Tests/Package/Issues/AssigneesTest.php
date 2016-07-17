@@ -194,4 +194,62 @@ class AssigneesTest extends \PHPUnit_Framework_TestCase
 			$this->equalTo(false)
 		);
 	}
+
+	/**
+	 * Tests the add method
+	 *
+	 * @return void
+	 */
+	public function testAdd()
+	{
+		$this->response->code = 201;
+		$this->response->body = '[
+	{
+	"login": "octocat",
+	"id": 1,
+	"avatar_url": "https://github.com/images/error/octocat_happy.gif",
+	"gravatar_id": "somehexcode",
+	"url": "https://api.github.com/users/octocat"
+	}
+	]';
+
+		$this->client->expects($this->once())
+			->method('post')
+			->with('/repos/' . $this->owner . '/' . $this->repo . '/issues/123/assignees', json_encode(array('assignees' => array('joomla'))))
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->add($this->owner, $this->repo, 123, array('joomla')),
+			$this->equalTo(json_decode($this->response->body))
+		);
+	}
+
+	/**
+	 * Tests the remove method
+	 *
+	 * @return void
+	 */
+	public function testRemove()
+	{
+		$this->response->code = 200;
+		$this->response->body = '[
+	{
+	"login": "octocat",
+	"id": 1,
+	"avatar_url": "https://github.com/images/error/octocat_happy.gif",
+	"gravatar_id": "somehexcode",
+	"url": "https://api.github.com/users/octocat"
+	}
+	]';
+
+		$this->client->expects($this->once())
+			->method('delete')
+			->with('/repos/' . $this->owner . '/' . $this->repo . '/issues/123/assignees', array(), null, json_encode(array('assignees' => array('joomla'))))
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->remove($this->owner, $this->repo, 123, array('joomla')),
+			$this->equalTo(json_decode($this->response->body))
+		);
+	}
 }

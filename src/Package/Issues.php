@@ -29,20 +29,21 @@ class Issues extends AbstractPackage
 	/**
 	 * Create an issue.
 	 *
-	 * @param   string   $user       The name of the owner of the GitHub repository.
-	 * @param   string   $repo       The name of the GitHub repository.
-	 * @param   string   $title      The title of the new issue.
-	 * @param   string   $body       The body text for the new issue.
-	 * @param   string   $assignee   The login for the GitHub user that this issue should be assigned to.
-	 * @param   integer  $milestone  The milestone to associate this issue with.
-	 * @param   array    $labels     The labels to associate with this issue.
+	 * @param   string    $user       The name of the owner of the GitHub repository.
+	 * @param   string    $repo       The name of the GitHub repository.
+	 * @param   string    $title      The title of the new issue.
+	 * @param   string    $body       The body text for the new issue.
+	 * @param   string    $assignee   The login for the GitHub user that this issue should be assigned to.
+	 * @param   integer   $milestone  The milestone to associate this issue with.
+	 * @param   string[]  $labels     The labels to associate with this issue.
+	 * @param   string[]  $assignees  The logins for GitHub users to assign to this issue.
 	 *
 	 * @return  object
 	 *
 	 * @since   1.0
 	 * @throws  \DomainException
 	 */
-	public function create($user, $repo, $title, $body = null, $assignee = null, $milestone = null, array $labels = array())
+	public function create($user, $repo, $title, $body = null, $assignee = null, $milestone = null, array $labels = array(), array $assignees = array())
 	{
 		// Build the request path.
 		$path = '/repos/' . $user . '/' . $repo . '/issues';
@@ -60,7 +61,8 @@ class Issues extends AbstractPackage
 				'assignee'  => $assignee,
 				'milestone' => $milestone,
 				'labels'    => $labels,
-				'body'      => $body
+				'body'      => $body,
+				'assignees' => $assignees,
 			)
 		);
 
