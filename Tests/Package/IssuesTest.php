@@ -8,7 +8,6 @@ namespace Joomla\Github\Tests;
 
 use Joomla\Github\Package\Issues;
 use Joomla\Registry\Registry;
-use Joomla\Date\Date;
 
 /**
  * Test class for Issues.
@@ -743,7 +742,7 @@ class IssuesTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetListByRepositoryAll()
 	{
-		$date = new Date('January 1, 2012 12:12:12');
+		$date = new \DateTime('January 1, 2012 12:12:12', new \DateTimeZone('UTC'));
 		$this->response->code = 200;
 		$this->response->body = $this->sampleString;
 

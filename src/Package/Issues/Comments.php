@@ -9,7 +9,6 @@
 namespace Joomla\Github\Package\Issues;
 
 use Joomla\Github\AbstractPackage;
-use Joomla\Date\Date;
 
 /**
  * GitHub API Comments class for the Joomla Framework.
@@ -32,10 +31,10 @@ class Comments extends AbstractPackage
 	 * @param   integer  $page     The page number from which to get items.
 	 * @param   integer  $limit    The number of items on a page.
 	 *
-	 * @throws \DomainException
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return  array
+	 * @since   1.0
+	 * @throws  \DomainException
 	 */
 	public function getList($owner, $repo, $issueId, $page = 0, $limit = 0)
 	{
@@ -51,19 +50,19 @@ class Comments extends AbstractPackage
 	/**
 	 * List comments in a repository.
 	 *
-	 * @param   string  $owner      The name of the owner of the GitHub repository.
-	 * @param   string  $repo       The name of the GitHub repository.
-	 * @param   string  $sort       The sort field - created or updated.
-	 * @param   string  $direction  The sort order- asc or desc. Ignored without sort parameter.
-	 * @param   Date    $since      A timestamp in ISO 8601 format.
+	 * @param   string     $owner      The name of the owner of the GitHub repository.
+	 * @param   string     $repo       The name of the GitHub repository.
+	 * @param   string     $sort       The sort field - created or updated.
+	 * @param   string     $direction  The sort order- asc or desc. Ignored without sort parameter.
+	 * @param   \DateTime  $since      A timestamp in ISO 8601 format.
 	 *
-	 * @throws \UnexpectedValueException
-	 * @throws \DomainException
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return  array
+	 * @since   1.0
+	 * @throws  \UnexpectedValueException
+	 * @throws  \DomainException
 	 */
-	public function getRepositoryList($owner, $repo, $sort = 'created', $direction = 'asc', Date $since = null)
+	public function getRepositoryList($owner, $repo, $sort = 'created', $direction = 'asc', \DateTime $since = null)
 	{
 		// Build the request path.
 		$path = '/repos/' . $owner . '/' . $repo . '/issues/comments';
@@ -91,7 +90,7 @@ class Comments extends AbstractPackage
 
 		if ($since)
 		{
-			$path .= '&since=' . $since->toISO8601();
+			$path .= '&since=' . $since->format(\DateTime::RFC3339);
 		}
 
 		// Send the request.
@@ -105,7 +104,10 @@ class Comments extends AbstractPackage
 	 * @param   string   $repo   The name of the GitHub repository.
 	 * @param   integer  $id     The comment id.
 	 *
-	 * @return mixed
+	 * @return  object
+	 *
+	 * @since   1.0
+	 * @throws  \DomainException
 	 */
 	public function get($owner, $repo, $id)
 	{
@@ -126,10 +128,10 @@ class Comments extends AbstractPackage
 	 * @param   integer  $commentId  The id of the comment to update.
 	 * @param   string   $body       The new body text for the comment.
 	 *
-	 * @since  1.0
-	 * @throws \DomainException
-	 *
 	 * @return  object
+	 *
+	 * @since   1.0
+	 * @throws  \DomainException
 	 */
 	public function edit($user, $repo, $commentId, $body)
 	{
@@ -157,10 +159,10 @@ class Comments extends AbstractPackage
 	 * @param   integer  $issueId  The issue number.
 	 * @param   string   $body     The comment body text.
 	 *
-	 * @throws \DomainException
-	 * @since  1.0
-	 *
 	 * @return  object
+	 *
+	 * @since   1.0
+	 * @throws  \DomainException
 	 */
 	public function create($user, $repo, $issueId, $body)
 	{
@@ -188,10 +190,10 @@ class Comments extends AbstractPackage
 	 * @param   string   $repo       The name of the GitHub repository.
 	 * @param   integer  $commentId  The id of the comment to delete.
 	 *
-	 * @throws \DomainException
-	 * @since  1.0
-	 *
 	 * @return  boolean
+	 *
+	 * @since   1.0
+	 * @throws  \DomainException
 	 */
 	public function delete($user, $repo, $commentId)
 	{

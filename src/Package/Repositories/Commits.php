@@ -9,7 +9,6 @@
 namespace Joomla\Github\Package\Repositories;
 
 use Joomla\Github\AbstractPackage;
-use Joomla\Date\Date;
 
 /**
  * GitHub API Repositories Commits class for the Joomla Framework.
@@ -28,20 +27,20 @@ class Commits extends AbstractPackage
 	 * Please follow the link headers as outlined in the pagination overview instead of constructing
 	 * page links yourself.
 	 *
-	 * @param   string  $user    The name of the owner of the GitHub repository.
-	 * @param   string  $repo    The name of the GitHub repository.
-	 * @param   string  $sha     Sha or branch to start listing commits from.
-	 * @param   string  $path    Only commits containing this file path will be returned.
-	 * @param   string  $author  GitHub login, name, or email by which to filter by commit author.
-	 * @param   Date    $since   ISO 8601 Date - Only commits after this date will be returned.
-	 * @param   Date    $until   ISO 8601 Date - Only commits before this date will be returned.
+	 * @param   string     $user    The name of the owner of the GitHub repository.
+	 * @param   string     $repo    The name of the GitHub repository.
+	 * @param   string     $sha     Sha or branch to start listing commits from.
+	 * @param   string     $path    Only commits containing this file path will be returned.
+	 * @param   string     $author  GitHub login, name, or email by which to filter by commit author.
+	 * @param   \DateTime  $since   ISO 8601 Date - Only commits after this date will be returned.
+	 * @param   \DateTime  $until   ISO 8601 Date - Only commits before this date will be returned.
 	 *
-	 * @throws \DomainException
-	 * @since    1.0
+	 * @return  object
 	 *
-	 * @return  array
+	 * @since   1.0
+	 * @throws  \DomainException
 	 */
-	public function getList($user, $repo, $sha = '', $path = '', $author = '', Date $since = null, Date $until = null)
+	public function getList($user, $repo, $sha = '', $path = '', $author = '', \DateTime $since = null, \DateTime $until = null)
 	{
 		// Build the request path.
 		$rPath = '/repos/' . $user . '/' . $repo . '/commits?';
@@ -49,8 +48,8 @@ class Commits extends AbstractPackage
 		$rPath .= ($sha) ? '&sha=' . $sha : '';
 		$rPath .= ($path) ? '&path=' . $path : '';
 		$rPath .= ($author) ? '&author=' . $author : '';
-		$rPath .= ($since) ? '&since=' . $since->toISO8601() : '';
-		$rPath .= ($until) ? '&until=' . $until->toISO8601() : '';
+		$rPath .= ($since) ? '&since=' . $since->format(\DateTime::RFC3339) : '';
+		$rPath .= ($until) ? '&until=' . $until->format(\DateTime::RFC3339) : '';
 
 		// Send the request.
 		$response = $this->client->get($this->fetchUrl($rPath));
@@ -73,10 +72,10 @@ class Commits extends AbstractPackage
 	 * @param   string  $repo  The name of the GitHub repository.
 	 * @param   string  $sha   The SHA of the commit to retrieve.
 	 *
-	 * @throws \DomainException
-	 * @since   1.0
+	 * @return  object
 	 *
-	 * @return  array
+	 * @since   1.0
+	 * @throws  \DomainException
 	 */
 	public function get($user, $repo, $sha)
 	{
@@ -136,7 +135,7 @@ class Commits extends AbstractPackage
 	 * @param   string  $base  The base of the diff, either a commit SHA or branch.
 	 * @param   string  $head  The head of the diff, either a commit SHA or branch.
 	 *
-	 * @return  array
+	 * @return  object
 	 *
 	 * @since   1.0
 	 */

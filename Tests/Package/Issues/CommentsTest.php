@@ -8,7 +8,6 @@ namespace Joomla\Github\Tests\Issues;
 
 use Joomla\Github\Package\Issues\Comments;
 use Joomla\Registry\Registry;
-use Joomla\Date\Date;
 
 /**
  * Test class for the GitHub API package.
@@ -152,7 +151,7 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
 		$this->response->code = 200;
 		$this->response->body = $this->sampleString;
 
-		$date = new Date('1966-09-15 12:34:56');
+		$date = new \DateTime('1966-09-15 12:34:56', new \DateTimeZone('UTC'));
 
 		$this->client->expects($this->once())
 			->method('get')

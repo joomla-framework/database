@@ -8,7 +8,6 @@ namespace Joomla\Github\Tests;
 
 use Joomla\Github\Package\Activity\Notifications;
 use Joomla\Registry\Registry;
-use Joomla\Date\Date;
 
 /**
  * Test class for the GitHub API package.
@@ -145,7 +144,7 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
 		$this->response->code = 205;
 		$this->response->body = '';
 
-		$date = new Date('1966-09-14');
+		$date = new \DateTime('1966-09-14', new \DateTimeZone('UTC'));
 		$data = '{"unread":true,"read":true,"last_read_at":"1966-09-14T00:00:00+00:00"}';
 
 		$this->client->expects($this->once())
@@ -192,7 +191,7 @@ class NotificationsTest extends \PHPUnit_Framework_TestCase
 		$this->response->code = 205;
 		$this->response->body = '';
 
-		$date = new Date('1966-09-14');
+		$date = new \DateTime('1966-09-14', new \DateTimeZone('UTC'));
 		$data = '{"unread":true,"read":true,"last_read_at":"1966-09-14T00:00:00+00:00"}';
 
 		$this->client->expects($this->once())

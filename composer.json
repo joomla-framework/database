@@ -7,7 +7,6 @@
     "license": "GPL-2.0+",
     "require": {
         "php": ">=5.3.10|>=7.0",
-        "joomla/date": "~1.0",
         "joomla/http": "^1.2.2",
         "joomla/registry": "~1.0",
         "joomla/uri": "~1.0"

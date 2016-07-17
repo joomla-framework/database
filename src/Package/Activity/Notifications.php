@@ -9,7 +9,6 @@
 namespace Joomla\Github\Package\Activity;
 
 use Joomla\Github\AbstractPackage;
-use Joomla\Date\Date;
 
 /**
  * GitHub API Activity Events class for the Joomla Framework.
@@ -25,24 +24,23 @@ class Notifications extends AbstractPackage
 	 *
 	 * List all notifications for the current user, grouped by repository.
 	 *
-	 * @param   boolean  $all            True to show notifications marked as read.
-	 * @param   boolean  $participating  True to show only notifications in which the user is directly participating or
-	 *                                   mentioned.
-	 * @param   Date     $since          filters out any notifications updated before the given time. The time should be passed in
-	 *                                   as UTC in the ISO 8601 format.
+	 * @param   boolean    $all            True to show notifications marked as read.
+	 * @param   boolean    $participating  True to show only notifications in which the user is directly participating or mentioned.
+	 * @param   \DateTime  $since          Filters out any notifications updated before the given time. The time should be passed in
+	 *                                     as UTC in the ISO 8601 format.
 	 *
 	 * @return  object
 	 *
 	 * @since   1.0
 	 */
-	public function getList($all = true, $participating = true, Date $since = null)
+	public function getList($all = true, $participating = true, \DateTime $since = null)
 	{
 		// Build the request path.
 		$path = '/notifications?';
 
 		$path .= ($all) ? '&all=1' : '';
 		$path .= ($participating) ? '&participating=1' : '';
-		$path .= ($since) ? '&since=' . $since->toISO8601() : '';
+		$path .= ($since) ? '&since=' . $since->format(\DateTime::RFC3339) : '';
 
 		return $this->processResponse(
 			$this->client->get($this->fetchUrl($path))
@@ -54,26 +52,25 @@ class Notifications extends AbstractPackage
 	 *
 	 * List all notifications for the current user.
 	 *
-	 * @param   string   $owner          Repository owner.
-	 * @param   string   $repo           Repository name.
-	 * @param   boolean  $all            True to show notifications marked as read.
-	 * @param   boolean  $participating  True to show only notifications in which the user is directly participating or
-	 *                                   mentioned.
-	 * @param   Date     $since          filters out any notifications updated before the given time. The time should be passed in
-	 *                                   as UTC in the ISO 8601 format.
+	 * @param   string     $owner          Repository owner.
+	 * @param   string     $repo           Repository name.
+	 * @param   boolean    $all            True to show notifications marked as read.
+	 * @param   boolean    $participating  True to show only notifications in which the user is directly participating or mentioned.
+	 * @param   \DateTime  $since          Filters out any notifications updated before the given time. The time should be passed in
+	 *                                     as UTC in the ISO 8601 format.
 	 *
 	 * @return  object
 	 *
 	 * @since   1.0
 	 */
-	public function getListRepository($owner, $repo, $all = true, $participating = true, Date $since = null)
+	public function getListRepository($owner, $repo, $all = true, $participating = true, \DateTime $since = null)
 	{
 		// Build the request path.
 		$path = '/repos/' . $owner . '/' . $repo . '/notifications?';
 
 		$path .= ($all) ? '&all=1' : '';
 		$path .= ($participating) ? '&participating=1' : '';
-		$path .= ($since) ? '&since=' . $since->toISO8601() : '';
+		$path .= ($since) ? '&since=' . $since->format(\DateTime::RFC3339) : '';
 
 		return $this->processResponse(
 			$this->client->get($this->fetchUrl($path))
@@ -85,16 +82,16 @@ class Notifications extends AbstractPackage
 	 *
 	 * Marking a notification as “read” removes it from the default view on GitHub.com.
 	 *
-	 * @param   boolean  $unread        Changes the unread status of the threads.
-	 * @param   boolean  $read          Inverse of “unread”.
-	 * @param   Date     $last_read_at  Describes the last point that notifications were checked.
+	 * @param   boolean    $unread      Changes the unread status of the threads.
+	 * @param   boolean    $read        Inverse of “unread”.
+	 * @param   \DateTime  $lastReadAt  Describes the last point that notifications were checked.
 	 *                                  Anything updated since this time will not be updated. Default: Now. Expected in ISO 8601 format.
 	 *
 	 * @return  object
 	 *
 	 * @since   1.0
 	 */
-	public function markRead($unread = true, $read = true, Date $last_read_at = null)
+	public function markRead($unread = true, $read = true, \DateTime $lastReadAt = null)
 	{
 		// Build the request path.
 		$path = '/notifications';
@@ -104,9 +101,9 @@ class Notifications extends AbstractPackage
 			'read'   => $read
 		);
 
-		if ($last_read_at)
+		if ($lastReadAt)
 		{
-			$data['last_read_at'] = $last_read_at->toISO8601();
+			$data['last_read_at'] = $lastReadAt->format(\DateTime::RFC3339);
 		}
 
 		return $this->processResponse(
@@ -120,18 +117,18 @@ class Notifications extends AbstractPackage
 	 *
 	 * Marking all notifications in a repository as “read” removes them from the default view on GitHub.com.
 	 *
-	 * @param   string   $owner         Repository owner.
-	 * @param   string   $repo          Repository name.
-	 * @param   boolean  $unread        Changes the unread status of the threads.
-	 * @param   boolean  $read          Inverse of “unread”.
-	 * @param   Date     $last_read_at  Describes the last point that notifications were checked.
+	 * @param   string     $owner       Repository owner.
+	 * @param   string     $repo        Repository name.
+	 * @param   boolean    $unread      Changes the unread status of the threads.
+	 * @param   boolean    $read        Inverse of “unread”.
+	 * @param   \DateTime  $lastReadAt  Describes the last point that notifications were checked.
 	 *                                  Anything updated since this time will not be updated. Default: Now. Expected in ISO 8601 format.
 	 *
 	 * @return  object
 	 *
 	 * @since   1.0
 	 */
-	public function markReadRepository($owner, $repo, $unread, $read, Date $last_read_at = null)
+	public function markReadRepository($owner, $repo, $unread, $read, \DateTime $lastReadAt = null)
 	{
 		// Build the request path.
 		$path = '/repos/' . $owner . '/' . $repo . '/notifications';
@@ -141,9 +138,9 @@ class Notifications extends AbstractPackage
 			'read'   => $read
 		);
 
-		if ($last_read_at)
+		if ($lastReadAt)
 		{
-			$data['last_read_at'] = $last_read_at->toISO8601();
+			$data['last_read_at'] = $lastReadAt->format(\DateTime::RFC3339);
 		}
 
 		return $this->processResponse(
