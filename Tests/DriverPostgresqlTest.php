@@ -881,7 +881,14 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	 */
 	public function testSetUtf()
 	{
-		$this->assertThat(self::$driver->setUtf(), $this->equalTo(0), __LINE__);
+		if (!function_exists('pg_set_client_encoding'))
+		{
+			$this->assertThat(self::$driver->setUtf(), $this->equalTo(-1), __LINE__);
+		}
+		else
+		{
+			$this->assertThat(self::$driver->setUtf(), $this->equalTo(0), __LINE__);
+		}
 	}
 
 	/**
