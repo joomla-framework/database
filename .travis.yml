@@ -30,7 +30,6 @@ matrix:
       services:
         - mysql
         - postgresql
-        - redis-server
   allow_failures:
     - php: 7.1
     - php: hhvm
