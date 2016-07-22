@@ -66,7 +66,7 @@ class Releases extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function delete($owner, $repo, $releaseId)
 	{
@@ -176,7 +176,7 @@ class Releases extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getLatest($user, $repo)
 	{
@@ -196,7 +196,7 @@ class Releases extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getByTag($user, $repo, $tag)
 	{
@@ -252,7 +252,7 @@ class Releases extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getListAssets($user, $repo, $releaseId, $page = 0, $limit = 0)
 	{
@@ -272,7 +272,7 @@ class Releases extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getAsset($user, $repo, $assetId)
 	{
@@ -294,7 +294,7 @@ class Releases extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function editAsset($user, $repo, $assetId, $name, $label = '')
 	{
@@ -323,7 +323,7 @@ class Releases extends AbstractPackage
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function deleteAsset($user, $repo, $assetId)
 	{

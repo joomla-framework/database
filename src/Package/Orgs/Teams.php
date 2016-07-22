@@ -292,7 +292,7 @@ class Teams extends AbstractPackage
 	 *
 	 * @return  string|boolean  The state the user's membership is in or boolean false if the user is not a member.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \UnexpectedValueException
 	 */
 	public function getTeamMembership($id, $user)
@@ -332,7 +332,7 @@ class Teams extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \UnexpectedValueException
 	 */
 	public function addTeamMembership($id, $user, $role = 'member')
@@ -364,7 +364,7 @@ class Teams extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \UnexpectedValueException
 	 */
 	public function removeTeamMembership($id, $user)
@@ -497,7 +497,7 @@ class Teams extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getUserTeams($page = 0, $limit = 0)
 	{

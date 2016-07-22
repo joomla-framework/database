@@ -198,7 +198,7 @@ class Comments extends AbstractPackage
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getListForRepo($user, $repo, $page = 0, $limit = 0)
 	{

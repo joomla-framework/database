@@ -98,7 +98,7 @@ class Assignees extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \DomainException
 	 */
 	public function add($owner, $repo, $number, array $assignees)
@@ -127,7 +127,7 @@ class Assignees extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \DomainException
 	 */
 	public function remove($owner, $repo, $number, array $assignees)

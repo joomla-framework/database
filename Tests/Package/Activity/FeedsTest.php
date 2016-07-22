@@ -12,43 +12,43 @@ use Joomla\Registry\Registry;
 /**
  * Test class for the GitHub API package.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.4.0
  */
 class FeedsTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var    Registry  Options for the GitHub object.
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	protected $options;
 
 	/**
 	 * @var    \PHPUnit_Framework_MockObject_MockObject  Mock client object.
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	protected $client;
 
 	/**
 	 * @var    Feeds  Object under test.
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	protected $object;
 
 	/**
 	 * @var    \Joomla\Http\Response  Mock response object.
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	protected $response;
 
 	/**
 	 * @var    string  Sample JSON string.
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	protected $sampleString = '{"a":1,"b":2,"c":3,"d":4,"e":5}';
 
 	/**
 	 * @var    string  Sample JSON error message.
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	protected $errorString = '{"message": "Generic Error"}';
 
@@ -56,7 +56,7 @@ class FeedsTest extends \PHPUnit_Framework_TestCase
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 *
 	 * @return  void
 	 */

@@ -105,7 +105,7 @@ class Statuses extends AbstractPackage
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getCombinedStatus($user, $repo, $sha)
 	{

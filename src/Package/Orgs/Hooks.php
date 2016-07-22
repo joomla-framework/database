@@ -18,7 +18,7 @@ use Joomla\Github\AbstractPackage;
  *
  * @documentation http://developer.github.com/v3/orgs/hooks/
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.4.0
  */
 class Hooks extends AbstractPackage
 {
@@ -29,7 +29,7 @@ class Hooks extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getList($org)
 	{
@@ -49,7 +49,7 @@ class Hooks extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function get($org, $id)
 	{
@@ -77,7 +77,7 @@ class Hooks extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \UnexpectedValueException
 	 */
 	public function create($org, $url, $contentType = 'form', $secret = null, $insecureSsl = false, array $events = array('push'), $active = true)
@@ -143,7 +143,7 @@ class Hooks extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \UnexpectedValueException
 	 */
 	public function edit($org, $url, $contentType = null, $secret = null, $insecureSsl = null, array $events = array(), $active = null)
@@ -212,7 +212,7 @@ class Hooks extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \DomainException
 	 */
 	public function ping($org, $id)
@@ -234,7 +234,7 @@ class Hooks extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function delete($org, $id)
 	{

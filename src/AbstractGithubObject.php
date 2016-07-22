@@ -42,7 +42,7 @@ abstract class AbstractGithubObject
 	 * Array containing the allowed hook events
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 * @see    https://developer.github.com/webhooks/#events
 	 */
 	protected $events = array(

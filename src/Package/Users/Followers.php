@@ -104,7 +104,7 @@ class Followers extends AbstractPackage
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \UnexpectedValueException
 	 */
 	public function checkUserFollowing($user, $target)

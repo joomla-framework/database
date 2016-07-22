@@ -15,7 +15,7 @@ use Joomla\Github\AbstractPackage;
  *
  * @documentation https://developer.github.com/v3/repos/pages/
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.4.0
  */
 class Pages extends AbstractPackage
 {
@@ -27,7 +27,7 @@ class Pages extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getInfo($owner, $repo)
 	{
@@ -49,7 +49,7 @@ class Pages extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getList($owner, $repo, $page = 0, $limit = 0)
 	{
@@ -69,7 +69,7 @@ class Pages extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getLatest($owner, $repo)
 	{

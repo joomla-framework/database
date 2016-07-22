@@ -86,7 +86,7 @@ class Commits extends AbstractPackage
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  UnexpectedResponseException
 	 */
 	public function getSha($user, $repo, $ref)

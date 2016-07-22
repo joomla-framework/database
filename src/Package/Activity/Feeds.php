@@ -15,7 +15,7 @@ use Joomla\Github\AbstractPackage;
  *
  * @documentation https://developer.github.com/v3/activity/feeds/
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.4.0
  */
 class Feeds extends AbstractPackage
 {
@@ -24,7 +24,7 @@ class Feeds extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getFeeds()
 	{

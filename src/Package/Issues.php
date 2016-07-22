@@ -307,7 +307,7 @@ class Issues extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \DomainException
 	 */
 	public function lock($user, $repo, $issueId)
@@ -327,7 +327,7 @@ class Issues extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \DomainException
 	 */
 	public function unlock($user, $repo, $issueId)

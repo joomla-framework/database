@@ -16,7 +16,7 @@ use Joomla\Uri\Uri;
  *
  * @documentation https://developer.github.com/v3/repos/deployments
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.4.0
  */
 class Deployments extends AbstractPackage
 {
@@ -34,7 +34,7 @@ class Deployments extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getList($owner, $repo, $sha = '', $ref = '', $task = '', $environment = '', $page = 0, $limit = 0)
 	{
@@ -85,7 +85,7 @@ class Deployments extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \RuntimeException
 	 */
 	public function create($owner, $repo, $ref, $task = '', $autoMerge = true, $requiredContexts = null, $payload = '', $environment = '',
@@ -155,7 +155,7 @@ class Deployments extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getDeploymentStatuses($owner, $repo, $id, $page = 0, $limit = 0)
 	{
@@ -180,7 +180,7 @@ class Deployments extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \InvalidArgumentException
 	 */
 	public function createStatus($owner, $repo, $id, $state, $targetUrl = '', $description = '')

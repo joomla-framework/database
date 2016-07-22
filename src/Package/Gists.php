@@ -164,7 +164,7 @@ class Gists extends AbstractPackage
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \DomainException
 	 */
 	public function getCommitList($gistId, $page = 0, $limit = 0)
@@ -185,7 +185,7 @@ class Gists extends AbstractPackage
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \DomainException
 	 */
 	public function getForkList($gistId, $page = 0, $limit = 0)
@@ -289,7 +289,7 @@ class Gists extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \DomainException
 	 */
 	public function getRevision($gistId, $sha)

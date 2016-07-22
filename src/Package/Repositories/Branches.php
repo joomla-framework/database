@@ -15,7 +15,7 @@ use Joomla\Github\AbstractPackage;
  *
  * @documentation https://developer.github.com/v3/repos/branches
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.4.0
  */
 class Branches extends AbstractPackage
 {
@@ -27,7 +27,7 @@ class Branches extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getList($owner, $repo)
 	{
@@ -49,7 +49,7 @@ class Branches extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function get($owner, $repo, $branch)
 	{

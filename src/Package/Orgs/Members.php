@@ -243,7 +243,7 @@ class Members extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getMembership($org, $user)
 	{
@@ -264,7 +264,7 @@ class Members extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function updateMembership($org, $user, $role = 'member')
 	{
@@ -295,7 +295,7 @@ class Members extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function removeMembership($org, $user)
 	{
@@ -313,7 +313,7 @@ class Members extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function listMemberships()
 	{
@@ -330,7 +330,7 @@ class Members extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function listOrganizationMembership($org)
 	{
@@ -348,7 +348,7 @@ class Members extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function editOrganizationMembership($org, $state)
 	{

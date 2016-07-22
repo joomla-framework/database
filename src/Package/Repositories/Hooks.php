@@ -199,7 +199,7 @@ class Hooks extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @throws  \DomainException
 	 */
 	public function ping($user, $repo, $id)
