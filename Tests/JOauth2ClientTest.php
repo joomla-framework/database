@@ -58,7 +58,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
 		$_SERVER['SCRIPT_NAME'] = '/index.php';
 
 		$this->options = new Registry;
-		$this->http = $this->getMock('Joomla\Http\Http', array('head', 'get', 'delete', 'trace', 'post', 'put', 'patch'), array($this->options));
+		$this->http = $this->getMockBuilder('Joomla\Http\Http')->getMock();
 		$array = array();
 		$this->input = new Input($array);
 		$this->application = new WebInspector;
