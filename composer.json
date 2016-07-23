@@ -6,17 +6,18 @@
     "homepage": "https://github.com/joomla-framework/http",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.3.10|>=7.0",
+        "php": "^5.3.10|~7.0",
         "joomla/uri": "~1.0",
         "composer/ca-bundle": "~1.0"
     },
     "require-dev": {
         "joomla/test": "~1.0",
-        "phpunit/phpunit": "~4.8|~5.0",
+        "phpunit/phpunit": "~4.8|>=5.0 <5.4",
         "squizlabs/php_codesniffer": "1.*"
     },
     "suggest": {
-        "joomla/registry": "Registry can be used as an alternative to using an array for the package options."
+        "joomla/registry": "Registry can be used as an alternative to using an array for the package options.",
+        "ext-curl": "To use cURL for HTTP connections"
     },
     "autoload": {
     	"psr-4": {
