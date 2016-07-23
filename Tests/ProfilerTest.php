@@ -313,7 +313,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testTheProfilerRendersItsData()
 	{
-		$mockedRenderer = $this->getMock('\Joomla\Profiler\ProfilerRendererInterface');
+		$mockedRenderer = $this->getMockBuilder('\Joomla\Profiler\ProfilerRendererInterface')->getMock();
 		$mockedRenderer->expects($this->once())
 			->method('render')
 			->with($this->instance);
@@ -329,7 +329,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testTheProfilerCanBeCastToAString()
 	{
-		$mockedRenderer = $this->getMock('\Joomla\Profiler\ProfilerRendererInterface');
+		$mockedRenderer = $this->getMockBuilder('\Joomla\Profiler\ProfilerRendererInterface')->getMock();
 		$mockedRenderer->expects($this->once())
 			->method('render')
 			->with($this->instance)
