@@ -6,7 +6,7 @@
     "homepage": "https://github.com/joomla-framework/router",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.3.10|>=7.0",
+        "php": "^5.3.10|~7.0",
     	"joomla/controller": "~1.0",
     	"joomla/input": "~1.0"
     },
