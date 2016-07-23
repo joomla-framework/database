@@ -39,7 +39,7 @@ class PhpEngineRenderer extends AbstractRenderer implements RendererInterface
 	/**
 	 * Constructor
 	 *
-	 * @param   TemplateNameParserInterface  $parser  Object to parese template names
+	 * @param   TemplateNameParserInterface  $parser  Object to parse template names
 	 * @param   LoaderInterface              $loader  Object to direct the engine where to search for templates
 	 * @param   PhpEngine|null               $engine  Optional PhpEngine instance to inject or null for a new object to be created
 	 *
