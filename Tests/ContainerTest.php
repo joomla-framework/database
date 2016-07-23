@@ -1010,7 +1010,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRegisterServiceProvider()
 	{
-		$mock = $this->getMock('Joomla\\DI\\ServiceProviderInterface');
+		$mock = $this->getMockBuilder('Joomla\\DI\\ServiceProviderInterface')
+			->getMock();
 
 		$mock->expects($this->once())
 			->method('register');
