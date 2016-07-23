@@ -6,7 +6,7 @@
     "homepage": "https://github.com/joomla-framework/registry",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.3.10|>=7.0",
+        "php": "^5.3.10|~7.0",
         "joomla/compat": "~1.0",
         "joomla/utilities": "~1.0",
         "symfony/polyfill-php55": "~1.0"
