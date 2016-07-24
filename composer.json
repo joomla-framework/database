@@ -16,6 +16,7 @@
         "squizlabs/php_codesniffer": "1.*"
     },
     "suggest": {
+        "illuminate/view": "Install ~5.1 if you are using Laravel's Blade template engine.",
         "league/plates": "Install ~2.0|~3.0 if you are using the Plates template engine.",
         "mustache/mustache": "Install ~2.0 if you are using the Mustache template engine.",
         "symfony/templating": "Install ~2.0|~3.0 if you are using Symfony's PHP template component.",
