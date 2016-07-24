@@ -97,6 +97,8 @@ class MustacheRenderer extends AbstractRenderer implements RendererInterface
 	 */
 	public function render($template, array $data = array())
 	{
+		$data = array_merge($this->data, $data);
+
 		return $this->getRenderer()->render($template, $data);
 	}
 

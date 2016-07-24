@@ -18,16 +18,8 @@ use Symfony\Component\Templating\TemplateReferenceInterface;
  *
  * @since  __DEPLOY_VERSION__
  */
-class PhpEngineRenderer extends AbstractRenderer implements RendererInterface
+class PhpEngineRenderer extends AbstractRenderer
 {
-	/**
-	 * Data for output by the renderer
-	 *
-	 * @var    array
-	 * @since  __DEPLOY_VERSION__
-	 */
-	private $data = array();
-
 	/**
 	 * Rendering engine
 	 *

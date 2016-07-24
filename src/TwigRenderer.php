@@ -15,7 +15,7 @@ use Joomla\Renderer\Twig\FilesystemLoader;
  *
  * @since  __DEPLOY_VERSION__
  */
-class TwigRenderer extends AbstractRenderer implements RendererInterface
+class TwigRenderer extends AbstractRenderer
 {
 	/**
 	 * Configuration array
@@ -131,20 +131,6 @@ class TwigRenderer extends AbstractRenderer implements RendererInterface
 	public function setFileExtension($extension)
 	{
 		$this->config['extension'] = $extension;
-
-		return $this;
-	}
-
-	/**
-	 * Unloads data from renderer
-	 *
-	 * @return  $this
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function unsetData()
-	{
-		$this->data = array();
 
 		return $this;
 	}
