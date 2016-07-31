@@ -504,6 +504,35 @@ class InflectorTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Method to test Inflector::isSingular() for a word that is in plural form.
+	 *
+	 * @return  void
+	 *
+	 * @covers  Joomla\String\Inflector::isSingular
+	 * @since   1.0
+	 * @ticket  https://github.com/joomla-framework/string/pull/13
+	 */
+	public function testIsSingularBadCase()
+	{
+		$word = 'tags';
+
+		$this->assertFalse(
+			$this->inflector->isSingular($word),
+			'Validates the plural word is not singular.'
+		);
+
+		$this->assertFalse(
+			$this->inflector->getCachedSingular($word),
+			'Validates the plural word is not in the cache.'
+		);
+
+		$this->assertFalse(
+			$this->inflector->getCachedPlural($word),
+			'Validates the plural word is not in the cache.'
+		);
+	}
+
+	/**
 	 * Method to test Inflector::toPlural().
 	 *
 	 * @param   string  $singular  The singular form of a word.
