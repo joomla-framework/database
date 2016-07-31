@@ -6,7 +6,7 @@
     "homepage": "https://github.com/joomla-framework/database",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.4|>=7.0",
+        "php": "~5.4|~7.0",
         "psr/log": "~1.0"
     },
     "require-dev": {
@@ -18,7 +18,11 @@
         "squizlabs/php_codesniffer": "1.*"
     },
     "suggest": {
-        "joomla/di": "To use the Database ServiceProviderInterface objects, install joomla/di."
+        "joomla/di": "To use the Database ServiceProviderInterface objects, install joomla/di.",
+        "ext-mysqli": "To connect to a MySQL database via MySQLi",
+        "ext-pdo": "To connect to a MySQL, Oracle, or SQLite database via PDO",
+        "ext-pgsql": "To connect to a PostgreSQL database",
+        "ext-sqlsrv": "To connect to a SQL Server database"
     },
     "autoload": {
         "psr-4": {
