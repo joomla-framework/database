@@ -104,20 +104,6 @@ class Stream implements TransportInterface
 			$headers['Content-Length'] = strlen($options['content']);
 		}
 
-		// Build the headers string for the request.
-		$headerString = null;
-
-		if (isset($headers))
-		{
-			foreach ($headers as $key => $value)
-			{
-				$headerString .= $key . ': ' . $value . "\r\n";
-			}
-
-			// Add the headers string into the stream context options array.
-			$options['header'] = trim($headerString, "\r\n");
-		}
-
 		// If an explicit timeout is given user it.
 		if (isset($timeout))
 		{
@@ -144,6 +130,45 @@ class Stream implements TransportInterface
 				$options[$key] = $value;
 			}
 		}
+
+		// Add the proxy configuration if enabled
+		$proxyEnabled = isset($this->options['proxy.enabled']) ? (bool) $this->options['proxy.enabled'] : false;
+
+		if ($proxyEnabled)
+		{
+			$options['request_fulluri'] = true;
+
+			if (isset($this->options['proxy.host']) && isset($this->options['proxy.port']))
+			{
+				$options['proxy'] = $this->options['proxy.host'] . ':' . (int) $this->options['proxy.port'];
+			}
+
+			// If authentication details are provided, add those as well
+			if (isset($this->options['proxy.user']) && isset($this->options['proxy.password']))
+			{
+				$headers['Proxy-Authorization'] = 'Basic ' . base64_encode($this->options['proxy.user'] . ':' . $this->options['proxy.password']);
+			}
+		}
+
+		// Build the headers string for the request.
+		$headerString = null;
+
+		if (isset($headers))
+		{
+			foreach ($headers as $key => $value)
+			{
+				$headerString .= $key . ': ' . $value . "\r\n";
+			}
+
+			// Add the headers string into the stream context options array.
+			$options['header'] = trim($headerString, "\r\n");
+		}
+
+		// Get the current context options.
+		$contextOptions = stream_context_get_options(stream_context_get_default());
+
+		// Add our options to the currently defined options, if any.
+		$contextOptions['http'] = isset($contextOptions['http']) ? array_merge($contextOptions['http'], $options) : $options;
 
 		// Create the stream context for the request.
 		$streamOptions = array(
