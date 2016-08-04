@@ -85,8 +85,8 @@ class MysqliDriver extends DatabaseDriver
 		$options['password'] = (isset($options['password'])) ? $options['password'] : '';
 		$options['database'] = (isset($options['database'])) ? $options['database'] : '';
 		$options['select']   = (isset($options['select'])) ? (bool) $options['select'] : true;
-		$options['port']     = null;
-		$options['socket']   = null;
+		$options['port']     = (isset($options['port'])) ? (int) $options['port'] : null;
+		$options['socket']   = (isset($options['socket'])) ? $options['socket'] : null;
 		$options['utf8mb4']  = (isset($options['utf8mb4'])) ? (bool) $options['utf8mb4'] : false;
 
 		// Finalize initialisation.
