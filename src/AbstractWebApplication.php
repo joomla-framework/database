@@ -238,7 +238,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 		if (!$this->allowCache())
 		{
 			// Expires in the past.
-			$this->setHeader('Expires', 'Mon, 1 Jan 2001 00:00:00 GMT', true);
+			$this->setHeader('Expires', 'Wed, 17 Aug 2005 00:00:00 GMT', true);
 
 			// Always modified.
 			$this->setHeader('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT', true);
