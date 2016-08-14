@@ -145,6 +145,12 @@ class Socket implements TransportInterface
 			}
 		}
 
+		// Authentication, if needed
+		if (isset($this->options['userauth']) && isset($this->options['passwordauth']))
+		{
+			$request[] = 'Authorization: Basic ' . base64_encode($this->options['userauth'] . ':' . $this->options['passwordauth']);
+		}
+
 		// Set any custom transport options
 		if (isset($this->options['transport.socket']))
 		{

@@ -12,6 +12,7 @@ use Composer\CaBundle\CaBundle;
 use Joomla\Http\Exception\InvalidResponseCodeException;
 use Joomla\Http\TransportInterface;
 use Joomla\Http\Response;
+use Joomla\Uri\Uri;
 use Joomla\Uri\UriInterface;
 
 /**
@@ -122,15 +123,6 @@ class Stream implements TransportInterface
 		// Follow redirects.
 		$options['follow_location'] = isset($this->options['follow_location']) ? (int) $this->options['follow_location'] : 1;
 
-		// Set any custom transport options
-		if (isset($this->options['transport.stream']))
-		{
-			foreach ($this->options['transport.stream'] as $key => $value)
-			{
-				$options[$key] = $value;
-			}
-		}
-
 		// Add the proxy configuration if enabled
 		$proxyEnabled = isset($this->options['proxy.enabled']) ? (bool) $this->options['proxy.enabled'] : false;
 
@@ -162,6 +154,22 @@ class Stream implements TransportInterface
 
 			// Add the headers string into the stream context options array.
 			$options['header'] = trim($headerString, "\r\n");
+		}
+
+		// Authentication, if needed
+		if ($uri instanceof Uri && isset($this->options['userauth']) && isset($this->options['passwordauth']))
+		{
+			$uri->setUser($this->options['userauth']);
+			$uri->setPass($this->options['passwordauth']);
+		}
+
+		// Set any custom transport options
+		if (isset($this->options['transport.stream']))
+		{
+			foreach ($this->options['transport.stream'] as $key => $value)
+			{
+				$options[$key] = $value;
+			}
 		}
 
 		// Get the current context options.

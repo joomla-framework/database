@@ -76,6 +76,8 @@ class Curl implements TransportInterface
 		// Setup the cURL handle.
 		$ch = curl_init();
 
+		$options = array();
+
 		// Set the request method.
 		$options[CURLOPT_CUSTOMREQUEST] = strtoupper($method);
 
@@ -155,6 +157,13 @@ class Curl implements TransportInterface
 		if ($this->redirectsAllowed())
 		{
 			$options[CURLOPT_FOLLOWLOCATION] = (bool) isset($this->options['follow_location']) ? $this->options['follow_location'] : true;
+		}
+
+		// Authentication, if needed
+		if (isset($this->options['userauth']) && isset($this->options['passwordauth']))
+		{
+			$options[CURLOPT_USERPWD]  = $this->options['userauth'] . ':' . $this->options['passwordauth'];
+			$options[CURLOPT_HTTPAUTH] = CURLAUTH_BASIC;
 		}
 
 		// Set any custom transport options
