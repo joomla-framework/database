@@ -9,12 +9,20 @@
         "php": "^5.3.10|~7.0"
     },
     "require-dev": {
+        "paragonie/random_compat": "~1.0|~2.0",
         "phpunit/phpunit": "~4.8|~5.0",
         "squizlabs/php_codesniffer": "1.*"
     },
+    "suggest": {
+        "paragonie/random_compat": "Required to use Joomla\\Filesystem\\Path::isOwner()"
+    },
     "autoload": {
         "psr-4": {
-            "Joomla\\Filesystem\\": "src/",
+            "Joomla\\Filesystem\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Joomla\\Filesystem\\Tests\\": "Tests/"
         }
     },

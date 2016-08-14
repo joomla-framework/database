@@ -225,7 +225,7 @@ class Path
 	 */
 	public static function isOwner($path)
 	{
-		$tmp = md5(mt_rand());
+		$tmp = md5(random_bytes(16));
 		$ssp = ini_get('session.save_path');
 		$jtp = JPATH_ROOT . '/tmp';
 
