@@ -361,6 +361,7 @@ class SqlsrvDriver extends DatabaseDriver
 		{
 			foreach ($fields as $field)
 			{
+				$field->Default = preg_replace("/(^(\(\(|\('|\(N'|\()|(('\)|(?<!\()\)\)|\))$))/i", '', $field->Default);
 				$result[$field->Field] = $field;
 			}
 		}
