@@ -7,12 +7,17 @@
     "license": "GPL-2.0+",
     "require": {
         "php": "^5.3.10|~7.0",
-        "paragonie/random_compat": "~1.0|~2.0",
-        "symfony/polyfill-php56": "~1.0"
+        "paragonie/random_compat": "~1.0|~2.0"
     },
     "require-dev": {
+        "ircmaxell/password-compat": "~1.0",
         "phpunit/phpunit": "~4.8|>=5.0 <5.4",
-        "squizlabs/php_codesniffer": "1.*"
+        "squizlabs/php_codesniffer": "1.*",
+        "symfony/polyfill-php56": "~1.0"
+    },
+    "suggest": {
+        "ircmaxell/password-compat": "Required to use Joomla\\Crypt\\Password\\Simple",
+        "symfony/polyfill-php56": "Required to use Joomla\\Crypt\\Password\\Simple"
     },
     "target-dir": "Joomla/Crypt",
     "autoload": {
