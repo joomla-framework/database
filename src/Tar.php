@@ -32,7 +32,7 @@ class Tar implements ExtractableInterface
 	 * @since  1.0
 	 */
 	private $types = array(
-		0x0 => 'Unix file',
+		0x0  => 'Unix file',
 		0x30 => 'File',
 		0x31 => 'Link',
 		0x32 => 'Symbolic link',
@@ -40,7 +40,8 @@ class Tar implements ExtractableInterface
 		0x34 => 'Block special file',
 		0x35 => 'Directory',
 		0x36 => 'FIFO special file',
-		0x37 => 'Contiguous file');
+		0x37 => 'Contiguous file'
+	);
 
 	/**
 	 * Tar file data buffer
@@ -181,6 +182,16 @@ class Tar implements ExtractableInterface
 				);
 			}
 
+			/*
+			 * This variable has been set in the previous loop, meaning that the filename was present in the previous block
+			 * to allow more than 100 characters - see below
+			 */
+			if (isset($longlinkfilename))
+			{
+				$info['filename'] = $longlinkfilename;
+				unset($longlinkfilename);
+			}
+
 			if (!$info)
 			{
 				throw new \RuntimeException('Unable to decompress data');
@@ -202,7 +213,7 @@ class Tar implements ExtractableInterface
 
 				if (($info['typeflag'] == 0) || ($info['typeflag'] == 0x30) || ($info['typeflag'] == 0x35))
 				{
-					/* File or folder. */
+					// File or folder.
 					$file['data'] = $contents;
 
 					$mode = hexdec(substr($info['mode'], 4, 3));
@@ -210,9 +221,17 @@ class Tar implements ExtractableInterface
 						(($mode & 0x100) ? 'x' : '-') . (($mode & 0x040) ? 'r' : '-') . (($mode & 0x020) ? 'w' : '-') . (($mode & 0x010) ? 'x' : '-') .
 						(($mode & 0x004) ? 'r' : '-') . (($mode & 0x002) ? 'w' : '-') . (($mode & 0x001) ? 'x' : '-');
 				}
+				elseif (chr($info['typeflag']) == 'L' && $info['filename'] == '././@LongLink')
+				{
+					// GNU tar ././@LongLink support - the filename is actually in the contents, set a variable here so we can test in the next loop
+					$longlinkfilename = $contents;
+
+					// And the file contents are in the next block so we'll need to skip this
+					continue;
+				}
 				else
 				{
-					/* Some other type. */
+					// Some other type.
 				}
 
 				$return_array[] = $file;
