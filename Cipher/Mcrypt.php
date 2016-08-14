@@ -122,7 +122,7 @@ abstract class Cipher_Mcrypt implements CipherInterface
 		$key = new Key($this->keyType);
 
 		// Generate an initialisation vector based on the algorithm.
-		$key->public = mcrypt_create_iv(mcrypt_get_iv_size($this->type, $this->mode));
+		$key->public = mcrypt_create_iv(mcrypt_get_iv_size($this->type, $this->mode), MCRYPT_DEV_URANDOM);
 
 		// Get the salt and password setup.
 		$salt = (isset($options['salt'])) ? $options['salt'] : substr(pack("h*", md5(mt_rand())), 0, 16);
