@@ -44,14 +44,14 @@ abstract class Client
 	protected $input;
 
 	/**
-	 * @var   AbstractWebApplication  The application object to send HTTP headers for redirects.
-	 * @since 1.0
+	 * @var    AbstractWebApplication  The application object to send HTTP headers for redirects.
+	 * @since  1.0
 	 */
 	protected $application;
 
 	/**
-	 * @var   string  Selects which version of OAuth to use: 1.0 or 1.0a.
-	 * @since 1.0
+	 * @var    string  Selects which version of OAuth to use: 1.0 or 1.0a.
+	 * @since  1.0
 	 */
 	protected $version;
 
@@ -64,7 +64,7 @@ abstract class Client
 	 * @param   AbstractWebApplication  $application  The application object
 	 * @param   string                  $version      Specify the OAuth version. By default we are using 1.0a.
 	 *
-	 * @since 1.0
+	 * @since   1.0
 	 */
 	public function __construct($options = array(), Http $client, Input $input, AbstractWebApplication $application, $version = '1.0a')
 	{
@@ -78,11 +78,10 @@ abstract class Client
 	/**
 	 * Method to form the oauth flow.
 	 *
-	 * @return string  The access token.
+	 * @return  string  The access token.
 	 *
-	 * @since  1.0
-	 *
-	 * @throws \DomainException
+	 * @since   1.0
+	 * @throws  \DomainException
 	 */
 	public function authenticate()
 	{
@@ -151,7 +150,7 @@ abstract class Client
 	/**
 	 * Method used to get a request token.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @since   1.0
 	 * @throws  \DomainException
@@ -192,9 +191,9 @@ abstract class Client
 	/**
 	 * Method used to authorise the application.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since  1.0
+	 * @since   1.0
 	 */
 	private function _authorise()
 	{
@@ -215,9 +214,9 @@ abstract class Client
 	/**
 	 * Method used to get an access token.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since  1.0
+	 * @since   1.0
 	 */
 	private function _generateAccessToken()
 	{
@@ -514,12 +513,12 @@ abstract class Client
 	 *
 	 * @return  string  The current nonce.
 	 *
-	 * @since 1.0
+	 * @since   1.0
 	 */
 	public static function generateNonce()
 	{
 		$mt = microtime();
-		$rand = mt_rand();
+		$rand = random_bytes(16);
 
 		// The md5s look nicer than numbers.
 		return md5($mt . $rand);
@@ -528,9 +527,9 @@ abstract class Client
 	/**
 	 * Prepares the OAuth signing key.
 	 *
-	 * @return string  The prepared signing key.
+	 * @return  string  The prepared signing key.
 	 *
-	 * @since 1.0
+	 * @since   1.0
 	 */
 	private function _prepareSigningKey()
 	{
