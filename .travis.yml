@@ -38,10 +38,8 @@ matrix:
 before_script:
   - composer self-update
   - composer update $COMPOSER_FLAGS
-  - if [[ $TRAVIS_PHP_VERSION != hhv* ]]; then mysql -e 'create database joomla_ut;'; fi
-  - if [[ $TRAVIS_PHP_VERSION != hhv* ]]; then mysql joomla_ut < Tests/Stubs/mysql.sql; fi
-  - if [[ $TRAVIS_PHP_VERSION = hhv* ]]; then mysql -u root -e 'create database joomla_ut;'; fi
-  - if [[ $TRAVIS_PHP_VERSION = hhv* ]]; then mysql -u root joomla_ut < Tests/Stubs/mysql.sql; fi
+  - mysql -u root -e 'create database joomla_ut;'
+  - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
   - psql -c 'create database joomla_ut;' -U postgres
   - psql -d joomla_ut -a -f Tests/Stubs/postgresql.sql
 

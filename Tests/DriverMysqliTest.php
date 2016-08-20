@@ -587,7 +587,40 @@ class DriverMysqliTest extends DatabaseMysqliCase
 	 */
 	public function testExecute()
 	{
-		self::$driver->setQuery("REPLACE INTO `jos_dbtest` SET `id` = 5, `title` = 'testTitle'");
+		self::$driver->setQuery(
+			"REPLACE INTO `jos_dbtest` SET `id` = 5, `title` = 'testTitle', `start_date` = '1980-04-18 00:00:00', `description` = 'Testing'"
+		);
+
+		$this->assertThat(self::$driver->execute(), $this->isTrue(), __LINE__);
+
+		$this->assertThat(self::$driver->insertid(), $this->equalTo(5), __LINE__);
+	}
+
+	/**
+	 * Test the execute method with a prepared statement
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testExecutePreparedStatement()
+	{
+		$id          = 5;
+		$title       = 'testTitle';
+		$startDate   = '1980-04-18 00:00:00';
+		$description = 'Testing';
+
+		/** @var \Joomla\Database\Mysqli\MysqliQuery $query */
+		$query = self::$driver->getQuery(true);
+		$query->setQuery(
+			"REPLACE INTO `jos_dbtest` SET `id` = ?, `title` = ?, `start_date` = ?, `description` = ?"
+		);
+		$query->bind(1, $id, 'i');
+		$query->bind(2, $title);
+		$query->bind(3, $startDate);
+		$query->bind(4, $description);
+
+		self::$driver->setQuery($query);
 
 		$this->assertThat(self::$driver->execute(), $this->isTrue(), __LINE__);
 
