@@ -369,7 +369,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		return $this->connection->affected_rows();
+		return $this->connection->affected_rows;
 	}
 
 	/**
@@ -540,7 +540,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		return $this->connection->insert_id();
+		return $this->connection->insert_id;
 	}
 
 	/**
