@@ -98,8 +98,7 @@ abstract class PdoDriver extends DatabaseDriver
 	 */
 	public function __destruct()
 	{
-		$this->freeResult();
-		unset($this->connection);
+		$this->disconnect();
 	}
 
 	/**
@@ -319,7 +318,8 @@ abstract class PdoDriver extends DatabaseDriver
 	public function disconnect()
 	{
 		$this->freeResult();
-		unset($this->connection);
+
+		$this->connection = null;
 	}
 
 	/**
@@ -490,6 +490,20 @@ abstract class PdoDriver extends DatabaseDriver
 	}
 
 	/**
+	 * Get the version of the database connector.
+	 *
+	 * @return  string  The database connector version.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getVersion()
+	{
+		$this->connect();
+
+		return $this->getOption(\PDO::ATTR_SERVER_VERSION);
+	}
+
+	/**
 	 * Get a query to run and verify the database is operational.
 	 *
 	 * @return  string  The query to check the health of the DB.
@@ -602,10 +616,8 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			return $this->prepared->rowCount();
 		}
-		else
-		{
-			return 0;
-		}
+
+		return 0;
 	}
 
 	/**
@@ -625,14 +637,13 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			return $cursor->rowCount();
 		}
-		elseif ($this->prepared instanceof \PDOStatement)
+
+		if ($this->prepared instanceof \PDOStatement)
 		{
 			return $this->prepared->rowCount();
 		}
-		else
-		{
-			return 0;
-		}
+
+		return 0;
 	}
 
 	/**
