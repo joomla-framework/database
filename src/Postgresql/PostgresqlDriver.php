@@ -8,6 +8,9 @@
 
 namespace Joomla\Database\Postgresql;
 
+use Joomla\Database\Exception\ConnectionFailureException;
+use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Database\Exception\UnsupportedAdapterException;
 use Psr\Log;
 use Joomla\Database\DatabaseDriver;
 
@@ -120,7 +123,7 @@ class PostgresqlDriver extends DatabaseDriver
 		// Make sure the postgresql extension for PHP is installed and enabled.
 		if (!static::isSupported())
 		{
-			throw new \RuntimeException('PHP extension pg_connect is not available.');
+			throw new UnsupportedAdapterException('PHP extension pg_connect is not available.');
 		}
 
 		/*
@@ -168,11 +171,11 @@ class PostgresqlDriver extends DatabaseDriver
 		{
 			$this->log(Log\LogLevel::ERROR, 'Error connecting to PGSQL database.');
 
-			throw new \RuntimeException('Error connecting to PGSQL database.');
+			throw new ConnectionFailureException('Error connecting to PGSQL database.');
 		}
 
 		pg_set_error_verbosity($this->connection, PGSQL_ERRORS_DEFAULT);
-		pg_query('SET standard_conforming_strings=off');
+		pg_query($this->connection, 'SET standard_conforming_strings=off');
 	}
 
 	/**
@@ -336,7 +339,7 @@ class PostgresqlDriver extends DatabaseDriver
 			// Make sure we have a query class for this driver.
 			if (!class_exists('\\Joomla\\Database\\Postgresql\\PostgresqlQuery'))
 			{
-				throw new \RuntimeException('\\Joomla\\Database\\Postgresql\\PostgresqlQuery Class not found.');
+				throw new UnsupportedAdapterException('\\Joomla\\Database\\Postgresql\\PostgresqlQuery Class not found.');
 			}
 
 			$this->queryObject = new PostgresqlQuery($this);
@@ -431,6 +434,16 @@ class PostgresqlDriver extends DatabaseDriver
 		{
 			foreach ($fields as $field)
 			{
+				if (stristr(strtolower($field->type), "character varying"))
+				{
+					$field->Default = "";
+				}
+
+				if (stristr(strtolower($field->type), "text"))
+				{
+					$field->Default = "";
+				}
+
 				// Do some dirty translation to MySQL output.
 				// @todo: Come up with and implement a standard across databases.
 				$result[$field->column_name] = (object) array(
@@ -721,20 +734,21 @@ class PostgresqlDriver extends DatabaseDriver
 					$this->connection = null;
 					$this->connect();
 				}
-				catch (\RuntimeException $e)
+				catch (ConnectionFailureException $e)
 				// If connect fails, ignore that exception and throw the normal exception.
 				{
 					// Get the error number and message.
 					$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE) . ' ';
-					$this->errorMsg = pg_last_error($this->connection) . "\nSQL=$sql";
+					$this->errorMsg = pg_last_error($this->connection);
 
 					// Throw the normal query exception.
 					$this->log(
 						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}',
-						array('code' => $this->errorNum, 'message' => $this->errorMsg)
+						'Database query failed (error #{code}): {message}; Failed query: {sql}',
+						array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
 					);
-					throw new \RuntimeException($this->errorMsg);
+
+					throw new ExecutionFailureException($sql, $this->errorMsg);
 				}
 
 				// Since we were able to reconnect, run the query again.
@@ -750,10 +764,11 @@ class PostgresqlDriver extends DatabaseDriver
 				// Throw the normal query exception.
 				$this->log(
 					Log\LogLevel::ERROR,
-					'Database query failed (error #{code}): {message}',
-					array('code' => $this->errorNum, 'message' => $this->errorMsg)
+					'Database query failed (error #{code}): {message}; Failed query: {sql}',
+					array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
 				);
-				throw new \RuntimeException($this->errorMsg);
+
+				throw new ExecutionFailureException($sql, $this->errorMsg);
 			}
 		}
 
@@ -863,6 +878,11 @@ class PostgresqlDriver extends DatabaseDriver
 	public function setUtf()
 	{
 		$this->connect();
+
+		if (!function_exists('pg_set_client_encoding'))
+		{
+			return -1;
+		}
 
 		return pg_set_client_encoding($this->connection, 'UTF8');
 	}
@@ -1112,7 +1132,7 @@ class PostgresqlDriver extends DatabaseDriver
 			}
 
 			// Ignore any internal fields or primary keys with value 0.
-			if (($k[0] == "_") || ($k == $key && $v === 0))
+			if (($k[0] == "_") || ($k == $key && (($v === 0) || ($v === '0'))))
 			{
 				continue;
 			}
