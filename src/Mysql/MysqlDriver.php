@@ -8,6 +8,7 @@
 
 namespace Joomla\Database\Mysql;
 
+use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Pdo\PdoDriver;
 use Psr\Log;
 
@@ -109,7 +110,7 @@ class MysqlDriver extends PdoDriver
 			// Try to connect to MySQL
 			parent::connect();
 		}
-		catch (\RuntimeException $e)
+		catch (ConnectionFailureException $e)
 		{
 			// If the connection failed, but not because of the wrong character set, then bubble up the exception.
 			if (!$this->utf8mb4)

@@ -10,6 +10,9 @@ namespace Joomla\Database\Mysqli;
 
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\DatabaseQuery;
+use Joomla\Database\Exception\ConnectionFailureException;
+use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\PreparableInterface;
 use Psr\Log;
 
@@ -104,8 +107,8 @@ class MysqliDriver extends DatabaseDriver
 		$options['password'] = (isset($options['password'])) ? $options['password'] : '';
 		$options['database'] = (isset($options['database'])) ? $options['database'] : '';
 		$options['select']   = (isset($options['select'])) ? (bool) $options['select'] : true;
-		$options['port']     = null;
-		$options['socket']   = null;
+		$options['port']     = (isset($options['port'])) ? (int) $options['port'] : null;
+		$options['socket']   = (isset($options['socket'])) ? $options['socket'] : null;
 		$options['utf8mb4']  = (isset($options['utf8mb4'])) ? (bool) $options['utf8mb4'] : false;
 
 		// Finalize initialisation.
@@ -202,7 +205,7 @@ class MysqliDriver extends DatabaseDriver
 		// Make sure the MySQLi extension for PHP is installed and enabled.
 		if (!static::isSupported())
 		{
-			throw new \RuntimeException('The MySQLi extension is not available');
+			throw new UnsupportedAdapterException('The MySQLi extension is not available');
 		}
 
 		$this->connection = mysqli_init();
@@ -216,7 +219,7 @@ class MysqliDriver extends DatabaseDriver
 		{
 			$this->log(Log\LogLevel::ERROR, 'Could not connect to MySQL: ' . $this->connection->connect_error);
 
-			throw new \RuntimeException('Could not connect to MySQL.', $this->connection->connect_errno);
+			throw new ConnectionFailureException('Could not connect to MySQL.', $this->connection->connect_errno);
 		}
 
 		// If auto-select is enabled select the given database.
@@ -646,7 +649,7 @@ class MysqliDriver extends DatabaseDriver
 		if (!$this->executed)
 		{
 			$this->errorNum = (int) $this->connection->errno;
-			$this->errorMsg = (string) $this->connection->error . "\n-- SQL --\n" . $sql;
+			$this->errorMsg = (string) $this->connection->error;
 
 			// Check if the server was disconnected.
 			if (!$this->connected())
@@ -657,15 +660,16 @@ class MysqliDriver extends DatabaseDriver
 					$this->connection = null;
 					$this->connect();
 				}
-				catch (\RuntimeException $e)
+				catch (ConnectionFailureException $e)
 				// If connect fails, ignore that exception and throw the normal exception.
 				{
 					$this->log(
 						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}',
-						array('code' => $this->errorNum, 'message' => $this->errorMsg)
+						'Database query failed (error #{code}): {message}; Failed query: {sql}',
+						array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
 					);
-					throw new \RuntimeException($this->errorMsg, $this->errorNum);
+
+					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
 				// Since we were able to reconnect, run the query again.
@@ -676,10 +680,11 @@ class MysqliDriver extends DatabaseDriver
 			{
 				$this->log(
 					Log\LogLevel::ERROR,
-					'Database query failed (error #{code}): {message}',
-					array('code' => $this->errorNum, 'message' => $this->errorMsg)
+					'Database query failed (error #{code}): {message}; Failed query: {sql}',
+					array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
 				);
-				throw new \RuntimeException($this->errorMsg, $this->errorNum);
+
+				throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 			}
 		}
 
@@ -727,7 +732,7 @@ class MysqliDriver extends DatabaseDriver
 
 		if (!$this->connection->select_db($database))
 		{
-			throw new \RuntimeException('Could not connect to database.');
+			throw new ConnectionFailureException('Could not connect to database.');
 		}
 
 		return true;
