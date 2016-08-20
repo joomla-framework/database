@@ -287,7 +287,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			// If the class still doesn't exist we have nothing left to do but throw an exception.  We did our best.
 			if (!class_exists($class))
 			{
-				throw new \RuntimeException(sprintf('Unable to load Database Driver: %s', $options['driver']));
+				throw new Exception\UnsupportedAdapterException(sprintf('Unable to load Database Driver: %s', $options['driver']));
 			}
 
 			// Create our new DatabaseDriver connector based on the options given.
@@ -297,7 +297,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			}
 			catch (\RuntimeException $e)
 			{
-				throw new \RuntimeException(sprintf('Unable to connect to the Database: %s', $e->getMessage()));
+				throw new Exception\ConnectionFailureException(sprintf('Unable to connect to the Database: %s', $e->getMessage()));
 			}
 
 			// Set the new connector to the global instances based on signature.
@@ -815,7 +815,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		if (!class_exists($class))
 		{
 			// If it doesn't exist we are at an impasse so throw an exception.
-			throw new \RuntimeException('Database Exporter not found.');
+			throw new Exception\UnsupportedAdapterException('Database Exporter not found.');
 		}
 
 		/* @var  $o  DatabaseExporter */
@@ -842,7 +842,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		if (!class_exists($class))
 		{
 			// If it doesn't exist we are at an impasse so throw an exception.
-			throw new \RuntimeException('Database Importer not found');
+			throw new Exception\UnsupportedAdapterException('Database Importer not found');
 		}
 
 		/* @var  $o  DatabaseImporter */
@@ -873,7 +873,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			if (!class_exists($class))
 			{
 				// If it doesn't exist we are at an impasse so throw an exception.
-				throw new \RuntimeException('Database Query Class not found.');
+				throw new Exception\UnsupportedAdapterException('Database Query Class not found.');
 			}
 
 			return new $class($this);
@@ -902,7 +902,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		if (!class_exists($iteratorClass))
 		{
 			// If it doesn't exist we are at an impasse so throw an exception.
-			throw new \RuntimeException(sprintf('class *%s* is not defined', $iteratorClass));
+			throw new Exception\UnsupportedAdapterException(sprintf('class *%s* is not defined', $iteratorClass));
 		}
 
 		// Return a new iterator
