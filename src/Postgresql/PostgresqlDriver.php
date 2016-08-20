@@ -8,11 +8,14 @@
 
 namespace Joomla\Database\Postgresql;
 
+use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
+use Joomla\Database\Query\LimitableInterface;
+use Joomla\Database\Query\PreparableInterface;
 use Psr\Log;
-use Joomla\Database\DatabaseDriver;
 
 /**
  * PostgreSQL Database Driver
@@ -48,6 +51,30 @@ class PostgresqlDriver extends DatabaseDriver
 	 * @since  1.0
 	 */
 	protected $nullDate = '1970-01-01 00:00:00';
+
+	/**
+	 * The prepared statement.
+	 *
+	 * @var    resource
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $prepared;
+
+	/**
+	 * Contains the current query execution status
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $executed = false;
+
+	/**
+	 * Contains the name of the prepared query
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $queryName = 'query';
 
 	/**
 	 * The minimum supported database version.
@@ -701,6 +728,8 @@ class PostgresqlDriver extends DatabaseDriver
 			$sql .= ' LIMIT ' . $this->limit . ' OFFSET ' . $this->offset;
 		}
 
+		$count = $this->getCount();
+
 		// Increment the query counter.
 		$this->count++;
 
@@ -719,8 +748,27 @@ class PostgresqlDriver extends DatabaseDriver
 		$this->errorNum = 0;
 		$this->errorMsg = '';
 
-		// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
-		$this->cursor = @pg_query($this->connection, $sql);
+		// Bind the variables
+		if ($this->sql instanceof PreparableInterface)
+		{
+			$bounded =& $this->sql->getBounded();
+
+			if (count($bounded))
+			{
+				// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
+				$this->cursor = @pg_execute($this->connection, $this->queryName . $count, array_values($bounded));
+			}
+			else
+			{
+				// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
+				$this->cursor = @pg_query($this->connection, $sql);
+			}
+		}
+		else
+		{
+			// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
+			$this->cursor = @pg_query($this->connection, $sql);
+		}
 
 		// If an error occurred handle it.
 		if (!$this->cursor)
@@ -866,6 +914,42 @@ class PostgresqlDriver extends DatabaseDriver
 	public function select($database)
 	{
 		return true;
+	}
+
+	/**
+	 * Sets the SQL statement string for later execution.
+	 *
+	 * @param   DatabaseQuery|string  $query   The SQL statement to set either as a DatabaseQuery object or a string.
+	 * @param   integer               $offset  The affected row offset to set.
+	 * @param   integer               $limit   The maximum affected rows to set.
+	 *
+	 * @return  PostgresqlDriver  This object to support method chaining.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setQuery($query, $offset = null, $limit = null)
+	{
+		$this->connect();
+
+		$this->freeResult();
+
+		if (is_string($query))
+		{
+			// Allows taking advantage of bound variables in a direct query:
+			$query = $this->getQuery(true)->setQuery($query);
+		}
+
+		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
+		{
+			$query->setLimit($limit, $offset);
+		}
+
+		$sql = $this->replacePrefix((string) $query);
+
+		$this->prepared = pg_prepare($this->connection, $this->queryName . $this->getCount(), $sql);
+
+		// Store reference to the DatabaseQuery instance
+		return parent::setQuery($query, $offset, $limit);
 	}
 
 	/**
@@ -1094,7 +1178,12 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	protected function freeResult($cursor = null)
 	{
-		pg_free_result($cursor ? $cursor : $this->cursor);
+		$useCursor = $cursor ?: $this->cursor;
+
+		if (is_resource($useCursor))
+		{
+			pg_free_result($useCursor);
+		}
 	}
 
 	/**

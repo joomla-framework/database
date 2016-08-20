@@ -1114,6 +1114,55 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	}
 
 	/**
+	 * Test the execute method
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testExecute()
+	{
+		$query = self::$driver->getQuery(true);
+		$query->insert('jos_dbtest')
+			->columns('title,start_date,description')
+			->values("'testTitle','1970-01-01','testDescription'");
+		self::$driver->setQuery($query);
+
+		$this->assertThat(self::$driver->execute(), $this->isTrue(), __LINE__);
+
+		$this->assertThat(self::$driver->insertid(), $this->equalTo(1), __LINE__);
+	}
+
+	/**
+	 * Test the execute method with a prepared statement
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testExecutePreparedStatement()
+	{
+		$title       = 'testTitle';
+		$startDate   = '1970-01-01';
+		$description = 'Testing';
+
+		/** @var \Joomla\Database\Postgresql\PostgresqlQuery $query */
+		$query = self::$driver->getQuery(true);
+		$query->insert('jos_dbtest')
+			->columns('title,start_date,description')
+			->values('$1, $2, $3');
+		$query->bind(1, $title);
+		$query->bind(2, $startDate);
+		$query->bind(3, $description);
+
+		self::$driver->setQuery($query);
+
+		$this->assertThat(self::$driver->execute(), $this->isTrue(), __LINE__);
+
+		$this->assertThat(self::$driver->insertid(), $this->equalTo(5), __LINE__);
+	}
+
+	/**
 	 * Tests the JDatabasePostgresql replacePrefix method.
 	 *
 	 * @param   string  $stringToReplace  The string in which replace the prefix.
