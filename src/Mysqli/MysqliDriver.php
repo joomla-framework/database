@@ -927,7 +927,7 @@ class MysqliDriver extends DatabaseDriver
 		if (!$cursor)
 		{
 			$this->errorNum = (int) $this->connection->errno;
-			$this->errorMsg = (string) $this->connection->error . "\n-- SQL --\n" . $sql;
+			$this->errorMsg = (string) $this->connection->error;
 
 			// Check if the server was disconnected.
 			if (!$this->connected())
@@ -938,16 +938,16 @@ class MysqliDriver extends DatabaseDriver
 					$this->connection = null;
 					$this->connect();
 				}
-				catch (\RuntimeException $e)
+				catch (ConnectionFailureException $e)
 				// If connect fails, ignore that exception and throw the normal exception.
 				{
 					$this->log(
 						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}',
-						array('code' => $this->errorNum, 'message' => $this->errorMsg)
+						'Database query failed (error #{code}): {message}; Failed query: {sql}',
+						array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
 					);
 
-					throw new \RuntimeException($this->errorMsg, $this->errorNum);
+					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
 				// Since we were able to reconnect, run the query again.
@@ -957,11 +957,11 @@ class MysqliDriver extends DatabaseDriver
 			// The server was not disconnected.
 			$this->log(
 				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}',
-				array('code' => $this->errorNum, 'message' => $this->errorMsg)
+				'Database query failed (error #{code}): {message}; Failed query: {sql}',
+				array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
 			);
 
-			throw new \RuntimeException($this->errorMsg, $this->errorNum);
+			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
 		$this->freeResult($cursor);
@@ -1025,10 +1025,9 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->executed = false;
 
-		if ($cursor instanceof \mysqli_stmt)
+		if ($cursor instanceof \mysqli_result)
 		{
-			$cursor->close();
-			$cursor = null;
+			$cursor->free_result();
 		}
 
 		if ($this->prepared instanceof \mysqli_stmt)
