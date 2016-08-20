@@ -103,24 +103,6 @@ class PgsqlDriver extends PdoDriver
 	}
 
 	/**
-	 * Disconnects the database.
-	 *
-	 * @return  void
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function disconnect()
-	{
-		// Close the connection.
-		if (is_resource($this->connection))
-		{
-			pg_close($this->connection);
-		}
-
-		$this->connection = null;
-	}
-
-	/**
 	 * Drops a table from the database.
 	 *
 	 * @param   string   $tableName  The name of the database table to drop.
@@ -229,6 +211,16 @@ class PgsqlDriver extends PdoDriver
 		{
 			foreach ($fields as $field)
 			{
+				if (stristr(strtolower($field->type), "character varying"))
+				{
+					$field->Default = "";
+				}
+
+				if (stristr(strtolower($field->type), "text"))
+				{
+					$field->Default = "";
+				}
+
 				// Do some dirty translation to MySQL output.
 				// @todo: Come up with and implement a standard across databases.
 				$result[$field->column_name] = (object) array(
@@ -643,7 +635,7 @@ class PgsqlDriver extends PdoDriver
 			}
 
 			// Ignore any internal fields or primary keys with value 0.
-			if (($k[0] == "_") || ($k == $key && $v === 0))
+			if (($k[0] == "_") || ($k == $key && (($v === 0) || ($v === '0'))))
 			{
 				continue;
 			}
