@@ -47,6 +47,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 					'getTableKeys',
 					'getTableSequences',
 					'getVersion',
+					'quote',
 					'quoteName',
 					'loadObjectList',
 					'setQuery',
