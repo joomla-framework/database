@@ -24,7 +24,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 	 * @var    mixed
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $bounded = array();
+	protected $bounded = [];
 
 	/**
 	 * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution. Also
@@ -38,7 +38,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters.
 	 * @param   array           $driverOptions  Optional driver options to be used.
 	 *
-	 * @return  PgsqlQuery
+	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -104,7 +104,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 	 *
 	 * @param   string  $clause  Optionally, the name of the clause to clear, or nothing to clear the whole query.
 	 *
-	 * @return  PgsqlQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */

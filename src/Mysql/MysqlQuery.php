@@ -55,7 +55,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters.
 	 * @param   array           $driverOptions  Optional driver options to be used.
 	 *
-	 * @return  MysqlQuery
+	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -64,7 +64,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 		// Case 1: Empty Key (reset $bounded array)
 		if (empty($key))
 		{
-			$this->bounded = array();
+			$this->bounded = [];
 
 			return $this;
 		}
@@ -121,7 +121,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 	 *
 	 * @param   string  $clause  Optionally, the name of the clause to clear, or nothing to clear the whole query.
 	 *
-	 * @return  MysqlQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */

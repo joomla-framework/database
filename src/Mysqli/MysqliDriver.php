@@ -603,7 +603,7 @@ class MysqliDriver extends DatabaseDriver
 
 				if (count($bounded))
 				{
-					$params     = array();
+					$params     = [];
 					$typeString = '';
 
 					foreach ($bounded as $key => $obj)
@@ -624,7 +624,7 @@ class MysqliDriver extends DatabaseDriver
 						$bindParams[] = &$params[$i];
 					}
 
-					call_user_func_array(array($this->prepared, 'bind_param'), $bindParams);
+					call_user_func_array([$this->prepared, 'bind_param'], $bindParams);
 				}
 			}
 
@@ -736,7 +736,7 @@ class MysqliDriver extends DatabaseDriver
 	 * @param   integer               $offset  The affected row offset to set.
 	 * @param   integer               $limit   The maximum affected rows to set.
 	 *
-	 * @return  MysqliDriver  This object to support method chaining.
+	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -935,7 +935,7 @@ class MysqliDriver extends DatabaseDriver
 					$this->log(
 						Log\LogLevel::ERROR,
 						'Database query failed (error #{code}): {message}; Failed query: {sql}',
-						array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
+						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
 					);
 
 					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
@@ -949,7 +949,7 @@ class MysqliDriver extends DatabaseDriver
 			$this->log(
 				Log\LogLevel::ERROR,
 				'Database query failed (error #{code}): {message}; Failed query: {sql}',
-				array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
+				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
 			);
 
 			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
