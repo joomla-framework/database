@@ -95,7 +95,7 @@ class Driver
 
 		// Create the mock.
 		$mockObject = $test->getMockBuilder('\Joomla\Database\DatabaseDriver')
-			->disableOriginalConstructor()
+			->setConstructorArgs(array(array()))
 			->setMethods($methods)
 			->getMock();
 
