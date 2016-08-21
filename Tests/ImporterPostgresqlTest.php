@@ -39,28 +39,22 @@ class ImporterPostgresqlTest extends \PHPUnit_Framework_TestCase
 		parent::setUp();
 
 		// Set up the database object mock.
-		$this->dbo = $this->getMock(
-			'Joomla\\Database\\Postgresql\\PostgresqlDriver',
-			array(
-				'getErrorNum',
-				'getPrefix',
-				'getTableColumns',
-				'getTableKeys',
-				'getTableSequences',
-				'getAddSequenceSQL',
-				'getChangeSequenceSQL',
-				'getDropSequenceSQL',
-				'getAddIndexSQL',
-				'getVersion',
-				'quoteName',
-				'loadObjectList',
-				'quote',
-				'setQuery',
-			),
-			array(),
-			'',
-			false
-		);
+		$this->dbo = $this->getMockBuilder('Joomla\\Database\\Postgresql\\PostgresqlDriver')
+			->disableOriginalConstructor()
+			->setMethods(
+				array(
+					'getErrorNum',
+					'getPrefix',
+					'getTableColumns',
+					'getTableKeys',
+					'getTableSequences',
+					'getVersion',
+					'quoteName',
+					'loadObjectList',
+					'setQuery',
+				)
+			)
+			->getMock();
 
 		$this->dbo->expects(
 			$this->any()

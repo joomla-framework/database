@@ -38,21 +38,20 @@ class ExporterMySqlTest extends \PHPUnit_Framework_TestCase
 	{
 		// Set up the database object mock.
 
-		$this->dbo = $this->getMock(
-			'Joomla\\Database\\Mysql\\MysqlDriver',
-			array(
-				'getErrorNum',
-				'getPrefix',
-				'getTableColumns',
-				'getTableKeys',
-				'quoteName',
-				'loadObjectList',
-				'setQuery',
-			),
-			array(),
-			'',
-			false
-		);
+		$this->dbo = $this->getMockBuilder('Joomla\\Database\\Mysql\\MysqlDriver')
+			->disableOriginalConstructor()
+			->setMethods(
+				array(
+					'getErrorNum',
+					'getPrefix',
+					'getTableColumns',
+					'getTableKeys',
+					'quoteName',
+					'loadObjectList',
+					'setQuery',
+				)
+			)
+			->getMock();
 
 		$this->dbo->expects(
 			$this->any()

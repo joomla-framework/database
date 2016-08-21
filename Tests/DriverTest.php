@@ -385,10 +385,12 @@ SQL
 	{
 		$this->logs = array();
 
-		$mockLogger = $this->getMock('Psr\Log\AbstractLogger', array('log'), array(), '', false);
+		$mockLogger = $this->getMockBuilder('Psr\Log\LoggerInterface')
+			->getMock();
+
 		$mockLogger->expects($this->any())
 			->method('log')
-			->will($this->returnCallback(array($this, 'mockLog')));
+			->willReturnCallback(array($this, 'mockLog'));
 
 		$this->instance->log(Log\LogLevel::DEBUG, 'Debug', array('sql' => true));
 

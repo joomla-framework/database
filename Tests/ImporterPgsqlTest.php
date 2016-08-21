@@ -39,28 +39,22 @@ class ImporterPgsqlTest extends \PHPUnit_Framework_TestCase
 		parent::setUp();
 
 		// Set up the database object mock.
-		$this->dbo = $this->getMock(
-			'Joomla\\Database\\Pgsql\\PgsqlDriver',
-			array(
-				'getErrorNum',
-				'getPrefix',
-				'getTableColumns',
-				'getTableKeys',
-				'getTableSequences',
-				'getAddSequenceSQL',
-				'getChangeSequenceSQL',
-				'getDropSequenceSQL',
-				'getAddIndexSQL',
-				'getVersion',
-				'quoteName',
-				'loadObjectList',
-				'quote',
-				'setQuery',
-			),
-			array(),
-			'',
-			false
-		);
+		$this->dbo = $this->getMockBuilder('Joomla\\Database\\Pgsql\\PgsqlDriver')
+			->disableOriginalConstructor()
+			->setMethods(
+				array(
+					'getErrorNum',
+					'getPrefix',
+					'getTableColumns',
+					'getTableKeys',
+					'getTableSequences',
+					'getVersion',
+					'quoteName',
+					'loadObjectList',
+					'setQuery',
+				)
+			)
+			->getMock();
 
 		$this->dbo->expects(
 			$this->any()
