@@ -6,12 +6,14 @@
 
 namespace Joomla\Database\Tests\Pgsql;
 
+use Joomla\Database\Tests\Cases\PgsqlCase;
+
 /**
  * Test class for Joomla\Database\Pgsql\PgsqlIteragor.
  *
  * @since  1.0
  */
-class PgsqlIteratorTest extends DatabasePgsqlCase
+class PgsqlIteratorTest extends PgsqlCase
 {
 	/**
 	 * Data provider for the testForEach method
