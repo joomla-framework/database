@@ -11,13 +11,13 @@
     },
     "require-dev": {
         "ircmaxell/password-compat": "~1.0",
-        "phpunit/phpunit": "~4.8|>=5.0 <5.4",
+        "phpunit/phpunit": "~4.8|~5.0",
         "squizlabs/php_codesniffer": "1.*",
         "symfony/polyfill-php56": "~1.0"
     },
     "suggest": {
-        "ircmaxell/password-compat": "Required to use Joomla\\Crypt\\Password\\Simple",
-        "symfony/polyfill-php56": "Required to use Joomla\\Crypt\\Password\\Simple"
+        "ircmaxell/password-compat": "Required to use Joomla\\Crypt\\Password\\Simple on PHP 5.4 or earlier",
+        "symfony/polyfill-php56": "Required to use Joomla\\Crypt\\Password\\Simple on PHP 5.5 or earlier"
     },
     "target-dir": "Joomla/Crypt",
     "autoload": {

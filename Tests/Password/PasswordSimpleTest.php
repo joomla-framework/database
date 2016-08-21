@@ -75,7 +75,10 @@ class PasswordSimpleTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCreateException($password, $type, $salt, $expected, $cost)
 	{
-		$hasher = $this->getMock('Joomla\\Crypt\\Password\\Simple', array('getSalt'));
+		/** @var \PHPUnit_Framework_MockObject_MockObject|\Joomla\Crypt\Password\Simple $hasher */
+		$hasher = $this->getMockBuilder('Joomla\\Crypt\\Password\\Simple')
+			->setMethods(array('getSalt'))
+			->getMock();
 		$hasher->setCost($cost);
 
 		$hasher->expects($this->any())
@@ -106,8 +109,10 @@ class PasswordSimpleTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCreate($password, $type, $salt, $expected, $cost = 10)
 	{
-		$hasher = $this->getMock('Joomla\\Crypt\\Password\\Simple', array('getSalt'));
-
+		/** @var \PHPUnit_Framework_MockObject_MockObject|\Joomla\Crypt\Password\Simple $hasher */
+		$hasher = $this->getMockBuilder('Joomla\\Crypt\\Password\\Simple')
+			->setMethods(array('getSalt'))
+			->getMock();
 		$hasher->setCost($cost);
 
 		$hasher->expects($this->any())

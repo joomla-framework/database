@@ -101,7 +101,9 @@ class CryptTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetKey()
 	{
-		$keyMock = $this->getMock('Joomla\\Crypt\\Key', array(), array('simple'));
+		$keyMock = $this->getMockBuilder('Joomla\\Crypt\\Key')
+			->setConstructorArgs(array('simple'))
+			->getMock();
 
 		$this->object->setKey($keyMock);
 
