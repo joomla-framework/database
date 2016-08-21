@@ -8,11 +8,11 @@ use Joomla\Github\Http;
 use Joomla\Registry\Registry;
 
 /**
- * Test class for JGithub.
+ * Test class for \Joomla\Github\Http.
  *
  * @since  1.0
  */
-class JGithubHttpTest extends \PHPUnit_Framework_TestCase
+class HttpTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var    Registry  Options for the GitHub object.
@@ -21,7 +21,7 @@ class JGithubHttpTest extends \PHPUnit_Framework_TestCase
 	protected $options;
 
 	/**
-	 * @var    Joomla\Http\Transport  Mock client object.
+	 * @var    \Joomla\Http\TransportInterface  Mock client object.
 	 * @since  1.0
 	 */
 	protected $transport;
@@ -45,21 +45,12 @@ class JGithubHttpTest extends \PHPUnit_Framework_TestCase
 		parent::setUp();
 
 		$this->options = new Registry;
-		$this->transport = $this->getMock('Joomla\\Http\\Transport\\Stream', array('request'), array($this->options), 'CustomTransport', false);
+
+		$this->transport = $this->getMockBuilder('Joomla\\Http\\TransportInterface')
+			->setConstructorArgs(array($this->options))
+			->getMock();
 
 		$this->object = new Http($this->options, $this->transport);
-	}
-
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	protected function tearDown()
-	{
 	}
 
 	/**

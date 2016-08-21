@@ -64,8 +64,12 @@ class MembersTest extends \PHPUnit_Framework_TestCase
 		parent::setUp();
 
 		$this->options  = new Registry;
-		$this->client   = $this->getMock('\\Joomla\\Github\\Http', array('get', 'post', 'delete', 'patch', 'put'));
-		$this->response = $this->getMock('\\Joomla\\Http\\Response');
+
+		$this->client = $this->getMockBuilder('\\Joomla\\Github\\Http')
+			->setMethods(array('get', 'post', 'delete', 'patch', 'put'))
+			->getMock();
+
+		$this->response = $this->getMockBuilder('\\Joomla\\Http\\Response')->getMock();
 
 		$this->object = new Members($this->options, $this->client);
 	}

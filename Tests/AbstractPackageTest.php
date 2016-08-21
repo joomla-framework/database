@@ -48,7 +48,10 @@ class AbstractPackageTest extends \PHPUnit_Framework_TestCase
 		parent::setUp();
 
 		$this->options = new Registry;
-		$this->client = $this->getMock('\\Joomla\\Github\\Http', array('get', 'post', 'delete', 'patch', 'put'));
+
+		$this->client = $this->getMockBuilder('\\Joomla\\Github\\Http')
+			->setMethods(array('get', 'post', 'delete', 'patch', 'put'))
+			->getMock();
 
 		$this->object = new Github($this->options, $this->client);
 	}
