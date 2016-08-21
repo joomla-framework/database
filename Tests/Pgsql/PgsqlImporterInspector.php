@@ -4,14 +4,14 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Database\Tests;
+namespace Joomla\Database\Tests\Pgsql;
 
 /**
  * Class to expose protected properties and methods in \Joomla\Database\Pgsql\PgsqlImporter for testing purposes
  *
  * @since  1.0
  */
-class ImporterPgsqlInspector extends \Joomla\Database\Pgsql\PgsqlImporter
+class PgsqlImporterInspector extends \Joomla\Database\Pgsql\PgsqlImporter
 {
 	/**
 	 * Gets any property from the class.

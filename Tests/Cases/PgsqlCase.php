@@ -4,7 +4,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Database\Tests;
+namespace Joomla\Database\Tests\Cases;
 
 use Joomla\Test\TestDatabase;
 use Joomla\Database\DatabaseDriver;
@@ -14,10 +14,12 @@ use Joomla\Database\DatabaseDriver;
  *
  * @since  1.0
  */
-abstract class DatabasePgsqlCase extends TestDatabase
+abstract class PgsqlCase extends TestDatabase
 {
 	/**
-	 * @var    array  The database driver options for the connection.
+	 * The database driver options for the connection.
+	 *
+	 * @var    array
 	 * @since  1.0
 	 */
 	private static $options = array('driver' => 'pgsql');
@@ -34,14 +36,12 @@ abstract class DatabasePgsqlCase extends TestDatabase
 	public static function setUpBeforeClass()
 	{
 		// First let's look to see if we have a DSN defined or in the environment variables.
-		if (defined('JTEST_DATABASE_PGSQL_DSN') || getenv('JTEST_DATABASE_PGSQL_DSN'))
-		{
-			$dsn = defined('JTEST_DATABASE_PGSQL_DSN') ? JTEST_DATABASE_PGSQL_DSN : getenv('JTEST_DATABASE_PGSQL_DSN');
-		}
-		else
+		if (!defined('JTEST_DATABASE_PGSQL_DSN') && !getenv('JTEST_DATABASE_PGSQL_DSN'))
 		{
 			return;
 		}
+
+		$dsn = defined('JTEST_DATABASE_PGSQL_DSN') ? JTEST_DATABASE_PGSQL_DSN : getenv('JTEST_DATABASE_PGSQL_DSN');
 
 		// First let's trim the pgsql: part off the front of the DSN if it exists.
 		if (strpos($dsn, 'pgsql:') === 0)
@@ -103,7 +103,7 @@ abstract class DatabasePgsqlCase extends TestDatabase
 	 */
 	protected function getDataSet()
 	{
-		return $this->createXMLDataSet(__DIR__ . '/Stubs/database.xml');
+		return $this->createXMLDataSet(dirname(__DIR__) . '/Stubs/database.xml');
 	}
 
 	/**

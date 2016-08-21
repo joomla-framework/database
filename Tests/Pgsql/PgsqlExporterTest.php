@@ -4,16 +4,14 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Database\Tests;
-
-require_once __DIR__ . '/ExporterPgsqlInspector.php';
+namespace Joomla\Database\Tests\Pgsql;
 
 /**
  * Test the \Joomla\Database\Pgsql\PgsqlExporter class.
  *
  * @since  1.0
  */
-class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
+class PgsqlExporterTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var    object  The mocked database object for use by test methods.
@@ -254,7 +252,7 @@ class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test__toString()
 	{
-		$instance = new ExporterPgsqlInspector;
+		$instance = new PgsqlExporterInspector;
 
 		// Set up the export settings.
 		$instance
@@ -304,7 +302,7 @@ class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testAsXml()
 	{
-		$instance = new ExporterPgsqlInspector;
+		$instance = new PgsqlExporterInspector;
 
 		$result = $instance->asXml();
 
@@ -330,7 +328,7 @@ class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testBuildXml()
 	{
-		$instance = new ExporterPgsqlInspector;
+		$instance = new PgsqlExporterInspector;
 
 		// Set up the export settings.
 		$instance
@@ -380,7 +378,7 @@ class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testBuildXmlStructure()
 	{
-		$instance = new ExporterPgsqlInspector;
+		$instance = new PgsqlExporterInspector;
 
 		// Set up the export settings.
 		$instance
@@ -424,7 +422,7 @@ class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCheckWithNoDbo()
 	{
-		$instance = new ExporterPgsqlInspector;
+		$instance = new PgsqlExporterInspector;
 
 		try
 		{
@@ -450,7 +448,7 @@ class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCheckWithNoTables()
 	{
-		$instance	= new ExporterPgsqlInspector;
+		$instance	= new PgsqlExporterInspector;
 		$instance->setDbo($this->dbo);
 
 		try
@@ -477,7 +475,7 @@ class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCheckWithGoodInput()
 	{
-		$instance	= new ExporterPgsqlInspector;
+		$instance	= new PgsqlExporterInspector;
 		$instance->setDbo($this->dbo);
 		$instance->from('foobar');
 
@@ -508,7 +506,7 @@ class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testFromWithBadInput()
 	{
-		$instance = new ExporterPgsqlInspector;
+		$instance = new PgsqlExporterInspector;
 
 		try
 		{
@@ -534,7 +532,7 @@ class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testFromWithGoodInput()
 	{
-		$instance = new ExporterPgsqlInspector;
+		$instance = new PgsqlExporterInspector;
 
 		try
 		{
@@ -569,7 +567,7 @@ class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetGenericTableName()
 	{
-		$instance = new ExporterPgsqlInspector;
+		$instance = new PgsqlExporterInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
@@ -588,7 +586,7 @@ class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetDboWithGoodInput()
 	{
-		$instance = new ExporterPgsqlInspector;
+		$instance = new PgsqlExporterInspector;
 
 		try
 		{
@@ -618,7 +616,7 @@ class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testWithStructure()
 	{
-		$instance = new ExporterPgsqlInspector;
+		$instance = new PgsqlExporterInspector;
 
 		$result = $instance->withStructure();
 

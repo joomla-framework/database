@@ -4,14 +4,16 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Database\Tests;
+namespace Joomla\Database\Tests\Pgsql;
+
+use Joomla\Database\Tests\Cases\PgsqlCase;
 
 /**
  * Test class for Joomla\Database\Pgsql\PgsqlDriver.
  *
  * @since  1.0
  */
-class DriverPgsqlTest extends DatabasePgsqlCase
+class PgsqlDriverTest extends PgsqlCase
 {
 	/**
 	 * Data for the testEscape test.

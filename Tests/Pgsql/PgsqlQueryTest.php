@@ -4,7 +4,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Database\Tests;
+namespace Joomla\Database\Tests\Pgsql;
 
 use Joomla\Database\Pgsql\PgsqlQuery;
 use Joomla\Test\TestHelper;
@@ -14,7 +14,7 @@ use Joomla\Test\TestHelper;
  *
  * @since  1.0
  */
-class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
+class PgsqlQueryTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var    \Joomla\Database\DatabaseDriver  A mock of the DatabaseDriver object for testing purposes.

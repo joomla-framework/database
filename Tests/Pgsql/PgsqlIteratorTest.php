@@ -4,14 +4,14 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Database\Tests;
+namespace Joomla\Database\Tests\Pgsql;
 
 /**
  * Test class for Joomla\Database\Pgsql\PgsqlIteragor.
  *
  * @since  1.0
  */
-class IteratorPgsqlTest extends DatabasePgsqlCase
+class PgsqlIteratorTest extends DatabasePgsqlCase
 {
 	/**
 	 * Data provider for the testForEach method
