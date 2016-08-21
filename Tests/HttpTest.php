@@ -49,13 +49,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
 		static $classNumber = 1;
 		$this->options = array();
-		$this->transport = $this->getMock(
-			'Joomla\Http\Transport\Stream',
-			array('request'),
-			array($this->options),
-			'CustomTransport' . $classNumber ++,
-			false
-		);
+
+		$this->transport = $this->getMockBuilder('Joomla\Http\TransportInterface')
+			->setConstructorArgs(array($this->options))
+			->getMock();
 
 		$this->object = new Http($this->options, $this->transport);
 	}
