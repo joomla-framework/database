@@ -776,7 +776,11 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
 	{
 		$event = new Event('onSomething');
 
-		$mockedListener = $this->getMock('Joomla\Event\Test\Stubs\SomethingListener', array('onSomething'));
+		/** @var \PHPUnit_Framework_MockObject_MockObject|\Joomla\Event\Tests\Stubs\SomethingListener $mockedListener */
+		$mockedListener = $this->getMockBuilder('Joomla\Event\Tests\Stubs\SomethingListener')
+			->setMethods(array('onSomething'))
+			->getMock();
+
 		$mockedListener->expects($this->once())
 			->method('onSomething')
 			->with($event);
