@@ -9,6 +9,11 @@
 namespace Joomla\Database\Mysqli;
 
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseQuery;
+use Joomla\Database\Exception\ConnectionFailureException;
+use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Database\Exception\UnsupportedAdapterException;
+use Joomla\Database\Query\PreparableInterface;
 use Psr\Log;
 
 /**
@@ -61,6 +66,22 @@ class MysqliDriver extends DatabaseDriver
 	 * @since  1.4.0
 	 */
 	protected $utf8mb4 = false;
+
+	/**
+	 * The prepared statement.
+	 *
+	 * @var    \mysqli_stmt
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $prepared;
+
+	/**
+	 * Contains the current query execution status
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $executed = false;
 
 	/**
 	 * The minimum supported database version.
@@ -183,16 +204,24 @@ class MysqliDriver extends DatabaseDriver
 			$this->options['socket'] = $port;
 		}
 
-		$this->connection = @mysqli_connect(
+		// Make sure the MySQLi extension for PHP is installed and enabled.
+		if (!static::isSupported())
+		{
+			throw new UnsupportedAdapterException('The MySQLi extension is not available');
+		}
+
+		$this->connection = mysqli_init();
+
+		// Attempt to connect to the server.
+		$connected = $this->connection->real_connect(
 			$this->options['host'], $this->options['user'], $this->options['password'], null, $this->options['port'], $this->options['socket']
 		);
 
-		// Attempt to connect to the server.
-		if (!$this->connection)
+		if (!$connected)
 		{
-			$this->log(Log\LogLevel::ERROR, 'Could not connect to MySQL: ' . mysqli_connect_error());
+			$this->log(Log\LogLevel::ERROR, 'Could not connect to MySQL: ' . $this->connection->connect_error);
 
-			throw new \RuntimeException('Could not connect to MySQL.', mysqli_connect_errno());
+			throw new ConnectionFailureException('Could not connect to MySQL.', $this->connection->connect_errno);
 		}
 
 		// If auto-select is enabled select the given database.
@@ -250,7 +279,7 @@ class MysqliDriver extends DatabaseDriver
 		// Close the connection.
 		if (is_callable($this->connection, 'close'))
 		{
-			mysqli_close($this->connection);
+			$this->connection->close();
 		}
 
 		$this->connection = null;
@@ -270,7 +299,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$result = mysqli_real_escape_string($this->getConnection(), $text);
+		$result = $this->connection->real_escape_string($text);
 
 		if ($extra)
 		{
@@ -303,7 +332,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		if (is_object($this->connection))
 		{
-			return mysqli_ping($this->connection);
+			return $this->connection->ping();
 		}
 
 		return false;
@@ -341,7 +370,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		return mysqli_affected_rows($this->connection);
+		return $this->connection->affected_rows;
 	}
 
 	/**
@@ -489,7 +518,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		return mysqli_get_server_info($this->connection);
+		return $this->connection->get_server_info();
 	}
 
 	/**
@@ -504,7 +533,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		return mysqli_insert_id($this->connection);
+		return $this->connection->insert_id;
 	}
 
 	/**
@@ -562,14 +591,58 @@ class MysqliDriver extends DatabaseDriver
 		$this->errorNum = 0;
 		$this->errorMsg = '';
 
-		// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
-		$this->cursor = @mysqli_query($this->connection, $sql);
+		// Execute the query.
+		$this->executed = false;
+
+		if ($this->prepared instanceof \mysqli_stmt)
+		{
+			// Bind the variables:
+			if ($this->sql instanceof PreparableInterface)
+			{
+				$bounded =& $this->sql->getBounded();
+
+				if (count($bounded))
+				{
+					$params     = array();
+					$typeString = '';
+
+					foreach ($bounded as $key => $obj)
+					{
+						// Add the type to the type string
+						$typeString .= $obj->dataType;
+
+						// And add the value as an additional param
+						$params[] = $obj->value;
+					}
+
+					// Make everything references for call_user_func_array()
+					$bindParams = array();
+					$bindParams[] = &$typeString;
+
+					for ($i = 0; $i < count($params); $i++)
+					{
+						$bindParams[] = &$params[$i];
+					}
+
+					call_user_func_array(array($this->prepared, 'bind_param'), $bindParams);
+				}
+			}
+
+			$this->executed = $this->prepared->execute();
+			$this->cursor   = $this->prepared->get_result();
+
+			// If the query was successful and we did not get a cursor, then set this to true (mimics mysql_query() return)
+			if ($this->executed && !$this->cursor)
+			{
+				$this->cursor = true;
+			}
+		}
 
 		// If an error occurred handle it.
-		if (!$this->cursor)
+		if (!$this->executed)
 		{
-			$this->errorNum = (int) mysqli_errno($this->connection);
-			$this->errorMsg = (string) mysqli_error($this->connection) . "\n-- SQL --\n" . $sql;
+			$this->errorNum = (int) $this->connection->errno;
+			$this->errorMsg = (string) $this->connection->error;
 
 			// Check if the server was disconnected.
 			if (!$this->connected())
@@ -580,16 +653,16 @@ class MysqliDriver extends DatabaseDriver
 					$this->connection = null;
 					$this->connect();
 				}
-				catch (\RuntimeException $e)
+				catch (ConnectionFailureException $e)
 				// If connect fails, ignore that exception and throw the normal exception.
 				{
 					$this->log(
 						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}',
-						['code' => $this->errorNum, 'message' => $this->errorMsg]
+						'Database query failed (error #{code}): {message}; Failed query: {sql}',
+						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
 					);
 
-					throw new \RuntimeException($this->errorMsg, $this->errorNum);
+					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
 				// Since we were able to reconnect, run the query again.
@@ -599,11 +672,11 @@ class MysqliDriver extends DatabaseDriver
 			// The server was not disconnected.
 			$this->log(
 				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}',
-				['code' => $this->errorNum, 'message' => $this->errorMsg]
+				'Database query failed (error #{code}): {message}; Failed query: {sql}',
+				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
 			);
 
-			throw new \RuntimeException($this->errorMsg, $this->errorNum);
+			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
 		return $this->cursor;
@@ -648,12 +721,48 @@ class MysqliDriver extends DatabaseDriver
 			return false;
 		}
 
-		if (!mysqli_select_db($this->connection, $database))
+		if (!$this->connection->select_db($database))
 		{
-			throw new \RuntimeException('Could not connect to database.');
+			throw new ConnectionFailureException('Could not connect to database.');
 		}
 
 		return true;
+	}
+
+	/**
+	 * Sets the SQL statement string for later execution.
+	 *
+	 * @param   DatabaseQuery|string  $query   The SQL statement to set either as a DatabaseQuery object or a string.
+	 * @param   integer               $offset  The affected row offset to set.
+	 * @param   integer               $limit   The maximum affected rows to set.
+	 *
+	 * @return  MysqliDriver  This object to support method chaining.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setQuery($query, $offset = null, $limit = null)
+	{
+		$this->connect();
+
+		$this->freeResult();
+
+		if (is_string($query))
+		{
+			// Allows taking advantage of bound variables in a direct query:
+			$query = $this->getQuery(true)->setQuery($query);
+		}
+
+		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
+		{
+			$query->setLimit($limit, $offset);
+		}
+
+		$sql = $this->replacePrefix((string) $query);
+
+		$this->prepared = $this->connection->prepare($sql);
+
+		// Store reference to the DatabaseQuery instance
+		return parent::setQuery($query, $offset, $limit);
 	}
 
 	/**
@@ -706,11 +815,11 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function transactionCommit($toSavepoint = false)
 	{
-		$this->connect();
-
 		if (!$toSavepoint || $this->transactionDepth <= 1)
 		{
-			if ($this->setQuery('COMMIT')->execute())
+			$this->connect();
+
+			if ($this->connection->commit())
 			{
 				$this->transactionDepth = 0;
 			}
@@ -733,11 +842,11 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function transactionRollback($toSavepoint = false)
 	{
-		$this->connect();
-
 		if (!$toSavepoint || $this->transactionDepth <= 1)
 		{
-			if ($this->setQuery('ROLLBACK')->execute())
+			$this->connect();
+
+			if ($this->connection->rollback())
 			{
 				$this->transactionDepth = 0;
 			}
@@ -746,9 +855,8 @@ class MysqliDriver extends DatabaseDriver
 		}
 
 		$savepoint = 'SP_' . ($this->transactionDepth - 1);
-		$this->setQuery('ROLLBACK TO SAVEPOINT ' . $this->quoteName($savepoint));
 
-		if ($this->execute())
+		if ($this->executeTransactionQuery('ROLLBACK TO SAVEPOINT ' . $this->quoteName($savepoint)))
 		{
 			$this->transactionDepth--;
 		}
@@ -768,9 +876,12 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
+		// Disallow auto commit
+		$this->connection->autocommit(false);
+
 		if (!$asSavepoint || !$this->transactionDepth)
 		{
-			if ($this->setQuery('START TRANSACTION')->execute())
+			if ($this->executeTransactionQuery('START TRANSACTION'))
 			{
 				$this->transactionDepth = 1;
 			}
@@ -779,12 +890,74 @@ class MysqliDriver extends DatabaseDriver
 		}
 
 		$savepoint = 'SP_' . $this->transactionDepth;
-		$this->setQuery('SAVEPOINT ' . $this->quoteName($savepoint));
 
-		if ($this->execute())
+		if ($this->executeTransactionQuery('SAVEPOINT ' . $this->quoteName($savepoint)))
 		{
 			$this->transactionDepth++;
 		}
+	}
+
+	/**
+	 * Internal method to execute queries regarding transactions.
+	 *
+	 * This method uses `mysqli_query()` directly due to the execute() method using prepared statements and the underlying API not supporting this.
+	 *
+	 * @param   string  $sql  SQL statement to execute.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function executeTransactionQuery($sql)
+	{
+		$this->connect();
+
+		$cursor = $this->connection->query($sql);
+
+		// If an error occurred handle it.
+		if (!$cursor)
+		{
+			$this->errorNum = (int) $this->connection->errno;
+			$this->errorMsg = (string) $this->connection->error;
+
+			// Check if the server was disconnected.
+			if (!$this->connected())
+			{
+				try
+				{
+					// Attempt to reconnect.
+					$this->connection = null;
+					$this->connect();
+				}
+				catch (ConnectionFailureException $e)
+				// If connect fails, ignore that exception and throw the normal exception.
+				{
+					$this->log(
+						Log\LogLevel::ERROR,
+						'Database query failed (error #{code}): {message}; Failed query: {sql}',
+						array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
+					);
+
+					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
+				}
+
+				// Since we were able to reconnect, run the query again.
+				return $this->executeTransactionQuery($sql);
+			}
+
+			// The server was not disconnected.
+			$this->log(
+				Log\LogLevel::ERROR,
+				'Database query failed (error #{code}): {message}; Failed query: {sql}',
+				array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
+			);
+
+			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
+		}
+
+		$this->freeResult($cursor);
+
+		return true;
 	}
 
 	/**
@@ -841,7 +1014,18 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	protected function freeResult($cursor = null)
 	{
-		mysqli_free_result($cursor ? $cursor : $this->cursor);
+		$this->executed = false;
+
+		if ($cursor instanceof \mysqli_result)
+		{
+			$cursor->free_result();
+		}
+
+		if ($this->prepared instanceof \mysqli_stmt)
+		{
+			$this->prepared->close();
+			$this->prepared = null;
+		}
 	}
 
 	/**

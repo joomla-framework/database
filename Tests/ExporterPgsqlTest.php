@@ -4,14 +4,16 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Database\Tests\Postgresql;
+namespace Joomla\Database\Tests;
+
+require_once __DIR__ . '/ExporterPgsqlInspector.php';
 
 /**
- * Test the \Joomla\Database\Postgresql\PostgresqlExporter class.
+ * Test the \Joomla\Database\Pgsql\PgsqlExporter class.
  *
  * @since  1.0
  */
-class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
+class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var    object  The mocked database object for use by test methods.
@@ -43,7 +45,7 @@ class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
 		parent::setUp();
 
 		// Set up the database object mock.
-		$this->dbo = $this->getMockBuilder('Joomla\\Database\\Postgresql\\PostgresqlDriver')
+		$this->dbo = $this->getMockBuilder('Joomla\\Database\\Pgsql\\PgsqlDriver')
 			->disableOriginalConstructor()
 			->setMethods(
 				array(
@@ -252,7 +254,7 @@ class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test__toString()
 	{
-		$instance = new PostgresqlExporterInspector;
+		$instance = new ExporterPgsqlInspector;
 
 		// Set up the export settings.
 		$instance
@@ -302,7 +304,7 @@ class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testAsXml()
 	{
-		$instance = new PostgresqlExporterInspector;
+		$instance = new ExporterPgsqlInspector;
 
 		$result = $instance->asXml();
 
@@ -328,7 +330,7 @@ class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testBuildXml()
 	{
-		$instance = new PostgresqlExporterInspector;
+		$instance = new ExporterPgsqlInspector;
 
 		// Set up the export settings.
 		$instance
@@ -378,7 +380,7 @@ class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testBuildXmlStructure()
 	{
-		$instance = new PostgresqlExporterInspector;
+		$instance = new ExporterPgsqlInspector;
 
 		// Set up the export settings.
 		$instance
@@ -422,7 +424,7 @@ class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCheckWithNoDbo()
 	{
-		$instance = new PostgresqlExporterInspector;
+		$instance = new ExporterPgsqlInspector;
 
 		try
 		{
@@ -448,7 +450,7 @@ class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCheckWithNoTables()
 	{
-		$instance	= new PostgresqlExporterInspector;
+		$instance	= new ExporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		try
@@ -475,7 +477,7 @@ class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCheckWithGoodInput()
 	{
-		$instance	= new PostgresqlExporterInspector;
+		$instance	= new ExporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 		$instance->from('foobar');
 
@@ -506,7 +508,7 @@ class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testFromWithBadInput()
 	{
-		$instance = new PostgresqlExporterInspector;
+		$instance = new ExporterPgsqlInspector;
 
 		try
 		{
@@ -532,7 +534,7 @@ class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testFromWithGoodInput()
 	{
-		$instance = new PostgresqlExporterInspector;
+		$instance = new ExporterPgsqlInspector;
 
 		try
 		{
@@ -567,7 +569,7 @@ class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetGenericTableName()
 	{
-		$instance = new PostgresqlExporterInspector;
+		$instance = new ExporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
@@ -586,7 +588,7 @@ class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetDboWithGoodInput()
 	{
-		$instance = new PostgresqlExporterInspector;
+		$instance = new ExporterPgsqlInspector;
 
 		try
 		{
@@ -616,7 +618,7 @@ class PostgresqlExporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testWithStructure()
 	{
-		$instance = new PostgresqlExporterInspector;
+		$instance = new ExporterPgsqlInspector;
 
 		$result = $instance->withStructure();
 

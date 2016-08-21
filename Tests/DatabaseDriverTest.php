@@ -269,7 +269,9 @@ SQL
 	{
 		$this->logs = array();
 
-		$mockLogger = $this->getMock('Psr\Log\AbstractLogger', array('log'), array(), '', false);
+		$mockLogger = $this->getMockBuilder('Psr\Log\LoggerInterface')
+			->getMock();
+
 		$mockLogger->expects($this->any())
 			->method('log')
 			->willReturnCallback(array($this, 'mockLog'));

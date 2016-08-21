@@ -1,19 +1,17 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Database\Tests\Postgresql;
-
-use Joomla\Database\Tests\Cases\PostgresqlCase;
+namespace Joomla\Database\Tests;
 
 /**
- * Test class for Joomla\Database\Postgresql\PostgresqlDriver.
+ * Test class for Joomla\Database\Pgsql\PgsqlDriver.
  *
  * @since  1.0
  */
-class PostgresqlDriverTest extends PostgresqlCase
+class DriverPgsqlTest extends DatabasePgsqlCase
 {
 	/**
 	 * Data for the testEscape test.
@@ -27,10 +25,10 @@ class PostgresqlDriverTest extends PostgresqlCase
 		return array(
 			/* ' will be escaped and become '' */
 			array("'%_abc123", false, '\'\'%_abc123'),
-			array("'%_abc123", true, '\'\'\%\_abc123'),
+			array("'%_abc123", true, '\'\'%_abc123'),
 			/* ' and \ will be escaped: the first become '', the latter \\ */
 			array("\'%_abc123", false, '\\\\\'\'%_abc123'),
-			array("\'%_abc123", true, '\\\\\'\'\%\_abc123'));
+			array("\'%_abc123", true, '\\\\\'\'%_abc123'));
 	}
 
 	/**
@@ -90,15 +88,15 @@ class PostgresqlDriverTest extends PostgresqlCase
 			/* no prefix inside, no change */
 			array('SELECT * FROM table', '#__', 'SELECT * FROM table'),
 			/* the prefix inside double quote has to be changed */
-			array('SELECT * FROM "#__table"', '#__', 'SELECT * FROM "table"'),
+			array('SELECT * FROM "#__table"', '#__', 'SELECT * FROM "jos_table"'),
 			/* the prefix inside single quote hasn't to be changed */
 			array('SELECT * FROM \'#__table\'', '#__', 'SELECT * FROM \'#__table\''),
 			/* mixed quote case */
-			array('SELECT * FROM \'#__table\', "#__tableSecond"', '#__', 'SELECT * FROM \'#__table\', "tableSecond"'),
+			array('SELECT * FROM \'#__table\', "#__tableSecond"', '#__', 'SELECT * FROM \'#__table\', "jos_tableSecond"'),
 			/* the prefix used in sequence name (single quote) has to be changed */
-			array('SELECT * FROM currval(\'#__table_id_seq\'::regclass)', '#__', 'SELECT * FROM currval(\'table_id_seq\'::regclass)'),
+			array('SELECT * FROM currval(\'#__table_id_seq\'::regclass)', '#__', 'SELECT * FROM currval(\'jos_table_id_seq\'::regclass)'),
 			/* using another prefix */
-			array('SELECT * FROM "#!-_table"', '#!-_', 'SELECT * FROM "table"'));
+			array('SELECT * FROM "#!-_table"', '#!-_', 'SELECT * FROM "jos_table"'));
 	}
 
 	/**
@@ -112,11 +110,11 @@ class PostgresqlDriverTest extends PostgresqlCase
 	{
 		return array(
 			/* no dot inside var */
-			array('dbtest', null, '"dbtest"'),
+			array('jos_dbtest', null, '"jos_dbtest"'),
 			/* a dot inside var */
-			array('public.dbtest', null, '"public"."dbtest"'),
+			array('public.jos_dbtest', null, '"public"."jos_dbtest"'),
 			/* two dot inside var */
-			array('joomla_ut.public.dbtest', null, '"joomla_ut"."public"."dbtest"'),
+			array('joomla_ut.public.jos_dbtest', null, '"joomla_ut"."public"."jos_dbtest"'),
 			/* using an array */
 			array(array('joomla_ut', 'dbtest'), null, array('"joomla_ut"', '"dbtest"')),
 			/* using an array with dotted name */
@@ -125,9 +123,9 @@ class PostgresqlDriverTest extends PostgresqlCase
 			array(array('joomla_ut.public.dbtest', 'public.dbtest.col'), null, array('"joomla_ut"."public"."dbtest"', '"public"."dbtest"."col"')),
 
 			/*** same tests with AS part ***/
-			array('dbtest', 'test', '"dbtest" AS "test"'),
-			array('public.dbtest', 'tst', '"public"."dbtest" AS "tst"'),
-			array('joomla_ut.public.dbtest', 'tst', '"joomla_ut"."public"."dbtest" AS "tst"'),
+			array('jos_dbtest', 'test', '"jos_dbtest" AS "test"'),
+			array('public.jos_dbtest', 'tst', '"public"."jos_dbtest" AS "tst"'),
+			array('joomla_ut.public.jos_dbtest', 'tst', '"joomla_ut"."public"."jos_dbtest" AS "tst"'),
 			array(array('joomla_ut', 'dbtest'), array('j_ut', 'tst'), array('"joomla_ut" AS "j_ut"', '"dbtest" AS "tst"')),
 			array(
 				array('joomla_ut.dbtest', 'public.dbtest'),
@@ -206,7 +204,7 @@ class PostgresqlDriverTest extends PostgresqlCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->delete();
-		$query->from('dbtest');
+		$query->from('jos_dbtest');
 		self::$driver->setQuery($query);
 
 		self::$driver->execute();
@@ -237,7 +235,7 @@ class PostgresqlDriverTest extends PostgresqlCase
 	{
 		$query = self::$driver->getQuery(true);
 		$query->select('*');
-		$query->from('dbtest');
+		$query->from('jos_dbtest');
 		$query->where('description=' . self::$driver->quote('one'));
 		self::$driver->setQuery($query);
 
@@ -256,7 +254,7 @@ class PostgresqlDriverTest extends PostgresqlCase
 	public function testGetTableCreate()
 	{
 		$this->assertThat(
-			self::$driver->getTableCreate('dbtest'),
+			self::$driver->getTableCreate('jos_dbtest'),
 			$this->equalTo(''),
 			__LINE__
 		);
@@ -273,7 +271,7 @@ class PostgresqlDriverTest extends PostgresqlCase
 	{
 		$tableCol = array('id' => 'integer', 'title' => 'character varying', 'start_date' => 'timestamp without time zone', 'description' => 'text');
 
-		$this->assertThat(self::$driver->getTableColumns('dbtest'), $this->equalTo($tableCol), __LINE__);
+		$this->assertThat(self::$driver->getTableColumns('jos_dbtest'), $this->equalTo($tableCol), __LINE__);
 
 		/* not only type field */
 		$id = new \stdClass;
@@ -283,7 +281,7 @@ class PostgresqlDriverTest extends PostgresqlCase
 		$id->Type = 'integer';
 		$id->null = 'NO';
 		$id->Null = 'NO';
-		$id->Default = 'nextval(\'dbtest_id_seq\'::regclass)';
+		$id->Default = 'nextval(\'jos_dbtest_id_seq\'::regclass)';
 		$id->comments = '';
 
 		$title = new \stdClass;
@@ -317,7 +315,7 @@ class PostgresqlDriverTest extends PostgresqlCase
 		$description->comments = '';
 
 		$this->assertThat(
-			self::$driver->getTableColumns('dbtest', false),
+			self::$driver->getTableColumns('jos_dbtest', false),
 			$this->equalTo(array('id' => $id, 'title' => $title, 'start_date' => $start_date, 'description' => $description)),
 			__LINE__
 		);
@@ -333,30 +331,30 @@ class PostgresqlDriverTest extends PostgresqlCase
 	public function testGetTableKeys()
 	{
 		$pkey = new \stdClass;
-		$pkey->idxName = 'assets_pkey';
-		$pkey->isPrimary = 't';
-		$pkey->isUnique = 't';
-		$pkey->Query = 'ALTER TABLE assets ADD PRIMARY KEY (id)';
+		$pkey->idxName = 'jos_assets_pkey';
+		$pkey->isPrimary = true;
+		$pkey->isUnique = true;
+		$pkey->Query = 'ALTER TABLE jos_assets ADD PRIMARY KEY (id)';
 
 		$asset = new \stdClass;
 		$asset->idxName = 'idx_asset_name';
-		$asset->isPrimary = 'f';
-		$asset->isUnique = 't';
-		$asset->Query = 'CREATE UNIQUE INDEX idx_asset_name ON assets USING btree (name)';
+		$asset->isPrimary = false;
+		$asset->isUnique = true;
+		$asset->Query = 'CREATE UNIQUE INDEX idx_asset_name ON jos_assets USING btree (name)';
 
 		$lftrgt = new \stdClass;
-		$lftrgt->idxName = 'assets_idx_lft_rgt';
-		$lftrgt->isPrimary = 'f';
-		$lftrgt->isUnique = 'f';
-		$lftrgt->Query = 'CREATE INDEX assets_idx_lft_rgt ON assets USING btree (lft, rgt)';
+		$lftrgt->idxName = 'jos_assets_idx_lft_rgt';
+		$lftrgt->isPrimary = false;
+		$lftrgt->isUnique = false;
+		$lftrgt->Query = 'CREATE INDEX jos_assets_idx_lft_rgt ON jos_assets USING btree (lft, rgt)';
 
 		$id = new \stdClass;
-		$id->idxName = 'assets_idx_parent_id';
-		$id->isPrimary = 'f';
-		$id->isUnique = 'f';
-		$id->Query = 'CREATE INDEX assets_idx_parent_id ON assets USING btree (parent_id)';
+		$id->idxName = 'jos_assets_idx_parent_id';
+		$id->isPrimary = false;
+		$id->isUnique = false;
+		$id->Query = 'CREATE INDEX jos_assets_idx_parent_id ON jos_assets USING btree (parent_id)';
 
-		$this->assertThat(self::$driver->getTableKeys('assets'), $this->equalTo(array($pkey, $id, $lftrgt, $asset)), __LINE__);
+		$this->assertThat(self::$driver->getTableKeys('jos_assets'), $this->equalTo(array($pkey, $id, $lftrgt, $asset)), __LINE__);
 	}
 
 	/**
@@ -369,9 +367,9 @@ class PostgresqlDriverTest extends PostgresqlCase
 	public function testGetTableSequences()
 	{
 		$seq = new \stdClass;
-		$seq->sequence = 'dbtest_id_seq';
+		$seq->sequence = 'jos_dbtest_id_seq';
 		$seq->schema = 'public';
-		$seq->table = 'dbtest';
+		$seq->table = 'jos_dbtest';
 		$seq->column = 'id';
 		$seq->data_type = 'bigint';
 
@@ -391,7 +389,7 @@ class PostgresqlDriverTest extends PostgresqlCase
 			$seq->cycle_option = null;
 		}
 
-		$this->assertThat(self::$driver->getTableSequences('dbtest'), $this->equalTo(array($seq)), __LINE__);
+		$this->assertThat(self::$driver->getTableSequences('jos_dbtest'), $this->equalTo(array($seq)), __LINE__);
 	}
 
 	/**
@@ -404,29 +402,29 @@ class PostgresqlDriverTest extends PostgresqlCase
 	public function testGetTableList()
 	{
 		$expected = array(
-			"0" => "assets",
-			"1" => "categories",
-			"2" => "content",
-			"3" => "core_log_searches",
-			"4" => "dbtest",
-			"5" => "extensions",
-			"6" => "languages",
-			"7" => "log_entries",
-			"8" => "menu",
-			"9" => "menu_types",
-			"10" => "modules",
-			"11" => "modules_menu",
-			"12" => "schemas",
-			"13" => "session",
-			"14" => "update_categories",
-			"15" => "update_sites",
-			"16" => "update_sites_extensions",
-			"17" => "updates",
-			"18" => "user_profiles",
-			"19" => "user_usergroup_map",
-			"20" => "usergroups",
-			"21" => "users",
-			"22" => "viewlevels");
+			"0" => "jos_assets",
+			"1" => "jos_categories",
+			"2" => "jos_content",
+			"3" => "jos_core_log_searches",
+			"4" => "jos_dbtest",
+			"5" => "jos_extensions",
+			"6" => "jos_languages",
+			"7" => "jos_log_entries",
+			"8" => "jos_menu",
+			"9" => "jos_menu_types",
+			"10" => "jos_modules",
+			"11" => "jos_modules_menu",
+			"12" => "jos_schemas",
+			"13" => "jos_session",
+			"14" => "jos_update_categories",
+			"15" => "jos_update_sites",
+			"16" => "jos_update_sites_extensions",
+			"17" => "jos_updates",
+			"18" => "jos_user_profiles",
+			"19" => "jos_user_usergroup_map",
+			"20" => "jos_usergroups",
+			"21" => "jos_users",
+			"22" => "jos_viewlevels");
 
 		$result = self::$driver->getTableList();
 
@@ -476,37 +474,7 @@ class PostgresqlDriverTest extends PostgresqlCase
 	 */
 	public function testInsertid()
 	{
-		self::$driver->setQuery('TRUNCATE TABLE "dbtest"');
-		self::$driver->execute();
-
-		/* increment the sequence automatically with INSERT INTO,
-		 * first insert to have a common starting point */
-		$query = self::$driver->getQuery(true);
-		$query->insert('dbtest')
-			->columns('title,start_date,description')
-			->values("'testTitle','1970-01-01','testDescription'");
-		self::$driver->setQuery($query);
-		self::$driver->execute();
-
-		/* get the current sequence value */
-		$actualVal = self::$driver->getQuery(true);
-		$actualVal->select("currval('dbtest_id_seq'::regclass)");
-		self::$driver->setQuery($actualVal);
-		$idActualVal = self::$driver->loadRow();
-
-		/* insert again, then call insertid() */
-		$secondInsertQuery = self::$driver->getQuery(true);
-		$secondInsertQuery->insert('dbtest')
-			->columns('title,start_date,description')
-			->values("'testTitle2nd', '1971-01-01', 'testDescription2nd'");
-		self::$driver->setQuery($secondInsertQuery);
-		self::$driver->execute();
-
-		/* get insertid of last INSERT INTO */
-		$insertId = self::$driver->insertid();
-
-		/* check if first sequence val +1 is equal to last sequence val */
-		$this->assertThat($insertId, $this->equalTo($idActualVal[0] + 1), __LINE__);
+		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -518,9 +486,9 @@ class PostgresqlDriverTest extends PostgresqlCase
 	 */
 	public function testInsertObject()
 	{
-		self::$driver->setQuery('ALTER SEQUENCE dbtest_id_seq RESTART WITH 1')->execute();
+		self::$driver->setQuery('ALTER SEQUENCE jos_dbtest_id_seq RESTART WITH 1')->execute();
 
-		self::$driver->setQuery('TRUNCATE TABLE "dbtest"')->execute();
+		self::$driver->setQuery('TRUNCATE TABLE "jos_dbtest"')->execute();
 
 		$tst = new \stdClass;
 		$tst->title = "PostgreSQL test insertObject";
@@ -857,8 +825,8 @@ class PostgresqlDriverTest extends PostgresqlCase
 		$tst->timeStamp = '2012-04-07 15:00:00';
 		$tst->nullDate = null;
 		$tst->txt = "Test insertObject";
-		$tst->boolTrue = 't';
-		$tst->boolFalse = 'f';
+		$tst->boolTrue = true;
+		$tst->boolFalse = false;
 		$tst->num = '43.2';
 		$tst->nullInt = '';
 
@@ -870,7 +838,7 @@ class PostgresqlDriverTest extends PostgresqlCase
 		$this->assertThat(
 			implode(',', $values),
 			$this->equalTo(
-				"5,'PostgreSQL test insertObject','2012-04-07 15:00:00','1970-01-01 00:00:00','Test insertObject',TRUE,FALSE,43.2,NULL"
+				"5,'PostgreSQL test insertObject','2012-04-07 15:00:00','1970-01-01 00:00:00','Test insertObject',TRUE,NULL,43.2,NULL"
 			),
 			__LINE__
 		);
@@ -883,14 +851,21 @@ class PostgresqlDriverTest extends PostgresqlCase
 	 */
 	public function testSetUtf()
 	{
-		if (!function_exists('pg_set_client_encoding'))
-		{
-			$this->assertThat(self::$driver->setUtf(), $this->equalTo(-1), __LINE__);
-		}
-		else
-		{
-			$this->assertThat(self::$driver->setUtf(), $this->equalTo(0), __LINE__);
-		}
+		$this->assertThat(self::$driver->setUtf(), $this->equalTo(0), __LINE__);
+	}
+
+	/**
+	 * Test Test method - there really isn't a lot to test here, but
+	 * this is present for the sake of completeness
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 * @deprecated  2.0
+	 */
+	public function testTest()
+	{
+		$this->assertThat(\Joomla\Database\Postgresql\PostgresqlDriver::test(), $this->isTrue(), __LINE__);
 	}
 
 	/**
@@ -957,8 +932,8 @@ class PostgresqlDriverTest extends PostgresqlCase
 		/* try to insert this tuple, inserted only when savepoint != null */
 		$queryIns = self::$driver->getQuery(true);
 		$queryIns->insert('#__dbtest')
-			->columns('id,title,start_date,description')
-			->values("7, 'testRollback','1970-01-01','testRollbackSp'");
+			->columns('id, title, start_date, description')
+			->values("7, 'testRollback', '1970-01-01', 'testRollbackSp'");
 		self::$driver->setQuery($queryIns)->execute();
 
 		/* create savepoint only if is passed by data provider */
@@ -970,8 +945,8 @@ class PostgresqlDriverTest extends PostgresqlCase
 		/* try to insert this tuple, always rolled back */
 		$queryIns = self::$driver->getQuery(true);
 		$queryIns->insert('#__dbtest')
-			->columns('id,title,start_date,description')
-			->values("8, 'testRollback','1972-01-01','testRollbackSp'");
+			->columns('id, title, start_date, description')
+			->values("8, 'testRollback', '1972-01-01', 'testRollbackSp'");
 		self::$driver->setQuery($queryIns)->execute();
 
 		self::$driver->transactionRollback((boolean) $toSavepoint);
@@ -989,7 +964,7 @@ class PostgresqlDriverTest extends PostgresqlCase
 		$queryCheck = self::$driver->getQuery(true);
 		$queryCheck->select('*')
 			->from('#__dbtest')
-			->where("description='testRollbackSp'");
+			->where("description = 'testRollbackSp'");
 		self::$driver->setQuery($queryCheck);
 		$result = self::$driver->loadRowList();
 
@@ -1005,7 +980,6 @@ class PostgresqlDriverTest extends PostgresqlCase
 	 */
 	public function testTransactionStart()
 	{
-		self::$driver->transactionRollback();
 		self::$driver->transactionStart();
 		$queryIns = self::$driver->getQuery(true);
 		$queryIns->insert('#__dbtest')
@@ -1026,33 +1000,6 @@ class PostgresqlDriverTest extends PostgresqlCase
 	}
 
 	/**
-	 * Test for release of transaction savepoint, correct case is already tested inside
-	 * 		testTransactionRollback, here will be tested a RELEASE SAVEPOINT of an
-	 * 		inexistent savepoint that will throw and exception.
-	 *
-	 * @return  void
-	 *
-	 * @since             1.0
-	 * @expectedException \RuntimeException
-	 */
-	public function testReleaseTransactionSavepoint()
-	{
-		self::$driver->transactionRollback();
-		self::$driver->transactionStart();
-
-		/* release a nonexistent savepoint will throw an exception */
-		try
-		{
-			self::$driver->releaseTransactionSavepoint('pippo');
-		}
-		catch (\RuntimeException $e)
-		{
-			self::$driver->transactionRollback();
-			throw $e;
-		}
-	}
-
-	/**
 	 * Tests the renameTable method.
 	 *
 	 * @return  void
@@ -1061,9 +1008,9 @@ class PostgresqlDriverTest extends PostgresqlCase
 	 */
 	public function testRenameTable()
 	{
-		$newTableName = 'bak_dbtest';
+		$newTableName = 'bak_jos_dbtest';
 
-		self::$driver->renameTable('dbtest', $newTableName);
+		self::$driver->renameTable('jos_dbtest', $newTableName);
 
 		/* check name change */
 		$tableList = self::$driver->getTableList();
@@ -1079,7 +1026,7 @@ class PostgresqlDriverTest extends PostgresqlCase
 								WHERE pg_class.relname=\'' . $newTableName . '\' AND pg_class.oid=pg_index.indrelid );');
 
 		$oldIndexes = self::$driver->loadColumn();
-		$this->assertThat($oldIndexes[0], $this->equalTo('bak_dbtest_pkey'), __LINE__);
+		$this->assertThat($oldIndexes[0], $this->equalTo('bak_jos_dbtest_pkey'), __LINE__);
 
 		/* check sequence change */
 		self::$driver->setQuery(
@@ -1095,59 +1042,10 @@ class PostgresqlDriverTest extends PostgresqlCase
 							AND relname LIKE \'%' . $newTableName . '%\' ;');
 
 		$oldSequences = self::$driver->loadColumn();
-		$this->assertThat($oldSequences[0], $this->equalTo('bak_dbtest_id_seq'), __LINE__);
+		$this->assertThat($oldSequences[0], $this->equalTo('bak_jos_dbtest_id_seq'), __LINE__);
 
 		/* restore initial state */
-		self::$driver->renameTable($newTableName, 'dbtest');
-	}
-
-	/**
-	 * Test the execute method
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testExecute()
-	{
-		$query = self::$driver->getQuery(true);
-		$query->insert('jos_dbtest')
-			->columns('title,start_date,description')
-			->values("'testTitle','1970-01-01','testDescription'");
-		self::$driver->setQuery($query);
-
-		$this->assertThat(self::$driver->execute(), $this->isTrue(), __LINE__);
-
-		$this->assertThat(self::$driver->insertid(), $this->equalTo(1), __LINE__);
-	}
-
-	/**
-	 * Test the execute method with a prepared statement
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testExecutePreparedStatement()
-	{
-		$title       = 'testTitle';
-		$startDate   = '1970-01-01';
-		$description = 'Testing';
-
-		/** @var \Joomla\Database\Postgresql\PostgresqlQuery $query */
-		$query = self::$driver->getQuery(true);
-		$query->insert('jos_dbtest')
-			->columns('title,start_date,description')
-			->values('$1, $2, $3');
-		$query->bind(1, $title);
-		$query->bind(2, $startDate);
-		$query->bind(3, $description);
-
-		self::$driver->setQuery($query);
-
-		$this->assertThat(self::$driver->execute(), $this->isTrue(), __LINE__);
-
-		$this->assertThat(self::$driver->insertid(), $this->equalTo(5), __LINE__);
+		self::$driver->renameTable($newTableName, 'jos_dbtest');
 	}
 
 	/**
@@ -1167,19 +1065,6 @@ class PostgresqlDriverTest extends PostgresqlCase
 		$result = self::$driver->replacePrefix($stringToReplace, $prefix);
 
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
-	}
-
-	/**
-	 * Test for creation of transaction savepoint
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 * @todo    Implement testTransactionSavepoint().
-	 */
-	public function testTransactionSavepoint( /*$savepointName*/ )
-	{
-		$this->markTestSkipped('This command is tested inside testTransactionRollback.');
 	}
 
 	/**

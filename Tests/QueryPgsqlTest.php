@@ -6,20 +6,19 @@
 
 namespace Joomla\Database\Tests;
 
-use Joomla\Database\Sqlsrv\SqlsrvQuery;
-use Joomla\Database\Tests\Mock\Driver;
+use Joomla\Database\Pgsql\PgsqlQuery;
 use Joomla\Test\TestHelper;
 
 /**
- * Test class for \Joomla\Database\Sqlsrv\SqlsrvQuery.
+ * Test class for \Joomla\Database\Pgsql\PgsqlQuery.
  *
- * @since  1.1
+ * @since  1.0
  */
-class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
+class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var    \Joomla\Database\DatabaseDriver  A mock of the DatabaseDriver object for testing purposes.
-	 * @since  1.1
+	 * @since  1.0
 	 */
 	protected $dbo;
 
@@ -28,14 +27,14 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function dataTestNullDate()
 	{
 		return array(
 			// Quoted, expected
-			array(true, "'_0000-00-00 00:00:00_'"),
-			array(false, "0000-00-00 00:00:00"),
+			array(true, "'_1970-01-01 00:00:00_'"),
+			array(false, "1970-01-01 00:00:00"),
 		);
 	}
 
@@ -44,7 +43,7 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function dataTestQuote()
 	{
@@ -59,7 +58,7 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function dataTestJoin()
 	{
@@ -83,7 +82,7 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  string
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function mockEscape($text)
 	{
@@ -100,7 +99,7 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  string
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function mockQuoteName($text)
 	{
@@ -117,7 +116,7 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
-		$this->dbo = Driver::create($this);
+		$this->dbo = Mock\Driver::create($this, '1970-01-01 00:00:00', 'Y-m-d H:i:s');
 
 		// Mock the escape method to ensure the API is calling the DBO's escape method.
 		TestHelper::assignMockCallbacks(
@@ -128,24 +127,22 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test for the SqlsrvQuery::__string method for a 'select' case.
+	 * Test for the PgsqlQuery::__string method for a 'select' case.
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function test__toStringSelect()
 	{
-		$this->markTestSkipped('Fails with new GROUP method');
-
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$q->select('a.id')
 			->from('a')
 			->innerJoin('b ON b.id = a.id')
 			->where('b.id = 1')
 			->group('a.id')
-			->having('COUNT(a.id) > 3')
+				->having('COUNT(a.id) > 3')
 			->order('a.id');
 
 		$this->assertThat(
@@ -164,15 +161,15 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Test for the SqlsrvQuery::__string method for a 'update' case.
+	 * Test for the PgsqlQuery::__string method for a 'update' case.
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function test__toStringUpdate()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$q->update('#__foo AS a')
 			->join('INNER', 'b ON b.id = a.id')
@@ -183,9 +180,9 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 			(string) $q,
 			$this->equalTo(
 				PHP_EOL . "UPDATE #__foo AS a" .
-				PHP_EOL . "INNER JOIN b ON b.id = a.id" .
 				PHP_EOL . "SET a.id = 2" .
-				PHP_EOL . "WHERE b.id = 1"
+				PHP_EOL . "FROM b" .
+				PHP_EOL . "WHERE b.id = 1 AND b.id = a.id"
 			),
 			'Tests for correct rendering.'
 		);
@@ -196,17 +193,17 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function test__toStringYear()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$q->select($q->year($q->quoteName('col')))->from('table');
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT YEAR("col")' . PHP_EOL . 'FROM table')
+			$this->equalTo(PHP_EOL . "SELECT EXTRACT (YEAR FROM \"col\")" . PHP_EOL . "FROM table")
 		);
 	}
 
@@ -215,17 +212,17 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function test__toStringMonth()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$q->select($q->month($q->quoteName('col')))->from('table');
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT MONTH("col")' . PHP_EOL . 'FROM table')
+			$this->equalTo(PHP_EOL . "SELECT EXTRACT (MONTH FROM \"col\")" . PHP_EOL . "FROM table")
 		);
 	}
 
@@ -234,17 +231,17 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function test__toStringDay()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$q->select($q->day($q->quoteName('col')))->from('table');
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT DAY("col")' . PHP_EOL . 'FROM table')
+			$this->equalTo(PHP_EOL . "SELECT EXTRACT (DAY FROM \"col\")" . PHP_EOL . "FROM table")
 		);
 	}
 
@@ -253,17 +250,17 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function test__toStringHour()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$q->select($q->hour($q->quoteName('col')))->from('table');
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT HOUR("col")' . PHP_EOL . 'FROM table')
+			$this->equalTo(PHP_EOL . "SELECT EXTRACT (HOUR FROM \"col\")" . PHP_EOL . "FROM table")
 		);
 	}
 
@@ -272,17 +269,17 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function test__toStringMinute()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$q->select($q->minute($q->quoteName('col')))->from('table');
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT MINUTE("col")' . PHP_EOL . 'FROM table')
+			$this->equalTo(PHP_EOL . "SELECT EXTRACT (MINUTE FROM \"col\")" . PHP_EOL . "FROM table")
 		);
 	}
 
@@ -291,17 +288,17 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function test__toStringSecond()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$q->select($q->second($q->quoteName('col')))->from('table');
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT SECOND("col")' . PHP_EOL . 'FROM table')
+			$this->equalTo(PHP_EOL . "SELECT EXTRACT (SECOND FROM \"col\")" . PHP_EOL . "FROM table")
 		);
 	}
 
@@ -310,26 +307,26 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function test__toStringInsert_subquery()
 	{
-		$q = new SqlsrvQuery($this->dbo);
-		$subq = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
+		$subq = new PgsqlQuery($this->dbo);
 		$subq->select('col2')->where('a=1');
 
 		$q->insert('table')->columns('col')->values($subq);
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "INSERT INTO table" . PHP_EOL . "(col)VALUES " . PHP_EOL . "(" . PHP_EOL . "SELECT col2" . PHP_EOL . "WHERE a=1)")
+			$this->equalTo(PHP_EOL . "INSERT INTO table" . PHP_EOL . "(col)" . PHP_EOL . "(" . PHP_EOL . "SELECT col2" . PHP_EOL . "WHERE a=1)")
 		);
 
 		$q->clear();
 		$q->insert('table')->columns('col')->values('3');
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "INSERT INTO table" . PHP_EOL . "(col)VALUES " . PHP_EOL . "(3)")
+			$this->equalTo(PHP_EOL . "INSERT INTO table" . PHP_EOL . "(col) VALUES " . PHP_EOL . "(3)")
 		);
 	}
 
@@ -338,15 +335,15 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testCastAsChar()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$this->assertThat(
 			$q->castAsChar('123'),
-			$this->equalTo('CAST(123 as NVARCHAR(10))'),
+			$this->equalTo('123::text'),
 			'The default castAsChar behaviour is quote the input.'
 		);
 	}
@@ -356,15 +353,15 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testCharLength()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$this->assertThat(
 			$q->charLength('a.title'),
-			$this->equalTo('DATALENGTH(a.title)')
+			$this->equalTo('CHAR_LENGTH(a.title)')
 		);
 	}
 
@@ -373,7 +370,7 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testChaining()
 	{
@@ -390,7 +387,7 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testClear_all()
 	{
@@ -408,9 +405,15 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 			'order',
 			'columns',
 			'values',
+			'forShare',
+			'forUpdate',
+			'limit',
+			'noWait',
+			'offset',
+			'returning',
 		);
 
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		// First pass - set the values.
 		foreach ($properties as $property)
@@ -442,7 +445,7 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testClear_clause()
 	{
@@ -456,12 +459,18 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 			'order',
 			'columns',
 			'values',
+			'forShare',
+			'forUpdate',
+			'limit',
+			'noWait',
+			'offset',
+			'returning',
 		);
 
 		// Test each clause.
 		foreach ($clauses as $clause)
 		{
-			$q = new SqlsrvQuery($this->dbo);
+			$q = new PgsqlQuery($this->dbo);
 
 			// Set the clauses
 			foreach ($clauses as $clause2)
@@ -498,7 +507,7 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testClear_type()
 	{
@@ -507,6 +516,12 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 			'delete',
 			'update',
 			'insert',
+			'forShare',
+			'forUpdate',
+			'limit',
+			'noWait',
+			'offset',
+			'returning',
 		);
 
 		$clauses = array(
@@ -521,7 +536,7 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 			'values',
 		);
 
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		// Set the clauses.
 		foreach ($clauses as $clause)
@@ -539,6 +554,11 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 			$q->clear($type);
 
 			// Check the type has been cleared.
+			$this->assertThat(
+				$q->type,
+				$this->equalTo(null)
+			);
+
 			$this->assertThat(
 				$q->$type,
 				$this->equalTo(null)
@@ -562,17 +582,17 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testConcatenate()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$this->assertThat(
 			$q->concatenate(array('foo', 'bar')),
-			$this->equalTo('(foo+bar)'),
+			$this->equalTo('foo || bar'),
 			'Tests without separator.'
 		);
 
 		$this->assertThat(
 			$q->concatenate(array('foo', 'bar'), ' and '),
-			$this->equalTo("(foo+'_ and _'+bar)"),
+			$this->equalTo("foo || '_ and _' || bar"),
 			'Tests without separator.'
 		);
 	}
@@ -582,11 +602,11 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testFrom()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$this->assertThat(
 			$q->from('#__foo'),
@@ -615,13 +635,11 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testGroup()
 	{
-		$this->markTestSkipped('Fails with new GROUP method');
-
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$this->assertThat(
 			$q->group('foo'),
@@ -650,11 +668,11 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testHaving()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$this->assertThat(
 			$q->having('COUNT(foo) > 1'),
@@ -694,12 +712,12 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testInnerJoin()
 	{
-		$q = new SqlsrvQuery($this->dbo);
-		$q2 = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
+		$q2 = new PgsqlQuery($this->dbo);
 		$condition = 'foo ON foo.id = bar.id';
 
 		$this->assertThat(
@@ -725,12 +743,12 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 * @dataProvider  dataTestJoin
 	 */
 	public function testJoin($type, $conditions)
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$this->assertThat(
 			$q->join('INNER', 'foo ON foo.id = bar.id'),
@@ -758,12 +776,12 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testLeftJoin()
 	{
-		$q = new SqlsrvQuery($this->dbo);
-		$q2 = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
+		$q2 = new PgsqlQuery($this->dbo);
 		$condition = 'foo ON foo.id = bar.id';
 
 		$this->assertThat(
@@ -789,12 +807,12 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 * @dataProvider  dataTestNullDate
 	 */
 	public function testNullDate($quoted, $expected)
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$this->assertThat(
 			$q->nullDate($quoted),
@@ -808,11 +826,11 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testOrder()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$this->assertThat(
 			$q->order('column'),
@@ -839,12 +857,12 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testOuterJoin()
 	{
-		$q = new SqlsrvQuery($this->dbo);
-		$q2 = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
+		$q2 = new PgsqlQuery($this->dbo);
 		$condition = 'foo ON foo.id = bar.id';
 
 		$this->assertThat(
@@ -871,12 +889,12 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 * @dataProvider  dataTestQuote
 	 */
 	public function testQuote($text, $escape, $expected)
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$this->assertThat(
 			$q->quote('test'),
@@ -890,11 +908,11 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testQuoteName()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$this->assertThat(
 			$q->quoteName('test'),
@@ -908,12 +926,12 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testRightJoin()
 	{
-		$q = new SqlsrvQuery($this->dbo);
-		$q2 = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
+		$q2 = new PgsqlQuery($this->dbo);
 		$condition = 'foo ON foo.id = bar.id';
 
 		$this->assertThat(
@@ -936,11 +954,11 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testSelect()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$this->assertThat(
 			$q->select('foo'),
@@ -986,11 +1004,11 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testWhere()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 		$this->assertThat(
 			$q->where('foo = 1'),
 			$this->identicalTo($q),
@@ -1035,19 +1053,197 @@ class SqlsrvQueryTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the SqlsrvQuery::escape method.
+	 * Tests the PgsqlQuery::escape method.
 	 *
 	 * @return  void
 	 *
-	 * @since   1.1
+	 * @since   1.0
 	 */
 	public function testEscape()
 	{
-		$q = new SqlsrvQuery($this->dbo);
+		$q = new PgsqlQuery($this->dbo);
 
 		$this->assertThat(
 			$q->escape('foo'),
 			$this->equalTo('foo')
+		);
+	}
+
+	/**
+	 * Test for FOR UPDATE clause.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testForUpdate ()
+	{
+		$q = new PgsqlQuery($this->dbo);
+
+		$this->assertThat(
+			$q->forUpdate('#__foo'),
+			$this->identicalTo($q),
+			'Tests chaining.'
+		);
+
+		$this->assertThat(
+			trim($q->forUpdate),
+			$this->equalTo('FOR UPDATE OF #__foo'),
+			'Tests rendered value.'
+		);
+
+		$q->forUpdate('#__bar');
+		$this->assertThat(
+			trim($q->forUpdate),
+			$this->equalTo('FOR UPDATE OF #__foo, #__bar'),
+			'Tests rendered value.'
+		);
+
+		// Testing glue
+		TestHelper::setValue($q, 'forUpdate', null);
+		$q->forUpdate('#__foo', ';');
+		$q->forUpdate('#__bar');
+		$this->assertThat(
+			trim($q->forUpdate),
+			$this->equalTo('FOR UPDATE OF #__foo; #__bar'),
+			'Tests rendered value.'
+		);
+	}
+
+	/**
+	 * Test for FOR SHARE clause.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testForShare ()
+	{
+		$q = new PgsqlQuery($this->dbo);
+
+		$this->assertThat(
+			$q->forShare('#__foo'),
+			$this->identicalTo($q),
+			'Tests chaining.'
+		);
+
+		$this->assertThat(
+			trim($q->forShare),
+			$this->equalTo('FOR SHARE OF #__foo'),
+			'Tests rendered value.'
+		);
+
+		$q->forShare('#__bar');
+		$this->assertThat(
+			trim($q->forShare),
+			$this->equalTo('FOR SHARE OF #__foo, #__bar'),
+			'Tests rendered value.'
+		);
+
+		// Testing glue
+		TestHelper::setValue($q, 'forShare', null);
+		$q->forShare('#__foo', ';');
+		$q->forShare('#__bar');
+		$this->assertThat(
+			trim($q->forShare),
+			$this->equalTo('FOR SHARE OF #__foo; #__bar'),
+			'Tests rendered value.'
+		);
+	}
+
+	/**
+	 * Test for NOWAIT clause.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testNoWait ()
+	{
+		$q = new PgsqlQuery($this->dbo);
+
+		$this->assertThat(
+			$q->noWait(),
+			$this->identicalTo($q),
+			'Tests chaining.'
+		);
+
+		$this->assertThat(
+			trim($q->noWait),
+			$this->equalTo('NOWAIT'),
+			'Tests rendered value.'
+		);
+	}
+
+	/**
+	 * Test for LIMIT clause.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testLimit()
+	{
+		$q = new PgsqlQuery($this->dbo);
+
+		$this->assertThat(
+			$q->limit('5'),
+			$this->identicalTo($q),
+			'Tests chaining.'
+		);
+
+		$this->assertThat(
+			trim($q->limit),
+			$this->equalTo('LIMIT 5'),
+			'Tests rendered value.'
+		);
+	}
+
+	/**
+	 * Test for OFFSET clause.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testOffset()
+	{
+		$q = new PgsqlQuery($this->dbo);
+
+		$this->assertThat(
+			$q->offset('10'),
+			$this->identicalTo($q),
+			'Tests chaining.'
+		);
+
+		$this->assertThat(
+			trim($q->offset),
+			$this->equalTo('OFFSET 10'),
+			'Tests rendered value.'
+		);
+	}
+
+	/**
+	 * Test for RETURNING clause.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testReturning()
+	{
+		$q = new PgsqlQuery($this->dbo);
+
+		$this->assertThat(
+			$q->returning('id'),
+			$this->identicalTo($q),
+			'Tests chaining.'
+		);
+
+		$this->assertThat(
+			trim($q->returning),
+			$this->equalTo('RETURNING id'),
+			'Tests rendered value.'
 		);
 	}
 }

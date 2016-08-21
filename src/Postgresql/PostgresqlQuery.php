@@ -9,6 +9,7 @@
 namespace Joomla\Database\Postgresql;
 
 use Joomla\Database\DatabaseQuery;
+use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\Query\QueryElement;
 use Joomla\Database\Query\LimitableInterface;
 
@@ -17,7 +18,7 @@ use Joomla\Database\Query\LimitableInterface;
  *
  * @since  1.0
  */
-class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
+class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, PreparableInterface
 {
 	/**
 	 * The FOR UPDATE element used in "FOR UPDATE" lock
@@ -66,6 +67,80 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 	 * @since  1.0
 	 */
 	protected $returning = null;
+
+	/**
+	 * Holds key / value pair of bound objects.
+	 *
+	 * @var    mixed
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $bounded = array();
+
+	/**
+	 * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution. Also
+	 * removes a variable that has been bounded from the internal bounded array when the passed in value is null.
+	 *
+	 * @param   string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
+	 *                                          the form ':key', but can also be an integer.
+	 * @param   mixed           &$value         The value that will be bound. The value is passed by reference to support output
+	 *                                          parameters such as those possible with stored procedures.
+	 * @param   string          $dataType       The corresponding bind type. (Unused)
+	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters. (Unused)
+	 * @param   array           $driverOptions  Optional driver options to be used. (Unused)
+	 *
+	 * @return  PostgresqlQuery
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function bind($key = null, &$value = null, $dataType = '', $length = 0, $driverOptions = array())
+	{
+		// Case 1: Empty Key (reset $bounded array)
+		if (empty($key))
+		{
+			$this->bounded = array();
+
+			return $this;
+		}
+
+		// Case 2: Key Provided, null value (unset key from $bounded array)
+		if (is_null($value))
+		{
+			if (isset($this->bounded[$key]))
+			{
+				unset($this->bounded[$key]);
+			}
+
+			return $this;
+		}
+
+		// Case 3: Simply add the Key/Value into the bounded array
+		$this->bounded[$key] = &$value;
+
+		return $this;
+	}
+
+	/**
+	 * Retrieves the bound parameters array when key is null and returns it by reference. If a key is provided then that item is
+	 * returned.
+	 *
+	 * @param   mixed  $key  The bounded variable key to retrieve.
+	 *
+	 * @return  mixed
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function &getBounded($key = null)
+	{
+		if (empty($key))
+		{
+			return $this->bounded;
+		}
+
+		if (isset($this->bounded[$key]))
+		{
+			return $this->bounded[$key];
+		}
+	}
 
 	/**
 	 * Magic function to convert the query to a string, only for PostgreSQL specific queries
@@ -255,6 +330,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 				break;
 
 			default:
+				$this->bounded = array();
 				$this->type = null;
 				$this->limit = null;
 				$this->offset = null;

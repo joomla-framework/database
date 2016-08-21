@@ -6,35 +6,18 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Database\Mysql;
+namespace Joomla\Database\Pgsql;
 
-use Joomla\Database\DatabaseQuery;
-use Joomla\Database\Query\LimitableInterface;
+use Joomla\Database\Postgresql\PostgresqlQuery;
 use Joomla\Database\Query\PreparableInterface;
 
 /**
- * MySQL Query Building Class.
+ * PDO PostgreSQL Query Building Class.
  *
  * @since  1.0
  */
-class MysqlQuery extends DatabaseQuery implements LimitableInterface, PreparableInterface
+class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 {
-	/**
-	 * The offset for the result set.
-	 *
-	 * @var    integer
-	 * @since  1.0
-	 */
-	protected $offset;
-
-	/**
-	 * The limit for the result set.
-	 *
-	 * @var    integer
-	 * @since  1.0
-	 */
-	protected $limit;
-
 	/**
 	 * Holds key / value pair of bound objects.
 	 *
@@ -55,7 +38,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters.
 	 * @param   array           $driverOptions  Optional driver options to be used.
 	 *
-	 * @return  MysqlQuery
+	 * @return  PgsqlQuery
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -121,7 +104,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 	 *
 	 * @param   string  $clause  Optionally, the name of the clause to clear, or nothing to clear the whole query.
 	 *
-	 * @return  MysqlQuery  Returns this object to allow chaining.
+	 * @return  PgsqlQuery  Returns this object to allow chaining.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -135,80 +118,5 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 		}
 
 		return parent::clear($clause);
-	}
-
-	/**
-	 * Method to modify a query already in string format with the needed additions to make the query limited to a particular number of
-	 * results, or start at a particular offset.
-	 *
-	 * @param   string   $query   The query in string format
-	 * @param   integer  $limit   The limit for the result set
-	 * @param   integer  $offset  The offset for the result set
-	 *
-	 * @return  string
-	 *
-	 * @since   1.0
-	 */
-	public function processLimit($query, $limit, $offset = 0)
-	{
-		if ($limit > 0 && $offset > 0)
-		{
-			$query .= ' LIMIT ' . $offset . ', ' . $limit;
-		}
-		elseif ($limit > 0)
-		{
-			$query .= ' LIMIT ' . $limit;
-		}
-
-		return $query;
-	}
-
-	/**
-	 * Concatenates an array of column names or values.
-	 *
-	 * @param   array   $values     An array of values to concatenate.
-	 * @param   string  $separator  As separator to place between each value.
-	 *
-	 * @return  string  The concatenated values.
-	 *
-	 * @since   1.0
-	 */
-	public function concatenate($values, $separator = null)
-	{
-		if ($separator)
-		{
-			$concat_string = 'CONCAT_WS(' . $this->quote($separator);
-
-			foreach ($values as $value)
-			{
-				$concat_string .= ', ' . $value;
-			}
-
-			return $concat_string . ')';
-		}
-
-		return 'CONCAT(' . implode(',', $values) . ')';
-	}
-
-	/**
-	 * Sets the offset and limit for the result set, if the database driver supports it.
-	 *
-	 * Usage:
-	 * $query->setLimit(100, 0); (retrieve 100 rows, starting at first record)
-	 * $query->setLimit(50, 50); (retrieve 50 rows, starting at 50th record)
-	 *
-	 * @param   integer  $limit   The limit for the result set
-	 * @param   integer  $offset  The offset for the result set
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function setLimit($limit = 0, $offset = 0)
-	{
-		$this->limit  = (int) $limit;
-		$this->offset = (int) $offset;
-
-		return $this;
 	}
 }

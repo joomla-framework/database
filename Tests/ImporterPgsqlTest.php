@@ -4,14 +4,16 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Database\Tests\Postgresql;
+namespace Joomla\Database\Tests;
+
+require_once __DIR__ . '/ImporterPgsqlInspector.php';
 
 /**
- * Test the \Joomla\Database\Postgresql\PostgresqlImporter class.
+ * Test the JDatabaseImporterPgsql class.
  *
  * @since  1.0
  */
-class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
+class ImporterPgsqlTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var    object  The mocked database object for use by test methods.
@@ -37,7 +39,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 		parent::setUp();
 
 		// Set up the database object mock.
-		$this->dbo = $this->getMockBuilder('Joomla\\Database\\Postgresql\\PostgresqlDriver')
+		$this->dbo = $this->getMockBuilder('Joomla\\Database\\Pgsql\\PgsqlDriver')
 			->disableOriginalConstructor()
 			->setMethods(
 				array(
@@ -456,7 +458,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testAsXml()
 	{
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 
 		$result = $instance->asXml();
 
@@ -482,7 +484,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCheckWithNoDbo()
 	{
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 
 		try
 		{
@@ -508,7 +510,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCheckWithNoFrom()
 	{
-		$instance	= new PostgresqlImporterInspector;
+		$instance	= new ImporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		try
@@ -535,7 +537,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCheckWithGoodInput()
 	{
-		$instance	= new PostgresqlImporterInspector;
+		$instance	= new ImporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 		$instance->from('foobar');
 
@@ -566,7 +568,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testFromWithGoodInput()
 	{
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 
 		try
 		{
@@ -603,7 +605,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetAddColumnSql()
 	{
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		$sample = array(
@@ -656,7 +658,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetAddSequenceSql()
 	{
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		$xmlIdSeq = '<sequence Name="jos_dbtest_id_seq" Schema="public" Table="jos_dbtest" Column="id" ' .
@@ -687,7 +689,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 		$xmlPrimaryKey = '<key Index="jos_dbtest_pkey" is_primary="TRUE" is_unique="TRUE" ' .
 			'Query="ALTER TABLE jos_dbtest ADD PRIMARY KEY (id)" />';
 
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
@@ -726,7 +728,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetAlterTableSql($structure, $expected, $message)
 	{
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
@@ -753,7 +755,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	{
 		$xmlTitleField = '<field Field="title" Type="character varying(50)" Null="NO" Default="NULL" Comments="" />';
 
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
@@ -782,7 +784,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 		$xmlIdSeq = '<sequence Name="jos_dbtest_id_seq" Schema="public" Table="jos_dbtest" Column="id" ' .
 			'Type="bigint" Start_Value="1" Min_Value="1" Max_Value="9223372036854775807" Increment="1" Cycle_option="NO" /> ';
 
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
@@ -811,7 +813,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetColumnSql($field, $expected, $message)
 	{
-		$instance	= new PostgresqlImporterInspector;
+		$instance	= new ImporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
@@ -830,7 +832,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetDropColumnSql()
 	{
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
@@ -854,7 +856,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetDropIndexSql()
 	{
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
@@ -877,7 +879,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetDropPrimaryKeySql()
 	{
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
@@ -900,7 +902,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetDropSequenceSql()
 	{
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
@@ -915,22 +917,22 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the getKeyLookup method.
+	 * Tests the getIdxLookup method.
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0
 	 */
-	public function testGetKeyLookup()
+	public function testGetIdxLookup()
 	{
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 
 		$o1 = (object) array('Index' => 'id', 'foo' => 'bar1');
 		$o2 = (object) array('Index' => 'id', 'foo' => 'bar2');
 		$o3 = (object) array('Index' => 'title', 'foo' => 'bar3');
 
 		$this->assertThat(
-			$instance->getKeyLookup(
+			$instance->getIdxLookup(
 				array($o1, $o2, $o3)
 			),
 			$this->equalTo(
@@ -939,7 +941,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 					'title' => array($o3)
 				)
 			),
-			'getKeyLookup, using array input, did not yield the expected result.'
+			'getIdxLookup, using array input, did not yield the expected result.'
 		);
 
 		$o1 = new \SimpleXmlElement('<key Index="id" foo="bar1" />');
@@ -947,7 +949,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 		$o3 = new \SimpleXmlElement('<key Index="title" foo="bar3" />');
 
 		$this->assertThat(
-			$instance->getKeyLookup(
+			$instance->getIdxLookup(
 				array($o1, $o2, $o3)
 			),
 			$this->equalTo(
@@ -956,7 +958,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 					'title' => array($o3)
 				)
 			),
-			'getKeyLookup, using SimpleXmlElement input, did not yield the expected result.'
+			'getIdxLookup, using SimpleXmlElement input, did not yield the expected result.'
 		);
 	}
 
@@ -969,7 +971,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetRealTableName()
 	{
-		$instance	= new PostgresqlImporterInspector;
+		$instance	= new ImporterPgsqlInspector;
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
@@ -988,7 +990,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSetDboWithGoodInput()
 	{
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 
 		try
 		{
@@ -1018,7 +1020,7 @@ class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testWithStructure()
 	{
-		$instance = new PostgresqlImporterInspector;
+		$instance = new ImporterPgsqlInspector;
 
 		$result = $instance->withStructure();
 

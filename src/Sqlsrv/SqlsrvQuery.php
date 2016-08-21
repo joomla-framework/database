@@ -192,7 +192,7 @@ class SqlsrvQuery extends DatabaseQuery
 		}
 
 		// Transform $columns into an array for filtering purposes
-		$columns = explode(',', str_replace(" ", "", $columns));
+		is_string($columns) && $columns = explode(',', str_replace(" ", "", $columns));
 
 		// Get the _formatted_ FROM string and remove everything except `table AS alias`
 		$fromStr = str_replace(array("[","]"), "", str_replace("#__", $this->db->getPrefix(), str_replace("FROM ", "", (string) $this->from)));
@@ -224,7 +224,7 @@ class SqlsrvQuery extends DatabaseQuery
 			}
 		}
 
-		$selectStr = str_replace("SELECT ", "", (string)$this->select);
+		$selectStr = str_replace("SELECT ", "", (string) $this->select);
 
 		// Remove any functions (e.g. COUNT(), SUM(), CONCAT())
 		$selectCols = preg_replace("/([^,]*\([^\)]*\)[^,]*,?)/", "", $selectStr);
@@ -241,7 +241,7 @@ class SqlsrvQuery extends DatabaseQuery
 		// Get an array to compare against
 		$selectCols = explode(",", $selectCols);
 
-		// find all alias.* and fill with proper table column names
+		// Find all alias.* and fill with proper table column names
 		foreach ($selectCols as $key => $aliasColName)
 		{
 			if (preg_match("/.+\*/", $aliasColName, $match))

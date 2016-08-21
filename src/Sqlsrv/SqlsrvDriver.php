@@ -8,6 +8,9 @@
 
 namespace Joomla\Database\Sqlsrv;
 
+use Joomla\Database\Exception\ConnectionFailureException;
+use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Database\Exception\UnsupportedAdapterException;
 use Psr\Log;
 use Joomla\Database\DatabaseDriver;
 
@@ -63,7 +66,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public static function isSupported()
 	{
-		return (function_exists('sqlsrv_connect'));
+		return function_exists('sqlsrv_connect');
 	}
 
 	/**
@@ -114,7 +117,7 @@ class SqlsrvDriver extends DatabaseDriver
 		// Make sure the SQLSRV extension for PHP is installed and enabled.
 		if (!static::isSupported())
 		{
-			throw new \RuntimeException('PHP extension sqlsrv_connect is not available.');
+			throw new UnsupportedAdapterException('PHP extension sqlsrv_connect is not available.');
 		}
 
 		// Build the connection configuration array.
@@ -131,7 +134,7 @@ class SqlsrvDriver extends DatabaseDriver
 		{
 			$this->log(Log\LogLevel::ERROR, 'Could not connect to SQL Server', ['errors' => sqlsrv_errors()]);
 
-			throw new \RuntimeException('Could not connect to SQL Server');
+			throw new ConnectionFailureException('Could not connect to SQL Server');
 		}
 
 		// Make sure that DB warnings are not returned as errors.
@@ -352,6 +355,7 @@ class SqlsrvDriver extends DatabaseDriver
 		{
 			foreach ($fields as $field)
 			{
+				$field->Default = preg_replace("/(^(\(\(|\('|\(N'|\()|(('\)|(?<!\()\)\)|\))$))/i", '', $field->Default);
 				$result[$field->Field] = $field;
 			}
 		}
@@ -606,8 +610,8 @@ class SqlsrvDriver extends DatabaseDriver
 					$this->connection = null;
 					$this->connect();
 				}
-				catch (\RuntimeException $e)
-					// If connect fails, ignore that exception and throw the normal exception.
+				catch (ConnectionFailureException $e)
+				// If connect fails, ignore that exception and throw the normal exception.
 				{
 					// Get the error number and message.
 					$errors         = sqlsrv_errors();
@@ -617,11 +621,11 @@ class SqlsrvDriver extends DatabaseDriver
 					// Throw the normal query exception.
 					$this->log(
 						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}',
-						['code' => $this->errorNum, 'message' => $this->errorMsg]
+						'Database query failed (error #{code}): {message}; Failed query: {sql}',
+						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
 					);
 
-					throw new \RuntimeException($this->errorMsg, $this->errorNum);
+					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
 				// Since we were able to reconnect, run the query again.
@@ -636,11 +640,11 @@ class SqlsrvDriver extends DatabaseDriver
 			// Throw the normal query exception.
 			$this->log(
 				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}',
-				['code' => $this->errorNum, 'message' => $this->errorMsg]
+				'Database query failed (error #{code}): {message}; Failed query: {sql}',
+				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
 			);
 
-			throw new \RuntimeException($this->errorMsg, $this->errorNum);
+			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
 		return $this->cursor;
@@ -757,7 +761,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 * @return  boolean  True if the database was successfully selected.
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  ConnectionFailureException
 	 */
 	public function select($database)
 	{
@@ -770,7 +774,7 @@ class SqlsrvDriver extends DatabaseDriver
 
 		if (!sqlsrv_query($this->connection, 'USE ' . $database, null, ['scrollable' => SQLSRV_CURSOR_STATIC]))
 		{
-			throw new \RuntimeException('Could not connect to database');
+			throw new ConnectionFailureException('Could not connect to database');
 		}
 
 		return true;

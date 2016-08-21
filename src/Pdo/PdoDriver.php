@@ -8,6 +8,9 @@
 
 namespace Joomla\Database\Pdo;
 
+use Joomla\Database\Exception\ConnectionFailureException;
+use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Database\Exception\UnsupportedAdapterException;
 use Psr\Log;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Query\LimitableInterface;
@@ -87,6 +90,7 @@ abstract class PdoDriver extends DatabaseDriver
 		$options['host']          = (isset($options['host'])) ? $options['host'] : 'localhost';
 		$options['database']      = (isset($options['database'])) ? $options['database'] : '';
 		$options['user']          = (isset($options['user'])) ? $options['user'] : '';
+		$options['port']          = (isset($options['port'])) ? (int) $options['port'] : null;
 		$options['password']      = (isset($options['password'])) ? $options['password'] : '';
 		$options['driverOptions'] = (isset($options['driverOptions'])) ? $options['driverOptions'] : [];
 
@@ -111,7 +115,6 @@ abstract class PdoDriver extends DatabaseDriver
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
-	 * @throws  \UnexpectedValueException
 	 */
 	public function connect()
 	{
@@ -123,7 +126,7 @@ abstract class PdoDriver extends DatabaseDriver
 		// Make sure the PDO extension for PHP is installed and enabled.
 		if (!static::isSupported())
 		{
-			throw new \RuntimeException('PDO Extension is not available.', 1);
+			throw new UnsupportedAdapterException('PDO Extension is not available.', 1);
 		}
 
 		// Find the correct PDO DSN Format to use:
@@ -293,7 +296,7 @@ abstract class PdoDriver extends DatabaseDriver
 				break;
 
 			default:
-				throw new \UnexpectedValueException('The ' . $this->options['driver'] . ' driver is not supported.');
+				throw new UnsupportedAdapterException('The ' . $this->options['driver'] . ' driver is not supported.');
 		}
 
 		// Create the connection string:
@@ -314,7 +317,7 @@ abstract class PdoDriver extends DatabaseDriver
 
 			$this->log(Log\LogLevel::ERROR, $message);
 
-			throw new \RuntimeException($message, $e->getCode(), $e);
+			throw new ConnectionFailureException($message, $e->getCode(), $e);
 		}
 	}
 
@@ -328,7 +331,8 @@ abstract class PdoDriver extends DatabaseDriver
 	public function disconnect()
 	{
 		$this->freeResult();
-		unset($this->connection);
+
+		$this->connection = null;
 	}
 
 	/**
@@ -438,21 +442,20 @@ abstract class PdoDriver extends DatabaseDriver
 					$this->connection = null;
 					$this->connect();
 				}
-				catch (\RuntimeException $e)
+				catch (ConnectionFailureException $e)
 				// If connect fails, ignore that exception and throw the normal exception.
 				{
 					// Get the error number and message.
 					$this->errorNum = (int) $this->connection->errorCode();
 					$this->errorMsg = (string) 'SQL: ' . implode(", ", $this->connection->errorInfo());
 
-					// Throw the normal query exception.
 					$this->log(
 						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}',
-						['code' => $this->errorNum, 'message' => $this->errorMsg]
+						'Database query failed (error #{code}): {message}; Failed query: {sql}',
+						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
 					);
 
-					throw new \RuntimeException($this->errorMsg, $this->errorNum);
+					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
 				// Since we were able to reconnect, run the query again.
@@ -466,11 +469,11 @@ abstract class PdoDriver extends DatabaseDriver
 			// Throw the normal query exception.
 			$this->log(
 				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}',
-				['code' => $this->errorNum, 'message' => $this->errorMsg]
+				'Database query failed (error #{code}): {message}; Failed query: {sql}',
+				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
 			);
 
-			throw new \RuntimeException($this->errorMsg, $this->errorNum);
+			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
 		return $this->prepared;
@@ -493,6 +496,20 @@ abstract class PdoDriver extends DatabaseDriver
 		$this->connect();
 
 		return $this->connection->getAttribute($key);
+	}
+
+	/**
+	 * Get the version of the database connector.
+	 *
+	 * @return  string  The database connector version.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getVersion()
+	{
+		$this->connect();
+
+		return $this->getOption(\PDO::ATTR_SERVER_VERSION);
 	}
 
 	/**

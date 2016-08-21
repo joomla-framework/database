@@ -8,6 +8,7 @@
 
 namespace Joomla\Database\Mysql;
 
+use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Pdo\PdoDriver;
 use Psr\Log;
 
@@ -108,7 +109,7 @@ class MysqlDriver extends PdoDriver
 			// Try to connect to MySQL
 			parent::connect();
 		}
-		catch (\RuntimeException $e)
+		catch (ConnectionFailureException $e)
 		{
 			// If the connection failed, but not because of the wrong character set, then bubble up the exception.
 			if (!$this->utf8mb4)
@@ -347,20 +348,6 @@ class MysqlDriver extends PdoDriver
 
 		// Set the query to get the tables statement.
 		return $this->setQuery('SHOW TABLES')->loadColumn();
-	}
-
-	/**
-	 * Get the version of the database connector.
-	 *
-	 * @return  string  The database connector version.
-	 *
-	 * @since   1.0
-	 */
-	public function getVersion()
-	{
-		$this->connect();
-
-		return $this->getOption(\PDO::ATTR_SERVER_VERSION);
 	}
 
 	/**

@@ -8,8 +8,14 @@
 
 namespace Joomla\Database\Postgresql;
 
-use Psr\Log;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseQuery;
+use Joomla\Database\Exception\ConnectionFailureException;
+use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Database\Exception\UnsupportedAdapterException;
+use Joomla\Database\Query\LimitableInterface;
+use Joomla\Database\Query\PreparableInterface;
+use Psr\Log;
 
 /**
  * PostgreSQL Database Driver
@@ -44,6 +50,30 @@ class PostgresqlDriver extends DatabaseDriver
 	 * @since  1.0
 	 */
 	protected $nullDate = '1970-01-01 00:00:00';
+
+	/**
+	 * The prepared statement.
+	 *
+	 * @var    resource
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $prepared;
+
+	/**
+	 * Contains the current query execution status
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $executed = false;
+
+	/**
+	 * Contains the name of the prepared query
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $queryName = 'query';
 
 	/**
 	 * The minimum supported database version.
@@ -108,7 +138,7 @@ class PostgresqlDriver extends DatabaseDriver
 		// Make sure the postgresql extension for PHP is installed and enabled.
 		if (!static::isSupported())
 		{
-			throw new \RuntimeException('PHP extension pg_connect is not available.');
+			throw new UnsupportedAdapterException('PHP extension pg_connect is not available.');
 		}
 
 		/*
@@ -156,7 +186,7 @@ class PostgresqlDriver extends DatabaseDriver
 		{
 			$this->log(Log\LogLevel::ERROR, 'Error connecting to PGSQL database.');
 
-			throw new \RuntimeException('Error connecting to PGSQL database.');
+			throw new ConnectionFailureException('Error connecting to PGSQL database.');
 		}
 
 		pg_set_error_verbosity($this->connection, PGSQL_ERRORS_DEFAULT);
@@ -368,6 +398,16 @@ class PostgresqlDriver extends DatabaseDriver
 		{
 			foreach ($fields as $field)
 			{
+				if (stristr(strtolower($field->type), "character varying"))
+				{
+					$field->Default = "";
+				}
+
+				if (stristr(strtolower($field->type), "text"))
+				{
+					$field->Default = "";
+				}
+
 				// Do some dirty translation to MySQL output.
 				// @todo: Come up with and implement a standard across databases.
 				$result[$field->column_name] = (object) [
@@ -620,6 +660,8 @@ class PostgresqlDriver extends DatabaseDriver
 			$sql .= ' LIMIT ' . $this->limit . ' OFFSET ' . $this->offset;
 		}
 
+		$count = $this->getCount();
+
 		// Increment the query counter.
 		$this->count++;
 
@@ -638,8 +680,27 @@ class PostgresqlDriver extends DatabaseDriver
 		$this->errorNum = 0;
 		$this->errorMsg = '';
 
-		// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
-		$this->cursor = @pg_query($this->connection, $sql);
+		// Bind the variables
+		if ($this->sql instanceof PreparableInterface)
+		{
+			$bounded =& $this->sql->getBounded();
+
+			if (count($bounded))
+			{
+				// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
+				$this->cursor = @pg_execute($this->connection, $this->queryName . $count, array_values($bounded));
+			}
+			else
+			{
+				// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
+				$this->cursor = @pg_query($this->connection, $sql);
+			}
+		}
+		else
+		{
+			// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
+			$this->cursor = @pg_query($this->connection, $sql);
+		}
 
 		// If an error occurred handle it.
 		if (!$this->cursor)
@@ -653,20 +714,21 @@ class PostgresqlDriver extends DatabaseDriver
 					$this->connection = null;
 					$this->connect();
 				}
-				catch (\RuntimeException $e)
-					// If connect fails, ignore that exception and throw the normal exception.
+				catch (ConnectionFailureException $e)
+				// If connect fails, ignore that exception and throw the normal exception.
 				{
 					// Get the error number and message.
 					$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE) . ' ';
-					$this->errorMsg = pg_last_error($this->connection) . "\nSQL=$sql";
+					$this->errorMsg = pg_last_error($this->connection);
 
 					// Throw the normal query exception.
 					$this->log(
 						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}',
-						['code' => $this->errorNum, 'message' => $this->errorMsg]
+						'Database query failed (error #{code}): {message}; Failed query: {sql}',
+						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
 					);
-					throw new \RuntimeException($this->errorMsg);
+
+					throw new ExecutionFailureException($sql, $this->errorMsg);
 				}
 
 				// Since we were able to reconnect, run the query again.
@@ -680,11 +742,11 @@ class PostgresqlDriver extends DatabaseDriver
 			// Throw the normal query exception.
 			$this->log(
 				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}',
-				['code' => $this->errorNum, 'message' => $this->errorMsg]
+				'Database query failed (error #{code}): {message}; Failed query: {sql}',
+				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
 			);
 
-			throw new \RuntimeException($this->errorMsg);
+			throw new ExecutionFailureException($sql, $this->errorMsg);
 		}
 
 		return $this->cursor;
@@ -781,6 +843,42 @@ class PostgresqlDriver extends DatabaseDriver
 	public function select($database)
 	{
 		return true;
+	}
+
+	/**
+	 * Sets the SQL statement string for later execution.
+	 *
+	 * @param   DatabaseQuery|string  $query   The SQL statement to set either as a DatabaseQuery object or a string.
+	 * @param   integer               $offset  The affected row offset to set.
+	 * @param   integer               $limit   The maximum affected rows to set.
+	 *
+	 * @return  PostgresqlDriver  This object to support method chaining.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setQuery($query, $offset = null, $limit = null)
+	{
+		$this->connect();
+
+		$this->freeResult();
+
+		if (is_string($query))
+		{
+			// Allows taking advantage of bound variables in a direct query:
+			$query = $this->getQuery(true)->setQuery($query);
+		}
+
+		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
+		{
+			$query->setLimit($limit, $offset);
+		}
+
+		$sql = $this->replacePrefix((string) $query);
+
+		$this->prepared = pg_prepare($this->connection, $this->queryName . $this->getCount(), $sql);
+
+		// Store reference to the DatabaseQuery instance
+		return parent::setQuery($query, $offset, $limit);
 	}
 
 	/**
@@ -1001,7 +1099,12 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	protected function freeResult($cursor = null)
 	{
-		pg_free_result($cursor ? $cursor : $this->cursor);
+		$useCursor = $cursor ?: $this->cursor;
+
+		if (is_resource($useCursor))
+		{
+			pg_free_result($useCursor);
+		}
 	}
 
 	/**
@@ -1039,7 +1142,7 @@ class PostgresqlDriver extends DatabaseDriver
 			}
 
 			// Ignore any internal fields or primary keys with value 0.
-			if (($k[0] == "_") || ($k == $key && $v === 0))
+			if (($k[0] == "_") || ($k == $key && (($v === 0) || ($v === '0'))))
 			{
 				continue;
 			}

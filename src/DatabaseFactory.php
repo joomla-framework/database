@@ -42,7 +42,7 @@ class DatabaseFactory
 		// If the class still doesn't exist we have nothing left to do but throw an exception.  We did our best.
 		if (!class_exists($class))
 		{
-			throw new \RuntimeException(sprintf('Unable to load Database Driver: %s', $options['driver']));
+			throw new Exception\UnsupportedAdapterException(sprintf('Unable to load Database Driver: %s', $options['driver']));
 		}
 
 		// Create our new DatabaseDriver connector based on the options given.
@@ -52,7 +52,7 @@ class DatabaseFactory
 		}
 		catch (\RuntimeException $e)
 		{
-			throw new \RuntimeException(sprintf('Unable to connect to the Database: %s', $e->getMessage()), $e->getCode(), $e);
+			throw new Exception\ConnectionFailureException(sprintf('Unable to connect to the Database: %s', $e->getMessage()), $e->getCode(), $e);
 		}
 	}
 
@@ -65,7 +65,7 @@ class DatabaseFactory
 	 * @return  DatabaseExporter
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  Exception\UnsupportedAdapterException
 	 */
 	public function getExporter($name, DatabaseDriver $db = null)
 	{
@@ -76,7 +76,7 @@ class DatabaseFactory
 		if (!class_exists($class))
 		{
 			// If it doesn't exist we are at an impasse so throw an exception.
-			throw new \RuntimeException('Database Exporter not found.');
+			throw new Exception\UnsupportedAdapterException('Database Exporter not found.');
 		}
 
 		/** @var $o DatabaseExporter */
@@ -99,7 +99,7 @@ class DatabaseFactory
 	 * @return  DatabaseImporter
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  Exception\UnsupportedAdapterException
 	 */
 	public function getImporter($name, DatabaseDriver $db = null)
 	{
@@ -110,7 +110,7 @@ class DatabaseFactory
 		if (!class_exists($class))
 		{
 			// If it doesn't exist we are at an impasse so throw an exception.
-			throw new \RuntimeException('Database importer not found.');
+			throw new Exception\UnsupportedAdapterException('Database importer not found.');
 		}
 
 		/** @var $o DatabaseImporter */
@@ -162,7 +162,7 @@ class DatabaseFactory
 	 * @return  DatabaseQuery
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  Exception\UnsupportedAdapterException
 	 */
 	public function getQuery($name, DatabaseDriver $db = null)
 	{
@@ -173,7 +173,7 @@ class DatabaseFactory
 		if (!class_exists($class))
 		{
 			// If it doesn't exist we are at an impasse so throw an exception.
-			throw new \RuntimeException('Database Query class not found');
+			throw new Exception\UnsupportedAdapterException('Database Query class not found');
 		}
 
 		return new $class($db);
