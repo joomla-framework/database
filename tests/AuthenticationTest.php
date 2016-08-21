@@ -37,7 +37,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSingleStrategy()
 	{
-		$mockStrategy = $this->getMock('Joomla\\Authentication\\AuthenticationStrategyInterface');
+		$mockStrategy = $this->getMockBuilder('Joomla\\Authentication\\AuthenticationStrategyInterface')->getMock();
 
 		$this->object->addStrategy('mock', $mockStrategy);
 
@@ -58,7 +58,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSingleStrategyEmptyArray()
 	{
-		$mockStrategy = $this->getMock('Joomla\\Authentication\\AuthenticationStrategyInterface');
+		$mockStrategy = $this->getMockBuilder('Joomla\\Authentication\\AuthenticationStrategyInterface')->getMock();
 
 		$this->object->addStrategy('mock', $mockStrategy);
 
@@ -79,9 +79,9 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSomeStrategies()
 	{
-		$mockStrategy1 = $this->getMock('Joomla\\Authentication\\AuthenticationStrategyInterface');
-		$mockStrategy2 = $this->getMock('Joomla\\Authentication\\AuthenticationStrategyInterface');
-		$mockStrategy3 = $this->getMock('Joomla\\Authentication\\AuthenticationStrategyInterface');
+		$mockStrategy1 = $this->getMockBuilder('Joomla\\Authentication\\AuthenticationStrategyInterface')->getMock();
+		$mockStrategy2 = $this->getMockBuilder('Joomla\\Authentication\\AuthenticationStrategyInterface')->getMock();
+		$mockStrategy3 = $this->getMockBuilder('Joomla\\Authentication\\AuthenticationStrategyInterface')->getMock();
 
 		$this->object->addStrategy('mock1', $mockStrategy1);
 		$this->object->addStrategy('mock2', $mockStrategy2);
@@ -124,7 +124,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetResults()
 	{
-		$mockStrategy = $this->getMock('Joomla\\Authentication\\AuthenticationStrategyInterface');
+		$mockStrategy = $this->getMockBuilder('Joomla\\Authentication\\AuthenticationStrategyInterface')->getMock();
 
 		$this->object->addStrategy('mock', $mockStrategy);
 

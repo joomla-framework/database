@@ -20,7 +20,7 @@ class LocalStrategyTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		$this->input = $this->getMock('Joomla\\Input\\Input');
+		$this->input = $this->getMockBuilder('Joomla\\Input\\Input')->getMock();
 	}
 
 	/**

@@ -40,7 +40,7 @@ class DatabaseStrategyTest extends TestDatabase
 	 */
 	protected function setUp()
 	{
-		$this->input = $this->getMock('Joomla\\Input\\Input');
+		$this->input = $this->getMockBuilder('Joomla\\Input\\Input')->getMock();
 	}
 
 	/**
