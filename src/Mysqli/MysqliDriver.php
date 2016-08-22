@@ -14,6 +14,7 @@ use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\PreparableInterface;
+use Joomla\Database\Query\LimitableInterface;
 use Psr\Log;
 
 /**
