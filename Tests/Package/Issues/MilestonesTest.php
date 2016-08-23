@@ -4,53 +4,23 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Github\Tests;
+namespace Joomla\Github\Tests\Issues;
 
 use Joomla\Github\Package\Issues\Milestones;
-use Joomla\Registry\Registry;
+use Joomla\Github\Tests\Stub\GitHubTestCase;
 
 /**
  * Test class for the GitHub API package.
  *
  * @since  1.0
  */
-class MilestonesTest extends \PHPUnit_Framework_TestCase
+class MilestonesTest extends GitHubTestCase
 {
-	/**
-	 * @var    Registry  Options for the GitHub object.
-	 * @since  1.0
-	 */
-	protected $options;
-
-	/**
-	 * @var    \PHPUnit_Framework_MockObject_MockObject  Mock client object.
-	 * @since  1.0
-	 */
-	protected $client;
-
 	/**
 	 * @var    Milestones  Object under test.
 	 * @since  1.0
 	 */
 	protected $object;
-
-	/**
-	 * @var    \Joomla\Http\Response  Mock response object.
-	 * @since  1.0
-	 */
-	protected $response;
-
-	/**
-	 * @var    string  Sample JSON string.
-	 * @since  12.3
-	 */
-	protected $sampleString = '{"a":1,"b":2,"c":3,"d":4,"e":5}';
-
-	/**
-	 * @var    string  Sample JSON error message.
-	 * @since  12.3
-	 */
-	protected $errorString = '{"message": "Generic Error"}';
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -64,31 +34,7 @@ class MilestonesTest extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
-		$this->options  = new Registry;
-
-		$this->client = $this->getMockBuilder('\\Joomla\\Github\\Http')
-			->setMethods(array('get', 'post', 'delete', 'patch', 'put'))
-			->getMock();
-
-		$this->response = $this->getMockBuilder('\\Joomla\\Http\\Response')->getMock();
-
 		$this->object = new Milestones($this->options, $this->client);
-	}
-
-	/**
-	 * Test...
-	 *
-	 * @param   string  $name  The method name.
-	 *
-	 * @return string
-	 */
-	protected function xxxgetMethod($name)
-	{
-		$class = new ReflectionClass('JGithubMilestones');
-		$method = $class->getMethod($name);
-		$method->setAccessible(true);
-
-		return $method;
 	}
 
 	/**

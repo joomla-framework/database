@@ -6,31 +6,18 @@
 
 namespace Joomla\Github\Tests;
 
-use Joomla\Registry\Registry;
-
-require_once __DIR__ . '/stubs/JGithubObjectMock.php';
+use Joomla\Github\Tests\Stub\GitHubTestCase;
+use Joomla\Github\Tests\Stub\ObjectMock;
 
 /**
  * Test class for Joomla\Github\Object.
  *
  * @since  1.0
  */
-class AbstractGithubObjectTest extends \PHPUnit_Framework_TestCase
+class GithubObjectTest extends GitHubTestCase
 {
 	/**
-	 * @var    Registry  Options for the GitHub object.
-	 * @since  1.0
-	 */
-	protected $options;
-
-	/**
-	 * @var    \Joomla\Github\Http  Mock client object.
-	 * @since  1.0
-	 */
-	protected $client;
-
-	/**
-	 * @var    \Joomla\Github\Tests\ObjectMock  Object under test.
+	 * @var    ObjectMock  Object under test.
 	 * @since  1.0
 	 */
 	protected $object;
@@ -46,12 +33,6 @@ class AbstractGithubObjectTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-
-		$this->options = new Registry;
-
-		$this->client = $this->getMockBuilder('\\Joomla\\Github\\Http')
-			->setMethods(array('get', 'post', 'delete', 'patch', 'put'))
-			->getMock();
 
 		$this->object = new ObjectMock($this->options, $this->client);
 	}

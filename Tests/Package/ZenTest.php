@@ -7,33 +7,15 @@
 namespace Joomla\Github\Tests;
 
 use Joomla\Github\Package\Zen;
-use Joomla\Registry\Registry;
+use Joomla\Github\Tests\Stub\GitHubTestCase;
 
 /**
  * Test class for the Zen package.
  *
  * @since  1.0
  */
-class ZenTest extends \PHPUnit_Framework_TestCase
+class ZenTest extends GitHubTestCase
 {
-	/**
-	 * @var    Registry  Options for the GitHub object.
-	 * @since  11.4
-	 */
-	protected $options;
-
-	/**
-	 * @var    \PHPUnit_Framework_MockObject_MockObject  Mock client object.
-	 * @since  11.4
-	 */
-	protected $client;
-
-	/**
-	 * @var    \Joomla\Http\Response  Mock response object.
-	 * @since  12.3
-	 */
-	protected $response;
-
 	/**
 	 * @var Zen
 	 */
@@ -50,14 +32,6 @@ class ZenTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-
-		$this->options  = new Registry;
-
-		$this->client = $this->getMockBuilder('\\Joomla\\Github\\Http')
-			->setMethods(array('get', 'post', 'delete', 'patch', 'put'))
-			->getMock();
-
-		$this->response = $this->getMockBuilder('\\Joomla\\Http\\Response')->getMock();
 
 		$this->object = new Zen($this->options, $this->client);
 	}

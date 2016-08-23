@@ -7,50 +7,20 @@
 namespace Joomla\Github\Tests;
 
 use Joomla\Github\Package\Repositories\Forks;
-use Joomla\Registry\Registry;
+use Joomla\Github\Tests\Stub\GitHubTestCase;
 
 /**
  * Test class for Forks.
  *
  * @since  1.0
  */
-class ForksTest extends \PHPUnit_Framework_TestCase
+class ForksTest extends GitHubTestCase
 {
-	/**
-	 * @var    Registry  Options for the GitHub object.
-	 * @since  1.0
-	 */
-	protected $options;
-
-	/**
-	 * @var    \PHPUnit_Framework_MockObject_MockObject  Mock client object.
-	 * @since  1.0
-	 */
-	protected $client;
-
-	/**
-	 * @var    \Joomla\Http\Response  Mock response object.
-	 * @since  1.0
-	 */
-	protected $response;
-
 	/**
 	 * @var    Forks  Object under test.
 	 * @since  11.4
 	 */
 	protected $object;
-
-	/**
-	 * @var    string  Sample JSON string.
-	 * @since  11.4
-	 */
-	protected $sampleString = '{"a":1,"b":2,"c":3,"d":4,"e":5}';
-
-	/**
-	 * @var    string  Sample JSON error message.
-	 * @since  11.4
-	 */
-	protected $errorString = '{"message": "Generic Error"}';
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -63,14 +33,6 @@ class ForksTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-
-		$this->options = new Registry;
-
-		$this->client = $this->getMockBuilder('\\Joomla\\Github\\Http')
-			->setMethods(array('get', 'post', 'delete', 'patch', 'put'))
-			->getMock();
-
-		$this->response = $this->getMockBuilder('\\Joomla\\Http\\Response')->getMock();
 
 		$this->object = new Forks($this->options, $this->client);
 	}

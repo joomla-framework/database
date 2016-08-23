@@ -7,33 +7,15 @@
 namespace Joomla\Github\Tests;
 
 use Joomla\Github\Package\Meta;
-use Joomla\Registry\Registry;
+use Joomla\Github\Tests\Stub\GitHubTestCase;
 
 /**
  * Test class for Joomla\Github\Meta.
  *
  * @since  1.0
  */
-class MetaTest extends \PHPUnit_Framework_TestCase
+class MetaTest extends GitHubTestCase
 {
-	/**
-	 * @var    Registry  Options for the GitHub object.
-	 * @since  1.0
-	 */
-	protected $options;
-
-	/**
-	 * @var    \PHPUnit_Framework_MockObject_MockObject  Mock client object.
-	 * @since  1.0
-	 */
-	protected $client;
-
-	/**
-	 * @var    \Joomla\Http\Response  Mock response object.
-	 * @since  1.0
-	 */
-	protected $response;
-
 	/**
 	 * @var    Meta  Object under test.
 	 * @since  1.0
@@ -47,12 +29,6 @@ class MetaTest extends \PHPUnit_Framework_TestCase
 	protected $sampleString = '{"hooks":["127.0.0.1/32","192.168.1.1/32","10.10.1.1/27"],"git":["127.0.0.1/32"]}';
 
 	/**
-	 * @var    string  Sample JSON error message.
-	 * @since  1.0
-	 */
-	protected $errorString = '{"message": "Generic Error"}';
-
-	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
@@ -63,14 +39,6 @@ class MetaTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-
-		$this->options = new Registry;
-
-		$this->client = $this->getMockBuilder('\\Joomla\\Github\\Http')
-			->setMethods(array('get', 'post', 'delete', 'patch', 'put'))
-			->getMock();
-
-		$this->response = $this->getMockBuilder('\\Joomla\\Http\\Response')->getMock();
 
 		$this->object = new Meta($this->options, $this->client);
 	}

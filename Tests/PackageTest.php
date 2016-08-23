@@ -7,28 +7,15 @@
 namespace Joomla\Github\Tests;
 
 use Joomla\Github\Github;
-use Joomla\Github\Http;
-use Joomla\Registry\Registry;
+use Joomla\Github\Tests\Stub\GitHubTestCase;
 
 /**
  * Test class for Joomla\Github\Github.
  *
  * @since  1.0
  */
-class AbstractPackageTest extends \PHPUnit_Framework_TestCase
+class PackageTest extends GitHubTestCase
 {
-	/**
-	 * @var    Registry  Options for the GitHub object.
-	 * @since  1.0
-	 */
-	protected $options;
-
-	/**
-	 * @var    Http  Mock client object.
-	 * @since  1.0
-	 */
-	protected $client;
-
 	/**
 	 * @var    Github  Object under test.
 	 * @since  1.0
@@ -46,12 +33,6 @@ class AbstractPackageTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-
-		$this->options = new Registry;
-
-		$this->client = $this->getMockBuilder('\\Joomla\\Github\\Http')
-			->setMethods(array('get', 'post', 'delete', 'patch', 'put'))
-			->getMock();
 
 		$this->object = new Github($this->options, $this->client);
 	}
@@ -82,9 +63,6 @@ class AbstractPackageTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test__GetInvalid()
 	{
-		$this->assertThat(
-			$this->object->repositories->INVALID,
-			$this->isInstanceOf('Joomla\Github\Package\Repositories\Forks')
-		);
+		$this->object->repositories->INVALID;
 	}
 }
