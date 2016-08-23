@@ -4,16 +4,16 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Github\Tests;
+namespace Joomla\Github\Tests\Stub;
 
 use Joomla\Registry\Registry;
 
 /**
- * JGithub base test class.
+ * JGitHub base test class.
  *
  * @since  1.0
  */
-abstract class AbstractGitHubBaseTest extends \PHPUnit_Framework_TestCase
+abstract class GitHubTestCase extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var    Registry  Options for the GitHub object.

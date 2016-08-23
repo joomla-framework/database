@@ -7,14 +7,14 @@
 namespace Joomla\Github\Tests\Issues;
 
 use Joomla\Github\Package\Issues\Comments;
-use Joomla\Github\Tests\AbstractGitHubBaseTest;
+use Joomla\Github\Tests\Stub\GitHubTestCase;
 
 /**
  * Test class for the GitHub API package.
  *
  * @since  1.0
  */
-class CommentsTest extends AbstractGitHubBaseTest
+class CommentsTest extends GitHubTestCase
 {
 	/**
 	 * @var    Comments  Object under test.
@@ -209,7 +209,7 @@ class CommentsTest extends AbstractGitHubBaseTest
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
-			$this->object->delete('joomla', 'joomla-platform', 1, 'Hello'),
+			$this->object->delete('joomla', 'joomla-platform', 1),
 			$this->equalTo(true)
 		);
 	}

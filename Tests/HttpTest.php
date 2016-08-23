@@ -5,21 +5,15 @@
  */
 
 use Joomla\Github\Http;
-use Joomla\Registry\Registry;
+use Joomla\Github\Tests\Stub\GitHubTestCase;
 
 /**
  * Test class for \Joomla\Github\Http.
  *
  * @since  1.0
  */
-class HttpTest extends \PHPUnit_Framework_TestCase
+class HttpTest extends GitHubTestCase
 {
-	/**
-	 * @var    Registry  Options for the GitHub object.
-	 * @since  1.0
-	 */
-	protected $options;
-
 	/**
 	 * @var    \Joomla\Http\TransportInterface  Mock client object.
 	 * @since  1.0
@@ -43,8 +37,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-
-		$this->options = new Registry;
 
 		$this->transport = $this->getMockBuilder('Joomla\\Http\\TransportInterface')
 			->setConstructorArgs(array($this->options))

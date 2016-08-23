@@ -7,33 +7,15 @@
 namespace Joomla\Github\Tests;
 
 use Joomla\Github\Package\Activity;
-use Joomla\Registry\Registry;
+use Joomla\Github\Tests\Stub\GitHubTestCase;
 
 /**
  * Test class for Activity.
  *
  * @since  1.0
  */
-class ActivityTest extends \PHPUnit_Framework_TestCase
+class ActivityTest extends GitHubTestCase
 {
-	/**
-	 * @var    Registry  Options for the GitHub object.
-	 * @since  1.0
-	 */
-	protected $options;
-
-	/**
-	 * @var    \PHPUnit_Framework_MockObject_MockObject  Mock client object.
-	 * @since  1.0
-	 */
-	protected $client;
-
-	/**
-	 * @var    \Joomla\Http\Response  Mock response object.
-	 * @since  1.0
-	 */
-	protected $response;
-
 	/**
 	 * @var Activity
 	 */
@@ -51,19 +33,11 @@ class ActivityTest extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
-		$this->options  = new Registry;
-
-		$this->client = $this->getMockBuilder('\\Joomla\\Github\\Http')
-			->setMethods(array('get', 'post', 'delete', 'patch', 'put'))
-			->getMock();
-
-		$this->response = $this->getMockBuilder('\\Joomla\\Http\\Response')->getMock();
-
 		$this->object = new Activity($this->options, $this->client);
 	}
 
 	/**
-	 * Tests the getList method.
+	 * Tests the construct method.
 	 *
 	 * @return  void
 	 *

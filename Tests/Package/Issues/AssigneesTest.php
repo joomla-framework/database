@@ -7,14 +7,14 @@
 namespace Joomla\Github\Tests\Issues;
 
 use Joomla\Github\Package\Issues\Assignees;
-use Joomla\Github\Tests\AbstractGitHubBaseTest;
+use Joomla\Github\Tests\Stub\GitHubTestCase;
 
 /**
  * Test class for the GitHub API package.
  *
  * @since  1.0
  */
-class AssigneesTest extends AbstractGitHubBaseTest
+class AssigneesTest extends GitHubTestCase
 {
 	/**
 	 * @var    Assignees  Object under test.

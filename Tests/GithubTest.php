@@ -7,28 +7,15 @@
 namespace Joomla\Github\Tests;
 
 use Joomla\Github\Github;
-use Joomla\Github\Http;
-use Joomla\Registry\Registry;
+use Joomla\Github\Tests\Stub\GitHubTestCase;
 
 /**
  * Test class for Joomla\Github\Github.
  *
  * @since  1.0
  */
-class GithubTest extends \PHPUnit_Framework_TestCase
+class GithubTest extends GitHubTestCase
 {
-	/**
-	 * @var    Registry  Options for the GitHub object.
-	 * @since  1.0
-	 */
-	protected $options;
-
-	/**
-	 * @var    Http  Mock client object.
-	 * @since  1.0
-	 */
-	protected $client;
-
 	/**
 	 * @var    Github  Object under test.
 	 * @since  1.0
@@ -46,12 +33,6 @@ class GithubTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		parent::setUp();
-
-		$this->options = new Registry;
-
-		$this->client = $this->getMockBuilder('\\Joomla\\Github\\Http')
-			->setMethods(array('get', 'post', 'delete', 'patch', 'put'))
-			->getMock();
 
 		$this->object = new Github($this->options, $this->client);
 	}
@@ -126,7 +107,7 @@ class GithubTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test__GetFailure()
 	{
-		$tmp = $this->object->other;
+		$this->object->other;
 	}
 
 	/**
@@ -158,7 +139,7 @@ class GithubTest extends \PHPUnit_Framework_TestCase
 		$this->options->set('api.url', 'https://example.com/gettest');
 
 		$this->assertThat(
-			$this->object->getOption('api.url', 'https://example.com/gettest'),
+			$this->object->getOption('api.url'),
 			$this->equalTo('https://example.com/gettest')
 		);
 	}

@@ -7,14 +7,14 @@
 namespace Joomla\Github\Tests\Issues;
 
 use Joomla\Github\Package\Issues\Labels;
-use Joomla\Github\Tests\AbstractGitHubBaseTest;
+use Joomla\Github\Tests\Stub\GitHubTestCase;
 
 /**
  * Test class for the GitHub API package.
  *
  * @since  1.0
  */
-class LabelsTest extends AbstractGitHubBaseTest
+class LabelsTest extends GitHubTestCase
 {
 	/**
 	 * @var    Labels  Object under test.
@@ -53,7 +53,7 @@ class LabelsTest extends AbstractGitHubBaseTest
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
-			$this->object->getList('joomla', 'joomla-platform', '1'),
+			$this->object->getList('joomla', 'joomla-platform'),
 			$this->equalTo(json_decode($this->response->body))
 		);
 	}
