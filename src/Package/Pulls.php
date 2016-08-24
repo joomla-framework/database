@@ -103,13 +103,14 @@ class Pulls extends AbstractPackage
 	 * @param   string   $title   The optional new title for the pull request.
 	 * @param   string   $body    The optional new body text for the pull request.
 	 * @param   string   $state   The optional new state for the pull request. [open, closed]
+	 * @param   string   $base    The optional new base branch for the pull request.
 	 *
 	 * @return  object
 	 *
 	 * @since   1.0
 	 * @throws  \DomainException
 	 */
-	public function edit($user, $repo, $pullId, $title = null, $body = null, $state = null)
+	public function edit($user, $repo, $pullId, $title = null, $body = null, $state = null, $base = null)
 	{
 		// Build the request path.
 		$path = '/repos/' . $user . '/' . $repo . '/pulls/' . (int) $pullId;
@@ -133,6 +134,12 @@ class Pulls extends AbstractPackage
 		if (isset($state))
 		{
 			$data->state = $state;
+		}
+
+		// If a base branch is set add it to the data object.
+		if (isset($base))
+		{
+			$data->base = $base;
 		}
 
 		// Encode the request data.

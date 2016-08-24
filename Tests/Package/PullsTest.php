@@ -302,6 +302,7 @@ class JGithubPackagePullsTest extends GitHubTestCase
 		$pull->title = 'My Pull Request';
 		$pull->body = 'These are my changes - please review them';
 		$pull->state = 'Closed';
+		$pull->base = 'new';
 
 		$this->client->expects($this->once())
 			->method('patch')
@@ -309,7 +310,7 @@ class JGithubPackagePullsTest extends GitHubTestCase
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
-			$this->object->edit('joomla', 'joomla-platform', 523, 'My Pull Request', 'These are my changes - please review them', 'Closed'),
+			$this->object->edit('joomla', 'joomla-platform', 523, 'My Pull Request', 'These are my changes - please review them', 'Closed', 'new'),
 			$this->equalTo(json_decode($this->sampleString))
 		);
 	}
