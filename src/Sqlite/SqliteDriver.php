@@ -8,7 +8,6 @@
 
 namespace Joomla\Database\Sqlite;
 
-use Sqlite3;
 use Joomla\Database\Pdo\PdoDriver;
 
 /**
@@ -28,10 +27,10 @@ class SqliteDriver extends PdoDriver
 	public $name = 'sqlite';
 
 	/**
-	 * The character(s) used to quote SQL statement names such as table names or field names,
-	 * etc. The child classes should define this as necessary.  If a single character string the
-	 * same character is used for both sides of the quoted name, else the first character will be
-	 * used for the opening quote and the second for the closing quote.
+	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
+	 *
+	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
+	 * opening quote and the second for the closing quote.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -45,8 +44,7 @@ class SqliteDriver extends PdoDriver
 	 */
 	public function __destruct()
 	{
-		$this->freeResult();
-		unset($this->connection);
+		$this->disconnect();
 	}
 
 	/**
@@ -68,7 +66,7 @@ class SqliteDriver extends PdoDriver
 	 * @param   string   $tableName  The name of the database table to drop.
 	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
 	 *
-	 * @return  SqliteDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -76,11 +74,8 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$query = $this->getQuery(true);
-
-		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $query->quoteName($tableName));
-
-		$this->execute();
+		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($tableName))
+			->execute();
 
 		return $this;
 	}
@@ -104,7 +99,7 @@ class SqliteDriver extends PdoDriver
 			return $text;
 		}
 
-		return SQLite3::escapeString($text);
+		return \SQLite3::escapeString($text);
 	}
 
 	/**
@@ -156,8 +151,7 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$columns = array();
-		$query = $this->getQuery(true);
+		$columns = [];
 
 		$fieldCasing = $this->getOption(\PDO::ATTR_CASE);
 
@@ -165,10 +159,7 @@ class SqliteDriver extends PdoDriver
 
 		$table = strtoupper($table);
 
-		$query->setQuery('pragma table_info(' . $table . ')');
-
-		$this->setQuery($query);
-		$fields = $this->loadObjectList();
+		$fields = $this->setQuery('pragma table_info(' . $table . ')')->loadObjectList();
 
 		if ($typeOnly)
 		{
@@ -183,13 +174,13 @@ class SqliteDriver extends PdoDriver
 			{
 				// Do some dirty translation to MySQL output.
 				// TODO: Come up with and implement a standard across databases.
-				$columns[$field->NAME] = (object) array(
-					'Field' => $field->NAME,
-					'Type' => $field->TYPE,
-					'Null' => ($field->NOTNULL == '1' ? 'NO' : 'YES'),
+				$columns[$field->NAME] = (object) [
+					'Field'   => $field->NAME,
+					'Type'    => $field->TYPE,
+					'Null'    => ($field->NOTNULL == '1' ? 'NO' : 'YES'),
 					'Default' => $field->DFLT_VALUE,
-					'Key' => ($field->PK == '1' ? 'PRI' : '')
-				);
+					'Key'     => ($field->PK == '1' ? 'PRI' : '')
+				];
 			}
 		}
 
@@ -212,20 +203,15 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$keys = array();
-		$query = $this->getQuery(true);
+		$keys = [];
 
 		$fieldCasing = $this->getOption(\PDO::ATTR_CASE);
 
 		$this->setOption(\PDO::ATTR_CASE, \PDO::CASE_UPPER);
 
 		$table = strtoupper($table);
-		$query->setQuery('pragma table_info( ' . $table . ')');
 
-		// $query->bind(':tableName', $table);
-
-		$this->setQuery($query);
-		$rows = $this->loadObjectList();
+		$rows = $this->setQuery('pragma table_info( ' . $table . ')')->loadObjectList();
 
 		foreach ($rows as $column)
 		{
@@ -252,22 +238,17 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		/* @type  SqliteQuery  $query */
-		$query = $this->getQuery(true);
-
 		$type = 'table';
 
+		/** @type SqliteQuery $query */
+		$query = $this->getQuery(true);
 		$query->select('name');
 		$query->from('sqlite_master');
 		$query->where('type = :type');
 		$query->bind(':type', $type);
 		$query->order('name');
 
-		$this->setQuery($query);
-
-		$tables = $this->loadColumn();
-
-		return $tables;
+		return $this->setQuery($query)->loadColumn();
 	}
 
 	/**
@@ -281,9 +262,7 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$this->setQuery("SELECT sqlite_version()");
-
-		return $this->loadResult();
+		return $this->setQuery("SELECT sqlite_version()")->loadResult();
 	}
 
 	/**
@@ -326,7 +305,7 @@ class SqliteDriver extends PdoDriver
 	 *
 	 * @param   string  $table  The name of the table to unlock.
 	 *
-	 * @return  SqliteDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -344,7 +323,7 @@ class SqliteDriver extends PdoDriver
 	 * @param   string  $backup    Not used by Sqlite.
 	 * @param   string  $prefix    Not used by Sqlite.
 	 *
-	 * @return  SqliteDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -375,7 +354,7 @@ class SqliteDriver extends PdoDriver
 	/**
 	 * Unlocks tables in the database.
 	 *
-	 * @return  SqliteDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -442,12 +421,9 @@ class SqliteDriver extends PdoDriver
 		else
 		{
 			$savepoint = 'SP_' . ($this->transactionDepth - 1);
-			$this->setQuery('ROLLBACK TO ' . $this->quoteName($savepoint));
+			$this->setQuery('ROLLBACK TO ' . $this->quoteName($savepoint))->execute();
 
-			if ($this->execute())
-			{
-				$this->transactionDepth--;
-			}
+			$this->transactionDepth--;
 		}
 	}
 
@@ -472,12 +448,9 @@ class SqliteDriver extends PdoDriver
 		else
 		{
 			$savepoint = 'SP_' . $this->transactionDepth;
-			$this->setQuery('SAVEPOINT ' . $this->quoteName($savepoint));
+			$this->setQuery('SAVEPOINT ' . $this->quoteName($savepoint))->execute();
 
-			if ($this->execute())
-			{
-				$this->transactionDepth++;
-			}
+			$this->transactionDepth++;
 		}
 	}
 }

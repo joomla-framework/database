@@ -55,7 +55,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters.
 	 * @param   array           $driverOptions  Optional driver options to be used.
 	 *
-	 * @return  MysqlQuery
+	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -64,7 +64,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 		// Case 1: Empty Key (reset $bounded array)
 		if (empty($key))
 		{
-			$this->bounded = array();
+			$this->bounded = [];
 
 			return $this;
 		}
@@ -121,7 +121,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 	 *
 	 * @param   string  $clause  Optionally, the name of the clause to clear, or nothing to clear the whole query.
 	 *
-	 * @return  MysqlQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -138,8 +138,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 	}
 
 	/**
-	 * Method to modify a query already in string format with the needed
-	 * additions to make the query limited to a particular number of
+	 * Method to modify a query already in string format with the needed additions to make the query limited to a particular number of
 	 * results, or start at a particular offset.
 	 *
 	 * @param   string   $query   The query in string format
@@ -187,10 +186,8 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 
 			return $concat_string . ')';
 		}
-		else
-		{
-			return 'CONCAT(' . implode(',', $values) . ')';
-		}
+
+		return 'CONCAT(' . implode(',', $values) . ')';
 	}
 
 	/**
@@ -203,7 +200,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 	 * @param   integer  $limit   The limit for the result set
 	 * @param   integer  $offset  The offset for the result set
 	 *
-	 * @return  MysqlQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */

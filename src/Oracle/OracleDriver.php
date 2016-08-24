@@ -27,10 +27,10 @@ class OracleDriver extends PdoDriver
 	public $name = 'oracle';
 
 	/**
-	 * The character(s) used to quote SQL statement names such as table names or field names,
-	 * etc.  The child classes should define this as necessary.  If a single character string the
-	 * same character is used for both sides of the quoted name, else the first character will be
-	 * used for the opening quote and the second for the closing quote.
+	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
+	 *
+	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
+	 * opening quote and the second for the closing quote.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -60,13 +60,13 @@ class OracleDriver extends PdoDriver
 	 *
 	 * @since   1.0
 	 */
-	public function __construct($options)
+	public function __construct(array $options)
 	{
-		$options['driver'] = 'oci';
-		$options['charset']    = (isset($options['charset'])) ? $options['charset']   : 'AL32UTF8';
+		$options['driver']     = 'oci';
+		$options['charset']    = (isset($options['charset'])) ? $options['charset'] : 'AL32UTF8';
 		$options['dateformat'] = (isset($options['dateformat'])) ? $options['dateformat'] : 'RRRR-MM-DD HH24:MI:SS';
 
-		$this->charset = $options['charset'];
+		$this->charset    = $options['charset'];
 		$this->dateformat = $options['dateformat'];
 
 		// Finalize initialisation
@@ -80,8 +80,7 @@ class OracleDriver extends PdoDriver
 	 */
 	public function __destruct()
 	{
-		$this->freeResult();
-		unset($this->connection);
+		$this->disconnect();
 	}
 
 	/**
@@ -103,7 +102,8 @@ class OracleDriver extends PdoDriver
 
 		if (isset($this->options['schema']))
 		{
-			$this->setQuery('ALTER SESSION SET CURRENT_SCHEMA = ' . $this->quoteName($this->options['schema']))->execute();
+			$this->setQuery('ALTER SESSION SET CURRENT_SCHEMA = ' . $this->quoteName($this->options['schema']))
+				->execute();
 		}
 
 		$this->setDateFormat($this->dateformat);
@@ -131,7 +131,7 @@ class OracleDriver extends PdoDriver
 	 * @param   string   $tableName  The name of the database table to drop.
 	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
 	 *
-	 * @return  OracleDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -139,15 +139,13 @@ class OracleDriver extends PdoDriver
 	{
 		$this->connect();
 
-		/* @type  OracleQuery  $query */
+		/** @type OracleQuery $query */
 		$query = $this->getQuery(true);
-
 		$query->setQuery('DROP TABLE :tableName');
 		$query->bind(':tableName', $tableName);
 
-		$this->setQuery($query);
-
-		$this->execute();
+		$this->setQuery($query)
+			->execute();
 
 		return $this;
 	}
@@ -209,13 +207,12 @@ class OracleDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$result = array();
+		$result = [];
 
-		/* @type  OracleQuery  $query */
-		$query = $this->getQuery(true);
-
-		$query->select('dbms_metadata.get_ddl(:type, :tableName)');
-		$query->from('dual');
+		/** @type OracleQuery $query */
+		$query = $this->getQuery(true)
+			->select('dbms_metadata.get_ddl(:type, :tableName)')
+			->from('dual');
 
 		$query->bind(':type', 'TABLE');
 
@@ -226,8 +223,7 @@ class OracleDriver extends PdoDriver
 		{
 			$query->bind(':tableName', $table);
 			$this->setQuery($query);
-			$statement = (string) $this->loadResult();
-			$result[$table] = $statement;
+			$result[$table] = (string) $this->loadResult();
 		}
 
 		return $result;
@@ -248,9 +244,9 @@ class OracleDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$columns = array();
+		$columns = [];
 
-		/* @type  OracleQuery  $query */
+		/** @type OracleQuery $query */
 		$query = $this->getQuery(true);
 
 		$fieldCasing = $this->getOption(\PDO::ATTR_CASE);
@@ -259,14 +255,13 @@ class OracleDriver extends PdoDriver
 
 		$table = strtoupper($table);
 
-		$query->select('*');
-		$query->from('ALL_TAB_COLUMNS');
-		$query->where('table_name = :tableName');
+		$query->select('*')
+			->from('ALL_TAB_COLUMNS')
+			->where('table_name = :tableName');
 
-		$prefixedTable = str_replace('#__', strtoupper($this->tablePrefix), $table);
+		$prefixedTable = $this->replacePrefix($table);
 		$query->bind(':tableName', $prefixedTable);
-		$this->setQuery($query);
-		$fields = $this->loadObjectList();
+		$fields = $this->setQuery($query)->loadObjectList();
 
 		if ($typeOnly)
 		{
@@ -303,7 +298,7 @@ class OracleDriver extends PdoDriver
 	{
 		$this->connect();
 
-		/* @type  OracleQuery  $query */
+		/** @type OracleQuery $query */
 		$query = $this->getQuery(true);
 
 		$fieldCasing = $this->getOption(\PDO::ATTR_CASE);
@@ -311,14 +306,13 @@ class OracleDriver extends PdoDriver
 		$this->setOption(\PDO::ATTR_CASE, \PDO::CASE_UPPER);
 
 		$table = strtoupper($table);
-		$query->select('*');
-		$query->from('ALL_CONSTRAINTS');
-		$query->where('table_name = :tableName');
+		$query->select('*')
+			->from('ALL_CONSTRAINTS')
+			->where('table_name = :tableName');
 
 		$query->bind(':tableName', $table);
 
-		$this->setQuery($query);
-		$keys = $this->loadObjectList();
+		$keys = $this->setQuery($query)->loadObjectList();
 
 		$this->setOption(\PDO::ATTR_CASE, $fieldCasing);
 
@@ -340,16 +334,14 @@ class OracleDriver extends PdoDriver
 	{
 		$this->connect();
 
-		/* @type  OracleQuery  $query */
+		/** @type OracleQuery $query */
 		$query = $this->getQuery(true);
+
+		$query->select('table_name');
 
 		if ($includeDatabaseName)
 		{
-			$query->select('owner, table_name');
-		}
-		else
-		{
-			$query->select('table_name');
+			$query->select('owner');
 		}
 
 		$query->from('all_tables');
@@ -366,14 +358,10 @@ class OracleDriver extends PdoDriver
 
 		if ($includeDatabaseName)
 		{
-			$tables = $this->loadAssocList();
-		}
-		else
-		{
-			$tables = $this->loadColumn();
+			return $this->loadAssocList();
 		}
 
-		return $tables;
+		return $this->loadColumn();
 	}
 
 	/**
@@ -387,9 +375,7 @@ class OracleDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$this->setQuery("SELECT value FROM nls_database_parameters WHERE parameter = 'NLS_RDBMS_VERSION'");
-
-		return $this->loadResult();
+		return $this->setQuery("SELECT value FROM nls_database_parameters WHERE parameter = 'NLS_RDBMS_VERSION'")->loadResult();
 	}
 
 	/**
@@ -427,19 +413,8 @@ class OracleDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$this->setQuery("ALTER SESSION SET NLS_DATE_FORMAT = '$dateFormat'");
-
-		if (!$this->execute())
-		{
-			return false;
-		}
-
-		$this->setQuery("ALTER SESSION SET NLS_TIMESTAMP_FORMAT = '$dateFormat'");
-
-		if (!$this->execute())
-		{
-			return false;
-		}
+		$this->setQuery("ALTER SESSION SET NLS_DATE_FORMAT = '$dateFormat'")->execute();
+		$this->setQuery("ALTER SESSION SET NLS_TIMESTAMP_FORMAT = '$dateFormat'")->execute();
 
 		$this->dateformat = $dateFormat;
 
@@ -467,7 +442,7 @@ class OracleDriver extends PdoDriver
 	 *
 	 * @param   string  $table  The name of the table to unlock.
 	 *
-	 * @return  OracleDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -487,7 +462,7 @@ class OracleDriver extends PdoDriver
 	 * @param   string  $backup    Not used by Oracle.
 	 * @param   string  $prefix    Not used by Oracle.
 	 *
-	 * @return  OracleDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -502,7 +477,7 @@ class OracleDriver extends PdoDriver
 	/**
 	 * Unlocks tables in the database.
 	 *
-	 * @return  OracleDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -664,12 +639,9 @@ class OracleDriver extends PdoDriver
 		else
 		{
 			$savepoint = 'SP_' . ($this->transactionDepth - 1);
-			$this->setQuery('ROLLBACK TO SAVEPOINT ' . $this->quoteName($savepoint));
+			$this->setQuery('ROLLBACK TO SAVEPOINT ' . $this->quoteName($savepoint))->execute();
 
-			if ($this->execute())
-			{
-				$this->transactionDepth--;
-			}
+			$this->transactionDepth--;
 		}
 	}
 
@@ -694,12 +666,9 @@ class OracleDriver extends PdoDriver
 		else
 		{
 			$savepoint = 'SP_' . $this->transactionDepth;
-			$this->setQuery('SAVEPOINT ' . $this->quoteName($savepoint));
+			$this->setQuery('SAVEPOINT ' . $this->quoteName($savepoint))->execute();
 
-			if ($this->execute())
-			{
-				$this->transactionDepth++;
-			}
+			$this->transactionDepth++;
 		}
 	}
 }

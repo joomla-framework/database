@@ -8,17 +8,15 @@
 
 namespace Joomla\Database;
 
-use Psr\Log;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Joomla Framework Database Driver Class
  *
  * @since  1.0
- *
- * @method  string  q($text, $escape = true)  Alias for quote method
- * @method  string  qn($name, $as = null)     Alias for quoteName method
  */
-abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInterface
+abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 {
 	/**
 	 * The name of the database.
@@ -58,7 +56,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * @var    array
 	 * @since  1.0
 	 */
-	protected static $connectors;
+	protected static $connectors = [];
 
 	/**
 	 * The number of SQL statements executed by the database driver.
@@ -93,12 +91,10 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	protected $limit = 0;
 
 	/**
-	 * The character(s) used to quote SQL statement names such as table names or field names,
-	 * etc.
+	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
 	 *
-	 * The child classes should define this as necessary.  If a single character string the
-	 * same character is used for both sides of the quoted name, else the first character will be
-	 * used for the opening quote and the second for the closing quote.
+	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
+	 * opening quote and the second for the closing quote.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -107,8 +103,6 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 	/**
 	 * The null or zero representation of a timestamp for the database driver.
-	 *
-	 * This should be defined in child classes to hold the appropriate value for the engine.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -174,10 +168,10 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	/**
 	 * DatabaseDriver instances container.
 	 *
-	 * @var    array
+	 * @var    DatabaseDriver[]
 	 * @since  1.0
 	 */
-	protected static $instances = array();
+	protected static $instances = [];
 
 	/**
 	 * The minimum supported database version.
@@ -198,15 +192,25 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	/**
 	 * A logger.
 	 *
-	 * @var    Log\LoggerInterface
+	 * @var    LoggerInterface
 	 * @since  1.0
 	 */
 	private $logger;
 
 	/**
-	 * Get a list of available database connectors.  The list will only be populated with connectors that both
-	 * the class exists and the static test method returns true.  This gives us the ability to have a multitude
-	 * of connector classes that are self-aware as to whether or not they are able to be used on a given system.
+	 * DatabaseFactory object
+	 *
+	 * @var    DatabaseFactory
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $factory;
+
+	/**
+	 * Get a list of available database connectors.
+	 *
+	 * The list will only be populated with connectors that the class exists for and the environment supports its use.
+	 * This gives us the ability to have a multitude of connector classes that are self-aware as to whether or not they
+	 * are able to be used on a given system.
 	 *
 	 * @return  array  An array of available database connectors.
 	 *
@@ -214,15 +218,13 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public static function getConnectors()
 	{
-		if (!isset(self::$connectors))
+		if (empty(self::$connectors))
 		{
-			self::$connectors = array();
-
 			// Get an iterator and loop trough the driver classes.
-			$dir = __DIR__;
+			$dir      = __DIR__;
 			$iterator = new \DirectoryIterator($dir);
 
-			/* @var  $file  \DirectoryIterator */
+			/** @var $file \DirectoryIterator */
 			foreach ($iterator as $file)
 			{
 				// Only load for php files.
@@ -234,8 +236,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 				$baseName = $file->getBasename();
 
 				// Derive the class name from the type.
-				/* @var  $class  DatabaseDriver */
-				$class = '\\Joomla\\Database\\' . ucfirst(strtolower($baseName)) . '\\' . ucfirst(strtolower($baseName)) . 'Driver';
+				/** @var $class DatabaseDriver */
+				$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($baseName)) . '\\' . ucfirst(strtolower($baseName)) . 'Driver';
 
 				// If the class doesn't exist, or if it's not supported on this system, move on to the next type.
 				if (!class_exists($class) || !($class::isSupported()))
@@ -254,26 +256,29 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	/**
 	 * Method to return a DatabaseDriver instance based on the given options.
 	 *
-	 * There are three global options and then the rest are specific to the database driver.  The 'driver' option defines which
-	 * DatabaseDriver class is used for the connection -- the default is 'mysqli'.  The 'database' option determines which database is to
-	 * be used for the connection.  The 'select' option determines whether the connector should automatically select the chosen database.
+	 * There are three global options and then the rest are specific to the database driver.
+	 *
+	 * - The 'driver' option defines which DatabaseDriver class is used for the connection -- the default is 'mysqli'.
+	 * - The 'database' option determines which database is to be used for the connection.
+	 * - The 'select' option determines whether the connector should automatically select the chosen database.
 	 *
 	 * Instances are unique to the given options and new objects are only created when a unique options array is
 	 * passed into the method.  This ensures that we don't end up with unnecessary database connection resources.
 	 *
 	 * @param   array  $options  Parameters to be passed to the database driver.
 	 *
-	 * @return  DatabaseDriver  A database object.
+	 * @return  DatabaseDriver
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public static function getInstance($options = array())
+	public static function getInstance(array $options = [])
 	{
 		// Sanitize the database connector options.
 		$options['driver']   = (isset($options['driver'])) ? preg_replace('/[^A-Z0-9_\.-]/i', '', $options['driver']) : 'mysqli';
 		$options['database'] = (isset($options['database'])) ? $options['database'] : null;
 		$options['select']   = (isset($options['select'])) ? $options['select'] : true;
+		$options['factory']  = (isset($options['factory'])) ? $options['factory'] : new DatabaseFactory;
 
 		// Get the options signature for the database connector.
 		$signature = md5(serialize($options));
@@ -281,27 +286,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		// If we already have a database connector instance for these options then just use that.
 		if (empty(self::$instances[$signature]))
 		{
-			// Derive the class name from the driver.
-			$class = '\\Joomla\\Database\\' . ucfirst(strtolower($options['driver'])) . '\\' . ucfirst(strtolower($options['driver'])) . 'Driver';
-
-			// If the class still doesn't exist we have nothing left to do but throw an exception.  We did our best.
-			if (!class_exists($class))
-			{
-				throw new Exception\UnsupportedAdapterException(sprintf('Unable to load Database Driver: %s', $options['driver']));
-			}
-
-			// Create our new DatabaseDriver connector based on the options given.
-			try
-			{
-				$instance = new $class($options);
-			}
-			catch (\RuntimeException $e)
-			{
-				throw new Exception\ConnectionFailureException(sprintf('Unable to connect to the Database: %s', $e->getMessage()));
-			}
-
 			// Set the new connector to the global instances based on signature.
-			self::$instances[$signature] = $instance;
+			self::$instances[$signature] = $options['factory']->getDriver($options['driver'], $options);
 		}
 
 		return self::$instances[$signature];
@@ -312,7 +298,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 *
 	 * @param   string  $sql  Input SQL string with which to split into individual queries.
 	 *
-	 * @return  array  The queries from the input string separated into an array.
+	 * @return  array
 	 *
 	 * @since   1.0
 	 */
@@ -323,7 +309,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		$comment   = false;
 		$endString = '';
 		$end       = strlen($sql);
-		$queries   = array();
+		$queries   = [];
 		$query     = '';
 
 		for ($i = 0; $i < $end; $i++)
@@ -438,35 +424,6 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	}
 
 	/**
-	 * Magic method to provide method alias support for quote() and quoteName().
-	 *
-	 * @param   string  $method  The called method.
-	 * @param   array   $args    The array of arguments passed to the method.
-	 *
-	 * @return  string  The aliased method's return value or null.
-	 *
-	 * @since   1.0
-	 */
-	public function __call($method, $args)
-	{
-		if (empty($args))
-		{
-			return;
-		}
-
-		switch ($method)
-		{
-			case 'q':
-				return $this->quote($args[0], isset($args[1]) ? $args[1] : true);
-				break;
-
-			case 'qn':
-				return $this->quoteName($args[0], isset($args[1]) ? $args[1] : null);
-				break;
-		}
-	}
-
-	/**
 	 * Magic method to access properties of the database driver.
 	 *
 	 * @param   string  $name  The name of the property.
@@ -499,46 +456,21 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 *
 	 * @since   1.0
 	 */
-	public function __construct($options)
+	public function __construct(array $options)
 	{
 		// Initialise object variables.
-		$this->database = (isset($options['database'])) ? $options['database'] : '';
-
-		$this->tablePrefix = (isset($options['prefix'])) ? $options['prefix'] : 'jos_';
-		$this->count = 0;
-		$this->errorNum = 0;
+		$this->database    = (isset($options['database'])) ? $options['database'] : '';
+		$this->debug       = (isset($options['debug'])) ? $options['debug'] : false;
+		$this->tablePrefix = (isset($options['prefix'])) ? $options['prefix'] : '';
+		$this->count       = 0;
+		$this->errorNum    = 0;
 
 		// Set class options.
 		$this->options = $options;
+
+		// Register the DatabaseFactory
+		$this->factory = isset($options['factory']) ? $options['factory'] : new DatabaseFactory;
 	}
-
-	/**
-	 * Connects to the database if needed.
-	 *
-	 * @return  void  Returns void if the database connected successfully.
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	abstract public function connect();
-
-	/**
-	 * Determines if the connection to the server is active.
-	 *
-	 * @return  boolean  True if connected to the database engine.
-	 *
-	 * @since   1.0
-	 */
-	abstract public function connected();
-
-	/**
-	 * Disconnects the database.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	abstract public function disconnect();
 
 	/**
 	 * Drops a table from the database.
@@ -546,24 +478,12 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * @param   string   $table     The name of the database table to drop.
 	 * @param   boolean  $ifExists  Optionally specify that the table must exist before it is dropped.
 	 *
-	 * @return  DatabaseDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
 	abstract public function dropTable($table, $ifExists = true);
-
-	/**
-	 * Escapes a string for usage in an SQL statement.
-	 *
-	 * @param   string   $text   The string to be escaped.
-	 * @param   boolean  $extra  Optional parameter to provide extra escaping.
-	 *
-	 * @return  string   The escaped string.
-	 *
-	 * @since   1.0
-	 */
-	abstract public function escape($text, $extra = false);
 
 	/**
 	 * Method to fetch a row from the result set cursor as an array.
@@ -611,26 +531,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	abstract protected function freeResult($cursor = null);
 
 	/**
-	 * Get the number of affected rows for the previous executed SQL statement.
-	 *
-	 * @return  integer  The number of affected rows.
-	 *
-	 * @since   1.0
-	 */
-	abstract public function getAffectedRows();
-
-	/**
-	 * Method to get the database collation in use by sampling a text field of a table in the database.
-	 *
-	 * @return  mixed  The collation in use by the database or boolean false if not supported.
-	 *
-	 * @since   1.0
-	 */
-	abstract public function getCollation();
-
-	/**
-	 * Method that provides access to the underlying database connection. Useful for when you need to call a
-	 * proprietary method such as PostgreSQL's lo_* methods.
+	 * Method that provides access to the underlying database connection.
 	 *
 	 * @return  resource  The underlying database connection resource.
 	 *
@@ -668,7 +569,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	/**
 	 * Returns a PHP date() function compliant date format for the database driver.
 	 *
-	 * @return  string  The format string.
+	 * @return  string
 	 *
 	 * @since   1.0
 	 */
@@ -680,7 +581,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	/**
 	 * Get the minimum supported database version.
 	 *
-	 * @return  string  The minimum version number for the database driver.
+	 * @return  string
 	 *
 	 * @since   1.0
 	 */
@@ -766,7 +667,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	/**
 	 * Get the null or zero representation of a timestamp for the database driver.
 	 *
-	 * @return  string  Null or zero representation of a timestamp.
+	 * @return  string
 	 *
 	 * @since   1.0
 	 */
@@ -774,17 +675,6 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	{
 		return $this->nullDate;
 	}
-
-	/**
-	 * Get the number of returned rows for the previous executed SQL statement.
-	 *
-	 * @param   resource  $cursor  An optional database cursor resource to extract the row count from.
-	 *
-	 * @return  integer   The number of returned rows.
-	 *
-	 * @since   1.0
-	 */
-	abstract public function getNumRows($cursor = null);
 
 	/**
 	 * Get the common table prefix for the database driver.
@@ -808,48 +698,19 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function getExporter()
 	{
-		// Derive the class name from the driver.
-		$class = '\\Joomla\\Database\\' . ucfirst($this->name) . '\\' . ucfirst($this->name) . 'Exporter';
-
-		// Make sure we have an exporter class for this driver.
-		if (!class_exists($class))
-		{
-			// If it doesn't exist we are at an impasse so throw an exception.
-			throw new Exception\UnsupportedAdapterException('Database Exporter not found.');
-		}
-
-		/* @var  $o  DatabaseExporter */
-		$o = new $class;
-		$o->setDbo($this);
-
-		return $o;
+		return $this->factory->getExporter($this->name, $this);
 	}
 
 	/**
 	 * Gets an importer class object.
 	 *
-	 * @return  DatabaseImporter  An importer object.
+	 * @return  DatabaseImporter
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
 	 */
 	public function getImporter()
 	{
-		// Derive the class name from the driver.
-		$class = '\\Joomla\\Database\\' . ucfirst($this->name) . '\\' . ucfirst($this->name) . 'Importer';
-
-		// Make sure we have an importer class for this driver.
-		if (!class_exists($class))
-		{
-			// If it doesn't exist we are at an impasse so throw an exception.
-			throw new Exception\UnsupportedAdapterException('Database Importer not found');
-		}
-
-		/* @var  $o  DatabaseImporter */
-		$o = new $class;
-		$o->setDbo($this);
-
-		return $o;
+		return $this->factory->getImporter($this->name, $this);
 	}
 
 	/**
@@ -857,26 +718,15 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 *
 	 * @param   boolean  $new  False to return the current query object, True to return a new DatabaseQuery object.
 	 *
-	 * @return  DatabaseQuery  The current query object or a new object extending the DatabaseQuery class.
+	 * @return  DatabaseQuery
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
 	 */
 	public function getQuery($new = false)
 	{
 		if ($new)
 		{
-			// Derive the class name from the driver.
-			$class = '\\Joomla\\Database\\' . ucfirst($this->name) . '\\' . ucfirst($this->name) . 'Query';
-
-			// Make sure we have a query class for this driver.
-			if (!class_exists($class))
-			{
-				// If it doesn't exist we are at an impasse so throw an exception.
-				throw new Exception\UnsupportedAdapterException('Database Query Class not found.');
-			}
-
-			return new $class($this);
+			return $this->factory->getQuery($this->name, $this);
 		}
 
 		return $this->sql;
@@ -888,39 +738,14 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * @param   string  $column  An option column to use as the iterator key.
 	 * @param   string  $class   The class of object that is returned.
 	 *
-	 * @return  DatabaseIterator  A new database iterator.
+	 * @return  DatabaseIterator
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
 	 */
 	public function getIterator($column = null, $class = '\\stdClass')
 	{
-		// Derive the class name from the driver.
-		$iteratorClass = '\\Joomla\\Database\\' . ucfirst($this->name) . '\\' . ucfirst($this->name) . 'Iterator';
-
-		// Make sure we have an iterator class for this driver.
-		if (!class_exists($iteratorClass))
-		{
-			// If it doesn't exist we are at an impasse so throw an exception.
-			throw new Exception\UnsupportedAdapterException(sprintf('class *%s* is not defined', $iteratorClass));
-		}
-
-		// Return a new iterator
-		return new $iteratorClass($this->execute(), $column, $class);
+		return $this->factory->getIterator($this->name, $this, $column, $class);
 	}
-
-	/**
-	 * Retrieves field information about the given tables.
-	 *
-	 * @param   string   $table     The name of the database table.
-	 * @param   boolean  $typeOnly  True (default) to only return field types.
-	 *
-	 * @return  array  An array of fields by table.
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	abstract public function getTableColumns($table, $typeOnly = true);
 
 	/**
 	 * Shows the table CREATE statement that creates the given tables.
@@ -935,28 +760,6 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	abstract public function getTableCreate($tables);
 
 	/**
-	 * Retrieves field information about the given tables.
-	 *
-	 * @param   mixed  $tables  A table name or a list of table names.
-	 *
-	 * @return  array  An array of keys for the table(s).
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	abstract public function getTableKeys($tables);
-
-	/**
-	 * Method to get an array of all tables in the database.
-	 *
-	 * @return  array  An array of all the tables in the database.
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	abstract public function getTableList();
-
-	/**
 	 * Determine whether or not the database engine supports UTF-8 character encoding.
 	 *
 	 * @return  boolean  True if the database engine supports UTF-8 character encoding.
@@ -969,52 +772,34 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	}
 
 	/**
-	 * Get the version of the database connector
-	 *
-	 * @return  string  The database connector version.
-	 *
-	 * @since   1.0
-	 */
-	abstract public function getVersion();
-
-	/**
-	 * Method to get the auto-incremented value from the last INSERT statement.
-	 *
-	 * @return  mixed  The value of the auto-increment field from the last inserted row.
-	 *
-	 * @since   1.0
-	 */
-	abstract public function insertid();
-
-	/**
 	 * Inserts a row into a table based on an object's properties.
 	 *
 	 * @param   string  $table    The name of the database table to insert into.
 	 * @param   object  &$object  A reference to an object whose public properties match the table fields.
 	 * @param   string  $key      The name of the primary key. If provided the object property is updated.
 	 *
-	 * @return  boolean  True on success.
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
 	public function insertObject($table, &$object, $key = null)
 	{
-		$fields = array();
-		$values = array();
+		$fields       = [];
+		$values       = [];
 		$tableColumns = $this->getTableColumns($table);
 
 		// Iterate over the object variables to build the query fields and values.
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (! array_key_exists($k, $tableColumns))
+			if (!array_key_exists($k, $tableColumns))
 			{
 				continue;
 			}
 
 			// Only process non-null scalars.
-			if (is_array($v) or is_object($v) or $v === null)
+			if (is_array($v) || is_object($v) || $v === null)
 			{
 				continue;
 			}
@@ -1031,18 +816,13 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		}
 
 		// Create the base insert statement.
-		$query = $this->getQuery(true);
-		$query->insert($this->quoteName($table))
+		$query = $this->getQuery(true)
+			->insert($this->quoteName($table))
 			->columns($fields)
 			->values(implode(',', $values));
 
 		// Set the query and execute the insert.
-		$this->setQuery($query);
-
-		if (!$this->execute())
-		{
-			return false;
-		}
+		$this->setQuery($query)->execute();
 
 		// Update the primary key if it exists.
 		$id = $this->insertid();
@@ -1122,7 +902,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	{
 		$this->connect();
 
-		$array = array();
+		$array = [];
 
 		// Execute the query and get the result set cursor.
 		if (!($cursor = $this->execute()))
@@ -1152,8 +932,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	}
 
 	/**
-	 * Method to get an array of values from the <var>$offset</var> field in each row of the result set from
-	 * the database query.
+	 * Method to get an array of values from the <var>$offset</var> field in each row of the result set from the database query.
 	 *
 	 * @param   integer  $offset  The row offset to use to build the result array.
 	 *
@@ -1166,7 +945,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	{
 		$this->connect();
 
-		$array = array();
+		$array = [];
 
 		// Execute the query and get the result set cursor.
 		if (!($cursor = $this->execute()))
@@ -1226,8 +1005,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * Method to get an array of the result set rows from the database query where each row is an object.  The array
 	 * of objects can optionally be keyed by a field name, but defaults to a sequential numeric array.
 	 *
-	 * NOTE: Choosing to key the result array by a non-unique field name can result in unwanted
-	 * behavior and should be avoided.
+	 * NOTE: Choosing to key the result array by a non-unique field name can result in unwanted behavior and should be avoided.
 	 *
 	 * @param   string  $key    The name of a field on which to key the result array.
 	 * @param   string  $class  The class name to use for the returned row objects.
@@ -1241,7 +1019,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	{
 		$this->connect();
 
-		$array = array();
+		$array = [];
 
 		// Execute the query and get the result set cursor.
 		if (!($cursor = $this->execute()))
@@ -1303,8 +1081,9 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	}
 
 	/**
-	 * Method to get the first row of the result set from the database query as an array.  Columns are indexed
-	 * numerically so the first column in the result set would be accessible via <var>$row[0]</var>, etc.
+	 * Method to get the first row of the result set from the database query as an array.
+	 *
+	 * Columns are indexed numerically so the first column in the result set would be accessible via <var>$row[0]</var>, etc.
 	 *
 	 * @return  mixed  The return value or null if the query failed.
 	 *
@@ -1341,8 +1120,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * Method to get an array of the result set rows from the database query where each row is an array.  The array
 	 * of objects can optionally be keyed by a field offset, but defaults to a sequential numeric array.
 	 *
-	 * NOTE: Choosing to key the result array by a non-unique field can result in unwanted
-	 * behavior and should be avoided.
+	 * NOTE: Choosing to key the result array by a non-unique field can result in unwanted behavior and should be avoided.
 	 *
 	 * @param   string  $key  The name of a field on which to key the result array.
 	 *
@@ -1355,7 +1133,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	{
 		$this->connect();
 
-		$array = array();
+		$array = [];
 
 		// Execute the query and get the result set cursor.
 		if (!($cursor = $this->execute()))
@@ -1389,11 +1167,11 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * @param   string  $message  The message.
 	 * @param   array   $context  Additional context.
 	 *
-	 * @return  DatabaseDriver  Returns itself to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
-	public function log($level, $message, array $context = array())
+	public function log($level, $message, array $context = [])
 	{
 		if ($this->logger)
 		{
@@ -1404,16 +1182,19 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	}
 
 	/**
-	 * Locks a table in the database.
+	 * Alias for quote method
 	 *
-	 * @param   string  $tableName  The name of the table to unlock.
+	 * @param   array|string  $text    A string or an array of strings to quote.
+	 * @param   boolean       $escape  True (default) to escape the string, false to leave it unchanged.
 	 *
-	 * @return  DatabaseDriver  Returns this object to support chaining.
+	 * @return  string  The quoted input string.
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
 	 */
-	abstract public function lockTable($tableName);
+	public function q($text, $escape = true)
+	{
+		return $this->quote($text, $escape);
+	}
 
 	/**
 	 * Quotes and optionally escapes a string to database requirements for use in database queries.
@@ -1423,7 +1204,6 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 *
 	 * @return  string  The quoted input string.
 	 *
-	 * @note    Accepting an array of strings was added in Platform 12.3.
 	 * @since   1.0
 	 */
 	public function quote($text, $escape = true)
@@ -1439,6 +1219,23 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		}
 
 		return '\'' . ($escape ? $this->escape($text) : $text) . '\'';
+	}
+
+	/**
+	 * Alias for quoteName method
+	 *
+	 * @param   array|string  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
+	 *                               Each type supports dot-notation name.
+	 * @param   array|string  $as    The AS query part associated to $name. It can be string or array, in latter case it has to be
+	 *                               same length of $name; if is null there will not be any AS part for string or array element.
+	 *
+	 * @return  array|string  The quote wrapped name, same type of $name.
+	 *
+	 * @since   1.0
+	 */
+	public function qn($name, $as = null)
+	{
+		return $this->quoteName($name, $as);
 	}
 
 	/**
@@ -1470,29 +1267,27 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 			return $quotedName . $quotedAs;
 		}
-		else
+
+		$fin = [];
+
+		if (is_null($as))
 		{
-			$fin = array();
-
-			if (is_null($as))
+			foreach ($name as $str)
 			{
-				foreach ($name as $str)
-				{
-					$fin[] = $this->quoteName($str);
-				}
+				$fin[] = $this->quoteName($str);
 			}
-			elseif (is_array($name) && (count($name) == count($as)))
-			{
-				$count = count($name);
-
-				for ($i = 0; $i < $count; $i++)
-				{
-					$fin[] = $this->quoteName($name[$i], $as[$i]);
-				}
-			}
-
-			return $fin;
 		}
+		elseif (is_array($name) && (count($name) == count($as)))
+		{
+			$count = count($name);
+
+			for ($i = 0; $i < $count; $i++)
+			{
+				$fin[] = $this->quoteName($name[$i], $as[$i]);
+			}
+		}
+
+		return $fin;
 	}
 
 	/**
@@ -1506,8 +1301,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	protected function quoteNameStr($strArr)
 	{
-		$parts = array();
-		$q = $this->nameQuote;
+		$parts = [];
+		$q     = $this->nameQuote;
 
 		foreach ($strArr as $part)
 		{
@@ -1530,8 +1325,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	}
 
 	/**
-	 * This function replaces a string identifier <var>$prefix</var> with the string held is the
-	 * <var>tablePrefix</var> class variable.
+	 * This function replaces a string identifier <var>$prefix</var> with the string held is the <var>tablePrefix</var> class variable.
 	 *
 	 * @param   string  $sql     The SQL statement to prepare.
 	 * @param   string  $prefix  The common table prefix.
@@ -1542,13 +1336,13 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function replacePrefix($sql, $prefix = '#__')
 	{
-		$escaped = false;
-		$startPos = 0;
+		$escaped   = false;
+		$startPos  = 0;
 		$quoteChar = '';
-		$literal = '';
+		$literal   = '';
 
 		$sql = trim($sql);
-		$n = strlen($sql);
+		$n   = strlen($sql);
 
 		while ($startPos < $n)
 		{
@@ -1565,7 +1359,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			if (($k !== false) && (($k < $j) || ($j === false)))
 			{
 				$quoteChar = '"';
-				$j = $k;
+				$j         = $k;
 			}
 			else
 			{
@@ -1590,7 +1384,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			// Quote comes first, find end of quote
 			while (true)
 			{
-				$k = strpos($sql, $quoteChar, $j);
+				$k       = strpos($sql, $quoteChar, $j);
 				$escaped = false;
 
 				if ($k === false)
@@ -1641,24 +1435,12 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * @param   string  $backup    Table prefix
 	 * @param   string  $prefix    For the table - used to rename constraints in non-mysql databases
 	 *
-	 * @return  DatabaseDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
 	abstract public function renameTable($oldTable, $newTable, $backup = null, $prefix = null);
-
-	/**
-	 * Select a database for use.
-	 *
-	 * @param   string  $database  The name of the database to select for use.
-	 *
-	 * @return  boolean  True if the database was successfully selected.
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	abstract public function select($database);
 
 	/**
 	 * Sets the database debugging state for the driver.
@@ -1671,7 +1453,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function setDebug($level)
 	{
-		$previous = $this->debug;
+		$previous    = $this->debug;
 		$this->debug = (bool) $level;
 
 		return $previous;
@@ -1684,14 +1466,14 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * @param   integer  $offset  The affected row offset to set.
 	 * @param   integer  $limit   The maximum affected rows to set.
 	 *
-	 * @return  DatabaseDriver  This object to support method chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
 	public function setQuery($query, $offset = 0, $limit = 0)
 	{
-		$this->sql = $query;
-		$this->limit = (int) max(0, $limit);
+		$this->sql    = $query;
+		$this->limit  = (int) max(0, $limit);
 		$this->offset = (int) max(0, $offset);
 
 		return $this;
@@ -1700,13 +1482,13 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	/**
 	 * Sets a logger instance on the object
 	 *
-	 * @param   Log\LoggerInterface  $logger  A PSR-3 compliant logger.
+	 * @param   LoggerInterface  $logger  A PSR-3 compliant logger.
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0
 	 */
-	public function setLogger(Log\LoggerInterface $logger)
+	public function setLogger(LoggerInterface $logger)
 	{
 		$this->logger = $logger;
 	}
@@ -1721,42 +1503,6 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	abstract public function setUtf();
 
 	/**
-	 * Method to commit a transaction.
-	 *
-	 * @param   boolean  $toSavepoint  If true, commit to the last savepoint.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	abstract public function transactionCommit($toSavepoint = false);
-
-	/**
-	 * Method to roll back a transaction.
-	 *
-	 * @param   boolean  $toSavepoint  If true, rollback to the last savepoint.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	abstract public function transactionRollback($toSavepoint = false);
-
-	/**
-	 * Method to initialize a transaction.
-	 *
-	 * @param   boolean  $asSavepoint  If true and a transaction is already active, a savepoint will be created.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	abstract public function transactionStart($asSavepoint = false);
-
-	/**
 	 * Method to truncate a table.
 	 *
 	 * @param   string  $table  The table to truncate
@@ -1768,8 +1514,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function truncateTable($table)
 	{
-		$this->setQuery('TRUNCATE TABLE ' . $this->quoteName($table));
-		$this->execute();
+		$this->setQuery('TRUNCATE TABLE ' . $this->quoteName($table))
+			->execute();
 	}
 
 	/**
@@ -1787,13 +1533,13 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function updateObject($table, &$object, $key, $nulls = false)
 	{
-		$fields = array();
-		$where = array();
+		$fields       = [];
+		$where        = [];
 		$tableColumns = $this->getTableColumns($table);
 
 		if (is_string($key))
 		{
-			$key = array($key);
+			$key = [$key];
 		}
 
 		if (is_object($key))
@@ -1808,7 +1554,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (! array_key_exists($k, $tableColumns))
+			if (!array_key_exists($k, $tableColumns))
 			{
 				continue;
 			}
@@ -1857,28 +1603,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		}
 
 		// Set the query and execute the update.
-		$this->setQuery(sprintf($statement, implode(",", $fields), implode(' AND ', $where)));
+		$this->setQuery(sprintf($statement, implode(",", $fields), implode(' AND ', $where)))->execute();
 
-		return $this->execute();
+		return true;
 	}
-
-	/**
-	 * Execute the SQL statement.
-	 *
-	 * @return  mixed  A database cursor resource on success, boolean false on failure.
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	abstract public function execute();
-
-	/**
-	 * Unlocks tables in the database.
-	 *
-	 * @return  DatabaseDriver  Returns this object to support chaining.
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	public abstract function unlockTables();
 }

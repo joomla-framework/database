@@ -16,15 +16,6 @@ namespace Joomla\Database;
 class DatabaseFactory
 {
 	/**
-	 * Contains the current Factory instance
-	 *
-	 * @var    DatabaseFactory
-	 * @since  1.0
-	 * @deprecated  2.0  Instantiate a new factory object as needed
-	 */
-	private static $instance = null;
-
-	/**
 	 * Method to return a DatabaseDriver instance based on the given options.
 	 *
 	 * There are three global options and then the rest are specific to the database driver. The 'database' option determines which database is to
@@ -38,7 +29,7 @@ class DatabaseFactory
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public function getDriver($name = 'mysqli', $options = array())
+	public function getDriver($name = 'mysqli', array $options = [])
 	{
 		// Sanitize the database connector options.
 		$options['driver']   = preg_replace('/[^A-Z0-9_\.-]/i', '', $name);
@@ -54,7 +45,7 @@ class DatabaseFactory
 			throw new Exception\UnsupportedAdapterException(sprintf('Unable to load Database Driver: %s', $options['driver']));
 		}
 
-		// Create our new Driver connector based on the options given.
+		// Create our new DatabaseDriver connector based on the options given.
 		try
 		{
 			return new $class($options);
@@ -134,21 +125,32 @@ class DatabaseFactory
 	}
 
 	/**
-	 * Gets an instance of the factory object.
+	 * Get a new iterator on the current query.
 	 *
-	 * @return  DatabaseFactory
+	 * @param   string          $name    Name of the driver you want an iterator for.
+	 * @param   DatabaseDriver  $db      DatabaseDriver instance with the query to be iterated.
+	 * @param   string          $column  An optional column to use as the iterator key.
+	 * @param   string          $class   The class of object that is returned.
 	 *
-	 * @since   1.0
-	 * @deprecated  2.0  Instantiate a new factory object as needed
+	 * @return  DatabaseIterator
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
 	 */
-	public static function getInstance()
+	public function getIterator($name, DatabaseDriver $db, $column = null, $class = '\\stdClass')
 	{
-		if (!self::$instance)
+		// Derive the class name from the driver.
+		$iteratorClass = __NAMESPACE__ . '\\' . ucfirst($name) . '\\' . ucfirst($name) . 'Iterator';
+
+		// Make sure we have an iterator class for this driver.
+		if (!class_exists($iteratorClass))
 		{
-			self::setInstance(new static);
+			// If it doesn't exist we are at an impasse so throw an exception.
+			throw new \RuntimeException(sprintf('Class *%s* is not defined', $iteratorClass));
 		}
 
-		return self::$instance;
+		// Return a new iterator
+		return new $iteratorClass($db->execute(), $column, $class);
 	}
 
 	/**
@@ -175,20 +177,5 @@ class DatabaseFactory
 		}
 
 		return new $class($db);
-	}
-
-	/**
-	 * Gets an instance of a factory object to return on subsequent calls of getInstance.
-	 *
-	 * @param   DatabaseFactory  $instance  A Factory object.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 * @deprecated  2.0  Instantiate a new factory object as needed
-	 */
-	public static function setInstance(DatabaseFactory $instance = null)
-	{
-		self::$instance = $instance;
 	}
 }

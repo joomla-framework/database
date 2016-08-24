@@ -85,7 +85,7 @@ class PgsqlDriver extends PdoDriver
 	/**
 	 * Connects to the database if needed.
 	 *
-	 * @return  void  Returns void if the database connected successfully.
+	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \RuntimeException
@@ -108,7 +108,7 @@ class PgsqlDriver extends PdoDriver
 	 * @param   string   $tableName  The name of the database table to drop.
 	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
 	 *
-	 * @return  boolean	true
+	 * @return  boolean
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \RuntimeException
@@ -168,7 +168,7 @@ class PgsqlDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$result = array();
+		$result = [];
 
 		$tableSub = $this->replacePrefix($table);
 
@@ -223,18 +223,18 @@ class PgsqlDriver extends PdoDriver
 
 				// Do some dirty translation to MySQL output.
 				// @todo: Come up with and implement a standard across databases.
-				$result[$field->column_name] = (object) array(
+				$result[$field->column_name] = (object) [
 					'column_name' => $field->column_name,
-					'type' => $field->type,
-					'null' => $field->null,
-					'Default' => $field->Default,
-					'comments' => '',
-					'Field' => $field->column_name,
-					'Type' => $field->type,
-					'Null' => $field->null,
+					'type'        => $field->type,
+					'null'        => $field->null,
+					'Default'     => $field->Default,
+					'comments'    => '',
+					'Field'       => $field->column_name,
+					'Type'        => $field->type,
+					'Null'        => $field->null,
 					// @todo: Improve query above to return primary key info as well
 					// 'Key' => ($field->PK == '1' ? 'PRI' : '')
-				);
+				];
 			}
 		}
 
@@ -286,7 +286,7 @@ class PgsqlDriver extends PdoDriver
 			return $this->loadObjectList();
 		}
 
-		return false;
+		return [];
 	}
 
 	/**
@@ -328,12 +328,12 @@ class PgsqlDriver extends PdoDriver
 
 		if (in_array($table, $tableList))
 		{
-			$name = array(
+			$name = [
 				's.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
 				'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option'
-			);
+			];
 
-			$as = array('sequence', 'schema', 'table', 'column', 'data_type', 'minimum_value', 'maximum_value', 'increment', 'cycle_option');
+			$as = ['sequence', 'schema', 'table', 'column', 'data_type', 'minimum_value', 'maximum_value', 'increment', 'cycle_option'];
 
 			if (version_compare($this->getVersion(), '9.1.0') >= 0)
 			{
@@ -356,7 +356,7 @@ class PgsqlDriver extends PdoDriver
 			return $this->loadObjectList();
 		}
 
-		return false;
+		return [];
 	}
 
 	/**
@@ -364,7 +364,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @param   string  $tableName  The name of the table to unlock.
 	 *
-	 * @return  PgsqlDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \RuntimeException
@@ -385,7 +385,7 @@ class PgsqlDriver extends PdoDriver
 	 * @param   string  $backup    Not used by PostgreSQL.
 	 * @param   string  $prefix    Not used by PostgreSQL.
 	 *
-	 * @return  PgsqlDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \RuntimeException
@@ -453,7 +453,7 @@ class PgsqlDriver extends PdoDriver
 		// Rename table
 		$this->setQuery('ALTER TABLE ' . $this->escape($oldTable) . ' RENAME TO ' . $this->escape($newTable))->execute();
 
-		return true;
+		return $this;
 	}
 
 	/**
@@ -616,8 +616,8 @@ class PgsqlDriver extends PdoDriver
 	{
 		$columns = $this->getTableColumns($table);
 
-		$fields = array();
-		$values = array();
+		$fields = [];
+		$values = [];
 
 		// Iterate over the object variables to build the query fields and values.
 		foreach (get_object_vars($object) as $k => $v)
@@ -862,7 +862,7 @@ class PgsqlDriver extends PdoDriver
 	/**
 	 * Unlocks tables in the database, this command does not exist in PostgreSQL, it is automatically done on commit or rollback.
 	 *
-	 * @return  PgsqlDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \RuntimeException
@@ -890,12 +890,12 @@ class PgsqlDriver extends PdoDriver
 	public function updateObject($table, &$object, $key, $nulls = false)
 	{
 		$columns = $this->getTableColumns($table);
-		$fields  = array();
-		$where   = array();
+		$fields  = [];
+		$where   = [];
 
 		if (is_string($key))
 		{
-			$key = array($key);
+			$key = [$key];
 		}
 
 		if (is_object($key))

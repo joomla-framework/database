@@ -31,10 +31,8 @@ class PdoIterator extends DatabaseIterator
 		{
 			return $this->cursor->rowCount();
 		}
-		else
-		{
-			return 0;
-		}
+
+		return 0;
 	}
 
 	/**
@@ -50,10 +48,8 @@ class PdoIterator extends DatabaseIterator
 		{
 			return $this->cursor->fetchObject($this->class);
 		}
-		else
-		{
-			return false;
-		}
+
+		return false;
 	}
 
 	/**

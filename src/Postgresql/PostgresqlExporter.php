@@ -27,7 +27,7 @@ class PostgresqlExporter extends DatabaseExporter
 	 */
 	protected function buildXml()
 	{
-		$buffer = array();
+		$buffer = [];
 
 		$buffer[] = '<?xml version="1.0"?>';
 		$buffer[] = '<postgresqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
@@ -51,7 +51,7 @@ class PostgresqlExporter extends DatabaseExporter
 	 */
 	protected function buildXmlStructure()
 	{
-		$buffer = array();
+		$buffer = [];
 
 		foreach ($this->from as $table)
 		{
@@ -59,8 +59,8 @@ class PostgresqlExporter extends DatabaseExporter
 			$table = $this->getGenericTableName($table);
 
 			// Get the details columns information.
-			$fields = $this->db->getTableColumns($table, false);
-			$keys = $this->db->getTableKeys($table);
+			$fields    = $this->db->getTableColumns($table, false);
+			$keys      = $this->db->getTableKeys($table);
 			$sequences = $this->db->getTableSequences($table);
 
 			$buffer[] = '  <table_structure name="' . $table . '">';
@@ -83,14 +83,13 @@ class PostgresqlExporter extends DatabaseExporter
 			foreach ($fields as $field)
 			{
 				$buffer[] = '   <field Field="' . $field->column_name . '"' . ' Type="' . $field->type . '"' . ' Null="' . $field->null . '"' .
-							(isset($field->default) ? ' Default="' . $field->default . '"' : '') . ' Comments="' . $field->comments . '"' .
-					' />';
+					(isset($field->default) ? ' Default="' . $field->default . '"' : '') . ' Comments="' . $field->comments . '"' . ' />';
 			}
 
 			foreach ($keys as $key)
 			{
-				$buffer[] = '   <key Index="' . $key->idxName . '"' . ' is_primary="' . $key->isPrimary . '"' . ' is_unique="' . $key->isUnique . '"' .
-					' Query="' . $key->Query . '" />';
+				$buffer[] = '   <key Index="' . $key->idxName . '"' . ' is_primary="' . $key->isPrimary . '"' . ' is_unique="' . $key->isUnique . '"'
+					. ' Query="' . $key->Query . '" />';
 			}
 
 			$buffer[] = '  </table_structure>';
@@ -102,23 +101,23 @@ class PostgresqlExporter extends DatabaseExporter
 	/**
 	 * Checks if all data and options are in order prior to exporting.
 	 *
-	 * @return  PostgresqlExporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
-	 * @throws  \Exception if an error is encountered.
+	 * @throws  \RuntimeException
 	 */
 	public function check()
 	{
 		// Check if the db connector has been set.
 		if (!($this->db instanceof PostgresqlDriver))
 		{
-			throw new \Exception('Database connection wrong type.');
+			throw new \RuntimeException('Database connection wrong type.');
 		}
 
 		// Check if the tables have been specified.
 		if (empty($this->from))
 		{
-			throw new \Exception('ERROR: No Tables Specified');
+			throw new \RuntimeException('ERROR: No Tables Specified');
 		}
 
 		return $this;

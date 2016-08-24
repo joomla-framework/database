@@ -38,10 +38,10 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	/**
 	 * Holds key / value pair of bound objects.
 	 *
-	 * @var    mixed
+	 * @var    array
 	 * @since  1.0
 	 */
-	protected $bounded = array();
+	protected $bounded = [];
 
 	/**
 	 * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution. Also
@@ -55,16 +55,16 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters.
 	 * @param   array           $driverOptions  Optional driver options to be used.
 	 *
-	 * @return  SqliteQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
-	public function bind($key = null, &$value = null, $dataType = \PDO::PARAM_STR, $length = 0, $driverOptions = array())
+	public function bind($key = null, &$value = null, $dataType = \PDO::PARAM_STR, $length = 0, $driverOptions = [])
 	{
 		// Case 1: Empty Key (reset $bounded array)
 		if (empty($key))
 		{
-			$this->bounded = array();
+			$this->bounded = [];
 
 			return $this;
 		}
@@ -82,9 +82,9 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 
 		$obj = new \stdClass;
 
-		$obj->value = &$value;
-		$obj->dataType = $dataType;
-		$obj->length = $length;
+		$obj->value         = &$value;
+		$obj->dataType      = $dataType;
+		$obj->length        = $length;
 		$obj->driverOptions = $driverOptions;
 
 		// Case 3: Simply add the Key/Value into the bounded array
@@ -94,8 +94,7 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	}
 
 	/**
-	 * Retrieves the bound parameters array when key is null and returns it by reference. If a key is provided then that item is
-	 * returned.
+	 * Retrieves the bound parameters array when key is null and returns it by reference. If a key is provided then that item is returned.
 	 *
 	 * @param   mixed  $key  The bounded variable key to retrieve.
 	 *
@@ -109,12 +108,10 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		{
 			return $this->bounded;
 		}
-		else
+
+		if (isset($this->bounded[$key]))
 		{
-			if (isset($this->bounded[$key]))
-			{
-				return $this->bounded[$key];
-			}
+			return $this->bounded[$key];
 		}
 	}
 
@@ -144,7 +141,7 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	 *
 	 * @param   string  $clause  Optionally, the name of the clause to clear, or nothing to clear the whole query.
 	 *
-	 * @return  SqliteQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -153,7 +150,7 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		switch ($clause)
 		{
 			case null:
-				$this->bounded = array();
+				$this->bounded = [];
 				break;
 		}
 
@@ -179,18 +176,13 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		{
 			return implode(' || ' . $this->quote($separator) . ' || ', $values);
 		}
-		else
-		{
-			return implode(' || ', $values);
-		}
+
+		return implode(' || ', $values);
 	}
 
 	/**
-	 * Method to modify a query already in string format with the needed
-	 * additions to make the query limited to a particular number of
-	 * results, or start at a particular offset. This method is used
-	 * automatically by the __toString() method if it detects that the
-	 * query implements the LimitableInterface.
+	 * Method to modify a query already in string format with the needed additions to make the query limited to a particular number of
+	 * results, or start at a particular offset.
 	 *
 	 * @param   string   $query   The query in string format
 	 * @param   integer  $limit   The limit for the result set
@@ -220,7 +212,7 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	 * @param   integer  $limit   The limit for the result set
 	 * @param   integer  $offset  The offset for the result set
 	 *
-	 * @return  SqliteQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */

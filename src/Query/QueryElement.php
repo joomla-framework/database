@@ -20,22 +20,28 @@ namespace Joomla\Database\Query;
 class QueryElement
 {
 	/**
-	 * @var    string  The name of the element.
+	 * The name of the element.
+	 *
+	 * @var    string
 	 * @since  1.0
 	 */
-	protected $name = null;
+	protected $name;
 
 	/**
-	 * @var    array  An array of elements.
+	 * An array of elements.
+	 *
+	 * @var    array
 	 * @since  1.0
 	 */
-	protected $elements = null;
+	protected $elements = [];
 
 	/**
-	 * @var    string  Glue piece.
+	 * Glue piece.
+	 *
+	 * @var    string
 	 * @since  1.0
 	 */
-	protected $glue = null;
+	protected $glue;
 
 	/**
 	 * Constructor.
@@ -48,7 +54,6 @@ class QueryElement
 	 */
 	public function __construct($name, $elements, $glue = ',')
 	{
-		$this->elements = array();
 		$this->name = $name;
 		$this->glue = $glue;
 
@@ -68,10 +73,8 @@ class QueryElement
 		{
 			return PHP_EOL . substr($this->name, 0, -2) . '(' . implode($this->glue, $this->elements) . ')';
 		}
-		else
-		{
-			return PHP_EOL . $this->name . ' ' . implode($this->glue, $this->elements);
-		}
+
+		return PHP_EOL . $this->name . ' ' . implode($this->glue, $this->elements);
 	}
 
 	/**
@@ -91,14 +94,14 @@ class QueryElement
 		}
 		else
 		{
-			$this->elements = array_merge($this->elements, array($elements));
+			$this->elements = array_merge($this->elements, [$elements]);
 		}
 	}
 
 	/**
 	 * Gets the elements of this element.
 	 *
-	 * @return  string
+	 * @return  array
 	 *
 	 * @since   1.0
 	 */
@@ -112,7 +115,7 @@ class QueryElement
 	 *
 	 * @param   string  $name  Name of the element.
 	 *
-	 * @return  QueryElement  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.3.0
 	 */
@@ -124,8 +127,7 @@ class QueryElement
 	}
 
 	/**
-	 * Method to provide deep copy support to nested objects and arrays
-	 * when cloning.
+	 * Method to provide deep copy support to nested objects and arrays when cloning.
 	 *
 	 * @return  void
 	 *

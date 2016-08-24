@@ -4,13 +4,13 @@ Array
         (
             [Field] => id
             [Type] => int(11) unsigned
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
             [Key] => PRI
-            [Default] => 
+            [Default] =>
             [Extra] => auto_increment
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [title] => stdClass Object
@@ -19,11 +19,11 @@ Array
             [Type] => text
             [Collation] => utf8_general_ci
             [Null] => NO
-            [Key] => 
-            [Default] => 
-            [Extra] => 
+            [Key] =>
+            [Default] =>
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [alias] => stdClass Object
@@ -32,11 +32,11 @@ Array
             [Type] => varchar(255)
             [Collation] => utf8_general_ci
             [Null] => NO
-            [Key] => 
-            [Default] => 
-            [Extra] => 
+            [Key] =>
+            [Default] =>
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [title_alias] => stdClass Object
@@ -45,11 +45,11 @@ Array
             [Type] => text
             [Collation] => utf8_general_ci
             [Null] => NO
-            [Key] => 
-            [Default] => 
-            [Extra] => 
+            [Key] =>
+            [Default] =>
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [introtext] => stdClass Object
@@ -58,11 +58,11 @@ Array
             [Type] => mediumtext
             [Collation] => utf8_general_ci
             [Null] => NO
-            [Key] => 
-            [Default] => 
-            [Extra] => 
+            [Key] =>
+            [Default] =>
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [fulltext] => stdClass Object
@@ -71,89 +71,89 @@ Array
             [Type] => mediumtext
             [Collation] => utf8_general_ci
             [Null] => NO
-            [Key] => 
-            [Default] => 
-            [Extra] => 
+            [Key] =>
+            [Default] =>
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [state] => stdClass Object
         (
             [Field] => state
             [Type] => tinyint(3)
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
             [Key] => MUL
             [Default] => 0
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [sectionid] => stdClass Object
         (
             [Field] => sectionid
             [Type] => int(11) unsigned
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
             [Key] => MUL
             [Default] => 0
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [mask] => stdClass Object
         (
             [Field] => mask
             [Type] => int(11) unsigned
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
-            [Key] => 
+            [Key] =>
             [Default] => 0
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [catid] => stdClass Object
         (
             [Field] => catid
             [Type] => int(11) unsigned
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
             [Key] => MUL
             [Default] => 0
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [created] => stdClass Object
         (
             [Field] => created
             [Type] => datetime
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
-            [Key] => 
+            [Key] =>
             [Default] => 0000-00-00 00:00:00
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [created_by] => stdClass Object
         (
             [Field] => created_by
             [Type] => int(11) unsigned
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
             [Key] => MUL
             [Default] => 0
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [created_by_alias] => stdClass Object
@@ -162,89 +162,89 @@ Array
             [Type] => text
             [Collation] => utf8_general_ci
             [Null] => NO
-            [Key] => 
-            [Default] => 
-            [Extra] => 
+            [Key] =>
+            [Default] =>
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [modified] => stdClass Object
         (
             [Field] => modified
             [Type] => datetime
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
-            [Key] => 
+            [Key] =>
             [Default] => 0000-00-00 00:00:00
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [modified_by] => stdClass Object
         (
             [Field] => modified_by
             [Type] => int(11) unsigned
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
-            [Key] => 
+            [Key] =>
             [Default] => 0
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [checked_out] => stdClass Object
         (
             [Field] => checked_out
             [Type] => int(11) unsigned
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
             [Key] => MUL
             [Default] => 0
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [checked_out_time] => stdClass Object
         (
             [Field] => checked_out_time
             [Type] => datetime
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
-            [Key] => 
+            [Key] =>
             [Default] => 0000-00-00 00:00:00
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [publish_up] => stdClass Object
         (
             [Field] => publish_up
             [Type] => datetime
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
-            [Key] => 
+            [Key] =>
             [Default] => 0000-00-00 00:00:00
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [publish_down] => stdClass Object
         (
             [Field] => publish_down
             [Type] => datetime
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
-            [Key] => 
+            [Key] =>
             [Default] => 0000-00-00 00:00:00
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [images] => stdClass Object
@@ -253,11 +253,11 @@ Array
             [Type] => text
             [Collation] => utf8_general_ci
             [Null] => NO
-            [Key] => 
-            [Default] => 
-            [Extra] => 
+            [Key] =>
+            [Default] =>
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [urls] => stdClass Object
@@ -266,11 +266,11 @@ Array
             [Type] => text
             [Collation] => utf8_general_ci
             [Null] => NO
-            [Key] => 
-            [Default] => 
-            [Extra] => 
+            [Key] =>
+            [Default] =>
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [attribs] => stdClass Object
@@ -279,50 +279,50 @@ Array
             [Type] => text
             [Collation] => utf8_general_ci
             [Null] => NO
-            [Key] => 
-            [Default] => 
-            [Extra] => 
+            [Key] =>
+            [Default] =>
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [version] => stdClass Object
         (
             [Field] => version
             [Type] => int(11) unsigned
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
-            [Key] => 
+            [Key] =>
             [Default] => 1
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [parentid] => stdClass Object
         (
             [Field] => parentid
             [Type] => int(11) unsigned
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
-            [Key] => 
+            [Key] =>
             [Default] => 0
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [ordering] => stdClass Object
         (
             [Field] => ordering
             [Type] => int(11)
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
-            [Key] => 
+            [Key] =>
             [Default] => 0
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [metakey] => stdClass Object
@@ -331,11 +331,11 @@ Array
             [Type] => text
             [Collation] => utf8_general_ci
             [Null] => NO
-            [Key] => 
-            [Default] => 
-            [Extra] => 
+            [Key] =>
+            [Default] =>
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [metadesc] => stdClass Object
@@ -344,37 +344,37 @@ Array
             [Type] => text
             [Collation] => utf8_general_ci
             [Null] => NO
-            [Key] => 
-            [Default] => 
-            [Extra] => 
+            [Key] =>
+            [Default] =>
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [access] => stdClass Object
         (
             [Field] => access
             [Type] => int(11) unsigned
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
             [Key] => MUL
             [Default] => 0
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [hits] => stdClass Object
         (
             [Field] => hits
             [Type] => int(11) unsigned
-            [Collation] => 
+            [Collation] =>
             [Null] => NO
-            [Key] => 
+            [Key] =>
             [Default] => 0
-            [Extra] => 
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
     [metadata] => stdClass Object
@@ -383,11 +383,11 @@ Array
             [Type] => text
             [Collation] => utf8_general_ci
             [Null] => NO
-            [Key] => 
-            [Default] => 
-            [Extra] => 
+            [Key] =>
+            [Default] =>
+            [Extra] =>
             [Privileges] => select,insert,update,references
-            [Comment] => 
+            [Comment] =>
         )
 
 )
@@ -396,114 +396,114 @@ Array
 (
     [0] => stdClass Object
         (
-            [Table] => jos_content
+            [Table] => content
             [Non_unique] => 0
             [Key_name] => PRIMARY
             [Seq_in_index] => 1
             [Column_name] => id
             [Collation] => A
             [Cardinality] => 2695
-            [Sub_part] => 
-            [Packed] => 
-            [Null] => 
+            [Sub_part] =>
+            [Packed] =>
+            [Null] =>
             [Index_type] => BTREE
-            [Comment] => 
+            [Comment] =>
         )
 
     [1] => stdClass Object
         (
-            [Table] => jos_content
+            [Table] => content
             [Non_unique] => 1
             [Key_name] => idx_section
             [Seq_in_index] => 1
             [Column_name] => sectionid
             [Collation] => A
             [Cardinality] => 16
-            [Sub_part] => 
-            [Packed] => 
-            [Null] => 
+            [Sub_part] =>
+            [Packed] =>
+            [Null] =>
             [Index_type] => BTREE
-            [Comment] => 
+            [Comment] =>
         )
 
     [2] => stdClass Object
         (
-            [Table] => jos_content
+            [Table] => content
             [Non_unique] => 1
             [Key_name] => idx_access
             [Seq_in_index] => 1
             [Column_name] => access
             [Collation] => A
             [Cardinality] => 1
-            [Sub_part] => 
-            [Packed] => 
-            [Null] => 
+            [Sub_part] =>
+            [Packed] =>
+            [Null] =>
             [Index_type] => BTREE
-            [Comment] => 
+            [Comment] =>
         )
 
     [3] => stdClass Object
         (
-            [Table] => jos_content
+            [Table] => content
             [Non_unique] => 1
             [Key_name] => idx_checkout
             [Seq_in_index] => 1
             [Column_name] => checked_out
             [Collation] => A
             [Cardinality] => 9
-            [Sub_part] => 
-            [Packed] => 
-            [Null] => 
+            [Sub_part] =>
+            [Packed] =>
+            [Null] =>
             [Index_type] => BTREE
-            [Comment] => 
+            [Comment] =>
         )
 
     [4] => stdClass Object
         (
-            [Table] => jos_content
+            [Table] => content
             [Non_unique] => 1
             [Key_name] => idx_state
             [Seq_in_index] => 1
             [Column_name] => state
             [Collation] => A
             [Cardinality] => 3
-            [Sub_part] => 
-            [Packed] => 
-            [Null] => 
+            [Sub_part] =>
+            [Packed] =>
+            [Null] =>
             [Index_type] => BTREE
-            [Comment] => 
+            [Comment] =>
         )
 
     [5] => stdClass Object
         (
-            [Table] => jos_content
+            [Table] => content
             [Non_unique] => 1
             [Key_name] => idx_catid
             [Seq_in_index] => 1
             [Column_name] => catid
             [Collation] => A
             [Cardinality] => 224
-            [Sub_part] => 
-            [Packed] => 
-            [Null] => 
+            [Sub_part] =>
+            [Packed] =>
+            [Null] =>
             [Index_type] => BTREE
-            [Comment] => 
+            [Comment] =>
         )
 
     [6] => stdClass Object
         (
-            [Table] => jos_content
+            [Table] => content
             [Non_unique] => 1
             [Key_name] => idx_createdby
             [Seq_in_index] => 1
             [Column_name] => created_by
             [Collation] => A
             [Cardinality] => 52
-            [Sub_part] => 
-            [Packed] => 
-            [Null] => 
+            [Sub_part] =>
+            [Packed] =>
+            [Null] =>
             [Index_type] => BTREE
-            [Comment] => 
+            [Comment] =>
         )
 
 )

@@ -20,7 +20,7 @@ class PgsqlExporter extends PostgresqlExporter
 	/**
 	 * Checks if all data and options are in order prior to exporting.
 	 *
-	 * @return  PgsqlExporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \Exception if an error is encountered.

@@ -20,10 +20,10 @@ use Joomla\Database\Query\QueryElement;
 class SqlsrvQuery extends DatabaseQuery
 {
 	/**
-	 * The character(s) used to quote SQL statement names such as table names or field names,
-	 * etc.  The child classes should define this as necessary.  If a single character string the
-	 * same character is used for both sides of the quoted name, else the first character will be
-	 * used for the opening quote and the second for the closing quote.
+	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
+	 *
+	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
+	 * opening quote and the second for the closing quote.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -31,8 +31,7 @@ class SqlsrvQuery extends DatabaseQuery
 	protected $name_quotes = '`';
 
 	/**
-	 * The null or zero representation of a timestamp for the database driver.  This should be
-	 * defined in child classes to hold the appropriate value for the engine.
+	 * The null or zero representation of a timestamp for the database driver.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -143,10 +142,8 @@ class SqlsrvQuery extends DatabaseQuery
 		{
 			return '(' . implode('+' . $this->quote($separator) . '+', $values) . ')';
 		}
-		else
-		{
-			return '(' . implode('+', $values) . ')';
-		}
+
+		return '(' . implode('+', $values) . ')';
 	}
 
 	/**

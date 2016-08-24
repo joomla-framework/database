@@ -135,8 +135,7 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 	}
 
 	/**
-	 * Method to modify a query already in string format with the needed
-	 * additions to make the query limited to a particular number of
+	 * Method to modify a query already in string format with the needed additions to make the query limited to a particular number of
 	 * results, or start at a particular offset.
 	 *
 	 * @param   string   $query   The query in string format
@@ -184,10 +183,8 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 
 			return $concat_string . ')';
 		}
-		else
-		{
-			return 'CONCAT(' . implode(',', $values) . ')';
-		}
+
+		return 'CONCAT(' . implode(',', $values) . ')';
 	}
 
 	/**
@@ -200,7 +197,7 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 	 * @param   integer  $limit   The limit for the result set
 	 * @param   integer  $offset  The offset for the result set
 	 *
-	 * @return  MysqliQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */

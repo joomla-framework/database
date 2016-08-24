@@ -23,7 +23,7 @@ class DatabaseFactoryTest extends TestDatabase
 	 * @var    DatabaseFactory
 	 * @since  1.0
 	 */
-	protected static $instance;
+	protected $instance;
 
 	/**
 	 * Sets up the fixture.
@@ -38,23 +38,7 @@ class DatabaseFactoryTest extends TestDatabase
 	{
 		parent::setUp();
 
-		static::$instance = DatabaseFactory::getInstance();
-	}
-
-	/**
-	 * Test for the Joomla\Database\DatabaseFactory::getInstance method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetInstance()
-	{
-		$this->assertThat(
-			DatabaseFactory::getInstance(),
-			$this->isInstanceOf('\\Joomla\\Database\\DatabaseFactory'),
-			'Tests that getInstance returns an instance of DatabaseFactory.'
-		);
+		$this->instance = new DatabaseFactory;
 	}
 
 	/**
@@ -66,7 +50,7 @@ class DatabaseFactoryTest extends TestDatabase
 	 */
 	public function testGetExporter()
 	{
-		$object = static::$instance;
+		$object = $this->instance;
 
 		$this->assertThat(
 			$object->getExporter('mysqli'),
@@ -105,7 +89,7 @@ class DatabaseFactoryTest extends TestDatabase
 	 */
 	public function testGetImporter()
 	{
-		$object = static::$instance;
+		$object = $this->instance;
 
 		$this->assertThat(
 			$object->getImporter('mysqli'),
@@ -144,7 +128,7 @@ class DatabaseFactoryTest extends TestDatabase
 	 */
 	public function testGetQuery()
 	{
-		$object = static::$instance;
+		$object = $this->instance;
 
 		$this->assertThat(
 			$object->getQuery('sqlite', static::$driver),

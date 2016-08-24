@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dataset>
-  <table name="jos_dbtest">
+  <table name="dbtest">
     <column>id</column>
     <column>title</column>
     <column>start_date</column>

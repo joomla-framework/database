@@ -26,6 +26,14 @@ use Psr\Log;
 class MysqliDriver extends DatabaseDriver
 {
 	/**
+	 * The database connection resource.
+	 *lo
+	 * @var    \mysqli
+	 * @since  1.0
+	 */
+	protected $connection;
+
+	/**
 	 * The name of the database driver.
 	 *
 	 * @var    string
@@ -34,18 +42,10 @@ class MysqliDriver extends DatabaseDriver
 	public $name = 'mysqli';
 
 	/**
-	 * The database connection resource.
+	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
 	 *
-	 * @var    \mysqli
-	 * @since  1.0
-	 */
-	protected $connection;
-
-	/**
-	 * The character(s) used to quote SQL statement names such as table names or field names,
-	 * etc. The child classes should define this as necessary.  If a single character string the
-	 * same character is used for both sides of the quoted name, else the first character will be
-	 * used for the opening quote and the second for the closing quote.
+	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
+	 * opening quote and the second for the closing quote.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -53,8 +53,7 @@ class MysqliDriver extends DatabaseDriver
 	protected $nameQuote = '`';
 
 	/**
-	 * The null or zero representation of a timestamp for the database driver.  This should be
-	 * defined in child classes to hold the appropriate value for the engine.
+	 * The null or zero representation of a timestamp for the database driver.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -100,7 +99,7 @@ class MysqliDriver extends DatabaseDriver
 	 *
 	 * @since   1.0
 	 */
-	public function __construct($options)
+	public function __construct(array $options)
 	{
 		// Get some basic values from the options.
 		$options['host']     = (isset($options['host'])) ? $options['host'] : 'localhost';
@@ -123,10 +122,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function __destruct()
 	{
-		if (is_resource($this->connection))
-		{
-			$this->connection->close();
-		}
+		$this->disconnect();
 	}
 
 	/**
@@ -142,6 +138,12 @@ class MysqliDriver extends DatabaseDriver
 		if ($this->connection)
 		{
 			return;
+		}
+
+		// Make sure the MySQLi extension for PHP is installed and enabled.
+		if (!static::isSupported())
+		{
+			throw new \RuntimeException('The MySQLi extension is not available');
 		}
 
 		/*
@@ -343,7 +345,7 @@ class MysqliDriver extends DatabaseDriver
 	 * @param   string   $tableName  The name of the database table to drop.
 	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
 	 *
-	 * @return  MysqliDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -352,9 +354,8 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($tableName));
-
-		$this->execute();
+		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($tableName))
+			->execute();
 
 		return $this;
 	}
@@ -416,7 +417,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$result = array();
+		$result = [];
 
 		// Sanitize input to an array and iterate over the list.
 		settype($tables, 'array');
@@ -424,8 +425,7 @@ class MysqliDriver extends DatabaseDriver
 		foreach ($tables as $table)
 		{
 			// Set the query to get the table CREATE statement.
-			$this->setQuery('SHOW CREATE TABLE ' . $this->quoteName($this->escape($table)));
-			$row = $this->loadRow();
+			$row = $this->setQuery('SHOW CREATE TABLE ' . $this->quoteName($this->escape($table)))->loadRow();
 
 			// Populate the result array based on the create statements.
 			$result[$table] = $row[1];
@@ -449,11 +449,10 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$result = array();
+		$result = [];
 
 		// Set the query to get the table fields statement.
-		$this->setQuery('SHOW FULL COLUMNS FROM ' . $this->quoteName($this->escape($table)));
-		$fields = $this->loadObjectList();
+		$fields = $this->setQuery('SHOW FULL COLUMNS FROM ' . $this->quoteName($this->escape($table)))->loadObjectList();
 
 		// If we only want the type as the value add just that to the list.
 		if ($typeOnly)
@@ -490,10 +489,7 @@ class MysqliDriver extends DatabaseDriver
 		$this->connect();
 
 		// Get the details columns information.
-		$this->setQuery('SHOW KEYS FROM ' . $this->quoteName($table));
-		$keys = $this->loadObjectList();
-
-		return $keys;
+		return $this->setQuery('SHOW KEYS FROM ' . $this->quoteName($table))->loadObjectList();
 	}
 
 	/**
@@ -509,10 +505,7 @@ class MysqliDriver extends DatabaseDriver
 		$this->connect();
 
 		// Set the query to get the tables statement.
-		$this->setQuery('SHOW TABLES');
-		$tables = $this->loadColumn();
-
-		return $tables;
+		return $this->setQuery('SHOW TABLES')->loadColumn();
 	}
 
 	/**
@@ -549,14 +542,14 @@ class MysqliDriver extends DatabaseDriver
 	 *
 	 * @param   string  $table  The name of the table to unlock.
 	 *
-	 * @return  MysqliDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
 	public function lockTable($table)
 	{
-		$this->setQuery('LOCK TABLES ' . $this->quoteName($table) . ' WRITE')->execute();
+		$this->executeTransactionQuery($this->replacePrefix('LOCK TABLES ' . $this->quoteName($table) . ' WRITE'));
 
 		return $this;
 	}
@@ -591,7 +584,7 @@ class MysqliDriver extends DatabaseDriver
 			$this->log(
 				Log\LogLevel::DEBUG,
 				'{sql}',
-				array('sql' => $sql, 'category' => 'databasequery', 'trace' => debug_backtrace())
+				['sql' => $sql, 'category' => 'databasequery', 'trace' => debug_backtrace()]
 			);
 		}
 
@@ -611,7 +604,7 @@ class MysqliDriver extends DatabaseDriver
 
 				if (count($bounded))
 				{
-					$params     = array();
+					$params     = [];
 					$typeString = '';
 
 					foreach ($bounded as $key => $obj)
@@ -632,7 +625,7 @@ class MysqliDriver extends DatabaseDriver
 						$bindParams[] = &$params[$i];
 					}
 
-					call_user_func_array(array($this->prepared, 'bind_param'), $bindParams);
+					call_user_func_array([$this->prepared, 'bind_param'], $bindParams);
 				}
 			}
 
@@ -667,7 +660,7 @@ class MysqliDriver extends DatabaseDriver
 					$this->log(
 						Log\LogLevel::ERROR,
 						'Database query failed (error #{code}): {message}; Failed query: {sql}',
-						array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
+						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
 					);
 
 					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
@@ -676,17 +669,15 @@ class MysqliDriver extends DatabaseDriver
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
-			else
-			// The server was not disconnected.
-			{
-				$this->log(
-					Log\LogLevel::ERROR,
-					'Database query failed (error #{code}): {message}; Failed query: {sql}',
-					array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
-				);
 
-				throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
-			}
+			// The server was not disconnected.
+			$this->log(
+				Log\LogLevel::ERROR,
+				'Database query failed (error #{code}): {message}; Failed query: {sql}',
+				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
+			);
+
+			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
 		return $this->cursor;
@@ -700,7 +691,7 @@ class MysqliDriver extends DatabaseDriver
 	 * @param   string  $backup    Not used by MySQL.
 	 * @param   string  $prefix    Not used by MySQL.
 	 *
-	 * @return  MysqliDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -746,7 +737,7 @@ class MysqliDriver extends DatabaseDriver
 	 * @param   integer               $offset  The affected row offset to set.
 	 * @param   integer               $limit   The maximum affected rows to set.
 	 *
-	 * @return  MysqliDriver  This object to support method chaining.
+	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -945,7 +936,7 @@ class MysqliDriver extends DatabaseDriver
 					$this->log(
 						Log\LogLevel::ERROR,
 						'Database query failed (error #{code}): {message}; Failed query: {sql}',
-						array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
+						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
 					);
 
 					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
@@ -959,7 +950,7 @@ class MysqliDriver extends DatabaseDriver
 			$this->log(
 				Log\LogLevel::ERROR,
 				'Database query failed (error #{code}): {message}; Failed query: {sql}',
-				array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
+				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
 			);
 
 			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
@@ -1041,14 +1032,14 @@ class MysqliDriver extends DatabaseDriver
 	/**
 	 * Unlocks tables in the database.
 	 *
-	 * @return  MysqliDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
 	public function unlockTables()
 	{
-		$this->setQuery('UNLOCK TABLES')->execute();
+		$this->executeTransactionQuery('UNLOCK TABLES');
 
 		return $this;
 	}

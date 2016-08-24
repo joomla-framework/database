@@ -20,23 +20,23 @@ class MysqliImporter extends DatabaseImporter
 	/**
 	 * Checks if all data and options are in order prior to exporting.
 	 *
-	 * @return  MysqliImporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
-	 * @throws  \Exception if an error is encountered.
+	 * @throws  \RuntimeException
 	 */
 	public function check()
 	{
 		// Check if the db connector has been set.
 		if (!($this->db instanceof MysqliDriver))
 		{
-			throw new \Exception('Database connection wrong type.');
+			throw new \RuntimeException('Database connection wrong type.');
 		}
 
 		// Check if the tables have been specified.
 		if (empty($this->from))
 		{
-			throw new \Exception('ERROR: No Tables Specified');
+			throw new \RuntimeException('ERROR: No Tables Specified');
 		}
 
 		return $this;
@@ -55,7 +55,7 @@ class MysqliImporter extends DatabaseImporter
 	protected function xmlToCreate(\SimpleXMLElement $table)
 	{
 		$existingTables = $this->db->getTableList();
-		$tableName = (string) $table['name'];
+		$tableName      = (string) $table['name'];
 
 		if (in_array($tableName, $existingTables))
 		{
@@ -71,7 +71,7 @@ class MysqliImporter extends DatabaseImporter
 
 		foreach ($table->xpath('key') as $key)
 		{
-			$createTableStatement .= $this->getKeySQL(array($key)) . ', ';
+			$createTableStatement .= $this->getKeySQL([$key]) . ', ';
 		}
 
 		$createTableStatement = rtrim($createTableStatement, ', ');
@@ -93,9 +93,7 @@ class MysqliImporter extends DatabaseImporter
 	 */
 	protected function getAddKeySql($table, $keys)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD ' . $this->getKeySql($keys);
-
-		return $sql;
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD ' . $this->getKeySql($keys);
 	}
 
 	/**
@@ -109,14 +107,14 @@ class MysqliImporter extends DatabaseImporter
 	 */
 	protected function getAlterTableSql(\SimpleXMLElement $structure)
 	{
-		$table = $this->getRealTableName($structure['name']);
+		$table     = $this->getRealTableName($structure['name']);
 		$oldFields = $this->db->getTableColumns($table);
-		$oldKeys = $this->db->getTableKeys($table);
-		$alters = array();
+		$oldKeys   = $this->db->getTableKeys($table);
+		$alters    = [];
 
 		// Get the fields and keys from the XML that we are aiming for.
 		$newFields = $structure->xpath('field');
-		$newKeys = $structure->xpath('key');
+		$newKeys   = $structure->xpath('key');
 
 		// Loop through each field in the new structure.
 		foreach ($newFields as $field)
@@ -164,7 +162,7 @@ class MysqliImporter extends DatabaseImporter
 			// Check if there are keys on this field in the existing table.
 			if (isset($oldLookup[$name]))
 			{
-				$same = true;
+				$same     = true;
 				$newCount = count($newLookup[$name]);
 				$oldCount = count($oldLookup[$name]);
 
@@ -259,10 +257,8 @@ class MysqliImporter extends DatabaseImporter
 	 */
 	protected function getChangeColumnSql($table, \SimpleXMLElement $field)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
 			. $this->getColumnSql($field);
-
-		return $sql;
 	}
 
 	/**
@@ -277,13 +273,13 @@ class MysqliImporter extends DatabaseImporter
 	protected function getColumnSql(\SimpleXMLElement $field)
 	{
 		// TODO Incorporate into parent class and use $this.
-		$blobs = array('text', 'smalltext', 'mediumtext', 'largetext');
+		$blobs = ['text', 'smalltext', 'mediumtext', 'largetext'];
 
-		$fName = (string) $field['Field'];
-		$fType = (string) $field['Type'];
-		$fNull = (string) $field['Null'];
+		$fName    = (string) $field['Field'];
+		$fType    = (string) $field['Type'];
+		$fNull    = (string) $field['Null'];
 		$fDefault = isset($field['Default']) ? (string) $field['Default'] : null;
-		$fExtra = (string) $field['Extra'];
+		$fExtra   = (string) $field['Extra'];
 
 		$sql = $this->db->quoteName($fName) . ' ' . $fType;
 
@@ -332,9 +328,7 @@ class MysqliImporter extends DatabaseImporter
 	 */
 	protected function getDropKeySql($table, $name)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP KEY ' . $this->db->quoteName($name);
-
-		return $sql;
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP KEY ' . $this->db->quoteName($name);
 	}
 
 	/**
@@ -348,9 +342,7 @@ class MysqliImporter extends DatabaseImporter
 	 */
 	protected function getDropPrimaryKeySql($table)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP PRIMARY KEY';
-
-		return $sql;
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP PRIMARY KEY';
 	}
 
 	/**
@@ -365,7 +357,7 @@ class MysqliImporter extends DatabaseImporter
 	protected function getKeyLookup($keys)
 	{
 		// First pass, create a lookup of the keys.
-		$lookup = array();
+		$lookup = [];
 
 		foreach ($keys as $key)
 		{
@@ -380,7 +372,7 @@ class MysqliImporter extends DatabaseImporter
 
 			if (empty($lookup[$kName]))
 			{
-				$lookup[$kName] = array();
+				$lookup[$kName] = [];
 			}
 
 			$lookup[$kName][] = $key;
@@ -403,8 +395,8 @@ class MysqliImporter extends DatabaseImporter
 		// TODO Error checking on array and element types.
 
 		$kNonUnique = (string) $columns[0]['Non_unique'];
-		$kName = (string) $columns[0]['Key_name'];
-		$kColumn = (string) $columns[0]['Column_name'];
+		$kName      = (string) $columns[0]['Key_name'];
+		$kColumn    = (string) $columns[0]['Column_name'];
 
 		$prefix = '';
 
@@ -418,7 +410,7 @@ class MysqliImporter extends DatabaseImporter
 		}
 
 		$nColumns = count($columns);
-		$kColumns = array();
+		$kColumns = [];
 
 		if ($nColumns == 1)
 		{
@@ -432,8 +424,6 @@ class MysqliImporter extends DatabaseImporter
 			}
 		}
 
-		$sql = $prefix . 'KEY ' . ($kName != 'PRIMARY' ? $this->db->quoteName($kName) : '') . ' (' . implode(',', $kColumns) . ')';
-
-		return $sql;
+		return $prefix . 'KEY ' . ($kName != 'PRIMARY' ? $this->db->quoteName($kName) : '') . ' (' . implode(',', $kColumns) . ')';
 	}
 }
