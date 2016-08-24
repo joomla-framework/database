@@ -549,7 +549,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function lockTable($table)
 	{
-		$this->setQuery('LOCK TABLES ' . $this->quoteName($table) . ' WRITE')->execute();
+		$this->executeUnpreparedQuery($this->replacePrefix('LOCK TABLES ' . $this->quoteName($table) . ' WRITE'));
 
 		return $this;
 	}
@@ -857,7 +857,7 @@ class MysqliDriver extends DatabaseDriver
 
 		$savepoint = 'SP_' . ($this->transactionDepth - 1);
 
-		if ($this->executeTransactionQuery('ROLLBACK TO SAVEPOINT ' . $this->quoteName($savepoint)))
+		if ($this->executeUnpreparedQuery('ROLLBACK TO SAVEPOINT ' . $this->quoteName($savepoint)))
 		{
 			$this->transactionDepth--;
 		}
@@ -882,7 +882,7 @@ class MysqliDriver extends DatabaseDriver
 
 		if (!$asSavepoint || !$this->transactionDepth)
 		{
-			if ($this->executeTransactionQuery('START TRANSACTION'))
+			if ($this->executeUnpreparedQuery('START TRANSACTION'))
 			{
 				$this->transactionDepth = 1;
 			}
@@ -892,16 +892,14 @@ class MysqliDriver extends DatabaseDriver
 
 		$savepoint = 'SP_' . $this->transactionDepth;
 
-		if ($this->executeTransactionQuery('SAVEPOINT ' . $this->quoteName($savepoint)))
+		if ($this->executeUnpreparedQuery('SAVEPOINT ' . $this->quoteName($savepoint)))
 		{
 			$this->transactionDepth++;
 		}
 	}
 
 	/**
-	 * Internal method to execute queries regarding transactions.
-	 *
-	 * This method uses `mysqli_query()` directly due to the execute() method using prepared statements and the underlying API not supporting this.
+	 * Internal method to execute queries which cannot be run as prepared statements.
 	 *
 	 * @param   string  $sql  SQL statement to execute.
 	 *
@@ -909,7 +907,7 @@ class MysqliDriver extends DatabaseDriver
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function executeTransactionQuery($sql)
+	protected function executeUnpreparedQuery($sql)
 	{
 		$this->connect();
 
@@ -943,7 +941,7 @@ class MysqliDriver extends DatabaseDriver
 				}
 
 				// Since we were able to reconnect, run the query again.
-				return $this->executeTransactionQuery($sql);
+				return $this->executeUnpreparedQuery($sql);
 			}
 
 			// The server was not disconnected.
@@ -1039,7 +1037,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function unlockTables()
 	{
-		$this->setQuery('UNLOCK TABLES')->execute();
+		$this->executeUnpreparedQuery('UNLOCK TABLES');
 
 		return $this;
 	}
