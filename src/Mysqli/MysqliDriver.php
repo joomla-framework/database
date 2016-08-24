@@ -556,7 +556,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function lockTable($table)
 	{
-		$this->setQuery('LOCK TABLES ' . $this->quoteName($table) . ' WRITE')->execute();
+		$this->executeTransactionQuery($this->replacePrefix('LOCK TABLES ' . $this->quoteName($table) . ' WRITE'));
 
 		return $this;
 	}
@@ -1048,7 +1048,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function unlockTables()
 	{
-		$this->setQuery('UNLOCK TABLES')->execute();
+		$this->executeTransactionQuery('UNLOCK TABLES');
 
 		return $this;
 	}
