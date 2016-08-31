@@ -614,9 +614,9 @@ class SqlsrvDriver extends DatabaseDriver
 				// If connect fails, ignore that exception and throw the normal exception.
 				{
 					// Get the error number and message.
-					$errors         = sqlsrv_errors();
-					$this->errorNum = $errors[0]['SQLSTATE'];
-					$this->errorMsg = $errors[0]['message'] . 'SQL=' . $sql;
+					$errors = sqlsrv_errors();
+					$this->errorNum = $errors[0]['code'];
+					$this->errorMsg = $errors[0]['message'];
 
 					// Throw the normal query exception.
 					$this->log(
@@ -634,8 +634,8 @@ class SqlsrvDriver extends DatabaseDriver
 
 			// Get the error number and message.
 			$errors         = sqlsrv_errors();
-			$this->errorNum = $errors[0]['SQLSTATE'];
-			$this->errorMsg = $errors[0]['message'] . 'SQL=' . $sql;
+			$this->errorNum = $errors[0]['code'];
+			$this->errorMsg = $errors[0]['message'];
 
 			// Throw the normal query exception.
 			$this->log(
