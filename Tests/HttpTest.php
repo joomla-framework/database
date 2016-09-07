@@ -176,6 +176,50 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the get method with an injected Uri object
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testGetWithUri()
+	{
+		// Set timeout option
+		$this->object->setOption('timeout', 100);
+
+		$this->transport->expects($this->once())
+			->method('request')
+			->with('GET', new Uri('http://example.com'), null, array('testHeader'), 100)
+			->will($this->returnValue('ReturnString'));
+
+		$this->assertThat(
+			$this->object->get(new Uri('http://example.com'), array('testHeader')),
+			$this->equalTo('ReturnString')
+		);
+	}
+
+	/**
+	 * Tests the get method with an invalid object for the URL
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 *
+	 * @expectedException  \InvalidArgumentException
+	 * @expectedExceptionMessage  A string or UriInterface object must be provided, a "array" was provided.
+	 */
+	public function testGetWithInvalidUrl()
+	{
+		// Set timeout option
+		$this->object->setOption('timeout', 100);
+
+		$this->assertThat(
+			$this->object->get(array(), array('testHeader')),
+			$this->equalTo('ReturnString')
+		);
+	}
+
+	/**
 	 * Tests the post method
 	 *
 	 * @return  void

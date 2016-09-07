@@ -9,6 +9,7 @@
 namespace Joomla\Http;
 
 use Joomla\Uri\Uri;
+use Joomla\Uri\UriInterface;
 
 /**
  * HTTP client class.
@@ -102,9 +103,9 @@ class Http
 	/**
 	 * Method to send the OPTIONS command to the server.
 	 *
-	 * @param   string   $url      Path to the resource.
-	 * @param   array    $headers  An array of name-value pairs to include in the header of the request.
-	 * @param   integer  $timeout  Read timeout in seconds.
+	 * @param   string|UriInterface  $url      The URI to the resource to request.
+	 * @param   array                $headers  An array of request headers to send with the request.
+	 * @param   integer              $timeout  Read timeout in seconds.
 	 *
 	 * @return  Response
 	 *
@@ -118,9 +119,9 @@ class Http
 	/**
 	 * Method to send the HEAD command to the server.
 	 *
-	 * @param   string   $url      Path to the resource.
-	 * @param   array    $headers  An array of name-value pairs to include in the header of the request.
-	 * @param   integer  $timeout  Read timeout in seconds.
+	 * @param   string|UriInterface  $url      The URI to the resource to request.
+	 * @param   array                $headers  An array of request headers to send with the request.
+	 * @param   integer              $timeout  Read timeout in seconds.
 	 *
 	 * @return  Response
 	 *
@@ -134,9 +135,9 @@ class Http
 	/**
 	 * Method to send the GET command to the server.
 	 *
-	 * @param   string   $url      Path to the resource.
-	 * @param   array    $headers  An array of name-value pairs to include in the header of the request.
-	 * @param   integer  $timeout  Read timeout in seconds.
+	 * @param   string|UriInterface  $url      The URI to the resource to request.
+	 * @param   array                $headers  An array of request headers to send with the request.
+	 * @param   integer              $timeout  Read timeout in seconds.
 	 *
 	 * @return  Response
 	 *
@@ -150,10 +151,10 @@ class Http
 	/**
 	 * Method to send the POST command to the server.
 	 *
-	 * @param   string   $url      Path to the resource.
-	 * @param   mixed    $data     Either an associative array or a string to be sent with the request.
-	 * @param   array    $headers  An array of name-value pairs to include in the header of the request
-	 * @param   integer  $timeout  Read timeout in seconds.
+	 * @param   string|UriInterface  $url      The URI to the resource to request.
+	 * @param   mixed                $data     Either an associative array or a string to be sent with the request.
+	 * @param   array                $headers  An array of request headers to send with the request.
+	 * @param   integer              $timeout  Read timeout in seconds.
 	 *
 	 * @return  Response
 	 *
@@ -167,10 +168,10 @@ class Http
 	/**
 	 * Method to send the PUT command to the server.
 	 *
-	 * @param   string   $url      Path to the resource.
-	 * @param   mixed    $data     Either an associative array or a string to be sent with the request.
-	 * @param   array    $headers  An array of name-value pairs to include in the header of the request.
-	 * @param   integer  $timeout  Read timeout in seconds.
+	 * @param   string|UriInterface  $url      The URI to the resource to request.
+	 * @param   mixed                $data     Either an associative array or a string to be sent with the request.
+	 * @param   array                $headers  An array of request headers to send with the request.
+	 * @param   integer              $timeout  Read timeout in seconds.
 	 *
 	 * @return  Response
 	 *
@@ -184,10 +185,10 @@ class Http
 	/**
 	 * Method to send the DELETE command to the server.
 	 *
-	 * @param   string   $url      Path to the resource.
-	 * @param   array    $headers  An array of name-value pairs to include in the header of the request.
-	 * @param   integer  $timeout  Read timeout in seconds.
-	 * @param   mixed    $data     Either an associative array or a string to be sent with the request.
+	 * @param   string|UriInterface  $url      The URI to the resource to request.
+	 * @param   array                $headers  An array of request headers to send with the request.
+	 * @param   integer              $timeout  Read timeout in seconds.
+	 * @param   mixed                $data     Either an associative array or a string to be sent with the request.
 	 *
 	 * @return  Response
 	 *
@@ -201,9 +202,9 @@ class Http
 	/**
 	 * Method to send the TRACE command to the server.
 	 *
-	 * @param   string   $url      Path to the resource.
-	 * @param   array    $headers  An array of name-value pairs to include in the header of the request.
-	 * @param   integer  $timeout  Read timeout in seconds.
+	 * @param   string|UriInterface  $url      The URI to the resource to request.
+	 * @param   array                $headers  An array of request headers to send with the request.
+	 * @param   integer              $timeout  Read timeout in seconds.
 	 *
 	 * @return  Response
 	 *
@@ -217,10 +218,10 @@ class Http
 	/**
 	 * Method to send the PATCH command to the server.
 	 *
-	 * @param   string   $url      Path to the resource.
-	 * @param   mixed    $data     Either an associative array or a string to be sent with the request.
-	 * @param   array    $headers  An array of name-value pairs to include in the header of the request.
-	 * @param   integer  $timeout  Read timeout in seconds.
+	 * @param   string|UriInterface  $url      The URI to the resource to request.
+	 * @param   mixed                $data     Either an associative array or a string to be sent with the request.
+	 * @param   array                $headers  An array of request headers to send with the request.
+	 * @param   integer              $timeout  Read timeout in seconds.
 	 *
 	 * @return  Response
 	 *
@@ -232,17 +233,18 @@ class Http
 	}
 
 	/**
-	 * Send a request to the server and return a JHttpResponse object with the response.
+	 * Send a request to the server and return a Response object with the response.
 	 *
-	 * @param   string   $method   The HTTP method for sending the request.
-	 * @param   string   $url      The URI to the resource to request.
-	 * @param   mixed    $data     Either an associative array or a string to be sent with the request.
-	 * @param   array    $headers  An array of request headers to send with the request.
-	 * @param   integer  $timeout  Read timeout in seconds.
+	 * @param   string               $method   The HTTP method for sending the request.
+	 * @param   string|UriInterface  $url      The URI to the resource to request.
+	 * @param   mixed                $data     Either an associative array or a string to be sent with the request.
+	 * @param   array                $headers  An array of request headers to send with the request.
+	 * @param   integer              $timeout  Read timeout in seconds.
 	 *
 	 * @return  Response
 	 *
 	 * @since   1.0
+	 * @throws  \InvalidArgumentException
 	 */
 	protected function makeTransportRequest($method, $url, $data = null, array $headers = array(), $timeout = null)
 	{
@@ -268,6 +270,16 @@ class Http
 
 		$userAgent = isset($this->options['userAgent']) ? $this->options['userAgent'] : null;
 
-		return $this->transport->request($method, new Uri($url), $data, $headers, $timeout, $userAgent);
+		// Convert to a Uri object if we were given a string
+		if (is_string($url))
+		{
+			$url = new Uri($url);
+		}
+		elseif (!($url instanceof UriInterface))
+		{
+			throw new \InvalidArgumentException(sprintf('A string or UriInterface object must be provided, a "%s" was provided.', gettype($url)));
+		}
+
+		return $this->transport->request($method, $url, $data, $headers, $timeout, $userAgent);
 	}
 }
