@@ -916,13 +916,13 @@ class PgsqlImporterTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the getIdxLookup method.
+	 * Tests the getKeyLookup method.
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0
 	 */
-	public function testGetIdxLookup()
+	public function testGetKeyLookup()
 	{
 		$instance = new PgsqlImporterInspector;
 
@@ -931,7 +931,7 @@ class PgsqlImporterTest extends \PHPUnit_Framework_TestCase
 		$o3 = (object) array('Index' => 'title', 'foo' => 'bar3');
 
 		$this->assertThat(
-			$instance->getIdxLookup(
+			$instance->getKeyLookup(
 				array($o1, $o2, $o3)
 			),
 			$this->equalTo(
@@ -940,7 +940,7 @@ class PgsqlImporterTest extends \PHPUnit_Framework_TestCase
 					'title' => array($o3)
 				)
 			),
-			'getIdxLookup, using array input, did not yield the expected result.'
+			'getKeyLookup, using array input, did not yield the expected result.'
 		);
 
 		$o1 = new \SimpleXmlElement('<key Index="id" foo="bar1" />');
@@ -948,7 +948,7 @@ class PgsqlImporterTest extends \PHPUnit_Framework_TestCase
 		$o3 = new \SimpleXmlElement('<key Index="title" foo="bar3" />');
 
 		$this->assertThat(
-			$instance->getIdxLookup(
+			$instance->getKeyLookup(
 				array($o1, $o2, $o3)
 			),
 			$this->equalTo(
@@ -957,7 +957,7 @@ class PgsqlImporterTest extends \PHPUnit_Framework_TestCase
 					'title' => array($o3)
 				)
 			),
-			'getIdxLookup, using SimpleXmlElement input, did not yield the expected result.'
+			'getKeyLookup, using SimpleXmlElement input, did not yield the expected result.'
 		);
 	}
 
