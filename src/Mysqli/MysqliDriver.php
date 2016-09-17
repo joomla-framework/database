@@ -882,9 +882,19 @@ class MysqliDriver extends DatabaseDriver
 
 		if (!$asSavepoint || !$this->transactionDepth)
 		{
-			if ($this->executeUnpreparedQuery('START TRANSACTION'))
+			if (version_compare($this->getVersion(), '5.6', 'ge'))
 			{
-				$this->transactionDepth = 1;
+				if ($this->connection->begin_transaction())
+				{
+					$this->transactionDepth = 1;
+				}
+			}
+			else
+			{
+				if ($this->executeUnpreparedQuery('START TRANSACTION'))
+				{
+					$this->transactionDepth = 1;
+				}
 			}
 
 			return;
@@ -892,7 +902,7 @@ class MysqliDriver extends DatabaseDriver
 
 		$savepoint = 'SP_' . $this->transactionDepth;
 
-		if ($this->executeUnpreparedQuery('SAVEPOINT ' . $this->quoteName($savepoint)))
+		if ($this->connection->savepoint($savepoint))
 		{
 			$this->transactionDepth++;
 		}
