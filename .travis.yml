@@ -44,5 +44,5 @@ before_script:
   - psql -d joomla_ut -a -f Tests/Stubs/postgresql.sql
 
 script:
-  - vendor/bin/phpunit
+  - vendor/bin/phpunit --configuration phpunit.travis.xml
   - if [ "$RUN_PHPCS" == "yes" ]; then vendor/bin/phpcs -p --report=full --extensions=php --standard=.travis/phpcs/Joomla/ruleset.xml src/; fi;
