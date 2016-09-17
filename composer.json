@@ -6,7 +6,7 @@
     "homepage": "https://github.com/joomla-framework/renderer",
     "license": "LGPL-2.1+",
     "require": {
-        "php": "^5.3.10|~7.0"
+        "php": "^5.5.9|~7.0"
     },
     "require-dev": {
         "league/plates": "~2.0|~3.0",
