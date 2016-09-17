@@ -886,9 +886,6 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		// Disallow auto commit
-		$this->connection->autocommit(false);
-
 		if (!$asSavepoint || !$this->transactionDepth)
 		{
 			if ($this->executeUnpreparedQuery('START TRANSACTION'))
