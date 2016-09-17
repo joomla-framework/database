@@ -61,7 +61,7 @@ class MysqlDriver extends PdoDriver
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected static $dbMinimum = '5.0.4';
+	protected static $dbMinimum = '5.5.3';
 
 	/**
 	 * Constructor.
