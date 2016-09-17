@@ -877,9 +877,6 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		// Disallow auto commit
-		$this->connection->autocommit(false);
-
 		if (!$asSavepoint || !$this->transactionDepth)
 		{
 			if (version_compare($this->getVersion(), '5.6', 'ge'))
