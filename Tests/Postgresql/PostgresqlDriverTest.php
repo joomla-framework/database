@@ -1111,7 +1111,7 @@ class PostgresqlDriverTest extends PostgresqlCase
 	public function testExecute()
 	{
 		$query = self::$driver->getQuery(true);
-		$query->insert('jos_dbtest')
+		$query->insert('dbtest')
 			->columns('title,start_date,description')
 			->values("'testTitle','1970-01-01','testDescription'");
 		self::$driver->setQuery($query);
@@ -1136,7 +1136,7 @@ class PostgresqlDriverTest extends PostgresqlCase
 
 		/** @var \Joomla\Database\Postgresql\PostgresqlQuery $query */
 		$query = self::$driver->getQuery(true);
-		$query->insert('jos_dbtest')
+		$query->insert('dbtest')
 			->columns('title,start_date,description')
 			->values('$1, $2, $3');
 		$query->bind(1, $title);
