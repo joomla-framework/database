@@ -151,7 +151,7 @@ class Driver
 	{
 		if ($new)
 		{
-			return new \Joomla\Database\Tests\Mock\Query;
+			return new Query;
 		}
 		else
 		{

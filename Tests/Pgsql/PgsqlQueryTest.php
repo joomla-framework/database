@@ -7,6 +7,7 @@
 namespace Joomla\Database\Tests\Pgsql;
 
 use Joomla\Database\Pgsql\PgsqlQuery;
+use Joomla\Database\Tests\Mock\Driver;
 use Joomla\Test\TestHelper;
 
 /**
@@ -116,7 +117,7 @@ class PgsqlQueryTest extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
-		$this->dbo = Mock\Driver::create($this, '1970-01-01 00:00:00', 'Y-m-d H:i:s');
+		$this->dbo = Driver::create($this, '1970-01-01 00:00:00', 'Y-m-d H:i:s');
 
 		// Mock the escape method to ensure the API is calling the DBO's escape method.
 		TestHelper::assignMockCallbacks(
