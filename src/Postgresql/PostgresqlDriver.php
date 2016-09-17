@@ -807,7 +807,7 @@ class PostgresqlDriver extends DatabaseDriver
 			{
 				// Get the error number and message.
 				$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE) . ' ';
-				$this->errorMsg = pg_last_error($this->connection) . "\nSQL=$sql";
+				$this->errorMsg = pg_last_error($this->connection);
 
 				// Throw the normal query exception.
 				$this->log(
