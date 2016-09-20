@@ -576,11 +576,6 @@ class MysqliDriver extends DatabaseDriver
 		// Take a local copy so that we don't modify the original query and cause issues later
 		$sql = $this->replacePrefix((string) $this->sql);
 
-		if ($this->limit > 0 || $this->offset > 0)
-		{
-			$sql .= ' LIMIT ' . $this->offset . ', ' . $this->limit;
-		}
-
 		// Increment the query counter.
 		$this->count++;
 
