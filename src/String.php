@@ -14,7 +14,7 @@ namespace Joomla\String;
  * All functions assume the validity of utf-8 strings.
  *
  * @since       1.0
- * @deprecated  2.0  Use StringHelper instead
+ * @deprecated  1.3.0  Use StringHelper instead
  */
 abstract class String extends StringHelper
 {
