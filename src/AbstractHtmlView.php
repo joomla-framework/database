@@ -15,7 +15,7 @@ use Joomla\Model\ModelInterface;
  * Joomla Framework HTML View Class
  *
  * @since       1.0
- * @deprecated  2.0  Will become BaseHtmlView in 2.0
+ * @deprecated  __DEPLOY_VERSION__  Will become BaseHtmlView in 2.0
  */
 abstract class AbstractHtmlView extends AbstractView
 {
@@ -32,7 +32,7 @@ abstract class AbstractHtmlView extends AbstractView
 	 *
 	 * @var    \SplPriorityQueue
 	 * @since  1.0
-	 * @deprecated  2.0  In 2.0, a RendererInterface object will be required which will manage paths.
+	 * @deprecated  __DEPLOY_VERSION__  In 2.0, a Joomla\Renderer\RendererInterface object will be required which will manage paths.
 	 */
 	protected $paths;
 
@@ -80,7 +80,7 @@ abstract class AbstractHtmlView extends AbstractView
 	 *
 	 * @see     ViewInterface::escape()
 	 * @since   1.0
-	 * @deprecated  2.0  Interface method is deprecated without replacement.
+	 * @deprecated  __DEPLOY_VERSION__  Interface method is deprecated without replacement.
 	 */
 	public function escape($output)
 	{
@@ -109,7 +109,7 @@ abstract class AbstractHtmlView extends AbstractView
 	 * @return  mixed  The layout file name if found, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  In 2.0, a RendererInterface object will be required which will manage paths.
+	 * @deprecated  __DEPLOY_VERSION__  In 2.0, a RendererInterface object will be required which will manage paths.
 	 */
 	public function getPath($layout, $ext = 'php')
 	{
@@ -128,7 +128,7 @@ abstract class AbstractHtmlView extends AbstractView
 	 * @return  \SplPriorityQueue  The paths queue.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  In 2.0, a RendererInterface object will be required which will manage paths.
+	 * @deprecated  __DEPLOY_VERSION__  In 2.0, a RendererInterface object will be required which will manage paths.
 	 */
 	public function getPaths()
 	{
@@ -190,7 +190,7 @@ abstract class AbstractHtmlView extends AbstractView
 	 * @return  AbstractHtmlView  Method supports chaining.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  In 2.0, a RendererInterface object will be required which will manage paths.
+	 * @deprecated  __DEPLOY_VERSION__  In 2.0, a RendererInterface object will be required which will manage paths.
 	 */
 	public function setPaths(\SplPriorityQueue $paths)
 	{
@@ -205,7 +205,7 @@ abstract class AbstractHtmlView extends AbstractView
 	 * @return  \SplPriorityQueue  The paths queue.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  In 2.0, a RendererInterface object will be required which will manage paths.
+	 * @deprecated  __DEPLOY_VERSION__  In 2.0, a RendererInterface object will be required which will manage paths.
 	 */
 	protected function loadPaths()
 	{
