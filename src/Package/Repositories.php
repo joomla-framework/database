@@ -397,7 +397,7 @@ class Repositories extends AbstractPackage
 	 * @return  object
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  Use Joomla\Github\Package\Repositories\Branches::getList() instead
+	 * @deprecated  1.4.0  Use Joomla\Github\Package\Repositories\Branches::getList() instead
 	 */
 	public function getListBranches($owner, $repo)
 	{
@@ -414,7 +414,7 @@ class Repositories extends AbstractPackage
 	 * @return  object
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  Use Joomla\Github\Package\Repositories\Branches::get() instead
+	 * @deprecated  1.4.0  Use Joomla\Github\Package\Repositories\Branches::get() instead
 	 */
 	public function getBranch($owner, $repo, $branch)
 	{
