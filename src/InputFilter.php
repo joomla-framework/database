@@ -57,7 +57,7 @@ class InputFilter
 	 *
 	 * @var    InputFilter[]
 	 * @since  1.0
-	 * @deprecated  2.0
+	 * @deprecated  1.2.0
 	 */
 	protected static $instances = array();
 
