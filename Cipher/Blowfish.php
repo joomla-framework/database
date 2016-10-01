@@ -12,7 +12,7 @@ namespace Joomla\Crypt;
  * Cipher class for Blowfish encryption, decryption and key generation.
  *
  * @since       1.0
- * @deprecated  2.0  Use \Joomla\Crypt\Cipher_Crypto instead
+ * @deprecated  1.3.0  Use \Joomla\Crypt\Cipher_Crypto instead
  */
 class Cipher_Blowfish extends Cipher_Mcrypt
 {
@@ -20,7 +20,7 @@ class Cipher_Blowfish extends Cipher_Mcrypt
 	 * @var    integer  The mcrypt cipher constant.
 	 * @see    http://www.php.net/manual/en/mcrypt.ciphers.php
 	 * @since  1.0
-	 * @deprecated  2.0  Use \Joomla\Crypt\Cipher_Crypto instead
+	 * @deprecated  1.3.0  Use \Joomla\Crypt\Cipher_Crypto instead
 	 */
 	protected $type = MCRYPT_BLOWFISH;
 
@@ -28,14 +28,14 @@ class Cipher_Blowfish extends Cipher_Mcrypt
 	 * @var    integer  The mcrypt block cipher mode.
 	 * @see    http://www.php.net/manual/en/mcrypt.constants.php
 	 * @since  1.0
-	 * @deprecated  2.0  Use \Joomla\Crypt\Cipher_Crypto instead
+	 * @deprecated  1.3.0  Use \Joomla\Crypt\Cipher_Crypto instead
 	 */
 	protected $mode = MCRYPT_MODE_CBC;
 
 	/**
 	 * @var    string  The JCrypt key type for validation.
 	 * @since  1.0
-	 * @deprecated  2.0  Use \Joomla\Crypt\Cipher_Crypto instead
+	 * @deprecated  1.3.0  Use \Joomla\Crypt\Cipher_Crypto instead
 	 */
 	protected $keyType = 'blowfish';
 }
