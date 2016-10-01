@@ -30,7 +30,7 @@ abstract class Stemmer
 	 *
 	 * @var    Stemmer[]
 	 * @since  1.0
-	 * @deprecated  2.0
+	 * @deprecated  1.3.0
 	 */
 	protected static $instances = array();
 
@@ -42,7 +42,7 @@ abstract class Stemmer
 	 * @return  Stemmer
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  Use LanguageFactory::getStemmer() instead
+	 * @deprecated  1.3.0  Use LanguageFactory::getStemmer() instead
 	 * @throws  RuntimeException on invalid stemmer.
 	 */
 	public static function getInstance($adapter)
