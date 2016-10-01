@@ -474,7 +474,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * @return  mixed   A value if the property name is valid, null otherwise.
 	 *
 	 * @since       1.4.0
-	 * @deprecated  2.0  This is a B/C proxy since $this->name was previously public
+	 * @deprecated  1.4.0  This is a B/C proxy since $this->name was previously public
 	 */
 	public function __get($name)
 	{

@@ -474,7 +474,7 @@ class PostgresqlImporter extends DatabaseImporter
 	 *
 	 * @return  array  The lookup array. array({key name} => array(object, ...))
 	 *
-	 * @since   1.0
+	 * @since   1.2.0
 	 * @deprecated  2.0  Use {@link getKeyLookup()} instead
 	 */
 	protected function getIdxLookup($keys)

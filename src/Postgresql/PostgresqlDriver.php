@@ -253,7 +253,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  Use isSupported() instead
+	 * @deprecated  1.1.0  Use isSupported() instead
 	 */
 	public static function test()
 	{
