@@ -34,7 +34,7 @@ class Dispatcher implements DispatcherInterface
 	 *
 	 * @var    string
 	 * @since  1.0
-	 * @deprecated
+	 * @deprecated  1.1.0
 	 */
 	protected $listenerFilter;
 
@@ -73,7 +73,7 @@ class Dispatcher implements DispatcherInterface
 	 * @return  Dispatcher  This method is chainable.
 	 *
 	 * @since       1.0
-	 * @deprecated  Incorporate a method in your listener object such as `getEvents` to feed into the `setListener` method.
+	 * @deprecated  1.1.0  Incorporate a method in your listener object such as `getEvents` to feed into the `setListener` method.
 	 */
 	public function setListenerFilter($regex)
 	{
