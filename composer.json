@@ -24,6 +24,9 @@
         "psr-0": {
             "Joomla\\Crypt": ""
         },
+        "psr-4": {
+            "Joomla\\Crypt\\": "src/"
+        },
         "files": [
             "lib/Crypto.php"
         ]
