@@ -19,7 +19,6 @@
         "ircmaxell/password-compat": "Required to use Joomla\\Crypt\\Password\\Simple on PHP 5.4 or earlier",
         "symfony/polyfill-php56": "Required to use Joomla\\Crypt\\Password\\Simple on PHP 5.5 or earlier"
     },
-    "target-dir": "Joomla/Crypt",
     "autoload": {
         "psr-0": {
             "Joomla\\Crypt": ""
