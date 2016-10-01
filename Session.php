@@ -76,7 +76,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @var    mixed
 	 * @since  1.0
-	 * @deprecated  2.0
+	 * @deprecated  1.3.0
 	 */
 	protected $cookie_domain;
 
@@ -85,7 +85,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @var    mixed
 	 * @since  1.0
-	 * @deprecated  2.0
+	 * @deprecated  1.3.0
 	 */
 	protected $cookie_path;
 
@@ -94,7 +94,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @var    Session
 	 * @since  1.0
-	 * @deprecated  2.0
+	 * @deprecated  1.3.0
 	 */
 	protected static $instance;
 
@@ -103,7 +103,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @var    string
 	 * @since  1.0
-	 * @deprecated  2.0
+	 * @deprecated  1.3.0
 	 */
 	protected $storeName;
 
@@ -167,7 +167,7 @@ class Session implements \IteratorAggregate
 	 * @return  mixed   The value of the property
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  Use get methods for non-deprecated properties
+	 * @deprecated  1.3.0  Use get methods for non-deprecated properties
 	 */
 	public function __get($name)
 	{
@@ -187,7 +187,7 @@ class Session implements \IteratorAggregate
 	 * @return  Session  The Session object.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  A singleton object store will no longer be supported
+	 * @deprecated  1.3.0  A singleton object store will no longer be supported
 	 */
 	public static function getInstance($handler, array $options = array ())
 	{
@@ -333,7 +333,7 @@ class Session implements \IteratorAggregate
 	 * @return  array  An array of available session handlers
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  The Storage class chain will be removed
+	 * @deprecated  1.3.0  The Storage class chain will be removed
 	 */
 	public static function getStores()
 	{
@@ -407,7 +407,7 @@ class Session implements \IteratorAggregate
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  In 2.0 the DispatcherInterface should be injected via the object constructor
+	 * @deprecated  1.3.0  In 2.0 the DispatcherInterface should be injected via the object constructor
 	 */
 	public function initialise(Input $input, DispatcherInterface $dispatcher = null)
 	{
@@ -420,7 +420,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @param   string  $name       Name of a variable
 	 * @param   mixed   $default    Default value of a variable if not set
-	 * @param   string  $namespace  Namespace to use, default to 'default' {@deprecated 2.0 Namespace support will be removed.}
+	 * @param   string  $namespace  Namespace to use, default to 'default' {@deprecated 1.3.0 Namespace support will be removed in 2.0.}
 	 *
 	 * @return  mixed  Value of a variable
 	 *
@@ -452,7 +452,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @param   string  $name       Name of a variable.
 	 * @param   mixed   $value      Value of a variable.
-	 * @param   string  $namespace  Namespace to use, default to 'default' {@deprecated 2.0 Namespace support will be removed.}
+	 * @param   string  $namespace  Namespace to use, default to 'default' {@deprecated 1.3.0 Namespace support will be removed in 2.0.}
 	 *
 	 * @return  mixed  Old value of a variable.
 	 *
@@ -487,7 +487,7 @@ class Session implements \IteratorAggregate
 	 * Check whether data exists in the session store
 	 *
 	 * @param   string  $name       Name of variable
-	 * @param   string  $namespace  Namespace to use, default to 'default' {@deprecated 2.0 Namespace support will be removed.}
+	 * @param   string  $namespace  Namespace to use, default to 'default' {@deprecated 1.3.0 Namespace support will be removed in 2.0.}
 	 *
 	 * @return  boolean  True if the variable exists
 	 *
@@ -511,7 +511,7 @@ class Session implements \IteratorAggregate
 	 * Unset data from the session store
 	 *
 	 * @param   string  $name       Name of variable
-	 * @param   string  $namespace  Namespace to use, default to 'default' {@deprecated 2.0 Namespace support will be removed.}
+	 * @param   string  $namespace  Namespace to use, default to 'default' {@deprecated 1.3.0 Namespace support will be removed in 2.0.}
 	 *
 	 * @return  mixed   The value from session or NULL if not set
 	 *
@@ -578,7 +578,7 @@ class Session implements \IteratorAggregate
 	 * @return  boolean  true on success
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
+	 * @deprecated  1.3.0
 	 */
 	protected function _start()
 	{
@@ -787,7 +787,7 @@ class Session implements \IteratorAggregate
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
+	 * @deprecated  1.3.0
 	 */
 	protected function _setCookieParams()
 	{
@@ -819,7 +819,7 @@ class Session implements \IteratorAggregate
 	 * @return  string  Generated token
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  Use createToken instead
+	 * @deprecated  1.3.1  Use createToken instead
 	 */
 	protected function _createToken($length = 32)
 	{
@@ -846,7 +846,7 @@ class Session implements \IteratorAggregate
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  Use setCounter instead
+	 * @deprecated  1.3.0  Use setCounter instead
 	 */
 	protected function _setCounter()
 	{
@@ -876,7 +876,7 @@ class Session implements \IteratorAggregate
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  Use setTimers instead
+	 * @deprecated  1.3.0  Use setTimers instead
 	 */
 	protected function _setTimers()
 	{
@@ -915,7 +915,7 @@ class Session implements \IteratorAggregate
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0  Use setOptions instead
+	 * @deprecated  1.3.0  Use setOptions instead
 	 */
 	protected function _setOptions(array $options)
 	{
@@ -993,7 +993,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @see     http://shiflett.org/articles/the-truth-about-sessions
 	 * @since   1.0
-	 * @deprecated  2.0  Use validate instead
+	 * @deprecated  1.3.0  Use validate instead
 	 */
 	protected function _validate($restart = false)
 	{

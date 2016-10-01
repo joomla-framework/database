@@ -14,7 +14,7 @@ use Joomla\Session\Storage;
  * Memcache session storage handler for PHP
  *
  * @since       1.0
- * @deprecated  2.0  The Storage class chain will be removed
+ * @deprecated  1.3.0  The Storage class chain will be removed
  */
 class Memcache extends Storage
 {
@@ -23,7 +23,7 @@ class Memcache extends Storage
 	 *
 	 * @var    array
 	 * @since  1.0
-	 * @deprecated  2.0
+	 * @deprecated  1.3.0
 	 */
 	protected $_servers = array();
 
@@ -34,7 +34,7 @@ class Memcache extends Storage
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
-	 * @deprecated  2.0
+	 * @deprecated  1.3.0
 	 */
 	public function __construct($options = array())
 	{
@@ -61,7 +61,7 @@ class Memcache extends Storage
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
+	 * @deprecated  1.3.0
 	 */
 	public function register()
 	{
@@ -75,7 +75,7 @@ class Memcache extends Storage
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
+	 * @deprecated  1.3.0
 	 */
 	static public function isSupported()
 	{
