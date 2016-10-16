@@ -54,7 +54,7 @@ class Labels extends AbstractPackage
 	public function get($user, $repo, $name)
 	{
 		// Build the request path.
-		$path = '/repos/' . $user . '/' . $repo . '/labels/' . $name;
+		$path = '/repos/' . $user . '/' . $repo . '/labels/' . urlencode($name);
 
 		// Send the request.
 		return $this->processResponse(
@@ -84,7 +84,7 @@ class Labels extends AbstractPackage
 		$data = json_encode(
 			array(
 				'name'  => $name,
-				'color' => $color
+				'color' => $color,
 			)
 		);
 
@@ -106,7 +106,7 @@ class Labels extends AbstractPackage
 	public function delete($owner, $repo, $name)
 	{
 		// Build the request path.
-		$path = '/repos/' . $owner . '/' . $repo . '/labels/' . $name;
+		$path = '/repos/' . $owner . '/' . $repo . '/labels/' . urlencode($name);
 
 		// Send the request.
 		return $this->processResponse(
@@ -137,7 +137,7 @@ class Labels extends AbstractPackage
 		$data = json_encode(
 			array(
 				'name'  => $name,
-				'color' => $color
+				'color' => $color,
 			)
 		);
 
@@ -207,7 +207,7 @@ class Labels extends AbstractPackage
 	public function removeFromIssue($owner, $repo, $number, $name)
 	{
 		// Build the request path.
-		$path = '/repos/' . $owner . '/' . $repo . '/issues/' . $number . '/labels/' . $name;
+		$path = '/repos/' . $owner . '/' . $repo . '/issues/' . $number . '/labels/' . urlencode($name);
 
 		// Send the request.
 		return $this->processResponse(
