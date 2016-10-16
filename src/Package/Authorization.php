@@ -76,7 +76,7 @@ class Authorization extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \DomainException
 	 */
 	public function deleteGrant($id)
@@ -179,7 +179,7 @@ class Authorization extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \DomainException
 	 */
 	public function getGrant($id)
@@ -215,7 +215,7 @@ class Authorization extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \DomainException
 	 */
 	public function getListGrants()
@@ -362,7 +362,7 @@ class Authorization extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \DomainException
 	 */
 	public function revokeGrantForApplication($clientId, $accessToken)
