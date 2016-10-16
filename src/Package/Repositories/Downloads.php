@@ -20,7 +20,7 @@ use Joomla\Github\AbstractPackage;
  * @documentation  https://developer.github.com/v3/repos/downloads
  *
  * @since       1.0
- * @deprecated  1.4.0 The Releases API should be used instead
+ * @deprecated  The Releases API should be used instead
  */
 class Downloads extends AbstractPackage
 {
@@ -33,7 +33,7 @@ class Downloads extends AbstractPackage
 	 * @return  object
 	 *
 	 * @since   1.0
-	 * @deprecated  1.4.0 The Releases API should be used instead
+	 * @deprecated  The Releases API should be used instead
 	 */
 	public function getList($owner, $repo)
 	{
@@ -56,7 +56,7 @@ class Downloads extends AbstractPackage
 	 * @return  object
 	 *
 	 * @since   1.0
-	 * @deprecated  1.4.0 The Releases API should be used instead
+	 * @deprecated  The Releases API should be used instead
 	 */
 	public function get($owner, $repo, $id)
 	{
@@ -86,7 +86,7 @@ class Downloads extends AbstractPackage
 	 * @note    This API endpoint no longer exists at GitHub
 	 * @since   1.0
 	 * @throws  \RuntimeException
-	 * @deprecated  1.4.0 The Releases API should be used instead
+	 * @deprecated  The Releases API should be used instead
 	 */
 	public function create($owner, $repo, $name, $size, $description = '', $content_type = '')
 	{
@@ -136,7 +136,7 @@ class Downloads extends AbstractPackage
 	 * @note    This API endpoint no longer exists at GitHub
 	 * @since   1.0
 	 * @throws  \RuntimeException
-	 * @deprecated  1.4.0 The Releases API should be used instead
+	 * @deprecated  The Releases API should be used instead
 	 */
 	public function upload($key, $acl, $success_action_status, $filename, $awsAccessKeyId, $policy, $signature, $content_type, $file)
 	{
@@ -153,7 +153,7 @@ class Downloads extends AbstractPackage
 	 * @return  object
 	 *
 	 * @since   1.0
-	 * @deprecated  1.4.0 The Releases API should be used instead
+	 * @deprecated  The Releases API should be used instead
 	 */
 	public function delete($owner, $repo, $id)
 	{

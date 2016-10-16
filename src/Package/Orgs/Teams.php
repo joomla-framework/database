@@ -204,7 +204,7 @@ class Teams extends AbstractPackage
 	 *
 	 * @since   1.0
 	 * @throws  \UnexpectedValueException
-	 * @deprecated  1.4.0 Use getTeamMembership() instead
+	 * @deprecated  Use getTeamMembership() instead
 	 */
 	public function isMember($id, $user)
 	{
@@ -243,7 +243,7 @@ class Teams extends AbstractPackage
 	 * @return  object
 	 *
 	 * @since   1.0
-	 * @deprecated  1.4.0 Use addTeamMembership() instead
+	 * @deprecated  Use addTeamMembership() instead
 	 */
 	public function addMember($id, $user)
 	{
@@ -269,7 +269,7 @@ class Teams extends AbstractPackage
 	 * @return  object
 	 *
 	 * @since   1.0
-	 * @deprecated  1.4.0 Use removeTeamMembership() instead
+	 * @deprecated  Use removeTeamMembership() instead
 	 */
 	public function removeMember($id, $user)
 	{
