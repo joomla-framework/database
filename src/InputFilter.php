@@ -24,7 +24,7 @@ class InputFilter
 	 * Defines the InputFilter instance should use a whitelist method for sanitising tags.
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	const TAGS_WHITELIST = 0;
 
@@ -32,7 +32,7 @@ class InputFilter
 	 * Defines the InputFilter instance should use a blacklist method for sanitising tags.
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	const TAGS_BLACKLIST = 1;
 
@@ -40,7 +40,7 @@ class InputFilter
 	 * Defines the InputFilter instance should use a whitelist method for sanitising attributes.
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	const ATTR_WHITELIST = 0;
 
@@ -48,7 +48,7 @@ class InputFilter
 	 * Defines the InputFilter instance should use a blacklist method for sanitising attributes.
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	const ATTR_BLACKLIST = 1;
 
