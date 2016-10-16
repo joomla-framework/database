@@ -16,7 +16,9 @@ use Joomla\Uri\Uri;
  * GitHub API Authorization class for the Joomla Framework.
  *
  * @documentation  http://developer.github.com/v3/oauth/
+ * @documentation  http://developer.github.com/v3/oauth_authorizations/
  *
+ * @note   The methods in this class are only accessible with Basic Authentication
  * @since  1.0
  */
 class Authorization extends AbstractPackage
@@ -60,6 +62,27 @@ class Authorization extends AbstractPackage
 	{
 		// Build the request path.
 		$path = '/authorizations/' . $id;
+
+		// Send the request.
+		return $this->processResponse($this->client->delete($this->fetchUrl($path)), 204);
+	}
+
+	/**
+	 * Delete a grant
+	 *
+	 * Deleting an OAuth application's grant will also delete all OAuth tokens associated with the application for your user.
+	 *
+	 * @param   integer  $id  ID of the authorization to delete
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function deleteGrant($id)
+	{
+		// Build the request path.
+		$path = '/authorizations/grants/' . $id;
 
 		// Send the request.
 		return $this->processResponse($this->client->delete($this->fetchUrl($path)), 204);
@@ -137,7 +160,6 @@ class Authorization extends AbstractPackage
 	 *
 	 * @return  object
 	 *
-	 * @note    This method will only accept Basic Authentication
 	 * @since   1.0
 	 * @throws  \DomainException
 	 */
@@ -151,11 +173,29 @@ class Authorization extends AbstractPackage
 	}
 
 	/**
+	 * Get a single grant
+	 *
+	 * @param   integer  $id  ID of the authorization to retrieve
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function getGrant($id)
+	{
+		// Build the request path.
+		$path = '/authorizations/grants/' . $id;
+
+		// Send the request.
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
+	}
+
+	/**
 	 * Method to get the authorised applications for the authenticated user.
 	 *
 	 * @return  object
 	 *
-	 * @note    This method will only accept Basic Authentication
 	 * @since   1.0
 	 * @throws  \DomainException
 	 */
@@ -163,6 +203,25 @@ class Authorization extends AbstractPackage
 	{
 		// Build the request path.
 		$path = '/authorizations';
+
+		// Send the request.
+		return $this->processResponse($this->client->get($this->fetchUrl($path)));
+	}
+
+	/**
+	 * List your grants.
+	 *
+	 * You can use this API to list the set of OAuth applications that have been granted access to your account.
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function getListGrants()
+	{
+		// Build the request path.
+		$path = '/authorizations/grants';
 
 		// Send the request.
 		return $this->processResponse($this->client->get($this->fetchUrl($path)));
@@ -291,5 +350,27 @@ class Authorization extends AbstractPackage
 			$this->client->post($uri, $data, $headers),
 			200
 		);
+	}
+
+	/**
+	 * Revoke a grant for an application
+	 *
+	 * OAuth application owners can revoke a grant for their OAuth application and a specific user.
+	 *
+	 * @param   integer  $clientId     The application client ID
+	 * @param   integer  $accessToken  The access token to revoke
+	 *
+	 * @return  object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \DomainException
+	 */
+	public function revokeGrantForApplication($clientId, $accessToken)
+	{
+		// Build the request path.
+		$path = "/applications/$clientId/grants/$accessToken";
+
+		// Send the request.
+		return $this->processResponse($this->client->delete($this->fetchUrl($path)), 204);
 	}
 }

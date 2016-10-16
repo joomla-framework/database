@@ -105,7 +105,7 @@ class AuthorizationsTest extends GitHubTestCase
 	}
 
 	/**
-	 * Tests the deleteAuthorisation method
+	 * Tests the delete method
 	 *
 	 * @return  void
 	 *
@@ -128,7 +128,7 @@ class AuthorizationsTest extends GitHubTestCase
 	}
 
 	/**
-	 * Tests the deleteAuthorisation method - simulated failure
+	 * Tests the delete method - simulated failure
 	 *
 	 * @return  void
 	 *
@@ -149,6 +149,64 @@ class AuthorizationsTest extends GitHubTestCase
 		try
 		{
 			$this->object->delete(42);
+		}
+		catch (\DomainException $e)
+		{
+			$exception = true;
+
+			$this->assertThat(
+				$e->getMessage(),
+				$this->equalTo(json_decode($this->errorString)->message)
+			);
+		}
+		$this->assertTrue($exception);
+	}
+
+	/**
+	 * Tests the deleteGrant method
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testDeleteGrant()
+	{
+		$this->response->code = 204;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('delete')
+			->with('/authorizations/grants/42')
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->deleteGrant(42),
+			$this->equalTo(json_decode($this->sampleString))
+		);
+	}
+
+	/**
+	 * Tests the deleteGrant method - simulated failure
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testDeleteGrantFailure()
+	{
+		$exception = false;
+
+		$this->response->code = 500;
+		$this->response->body = $this->errorString;
+
+		$this->client->expects($this->once())
+			->method('delete')
+			->with('/authorizations/grants/42')
+			->will($this->returnValue($this->response));
+
+		try
+		{
+			$this->object->deleteGrant(42);
 		}
 		catch (\DomainException $e)
 		{
@@ -301,7 +359,7 @@ class AuthorizationsTest extends GitHubTestCase
 	}
 
 	/**
-	 * Tests the getAuthorisation method
+	 * Tests the get method
 	 *
 	 * @return  void
 	 *
@@ -324,7 +382,7 @@ class AuthorizationsTest extends GitHubTestCase
 	}
 
 	/**
-	 * Tests the getAuthorisation method - failure
+	 * Tests the get method - failure
 	 *
 	 * @return  void
 	 *
@@ -346,7 +404,52 @@ class AuthorizationsTest extends GitHubTestCase
 	}
 
 	/**
-	 * Tests the getAuthorisations method
+	 * Tests the getGrant method
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testGetGrant()
+	{
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/authorizations/grants/42')
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->getGrant(42),
+			$this->equalTo(json_decode($this->sampleString))
+		);
+	}
+
+	/**
+	 * Tests the getGrant method - failure
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 *
+	 * @expectedException  \DomainException
+	 */
+	public function testGetGrantFailure()
+	{
+		$this->response->code = 500;
+		$this->response->body = $this->errorString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/authorizations/grants/42')
+			->will($this->returnValue($this->response));
+
+		$this->object->getGrant(42);
+	}
+
+	/**
+	 * Tests the getList method
 	 *
 	 * @return  void
 	 *
@@ -369,7 +472,7 @@ class AuthorizationsTest extends GitHubTestCase
 	}
 
 	/**
-	 * Tests the getAuthorisations method - failure
+	 * Tests the getList method - failure
 	 *
 	 * @return  void
 	 *
@@ -388,6 +491,51 @@ class AuthorizationsTest extends GitHubTestCase
 			->will($this->returnValue($this->response));
 
 		$this->object->getList();
+	}
+
+	/**
+	 * Tests the getListGrants method
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testGetListGrants()
+	{
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/authorizations/grants')
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->getListGrants(),
+			$this->equalTo(json_decode($this->sampleString))
+		);
+	}
+
+	/**
+	 * Tests the getListGrants method - failure
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 *
+	 * @expectedException  \DomainException
+	 */
+	public function testGetListGrantsFailure()
+	{
+		$this->response->code = 500;
+		$this->response->body = $this->errorString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/authorizations/grants')
+			->will($this->returnValue($this->response));
+
+		$this->object->getListGrants();
 	}
 
 	/**
@@ -548,5 +696,50 @@ class AuthorizationsTest extends GitHubTestCase
 		$this->response->body = '';
 
 		$this->object->requestToken('12345', 'aaa', 'bbb', 'ccc', 'invalid');
+	}
+
+	/**
+	 * Tests the revokeGrantForApplication method
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testRevokeGrantForApplication()
+	{
+		$this->response->code = 204;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('delete')
+			->with('/applications/42/grants/1a2b3c')
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->revokeGrantForApplication(42, '1a2b3c'),
+			$this->equalTo(json_decode($this->sampleString))
+		);
+	}
+
+	/**
+	 * Tests the revokeGrantForApplication method - failure
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 *
+	 * @expectedException  \DomainException
+	 */
+	public function testRevokeGrantForApplicationFailure()
+	{
+		$this->response->code = 500;
+		$this->response->body = $this->errorString;
+
+		$this->client->expects($this->once())
+			->method('delete')
+			->with('/applications/42/grants/1a2b3c')
+			->will($this->returnValue($this->response));
+
+		$this->object->revokeGrantForApplication(42, '1a2b3c');
 	}
 }
