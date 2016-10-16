@@ -49,7 +49,7 @@ class NotificationsTest extends GitHubTestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/notifications?&all=1&participating=1', array(), 0)
+			->with('/notifications?all=1&participating=1', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -70,7 +70,7 @@ class NotificationsTest extends GitHubTestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/repos/joomla/joomla-platform/notifications?&all=1&participating=1', array(), 0)
+			->with('/repos/joomla/joomla-platform/notifications?all=1&participating=1', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(

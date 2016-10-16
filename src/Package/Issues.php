@@ -174,7 +174,7 @@ class Issues extends AbstractPackage
 	 * @param   string     $labels     The list of comma separated Label names. Example: bug,ui,@high.
 	 * @param   string     $sort       The sort order: created, updated, comments, default: created.
 	 * @param   string     $direction  The list direction: asc or desc, default: desc.
-	 * @param   \DateTime  $since      The date/time since when issues should be returned.
+	 * @param   \DateTime  $since      Only issues updated at or after this time are returned.
 	 * @param   integer    $page       The page number from which to get items.
 	 * @param   integer    $limit      The number of items on a page.
 	 *
@@ -237,7 +237,7 @@ class Issues extends AbstractPackage
 	 * @param   string     $labels     The list of comma separated Label names. Example: bug,ui,@high.
 	 * @param   string     $sort       The sort order: created, updated, comments, default: created.
 	 * @param   string     $direction  The list direction: asc or desc, default: desc.
-	 * @param   \DateTime  $since      The date/time since when issues should be returned.
+	 * @param   \DateTime  $since      Only issues updated at or after this time are returned.
 	 * @param   integer    $page       The page number from which to get items.
 	 * @param   integer    $limit      The number of items on a page.
 	 *

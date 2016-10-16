@@ -70,13 +70,37 @@ class StarringTest extends GitHubTestCase
 
 		$this->client->expects($this->once())
 			->method('get')
-			->with('/user/starred', array(), 0)
+			->with('/user/starred?sort=created&direction=desc', array(), 0)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
 			$this->object->getRepositories(),
 			$this->equalTo(json_decode($this->response->body))
 		);
+	}
+
+	/**
+	 * Tests the getRepositories method - invalid sort option
+	 *
+	 * @return  void
+	 *
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testGetRepositoriesInvalidSort()
+	{
+		$this->object->getRepositories('', 'invalid');
+	}
+
+	/**
+	 * Tests the getRepositories method - invalid direction option
+	 *
+	 * @return  void
+	 *
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testGetRepositoriesInvalidDirection()
+	{
+		$this->object->getRepositories('', 'created', 'invalid');
 	}
 
 	/**

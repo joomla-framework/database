@@ -223,19 +223,21 @@ class Gists extends AbstractPackage
 	/**
 	 * List a user’s gists.
 	 *
-	 * @param   string   $user   The name of the GitHub user from which to list gists.
-	 * @param   integer  $page   The page number from which to get items.
-	 * @param   integer  $limit  The number of items on a page.
+	 * @param   string     $user   The name of the GitHub user from which to list gists.
+	 * @param   integer    $page   The page number from which to get items.
+	 * @param   integer    $limit  The number of items on a page.
+	 * @param   \DateTime  $since  Only gists updated at or after this time are returned.
 	 *
 	 * @return  array
 	 *
 	 * @since   1.0
 	 * @throws  \DomainException
 	 */
-	public function getListByUser($user, $page = 0, $limit = 0)
+	public function getListByUser($user, $page = 0, $limit = 0, \DateTime $since = null)
 	{
 		// Build the request path.
 		$path = '/users/' . $user . '/gists';
+		$path .= ($since) ? '?since=' . $since->format(\DateTime::RFC3339) : '';
 
 		// Send the request.
 		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
@@ -244,18 +246,20 @@ class Gists extends AbstractPackage
 	/**
 	 * List all public gists.
 	 *
-	 * @param   integer  $page   The page number from which to get items.
-	 * @param   integer  $limit  The number of items on a page.
+	 * @param   integer    $page   The page number from which to get items.
+	 * @param   integer    $limit  The number of items on a page.
+	 * @param   \DateTime  $since  Only gists updated at or after this time are returned.
 	 *
 	 * @return  array
 	 *
 	 * @since   1.0
 	 * @throws  \DomainException
 	 */
-	public function getListPublic($page = 0, $limit = 0)
+	public function getListPublic($page = 0, $limit = 0, \DateTime $since = null)
 	{
 		// Build the request path.
 		$path = '/gists/public';
+		$path .= ($since) ? '?since=' . $since->format(\DateTime::RFC3339) : '';
 
 		// Send the request.
 		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
@@ -264,18 +268,20 @@ class Gists extends AbstractPackage
 	/**
 	 * List starred gists.
 	 *
-	 * @param   integer  $page   The page number from which to get items.
-	 * @param   integer  $limit  The number of items on a page.
+	 * @param   integer    $page   The page number from which to get items.
+	 * @param   integer    $limit  The number of items on a page.
+	 * @param   \DateTime  $since  Only gists updated at or after this time are returned.
 	 *
 	 * @return  array
 	 *
 	 * @since   1.0
 	 * @throws  \DomainException
 	 */
-	public function getListStarred($page = 0, $limit = 0)
+	public function getListStarred($page = 0, $limit = 0, \DateTime $since = null)
 	{
 		// Build the request path.
 		$path = '/gists/starred';
+		$path .= ($since) ? '?since=' . $since->format(\DateTime::RFC3339) : '';
 
 		// Send the request.
 		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));

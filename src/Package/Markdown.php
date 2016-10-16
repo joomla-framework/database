@@ -21,7 +21,7 @@ use Joomla\Http\Exception\UnexpectedResponseException;
 class Markdown extends AbstractPackage
 {
 	/**
-	 * Method to render a markdown document.
+	 * Render an arbitrary Markdown document.
 	 *
 	 * @param   string  $text     The text object being parsed.
 	 * @param   string  $mode     The parsing mode; valid options are 'markdown' or 'gfm'.

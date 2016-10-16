@@ -77,10 +77,11 @@ class Milestones extends AbstractPackage
 	 * @param   integer  $title        The title of the milestone.
 	 * @param   string   $state        Can be open (default) or closed.
 	 * @param   string   $description  Optional description for milestone.
-	 * @param   string   $due_on       Optional ISO 8601 time.
+	 * @param   string   $due_on       The milestone due date. This is a timestamp in ISO 8601 format.
 	 *
 	 * @return  object
 	 *
+	 * @note    As of 2.0 the $due_on parameter will be typehinted to a \DateTime object
 	 * @since   1.0
 	 * @throws  \DomainException
 	 */
@@ -124,10 +125,11 @@ class Milestones extends AbstractPackage
 	 * @param   integer  $title        Optional title of the milestone.
 	 * @param   string   $state        Can be open (default) or closed.
 	 * @param   string   $description  Optional description for milestone.
-	 * @param   string   $due_on       Optional ISO 8601 time.
+	 * @param   string   $due_on       The milestone due date. This is a timestamp in ISO 8601 format.
 	 *
 	 * @return  object
 	 *
+	 * @note    As of 2.0 the $due_on parameter will be typehinted to a \DateTime object
 	 * @since   1.0
 	 * @throws  \DomainException
 	 */

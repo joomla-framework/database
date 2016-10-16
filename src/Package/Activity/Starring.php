@@ -9,6 +9,7 @@
 namespace Joomla\Github\Package\Activity;
 
 use Joomla\Github\AbstractPackage;
+use Joomla\Uri\Uri;
 
 /**
  * GitHub API Activity Events class for the Joomla Framework.
@@ -44,18 +45,46 @@ class Starring extends AbstractPackage
 	 *
 	 * List repositories being starred by a user.
 	 *
-	 * @param   string  $user  User name.
+	 * @param   string  $user       User name.
+	 * @param   string  $sort       One of `created` (when the repository was starred) or `updated` (when it was last pushed to).
+	 * @param   string  $direction  One of `asc` (ascending) or `desc` (descending).
 	 *
 	 * @return  object
 	 *
 	 * @since   1.0
+	 * @throws  \InvalidArgumentException
 	 */
-	public function getRepositories($user = '')
+	public function getRepositories($user = '', $sort = 'created', $direction = 'desc')
 	{
+		$allowedSort = array('created', 'updated');
+		$allowedDir  = array('asc', 'desc');
+
+		if (!in_array($sort, $allowedSort))
+		{
+			throw new \InvalidArgumentException(
+				sprintf(
+					'The sorting value is invalid. Allowed values are: %s',
+					implode(', ', $allowedSort)
+				)
+			);
+		}
+
+		if (!in_array($direction, $allowedDir))
+		{
+			throw new \InvalidArgumentException(
+				sprintf(
+					'The direction value is invalid. Allowed values are: %s',
+					implode(', ', $allowedDir)
+				)
+			);
+		}
+
 		// Build the request path.
 		$path = ($user)
 			? '/users' . $user . '/starred'
 			: '/user/starred';
+
+		$path .= "?sort=$sort&direction=$direction";
 
 		return $this->processResponse(
 			$this->client->get($this->fetchUrl($path))

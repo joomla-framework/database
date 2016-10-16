@@ -9,6 +9,7 @@
 namespace Joomla\Github\Package\Activity;
 
 use Joomla\Github\AbstractPackage;
+use Joomla\Uri\Uri;
 
 /**
  * GitHub API Activity Events class for the Joomla Framework.
@@ -26,24 +27,42 @@ class Notifications extends AbstractPackage
 	 *
 	 * @param   boolean    $all            True to show notifications marked as read.
 	 * @param   boolean    $participating  True to show only notifications in which the user is directly participating or mentioned.
-	 * @param   \DateTime  $since          Filters out any notifications updated before the given time. The time should be passed in
-	 *                                     as UTC in the ISO 8601 format.
+	 * @param   \DateTime  $since          Only show notifications updated after the given time.
+	 * @param   \DateTime  $before         Only show notifications updated before the given time.
 	 *
 	 * @return  object
 	 *
 	 * @since   1.0
 	 */
-	public function getList($all = true, $participating = true, \DateTime $since = null)
+	public function getList($all = true, $participating = true, \DateTime $since = null, \DateTime $before = null)
 	{
 		// Build the request path.
 		$path = '/notifications?';
 
-		$path .= ($all) ? '&all=1' : '';
-		$path .= ($participating) ? '&participating=1' : '';
-		$path .= ($since) ? '&since=' . $since->format(\DateTime::RFC3339) : '';
+		$uri = new Uri($this->fetchUrl($path));
+
+		if ($all)
+		{
+			$uri->setVar('all', 1);
+		}
+
+		if ($participating)
+		{
+			$uri->setVar('participating', 1);
+		}
+
+		if ($since)
+		{
+			$uri->setVar('since', $since->format(\DateTime::RFC3339));
+		}
+
+		if ($before)
+		{
+			$uri->setVar('before', $before->format(\DateTime::RFC3339));
+		}
 
 		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path))
+			$this->client->get((string) $uri)
 		);
 	}
 
@@ -56,24 +75,42 @@ class Notifications extends AbstractPackage
 	 * @param   string     $repo           Repository name.
 	 * @param   boolean    $all            True to show notifications marked as read.
 	 * @param   boolean    $participating  True to show only notifications in which the user is directly participating or mentioned.
-	 * @param   \DateTime  $since          Filters out any notifications updated before the given time. The time should be passed in
-	 *                                     as UTC in the ISO 8601 format.
+	 * @param   \DateTime  $since          Only show notifications updated after the given time.
+	 * @param   \DateTime  $before         Only show notifications updated before the given time.
 	 *
 	 * @return  object
 	 *
 	 * @since   1.0
 	 */
-	public function getListRepository($owner, $repo, $all = true, $participating = true, \DateTime $since = null)
+	public function getListRepository($owner, $repo, $all = true, $participating = true, \DateTime $since = null, \DateTime $before = null)
 	{
 		// Build the request path.
 		$path = '/repos/' . $owner . '/' . $repo . '/notifications?';
 
-		$path .= ($all) ? '&all=1' : '';
-		$path .= ($participating) ? '&participating=1' : '';
-		$path .= ($since) ? '&since=' . $since->format(\DateTime::RFC3339) : '';
+		$uri = new Uri($this->fetchUrl($path));
+
+		if ($all)
+		{
+			$uri->setVar('all', 1);
+		}
+
+		if ($participating)
+		{
+			$uri->setVar('participating', 1);
+		}
+
+		if ($since)
+		{
+			$uri->setVar('since', $since->format(\DateTime::RFC3339));
+		}
+
+		if ($before)
+		{
+			$uri->setVar('before', $before->format(\DateTime::RFC3339));
+		}
 
 		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path))
+			$this->client->get((string) $uri)
 		);
 	}
 
