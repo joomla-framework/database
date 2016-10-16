@@ -12,7 +12,7 @@ namespace Joomla\Github;
  * GitHub API package class for the Joomla Framework.
  *
  * @since       1.0
- * @deprecated  Use AbstractPackage instead.
+ * @deprecated  2.0 Use AbstractPackage instead.
  */
 abstract class Package extends AbstractPackage
 {
