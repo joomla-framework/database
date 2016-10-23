@@ -24,30 +24,43 @@ use Illuminate\View\FileViewFinder;
 class BladeRenderer extends AbstractRenderer
 {
 	/**
+	 * Rendering engine
+	 *
+	 * @var    Factory
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $renderer;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param   array  $config  Configuration array
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct(array $config = array())
+	public function __construct(Factory $renderer = null)
 	{
-		$filesystem = new Filesystem;
+		if (!$renderer)
+		{
+			$filesystem = new Filesystem;
 
-		$resolver = new EngineResolver;
-		$resolver->register(
-			'blade',
-			function () use ($filesystem)
-			{
-				return new CompilerEngine(new BladeCompiler($filesystem));
-			}
-		);
+			$resolver = new EngineResolver;
+			$resolver->register(
+				'blade',
+				function () use ($filesystem)
+				{
+					return new CompilerEngine(new BladeCompiler($filesystem));
+				}
+			);
 
-		$this->renderer = new Factory(
-			$resolver,
-			new FileViewFinder($filesystem, $config['paths']),
-			new Dispatcher
-		);
+			$renderer = new Factory(
+				$resolver,
+				new FileViewFinder($filesystem, []),
+				new Dispatcher
+			);
+		}
+
+		$this->renderer = $renderer;
 	}
 
 	/**
@@ -63,6 +76,8 @@ class BladeRenderer extends AbstractRenderer
 	public function addFolder($directory, $alias = null)
 	{
 		$this->getRenderer()->addLocation($directory);
+
+		return $this;
 	}
 
 	/**
