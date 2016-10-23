@@ -10,7 +10,7 @@
     },
     "require-dev": {
         "illuminate/view": "~5.1",
-        "league/plates": "~2.0|~3.0",
+        "league/plates": "~3.0",
         "mustache/mustache": "~2.3",
         "phpunit/phpunit": "~4.8|~5.0",
         "symfony/templating": "~2.0|~3.0",
@@ -19,7 +19,7 @@
     },
     "suggest": {
         "illuminate/view": "Install ~5.1 if you are using Laravel's Blade template engine.",
-        "league/plates": "Install ~2.0|~3.0 if you are using the Plates template engine.",
+        "league/plates": "Install ~3.0 if you are using the Plates template engine.",
         "mustache/mustache": "Install ~2.3 if you are using the Mustache template engine.",
         "symfony/templating": "Install ~2.0|~3.0 if you are using Symfony's PHP template component.",
         "twig/twig": "Install ~1.14|~2.0 if you are using the Twig template engine."

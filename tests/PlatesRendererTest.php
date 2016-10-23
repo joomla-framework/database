@@ -50,16 +50,7 @@ class PlatesRendererTest extends \PHPUnit_Framework_TestCase
 		$path     = __DIR__ . '/stubs/plates';
 
 		$this->assertSame($renderer, $renderer->addFolder($path, 'test'), 'Validates $this is returned');
-
-		// Switch between Plates 2.0 and 3.0 behavior
-		if (method_exists($renderer->getRenderer(), 'getFolders'))
-		{
-			$this->assertTrue($renderer->getRenderer()->getFolders()->exists('test'), 'Validates the folder was added on Plates 3.x');
-		}
-		else
-		{
-			$this->assertAttributeContains('test', 'folders', $renderer->getRenderer(), 'Validates the folder was added on Plates 2.x');
-		}
+		$this->assertTrue($renderer->getRenderer()->getFolders()->exists('test'));
 	}
 
 	/**
