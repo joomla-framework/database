@@ -42,10 +42,11 @@ abstract class AbstractGithubObject
 	 * Array containing the allowed hook events
 	 *
 	 * @var    array
-	 * @since  1.4.0
+	 * @since  __DEPLOY_VERSION__
 	 * @see    https://developer.github.com/webhooks/#events
+	 * @note   From 1.4.0 to 1.5.1 this was named $events, it was renamed due to naming conflicts with package subclasses
 	 */
-	protected $events = array(
+	protected $hookEvents = array(
 		'*',
 		'commit_comment',
 		'create',

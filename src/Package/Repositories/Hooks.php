@@ -43,7 +43,7 @@ class Hooks extends AbstractPackage
 		// Check to ensure all events are in the allowed list
 		foreach ($events as $event)
 		{
-			if (!in_array($event, $this->events))
+			if (!in_array($event, $this->hookEvents))
 			{
 				throw new \RuntimeException('Your events array contains an unauthorized event.');
 			}
@@ -107,7 +107,7 @@ class Hooks extends AbstractPackage
 		// Check to ensure all events are in the allowed list
 		foreach ($events as $event)
 		{
-			if (!in_array($event, $this->events))
+			if (!in_array($event, $this->hookEvents))
 			{
 				throw new \RuntimeException('Your events array contains an unauthorized event.');
 			}
@@ -115,7 +115,7 @@ class Hooks extends AbstractPackage
 
 		foreach ($addEvents as $event)
 		{
-			if (!in_array($event, $this->events))
+			if (!in_array($event, $this->hookEvents))
 			{
 				throw new \RuntimeException('Your active_events array contains an unauthorized event.');
 			}
@@ -123,7 +123,7 @@ class Hooks extends AbstractPackage
 
 		foreach ($removeEvents as $event)
 		{
-			if (!in_array($event, $this->events))
+			if (!in_array($event, $this->hookEvents))
 			{
 				throw new \RuntimeException('Your remove_events array contains an unauthorized event.');
 			}
