@@ -31,15 +31,13 @@ class PhpEngineRenderer extends AbstractRenderer
 	/**
 	 * Constructor
 	 *
-	 * @param   TemplateNameParserInterface  $parser  Object to parse template names
-	 * @param   LoaderInterface              $loader  Object to direct the engine where to search for templates
-	 * @param   PhpEngine|null               $engine  Optional PhpEngine instance to inject or null for a new object to be created
+	 * @param   PhpEngine  $renderer  Rendering engine
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct(TemplateNameParserInterface $parser, LoaderInterface $loader, PhpEngine $engine = null)
+	public function __construct(PhpEngine $renderer)
 	{
-		$this->renderer = is_null($engine) ? new PhpEngine($parser, $loader) : $engine;
+		$this->renderer = $renderer;
 	}
 
 	/**
@@ -54,7 +52,6 @@ class PhpEngineRenderer extends AbstractRenderer
 	 */
 	public function addFolder($directory, $alias = null)
 	{
-		// TODO: Implement addFolder() method.
 		return $this;
 	}
 
@@ -112,7 +109,6 @@ class PhpEngineRenderer extends AbstractRenderer
 	 */
 	public function setFileExtension($extension)
 	{
-		// TODO: Implement setFileExtension() method.
 		return $this;
 	}
 }
