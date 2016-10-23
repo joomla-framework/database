@@ -684,7 +684,7 @@ abstract class PdoDriver extends DatabaseDriver
 	 *
 	 * @since   1.0
 	 */
-	public function setQuery($query, $offset = null, $limit = null, $driverOptions = array())
+	public function setQuery($query, $offset = null, $limit = null, $driverOptions = array(\PDO::ATTR_CURSOR => \PDO::CURSOR_SCROLL))
 	{
 		$this->connect();
 
