@@ -34,7 +34,7 @@ class BladeRenderer extends AbstractRenderer
 	/**
 	 * Constructor.
 	 *
-	 * @param   array  $config  Configuration array
+	 * @param   Factory  $renderer  Rendering engine
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -49,7 +49,7 @@ class BladeRenderer extends AbstractRenderer
 				'blade',
 				function () use ($filesystem)
 				{
-					return new CompilerEngine(new BladeCompiler($filesystem));
+					return new CompilerEngine(new BladeCompiler($filesystem, getcwd() . '/cache'));
 				}
 			);
 
