@@ -12,6 +12,7 @@
         "illuminate/view": "~5.1",
         "league/plates": "~2.0|~3.0",
         "mustache/mustache": "~2.0",
+        "phpunit/phpunit": "~4.8|~5.0",
         "symfony/templating": "~2.0|~3.0",
         "twig/twig": "~1.0|~2.0",
         "squizlabs/php_codesniffer": "1.*"
@@ -26,6 +27,11 @@
     "autoload": {
         "psr-4": {
             "Joomla\\Renderer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Joomla\\Renderer\\Tests\\": "tests/"
         }
     },
     "extra": {
