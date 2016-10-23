@@ -28,7 +28,7 @@ class TwigRenderer extends AbstractRenderer
 	/**
 	 * Constructor.
 	 *
-	 * @param   array  $config  Configuration array
+	 * @param   \Twig_Environment  $renderer  Rendering engine
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
