@@ -34,7 +34,7 @@ class TwigRenderer extends AbstractRenderer
 	 */
 	public function __construct(\Twig_Environment $renderer = null)
 	{
-		$this->renderer = $renderer ?: new \Twig_Environment(new \Twig_Loader_Filesystem);
+		$this->renderer = $renderer ?: new \Twig_Environment(new \Twig_Loader_Filesystem([]));
 	}
 
 	/**
