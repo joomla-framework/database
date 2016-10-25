@@ -26,13 +26,13 @@ class MustacheRenderer extends AbstractRenderer implements RendererInterface
 	/**
 	 * Constructor
 	 *
-	 * @param   array  $options  Options for the rendering engine
+	 * @param   \Mustache_Engine  $renderer  Rendering engine
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct(array $options = array())
+	public function __construct(\Mustache_Engine $renderer = null)
 	{
-		$this->renderer = new \Mustache_Engine($options);
+		$this->renderer = $renderer ?: new \Mustache_Engine;
 	}
 
 	/**

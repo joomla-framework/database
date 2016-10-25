@@ -18,18 +18,6 @@ use League\Plates\Engine;
 class PlatesRenderer extends AbstractRenderer
 {
 	/**
-	 * Configuration array
-	 *
-	 * @var    array
-	 * @since  __DEPLOY_VERSION__
-	 */
-	private $config = array(
-		'path'      => null,
-		'debug'     => false,
-		'extension' => '.tpl'
-	);
-
-	/**
 	 * Rendering engine
 	 *
 	 * @var    Engine
@@ -40,15 +28,13 @@ class PlatesRenderer extends AbstractRenderer
 	/**
 	 * Constructor.
 	 *
-	 * @param   array  $config  Configuration array
+	 * @param   Engine  $renderer  Rendering engine
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct($config = array())
+	public function __construct(Engine $renderer = null)
 	{
-		$this->config = array_merge($this->config, (array) $config);
-
-		$this->renderer = new Engine($this->config['path'], ltrim($this->config['extension'], '.'));
+		$this->renderer = $renderer ?: new Engine;
 	}
 
 	/**
@@ -97,14 +83,6 @@ class PlatesRenderer extends AbstractRenderer
 	 */
 	public function pathExists($path)
 	{
-		$renderer = $this->getRenderer();
-
-		// The pathExists method was removed at 3.0
-		if (method_exists($renderer, 'pathExists'))
-		{
-			return $this->getRenderer()->pathExists($path);
-		}
-
 		return $this->getRenderer()->exists($path);
 	}
 

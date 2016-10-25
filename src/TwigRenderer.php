@@ -18,18 +18,6 @@ use Joomla\Renderer\Twig\FilesystemLoader;
 class TwigRenderer extends AbstractRenderer
 {
 	/**
-	 * Configuration array
-	 *
-	 * @var    array
-	 * @since  __DEPLOY_VERSION__
-	 */
-	private $config = array(
-		'path'      => null,
-		'debug'     => false,
-		'extension' => '.twig'
-	);
-
-	/**
 	 * Rendering engine
 	 *
 	 * @var    \Twig_Environment
@@ -40,18 +28,13 @@ class TwigRenderer extends AbstractRenderer
 	/**
 	 * Constructor.
 	 *
-	 * @param   array  $config  Configuration array
+	 * @param   \Twig_Environment  $renderer  Rendering engine
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct($config = array())
+	public function __construct(\Twig_Environment $renderer = null)
 	{
-		$this->config = array_merge($this->config, (array) $config);
-
-		$loader = new FilesystemLoader($this->config['path']);
-		$loader->setExtension($this->config['extension']);
-
-		$this->renderer = new \Twig_Environment($loader, $this->config);
+		$this->renderer = $renderer ?: new \Twig_Environment(new \Twig_Loader_Filesystem);
 	}
 
 	/**
@@ -66,12 +49,20 @@ class TwigRenderer extends AbstractRenderer
 	 */
 	public function addFolder($directory, $alias = null)
 	{
-		if ($alias === null)
+		$loader = $this->getRenderer()->getLoader();
+
+		// This can only be reliably tested with a loader using the filesystem loader's API
+		if (method_exists($loader, 'addPath'))
 		{
-			$alias = \Twig_Loader_Filesystem::MAIN_NAMESPACE;
+			if ($alias === null)
+			{
+				$alias = \Twig_Loader_Filesystem::MAIN_NAMESPACE;
+			}
+
+			$loader->addPath($directory, $alias);
 		}
 
-		$this->getRenderer()->getLoader()->addPath($directory, $alias);
+		return $this;
 	}
 
 	/**
@@ -97,7 +88,15 @@ class TwigRenderer extends AbstractRenderer
 	 */
 	public function pathExists($path)
 	{
-		return $this->getRenderer()->getLoader()->exists($path);
+		$loader = $this->getRenderer()->getLoader();
+
+		if ($loader instanceof \Twig_ExistsLoaderInterface)
+		{
+			return $loader->exists($path);
+		}
+
+		// For all other cases we'll assume the path exists
+		return true;
 	}
 
 	/**
@@ -130,8 +129,7 @@ class TwigRenderer extends AbstractRenderer
 	 */
 	public function setFileExtension($extension)
 	{
-		$this->config['extension'] = $extension;
-
+		// Not supported by Twig
 		return $this;
 	}
 }

@@ -21,7 +21,7 @@ abstract class AbstractRenderer implements RendererInterface
 	 * @var    array
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $data = array();
+	protected $data = [];
 
 	/**
 	 * Sets a piece of data
@@ -35,7 +35,6 @@ abstract class AbstractRenderer implements RendererInterface
 	 */
 	public function set($key, $value)
 	{
-		// TODO Make use of Joomla\Registry to provide paths
 		$this->data[$key] = $value;
 
 		return $this;
@@ -66,7 +65,7 @@ abstract class AbstractRenderer implements RendererInterface
 	 */
 	public function unsetData()
 	{
-		$this->data = array();
+		$this->data = [];
 
 		return $this;
 	}
