@@ -52,6 +52,7 @@ class WebClient
 	const SAFARI = 20;
 	const OPERA = 21;
 	const ANDROIDTABLET = 22;
+	const EDGE = 23;
 
 	/**
 	 * @var    integer  The detected platform on which the web client runs.
@@ -266,6 +267,11 @@ class WebClient
 			$this->browser = self::IE;
 			$patternBrowser = ' rv';
 		}
+		elseif (stripos($userAgent, 'Edge') !== false)
+		{
+			$this->browser = self::EDGE;
+			$patternBrowser = ' rv';
+		}
 		elseif ((stripos($userAgent, 'Firefox') !== false) && (stripos($userAgent, 'like Firefox') === false))
 		{
 			$this->browser = self::FIREFOX;
@@ -396,6 +402,10 @@ class WebClient
 			// Lesser known engine but it finishes off the major list from Wikipedia :-)
 			$this->engine = self::AMAYA;
 		}
+		elseif (stripos($userAgent, 'Edge') !== false || stripos($userAgent, 'EdgeHTML') !== false)
+		{
+			$this->engine = self::EDGE;
+		}
 
 		// Mark this detection routine as run.
 		$this->detection['engine'] = true;
@@ -523,7 +533,7 @@ class WebClient
 	 */
 	protected function detectRobot($userAgent)
 	{
-		if (preg_match('/http|bot|robot|spider|crawler|curl|^$/i', $userAgent))
+		if (preg_match('/http|bot|bingbot|googlebot|robot|spider|slurp|crawler|curl|^$/i', $userAgent))
 		{
 			$this->robot = true;
 		}
