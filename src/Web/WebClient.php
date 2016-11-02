@@ -270,7 +270,7 @@ class WebClient
 		elseif (stripos($userAgent, 'Edge') !== false)
 		{
 			$this->browser = self::EDGE;
-			$patternBrowser = ' rv';
+			$patternBrowser = 'Edge';
 		}
 		elseif ((stripos($userAgent, 'Firefox') !== false) && (stripos($userAgent, 'like Firefox') === false))
 		{
