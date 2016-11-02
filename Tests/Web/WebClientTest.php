@@ -36,6 +36,8 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 				'10', 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)'),
 			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE,
 				'9', 'Mozilla/5.0 (Windows; U; MSIE 9.0; WIndows NT 9.0; en-US))'),
+			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::EDGE, Joomla\Application\Web\WebClient::EDGE,
+				'14.14393', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393'),
 			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE, '8',
 				'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; ' .
 				'.NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 1.0.3705; .NET CLR 1.1.4322)'),
@@ -172,6 +174,8 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 			array('Mozilla/2.0 (compatible; Ask Jeeves/Teoma; +http://sp.ask.com/docs/about/tech_crawling.html)', true),
 			array('Mozilla/5.0 (iPad; U; CPU OS 3_2_1 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Mobile/7B405', false),
 			array('Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.168 Safari/535.19', false),
+			array('Mozilla/5.0 (iPhone; CPU iPhone OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 ' .
+				  'Safari/9537.53 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)', true),
 			array('BlackBerry8300/4.2.2 Profile/MIDP-2.0 Configuration/CLDC-1.1 VendorID/107 UP.Link/6.2.3.15.02011-10-16 20:20:17', false),
 			array('IE 7 ? Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)2011-10-16 ' .
 				'20:20:09', false)

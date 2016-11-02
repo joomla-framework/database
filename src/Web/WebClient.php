@@ -270,7 +270,7 @@ class WebClient
 		elseif (stripos($userAgent, 'Edge') !== false)
 		{
 			$this->browser = self::EDGE;
-			$patternBrowser = ' rv';
+			$patternBrowser = 'Edge';
 		}
 		elseif ((stripos($userAgent, 'Firefox') !== false) && (stripos($userAgent, 'like Firefox') === false))
 		{
@@ -377,6 +377,10 @@ class WebClient
 			// Attempt to detect the client engine -- starting with the most popular ... for now.
 			$this->engine = self::TRIDENT;
 		}
+		elseif (stripos($userAgent, 'Edge') !== false || stripos($userAgent, 'EdgeHTML') !== false)
+		{
+			$this->engine = self::EDGE;
+		}
 		elseif (stripos($userAgent, 'AppleWebKit') !== false || stripos($userAgent, 'blackberry') !== false)
 		{
 			// Evidently blackberry uses WebKit and doesn't necessarily report it.  Bad RIM.
@@ -401,10 +405,6 @@ class WebClient
 		{
 			// Lesser known engine but it finishes off the major list from Wikipedia :-)
 			$this->engine = self::AMAYA;
-		}
-		elseif (stripos($userAgent, 'Edge') !== false || stripos($userAgent, 'EdgeHTML') !== false)
-		{
-			$this->engine = self::EDGE;
 		}
 
 		// Mark this detection routine as run.
