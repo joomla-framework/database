@@ -53,6 +53,7 @@ class WebClient
 	const OPERA = 21;
 	const ANDROIDTABLET = 22;
 	const EDGE = 23;
+	const BLINK = 24;
 
 	/**
 	 * @var    integer  The detected platform on which the web client runs.
@@ -380,6 +381,10 @@ class WebClient
 		elseif (stripos($userAgent, 'Edge') !== false || stripos($userAgent, 'EdgeHTML') !== false)
 		{
 			$this->engine = self::EDGE;
+		}
+		elseif (stripos($userAgent, 'Chrome') !== false || (stripos($userAgent, 'Opera') !== false && stripos($userAgent, 'Presto') == false))
+		{
+			$this->engine = self::BLINK;
 		}
 		elseif (stripos($userAgent, 'AppleWebKit') !== false || stripos($userAgent, 'blackberry') !== false)
 		{
