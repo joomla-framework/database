@@ -398,8 +398,19 @@ class WebClient
 		}
 		elseif (stripos($userAgent, 'AppleWebKit') !== false || stripos($userAgent, 'blackberry') !== false)
 		{
-			// Evidently blackberry uses WebKit and doesn't necessarily report it.  Bad RIM.
-			$this->engine = self::WEBKIT;
+			$result  = explode('/', stristr($userAgent, 'AppleWebKit'));
+			$version = explode(' ', $result[1]);
+
+			if ($version[0] === 537.36)
+			{
+				// AppleWebKit/537.36 is Blink engine specific, exception is Blink emulated IEMobile, Trident or Edge
+				$this->engine = self::BLINK;
+			}
+			else
+			{
+				// Evidently blackberry uses WebKit and doesn't necessarily report it.  Bad RIM.
+				$this->engine = self::WEBKIT;
+			}
 		}
 		elseif (stripos($userAgent, 'Gecko') !== false && stripos($userAgent, 'like Gecko') === false)
 		{
@@ -410,7 +421,7 @@ class WebClient
 		{
 			// Sometimes Opera browsers don't say Presto.
 			$this->engine = self::PRESTO;
-			
+
 			// $this->engine = self::BLINK;
 		}
 		elseif (stripos($userAgent, 'KHTML') !== false)
