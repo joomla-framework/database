@@ -398,19 +398,20 @@ class WebClient
 		}
 		elseif (stripos($userAgent, 'AppleWebKit') !== false || stripos($userAgent, 'blackberry') !== false)
 		{
-			$result  = explode('/', stristr($userAgent, 'AppleWebKit'));
-			$version = explode(' ', $result[1]);
+			if (stripos($userAgent, 'AppleWebKit') !== false)
+			{
+				$result  = explode('/', stristr($userAgent, 'AppleWebKit'));
+				$version = explode(' ', $result[1]);
 
-			if ($version[0] === 537.36)
-			{
-				// AppleWebKit/537.36 is Blink engine specific, exception is Blink emulated IEMobile, Trident or Edge
-				$this->engine = self::BLINK;
+				if ($version[0] === 537.36)
+				{
+					// AppleWebKit/537.36 is Blink engine specific, exception is Blink emulated IEMobile, Trident or Edge
+					$this->engine = self::BLINK;
+				}
 			}
-			else
-			{
-				// Evidently blackberry uses WebKit and doesn't necessarily report it.  Bad RIM.
-				$this->engine = self::WEBKIT;
-			}
+
+			// Evidently blackberry uses WebKit and doesn't necessarily report it.  Bad RIM.
+			$this->engine = self::WEBKIT;
 		}
 		elseif (stripos($userAgent, 'Gecko') !== false && stripos($userAgent, 'like Gecko') === false)
 		{
