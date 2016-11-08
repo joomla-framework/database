@@ -63,6 +63,8 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 				'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_3) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.32 Safari/535.1'),
 			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::CHROME, '12.0.742.113',
 				'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.113 Safari/534.30'),
+			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::BLINK, Joomla\Application\Web\WebClient::CHROME, '54.0.2840.71',
+				'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36'),
 			array(Joomla\Application\Web\WebClient::LINUX, false, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::CHROME, '12.0.742.112',
 				'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/10.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30'),
 			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::CHROME, '15.0.864.0',
@@ -170,6 +172,9 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 		return array(
 			array('Googlebot/2.1 (+http://www.google.com/bot.html)', true),
 			array('msnbot/1.0 (+http://search.msn.com/msnbot.htm)', true),
+			array('Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)', true),
+			array('Mozilla/5.0 (compatible; MJ12bot/v1.4.5; http://www.majestic12.co.uk/bot.php?+)', true),
+			array('SimplePie/1.3.1 (Feed Parser; http://simplepie.org; Allow like Gecko) Build/20121030175911', true),
 			array('Mozilla/4.0 compatible ZyBorg/1.0 (wn-14.zyborg@looksmart.net; http://www.WISEnutbot.com)', true),
 			array('Mozilla/2.0 (compatible; Ask Jeeves/Teoma; +http://sp.ask.com/docs/about/tech_crawling.html)', true),
 			array('Mozilla/5.0 (iPad; U; CPU OS 3_2_1 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Mobile/7B405', false),
@@ -178,7 +183,7 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 				  'Safari/9537.53 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)', true),
 			array('BlackBerry8300/4.2.2 Profile/MIDP-2.0 Configuration/CLDC-1.1 VendorID/107 UP.Link/6.2.3.15.02011-10-16 20:20:17', false),
 			array('IE 7 ? Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)2011-10-16 ' .
-				'20:20:09', false)
+				'20:20:09', false),
 		);
 	}
 
