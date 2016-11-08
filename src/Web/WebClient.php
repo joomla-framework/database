@@ -420,10 +420,16 @@ class WebClient
 		}
 		elseif (stripos($userAgent, 'Opera') !== false || stripos($userAgent, 'Presto') !== false)
 		{
+			$result  = explode('/', stristr($userAgent, 'Opera'));
+			$version = explode(' ', $result[1]);
+
+			if ($version[0] >= 15)
+			{
+				$this->engine = self::BLINK;
+			}
+
 			// Sometimes Opera browsers don't say Presto.
 			$this->engine = self::PRESTO;
-
-			// $this->engine = self::BLINK;
 		}
 		elseif (stripos($userAgent, 'KHTML') !== false)
 		{
