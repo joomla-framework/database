@@ -385,6 +385,7 @@ class WebClient
 		elseif (stripos($userAgent, 'Chrome') !== false)
 		{
 			$result  = explode('/', stristr($this->user_agent, 'Chrome'));
+			var_dump($result);
 			$version = explode(' ', $result[1]);
 			if ($version[0] >= 28)
 			{
