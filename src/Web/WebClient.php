@@ -382,9 +382,18 @@ class WebClient
 		{
 			$this->engine = self::EDGE;
 		}
-		elseif (stripos($userAgent, 'Chrome') !== false || (stripos($userAgent, 'Opera') !== false && stripos($userAgent, 'Presto') == false))
+		elseif (stripos($userAgent, 'Chrome') !== false)
 		{
-			$this->engine = self::BLINK;
+			$result  = explode('/', stristr($this->user_agent, 'Chrome'));
+			$version = explode(' ', $result[1]);
+			if ($version[0] >= 28)
+			{
+				$this->engine = self::BLINK;
+			}
+			else
+			{
+				$this->engine = self::WEBKIT;
+			}
 		}
 		elseif (stripos($userAgent, 'AppleWebKit') !== false || stripos($userAgent, 'blackberry') !== false)
 		{
@@ -400,6 +409,8 @@ class WebClient
 		{
 			// Sometimes Opera browsers don't say Presto.
 			$this->engine = self::PRESTO;
+			
+			// $this->engine = self::BLINK;
 		}
 		elseif (stripos($userAgent, 'KHTML') !== false)
 		{
