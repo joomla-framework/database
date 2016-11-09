@@ -195,6 +195,90 @@ final class ArrayHelper
 	}
 
 	/**
+	 * Adds a column to an array of arrays or objects
+	 *
+	 * @param   array   $array    The source array
+	 * @param   array   $column   The array to be used as new column
+	 * @param   string  $colName  The index of the new column or name of the new object property
+	 * @param   string  $keyCol   The index of the column or name of object property to be used for mapping with the new column
+	 *
+	 * @return  array  An array with the new column added to the source array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @see     http://php.net/manual/en/language.types.array.php
+	 */
+	public static function addColumn(array $array, array $column, $colName, $keyCol = null)
+	{
+		$result = array();
+
+		foreach ($array as $i => $item)
+		{
+			$value = null;
+
+			if (empty($keyCol))
+			{
+				$value = static::getValue($column, $i);
+			}
+			else
+			{
+				// Convert object to array
+				$subject = is_object($item) ? static::fromObject($item) : $item;
+
+				if (isset($subject[$keyCol]) && is_scalar($subject[$keyCol]))
+				{
+					$value = static::getValue($column, $subject[$keyCol]);
+				}
+			}
+
+			// Add the column
+			if (is_object($item))
+			{
+				$item->$colName = $value;
+			}
+			else
+			{
+				$item[$colName] = $value;
+			}
+
+			$result[$i] = $item;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Remove a column from an array of arrays or objects
+	 *
+	 * @param   array   $array    The source array
+	 * @param   string  $colName  The index of the column or name of object property to be removed
+	 *
+	 * @return  array  Column of values from the source array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @see     http://php.net/manual/en/language.types.array.php
+	 */
+	public static function dropColumn(array $array, $colName)
+	{
+		$result = array();
+
+		foreach ($array as $i => $item)
+		{
+			if (is_object($item) && isset($item->$colName))
+			{
+				unset($item->$colName);
+			}
+			elseif (is_array($item) && isset($item[$colName]))
+			{
+				unset($item[$colName]);
+			}
+
+			$result[$i] = $item;
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Extracts a column from an array of arrays or objects
 	 *
 	 * @param   array   $array     The source array
