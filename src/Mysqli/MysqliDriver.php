@@ -526,7 +526,7 @@ class MysqliDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		return $this->connection->get_server_info();
+		return $this->connection->server_info;
 	}
 
 	/**
