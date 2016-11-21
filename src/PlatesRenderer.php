@@ -15,7 +15,7 @@ use League\Plates\Engine;
  *
  * @since  __DEPLOY_VERSION__
  */
-class PlatesRenderer extends AbstractRenderer implements ConfigurableFileExtensionInterface
+class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterface, ConfigurableFileExtensionInterface
 {
 	/**
 	 * Rendering engine

@@ -52,18 +52,6 @@ class MustacheRendererTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @testdox  Adding paths to the loader is unsupported
-	 *
-	 * @covers   \Joomla\Renderer\MustacheRenderer::addFolder()
-	 */
-	public function testAddingPathsToTheLoaderIsUnsupported()
-	{
-		$renderer = new MustacheRenderer;
-
-		$this->assertSame($renderer, $renderer->addFolder(__DIR__ . '/stubs/mustache'), 'Validates $this is returned');
-	}
-
-	/**
 	 * @testdox  The rendering engine is returned
 	 *
 	 * @covers   \Joomla\Renderer\MustacheRenderer::getRenderer

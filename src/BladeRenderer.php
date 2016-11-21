@@ -21,7 +21,7 @@ use Illuminate\View\FileViewFinder;
  *
  * @since  __DEPLOY_VERSION__
  */
-class BladeRenderer extends AbstractRenderer
+class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterface
 {
 	/**
 	 * Rendering engine

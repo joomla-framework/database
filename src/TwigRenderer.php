@@ -15,7 +15,7 @@ use Joomla\Renderer\Twig\FilesystemLoader;
  *
  * @since  __DEPLOY_VERSION__
  */
-class TwigRenderer extends AbstractRenderer
+class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterface
 {
 	/**
 	 * Rendering engine

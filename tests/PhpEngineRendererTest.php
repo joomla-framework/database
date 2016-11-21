@@ -30,19 +30,6 @@ class PhpEngineRendererTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @testdox  Adding paths to the loader is unsupported
-	 *
-	 * @covers   \Joomla\Renderer\PhpEngineRenderer::addFolder()
-	 */
-	public function testAddingPathsToTheLoaderIsUnsupported()
-	{
-		$engine   = $this->makeEngine();
-		$renderer = new PhpEngineRenderer($engine);
-
-		$this->assertSame($renderer, $renderer->addFolder(__DIR__ . '/stubs/templating'), 'Validates $this is returned');
-	}
-
-	/**
 	 * @testdox  The rendering engine is returned
 	 *
 	 * @covers   \Joomla\Renderer\PhpEngineRenderer::getRenderer
