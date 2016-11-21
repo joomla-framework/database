@@ -84,19 +84,6 @@ class PhpEngineRendererTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @testdox  Setting the file extension is unsupported
-	 *
-	 * @covers   \Joomla\Renderer\PhpEngineRenderer::setFileExtension
-	 */
-	public function testSettingTheFileExtensionIsUnsupported()
-	{
-		$engine   = $this->makeEngine();
-		$renderer = new PhpEngineRenderer($engine);
-
-		$this->assertSame($renderer, $renderer->setFileExtension('php'), 'Validates $this is returned');
-	}
-
-	/**
 	 * Make the PhpEngine instance for testing
 	 *
 	 * @return  PhpEngine

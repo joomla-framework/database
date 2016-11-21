@@ -83,17 +83,6 @@ interface RendererInterface
 	public function setData($data);
 
 	/**
-	 * Sets file extension for template loader
-	 *
-	 * @param   string  $extension  Template files extension
-	 *
-	 * @return  $this
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function setFileExtension($extension);
-
-	/**
 	 * Unloads data from renderer
 	 *
 	 * @return  $this

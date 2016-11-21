@@ -117,16 +117,4 @@ class MustacheRendererTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertSame(file_get_contents($path . '/index.mustache'), $renderer->render('index.mustache'));
 	}
-
-	/**
-	 * @testdox  Setting the file extension is unsupported
-	 *
-	 * @covers   \Joomla\Renderer\MustacheRenderer::setFileExtension
-	 */
-	public function testSettingTheFileExtensionIsUnsupported()
-	{
-		$renderer = new MustacheRenderer;
-
-		$this->assertSame($renderer, $renderer->setFileExtension('mustache'), 'Validates $this is returned');
-	}
 }

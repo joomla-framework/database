@@ -102,19 +102,6 @@ class BladeRendererTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @testdox  Setting the file extension is unsupported
-	 *
-	 * @covers   \Joomla\Renderer\BladeRenderer::setFileExtension
-	 */
-	public function testSettingTheFileExtensionIsUnsupported()
-	{
-		$factory  = $this->makeFactory();
-		$renderer = new BladeRenderer($factory);
-
-		$this->assertSame($renderer, $renderer->setFileExtension('php'), 'Validates $this is returned');
-	}
-
-	/**
 	 * Make the Factory instance for testing
 	 *
 	 * @return  Factory

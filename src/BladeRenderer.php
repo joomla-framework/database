@@ -122,18 +122,4 @@ class BladeRenderer extends AbstractRenderer
 
 		return $this->getRenderer()->make($template, $data)->render();
 	}
-
-	/**
-	 * Sets file extension for template loader
-	 *
-	 * @param   string  $extension  Template files extension
-	 *
-	 * @return  $this
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function setFileExtension($extension)
-	{
-		return $this;
-	}
 }

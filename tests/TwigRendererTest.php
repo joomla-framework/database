@@ -114,16 +114,4 @@ class TwigRendererTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertSame(file_get_contents($path . '/index.twig'), $renderer->render('index.twig'));
 	}
-
-	/**
-	 * @testdox  Setting the file extension is unsupported
-	 *
-	 * @covers   \Joomla\Renderer\TwigRenderer::setFileExtension
-	 */
-	public function testSettingTheFileExtensionIsUnsupported()
-	{
-		$renderer = new TwigRenderer;
-
-		$this->assertSame($renderer, $renderer->setFileExtension('twig'), 'Validates $this is returned');
-	}
 }
