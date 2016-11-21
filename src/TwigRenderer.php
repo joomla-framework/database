@@ -90,7 +90,12 @@ class TwigRenderer extends AbstractRenderer
 	{
 		$loader = $this->getRenderer()->getLoader();
 
-		if ($loader instanceof \Twig_ExistsLoaderInterface)
+		/*
+		 * Either the loader must implement Twig_ExistsLoaderInterface (1.x or 2.x) or implement
+		 * a version of Twig_LoaderInterface that has the exists() method (2.x or later)
+		 */
+		if ($loader instanceof \Twig_ExistsLoaderInterface
+			|| (method_exists('Twig_LoaderInterface', 'exists') && $loader instanceof \Twig_LoaderInterface))
 		{
 			return $loader->exists($path);
 		}
