@@ -4,6 +4,7 @@ sudo: false
 
 env:
   global:
+    - SYMFONY_VERSION="2.8.*"
     - RUN_PHPCS="no"
     - COMPOSER_FLAGS=""
 
@@ -13,8 +14,15 @@ matrix:
     - php: 5.5
       env: COMPOSER_FLAGS="--prefer-lowest"
     - php: 5.6
-      env: RUN_PHPCS="yes"
+    - php: 5.6
+      env: SYMFONY_VERSION="2.7.*"
+    - php: 5.6
+      env: RUN_PHPCS="yes" SYMFONY_VERSION="3.1.*"
     - php: 7.0
+    - php: 7.0
+      env: SYMFONY_VERSION="3.2.*"
+    - php: 7.0
+      env: SYMFONY_VERSION="3.3.*@dev"
     - php: 7.1
     - php: hhvm
   allow_failures:
@@ -23,6 +31,7 @@ matrix:
 
 before_script:
   - composer self-update
+  - composer require --no-update symfony/templating:${SYMFONY_VERSION}
   - composer update $COMPOSER_FLAGS
 
 script:
