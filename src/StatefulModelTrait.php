@@ -11,39 +11,26 @@ namespace Joomla\Model;
 use Joomla\Registry\Registry;
 
 /**
- * Joomla Framework Base Model Class
+ * Trait representing a model holding a state
  *
- * @since  1.0
- * @deprecated  2.0  Implement the model interfaces directly; the concrete implementations are provided as traits
+ * @since  __DEPLOY_VERSION__
  */
-class AbstractModel implements ModelInterface
+trait StatefulModelTrait
 {
 	/**
 	 * The model state.
 	 *
 	 * @var    Registry
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $state;
-
-	/**
-	 * Instantiate the model.
-	 *
-	 * @param   Registry  $state  The model state.
-	 *
-	 * @since   1.0
-	 */
-	public function __construct(Registry $state = null)
-	{
-		$this->state = ($state instanceof Registry) ? $state : new Registry;
-	}
 
 	/**
 	 * Get the model state.
 	 *
 	 * @return  Registry  The state object.
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getState()
 	{
@@ -57,7 +44,7 @@ class AbstractModel implements ModelInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setState(Registry $state)
 	{
