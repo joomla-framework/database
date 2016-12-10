@@ -14,6 +14,7 @@ use Joomla\Database\DatabaseDriver;
  * Trait representing a model holding a database reference
  *
  * @since  __DEPLOY_VERSION__
+ * @note   As of 2.0 the `Joomla\Database\DatabaseInterface` will be typehinted.
  */
 trait DatabaseModelTrait
 {
