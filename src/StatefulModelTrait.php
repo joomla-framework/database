@@ -31,10 +31,16 @@ trait StatefulModelTrait
 	 * @return  Registry  The state object.
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  \UnexpectedValueException
 	 */
 	public function getState()
 	{
-		return $this->state;
+		if ($this->state)
+		{
+			return $this->state;
+		}
+
+		throw new \UnexpectedValueException('State not set in ' . __CLASS__);
 	}
 
 	/**
