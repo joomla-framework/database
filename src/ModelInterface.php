@@ -8,32 +8,12 @@
 
 namespace Joomla\Model;
 
-use Joomla\Registry\Registry;
-
 /**
  * Joomla Framework Model Interface
  *
  * @since  1.0
+ * @deprecated  2.0  Use the StatefulModelInterface instead
  */
-interface ModelInterface
+interface ModelInterface extends StatefulModelInterface
 {
-	/**
-	 * Get the model state.
-	 *
-	 * @return  Registry  The state object.
-	 *
-	 * @since   1.0
-	 */
-	public function getState();
-
-	/**
-	 * Set the model state.
-	 *
-	 * @param   Registry  $state  The state object.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function setState(Registry $state);
 }
