@@ -26,15 +26,4 @@ interface DatabaseModelInterface
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getDb();
-
-	/**
-	 * Set the database driver.
-	 *
-	 * @param   DatabaseDriver  $db  The database driver.
-	 *
-	 * @return  void
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function setDb(DatabaseDriver $db);
 }

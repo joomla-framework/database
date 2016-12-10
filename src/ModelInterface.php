@@ -16,4 +16,14 @@ namespace Joomla\Model;
  */
 interface ModelInterface extends StatefulModelInterface
 {
+	/**
+	 * Set the model state.
+	 *
+	 * @param   Registry  $state  The state object.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function setState(Registry $state);
 }
