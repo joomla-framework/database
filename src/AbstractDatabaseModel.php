@@ -16,7 +16,7 @@ use Joomla\Registry\Registry;
  *
  * @since  1.0
  */
-abstract class AbstractDatabaseModel extends AbstractModel
+abstract class AbstractDatabaseModel extends AbstractModel implements DatabaseModelInterface
 {
 	/**
 	 * The database driver.
