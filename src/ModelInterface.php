@@ -8,6 +8,8 @@
 
 namespace Joomla\Model;
 
+use Joomla\Registry\Registry;
+
 /**
  * Joomla Framework Model Interface
  *
