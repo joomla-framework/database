@@ -67,7 +67,6 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		// Note: We're using DatabaseModel because it still uses the majority of the AbstractModel methods.
 		$this->instance = $this->getMockBuilder('Joomla\\Model\\AbstractModel')
 			->getMockForAbstractClass();
 	}
