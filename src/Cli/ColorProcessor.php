@@ -14,7 +14,7 @@ use \Joomla\Application\Cli\Output\Processor\ColorProcessor as RealColorProcesso
  * Class ColorProcessor.
  *
  * @since       1.0
- * @deprecated  1.0 Use \Joomla\Application\Cli\Output\Processor\ColorProcessor
+ * @deprecated  2.0 Use \Joomla\Application\Cli\Output\Processor\ColorProcessor
  */
 class ColorProcessor extends RealColorProcessor
 {
