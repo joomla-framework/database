@@ -8,6 +8,8 @@
 
 namespace Joomla\Filesystem\Stream;
 
+use Joomla\Filesystem\Support\StringController;
+
 /**
  * String Stream Wrapper
  *
@@ -15,7 +17,7 @@ namespace Joomla\Filesystem\Stream;
  * you would normally use a regular stream wrapper
  *
  * @since       1.0
- * @deprecated  1.3.0  Use StringWrapper instead
+ * @deprecated  2.0  Use StringWrapper instead
  */
 class String extends StringWrapper
 {
