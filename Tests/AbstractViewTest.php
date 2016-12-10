@@ -6,8 +6,6 @@
 
 namespace Joomla\View\Tests;
 
-use Joomla\Model;
-
 require_once __DIR__ . '/stubs/tbase.php';
 
 /**
@@ -60,7 +58,7 @@ class AbstractViewTest extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
-		$model = Model\Tests\Mock\Model::create($this);
+		$model = $this->getMockBuilder('Joomla\\Model\\ModelInterface')->getMock();
 
 		$this->instance = new BaseView($model);
 	}

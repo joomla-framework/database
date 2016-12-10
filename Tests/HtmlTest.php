@@ -6,7 +6,6 @@
 
 namespace Joomla\View\Tests;
 
-use Joomla\Model;
 use Joomla\Test\TestHelper;
 
 require_once __DIR__ . '/stubs/thtml.php';
@@ -36,7 +35,7 @@ class AbstractHtmlViewTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->assertAttributeEquals(new \SplPriorityQueue, 'paths', $this->instance, 'Check default paths.');
 
-		$model = Model\Tests\Mock\Model::create($this);
+		$model = $this->getMockBuilder('Joomla\\Model\\ModelInterface')->getMock();
 		$paths = new \SplPriorityQueue;
 		$paths->insert('foo', 1);
 
@@ -231,7 +230,7 @@ class AbstractHtmlViewTest extends \PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
-		$model = Model\Tests\Mock\Model::create($this);
+		$model = $this->getMockBuilder('Joomla\\Model\\ModelInterface')->getMock();
 
 		$this->instance = new HtmlView($model);
 	}
