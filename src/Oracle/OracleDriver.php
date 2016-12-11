@@ -81,7 +81,7 @@ class OracleDriver extends PdoDriver
 	public function __destruct()
 	{
 		$this->freeResult();
-		unset($this->connection);
+		$this->connection = null;
 	}
 
 	/**
@@ -120,7 +120,7 @@ class OracleDriver extends PdoDriver
 	{
 		// Close the connection.
 		$this->freeResult();
-		unset($this->connection);
+		$this->connection = null;
 	}
 
 	/**
