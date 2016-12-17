@@ -79,6 +79,6 @@ class Yaml extends AbstractRegistryFormat
 	{
 		$array = $this->parser->parse(trim($data));
 
-		return json_decode(json_encode($array));
+		return (object) json_decode(json_encode($array));
 	}
 }

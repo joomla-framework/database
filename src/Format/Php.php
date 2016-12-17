@@ -81,7 +81,7 @@ class Php extends AbstractRegistryFormat
 	 */
 	public function stringToObject($data, array $options = array())
 	{
-		return true;
+		return new \stdClass;
 	}
 
 	/**

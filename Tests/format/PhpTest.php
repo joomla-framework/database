@@ -135,7 +135,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
 		$class = new Php;
 
 		// This method is not implemented in the class. The test is to achieve 100% code coverage
-		$this->assertTrue($class->stringToObject(''));
+		$this->assertInstanceOf('stdClass', $class->stringToObject(''));
 	}
 
 	/**
