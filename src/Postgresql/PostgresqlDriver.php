@@ -781,7 +781,7 @@ class PostgresqlDriver extends DatabaseDriver
 				// If connect fails, ignore that exception and throw the normal exception.
 				{
 					// Get the error number and message.
-					$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE) . ' ';
+					$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
 					$this->errorMsg = pg_last_error($this->connection);
 
 					// Throw the normal query exception.
@@ -791,7 +791,7 @@ class PostgresqlDriver extends DatabaseDriver
 						array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
 					);
 
-					throw new ExecutionFailureException($sql, $this->errorMsg);
+					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
 				// Since we were able to reconnect, run the query again.
@@ -801,7 +801,7 @@ class PostgresqlDriver extends DatabaseDriver
 			// The server was not disconnected.
 			{
 				// Get the error number and message.
-				$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE) . ' ';
+				$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
 				$this->errorMsg = pg_last_error($this->connection);
 
 				// Throw the normal query exception.
@@ -811,7 +811,7 @@ class PostgresqlDriver extends DatabaseDriver
 					array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
 				);
 
-				throw new ExecutionFailureException($sql, $this->errorMsg);
+				throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 			}
 		}
 
