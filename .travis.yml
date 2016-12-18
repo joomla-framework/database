@@ -30,7 +30,6 @@ matrix:
         - mysql
         - postgresql
   allow_failures:
-    - php: 7.1
     - php: hhvm
 
 before_script:

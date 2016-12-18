@@ -57,7 +57,7 @@ class SqliteDriver extends PdoDriver
 	public function disconnect()
 	{
 		$this->freeResult();
-		unset($this->connection);
+		$this->connection = null;
 	}
 
 	/**

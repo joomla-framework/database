@@ -20,7 +20,7 @@
     "suggest": {
         "joomla/di": "To use the Database ServiceProviderInterface objects, install joomla/di.",
         "ext-mysqli": "To connect to a MySQL database via MySQLi",
-        "ext-pdo": "To connect to a MySQL, Oracle, or SQLite database via PDO",
+        "ext-pdo": "To connect to a MySQL, Oracle, PostgreSQL, or SQLite database via PDO",
         "ext-pgsql": "To connect to a PostgreSQL database",
         "ext-sqlsrv": "To connect to a SQL Server database"
     },

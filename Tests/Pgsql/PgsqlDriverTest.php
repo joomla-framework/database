@@ -863,7 +863,7 @@ class PgsqlDriverTest extends PgsqlCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
+	 * @deprecated
 	 */
 	public function testTest()
 	{

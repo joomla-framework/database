@@ -431,7 +431,7 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	 * @return  mixed   A value if the property name is valid, null otherwise.
 	 *
 	 * @since       1.4.0
-	 * @deprecated  2.0  This is a B/C proxy since $this->name was previously public
+	 * @deprecated  1.4.0  This is a B/C proxy since $this->name was previously public
 	 */
 	public function __get($name)
 	{
@@ -632,6 +632,10 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 				$this->serverType = 'mysql';
 			}
 			elseif (stristr($name, 'postgre') !== false)
+			{
+				$this->serverType = 'postgresql';
+			}
+			elseif (stristr($name, 'pgsql') !== false)
 			{
 				$this->serverType = 'postgresql';
 			}
