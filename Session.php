@@ -649,7 +649,7 @@ class Session implements \IteratorAggregate
 		 */
 		if (isset($_COOKIE[session_name()]))
 		{
-			$this->input->cookie(session_name(), '', 1);
+			$this->input->cookie->set(session_name(), '', 1);
 		}
 
 		session_unset();
