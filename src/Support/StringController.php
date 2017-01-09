@@ -50,7 +50,7 @@ class StringController
 	 *
 	 * @param   string  $reference  The key for the reference.
 	 *
-	 * @return  mixed  False if not set, reference if it it exists
+	 * @return  mixed  False if not set, reference if it exists
 	 *
 	 * @since   1.0
 	 */
