@@ -215,7 +215,7 @@ final class ArrayHelper
 		{
 			$value = null;
 
-			if (empty($keyCol))
+			if (!isset($keyCol))
 			{
 				$value = static::getValue($column, $i);
 			}
@@ -233,11 +233,21 @@ final class ArrayHelper
 			// Add the column
 			if (is_object($item))
 			{
-				$item->$colName = $value;
+				if (isset($colName))
+				{
+					$item->$colName = $value;
+				}
 			}
 			else
 			{
-				$item[$colName] = $value;
+				if (isset($colName))
+				{
+					$item[$colName] = $value;
+				}
+				else
+				{
+					$item[] = $value;
+				}
 			}
 
 			$result[$i] = $item;

@@ -244,6 +244,544 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Data provider for add column
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function seedTestAddColumn()
+	{
+		return array(
+			'generic array' => array(
+				array(
+					array(
+						1, 2, 3, 4, 5
+					), array(
+						6, 7, 8, 9, 10
+					), array(
+						11, 12, 13, 14, 15
+					), array(
+						16, 17, 18, 19, 20
+					)
+				),
+				array(101, 106, 111, 116),
+				null,
+				null,
+				array(
+					array(
+						1, 2, 3, 4, 5, 101
+					), array(
+						6, 7, 8, 9, 10, 106
+					), array(
+						11, 12, 13, 14, 15, 111
+					), array(
+						16, 17, 18, 19, 20, 116
+					)
+				),
+				'Should add column #5'
+			),
+			'associative array' => array(
+				array(
+					'a' => array(
+						1, 2, 3, 4, 5
+					),
+					'b' => array(
+						6, 7, 8, 9, 10
+					),
+					'c' => array(
+						11, 12, 13, 14, 15
+					),
+					'd' => array(
+						16, 17, 18, 19, 20
+					)
+				),
+				array('a' => 101, 'c' => 111, 'd' => 116, 'b' => 106),
+				null,
+				null,
+				array(
+					'a' => array(
+						1, 2, 3, 4, 5, 101
+					),
+					'b' => array(
+						6, 7, 8, 9, 10, 106
+					),
+					'c' => array(
+						11, 12, 13, 14, 15, 111
+					),
+					'd' => array(
+						16, 17, 18, 19, 20, 116
+					)
+				),
+				'Should add column #5 in correct associative order'
+			),
+			'generic array with lookup key' => array(
+				array(
+					array(
+						1, 2, 3, 4, 5
+					), array(
+						6, 7, 8, 9, 10
+					), array(
+						11, 12, 13, 14, 15
+					), array(
+						16, 17, 18, 19, 20
+					)
+				),
+				array(11 => 111, 1 => 101, 6 => 106, 16 => 116),
+				null,
+				0,
+				array(
+					array(
+						1, 2, 3, 4, 5, 101
+					), array(
+						6, 7, 8, 9, 10, 106
+					), array(
+						11, 12, 13, 14, 15, 111
+					), array(
+						16, 17, 18, 19, 20, 116
+					)
+				),
+				'Should add column #5 [101, 106, 111, 116] with column #0 as matching keys'
+			),
+			'generic array with existing key as column name' => array(
+				array(
+					array(
+						1, 2, 3, 4, 5
+					), array(
+						6, 7, 8, 9, 10
+					), array(
+						11, 12, 13, 14, 15
+					), array(
+						16, 17, 18, 19, 20
+					)
+				),
+				array(11 => 111, 1 => 101, 6 => 106, 16 => 116),
+				3,
+				0,
+				array(
+					array(
+						1, 2, 3, 101, 5,
+					), array(
+						6, 7, 8, 106, 10,
+					), array(
+						11, 12, 13, 111, 15,
+					), array(
+						16, 17, 18, 116, 20,
+					)
+				),
+				'Should replace column #3 [4, 9, 14, 19] with [101, 106, 111, 116] respective to column #0 as matching keys'
+			),
+			'array of associative arrays' => array(
+				array(
+					array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				array(104, 109, 114, 119),
+				'six',
+				null,
+				array(
+					array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5, 'six' => 104
+					),
+					array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10, 'six' => 109
+					),
+					array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15, 'six' => 114
+					),
+					array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20, 'six' => 119
+					)
+				),
+				'Should add column \'six\''
+			),
+			'array of associative array with key' => array(
+				array(
+					array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				array(4 => 104, 9 => 109, 14 => 114, 19 => 119),
+				'six',
+				'four',
+				array(
+					array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5, 'six' => 104
+					),
+					array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10, 'six' => 109
+					),
+					array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15, 'six' => 114
+					),
+					array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20, 'six' => 119
+					)
+				),
+				'Should add column \'six\' with respective match from column \'four\''
+			),
+			'object array' => array(
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					(object) array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				array(104, 109, 114, 119),
+				'six',
+				null,
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5, 'six' => 104
+					),
+					(object) array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10, 'six' => 109
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15, 'six' => 114
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20, 'six' => 119
+					)
+				),
+				'Should add column \'six\''
+			),
+			'object array with key' => array(
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					(object) array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				array(4 => 104, 9 => 109, 14 => 114, 19 => 119),
+				'six',
+				'four',
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5, 'six' => 104
+					),
+					(object) array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10, 'six' => 109
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15, 'six' => 114
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20, 'six' => 119
+					)
+				),
+				'Should add column \'six\' with respective match from column \'four\''
+			),
+			'object array with invalid key' => array(
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					(object) array(
+						'one' => array('array is invalid for key'), 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				array(1 => 101, 6 => 106, 11 => 111, 16 => 116),
+				'six',
+				'one',
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5, 'six' => 101
+					),
+					(object) array(
+						'one' => array('array is invalid for key'), 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10, 'six' => null
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15, 'six' => 111
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20, 'six' => 116
+					)
+				),
+				'Should add column \'six\' with keys from column \'one\' and invalid key should introduce an null value added in the new column'
+			),
+			'object array with one missing key' => array(
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					(object) array(
+						'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				array(1 => 101, 6 => 106, 11 => 111, 16 => 116),
+				'six',
+				'one',
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5, 'six' => 101
+					),
+					(object) array(
+						'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10, 'six' => null
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15, 'six' => 111
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20, 'six' => 116
+					)
+				),
+				'Should add column \'six\' with keys from column \'one\' and the missing key should add a null value in the new column'
+			),
+			'object array with one non matching value' => array(
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					(object) array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => -9, 'five' => 10
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				array(4 => 104, 9 => 109, 14 => 114, 19 => 119),
+				'six',
+				'four',
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5, 'six' => 104
+					),
+					(object) array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => -9, 'five' => 10, 'six' => null,
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15, 'six' => 114
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20, 'six' => 119
+					)
+				),
+				'Should get column \'six\' with keys from column \'four\' and item with missing referenced value should set null in new column'
+			),
+			'object array with null column name' => array(
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					(object) array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				array(1 => 101,6 => 102, 11 => 103, 16 => 104),
+				null,
+				'one',
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					(object) array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				'Should skip entire set and return the original value as automatic key is not possible with objects'
+			),
+		);
+	}
+
+	/**
+	 * Data provider for add column
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function seedTestDropColumn()
+	{
+		return array(
+			'generic array' => array(
+				array(
+					array(
+						1, 2, 3, 4, 5
+					), array(
+						6, 7, 8, 9, 10
+					), array(
+						11, 12, 13, 14, 15
+					), array(
+						16, 17, 18, 19, 20
+					)
+				),
+				4,
+				array(
+					array(
+						1, 2, 3, 4,
+					), array(
+						6, 7, 8, 9,
+					), array(
+						11, 12, 13, 14,
+					), array(
+						16, 17, 18, 19,
+					)
+				),
+				'Should drop column #4'
+			),
+			'associative array' => array(
+				array(
+					array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				'one',
+				array(
+					array(
+						'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5,
+					),
+					array(
+						'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10,
+					),
+					array(
+						'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15,
+					),
+					array(
+						'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20,
+					)
+				),
+				'Should drop column \'one\''
+			),
+			'object array' => array(
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					(object) array(
+						'one' => 6, 'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				'one',
+				array(
+					(object) array(
+						'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5,
+					),
+					(object) array(
+						'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10,
+					),
+					(object) array(
+						'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15,
+					),
+					(object) array(
+						'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20,
+					)
+				),
+				'Should drop column \'one\''
+			),
+			'array with non existing column' => array(
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					(object) array(
+						'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				'seven',
+				array(
+					(object) array(
+						'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5
+					),
+					(object) array(
+						'two' => 7, 'three' => 8, 'four' => 9, 'five' => 10
+					),
+					(object) array(
+						'one' => 11, 'two' => 12, 'three' => 13, 'four' => 14, 'five' => 15
+					),
+					(object) array(
+						'one' => 16, 'two' => 17, 'three' => 18, 'four' => 19, 'five' => 20
+					)
+				),
+				'Should not drop any column when target column does not exist'
+			),
+		);
+	}
+
+	/**
 	 * Data provider for get column
 	 *
 	 * @return  array
@@ -1613,6 +2151,46 @@ class ArrayHelperTest extends PHPUnit_Framework_TestCase
 		}
 
 		$this->assertEquals($expect, $output);
+	}
+
+	/**
+	 * Test adding a column from an array (by index or association).
+	 *
+	 * @param   array   $input    The source array
+	 * @param   array   $column   The array to be used as new column
+	 * @param   string  $colName  The index of the new column or name of the new object property
+	 * @param   string  $keyCol   The index of the column or name of object property to be used for mapping with the new column
+	 * @param   array   $expect   The expected results
+	 * @param   string  $message  The failure message
+	 *
+	 * @return  void
+	 *
+	 * @dataProvider  seedTestAddColumn
+	 * @covers        Joomla\Utilities\ArrayHelper::addColumn
+	 * @since         __DEPLOY_VERSION__
+	 */
+	public function testAddColumn($input, $column, $colName, $keyCol, $expect, $message)
+	{
+		$this->assertEquals($expect, ArrayHelper::addColumn($input, $column, $colName, $keyCol), $message);
+	}
+
+	/**
+	 * Test removing a column from an array (by index or association).
+	 *
+	 * @param   array   $input    The source array
+	 * @param   string  $colName  The index of the new column or name of the new object property
+	 * @param   array   $expect   The expected results
+	 * @param   string  $message  The failure message
+	 *
+	 * @return  void
+	 *
+	 * @dataProvider  seedTestDropColumn
+	 * @covers        Joomla\Utilities\ArrayHelper::dropColumn
+	 * @since         __DEPLOY_VERSION__
+	 */
+	public function testDropColumn($input, $colName, $expect, $message)
+	{
+		$this->assertEquals($expect, ArrayHelper::dropColumn($input, $colName), $message);
 	}
 
 	/**
