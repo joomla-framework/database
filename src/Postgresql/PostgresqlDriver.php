@@ -734,7 +734,6 @@ class PostgresqlDriver extends DatabaseDriver
 		// Take a local copy so that we don't modify the original query and cause issues later
 		$sql = $this->replacePrefix((string) $this->sql);
 
-
 		if (!($this->sql instanceof LimitableInterface) && ($this->limit > 0 || $this->offset > 0))
 		{
 			$sql .= ' LIMIT ' . $this->limit . ' OFFSET ' . $this->offset;
