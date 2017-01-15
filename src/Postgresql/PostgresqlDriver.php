@@ -799,12 +799,11 @@ class PostgresqlDriver extends DatabaseDriver
 					// Get the error number and message.
 					$this->errorMsg = pg_last_error($this->connection);
 
-					if ($this->cursor === false)
+					// Only get an error number if we have a non-boolean false cursor, otherwise use default 0
+					if ($this->cursor !== false)
 					{
-						throw new ExecutionFailureException($this->sql, $this->errorMsg);
+						$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
 					}
-
-					$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
 
 					// Throw the normal query exception.
 					$this->log(
