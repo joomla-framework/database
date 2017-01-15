@@ -89,9 +89,12 @@ class Archive
 			case 'gzip':
 				// This may just be an individual file (e.g. sql script)
 				$tmpfname = $this->options['tmp_path'] . '/' . uniqid('gzip');
-				$gzresult = $this->getAdapter('gzip')->extract($archivename, $tmpfname);
 
-				if ($gzresult instanceof \Exception)
+				try
+				{
+					$this->getAdapter('gzip')->extract($archivename, $tmpfname);
+				}
+				catch (\RuntimeException $exception)
 				{
 					@unlink($tmpfname);
 
@@ -117,9 +120,12 @@ class Archive
 			case 'bzip2':
 				// This may just be an individual file (e.g. sql script)
 				$tmpfname = $this->options['tmp_path'] . '/' . uniqid('bzip2');
-				$bzresult = $this->getAdapter('bzip2')->extract($archivename, $tmpfname);
 
-				if ($bzresult instanceof \Exception)
+				try
+				{
+					$this->getAdapter('bzip2')->extract($archivename, $tmpfname);
+				}
+				catch (\RuntimeException $exception)
 				{
 					@unlink($tmpfname);
 
@@ -144,12 +150,7 @@ class Archive
 				throw new \InvalidArgumentException(sprintf('Unknown archive type: %s', $ext));
 		}
 
-		if (!$result || $result instanceof \Exception)
-		{
-			return false;
-		}
-
-		return true;
+		return $result;
 	}
 
 	/**
