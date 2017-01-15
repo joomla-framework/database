@@ -126,10 +126,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	public function __destruct()
 	{
-		if (is_resource($this->connection))
-		{
-			pg_close($this->connection);
-		}
+		$this->disconnect();
 	}
 
 	/**
@@ -203,6 +200,7 @@ class PostgresqlDriver extends DatabaseDriver
 
 		pg_set_error_verbosity($this->connection, PGSQL_ERRORS_DEFAULT);
 		pg_query($this->connection, 'SET standard_conforming_strings=off');
+		pg_query($this->connection, 'SET escape_string_warning=off');
 	}
 
 	/**
@@ -217,6 +215,11 @@ class PostgresqlDriver extends DatabaseDriver
 		// Close the connection.
 		if (is_resource($this->connection))
 		{
+			foreach ($this->disconnectHandlers as $h)
+			{
+				call_user_func_array($h, array( &$this));
+			}
+
 			pg_close($this->connection);
 		}
 
@@ -330,6 +333,19 @@ class PostgresqlDriver extends DatabaseDriver
 		$array = $this->loadAssocList();
 
 		return $array[0]['lc_collate'];
+	}
+
+	/**
+	 * Method to get the database connection collation, as reported by the driver. If the connector doesn't support
+	 * reporting this value please return an empty string.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getConnectionCollation()
+	{
+		return pg_client_encoding($this->connection);
 	}
 
 	/**
@@ -723,6 +739,12 @@ class PostgresqlDriver extends DatabaseDriver
 		// Take a local copy so that we don't modify the original query and cause issues later
 		$sql = $this->replacePrefix((string) $this->sql);
 
+
+		if (!($this->sql instanceof LimitableInterface) && ($this->limit > 0 || $this->offset > 0))
+		{
+			$sql .= ' LIMIT ' . $this->limit . ' OFFSET ' . $this->offset;
+		}
+
 		$count = $this->getCount();
 
 		// Increment the query counter.
@@ -744,7 +766,7 @@ class PostgresqlDriver extends DatabaseDriver
 		$this->errorMsg = '';
 
 		// Bind the variables
-		if ($this->sql instanceof PreparableInterface)
+		if ($this->sql instanceof PreparableInterface && !instanceof LimitableInterface)
 		{
 			$bounded =& $this->sql->getBounded();
 
@@ -781,8 +803,14 @@ class PostgresqlDriver extends DatabaseDriver
 				// If connect fails, ignore that exception and throw the normal exception.
 				{
 					// Get the error number and message.
-					$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
 					$this->errorMsg = pg_last_error($this->connection);
+
+					if ($this->cursor === false)
+					{
+						throw new JDatabaseExceptionExecuting($this->sql, $this->errorMsg);
+					}
+
+					$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
 
 					// Throw the normal query exception.
 					$this->log(
