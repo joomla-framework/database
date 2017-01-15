@@ -96,7 +96,7 @@ class Zip implements ExtractableInterface
 	/**
 	 * Holds the options array.
 	 *
-	 * @var    mixed  Array or object that implements \ArrayAccess
+	 * @var    array|\ArrayAccess
 	 * @since  1.0
 	 */
 	protected $options = array();
@@ -104,12 +104,20 @@ class Zip implements ExtractableInterface
 	/**
 	 * Create a new Archive object.
 	 *
-	 * @param   mixed  $options  An array of options or an object that implements \ArrayAccess
+	 * @param   array|\ArrayAccess  $options  An array of options or an object that implements \ArrayAccess
 	 *
 	 * @since   1.0
+	 * @throws  \InvalidArgumentException
 	 */
 	public function __construct($options = array())
 	{
+		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		{
+			throw new \InvalidArgumentException(
+				'The options param must be an array or implement the ArrayAccess interface.'
+			);
+		}
+
 		$this->options = $options;
 	}
 
@@ -216,7 +224,7 @@ class Zip implements ExtractableInterface
 	 * @param   string  $archive      Path to ZIP archive to extract.
 	 * @param   string  $destination  Path to extract archive into.
 	 *
-	 * @return  mixed   True if successful
+	 * @return  boolean  True if successful
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException

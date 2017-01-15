@@ -43,7 +43,7 @@ class Gzip implements ExtractableInterface
 	/**
 	 * Holds the options array.
 	 *
-	 * @var    mixed  Array or object that implements \ArrayAccess
+	 * @var    array|\ArrayAccess
 	 * @since  1.0
 	 */
 	protected $options = array();
@@ -51,12 +51,20 @@ class Gzip implements ExtractableInterface
 	/**
 	 * Create a new Archive object.
 	 *
-	 * @param   mixed  $options  An array of options or an object that implements \ArrayAccess
+	 * @param   array|\ArrayAccess  $options  An array of options
 	 *
 	 * @since   1.0
+	 * @throws  \InvalidArgumentException
 	 */
 	public function __construct($options = array())
 	{
+		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		{
+			throw new \InvalidArgumentException(
+				'The options param must be an array or implement the ArrayAccess interface.'
+			);
+		}
+
 		$this->options = $options;
 	}
 

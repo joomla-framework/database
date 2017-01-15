@@ -21,7 +21,7 @@ class Archive
 	/**
 	 * The array of instantiated archive adapters.
 	 *
-	 * @var    array
+	 * @var    ExtractableInterface[]
 	 * @since  1.0
 	 */
 	protected $adapters = array();
@@ -29,7 +29,7 @@ class Archive
 	/**
 	 * Holds the options array.
 	 *
-	 * @var    mixed  Array or object that implements \ArrayAccess
+	 * @var    array|\ArrayAccess
 	 * @since  1.0
 	 */
 	public $options = array();
@@ -37,12 +37,20 @@ class Archive
 	/**
 	 * Create a new Archive object.
 	 *
-	 * @param   mixed  $options  An array of options or an object that implements \ArrayAccess
+	 * @param   array|\ArrayAccess  $options  An array of options
 	 *
 	 * @since   1.0
+	 * @throws  \InvalidArgumentException
 	 */
 	public function __construct($options = array())
 	{
+		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		{
+			throw new \InvalidArgumentException(
+				'The options param must be an array or implement the ArrayAccess interface.'
+			);
+		}
+
 		// Make sure we have a tmp directory.
 		isset($options['tmp_path']) or $options['tmp_path'] = realpath(sys_get_temp_dir());
 
