@@ -206,7 +206,7 @@ class Zip implements ExtractableInterface
 	 */
 	public function checkZipData(&$data)
 	{
-		return strpos($data, $this->fileHeader) === false;
+		return strpos($data, $this->fileHeader) !== false;
 	}
 
 	/**
