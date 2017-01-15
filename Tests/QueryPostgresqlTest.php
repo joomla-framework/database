@@ -26,9 +26,9 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 	 * The instance of the object to test.
 	 *
 	 * @var    PostgresqlQuery
-	 * @since  _VERSION_NAME_
+	 * @since  __DEPLOY_VERSION__
 	 */
-	private $_instance;
+	private $instance;
 
 	/**
 	 * Data for the testNullDate test.
@@ -121,7 +121,7 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  PostgresqlQuery
 	 *
-	 * @since   _VERSION_NAME_
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function mockGetQuery($new = false)
 	{
@@ -154,7 +154,7 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 			array('escape' => array($this, 'mockEscape'))
 		);
 
-		$this->_instance = new  PostgresqlQuery($this->dbo);
+		$this->instance = new  PostgresqlQuery($this->dbo);
 	}
 
 	/**
@@ -164,12 +164,12 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 	 * @return void
 	 *
 	 * @see     PHPUnit_Framework_TestCase::tearDown()
-	 * @since   _VERSION_NAME_
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function tearDown()
 	{
 		unset($this->dbo);
-		unset($this->_instance);
+		unset($this->instance);
 		parent::tearDown();
 	}
 
@@ -217,12 +217,12 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 	public function test__toStringUpdate()
 	{
 		// Test on ugly query
-		$this->_instance
+		$this->instance
 			->update('#__foo AS a')
 			->join('INNER', "b\roN\nb.id = a.id")
 			->set('a.hits = 0');
 
-		$string = (string) $this->_instance;
+		$string = (string) $this->instance;
 
 		$this->assertEquals(
 			PHP_EOL . "UPDATE #__foo AS a" .
@@ -232,14 +232,14 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 			$string
 		);
 
-		$this->_instance
+		$this->instance
 			->clear()
 			->update('#__foo AS a')
 			->join('INNER', 'b ON b.id = a.id')
 			->set('a.id = 2')
 			->where('b.id = 1');
 
-		$string = (string) $this->_instance;
+		$string = (string) $this->instance;
 
 		$this->assertEquals(
 			PHP_EOL . "UPDATE #__foo AS a" .
@@ -252,7 +252,7 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 		// Run method __toString() again on the same query
 		$this->assertEquals(
 			$string,
-			(string) $this->_instance
+			(string) $this->instance
 		);
 	}
 
