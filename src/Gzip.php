@@ -100,12 +100,11 @@ class Gzip implements ExtractableInterface
 				throw new \RuntimeException('Unable to decompress data');
 			}
 
-			if (File::write($destination, $buffer) === false)
+			if (!File::write($destination, $buffer))
 			{
 				throw new \RuntimeException('Unable to write archive');
 			}
 		}
-		// @codeCoverageIgnoreStart
 		else
 		{
 			// New style! streams!
@@ -148,7 +147,6 @@ class Gzip implements ExtractableInterface
 			$output->close();
 			$input->close();
 		}
-		// @codeCoverageIgnoreEnd
 
 		return true;
 	}

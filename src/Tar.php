@@ -127,7 +127,7 @@ class Tar implements ExtractableInterface
 					throw new \RuntimeException('Unable to create destination');
 				}
 
-				if (File::write($path, $buffer) === false)
+				if (!File::write($path, $buffer))
 				{
 					throw new \RuntimeException('Unable to write entry');
 				}
