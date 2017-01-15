@@ -228,15 +228,23 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public function escape($text, $extra = false)
 	{
-		$result = addslashes($text);
-		$result = str_replace("\'", "''", $result);
-		$result = str_replace('\"', '"', $result);
-		$result = str_replace('\/', '/', $result);
+		$result = str_replace("'", "''", $text);
+
+		// Fix for SQL Sever escape sequence, see https://support.microsoft.com/en-us/kb/164291
+		$result = str_replace(
+			array("\\\n",     "\\\r",     "\\\\\r\r\n"),
+			array("\\\\\n\n", "\\\\\r\r", "\\\\\r\n\r\n"),
+			$result
+		);
 
 		if ($extra)
 		{
-			// We need the below str_replace since the search in sql server doesn't recognize _ character.
-			$result = str_replace('_', '[_]', $result);
+			// Escape special chars
+			$result = str_replace(
+				array('[',   '_',   '%'),
+				array('[[]', '[_]', '[%]'),
+				$result
+			);
 		}
 
 		return $result;
