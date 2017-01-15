@@ -215,11 +215,6 @@ class PostgresqlDriver extends DatabaseDriver
 		// Close the connection.
 		if (is_resource($this->connection))
 		{
-			foreach ($this->disconnectHandlers as $h)
-			{
-				call_user_func_array($h, array( &$this));
-			}
-
 			pg_close($this->connection);
 		}
 
@@ -766,7 +761,7 @@ class PostgresqlDriver extends DatabaseDriver
 		$this->errorMsg = '';
 
 		// Bind the variables
-		if ($this->sql instanceof PreparableInterface && !instanceof LimitableInterface)
+		if ($this->sql instanceof PreparableInterface && !($this->sql instanceof LimitableInterface))
 		{
 			$bounded =& $this->sql->getBounded();
 
