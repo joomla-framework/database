@@ -761,7 +761,7 @@ class PostgresqlDriver extends DatabaseDriver
 		$this->errorMsg = '';
 
 		// Bind the variables
-		if ($this->sql instanceof PreparableInterface && !($this->sql instanceof LimitableInterface))
+		if ($this->sql instanceof PreparableInterface)
 		{
 			$bounded =& $this->sql->getBounded();
 
