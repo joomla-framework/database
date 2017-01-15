@@ -23,6 +23,14 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 	protected $dbo;
 
 	/**
+	 * The instance of the object to test.
+	 *
+	 * @var    PostgresqlQuery
+	 * @since  _VERSION_NAME_
+	 */
+	private $_instance;
+
+	/**
 	 * Data for the testNullDate test.
 	 *
 	 * @return  array
@@ -107,6 +115,27 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Callback for the dbo getQuery method.
+	 *
+	 * @param   boolean  $new  True to get a new query, false to get the last query.
+	 *
+	 * @return  PostgresqlQuery
+	 *
+	 * @since   _VERSION_NAME_
+	 */
+	public function mockGetQuery($new = false)
+	{
+		if ($new)
+		{
+			return new PostgresqlQuery($this->dbo);
+		}
+		else
+		{
+			return $this->$lastQuery;
+		}
+	}
+
+	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
@@ -124,6 +153,24 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 			$this,
 			array('escape' => array($this, 'mockEscape'))
 		);
+
+		$this->_instance = new  PostgresqlQuery($this->dbo);
+	}
+
+	/**
+	 * Tears down the fixture, for example, closes a network connection.
+	 * This method is called after a test is executed.
+	 *
+	 * @return void
+	 *
+	 * @see     PHPUnit_Framework_TestCase::tearDown()
+	 * @since   _VERSION_NAME_
+	 */
+	protected function tearDown()
+	{
+		unset($this->dbo);
+		unset($this->_instance);
+		parent::tearDown();
 	}
 
 	/**
@@ -142,7 +189,7 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 			->innerJoin('b ON b.id = a.id')
 			->where('b.id = 1')
 			->group('a.id')
-				->having('COUNT(a.id) > 3')
+			->having('COUNT(a.id) > 3')
 			->order('a.id');
 
 		$this->assertThat(
@@ -1097,7 +1144,7 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function testForUpdate ()
+	public function testForUpdate()
 	{
 		$q = new PostgresqlQuery($this->dbo);
 
@@ -1138,7 +1185,7 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function testForShare ()
+	public function testForShare()
 	{
 		$q = new PostgresqlQuery($this->dbo);
 
@@ -1179,7 +1226,7 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function testNoWait ()
+	public function testNoWait()
 	{
 		$q = new PostgresqlQuery($this->dbo);
 
