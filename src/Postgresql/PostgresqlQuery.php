@@ -239,8 +239,8 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 						$query .= (string) $this->where;
 					}
 
-						$this->from  = $tmpFrom;
-						$this->where = $tmpWhere;
+					$this->from  = $tmpFrom;
+					$this->where = $tmpWhere;
 				}
 				elseif ($this->where)
 				{
