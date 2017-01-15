@@ -807,7 +807,7 @@ class PostgresqlDriver extends DatabaseDriver
 
 					if ($this->cursor === false)
 					{
-						throw new JDatabaseExceptionExecuting($this->sql, $this->errorMsg);
+						throw new ExecutionFailureException($this->sql, $this->errorMsg);
 					}
 
 					$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
