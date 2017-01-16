@@ -695,4 +695,89 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 
 		return $query;
 	}
+
+	/**
+	 * Add to the current date and time in Postgresql.
+	 * Usage:
+	 * $query->select($query->dateAdd());
+	 * Prefixing the interval with a - (negative sign) will cause subtraction to be used.
+	 *
+	 * @param   datetime  $date      The date to add to
+	 * @param   string    $interval  The string representation of the appropriate number of units
+	 * @param   string    $datePart  The part of the date to perform the addition on
+	 *
+	 * @return  string  The string with the appropriate sql for addition of dates
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @note    Not all drivers support all units. Check appropriate references
+	 * @link    http://www.postgresql.org/docs/9.0/static/functions-datetime.html.
+	 */
+	public function dateAdd($date, $interval, $datePart)
+	{
+		if (substr($interval, 0, 1) != '-')
+		{
+			return "timestamp '" . $date . "' + interval '" . $interval . " " . $datePart . "'";
+		}
+		else
+		{
+			return "timestamp '" . $date . "' - interval '" . ltrim($interval, '-') . " " . $datePart . "'";
+		}
+	}
+
+	/**
+	 * Return correct regexp operator for Postgresql.
+	 *
+	 * Ensure that the regexp operator is Postgresql compatible.
+	 *
+	 * Usage:
+	 * $query->where('field ' . $query->regexp($search));
+	 *
+	 * @param   string  $value  The regex pattern.
+	 *
+	 * @return  string  Returns the regex operator.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function regexp($value)
+	{
+		return ' ~* ' . $value;
+	}
+
+	/**
+	 * Return correct rand() function for Postgresql.
+	 *
+	 * Ensure that the rand() function is Postgresql compatible.
+	 * 
+	 * Usage:
+	 * $query->Rand();
+	 * 
+	 * @return  string  The correct rand function.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function Rand()
+	{
+		return ' RANDOM() ';
+	}
+
+	/**
+	 * Find a value in a varchar used like a set.
+	 *
+	 * Ensure that the value is an integer before passing to the method.
+	 *
+	 * Usage:
+	 * $query->findInSet((int) $parent->id, 'a.assigned_cat_ids')
+	 *
+	 * @param   string  $value  The value to search for.
+	 *
+	 * @param   string  $set    The set of values.
+	 *
+	 * @return  string  Returns the find_in_set() postgresql translation.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function findInSet($value, $set)
+	{
+		return " $value = ANY (string_to_array($set, ',')::integer[]) ";
+	}
 }
