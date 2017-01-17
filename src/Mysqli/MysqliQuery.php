@@ -268,5 +268,4 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 	{
 		return ' find_in_set(' . $value . ', ' . $set . ')';
 	}
-
 }
