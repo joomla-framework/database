@@ -1122,15 +1122,27 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	 */
 	public function testExecute()
 	{
+		$checkQuery = self::$driver->getQuery(true)
+			 ->select('COUNT(*)')
+			 ->from('#__dbtest');
+		self::$driver->setQuery($checkQuery);
+
+		// Data is from `DatabasePostgresqlCase::getDataSet()`
+		$this->assertThat(self::$driver->loadResult(), $this->equalTo(4), __LINE__);
+
+		// jos_dbtest_id_seq == 2 because of `testInsertObject()`
+		// Reset jos_dbtest_id_seq
+		self::$driver->setQuery('ALTER SEQUENCE jos_dbtest_id_seq RESTART WITH 5')->execute();
+		
 		$query = self::$driver->getQuery(true);
 		$query->insert('jos_dbtest')
 			->columns('title,start_date,description')
 			->values("'testTitle','1970-01-01','testDescription'");
 		self::$driver->setQuery($query);
 
-		$this->assertThat(self::$driver->execute(), $this->isTrue(), __LINE__);
+		$this->assertThat((bool) self::$driver->execute(), $this->isTrue(), __LINE__);
 
-		$this->assertThat(self::$driver->insertid(), $this->equalTo(1), __LINE__);
+		$this->assertThat(self::$driver->insertid(), $this->equalTo(5), __LINE__);
 	}
 
 	/**
@@ -1157,9 +1169,9 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 
 		self::$driver->setQuery($query);
 
-		$this->assertThat(self::$driver->execute(), $this->isTrue(), __LINE__);
+		$this->assertThat((bool) self::$driver->execute(), $this->isTrue(), __LINE__);
 
-		$this->assertThat(self::$driver->insertid(), $this->equalTo(5), __LINE__);
+		$this->assertThat(self::$driver->insertid(), $this->equalTo(6), __LINE__);
 	}
 
 	/**
