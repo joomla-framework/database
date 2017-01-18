@@ -347,7 +347,7 @@ final class ArrayHelper
 	 * Utility function to return a value from a named array or a specified default
 	 *
 	 * @param   array|\ArrayAccess  $array    A named array or object that implements ArrayAccess
-	 * @param   string              $name     The key to search for
+	 * @param   string              $name     The key to search for (this can be an array index or a dot separated key sequence as in Registry)
 	 * @param   mixed               $default  The default value to give if no key found
 	 * @param   string              $type     Return type for the variable (INT, FLOAT, STRING, WORD, BOOLEAN, ARRAY)
 	 *
@@ -368,6 +368,15 @@ final class ArrayHelper
 		if (isset($array[$name]))
 		{
 			$result = $array[$name];
+		}
+		elseif (strpos($name, '.'))
+		{
+			list($name, $subset) = explode('.', $name, 2);
+
+			if (isset($array[$name]) && is_array($array[$name]))
+			{
+				return static::getValue($array[$name], $subset, $default, $type);
+			}
 		}
 
 		// Handle the default case
