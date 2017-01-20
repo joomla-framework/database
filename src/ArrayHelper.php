@@ -29,8 +29,8 @@ final class ArrayHelper
 	/**
 	 * Function to convert array to integer values
 	 *
-	 * @param   array  $array    The source array to convert
-	 * @param   mixed  $default  A default value (int|array) to assign if $array is not an array
+	 * @param   array      $array    The source array to convert
+	 * @param   int|array  $default  A default value to assign if $array is not an array
 	 *
 	 * @return  array
 	 *
