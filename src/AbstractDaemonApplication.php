@@ -15,9 +15,10 @@ use Psr\Log\LoggerAwareInterface;
 /**
  * Class to turn Cli applications into daemons.  It requires CLI and PCNTL support built into PHP.
  *
- * @see    http://www.php.net/manual/en/book.pcntl.php
- * @see    http://php.net/manual/en/features.commandline.php
- * @since  1.0
+ * @see         http://www.php.net/manual/en/book.pcntl.php
+ * @see         http://php.net/manual/en/features.commandline.php
+ * @since       1.0
+ * @deprecated  2.0  Deprecated without replacement
  */
 abstract class AbstractDaemonApplication extends AbstractCliApplication implements LoggerAwareInterface
 {
