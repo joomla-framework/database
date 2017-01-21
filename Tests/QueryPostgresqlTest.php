@@ -158,22 +158,6 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 *
-	 * @return void
-	 *
-	 * @see     PHPUnit_Framework_TestCase::tearDown()
-	 * @since   __DEPLOY_VERSION__
-	 */
-	protected function tearDown()
-	{
-		unset($this->dbo);
-		unset($this->instance);
-		parent::tearDown();
-	}
-
-	/**
 	 * Test for the PostgresqlQuery::__string method for a 'select' case.
 	 *
 	 * @return  void
