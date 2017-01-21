@@ -37,7 +37,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	{
 		if (!class_exists('\\Joomla\\Database\\DatabaseDriver'))
 		{
-			self::fail('The joomla/database package is not installed, cannot use this test case.');
+			static::fail('The joomla/database package is not installed, cannot use this test case.');
 		}
 
 		// We always want the default database test case to use an SQLite memory database.
@@ -50,24 +50,24 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 		try
 		{
 			// Attempt to instantiate the driver.
-			self::$driver = DatabaseDriver::getInstance($options);
+			static::$driver = DatabaseDriver::getInstance($options);
 
 			// Create a new PDO instance for an SQLite memory database and load the test schema into it.
 			$pdo = new \PDO('sqlite::memory:');
 			$pdo->exec(file_get_contents(__DIR__ . '/Schema/ddl.sql'));
 
 			// Set the PDO instance to the driver using reflection whizbangery.
-			TestHelper::setValue(self::$driver, 'connection', $pdo);
+			TestHelper::setValue(static::$driver, 'connection', $pdo);
 		}
 		catch (\RuntimeException $e)
 		{
-			self::$driver = null;
+			static::$driver = null;
 		}
 
 		// If for some reason an exception object was returned set our database object to null.
-		if (self::$driver instanceof \Exception)
+		if (static::$driver instanceof \Exception)
 		{
-			self::$driver = null;
+			static::$driver = null;
 		}
 	}
 
@@ -80,7 +80,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 */
 	public static function tearDownAfterClass()
 	{
-		self::$driver = null;
+		static::$driver = null;
 	}
 
 	/**
@@ -146,9 +146,9 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 */
 	protected function getConnection()
 	{
-		if (!is_null(self::$driver))
+		if (!is_null(static::$driver))
 		{
-			return $this->createDefaultDBConnection(self::$driver->getConnection(), ':memory:');
+			return $this->createDefaultDBConnection(static::$driver->getConnection(), ':memory:');
 		}
 
 		return null;
