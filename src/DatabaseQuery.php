@@ -188,7 +188,9 @@ abstract class DatabaseQuery
 	protected $union = null;
 
 	/**
-	 * @var    Query\QueryElement  The unionAll element.
+	 * The unionAll element.
+	 *
+	 * @var    Query\QueryElement
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $unionAll = null;
@@ -665,7 +667,7 @@ abstract class DatabaseQuery
 	 *
 	 * @return  string  The string with the appropriate sql for addition of dates
 	 *
-	 * @see     http://dev.mysql.com/doc/refman/5.1/en/date-and-time-functions.html#function_date-add
+	 * @see     http://dev.mysql.com/doc/en/date-and-time-functions.html
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function dateAdd($date, $interval, $datePart)
@@ -803,10 +805,9 @@ abstract class DatabaseQuery
 	 * $query->findInSet((int) $parent->id, 'a.assigned_cat_ids')
 	 *
 	 * @param   string  $value  The value to search for.
-	 *
 	 * @param   string  $set    The set of values.
 	 *
-	 * @return  string  Returns the find_in_set() Mysql function and must be translated in each driver.
+	 * @return  string  Returns the find_in_set() MySQL function and must be translated in each driver.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -1551,7 +1552,7 @@ abstract class DatabaseQuery
 	public function union($query, $distinct = false, $glue = '')
 	{
 		// Clear any ORDER BY clause in UNION query
-		// See http://dev.mysql.com/doc/refman/5.0/en/union.html
+		// See http://dev.mysql.com/doc/en/union.html
 		if (!is_null($this->order))
 		{
 			$this->clear('order');
@@ -1606,7 +1607,7 @@ abstract class DatabaseQuery
 		$glue = ')' . PHP_EOL . 'UNION ALL (';
 		$name = 'UNION ALL ()';
 
-		// Get the JDatabaseQueryElement if it does not exist
+		// Get the QueryElement if it does not exist
 		if (is_null($this->unionAll))
 		{
 			$this->unionAll = new Query\QueryElement($name, $query, "$glue");
