@@ -255,6 +255,12 @@ abstract class DatabaseQuery
 				break;
 
 			case 'select':
+
+				if ($this->union) 
+				{
+					$query .= "(";
+				}
+
 				$query .= (string) $this->select;
 				$query .= (string) $this->from;
 
@@ -285,6 +291,11 @@ abstract class DatabaseQuery
 				if ($this->order)
 				{
 					$query .= (string) $this->order;
+				}
+
+				if ($this->union) 
+				{
+					$query .= ")" . $this->union;
 				}
 
 				break;
@@ -1502,12 +1513,6 @@ abstract class DatabaseQuery
 	 */
 	public function union($query, $distinct = false, $glue = '')
 	{
-		// Clear any ORDER BY clause in UNION query
-		// See http://dev.mysql.com/doc/refman/5.0/en/union.html
-		if (!is_null($this->order))
-		{
-			$this->clear('order');
-		}
 
 		// Set up the DISTINCT flag, the name with parentheses, and the glue.
 		if ($distinct)
