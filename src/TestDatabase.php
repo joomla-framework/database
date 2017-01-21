@@ -51,21 +51,12 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 		{
 			// Attempt to instantiate the driver.
 			static::$driver = DatabaseDriver::getInstance($options);
+			static::$driver->connect();
 
-			// Create a new PDO instance for an SQLite memory database and load the test schema into it.
-			$pdo = new \PDO('sqlite::memory:');
-			$pdo->exec(file_get_contents(__DIR__ . '/Schema/ddl.sql'));
-
-			// Set the PDO instance to the driver using reflection whizbangery.
-			TestHelper::setValue(static::$driver, 'connection', $pdo);
+			// Get the PDO instance for an SQLite memory database and load the test schema into it.
+			static::$driver->getConnection()->exec(file_get_contents(JPATH_TESTS . '/schema/ddl.sql'));
 		}
 		catch (\RuntimeException $e)
-		{
-			static::$driver = null;
-		}
-
-		// If for some reason an exception object was returned set our database object to null.
-		if (static::$driver instanceof \Exception)
 		{
 			static::$driver = null;
 		}
@@ -80,7 +71,11 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 */
 	public static function tearDownAfterClass()
 	{
-		static::$driver = null;
+		if (static::$driver !== null)
+		{
+			static::$driver->disconnect();
+			static::$driver = null;
+		}
 	}
 
 	/**
