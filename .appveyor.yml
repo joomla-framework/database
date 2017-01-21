@@ -12,12 +12,10 @@ environment:
   - dependencies: lowest 
     php_ver_target: 5.6
   - dependencies: current
+    php_ver_target: 5.6
+  - dependencies: current
     php_ver_target: 7.0
   - dependencies: current
-    php_ver_target: 7.1
-  - dependencies: highest
-    php_ver_target: 7.0
-  - dependencies: highest
     php_ver_target: 7.1
 
 ## Cache composer bits
@@ -41,7 +39,7 @@ install:
     - cd c:\tools\php
     - IF %PHP%==1 copy php.ini-production php.ini /Y
     - IF %PHP%==1 echo date.timezone="UTC" >> php.ini
-    - IF %PHP%==1 echo extension_dir=c:\tools\php\ext >> php.ini
+    - IF %PHP%==1 echo extension_dir=ext >> php.ini
     - IF %PHP%==1 echo extension=php_openssl.dll >> php.ini
     - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
     - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini
