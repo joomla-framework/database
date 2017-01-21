@@ -455,21 +455,20 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function __call($method, $args)
 	{
-		if (empty($args))
+		if (!empty($args))
 		{
-			return;
-		}
+			switch ($method)
+			{
+				case 'q':
+					return $this->quote($args[0], isset($args[1]) ? $args[1] : true);
+					break;
 
-		switch ($method)
-		{
-			case 'q':
-				return $this->quote($args[0], isset($args[1]) ? $args[1] : true);
-				break;
-
-			case 'qn':
-				return $this->quoteName($args[0], isset($args[1]) ? $args[1] : null);
-				break;
+				case 'qn':
+					return $this->quoteName($args[0], isset($args[1]) ? $args[1] : null);
+					break;
+			}
 		}
+		return null;
 	}
 
 	/**

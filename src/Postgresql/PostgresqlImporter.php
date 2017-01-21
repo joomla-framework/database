@@ -13,6 +13,8 @@ use Joomla\Database\DatabaseImporter;
 /**
  * PostgreSQL Database Importer.
  *
+ * @property PostgresqlDriver $db
+ *
  * @since  1.0
  */
 class PostgresqlImporter extends DatabaseImporter

@@ -21,6 +21,8 @@ use Joomla\Database\Query\PreparableInterface;
  *
  * @see    http://php.net/pdo
  * @since  1.0
+ *
+ * @property \PDO $connection
  */
 abstract class PdoDriver extends DatabaseDriver
 {
@@ -809,6 +811,7 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			return $this->prepared->fetch(\PDO::FETCH_NUM);
 		}
+		return false;
 	}
 
 	/**
@@ -831,6 +834,7 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			return $this->prepared->fetch(\PDO::FETCH_ASSOC);
 		}
+		return false;
 	}
 
 	/**
@@ -854,6 +858,7 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			return $this->prepared->fetchObject($class);
 		}
+		return false;
 	}
 
 	/**
