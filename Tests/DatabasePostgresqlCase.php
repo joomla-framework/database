@@ -89,6 +89,22 @@ abstract class DatabasePostgresqlCase extends TestDatabase
 	}
 
 	/**
+	 * This method is called after the last test of this test class is run.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public static function tearDownAfterClass()
+	{
+		if (static::$driver !== null)
+		{
+			static::$driver->disconnect();
+			static::$driver = null;
+		}
+	}
+
+	/**
 	 * Gets the data set to be loaded into the database during setup
 	 *
 	 * @return  \PHPUnit_Extensions_Database_DataSet_XmlDataSet
