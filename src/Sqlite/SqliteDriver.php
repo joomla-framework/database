@@ -8,7 +8,7 @@
 
 namespace Joomla\Database\Sqlite;
 
-use Sqlite3;
+use SQLite3;
 use Joomla\Database\Pdo\PdoDriver;
 
 /**
@@ -394,7 +394,7 @@ class SqliteDriver extends PdoDriver
 	 */
 	public static function isSupported()
 	{
-		return class_exists('\\PDO') && in_array('sqlite', \PDO::getAvailableDrivers());
+		return class_exists('\\PDO') && class_exists('\\SQLite3') && in_array('sqlite', \PDO::getAvailableDrivers());
 	}
 
 	/**
