@@ -47,7 +47,7 @@ abstract class DatabaseOracleCase extends TestDatabase
 		// Make sure the driver is supported
 		if (!OracleDriver::isSupported())
 		{
-			static::skip('The PDO Oracle driver is not supported on this platform.');
+			static::markTestSkipped('The PDO Oracle driver is not supported on this platform.');
 		}
 
 		// First let's trim the oci: part off the front of the DSN if it exists.

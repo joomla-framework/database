@@ -47,7 +47,7 @@ abstract class DatabasePgsqlCase extends TestDatabase
 		// Make sure the driver is supported
 		if (!PgsqlDriver::isSupported())
 		{
-			static::skip('The PDO PostgreSQL driver is not supported on this platform.');
+			static::markTestSkipped('The PDO PostgreSQL driver is not supported on this platform.');
 		}
 
 		// First let's trim the pgsql: part off the front of the DSN if it exists.

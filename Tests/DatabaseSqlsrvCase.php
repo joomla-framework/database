@@ -47,7 +47,7 @@ abstract class DatabaseSqlsrvCase extends TestDatabase
 		// Make sure the driver is supported
 		if (!SqlsrvDriver::isSupported())
 		{
-			static::skip('The SQL Server driver is not supported on this platform.');
+			static::markTestSkipped('The SQL Server driver is not supported on this platform.');
 		}
 
 		// First let's trim the sqlsrv: part off the front of the DSN if it exists.

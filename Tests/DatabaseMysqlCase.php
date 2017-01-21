@@ -47,7 +47,7 @@ abstract class DatabaseMysqlCase extends TestDatabase
 		// Make sure the driver is supported
 		if (!MysqlDriver::isSupported())
 		{
-			static::skip('The PDO MySQL driver is not supported on this platform.');
+			static::markTestSkipped('The PDO MySQL driver is not supported on this platform.');
 		}
 
 		// First let's trim the mysql: part off the front of the DSN if it exists.
