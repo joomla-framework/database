@@ -54,7 +54,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 			static::$driver->connect();
 
 			// Get the PDO instance for an SQLite memory database and load the test schema into it.
-			static::$driver->getConnection()->exec(file_get_contents(JPATH_TESTS . '/schema/ddl.sql'));
+			static::$driver->getConnection()->exec(file_get_contents(__DIR__ . '/Schema/ddl.sql'));
 		}
 		catch (\RuntimeException $e)
 		{
