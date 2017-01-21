@@ -77,17 +77,11 @@ abstract class DatabaseMysqliCase extends TestDatabase
 		try
 		{
 			// Attempt to instantiate the driver.
-			self::$driver = DatabaseDriver::getInstance(self::$options);
+			static::$driver = DatabaseDriver::getInstance(self::$options);
 		}
 		catch (\RuntimeException $e)
 		{
-			self::$driver = null;
-		}
-
-		// If for some reason an exception object was returned set our database object to null.
-		if (self::$driver instanceof \Exception)
-		{
-			self::$driver = null;
+			static::$driver = null;
 		}
 	}
 

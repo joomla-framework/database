@@ -90,17 +90,11 @@ abstract class DatabaseOracleCase extends TestDatabase
 		try
 		{
 			// Attempt to instantiate the driver.
-			self::$driver = DatabaseDriver::getInstance(self::$options);
+			static::$driver = DatabaseDriver::getInstance(self::$options);
 		}
 		catch (\RuntimeException $e)
 		{
-			self::$driver = null;
-		}
-
-		// If for some reason an exception object was returned set our database object to null.
-		if (self::$driver instanceof \Exception)
-		{
-			self::$driver = null;
+			static::$driver = null;
 		}
 	}
 
@@ -125,13 +119,13 @@ abstract class DatabaseOracleCase extends TestDatabase
 	 */
 	protected function getConnection()
 	{
-		// Compile the connection DSN.
-		$dsn = 'oci:dbname=//' . self::$options['host'] . ':' . self::$options['port'] . '/' . self::$options['database'];
-		$dsn .= ';charset=' . self::$options['charset'];
+		if (static::$driver === null)
+		{
+			static::fail('Could not fetch a database driver to establish the connection.');
+		}
 
-		// Create the PDO object from the DSN and options.
-		$pdo = new \PDO($dsn, self::$options['user'], self::$options['password']);
+		static::$driver->connect();
 
-		return $this->createDefaultDBConnection($pdo, self::$options['database']);
+		return $this->createDefaultDBConnection(static::$driver->getConnection(), self::$options['database']);
 	}
 }

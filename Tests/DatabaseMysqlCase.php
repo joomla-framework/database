@@ -80,17 +80,11 @@ abstract class DatabaseMysqlCase extends TestDatabase
 		try
 		{
 			// Attempt to instantiate the driver.
-			self::$driver = DatabaseDriver::getInstance(self::$options);
+			static::$driver = DatabaseDriver::getInstance(self::$options);
 		}
 		catch (\RuntimeException $e)
 		{
-			self::$driver = null;
-		}
-
-		// If for some reason an exception object was returned set our database object to null.
-		if (self::$driver instanceof \Exception)
-		{
-			self::$driver = null;
+			static::$driver = null;
 		}
 	}
 
@@ -115,12 +109,13 @@ abstract class DatabaseMysqlCase extends TestDatabase
 	 */
 	protected function getConnection()
 	{
-		// Compile the connection DSN.
-		$dsn = 'mysql:host=' . self::$options['host'] . ';dbname=' . self::$options['database'];
+		if (static::$driver === null)
+		{
+			static::fail('Could not fetch a database driver to establish the connection.');
+		}
 
-		// Create the PDO object from the DSN and options.
-		$pdo = new \PDO($dsn, self::$options['user'], self::$options['password']);
+		static::$driver->connect();
 
-		return $this->createDefaultDBConnection($pdo, self::$options['database']);
+		return $this->createDefaultDBConnection(static::$driver->getConnection(), self::$options['database']);
 	}
 }
