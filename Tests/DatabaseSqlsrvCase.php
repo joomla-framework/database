@@ -6,6 +6,7 @@
 
 namespace Joomla\Database\Tests;
 
+use Joomla\Database\Sqlsrv\SqlsrvDriver;
 use Joomla\Test\TestDatabase;
 use Joomla\Database\DatabaseDriver;
 
@@ -41,6 +42,12 @@ abstract class DatabaseSqlsrvCase extends TestDatabase
 		else
 		{
 			return;
+		}
+
+		// Make sure the driver is supported
+		if (!SqlsrvDriver::isSupported())
+		{
+			static::skip('The SQL Server driver is not supported on this platform.');
 		}
 
 		// First let's trim the sqlsrv: part off the front of the DSN if it exists.

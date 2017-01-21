@@ -6,6 +6,8 @@
 
 namespace Joomla\Database\Tests;
 
+use Joomla\Database\Mysql\MysqlDriver;
+use Joomla\Database\Mysqli\MysqliDriver;
 use Joomla\Test\TestDatabase;
 use Joomla\Database\DatabaseDriver;
 
@@ -41,6 +43,12 @@ abstract class DatabaseMysqliCase extends TestDatabase
 		else
 		{
 			return;
+		}
+
+		// Make sure the driver is supported, we check both PDO MySQL and MySQLi here due to PHPUnit requiring a PDO connection to set up the test
+		if (!MysqlDriver::isSupported() || !MysqliDriver::isSupported())
+		{
+			static::skip('The PDO MySQL or MySQLi driver is not supported on this platform.');
 		}
 
 		// First let's trim the mysql: part off the front of the DSN if it exists.

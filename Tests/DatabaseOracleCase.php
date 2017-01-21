@@ -6,6 +6,7 @@
 
 namespace Joomla\Database\Tests;
 
+use Joomla\Database\Oracle\OracleDriver;
 use Joomla\Test\TestDatabase;
 use Joomla\Database\DatabaseDriver;
 
@@ -41,6 +42,12 @@ abstract class DatabaseOracleCase extends TestDatabase
 		else
 		{
 			return;
+		}
+
+		// Make sure the driver is supported
+		if (!OracleDriver::isSupported())
+		{
+			static::skip('The PDO Oracle driver is not supported on this platform.');
 		}
 
 		// First let's trim the oci: part off the front of the DSN if it exists.

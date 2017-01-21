@@ -6,6 +6,7 @@
 
 namespace Joomla\Database\Tests;
 
+use Joomla\Database\Pgsql\PgsqlDriver;
 use Joomla\Test\TestDatabase;
 use Joomla\Database\DatabaseDriver;
 
@@ -41,6 +42,12 @@ abstract class DatabasePgsqlCase extends TestDatabase
 		else
 		{
 			return;
+		}
+
+		// Make sure the driver is supported
+		if (!PgsqlDriver::isSupported())
+		{
+			static::skip('The PDO PostgreSQL driver is not supported on this platform.');
 		}
 
 		// First let's trim the pgsql: part off the front of the DSN if it exists.
