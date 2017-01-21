@@ -9,6 +9,7 @@
 namespace Joomla\Test;
 
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\Sqlite\SqliteDriver;
 use Joomla\Test\TestHelper;
 
 /**
@@ -38,6 +39,12 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 		if (!class_exists('\\Joomla\\Database\\DatabaseDriver'))
 		{
 			static::fail('The joomla/database package is not installed, cannot use this test case.');
+		}
+
+		// Make sure the driver is supported
+		if (!SqliteDriver::isSupported())
+		{
+			static::skip('The SQLite driver is not supported on this platform.');
 		}
 
 		// We always want the default database test case to use an SQLite memory database.
