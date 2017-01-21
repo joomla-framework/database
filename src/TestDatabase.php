@@ -44,7 +44,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 		// Make sure the driver is supported
 		if (!SqliteDriver::isSupported())
 		{
-			static::skip('The SQLite driver is not supported on this platform.');
+			static::markTestSkipped('The SQLite driver is not supported on this platform.');
 		}
 
 		// We always want the default database test case to use an SQLite memory database.
