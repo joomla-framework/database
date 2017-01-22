@@ -64,8 +64,14 @@ install:
 
 build_script:
 #  Database setup for mysql via PowerShell tools
-  - "C:\Program Files\MySQL\MySQL Server 5.7\bin\mysql" -u root -p"Password12!" -e "CREATE DATABASE IF NOT EXISTS joomla_ut;"
-  - "C:\Program Files\MySQL\MySQL Server 5.7\bin\mysql" -u root -p"Password12!" -e "joomla_ut < Tests/Stubs/mysql.sql;"
+  - >
+    "C:\Program Files\MySQL\MySQL Server 5.7\bin\mysql" -u root -p"Password12!" -e "
+    CREATE DATABASE IF NOT EXISTS joomla_ut;
+    "
+  - >
+    "C:\Program Files\MySQL\MySQL Server 5.7\bin\mysql" -u root -p"Password12!" -e "
+    joomla_ut < Tests/Stubs/mysql.sql;
+    "
 #  Database setup for postgreSQL
   - SET PGUSER=postgres
   - SET PGPASSWORD=Password12!
