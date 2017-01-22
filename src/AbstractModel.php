@@ -13,7 +13,7 @@ use Joomla\Registry\Registry;
 /**
  * Joomla Framework Base Model Class
  *
- * @since  1.0
+ * @since       1.0
  * @deprecated  2.0  Implement the model interfaces directly; the concrete implementations are provided as traits
  */
 class AbstractModel implements ModelInterface

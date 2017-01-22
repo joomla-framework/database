@@ -13,7 +13,7 @@ use Joomla\Registry\Registry;
 /**
  * Joomla Framework Model Interface
  *
- * @since  1.0
+ * @since       1.0
  * @deprecated  2.0  Use the StatefulModelInterface instead
  */
 interface ModelInterface extends StatefulModelInterface
