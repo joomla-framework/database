@@ -45,6 +45,8 @@ install:
     - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
     - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini
     - IF %PHP%==1 echo extension=php_pdo_mysql.dll >> php.ini
+#    - IF %PHP%==1 echo extension=php_sqlsrv.dll >> php.ini
+#    - IF %PHP%==1 echo extension=php_pdo_sqlsrv.dll >> php.ini
 #    - IF %PHP%==1 echo extension=php_pdo_mssql.dll >> php.ini
     - IF %PHP%==1 echo extension=php_pdo_pgsql.dll >> php.ini
     - IF %PHP%==1 echo extension=php_pdo_sqlite.dll >> php.ini
@@ -59,6 +61,12 @@ install:
     - IF %dependencies%==highest appveyor-retry composer update --no-progress --profile -n
     - composer show
     - php -i
+
+build_script:
+  - mysql -u root -e 'create database joomla_ut;'
+  - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
+  - psql -c 'create database joomla_ut;' -U postgres
+  - psql -d joomla_ut -a -f Tests/Stubs/postgresql.sql
 
 test_script:
   - cd C:\projects\database
