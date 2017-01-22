@@ -13,7 +13,7 @@ use Joomla\Registry\Registry;
 /**
  * Trait representing a model holding a state
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.3.0
  */
 trait StatefulModelTrait
 {
@@ -21,7 +21,7 @@ trait StatefulModelTrait
 	 * The model state.
 	 *
 	 * @var    Registry
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	protected $state;
 
@@ -30,7 +30,7 @@ trait StatefulModelTrait
 	 *
 	 * @return  Registry  The state object.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 * @throws  \UnexpectedValueException
 	 */
 	public function getState()
@@ -50,7 +50,7 @@ trait StatefulModelTrait
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function setState(Registry $state)
 	{

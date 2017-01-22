@@ -13,7 +13,7 @@ use Joomla\Database\DatabaseDriver;
 /**
  * Trait representing a model holding a database reference
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.3.0
  * @note   As of 2.0 the `Joomla\Database\DatabaseInterface` will be typehinted.
  */
 trait DatabaseModelTrait
@@ -22,7 +22,7 @@ trait DatabaseModelTrait
 	 * The database driver.
 	 *
 	 * @var    DatabaseDriver
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 */
 	protected $db;
 
@@ -31,7 +31,7 @@ trait DatabaseModelTrait
 	 *
 	 * @return  DatabaseDriver  The database driver.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 * @throws  \UnexpectedValueException
 	 */
 	public function getDb()
@@ -51,7 +51,7 @@ trait DatabaseModelTrait
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function setDb(DatabaseDriver $db)
 	{

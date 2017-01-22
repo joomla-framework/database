@@ -13,7 +13,7 @@ use Joomla\Registry\Registry;
 /**
  * Joomla Framework Stateful Model Interface
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.3.0
  */
 interface StatefulModelInterface
 {
@@ -22,7 +22,7 @@ interface StatefulModelInterface
 	 *
 	 * @return  Registry  The state object.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function getState();
 }

@@ -13,7 +13,7 @@ use Joomla\Database\DatabaseDriver;
 /**
  * Joomla Framework Database Model Interface
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.3.0
  * @note   As of 2.0 the `Joomla\Database\DatabaseInterface` will be typehinted.
  */
 interface DatabaseModelInterface
@@ -23,7 +23,7 @@ interface DatabaseModelInterface
 	 *
 	 * @return  DatabaseDriver  The database driver.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function getDb();
 }
