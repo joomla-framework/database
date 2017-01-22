@@ -9,49 +9,39 @@
 namespace Joomla\Model;
 
 use Joomla\Database\DatabaseDriver;
-use Joomla\Registry\Registry;
 
 /**
- * Joomla Framework Database Model Class
+ * Trait representing a model holding a database reference
  *
- * @since       1.0
- * @deprecated  2.0  Implement the model interfaces directly; the concrete implementations are provided as traits
+ * @since  __DEPLOY_VERSION__
+ * @note   As of 2.0 the `Joomla\Database\DatabaseInterface` will be typehinted.
  */
-abstract class AbstractDatabaseModel extends AbstractModel implements DatabaseModelInterface
+trait DatabaseModelTrait
 {
 	/**
 	 * The database driver.
 	 *
 	 * @var    DatabaseDriver
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $db;
-
-	/**
-	 * Instantiate the model.
-	 *
-	 * @param   DatabaseDriver  $db     The database adapter.
-	 * @param   Registry        $state  The model state.
-	 *
-	 * @since   1.0
-	 */
-	public function __construct(DatabaseDriver $db, Registry $state = null)
-	{
-		$this->db = $db;
-
-		parent::__construct($state);
-	}
 
 	/**
 	 * Get the database driver.
 	 *
 	 * @return  DatabaseDriver  The database driver.
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \UnexpectedValueException
 	 */
 	public function getDb()
 	{
-		return $this->db;
+		if ($this->db)
+		{
+			return $this->db;
+		}
+
+		throw new \UnexpectedValueException('Database driver not set in ' . __CLASS__);
 	}
 
 	/**
@@ -61,7 +51,7 @@ abstract class AbstractDatabaseModel extends AbstractModel implements DatabaseMo
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setDb(DatabaseDriver $db)
 	{

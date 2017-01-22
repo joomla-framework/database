@@ -13,19 +13,11 @@ use Joomla\Registry\Registry;
 /**
  * Joomla Framework Model Interface
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Use the StatefulModelInterface instead
  */
-interface ModelInterface
+interface ModelInterface extends StatefulModelInterface
 {
-	/**
-	 * Get the model state.
-	 *
-	 * @return  Registry  The state object.
-	 *
-	 * @since   1.0
-	 */
-	public function getState();
-
 	/**
 	 * Set the model state.
 	 *
