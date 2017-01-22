@@ -75,6 +75,22 @@ build_script:
   - PATH=C:\Program Files\PostgreSQL\9.4\bin\;%PATH%
   - createdb joomla_ut
   - psql -d joomla_ut -a -f Tests\Stubs\postgresql.sql
+# Database setup for MSSQL
+  - >
+    $startPath = "$($env:appveyor_build_folder)\path-to-your-bin"
+    $sqlInstance = "(local)\SQL2016"
+    $dbName = "joomla_ut"
+
+    # replace the db connection with the local instance
+    $config = join-path $startPath "MyTests.dll.config"
+    $doc = (gc $config) -as [xml]
+    $doc.SelectSingleNode('//connectionStrings/add[@name="store"]').connectionString = "Server=$sqlInstance; Database=$dbName; Trusted_connection=true"
+    $doc.Save($config)
+
+    # attach mdf to local instance
+    $mdfFile = join-path $startPath "store.mdf"
+    $ldfFile = join-path $startPath "store_log.ldf"
+    sqlcmd -S "$sqlInstance" -Q "Use [master]; CREATE DATABASE [$dbName] ON (FILENAME = '$mdfFile'),(FILENAME = '$ldfFile') for ATTACH"
 
 test_script:
   - cd C:\projects\database
