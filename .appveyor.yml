@@ -63,9 +63,13 @@ install:
     - php -i
 
 build_script:
-  - mysql -u root -e 'create database joomla_ut;'
-  - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
-  - psql -c 'create database joomla_ut;' -U postgres
+#  - mysql -u root -e 'create database joomla_ut;'
+#  - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
+#  - psql -c 'create database joomla_ut;' -U postgres
+  - SET PGUSER=postgres
+  - SET PGPASSWORD=Password12!
+  - PATH=C:\Program Files\PostgreSQL\9.3\bin\;%PATH%
+  - createdb joomla_ut
   - psql -d joomla_ut -a -f Tests/Stubs/postgresql.sql
 
 test_script:
