@@ -59,7 +59,6 @@ install:
     - IF %dependencies%==lowest appveyor-retry composer update --prefer-lowest --no-progress --profile -n
     - IF %dependencies%==current appveyor-retry composer install --no-progress --profile
     - IF %dependencies%==highest appveyor-retry composer update --no-progress --profile -n
-    - composer show
 
 before_build:
 #  Database setup for mysql via PowerShell tools
