@@ -188,6 +188,14 @@ abstract class DatabaseQuery
 	protected $union = null;
 
 	/**
+	 * The unionAll element.
+	 *
+	 * @var    Query\QueryElement
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $unionAll = null;
+
+	/**
 	 * Magic method to provide method alias support for quote() and quoteName().
 	 *
 	 * @param   string  $method  The called method.
@@ -647,6 +655,27 @@ abstract class DatabaseQuery
 	}
 
 	/**
+	 * Add to the current date and time.
+	 * Usage:
+	 * $query->select($query->dateAdd());
+	 * Prefixing the interval with a - (negative sign) will cause subtraction to be used.
+	 * Note: Not all drivers support all units.
+	 *
+	 * @param   mixed   $date      The date to add to. May be date or datetime
+	 * @param   string  $interval  The string representation of the appropriate number of units
+	 * @param   string  $datePart  The part of the date to perform the addition on
+	 *
+	 * @return  string  The string with the appropriate sql for addition of dates
+	 *
+	 * @see     http://dev.mysql.com/doc/en/date-and-time-functions.html
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function dateAdd($date, $interval, $datePart)
+	{
+		return trim("DATE_ADD('" . $date . "', INTERVAL " . $interval . ' ' . $datePart . ')');
+	}
+
+	/**
 	 * Returns a PHP date() function compliant date format for the database driver.
 	 *
 	 * This method is provided for use where the query object is passed to a function for modification.
@@ -765,6 +794,26 @@ abstract class DatabaseQuery
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Find a value in a varchar used like a set.
+	 *
+	 * Ensure that the value is an integer before passing to the method.
+	 *
+	 * Usage:
+	 * $query->findInSet((int) $parent->id, 'a.assigned_cat_ids')
+	 *
+	 * @param   string  $value  The value to search for.
+	 * @param   string  $set    The set of values.
+	 *
+	 * @return  string  Returns the find_in_set() MySQL function and must be translated in each driver.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function findInSet($value, $set)
+	{
+		return '';
 	}
 
 	/**
@@ -1503,7 +1552,7 @@ abstract class DatabaseQuery
 	public function union($query, $distinct = false, $glue = '')
 	{
 		// Clear any ORDER BY clause in UNION query
-		// See http://dev.mysql.com/doc/refman/5.0/en/union.html
+		// See http://dev.mysql.com/doc/en/union.html
 		if (!is_null($this->order))
 		{
 			$this->clear('order');
@@ -1530,6 +1579,44 @@ abstract class DatabaseQuery
 		// Otherwise append the second UNION.
 		{
 			$this->union->append($query);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Add a query to UNION ALL with the current query.
+	 * Multiple unions each require separate statements and create an array of unions.
+	 *
+	 * Usage:
+	 * $query->union('SELECT name FROM  #__foo')
+	 * $query->union(array('SELECT name FROM  #__foo','SELECT name FROM  #__bar'))
+	 *
+	 * @param   mixed    $query     The JDatabaseQuery object or string to union.
+	 * @param   boolean  $distinct  Not used - ignored.
+	 * @param   string   $glue      Not used - ignored.
+	 *
+	 * @return  Query\QueryElement  Returns this object to allow chaining.
+	 *
+	 * @see     union
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function unionAll($query, $distinct = false, $glue = '')
+	{
+		$glue = ')' . PHP_EOL . 'UNION ALL (';
+		$name = 'UNION ALL ()';
+
+		// Get the QueryElement if it does not exist
+		if (is_null($this->unionAll))
+		{
+			$this->unionAll = new Query\QueryElement($name, $query, "$glue");
+		}
+
+		// Otherwise append the second UNION.
+		else
+		{
+			$this->unionAll->append($query);
 		}
 
 		return $this;
