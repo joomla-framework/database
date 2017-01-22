@@ -697,9 +697,11 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	}
 
 	/**
-	 * Add to the current date and time in Postgresql.
+	 * Add to the current date and time.
+	 *
 	 * Usage:
 	 * $query->select($query->dateAdd());
+	 *
 	 * Prefixing the interval with a - (negative sign) will cause subtraction to be used.
 	 *
 	 * @param   datetime  $date      The date to add to
@@ -709,7 +711,6 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * @return  string  The string with the appropriate sql for addition of dates
 	 *
 	 * @since   __DEPLOY_VERSION__
-	 * @note    Not all drivers support all units. Check appropriate references
 	 * @link    http://www.postgresql.org/docs/9.0/static/functions-datetime.html.
 	 */
 	public function dateAdd($date, $interval, $datePart)
@@ -725,16 +726,14 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	}
 
 	/**
-	 * Return correct regexp operator for Postgresql.
-	 *
-	 * Ensure that the regexp operator is Postgresql compatible.
+	 * Get the regular expression operator
 	 *
 	 * Usage:
 	 * $query->where('field ' . $query->regexp($search));
 	 *
 	 * @param   string  $value  The regex pattern.
 	 *
-	 * @return  string  Returns the regex operator.
+	 * @return  string
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -744,18 +743,16 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	}
 
 	/**
-	 * Return correct rand() function for Postgresql.
+	 * Get the function to return a random floating-point value
 	 *
-	 * Ensure that the rand() function is Postgresql compatible.
-	 * 
 	 * Usage:
-	 * $query->Rand();
-	 * 
-	 * @return  string  The correct rand function.
+	 * $query->rand();
+	 *
+	 * @return  string
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function Rand()
+	public function rand()
 	{
 		return ' RANDOM() ';
 	}
@@ -769,10 +766,9 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * $query->findInSet((int) $parent->id, 'a.assigned_cat_ids')
 	 *
 	 * @param   string  $value  The value to search for.
-	 *
 	 * @param   string  $set    The set of values.
 	 *
-	 * @return  string  Returns the find_in_set() postgresql translation.
+	 * @return  string  A representation of the MySQL find_in_set() function for the driver.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */

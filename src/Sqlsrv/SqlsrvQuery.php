@@ -272,18 +272,16 @@ class SqlsrvQuery extends DatabaseQuery
 	}
 
 	/**
-	 * Return correct rand() function for MSSQL.
-	 *
-	 * Ensure that the rand() function is MSSQL compatible.
+	 * Get the function to return a random floating-point value
 	 *
 	 * Usage:
-	 * $query->Rand();
+	 * $query->rand();
 	 *
-	 * @return  string  The correct rand function.
+	 * @return  string
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function Rand()
+	public function rand()
 	{
 		return ' NEWID() ';
 	}
@@ -297,10 +295,9 @@ class SqlsrvQuery extends DatabaseQuery
 	 * $query->findInSet((int) $parent->id, 'a.assigned_cat_ids')
 	 *
 	 * @param   string  $value  The value to search for.
-	 *
 	 * @param   string  $set    The set of values.
 	 *
-	 * @return  string  Returns the find_in_set() Mysql translation.
+	 * @return  string  A representation of the MySQL find_in_set() function for the driver.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */

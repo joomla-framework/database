@@ -656,8 +656,10 @@ abstract class DatabaseQuery
 
 	/**
 	 * Add to the current date and time.
+	 *
 	 * Usage:
 	 * $query->select($query->dateAdd());
+	 *
 	 * Prefixing the interval with a - (negative sign) will cause subtraction to be used.
 	 * Note: Not all drivers support all units.
 	 *
@@ -807,7 +809,7 @@ abstract class DatabaseQuery
 	 * @param   string  $value  The value to search for.
 	 * @param   string  $set    The set of values.
 	 *
-	 * @return  string  Returns the find_in_set() MySQL function and must be translated in each driver.
+	 * @return  string  A representation of the MySQL find_in_set() function for the driver.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -1265,6 +1267,38 @@ abstract class DatabaseQuery
 	}
 
 	/**
+	 * Get the function to return a random floating-point value
+	 *
+	 * Usage:
+	 * $query->rand();
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function rand()
+	{
+		return '';
+	}
+
+	/**
+	 * Get the regular expression operator
+	 *
+	 * Usage:
+	 * $query->where('field ' . $query->regexp($search));
+	 *
+	 * @param   string  $value  The regex pattern.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function regexp($value)
+	{
+		return ' ' . $value;
+	}
+
+	/**
 	 * Add a RIGHT JOIN clause to the query.
 	 *
 	 * Usage:
@@ -1592,14 +1626,13 @@ abstract class DatabaseQuery
 	 * $query->union('SELECT name FROM  #__foo')
 	 * $query->union(array('SELECT name FROM  #__foo','SELECT name FROM  #__bar'))
 	 *
-	 * @param   mixed    $query     The JDatabaseQuery object or string to union.
-	 * @param   boolean  $distinct  Not used - ignored.
-	 * @param   string   $glue      Not used - ignored.
+	 * @param   DatabaseQuery|string  $query     The DatabaseQuery object or string to union.
+	 * @param   boolean               $distinct  Not used - ignored.
+	 * @param   string                $glue      The glue by which to join the conditions.
 	 *
-	 * @return  Query\QueryElement  Returns this object to allow chaining.
+	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
 	 * @see     union
-	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function unionAll($query, $distinct = false, $glue = '')

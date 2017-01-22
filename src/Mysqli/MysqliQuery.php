@@ -213,16 +213,14 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 	}
 
 	/**
-	 * Return correct regexp operator for mysqli.
-	 *
-	 * Ensure that the regexp operator is mysqli compatible.
+	 * Get the regular expression operator
 	 *
 	 * Usage:
 	 * $query->where('field ' . $query->regexp($search));
 	 *
 	 * @param   string  $value  The regex pattern.
 	 *
-	 * @return  string  Returns the regex operator.
+	 * @return  string
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -232,18 +230,16 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 	}
 
 	/**
-	 * Return correct rand() function for Mysqli.
+	 * Get the function to return a random floating-point value
 	 *
-	 * Ensure that the rand() function is Mysqli compatible.
-	 * 
 	 * Usage:
-	 * $query->Rand();
-	 * 
-	 * @return  string  The correct rand function.
+	 * $query->rand();
+	 *
+	 * @return  string
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function Rand()
+	public function rand()
 	{
 		return ' RAND() ';
 	}
@@ -257,10 +253,9 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 	 * $query->findInSet((int) $parent->id, 'a.assigned_cat_ids')
 	 *
 	 * @param   string  $value  The value to search for.
-	 *
 	 * @param   string  $set    The set of values.
 	 *
-	 * @return  string  Returns the find_in_set() Mysql translation.
+	 * @return  string  A representation of the MySQL find_in_set() function for the driver.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
