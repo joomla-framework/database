@@ -60,7 +60,6 @@ install:
     - IF %dependencies%==current appveyor-retry composer install --no-progress --profile
     - IF %dependencies%==highest appveyor-retry composer update --no-progress --profile -n
     - composer show
-    - php -i
 
 build_script:
 #  Database setup for mysql via PowerShell tools
@@ -69,7 +68,7 @@ build_script:
     CREATE DATABASE IF NOT EXISTS joomla_ut;
     "
   - >
-    "C:\Program Files\MySQL\MySQL Server 5.7\bin\mysql" -u root -p"Password12!" -e joomla_ut < Tests\Stubs\mysql.sql
+    "C:\Program Files\MySQL\MySQL Server 5.7\bin\mysql" -u root -p"Password12!" joomla_ut < Tests\Stubs\mysql.sql
 #  Database setup for postgreSQL
   - SET PGUSER=postgres
   - SET PGPASSWORD=Password12!
