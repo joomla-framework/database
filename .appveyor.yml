@@ -29,7 +29,7 @@ init:
 services:
   - mssql2014
   - mysql
-  - postgresql
+  - postgresql94
   - iis
 
 ## Install PHP and composer, and run the appropriate composer command
