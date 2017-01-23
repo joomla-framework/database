@@ -1,5 +1,5 @@
 build: false
-shallow_clone: false
+shallow_clone: true
 platform:
   - x64
 clone_folder: C:\projects\database
@@ -59,6 +59,22 @@ install:
     - IF %dependencies%==lowest appveyor-retry composer update --prefer-lowest --no-progress --profile -n
     - IF %dependencies%==current appveyor-retry composer install --no-progress --profile
     - IF %dependencies%==highest appveyor-retry composer update --no-progress --profile -n
+    - IF [%php_ver_target%]==[5.6] (
+        IF %PHP%==1 appveyor DownloadFile https://files.nette.org/misc/php-sqlsrv.zip
+        IF %PHP%==1 7z x php-sqlsrv.zip >nul
+        IF %PHP%==1 copy SQLSRV\php_sqlsrv_56_ts.dll ext\php_sqlsrv_ts.dll
+        IF %PHP%==1 copy SQLSRV\php_pdo_sqlsrv_56_ts.dll ext\php_pdo_sqlsrv_ts.dll
+        IF %PHP%==1 del /Q *.zip)
+    - IF [%php_ver_target%]==[7.0] (
+        IF %PHP%==1 appveyor DownloadFile https://github.com/Microsoft/msphpsql/releases/download/4.1.4-Windows/7.0.zip
+        IF %PHP%==1 7z x 7.0.zip >nul
+        IF %PHP%==1 copy 7.0\x64\php_pdo_sqlsrv_70_ts.dll ext\php_pdo_sqlsrv_ts.dll
+        IF %PHP%==1 del /Q *.zip)
+    - IF [%php_ver_target%]==[7.1] (
+        IF %PHP%==1 appveyor DownloadFile https://github.com/Microsoft/msphpsql/releases/download/4.1.5-Windows/7.1.zip
+        IF %PHP%==1 7z x 7.1.zip >nul
+        IF %PHP%==1 copy 7.1\x64\php_pdo_sqlsrv_71_ts.dll ext\php_pdo_sqlsrv_ts.dll
+        IF %PHP%==1 del /Q *.zip)
 
 before_build:
 #  Database setup for mysql via PowerShell tools
