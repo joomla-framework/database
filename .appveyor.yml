@@ -38,21 +38,21 @@ install:
     - ps: appveyor-retry cinst --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $Env:php_ver_target | Select-Object -first 1) -replace '[php|]','')
     - cinst -y sqlite
     - cd c:\tools\php
-    - IF %php_ver_target%==5.6 (
+    - IF $Env:php_ver_target==5.6 (
         IF %PHP%==1 (
           appveyor DownloadFile https://files.nette.org/misc/php-sqlsrv.zip
           7z x php-sqlsrv.zip >nul
           copy SQLSRV\php_sqlsrv_56_ts.dll ext\php_sqlsrv_ts.dll
           copy SQLSRV\php_pdo_sqlsrv_56_ts.dll ext\php_pdo_sqlsrv_ts.dll
           del /Q *.zip))
-    - IF %php_ver_target%==7.0 (
+    - IF $Env:php_ver_target==7.0 (
         IF %PHP%==1 (
           appveyor DownloadFile https://github.com/Microsoft/msphpsql/releases/download/4.1.4-Windows/7.0.zip
           7z x 7.0.zip >nul
           copy 7.0\x64\php_pdo_sqlsrv_70_ts.dll ext\php_pdo_sqlsrv_ts.dll
           copy 7.0\x64\php_sqlsrv_70_ts.dll ext\php_sqlsrv_ts.dll
           del /Q *.zip))
-    - IF %php_ver_target%==7.1 (
+    - IF $Env:php_ver_target==7.1 (
         IF %PHP%==1 (
           appveyor DownloadFile https://github.com/Microsoft/msphpsql/releases/download/4.1.5-Windows/7.1.zip
           7z x 7.1.zip >nul
