@@ -43,28 +43,28 @@ install:
           If ($env:PHP -eq "1") {
             appveyor DownloadFile https://files.nette.org/misc/php-sqlsrv.zip
             7z x php-sqlsrv.zip > $null
-            Get-ChildItem -Path c:\tools\php
             copy SQLSRV\php_sqlsrv_56_ts.dll ext\php_sqlsrv_ts.dll
             copy SQLSRV\php_pdo_sqlsrv_56_ts.dll ext\php_pdo_sqlsrv_ts.dll
             Remove-Item c:\tools\php\* -include .zip}}
+            Get-ChildItem -Path c:\tools\php\ext
     - ps: >-
         If ($env:php_ver_target -eq "7.0") {
           If ($env:PHP -eq "1") {
             appveyor DownloadFile https://github.com/Microsoft/msphpsql/releases/download/4.1.4-Windows/7.0.zip
             7z x 7.0.zip > $null
-            Get-ChildItem -Path c:\tools\php
             copy 7.0\x64\php_pdo_sqlsrv_7_ts.dll ext\php_pdo_sqlsrv_ts.dll
             copy 7.0\x64\php_sqlsrv_7_ts.dll ext\php_sqlsrv_ts.dll
             Remove-Item c:\tools\php\* -include .zip}}
+            Get-ChildItem -Path c:\tools\php\ext
     - ps: >-
         If ($env:php_ver_target -eq "7.1") {
           If ($env:PHP -eq "1") {
             appveyor DownloadFile https://github.com/Microsoft/msphpsql/releases/download/4.1.5-Windows/7.1.zip
             7z x 7.1.zip > $null
-            Get-ChildItem -Path c:\tools\php
             copy 7.1\x64\php_pdo_sqlsrv_71_ts.dll ext\php_pdo_sqlsrv_ts.dll
             copy 7.1\x64\php_sqlsrv_71_ts.dll ext\php_sqlsrv_ts.dll
             Remove-Item c:\tools\php\* -include .zip}}
+            Get-ChildItem -Path c:\tools\php\ext
     - IF %PHP%==1 copy php.ini-production php.ini /Y
     - IF %PHP%==1 echo date.timezone="UTC" >> php.ini
     - IF %PHP%==1 echo extension_dir=ext >> php.ini
