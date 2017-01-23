@@ -37,6 +37,7 @@ install:
     - IF EXIST c:\tools\php (SET PHP=0)
     - ps: appveyor-retry cinst --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $Env:php_ver_target | Select-Object -first 1) -replace '[php|]','')
     - cinst -y sqlite
+    - cd c:\tools\php
     - IF %php_ver_target%==5.6 (
         IF %PHP%==1 (
           appveyor DownloadFile https://files.nette.org/misc/php-sqlsrv.zip
@@ -49,14 +50,15 @@ install:
           appveyor DownloadFile https://github.com/Microsoft/msphpsql/releases/download/4.1.4-Windows/7.0.zip
           7z x 7.0.zip >nul
           copy 7.0\x64\php_pdo_sqlsrv_70_ts.dll ext\php_pdo_sqlsrv_ts.dll
+          copy 7.0\x64\php_sqlsrv_70_ts.dll ext\php_sqlsrv_ts.dll
           del /Q *.zip))
     - IF %php_ver_target%==7.1 (
         IF %PHP%==1 (
           appveyor DownloadFile https://github.com/Microsoft/msphpsql/releases/download/4.1.5-Windows/7.1.zip
           7z x 7.1.zip >nul
           copy 7.1\x64\php_pdo_sqlsrv_71_ts.dll ext\php_pdo_sqlsrv_ts.dll
+          copy 7.1\x64\php_sqlsrv_71_ts.dll ext\php_sqlsrv_ts.dll
           del /Q *.zip))
-    - cd c:\tools\php
     - IF %PHP%==1 copy php.ini-production php.ini /Y
     - IF %PHP%==1 echo date.timezone="UTC" >> php.ini
     - IF %PHP%==1 echo extension_dir=ext >> php.ini
@@ -64,9 +66,8 @@ install:
     - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
     - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini
     - IF %PHP%==1 echo extension=php_pdo_mysql.dll >> php.ini
-#    - IF %PHP%==1 echo extension=php_sqlsrv.dll >> php.ini
-#    - IF %PHP%==1 echo extension=php_pdo_sqlsrv.dll >> php.ini
-#    - IF %PHP%==1 echo extension=php_pdo_mssql.dll >> php.ini
+    - IF %PHP%==1 echo extension=php_pdo_sqlsrv_ts.dll >> php.ini
+    - IF %PHP%==1 echo extension=php_sqlsrv_ts.dll >> php.ini
     - IF %PHP%==1 echo extension=php_pdo_pgsql.dll >> php.ini
     - IF %PHP%==1 echo extension=php_pdo_sqlite.dll >> php.ini
     - IF %PHP%==1 echo extension=php_sqlite3.dll >> php.ini
