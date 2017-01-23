@@ -42,7 +42,7 @@ install:
         If ($env:php_ver_target -eq "5.6") {
           If ($env:PHP -eq "1") {
             appveyor DownloadFile https://files.nette.org/misc/php-sqlsrv.zip
-            7z x php-sqlsrv.zip >nul
+            7z x php-sqlsrv.zip > $null
             copy SQLSRV\php_sqlsrv_56_ts.dll ext\php_sqlsrv_ts.dll
             copy SQLSRV\php_pdo_sqlsrv_56_ts.dll ext\php_pdo_sqlsrv_ts.dll
             del /Q *.zip}}
@@ -50,7 +50,7 @@ install:
         If ($env:php_ver_target -eq "7.0") {
           If ($env:PHP -eq "1") {
             appveyor DownloadFile https://github.com/Microsoft/msphpsql/releases/download/4.1.4-Windows/7.0.zip
-            7z x 7.0.zip >nul
+            7z x 7.0.zip > $null
             copy 7.0\x64\php_pdo_sqlsrv_70_ts.dll ext\php_pdo_sqlsrv_ts.dll
             copy 7.0\x64\php_sqlsrv_70_ts.dll ext\php_sqlsrv_ts.dll
             del /Q *.zip}}
@@ -58,7 +58,7 @@ install:
         If ($env:php_ver_target -eq "7.1") {
           If ($env:PHP -eq "1") {
             appveyor DownloadFile https://github.com/Microsoft/msphpsql/releases/download/4.1.5-Windows/7.1.zip
-            7z x 7.1.zip >nul
+            7z x 7.1.zip > $null
             copy 7.1\x64\php_pdo_sqlsrv_71_ts.dll ext\php_pdo_sqlsrv_ts.dll
             copy 7.1\x64\php_sqlsrv_71_ts.dll ext\php_sqlsrv_ts.dll
             del /Q *.zip}}
