@@ -173,7 +173,7 @@ abstract class AbstractUri implements UriInterface
 	 *
 	 * @param   boolean  $toArray  True to return the query as a key => value pair array.
 	 *
-	 * @return  string   Query string.
+	 * @return  string|array   Query string or Array of parts in query string depending on the function param
 	 *
 	 * @since   1.0
 	 */
