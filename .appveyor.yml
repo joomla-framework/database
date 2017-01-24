@@ -9,8 +9,6 @@ branches:
 ## Build matrix for lowest and highest possible targets
 environment:
   matrix:
-  - dependencies: lowest 
-    php_ver_target: 5.6
   - dependencies: current
     php_ver_target: 5.6
   - dependencies: current
