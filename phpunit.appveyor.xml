@@ -7,7 +7,7 @@
 		<const name="JTEST_DATABASE_PGSQL_DSN" value="host=127.0.0.1;port=5432;dbname=joomla_ut;user=postgres;pass=Password12!" />
 		<const name="JTEST_DATABASE_POSTGRESQL_DSN" value="host=127.0.0.1;port=5432;dbname=joomla_ut;user=postgres;pass=Password12!" />
 		<!--<const name="JTEST_DATABASE_ORACLE_DSN" value="host=localhost;port=1521;dbname=joomla_ut;user=utuser;pass=ut1234" />-->
-		<const name="JTEST_DATABASE_SQLSRV_DSN" value="host=127.0.0.1;dbname=joomla_ut;user=sa;pass=Password12!" />
+		<const name="JTEST_DATABASE_SQLSRV_DSN" value="host=(local)\SQL2014;dbname=joomla_ut;user=sa;pass=Password12!" />
 	</php>
 	<testsuites>
 		<testsuite name="Unit">
