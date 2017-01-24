@@ -94,8 +94,7 @@ before_test:
   - SET PGUSER=postgres
   - SET PGPASSWORD=Password12!
   - PATH=C:\Program Files\PostgreSQL\9.4\bin\;%PATH%
-  #- createdb joomla_ut
-  - psql -c 'create database joomla_ut;' -U postgres
+  - createdb joomla_ut
   - psql -d joomla_ut -a -f Tests\Stubs\postgresql.sql
 # Database setup for MSSQL
   - ps: $sqlInstance = "(local)\SQL2014"
