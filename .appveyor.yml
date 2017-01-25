@@ -67,21 +67,23 @@ install:
             copy 7.1\x64\php_sqlsrv_71_nts.dll ext\php_sqlsrv_nts.dll
             Remove-Item c:\tools\php\* -include .zip}
             Get-ChildItem -Path c:\tools\php\ext}
-    - IF %PHP%==1 copy php.ini-production php.ini /Y
-    - IF %PHP%==1 echo date.timezone="UTC" >> php.ini
-    - IF %PHP%==1 echo extension_dir=ext >> php.ini
-    - IF %PHP%==1 echo extension=php_openssl.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_pdo_mysql.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_pdo_sqlsrv_nts.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_sqlsrv_nts.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_pdo_pgsql.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_pdo_sqlite.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_sqlite3.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_mysqli.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_pgsql.dll >> php.ini
-    - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
+    - ps: >-
+        If ($env:PHP -eq "1") {
+        copy php.ini-production php.ini /Y
+        echo date.timezone="UTC" >> php.ini
+        echo extension_dir=ext >> php.ini
+        echo extension=php_openssl.dll >> php.ini
+        echo extension=php_mbstring.dll >> php.ini
+        echo extension=php_fileinfo.dll >> php.ini
+        echo extension=php_pdo_mysql.dll >> php.ini
+        echo extension=php_pdo_sqlsrv_nts.dll >> php.ini
+        echo extension=php_sqlsrv_nts.dll >> php.ini
+        echo extension=php_pdo_pgsql.dll >> php.ini
+        echo extension=php_pdo_sqlite.dll >> php.ini
+        echo extension=php_sqlite3.dll >> php.ini
+        echo extension=php_mysqli.dll >> php.ini
+        echo extension=php_pgsql.dll >> php.ini
+        echo @php %%~dp0composer.phar %%* > composer.bat}
     - appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar
     - cd c:\projects\database
     - IF %dependencies%==lowest appveyor-retry composer update --prefer-lowest --no-progress --profile -n
