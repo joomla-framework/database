@@ -33,7 +33,12 @@ services:
 ## Install PHP and composer, and run the appropriate composer command
 install:
     - IF EXIST c:\tools\php (SET PHP=0)
-    - ps: appveyor-retry cinst --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $Env:php_ver_target | Select-Object -first 1) -replace '[php|]','')
+    - ps: >-
+      If ($env:php_ver_target -lt "7.0") {
+        appveyor-retry cinst --ignore-checksums -y --forcex86 php --version ((choco search php --exact --all-versions -r | select-string -pattern $Env:php_ver_target | Select-Object -first 1) -replace '[php|]','')
+      } ELSE {
+        appveyor-retry cinst --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $Env:php_ver_target | Select-Object -first 1) -replace '[php|]','')
+      }
     - cinst -y sqlite
     - cd c:\tools\php
     - ps: >-
