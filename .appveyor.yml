@@ -36,9 +36,8 @@ install:
     - ps: >-
       If ($env:php_ver_target -lt "7.0") {
         appveyor-retry cinst --ignore-checksums -y --forcex86 php --version ((choco search php --exact --all-versions -r | select-string -pattern $Env:php_ver_target | Select-Object -first 1) -replace '[php|]','')
-        } Else {
-        appveyor-retry cinst --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $Env:php_ver_target | Select-Object -first 1) -replace '[php|]','')
-      }
+      } Else {
+        appveyor-retry cinst --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $Env:php_ver_target | Select-Object -first 1) -replace '[php|]','')}
     - cinst -y sqlite
     - cd c:\tools\php
     - ps: >-
