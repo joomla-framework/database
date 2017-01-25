@@ -100,8 +100,6 @@ before_test:
 # Database setup for MSSQL
   - ps: $sqlInstance = "(local)\SQL2014"
   - ps: sqlcmd -b -E -S "$sqlInstance" -Q "CREATE DATABASE joomla_ut"
-  #- ps: sqlcmd -S "$sqlInstance" -U "sa" -P "Password12!" -Q "create database joomla_ut;"
-  - ps: sqlcmd -S "$sqlInstance" -U "sa" -P "Password12!" -Q "USE joomla_ut;"
   - ps: sqlcmd -S "$sqlInstance" -U "sa" -P "Password12!" -i $env:APPVEYOR_BUILD_FOLDER\Tests\Stubs\sqlsrv.sql
 
 test_script:
