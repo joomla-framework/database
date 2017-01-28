@@ -57,7 +57,12 @@ class Refs extends AbstractPackage
 	public function getList($user, $repo, $namespace = '', $page = 0, $limit = 0)
 	{
 		// Build the request path.
-		$path = '/repos/' . $user . '/' . $repo . '/git/refs' . $namespace;
+		$path = '/repos/' . $user . '/' . $repo . '/git/refs';
+
+		if (!empty($namespace))
+		{
+			$path .= '/' . $namespace;
+		}
 
 		// Send the request.
 		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
