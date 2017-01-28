@@ -95,7 +95,7 @@ before_test:
   - SET PGUSER=postgres
   - SET PGPASSWORD=Password12!
   - PATH=C:\Program Files\PostgreSQL\9.4\bin\;%PATH%
-  - createdb joomla_ut
+  - createdb --lc-collate=en_US.utf8 --lc-ctype=en_US.utf8 joomla_ut
   - psql -d joomla_ut -a -f Tests\Stubs\postgresql.sql
 # Database setup for MSSQL
   - ps: $sqlInstance = "(local)\SQL2014"
@@ -105,4 +105,4 @@ before_test:
 test_script:
   - cd C:\projects\database
   - vendor/bin/phpunit -c phpunit.appveyor.xml
-  
+

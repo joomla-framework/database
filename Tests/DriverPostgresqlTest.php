@@ -462,7 +462,9 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		$versionRow = self::$driver->setQuery('SELECT version();')->loadRow();
 		$versionArray = explode(' ', $versionRow[0]);
 
-		$this->assertGreaterThanOrEqual($versionArray[1], self::$driver->getVersion(), __LINE__);
+		$version = rtrim($versionArray[1], ',');
+
+		$this->assertGreaterThanOrEqual($version, self::$driver->getVersion(), __LINE__);
 	}
 
 	/**
@@ -1133,7 +1135,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		// jos_dbtest_id_seq == 2 because of `testInsertObject()`
 		// Reset jos_dbtest_id_seq
 		self::$driver->setQuery('ALTER SEQUENCE jos_dbtest_id_seq RESTART WITH 5')->execute();
-		
+
 		$query = self::$driver->getQuery(true);
 		$query->insert('jos_dbtest')
 			->columns('title,start_date,description')

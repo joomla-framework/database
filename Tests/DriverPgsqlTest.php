@@ -462,7 +462,9 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 		$versionRow = self::$driver->setQuery('SELECT version();')->loadRow();
 		$versionArray = explode(' ', $versionRow[0]);
 
-		$this->assertGreaterThanOrEqual($versionArray[1], self::$driver->getVersion(), __LINE__);
+		$version = rtrim($versionArray[1], ',');
+
+		$this->assertGreaterThanOrEqual($version, self::$driver->getVersion(), __LINE__);
 	}
 
 	/**
