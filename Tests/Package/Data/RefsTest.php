@@ -213,6 +213,27 @@ class RefsTest extends GitHubTestCase
 	}
 
 	/**
+	 * Tests the getList method with a namespace
+	 *
+	 * @return void
+	 */
+	public function testGetListWithNamespace()
+	{
+		$this->response->code = 200;
+		$this->response->body = $this->sampleString;
+
+		$this->client->expects($this->once())
+			->method('get')
+			->with('/repos/joomla/joomla-platform/git/refs/tags')
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->getList('joomla', 'joomla-platform', 'tags'),
+			$this->equalTo(json_decode($this->sampleString))
+		);
+	}
+
+	/**
 	 * Tests the getList method - failure
 	 *
 	 * @expectedException  \DomainException
@@ -233,7 +254,7 @@ class RefsTest extends GitHubTestCase
 	}
 
 	/**
-	 * Tests the getList method
+	 * Tests the delete method
 	 *
 	 * @return void
 	 */
@@ -256,7 +277,7 @@ class RefsTest extends GitHubTestCase
 	}
 
 	/**
-	 * Tests the getList method - failure
+	 * Tests the delete method - failure
 	 *
 	 * @expectedException  \DomainException
 	 *
