@@ -105,4 +105,4 @@ before_test:
 test_script:
   - cd C:\projects\database
   - vendor/bin/phpunit -c phpunit.appveyor.xml
-  
+
