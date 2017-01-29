@@ -56,7 +56,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 * The prepared statement.
 	 *
 	 * @var    resource
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $prepared;
 
@@ -64,7 +64,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 * Contains the current query execution status
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $executed = false;
 
@@ -72,7 +72,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 * Contains the name of the prepared query
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $queryName = 'query';
 
@@ -336,7 +336,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function getConnectionCollation()
 	{
@@ -936,7 +936,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 *
 	 * @return  PostgresqlDriver  This object to support method chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function setQuery($query, $offset = null, $limit = null)
 	{

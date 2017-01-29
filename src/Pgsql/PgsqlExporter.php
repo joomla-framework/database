@@ -13,7 +13,7 @@ use Joomla\Database\Postgresql\PostgresqlExporter;
 /**
  * PDO PostgreSQL Database Exporter.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.5.0
  */
 class PgsqlExporter extends PostgresqlExporter
 {
@@ -22,7 +22,7 @@ class PgsqlExporter extends PostgresqlExporter
 	 *
 	 * @return  PgsqlExporter  Method supports chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \Exception if an error is encountered.
 	 */
 	public function check()

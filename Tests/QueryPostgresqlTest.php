@@ -26,7 +26,7 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 	 * The instance of the object to test.
 	 *
 	 * @var    PostgresqlQuery
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	private $instance;
 
@@ -121,7 +121,7 @@ class QueryPostgresqlTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  PostgresqlQuery
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function mockGetQuery($new = false)
 	{

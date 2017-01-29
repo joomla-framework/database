@@ -13,7 +13,7 @@ use Joomla\Database\Pdo\PdoIterator;
 /**
  * PDO PostgreSQL Database Iterator.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.5.0
  */
 class PgsqlIterator extends PdoIterator
 {

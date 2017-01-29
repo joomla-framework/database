@@ -72,7 +72,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * Holds key / value pair of bound objects.
 	 *
 	 * @var    mixed
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $bounded = array();
 
@@ -90,7 +90,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * @return  PostgresqlQuery
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function bind($key = null, &$value = null, $dataType = '', $length = 0, $driverOptions = array())
 	{
@@ -127,7 +127,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * @return  mixed
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function &getBounded($key = null)
 	{
@@ -710,7 +710,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * @return  string  The string with the appropriate sql for addition of dates
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @link    http://www.postgresql.org/docs/9.0/static/functions-datetime.html.
 	 */
 	public function dateAdd($date, $interval, $datePart)
@@ -735,7 +735,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function regexp($value)
 	{
@@ -750,7 +750,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function rand()
 	{
@@ -770,7 +770,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * @return  string  A representation of the MySQL find_in_set() function for the driver.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function findInSet($value, $set)
 	{

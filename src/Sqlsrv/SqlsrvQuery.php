@@ -44,7 +44,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 	 * Holds key / value pair of bound objects.
 	 *
 	 * @var    mixed
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $bounded = array();
 
@@ -118,7 +118,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 	 *
 	 * @return  SqlsrvQuery
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function bind($key = null, &$value = null, $dataType = 's', $length = 0, $driverOptions = array())
 	{
@@ -158,7 +158,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 	 *
 	 * @return  mixed
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function &getBounded($key = null)
 	{
@@ -180,7 +180,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 	 *
 	 * @return  SqlsrvQuery  Returns this object to allow chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function clear($clause = null)
 	{
@@ -284,7 +284,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 	 *
 	 * @return  SqlsrvQuery  Returns this object to allow chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function group($columns)
 	{
@@ -378,7 +378,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function rand()
 	{
@@ -398,7 +398,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 	 *
 	 * @return  string  A representation of the MySQL find_in_set() function for the driver.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function findInSet($value, $set)
 	{

@@ -830,7 +830,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 *
 	 * @return  SqlsrvDriver  This object to support method chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function setQuery($query, $offset = null, $limit = null)
 	{

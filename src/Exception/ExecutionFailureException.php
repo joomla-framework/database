@@ -11,7 +11,7 @@ namespace Joomla\Database\Exception;
 /**
  * Exception class defining an error executing a statement
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.5.0
  */
 class ExecutionFailureException extends \RuntimeException
 {
@@ -19,7 +19,7 @@ class ExecutionFailureException extends \RuntimeException
 	 * The SQL statement that was executed.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	private $query;
 
@@ -31,7 +31,7 @@ class ExecutionFailureException extends \RuntimeException
 	 * @param   integer    $code      The Exception code. [optional]
 	 * @param   Exception  $previous  The previous exception used for the exception chaining. [optional]
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function __construct($query, $message = '', $code = 0, \Exception $previous = null)
 	{
@@ -45,7 +45,7 @@ class ExecutionFailureException extends \RuntimeException
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function getQuery()
 	{

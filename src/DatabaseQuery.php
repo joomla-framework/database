@@ -191,7 +191,7 @@ abstract class DatabaseQuery
 	 * The unionAll element.
 	 *
 	 * @var    Query\QueryElement
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $unionAll = null;
 
@@ -670,7 +670,7 @@ abstract class DatabaseQuery
 	 * @return  string  The string with the appropriate sql for addition of dates
 	 *
 	 * @see     http://dev.mysql.com/doc/en/date-and-time-functions.html
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function dateAdd($date, $interval, $datePart)
 	{
@@ -811,7 +811,7 @@ abstract class DatabaseQuery
 	 *
 	 * @return  string  A representation of the MySQL find_in_set() function for the driver.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function findInSet($value, $set)
 	{
@@ -1274,7 +1274,7 @@ abstract class DatabaseQuery
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function rand()
 	{
@@ -1291,7 +1291,7 @@ abstract class DatabaseQuery
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function regexp($value)
 	{
@@ -1633,7 +1633,7 @@ abstract class DatabaseQuery
 	 * @return  DatabaseQuery  Returns this object to allow chaining.
 	 *
 	 * @see     union
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function unionAll($query, $distinct = false, $glue = '')
 	{

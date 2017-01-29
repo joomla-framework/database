@@ -39,7 +39,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 	 * Holds key / value pair of bound objects.
 	 *
 	 * @var    mixed
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $bounded = array();
 
@@ -57,7 +57,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 	 *
 	 * @return  MysqlQuery
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function bind($key = null, &$value = null, $dataType = \PDO::PARAM_STR, $length = 0, $driverOptions = array())
 	{
@@ -101,7 +101,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 	 *
 	 * @return  mixed
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function &getBounded($key = null)
 	{
@@ -123,7 +123,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 	 *
 	 * @return  MysqlQuery  Returns this object to allow chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function clear($clause = null)
 	{
@@ -201,7 +201,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function rand()
 	{
