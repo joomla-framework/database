@@ -6,6 +6,7 @@
 
 namespace Joomla\Database\Tests\Cases;
 
+use Joomla\Database\Pgsql\PgsqlDriver;
 use Joomla\Test\TestDatabase;
 use Joomla\Database\DatabaseDriver;
 
@@ -39,6 +40,12 @@ abstract class PgsqlCase extends TestDatabase
 		if (!defined('JTEST_DATABASE_PGSQL_DSN') && !getenv('JTEST_DATABASE_PGSQL_DSN'))
 		{
 			return;
+		}
+
+		// Make sure the driver is supported
+		if (!PgsqlDriver::isSupported())
+		{
+			static::markTestSkipped('The PDO PostgreSQL driver is not supported on this platform.');
 		}
 
 		$dsn = defined('JTEST_DATABASE_PGSQL_DSN') ? JTEST_DATABASE_PGSQL_DSN : getenv('JTEST_DATABASE_PGSQL_DSN');
@@ -80,17 +87,27 @@ abstract class PgsqlCase extends TestDatabase
 		try
 		{
 			// Attempt to instantiate the driver.
-			self::$driver = DatabaseDriver::getInstance(self::$options);
+			static::$driver = DatabaseDriver::getInstance(self::$options);
 		}
 		catch (\RuntimeException $e)
 		{
-			self::$driver = null;
+			static::$driver = null;
 		}
+	}
 
-		// If for some reason an exception object was returned set our database object to null.
-		if (self::$driver instanceof \Exception)
+	/**
+	 * This method is called after the last test of this test class is run.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public static function tearDownAfterClass()
+	{
+		if (static::$driver !== null)
 		{
-			self::$driver = null;
+			static::$driver->disconnect();
+			static::$driver = null;
 		}
 	}
 
@@ -115,12 +132,13 @@ abstract class PgsqlCase extends TestDatabase
 	 */
 	protected function getConnection()
 	{
-		// Compile the connection DSN.
-		$dsn = 'pgsql:host=' . self::$options['host'] . ';port=' . self::$options['port'] . ';dbname=' . self::$options['database'];
+		if (static::$driver === null)
+		{
+			static::fail('Could not fetch a database driver to establish the connection.');
+		}
 
-		// Create the PDO object from the DSN and options.
-		$pdo = new \PDO($dsn, self::$options['user'], self::$options['password']);
+		static::$driver->connect();
 
-		return $this->createDefaultDBConnection($pdo, self::$options['database']);
+		return $this->createDefaultDBConnection(static::$driver->getConnection(), self::$options['database']);
 	}
 }

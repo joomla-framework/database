@@ -191,6 +191,7 @@ class PostgresqlDriver extends DatabaseDriver
 
 		pg_set_error_verbosity($this->connection, PGSQL_ERRORS_DEFAULT);
 		pg_query($this->connection, 'SET standard_conforming_strings=off');
+		pg_query($this->connection, 'SET escape_string_warning=off');
 	}
 
 	/**
@@ -305,6 +306,19 @@ class PostgresqlDriver extends DatabaseDriver
 			->loadAssocList();
 
 		return $array[0]['lc_collate'];
+	}
+
+	/**
+	 * Method to get the database connection collation, as reported by the driver. If the connector doesn't support
+	 * reporting this value please return an empty string.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getConnectionCollation()
+	{
+		return pg_client_encoding($this->connection);
 	}
 
 	/**
@@ -713,8 +727,13 @@ class PostgresqlDriver extends DatabaseDriver
 				// If connect fails, ignore that exception and throw the normal exception.
 				{
 					// Get the error number and message.
-					$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
 					$this->errorMsg = pg_last_error($this->connection);
+
+					// Only get an error number if we have a non-boolean false cursor, otherwise use default 0
+					if ($this->cursor !== false)
+					{
+						$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
+					}
 
 					// Throw the normal query exception.
 					$this->log(

@@ -213,23 +213,36 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 
 				if ($this->join)
 				{
-					$onWord = ' ON ';
+					$tmpFrom     = $this->from;
+					$tmpWhere    = $this->where ? clone $this->where : null;
+					$this->from  = null;
 
 					// Workaround for special case of JOIN with UPDATE
 					foreach ($this->join as $join)
 					{
 						$joinElem = $join->getElements();
 
-						$joinArray = explode($onWord, $joinElem[0]);
+						$joinArray = preg_split('/\sON\s/i', $joinElem[0], 2);
 
 						$this->from($joinArray[0]);
-						$this->where($joinArray[1]);
+
+						if (isset($joinArray[1]))
+						{
+							$this->where($joinArray[1]);
+						}
 					}
 
 					$query .= (string) $this->from;
-				}
 
-				if ($this->where)
+					if ($this->where)
+					{
+						$query .= (string) $this->where;
+					}
+
+					$this->from  = $tmpFrom;
+					$this->where = $tmpWhere;
+				}
+				elseif ($this->where)
 				{
 					$query .= (string) $this->where;
 				}
@@ -678,5 +691,86 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 		}
 
 		return $query;
+	}
+
+	/**
+	 * Add to the current date and time.
+	 *
+	 * Usage:
+	 * $query->select($query->dateAdd());
+	 *
+	 * Prefixing the interval with a - (negative sign) will cause subtraction to be used.
+	 *
+	 * @param   datetime  $date      The date to add to
+	 * @param   string    $interval  The string representation of the appropriate number of units
+	 * @param   string    $datePart  The part of the date to perform the addition on
+	 *
+	 * @return  string  The string with the appropriate sql for addition of dates
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @link    http://www.postgresql.org/docs/9.0/static/functions-datetime.html.
+	 */
+	public function dateAdd($date, $interval, $datePart)
+	{
+		if (substr($interval, 0, 1) != '-')
+		{
+			return "timestamp '" . $date . "' + interval '" . $interval . " " . $datePart . "'";
+		}
+		else
+		{
+			return "timestamp '" . $date . "' - interval '" . ltrim($interval, '-') . " " . $datePart . "'";
+		}
+	}
+
+	/**
+	 * Get the regular expression operator
+	 *
+	 * Usage:
+	 * $query->where('field ' . $query->regexp($search));
+	 *
+	 * @param   string  $value  The regex pattern.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function regexp($value)
+	{
+		return ' ~* ' . $value;
+	}
+
+	/**
+	 * Get the function to return a random floating-point value
+	 *
+	 * Usage:
+	 * $query->rand();
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function rand()
+	{
+		return ' RANDOM() ';
+	}
+
+	/**
+	 * Find a value in a varchar used like a set.
+	 *
+	 * Ensure that the value is an integer before passing to the method.
+	 *
+	 * Usage:
+	 * $query->findInSet((int) $parent->id, 'a.assigned_cat_ids')
+	 *
+	 * @param   string  $value  The value to search for.
+	 * @param   string  $set    The set of values.
+	 *
+	 * @return  string  A representation of the MySQL find_in_set() function for the driver.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function findInSet($value, $set)
+	{
+		return " $value = ANY (string_to_array($set, ',')::integer[]) ";
 	}
 }

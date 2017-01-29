@@ -208,4 +208,56 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 
 		return $this;
 	}
+
+	/**
+	 * Get the regular expression operator
+	 *
+	 * Usage:
+	 * $query->where('field ' . $query->regexp($search));
+	 *
+	 * @param   string  $value  The regex pattern.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function regexp($value)
+	{
+		return ' REGEXP ' . $value;
+	}
+
+	/**
+	 * Get the function to return a random floating-point value
+	 *
+	 * Usage:
+	 * $query->rand();
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function rand()
+	{
+		return ' RAND() ';
+	}
+
+	/**
+	 * Find a value in a varchar used like a set.
+	 *
+	 * Ensure that the value is an integer before passing to the method.
+	 *
+	 * Usage:
+	 * $query->findInSet((int) $parent->id, 'a.assigned_cat_ids')
+	 *
+	 * @param   string  $value  The value to search for.
+	 * @param   string  $set    The set of values.
+	 *
+	 * @return  string  A representation of the MySQL find_in_set() function for the driver.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function findInSet($value, $set)
+	{
+		return ' find_in_set(' . $value . ', ' . $set . ')';
+	}
 }

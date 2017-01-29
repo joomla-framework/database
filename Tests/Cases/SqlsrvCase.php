@@ -6,6 +6,7 @@
 
 namespace Joomla\Database\Tests\Cases;
 
+use Joomla\Database\Sqlsrv\SqlsrvDriver;
 use Joomla\Test\TestDatabase;
 use Joomla\Database\DatabaseDriver;
 
@@ -39,6 +40,12 @@ abstract class SqlsrvCase extends TestDatabase
 		if (!defined('JTEST_DATABASE_SQLSRV_DSN') && !getenv('JTEST_DATABASE_SQLSRV_DSN'))
 		{
 			return;
+		}
+
+		// Make sure the driver is supported
+		if (!SqlsrvDriver::isSupported())
+		{
+			static::markTestSkipped('The SQL Server driver is not supported on this platform.');
 		}
 
 		$dsn = defined('JTEST_DATABASE_SQLSRV_DSN') ? JTEST_DATABASE_SQLSRV_DSN : getenv('JTEST_DATABASE_SQLSRV_DSN');
@@ -92,6 +99,22 @@ abstract class SqlsrvCase extends TestDatabase
 	}
 
 	/**
+	 * This method is called after the last test of this test class is run.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public static function tearDownAfterClass()
+	{
+		if (static::$driver !== null)
+		{
+			static::$driver->disconnect();
+			static::$driver = null;
+		}
+	}
+
+	/**
 	 * Gets the data set to be loaded into the database during setup
 	 *
 	 * @return  \PHPUnit_Extensions_Database_DataSet_XmlDataSet
@@ -117,6 +140,7 @@ abstract class SqlsrvCase extends TestDatabase
 
 		// Create the PDO object from the DSN and options.
 		$pdo = new \PDO($dsn, self::$options['user'], self::$options['password']);
+		$pdo->exec('create table [jos_dbtest]([id] [int] IDENTITY(1,1) NOT NULL, [title] [nvarchar](50) NOT NULL, [start_date] [datetime] NOT NULL, [description] [nvarchar](max) NOT NULL, CONSTRAINT [PK_jos_dbtest_id] PRIMARY KEY CLUSTERED ([id] ASC) WITH (STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF))');
 
 		return $this->createDefaultDBConnection($pdo, self::$options['database']);
 	}

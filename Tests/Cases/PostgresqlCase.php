@@ -6,6 +6,8 @@
 
 namespace Joomla\Database\Tests\Cases;
 
+use Joomla\Database\Pgsql\PgsqlDriver;
+use Joomla\Database\Postgresql\PostgresqlDriver;
 use Joomla\Test\TestDatabase;
 use Joomla\Database\DatabaseDriver;
 
@@ -39,6 +41,15 @@ abstract class PostgresqlCase extends TestDatabase
 		if (!defined('JTEST_DATABASE_POSTGRESQL_DSN') && !getenv('JTEST_DATABASE_POSTGRESQL_DSN'))
 		{
 			return;
+		}
+
+		/*
+		 * Make sure the driver is supported, we check both PDO PostgreSQL and "plain" PostgreSQL here
+		 * due to PHPUnit requiring a PDO connection to set up the test
+		 */
+		if (!PostgresqlDriver::isSupported() || !PgsqlDriver::isSupported())
+		{
+			static::markTestSkipped('The PDO PostgreSQL or PostgreSQL driver is not supported on this platform.');
 		}
 
 		$dsn = defined('JTEST_DATABASE_POSTGRESQL_DSN') ? JTEST_DATABASE_POSTGRESQL_DSN : getenv('JTEST_DATABASE_POSTGRESQL_DSN');
@@ -80,17 +91,27 @@ abstract class PostgresqlCase extends TestDatabase
 		try
 		{
 			// Attempt to instantiate the driver.
-			self::$driver = DatabaseDriver::getInstance(self::$options);
+			static::$driver = DatabaseDriver::getInstance(self::$options);
 		}
 		catch (\RuntimeException $e)
 		{
-			self::$driver = null;
+			static::$driver = null;
 		}
+	}
 
-		// If for some reason an exception object was returned set our database object to null.
-		if (self::$driver instanceof \Exception)
+	/**
+	 * This method is called after the last test of this test class is run.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public static function tearDownAfterClass()
+	{
+		if (static::$driver !== null)
 		{
-			self::$driver = null;
+			static::$driver->disconnect();
+			static::$driver = null;
 		}
 	}
 

@@ -1,4 +1,4 @@
-# The Database Package [![Build Status](https://travis-ci.org/joomla-framework/database.png?branch=master)](https://travis-ci.org/joomla-framework/database)
+# The Database Package [![Build Status](https://travis-ci.org/joomla-framework/database.png?branch=master)](https://travis-ci.org/joomla-framework/database) [![Build status](https://ci.appveyor.com/api/projects/status/m2eh75a1g9k9y59u?svg=true)](https://ci.appveyor.com/project/joomla/database)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/database/v/stable)](https://packagist.org/packages/joomla/database)
 [![Total Downloads](https://poser.pugx.org/joomla/database/downloads)](https://packagist.org/packages/joomla/database)

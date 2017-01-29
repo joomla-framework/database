@@ -223,7 +223,7 @@ class PgsqlDriverTest extends PgsqlCase
 	 */
 	public function testGetCollation()
 	{
-		$this->assertContains('UTF-8', self::$driver->getCollation(), __LINE__);
+		$this->assertNotEmpty(self::$driver->getCollation(), __LINE__);
 	}
 
 	/**
@@ -464,7 +464,9 @@ class PgsqlDriverTest extends PgsqlCase
 		$versionRow = self::$driver->setQuery('SELECT version();')->loadRow();
 		$versionArray = explode(' ', $versionRow[0]);
 
-		$this->assertGreaterThanOrEqual($versionArray[1], self::$driver->getVersion(), __LINE__);
+		$version = rtrim($versionArray[1], ',');
+
+		$this->assertGreaterThanOrEqual($version, self::$driver->getVersion(), __LINE__);
 	}
 
 	/**

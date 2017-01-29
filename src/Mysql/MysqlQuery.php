@@ -191,6 +191,21 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 	}
 
 	/**
+	 * Get the function to return a random floating-point value
+	 *
+	 * Usage:
+	 * $query->rand();
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function rand()
+	{
+		return ' RANDOM() ';
+	}
+
+	/**
 	 * Sets the offset and limit for the result set, if the database driver supports it.
 	 *
 	 * Usage:
