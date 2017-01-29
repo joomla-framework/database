@@ -1642,7 +1642,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @param   boolean               $distinct  Not used - ignored.
 	 * @param   string                $glue      The glue by which to join the conditions.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @see     union
 	 * @since   __DEPLOY_VERSION__
