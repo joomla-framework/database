@@ -10,7 +10,6 @@ namespace Joomla\Database;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerInterface;
 
 /**
  * Joomla Framework Database Driver Class
@@ -195,6 +194,7 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	/**
 	 * DatabaseFactory object
 	 *
+<<<<<<< HEAD
 	 * @var    DatabaseFactory
 	 * @since  __DEPLOY_VERSION__
 	 */
