@@ -9,12 +9,9 @@ branches:
 ## Build matrix for lowest and highest possible targets
 environment:
   matrix:
-  - dependencies: current
-    php_ver_target: 5.6
-  - dependencies: current
-    php_ver_target: 7.0
-  - dependencies: current
-    php_ver_target: 7.1
+  - php_ver_target: 5.6
+  - php_ver_target: 7.0
+  - php_ver_target: 7.1
 
 init:
   - SET PATH=C:\Program Files\OpenSSL;c:\tools\php;%PATH%
@@ -78,9 +75,7 @@ install:
     - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
     - appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar
     - cd c:\projects\database
-    - IF %dependencies%==lowest appveyor-retry composer update --prefer-lowest --no-progress --profile -n
-    - IF %dependencies%==current appveyor-retry composer install --no-progress --profile
-    - IF %dependencies%==highest appveyor-retry composer update --no-progress --profile -n
+    - appveyor-retry composer install --no-progress --profile
 
 before_test:
 #  Database setup for mysql via PowerShell tools
