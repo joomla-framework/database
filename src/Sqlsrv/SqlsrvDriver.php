@@ -8,9 +8,12 @@
 
 namespace Joomla\Database\Sqlsrv;
 
+use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
+use Joomla\Database\Query\LimitableInterface;
+use Joomla\Database\Query\PreparableInterface;
 use Psr\Log;
 use Joomla\Database\DatabaseDriver;
 
@@ -604,18 +607,33 @@ class SqlsrvDriver extends DatabaseDriver
 		$this->errorNum = 0;
 		$this->errorMsg = '';
 
+		$options = array();
+
 		// SQLSrv_num_rows requires a static or keyset cursor.
 		if (strncmp(ltrim(strtoupper($sql)), 'SELECT', strlen('SELECT')) == 0)
 		{
-			$array = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
+			$options = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
 		}
-		else
+
+		$params = array();
+
+		// Bind the variables:
+		if ($this->sql instanceof PreparableInterface)
 		{
-			$array = array();
+			$bounded =& $this->sql->getBounded();
+
+			if (count($bounded))
+			{
+				foreach ($bounded as $key => $obj)
+				{
+					// And add the value as an additional param
+					$params[] = $obj->value;
+				}
+			}
 		}
 
 		// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
-		$this->cursor = @sqlsrv_query($this->connection, $sql, array(), $array);
+		$this->cursor = @sqlsrv_query($this->connection, $sql, $params, $options);
 
 		// If an error occurred handle it.
 		if (!$this->cursor)
@@ -804,6 +822,38 @@ class SqlsrvDriver extends DatabaseDriver
 	}
 
 	/**
+	 * Sets the SQL statement string for later execution.
+	 *
+	 * @param   DatabaseQuery|string  $query   The SQL statement to set either as a DatabaseQuery object or a string.
+	 * @param   integer               $offset  The affected row offset to set.
+	 * @param   integer               $limit   The maximum affected rows to set.
+	 *
+	 * @return  SqlsrvDriver  This object to support method chaining.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setQuery($query, $offset = null, $limit = null)
+	{
+		$this->connect();
+
+		$this->freeResult();
+
+		if (is_string($query))
+		{
+			// Allows taking advantage of bound variables in a direct query:
+			$query = $this->getQuery(true)->setQuery($query);
+		}
+
+		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
+		{
+			$query->setLimit($limit, $offset);
+		}
+
+		// Store reference to the DatabaseQuery instance
+		return parent::setQuery($query, $offset, $limit);
+	}
+
+	/**
 	 * Set the connection to use UTF-8 character encoding.
 	 *
 	 * @return  boolean  True on success.
@@ -962,7 +1012,12 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	protected function freeResult($cursor = null)
 	{
-		sqlsrv_free_stmt($cursor ? $cursor : $this->cursor);
+		$useCursor = $cursor ?: $this->cursor;
+
+		if (is_resource($useCursor))
+		{
+			sqlsrv_free_stmt($useCursor);
+		}
 	}
 
 	/**

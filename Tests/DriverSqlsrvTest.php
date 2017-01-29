@@ -485,6 +485,33 @@ class DriverSqlsrvTest extends DatabaseSqlsrvCase
 	}
 
 	/**
+	 * Test the execute method with a prepared statement
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testExecutePreparedStatement()
+	{
+		$title       = 'testTitle';
+		$startDate   = '2013-04-01 00:00:00.000';
+		$description = 'description';
+
+		/** @var \Joomla\Database\Sqlsrv\SqlsrvQuery $query */
+		$query = self::$driver->getQuery(true);
+		$query->insert('jos_dbtest')
+			->columns('title,start_date,description')
+			->values('?, ?, ?');
+		$query->bind(1, $title);
+		$query->bind(2, $startDate);
+		$query->bind(3, $description);
+
+		self::$driver->setQuery($query);
+
+		$this->assertNotEquals(self::$driver->execute(), false, __LINE__);
+	}
+
+	/**
 	 * Tests the renameTable method
 	 *
 	 * @return  void
