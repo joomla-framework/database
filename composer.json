@@ -19,6 +19,7 @@
     },
     "suggest": {
         "joomla/di": "To use the Database ServiceProviderInterface objects, install joomla/di.",
+        "joomla/registry": "To use the Database ServiceProviderInterface objects, install joomla/registry.",
         "ext-mysqli": "To connect to a MySQL database via MySQLi",
         "ext-pdo": "To connect to a MySQL, Oracle, PostgreSQL, or SQLite database via PDO",
         "ext-pgsql": "To connect to a PostgreSQL database",

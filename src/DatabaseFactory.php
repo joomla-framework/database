@@ -156,15 +156,15 @@ class DatabaseFactory
 	/**
 	 * Get the current query object or a new Query object.
 	 *
-	 * @param   string          $name  Name of the driver you want an query object for.
-	 * @param   DatabaseDriver  $db    Optional Driver instance
+	 * @param   string             $name  Name of the driver you want an query object for.
+	 * @param   DatabaseInterface  $db    Optional Driver instance
 	 *
 	 * @return  DatabaseQuery
 	 *
 	 * @since   1.0
 	 * @throws  Exception\UnsupportedAdapterException
 	 */
-	public function getQuery($name, DatabaseDriver $db = null)
+	public function getQuery($name, DatabaseInterface $db = null)
 	{
 		// Derive the class name from the driver.
 		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($name)) . '\\' . ucfirst(strtolower($name)) . 'Query';

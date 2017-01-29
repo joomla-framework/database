@@ -31,9 +31,10 @@ class DatabaseProvider implements ServiceProviderInterface
 	public function register(Container $container)
 	{
 		$container->share(
-			'Joomla\\Database\\DatabaseDriver',
+			DatabaseDriver::class,
 			function (Container $container)
 			{
+				/** @var \Joomla\Registry\Registry $config */
 				$config  = $container->get('config');
 				$options = (array) $config->get('database');
 

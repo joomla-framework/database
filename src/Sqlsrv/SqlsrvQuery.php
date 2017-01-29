@@ -8,7 +8,7 @@
 
 namespace Joomla\Database\Sqlsrv;
 
-use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseInterface;
 use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Query\QueryElement;
 
@@ -186,7 +186,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 */
 	public function group($columns)
 	{
-		if (!($this->db instanceof DatabaseDriver))
+		if (!($this->db instanceof DatabaseInterface))
 		{
 			throw new \RuntimeException('JLIB_DATABASE_ERROR_INVALID_DB_OBJECT');
 		}
