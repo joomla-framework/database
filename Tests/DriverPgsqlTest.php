@@ -221,7 +221,7 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 	 */
 	public function testGetCollation()
 	{
-		$this->assertContains('UTF-8', self::$driver->getCollation(), __LINE__);
+		$this->assertNotEmpty(self::$driver->getCollation(), __LINE__);
 	}
 
 	/**
