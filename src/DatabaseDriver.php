@@ -9,6 +9,7 @@
 namespace Joomla\Database;
 
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -18,6 +19,8 @@ use Psr\Log\LoggerInterface;
  */
 abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 {
+	use LoggerAwareTrait;
+
 	/**
 	 * The name of the database.
 	 *
@@ -188,14 +191,6 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	 * @since  1.0
 	 */
 	protected $transactionDepth = 0;
-
-	/**
-	 * A logger.
-	 *
-	 * @var    LoggerInterface
-	 * @since  1.0
-	 */
-	private $logger;
 
 	/**
 	 * DatabaseFactory object
@@ -1481,20 +1476,6 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 		$this->offset = (int) max(0, $offset);
 
 		return $this;
-	}
-
-	/**
-	 * Sets a logger instance on the object
-	 *
-	 * @param   LoggerInterface  $logger  A PSR-3 compliant logger.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function setLogger(LoggerInterface $logger)
-	{
-		$this->logger = $logger;
 	}
 
 	/**
