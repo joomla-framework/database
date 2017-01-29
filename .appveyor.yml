@@ -16,9 +16,6 @@ environment:
   - dependencies: current
     php_ver_target: 7.1
 
-## Cache composer bits
-cache:
-    - '%LOCALAPPDATA%\Composer\files -> composer.lock'
 init:
   - SET PATH=C:\Program Files\OpenSSL;c:\tools\php;%PATH%
   - SET COMPOSER_NO_INTERACTION=1
