@@ -18,7 +18,7 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * The database driver.
 	 *
-	 * @var    DatabaseDriver
+	 * @var    DatabaseInterface
 	 * @since  1.0
 	 */
 	protected $db = null;
@@ -194,11 +194,11 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * Class constructor.
 	 *
-	 * @param   DatabaseDriver  $db  The database driver.
+	 * @param   DatabaseInterface  $db  The database driver.
 	 *
 	 * @since   1.0
 	 */
-	public function __construct(DatabaseDriver $db = null)
+	public function __construct(DatabaseInterface $db = null)
 	{
 		$this->db = $db;
 	}
@@ -660,9 +660,9 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function dateFormat()
 	{
-		if (!($this->db instanceof DatabaseDriver))
+		if (!($this->db instanceof DatabaseInterface))
 		{
-			throw new \RuntimeException('JLIB_DATABASE_ERROR_INVALID_DB_OBJECT');
+			throw new \RuntimeException(sprintf('A %s instance is not set to the query object.', DatabaseInterface::class));
 		}
 
 		return $this->db->getDateFormat();
@@ -744,9 +744,9 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function escape($text, $extra = false)
 	{
-		if (!($this->db instanceof DatabaseDriver))
+		if (!($this->db instanceof DatabaseInterface))
 		{
-			throw new \RuntimeException('JLIB_DATABASE_ERROR_INVALID_DB_OBJECT');
+			throw new \RuntimeException(sprintf('A %s instance is not set to the query object.', DatabaseInterface::class));
 		}
 
 		return $this->db->escape($text, $extra);
@@ -1123,9 +1123,9 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function nullDate($quoted = true)
 	{
-		if (!($this->db instanceof DatabaseDriver))
+		if (!($this->db instanceof DatabaseInterface))
 		{
-			throw new \RuntimeException('JLIB_DATABASE_ERROR_INVALID_DB_OBJECT');
+			throw new \RuntimeException(sprintf('A %s instance is not set to the query object.', DatabaseInterface::class));
 		}
 
 		$result = $this->db->getNullDate();
@@ -1221,9 +1221,9 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function quote($text, $escape = true)
 	{
-		if (!($this->db instanceof DatabaseDriver))
+		if (!($this->db instanceof DatabaseInterface))
 		{
-			throw new \RuntimeException('JLIB_DATABASE_ERROR_INVALID_DB_OBJECT');
+			throw new \RuntimeException(sprintf('A %s instance is not set to the query object.', DatabaseInterface::class));
 		}
 
 		return $this->db->quote($text, $escape);
@@ -1272,9 +1272,9 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function quoteName($name, $as = null)
 	{
-		if (!($this->db instanceof DatabaseDriver))
+		if (!($this->db instanceof DatabaseInterface))
 		{
-			throw new \RuntimeException('JLIB_DATABASE_ERROR_INVALID_DB_OBJECT');
+			throw new \RuntimeException(sprintf('A %s instance is not set to the query object.', DatabaseInterface::class));
 		}
 
 		return $this->db->quoteName($name, $as);
