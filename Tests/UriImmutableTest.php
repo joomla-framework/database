@@ -78,9 +78,91 @@ class UriImmuteableTest extends TestCase
 	 */
 	public function testToString()
 	{
+		$classname = get_class($this->object);
+
+		// The next 4 tested functions should generate equivalent results
 		$this->assertThat(
 			$this->object->toString(),
 			$this->equalTo('http://someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
+		);
+
+		$this->assertThat(
+			$this->object->toString($classname::ALL),
+			$this->equalTo('http://someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
+		);
+
+		$this->assertThat(
+			$this->object->toString('scheme', 'user', 'pass', 'host', 'port', 'path', 'query', 'fragment'),
+			$this->equalTo('http://someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
+		);
+
+		$this->assertThat(
+			$this->object->toString(array('scheme', 'user', 'pass', 'host', 'port', 'path', 'query', 'fragment')),
+			$this->equalTo('http://someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
+		);
+
+		// The next 3 tested functions should generate equivalent results
+		$this->assertThat(
+			$this->object->toString($classname::SCHEME),
+			$this->equalTo('http://')
+		);
+
+		$this->assertThat(
+			$this->object->toString('scheme'),
+			$this->equalTo('http://')
+		);
+
+		$this->assertThat(
+			$this->object->toString(array('scheme')),
+			$this->equalTo('http://')
+		);
+
+		// The next 3 tested functions should generate equivalent results
+		$this->assertThat(
+			$this->object->toString($classname::HOST | $classname::PORT),
+			$this->equalTo('www.example.com:80')
+		);
+
+		$this->assertThat(
+			$this->object->toString('host', 'port'),
+			$this->equalTo('www.example.com:80')
+		);
+
+		$this->assertThat(
+			$this->object->toString(array('host', 'port')),
+			$this->equalTo('www.example.com:80')
+		);
+
+		// The next 3 tested functions should generate equivalent results
+		$this->assertThat(
+			$this->object->toString($classname::PATH | $classname::QUERY | $classname::FRAGMENT),
+			$this->equalTo('/path/file.html?var=value#fragment')
+		);
+
+		$this->assertThat(
+			$this->object->toString('path', 'query', 'fragment'),
+			$this->equalTo('/path/file.html?var=value#fragment')
+		);
+
+		$this->assertThat(
+			$this->object->toString(array('path', 'query', 'fragment')),
+			$this->equalTo('/path/file.html?var=value#fragment')
+		);
+
+		// The next 3 tested functions should generate equivalent results
+		$this->assertThat(
+			$this->object->toString($classname::ALL & ~$classname::SCHEME),
+			$this->equalTo('someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
+		);
+
+		$this->assertThat(
+			$this->object->toString('user', 'pass', 'host', 'port', 'path', 'query', 'fragment'),
+			$this->equalTo('someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
+		);
+
+		$this->assertThat(
+			$this->object->toString(array('user', 'pass', 'host', 'port', 'path', 'query', 'fragment')),
+			$this->equalTo('someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
 		);
 	}
 

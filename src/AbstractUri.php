@@ -110,26 +110,48 @@ abstract class AbstractUri implements UriInterface
 	/**
 	 * Returns full uri string.
 	 *
-	 * @param   array  $parts  An array specifying the parts to render.
+	 * @param   mixed  $parts  An integer, a list of strings, or an array of strings specifying the parts to render.
 	 *
 	 * @return  string  The rendered URI string.
 	 *
 	 * @since   1.0
 	 */
-	public function toString(array $parts = array('scheme', 'user', 'pass', 'host', 'port', 'path', 'query', 'fragment'))
+	public function toString($parts = self::ALL)
 	{
+		if (is_string($parts))
+		{
+			$parts = func_get_args();
+		}
+
+		if (is_array($parts))
+		{
+			$realParts = 0;
+
+			foreach ($parts as $part)
+			{
+				$const = 'static::' . strtoupper($part);
+
+				if (defined($const))
+				{
+					$realParts |= constant($const);
+				}
+			}
+
+			$parts = $realParts;
+		}
+
 		// Make sure the query is created
 		$query = $this->getQuery();
 
 		$uri = '';
-		$uri .= in_array('scheme', $parts) ? (!empty($this->scheme) ? $this->scheme . '://' : '') : '';
-		$uri .= in_array('user', $parts) ? $this->user : '';
-		$uri .= in_array('pass', $parts) ? (!empty($this->pass) ? ':' : '') . $this->pass . (!empty($this->user) ? '@' : '') : '';
-		$uri .= in_array('host', $parts) ? $this->host : '';
-		$uri .= in_array('port', $parts) ? (!empty($this->port) ? ':' : '') . $this->port : '';
-		$uri .= in_array('path', $parts) ? $this->path : '';
-		$uri .= in_array('query', $parts) ? (!empty($query) ? '?' . $query : '') : '';
-		$uri .= in_array('fragment', $parts) ? (!empty($this->fragment) ? '#' . $this->fragment : '') : '';
+		$uri .= $parts & static::SCHEME   ? (!empty($this->scheme) ? $this->scheme . '://' : '') : '';
+		$uri .= $parts & static::USER     ? $this->user : '';
+		$uri .= $parts & static::PASS     ? (!empty($this->pass) ? ':' : '') . $this->pass . (!empty($this->user) ? '@' : '') : '';
+		$uri .= $parts & static::HOST     ? $this->host : '';
+		$uri .= $parts & static::PORT     ? (!empty($this->port) ? ':' : '') . $this->port : '';
+		$uri .= $parts & static::PATH     ? $this->path : '';
+		$uri .= $parts & static::QUERY    ? (!empty($query) ? '?' . $query : '') : '';
+		$uri .= $parts & static::FRAGMENT ? (!empty($this->fragment) ? '#' . $this->fragment : '') : '';
 
 		return $uri;
 	}
