@@ -228,18 +228,47 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public function escape($text, $extra = false)
 	{
-		$result = addslashes($text);
-		$result = str_replace("\'", "''", $result);
-		$result = str_replace('\"', '"', $result);
-		$result = str_replace('\/', '/', $result);
+		$result = str_replace("'", "''", $text);
+
+		// Fix for SQL Sever escape sequence, see https://support.microsoft.com/en-us/kb/164291
+		$result = str_replace(
+			array("\\\n",     "\\\r",     "\\\\\r\r\n"),
+			array("\\\\\n\n", "\\\\\r\r", "\\\\\r\n\r\n"),
+			$result
+		);
 
 		if ($extra)
 		{
-			// We need the below str_replace since the search in sql server doesn't recognize _ character.
-			$result = str_replace('_', '[_]', $result);
+			// Escape special chars
+			$result = str_replace(
+				array('[',   '_',   '%'),
+				array('[[]', '[_]', '[%]'),
+				$result
+			);
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Quotes and optionally escapes a string to database requirements for use in database queries.
+	 *
+	 * @param   mixed    $text    A string or an array of strings to quote.
+	 * @param   boolean  $escape  True (default) to escape the string, false to leave it unchanged.
+	 *
+	 * @return  string  The quoted input string.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function quote($text, $escape = true)
+	{
+		if (is_array($text))
+		{
+			return parent::quote($text, $escape);
+		}
+
+		// To support unicode on MSSQL we have to add prefix N
+		return 'N\'' . ($escape ? $this->escape($text) : $text) . '\'';
 	}
 
 	/**
@@ -533,39 +562,6 @@ class SqlsrvDriver extends DatabaseDriver
 		$this->setQuery('SELECT @@IDENTITY');
 
 		return (int) $this->loadResult();
-	}
-
-	/**
-	 * Method to get the first field of the first row of the result set from the database query.
-	 *
-	 * @return  mixed  The return value or null if the query failed.
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	public function loadResult()
-	{
-		$ret = null;
-
-		// Execute the query and get the result set cursor.
-		if (!($cursor = $this->execute()))
-		{
-			return null;
-		}
-
-		// Get the first row from the result set as an array.
-		if ($row = sqlsrv_fetch_array($cursor, SQLSRV_FETCH_NUMERIC))
-		{
-			$ret = $row[0];
-		}
-
-		// Free up system resources and return.
-		$this->freeResult($cursor);
-
-		// For SQLServer - we need to strip slashes
-		$ret = stripslashes($ret);
-
-		return $ret;
 	}
 
 	/**
