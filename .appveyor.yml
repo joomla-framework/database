@@ -43,28 +43,37 @@ install:
             copy SQLSRV\php_pdo_sqlsrv_56_nts.dll ext\php_pdo_sqlsrv_nts.dll
             Remove-Item c:\tools\php\* -include .zip
             } Else {
-              cd c:\tools\php\ext
-              appveyor-retry appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/sqlsrv/4.1.6.1/php_sqlsrv-4.1.6.1-$($env:php)-nts-vc14-x64.zip
-              7z x -y php_sqlsrv-4.1.6.1-$($env:php)-nts-vc14-x64.zip > $null
-              appveyor-retry appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/pdo_sqlsrv/4.1.6.1/php_pdo_sqlsrv-4.1.6.1-$($env:php)-nts-vc14-x64.zip
-              7z x -y php_pdo_sqlsrv-4.1.6.1-$($env:php)-nts-vc14-x64.zip > $null
-              Remove-Item c:\tools\php\* -include .zip
-              cd c:\tools\php}}
-
+            $DLLVersion = "4.1.6.1"
+            cd c:\tools\php\ext
+            appveyor-retry appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/sqlsrv/$($DLLVersion)/php_sqlsrv-$($DLLVersion)-$($env:php_ver_target)-nts-vc14-x64.zip
+            7z x -y php_sqlsrv-$($DLLVersion)-$($env:php_ver_target)-nts-vc14-x64.zip > $null
+            appveyor-retry appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/pdo_sqlsrv/$($DLLVersion)/php_pdo_sqlsrv-$($DLLVersion)-$($env:php_ver_target)-nts-vc14-x64.zip
+            7z x -y php_pdo_sqlsrv-$($DLLVersion)-$($env:php_ver_target)-nts-vc14-x64.zip > $null
+            Remove-Item c:\tools\php\ext* -include .zip
+            cd c:\tools\php}}
     - IF %PHP%==1 copy php.ini-production php.ini /Y
     - IF %PHP%==1 echo date.timezone="UTC" >> php.ini
     - IF %PHP%==1 echo extension_dir=ext >> php.ini
     - IF %PHP%==1 echo extension=php_openssl.dll >> php.ini
     - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
     - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_pdo_mysql.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_pdo_sqlsrv.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_sqlsrv.dll >> php.ini
+    - ps: >-
+        If ($env:php_ver_target -eq "5.6") {
+          Add-Content php.ini "`nextension=php_sqlsrv_nts.dll"
+          Add-Content php.ini "`nextension=php_pdo_sqlsrv_nts.dll"
+          Add-Content php.ini "`n"
+        } Else {
+          Add-Content php.ini "`nextension=php_sqlsrv.dll"
+          Add-Content php.ini "`nextension=php_pdo_sqlsrv.dll"
+          Add-Content php.ini "`n"
+        }
+    - IF %PHP%==1 echo extension=php_pgsql.dll >> php.ini
     - IF %PHP%==1 echo extension=php_pdo_pgsql.dll >> php.ini
     - IF %PHP%==1 echo extension=php_pdo_sqlite.dll >> php.ini
     - IF %PHP%==1 echo extension=php_sqlite3.dll >> php.ini
+    - IF %PHP%==1 echo extension=php_pdo_mysql.dll >> php.ini
     - IF %PHP%==1 echo extension=php_mysqli.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_pgsql.dll >> php.ini
+    - IF %PHP_VER_TARGET%==5.6 IF %PHP%==1 echo extension=php_mysql.dll >> php.ini
     - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
     - appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar
     - cd c:\projects\database
