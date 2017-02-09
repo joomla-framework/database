@@ -1,5 +1,4 @@
 build: false
-shallow_clone: true
 platform:
   - x64
 clone_folder: C:\projects\database
@@ -16,7 +15,7 @@ environment:
 init:
   - SET PATH=C:\Program Files\OpenSSL;c:\tools\php;%PATH%
   - SET COMPOSER_NO_INTERACTION=1
-  - SET PHP=1
+  - SET PHP=1 # this var relates to caching the php  install
   - SET ANSICON=121x90 (121x90)
 services:
   - mssql2014
@@ -34,30 +33,24 @@ install:
         appveyor-retry cinst --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $Env:php_ver_target | Select-Object -first 1) -replace '[php|]','')}
     - cinst -y sqlite
     - cd c:\tools\php
+    # Get the MSSQL DLL's
     - ps: >-
-        If ($env:php_ver_target -eq "5.6") {
-          If ($env:PHP -eq "1") {
+        If ($env:PHP -eq "1") {
+          If ($env:php_ver_target -eq "5.6") {
             appveyor DownloadFile https://files.nette.org/misc/php-sqlsrv.zip
             7z x php-sqlsrv.zip > $null
             copy SQLSRV\php_sqlsrv_56_nts.dll ext\php_sqlsrv_nts.dll
             copy SQLSRV\php_pdo_sqlsrv_56_nts.dll ext\php_pdo_sqlsrv_nts.dll
-            Remove-Item c:\tools\php\* -include .zip}}
-    - ps: >-
-        If ($env:php_ver_target -eq "7.0") {
-          If ($env:PHP -eq "1") {
-            appveyor DownloadFile https://github.com/Microsoft/msphpsql/releases/download/4.1.5-Windows/7.0.zip
-            7z x 7.0.zip > $null
-            copy 7.0\x64\php_pdo_sqlsrv_7_nts.dll ext\php_pdo_sqlsrv_nts.dll
-            copy 7.0\x64\php_sqlsrv_7_nts.dll ext\php_sqlsrv_nts.dll
-            Remove-Item c:\tools\php\* -include .zip}}
-    - ps: >-
-        If ($env:php_ver_target -eq "7.1") {
-          If ($env:PHP -eq "1") {
-            appveyor DownloadFile https://github.com/Microsoft/msphpsql/releases/download/4.1.5-Windows/7.1.zip
-            7z x 7.1.zip > $null
-            copy 7.1\x64\php_pdo_sqlsrv_71_nts.dll ext\php_pdo_sqlsrv_nts.dll
-            copy 7.1\x64\php_sqlsrv_71_nts.dll ext\php_sqlsrv_nts.dll
-            Remove-Item c:\tools\php\* -include .zip}}
+            Remove-Item c:\tools\php\* -include .zip
+            } Else {
+              cd c:\tools\php\ext
+              appveyor-retry appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/sqlsrv/4.1.6.1/php_sqlsrv-4.1.6.1-$($env:php)-nts-vc14-x64.zip
+              7z x -y php_sqlsrv-4.1.6.1-$($env:php)-nts-vc14-x64.zip > $null
+              appveyor-retry appveyor DownloadFile http://windows.php.net/downloads/pecl/releases/pdo_sqlsrv/4.1.6.1/php_pdo_sqlsrv-4.1.6.1-$($env:php)-nts-vc14-x64.zip
+              7z x -y php_pdo_sqlsrv-4.1.6.1-$($env:php)-nts-vc14-x64.zip > $null
+              Remove-Item c:\tools\php\* -include .zip
+              cd c:\tools\php}}
+
     - IF %PHP%==1 copy php.ini-production php.ini /Y
     - IF %PHP%==1 echo date.timezone="UTC" >> php.ini
     - IF %PHP%==1 echo extension_dir=ext >> php.ini
@@ -65,8 +58,8 @@ install:
     - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
     - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini
     - IF %PHP%==1 echo extension=php_pdo_mysql.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_pdo_sqlsrv_nts.dll >> php.ini
-    - IF %PHP%==1 echo extension=php_sqlsrv_nts.dll >> php.ini
+    - IF %PHP%==1 echo extension=php_pdo_sqlsrv.dll >> php.ini
+    - IF %PHP%==1 echo extension=php_sqlsrv.dll >> php.ini
     - IF %PHP%==1 echo extension=php_pdo_pgsql.dll >> php.ini
     - IF %PHP%==1 echo extension=php_pdo_sqlite.dll >> php.ini
     - IF %PHP%==1 echo extension=php_sqlite3.dll >> php.ini
@@ -97,4 +90,3 @@ before_test:
 test_script:
   - cd C:\projects\database
   - vendor/bin/phpunit -c phpunit.appveyor.xml
-
