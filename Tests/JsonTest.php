@@ -8,6 +8,7 @@ namespace Joomla\Input\Tests;
 
 use Joomla\Input\Json;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/Stubs/FilterInputMock.php';
 
@@ -16,7 +17,7 @@ require_once __DIR__ . '/Stubs/FilterInputMock.php';
  *
  * @since  1.0
  */
-class JsonTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends TestCase
 {
 	/**
 	 * Test the Joomla\Input\Json::__construct method.

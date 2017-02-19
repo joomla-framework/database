@@ -8,6 +8,7 @@ namespace Joomla\Input\Tests;
 
 use Joomla\Input\Files;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/Stubs/FilterInputMock.php';
 
@@ -16,7 +17,7 @@ require_once __DIR__ . '/Stubs/FilterInputMock.php';
  *
  * @since  1.0
  */
-class FilesTest extends \PHPUnit_Framework_TestCase
+class FilesTest extends TestCase
 {
 	/**
 	 * Test the Joomla\Input\Files::__construct method.
