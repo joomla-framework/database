@@ -7,11 +7,12 @@
 namespace Joomla\Renderer\Tests;
 
 use Joomla\Renderer\AbstractRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Renderer\AbstractRenderer.
  */
-class AbstractRendererTest extends \PHPUnit_Framework_TestCase
+class AbstractRendererTest extends TestCase
 {
 	/**
 	 * @testdox  A data key is set to the renderer

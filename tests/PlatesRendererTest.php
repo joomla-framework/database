@@ -8,11 +8,12 @@ namespace Joomla\Renderer\Tests;
 
 use Joomla\Renderer\PlatesRenderer;
 use League\Plates\Engine;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Renderer\PlatesRenderer.
  */
-class PlatesRendererTest extends \PHPUnit_Framework_TestCase
+class PlatesRendererTest extends TestCase
 {
 	/**
 	 * @testdox  The Plates renderer is instantiated with default parameters

@@ -7,6 +7,7 @@
 namespace Joomla\Renderer\Tests;
 
 use Joomla\Renderer\PhpEngineRenderer;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Templating\Loader\FilesystemLoader;
 use Symfony\Component\Templating\PhpEngine;
 use Symfony\Component\Templating\TemplateNameParser;
@@ -14,7 +15,7 @@ use Symfony\Component\Templating\TemplateNameParser;
 /**
  * Test class for \Joomla\Renderer\PhpEngineRenderer.
  */
-class PhpEngineRendererTest extends \PHPUnit_Framework_TestCase
+class PhpEngineRendererTest extends TestCase
 {
 	/**
 	 * @testdox  The PhpEngine renderer is instantiated with injected parameters

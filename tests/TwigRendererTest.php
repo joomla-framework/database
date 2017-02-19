@@ -7,11 +7,12 @@
 namespace Joomla\Renderer\Tests;
 
 use Joomla\Renderer\TwigRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Renderer\TwigRenderer.
  */
-class TwigRendererTest extends \PHPUnit_Framework_TestCase
+class TwigRendererTest extends TestCase
 {
 	/**
 	 * @testdox  The Twig renderer is instantiated with default parameters

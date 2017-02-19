@@ -14,11 +14,12 @@ use Illuminate\View\Engines\EngineResolver;
 use Illuminate\View\Factory;
 use Illuminate\View\FileViewFinder;
 use Joomla\Renderer\BladeRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Renderer\BladeRenderer.
  */
-class BladeRendererTest extends \PHPUnit_Framework_TestCase
+class BladeRendererTest extends TestCase
 {
 	/**
 	 * @testdox  The Blade renderer is instantiated with default parameters

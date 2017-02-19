@@ -7,11 +7,12 @@
 namespace Joomla\Renderer\Tests;
 
 use Joomla\Renderer\MustacheRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Renderer\MustacheRenderer.
  */
-class MustacheRendererTest extends \PHPUnit_Framework_TestCase
+class MustacheRendererTest extends TestCase
 {
 	/**
 	 * Data provider for path existence checks
