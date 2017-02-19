@@ -143,7 +143,15 @@ class ArchiveTest extends ArchiveTestCase
 	{
 		if ($expectedException)
 		{
-			$this->setExpectedException('InvalidArgumentException');
+			// expectException was added in PHPUnit 5.2 and setExpectedException removed in 6.0
+			if (method_exists($this, 'expectException'))
+			{
+				$this->expectException('InvalidArgumentException');
+			}
+			else
+			{
+				$this->setExpectedException('InvalidArgumentException');
+			}
 		}
 
 		$adapter = $this->fixture->getAdapter($adapterType);

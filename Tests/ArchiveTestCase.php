@@ -6,12 +6,12 @@
 
 namespace Joomla\Archive\Tests;
 
-use Joomla\Archive\ExtractableInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Base test case for Archive tests
  */
-abstract class ArchiveTestCase extends \PHPUnit_Framework_TestCase
+abstract class ArchiveTestCase extends TestCase
 {
 	/**
 	 * Input directory
