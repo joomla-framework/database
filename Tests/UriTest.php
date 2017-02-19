@@ -8,13 +8,14 @@ namespace Joomla\Uri\Tests;
 
 use Joomla\Uri\Uri;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the Joomla\Uri\Uri class.
  *
  * @since  1.0
  */
-class UriTest extends \PHPUnit_Framework_TestCase
+class UriTest extends TestCase
 {
 	/**
 	 * Object under test

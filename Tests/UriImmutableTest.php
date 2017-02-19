@@ -7,13 +7,14 @@
 namespace Joomla\Uri\Tests;
 
 use Joomla\Uri\UriImmutable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the Joomla\Uri\UriImmutable class.
  *
  * @since  1.0
  */
-class UriImmuteableTest extends \PHPUnit_Framework_TestCase
+class UriImmuteableTest extends TestCase
 {
 	/**
 	 * Object under test

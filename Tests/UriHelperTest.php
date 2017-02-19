@@ -7,13 +7,14 @@
 namespace Joomla\Uri\Tests;
 
 use Joomla\Uri\UriHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the Joomla\Uri\UriHelper class.
  *
  * @since  1.0
  */
-class UriHelperTest extends \PHPUnit_Framework_TestCase
+class UriHelperTest extends TestCase
 {
 	/**
 	 * Test the parse_url method.
