@@ -7,13 +7,14 @@
 namespace Joomla\String\Tests;
 
 use Joomla\String\Normalise;
+use PHPUnit\Framework\TestCase;
 
 /**
  * NormaliseTest
  *
  * @since  1.0
  */
-class NormaliseTest extends \PHPUnit_Framework_TestCase
+class NormaliseTest extends TestCase
 {
 	/**
 	 * Method to seed data to testFromCamelCase.

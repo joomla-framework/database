@@ -8,6 +8,7 @@ namespace Joomla\String\Tests;
 
 use Joomla\String\Inflector;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for the Inflector class.
@@ -15,7 +16,7 @@ use Joomla\Test\TestHelper;
  * @link   http://en.wikipedia.org/wiki/English_plural
  * @since  1.0
  */
-class InflectorTest extends \PHPUnit_Framework_TestCase
+class InflectorTest extends TestCase
 {
 	/**
 	 * @var    Inflector

@@ -7,13 +7,14 @@
 namespace Joomla\String\Tests;
 
 use Joomla\String\StringHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for StringHelper.
  *
  * @since  1.0
  */
-class StringHelperTest extends \PHPUnit_Framework_TestCase
+class StringHelperTest extends TestCase
 {
 	/**
 	 * Test...
