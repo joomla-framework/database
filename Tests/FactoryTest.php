@@ -8,11 +8,12 @@ namespace Joomla\Registry\Tests;
 
 use Joomla\Registry\Factory;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Joomla\Registry\Factory
  */
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends TestCase
 {
 	/**
 	 * {@inheritdoc}

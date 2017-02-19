@@ -7,11 +7,12 @@
 namespace Joomla\Registry\Tests;
 
 use Joomla\Registry\AbstractRegistryFormat;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Registry\AbstractRegistryFormat.
  */
-class AbstractRegistryFormatTest extends \PHPUnit_Framework_TestCase
+class AbstractRegistryFormatTest extends TestCase
 {
 	/**
 	 * Data provider for testGetInstance

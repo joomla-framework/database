@@ -7,11 +7,12 @@
 namespace Joomla\Registry\Tests\Format;
 
 use Joomla\Registry\Format\Ini;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Registry\Format\Ini.
  */
-class IniTest extends \PHPUnit_Framework_TestCase
+class IniTest extends TestCase
 {
 	/**
 	 * @testdox  A data object is converted to a string

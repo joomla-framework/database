@@ -7,11 +7,12 @@
 namespace Joomla\Registry\Tests\Format;
 
 use Joomla\Registry\Format\Php;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Registry\Format\Php.
  */
-class PhpTest extends \PHPUnit_Framework_TestCase
+class PhpTest extends TestCase
 {
 	/**
 	 * @testdox  A data object is converted to a string

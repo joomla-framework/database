@@ -7,12 +7,13 @@
 namespace Joomla\Registry\Tests;
 
 use Joomla\Registry\Registry;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Test class for \Joomla\Registry\Registry.
  */
-class RegistryTest extends \PHPUnit_Framework_TestCase
+class RegistryTest extends TestCase
 {
 	/**
 	 * @testdox  A Registry instance is instantiated with empty data

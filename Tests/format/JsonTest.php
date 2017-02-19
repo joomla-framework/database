@@ -7,11 +7,12 @@
 namespace Joomla\Registry\Tests\Format;
 
 use Joomla\Registry\Format\Json;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Registry\Format\Json.
  */
-class JsonTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends TestCase
 {
 	/**
 	 * @testdox  A data object is converted to a string

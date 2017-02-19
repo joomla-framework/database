@@ -7,11 +7,12 @@
 namespace Joomla\Registry\Tests\Format;
 
 use Joomla\Registry\Format\Yaml;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Registry\Format\Yaml.
  */
-class YamlTest extends \PHPUnit_Framework_TestCase
+class YamlTest extends TestCase
 {
 	/**
 	 * Object being tested
