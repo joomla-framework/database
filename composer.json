@@ -10,8 +10,8 @@
     },
     "require-dev": {
         "ircmaxell/password-compat": "~1.0",
-        "joomla/database": "~1.0",
-        "joomla/input": "~1.0",
+        "joomla/database": "~1.0|~2.0",
+        "joomla/input": "~1.0|~2.0",
         "joomla/test": "~1.0",
         "phpunit/phpunit": "^4.8.35|^5.4.3",
         "phpunit/dbunit": "~1.3|~2.0",
@@ -32,6 +32,7 @@
             "Joomla\\Authentication\\Tests\\": "tests/"
         }
     },
+    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
             "dev-master": "1.x-dev"
