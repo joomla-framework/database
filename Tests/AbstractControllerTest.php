@@ -7,11 +7,12 @@
 namespace Joomla\Controller\Tests;
 
 use Joomla\Input\Input;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the Joomla\Controller\AbstractController class.
  */
-class AbstractControllerTest extends \PHPUnit_Framework_TestCase
+class AbstractControllerTest extends TestCase
 {
 	/**
 	 * Object being tested
