@@ -7,13 +7,14 @@
 namespace Joomla\Keychain\Tests;
 
 use Joomla\Keychain\Keychain;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the Joomla Framework Keychain Class
  *
  * @since  1.0
  */
-class KeychainTest extends \PHPUnit_Framework_TestCase
+class KeychainTest extends TestCase
 {
 	/**
 	 * Set up the system by ensuring some files aren't there.
