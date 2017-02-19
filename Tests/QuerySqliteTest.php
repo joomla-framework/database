@@ -8,13 +8,14 @@ namespace Joomla\Database\Tests;
 
 use Joomla\Database\Sqlite\SqliteQuery;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Database\Sqlite\SqliteQuery.
  *
  * @since  1.1
  */
-class QuerySqliteTest extends \PHPUnit_Framework_TestCase
+class QuerySqliteTest extends TestCase
 {
 	/**
 	 * @var    \Joomla\Database\DatabaseDriver  A mock of the DatabaseDriver object for testing purposes.

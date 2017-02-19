@@ -6,6 +6,8 @@
 
 namespace Joomla\Database\Tests;
 
+use PHPUnit\Framework\TestCase;
+
 require_once __DIR__ . '/ExporterPgsqlInspector.php';
 
 /**
@@ -13,7 +15,7 @@ require_once __DIR__ . '/ExporterPgsqlInspector.php';
  *
  * @since  1.0
  */
-class ExporterPgsqlTest extends \PHPUnit_Framework_TestCase
+class ExporterPgsqlTest extends TestCase
 {
 	/**
 	 * @var    object  The mocked database object for use by test methods.

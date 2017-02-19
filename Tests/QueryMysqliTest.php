@@ -8,13 +8,14 @@ namespace Joomla\Database\Tests;
 
 use Joomla\Database\Mysqli\MysqliQuery;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Database\Mysqli\MysqliQuery.
  *
  * @since  1.1
  */
-class QueryMysqliTest extends \PHPUnit_Framework_TestCase
+class QueryMysqliTest extends TestCase
 {
 	/**
 	 * @var    \Joomla\Database\DatabaseDriver  A mock of the DatabaseDriver object for testing purposes.

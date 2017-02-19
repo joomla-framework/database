@@ -6,12 +6,14 @@
 
 namespace Joomla\Database\Tests;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Tests the JDatabaseMySqlImporter class.
  *
  * @since  1.0
  */
-class ImporterMySQLiTest extends \PHPUnit_Framework_TestCase
+class ImporterMySQLiTest extends TestCase
 {
 	/**
 	 * @var    object  The mocked database object for use by test methods.

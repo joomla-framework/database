@@ -8,13 +8,14 @@ namespace Joomla\Database\Tests;
 
 use Joomla\Database\Sqlsrv\SqlsrvQuery;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Database\Sqlsrv\SqlsrvQuery.
  *
  * @since  1.1
  */
-class QuerySqlsrvTest extends \PHPUnit_Framework_TestCase
+class QuerySqlsrvTest extends TestCase
 {
 	/**
 	 * @var    \Joomla\Database\DatabaseDriver  A mock of the DatabaseDriver object for testing purposes.

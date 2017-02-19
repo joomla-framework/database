@@ -6,6 +6,8 @@
 
 namespace Joomla\Database\Tests;
 
+use PHPUnit\Framework\TestCase;
+
 require_once __DIR__ . '/ImporterMySqlInspector.php';
 
 /**
@@ -13,7 +15,7 @@ require_once __DIR__ . '/ImporterMySqlInspector.php';
  *
  * @since  1.0
  */
-class ImporterMySqlTest extends \PHPUnit_Framework_TestCase
+class ImporterMySqlTest extends TestCase
 {
 	/**
 	 * @var    object  The mocked database object for use by test methods.

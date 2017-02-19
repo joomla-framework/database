@@ -7,13 +7,14 @@
 namespace Joomla\Database\Tests;
 
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Database\DatabaseQuery.
  *
  * @since  1.0
  */
-class QueryTest extends \PHPUnit_Framework_TestCase
+class QueryTest extends TestCase
 {
 	/**
 	 * A mock of the Driver object for testing purposes.
