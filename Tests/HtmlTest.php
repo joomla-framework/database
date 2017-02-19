@@ -7,6 +7,7 @@
 namespace Joomla\View\Tests;
 
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/stubs/thtml.php';
 
@@ -15,7 +16,7 @@ require_once __DIR__ . '/stubs/thtml.php';
  *
  * @since  1.0
  */
-class AbstractHtmlViewTest extends \PHPUnit_Framework_TestCase
+class AbstractHtmlViewTest extends TestCase
 {
 	/**
 	 * @var    \Joomla\View\AbstractHtmlView

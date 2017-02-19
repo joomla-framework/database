@@ -6,6 +6,8 @@
 
 namespace Joomla\View\Tests;
 
+use PHPUnit\Framework\TestCase;
+
 require_once __DIR__ . '/stubs/tbase.php';
 
 /**
@@ -13,7 +15,7 @@ require_once __DIR__ . '/stubs/tbase.php';
  *
  * @since  1.0
  */
-class AbstractViewTest extends \PHPUnit_Framework_TestCase
+class AbstractViewTest extends TestCase
 {
 	/**
 	 * @var    \Joomla\View\AbstractView
