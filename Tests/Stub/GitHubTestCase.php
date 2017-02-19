@@ -7,13 +7,14 @@
 namespace Joomla\Github\Tests\Stub;
 
 use Joomla\Registry\Registry;
+use PHPUnit\Framework\TestCase;
 
 /**
  * JGitHub base test class.
  *
  * @since  1.0
  */
-abstract class GitHubTestCase extends \PHPUnit_Framework_TestCase
+abstract class GitHubTestCase extends TestCase
 {
 	/**
 	 * @var    Registry  Options for the GitHub object.
