@@ -8,7 +8,6 @@ namespace Joomla\Authentication\Tests\Strategies;
 
 use Joomla\Authentication\Strategies\DatabaseStrategy;
 use Joomla\Authentication\Authentication;
-use Joomla\Input\Input;
 use Joomla\Test\TestDatabase;
 
 /**

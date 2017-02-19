@@ -7,14 +7,14 @@
 namespace Joomla\Authentication\Tests;
 
 use Joomla\Authentication\Authentication;
-use Joomla\Authentication\AuthenticationStrategyInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Authentication
  *
  * @since  1.0
  */
-class AuthenticationTest extends \PHPUnit_Framework_TestCase
+class AuthenticationTest extends TestCase
 {
 	/**
 	 * Sets up the fixture, for example, opens a network connection.

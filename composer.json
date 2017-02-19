@@ -13,8 +13,8 @@
         "joomla/database": "~1.0",
         "joomla/input": "~1.0",
         "joomla/test": "~1.0",
-        "phpunit/phpunit": "~4.8|~5.0",
-        "phpunit/dbunit": "~1.3",
+        "phpunit/phpunit": "^4.8.35|^5.4.3",
+        "phpunit/dbunit": "~1.3|~2.0",
         "squizlabs/php_codesniffer": "1.*"
     },
     "suggest": {

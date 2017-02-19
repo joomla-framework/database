@@ -8,12 +8,12 @@ namespace Joomla\Authentication\Tests\Strategies;
 
 use Joomla\Authentication\Strategies\LocalStrategy;
 use Joomla\Authentication\Authentication;
-use Joomla\Input\Input;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Joomla\Authentication\Strategies\LocalStrategy
  */
-class LocalStrategyTest extends \PHPUnit_Framework_TestCase
+class LocalStrategyTest extends TestCase
 {
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
