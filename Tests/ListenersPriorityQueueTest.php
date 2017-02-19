@@ -8,13 +8,14 @@ namespace Joomla\Event\Tests;
 
 use Joomla\Event\ListenersPriorityQueue;
 use Joomla\Event\Tests\Stubs\EmptyListener;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the ListenersPriorityQueue class.
  *
  * @since  1.0
  */
-class ListenersPriorityQueueTest extends \PHPUnit_Framework_TestCase
+class ListenersPriorityQueueTest extends TestCase
 {
 	/**
 	 * Object under tests.

@@ -7,13 +7,14 @@
 namespace Joomla\Event\Tests;
 
 use Joomla\Event\DelegatingDispatcher;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the DelegatingDispatcher class.
  *
  * @since  1.0
  */
-class DelegatingDispatcherTest extends \PHPUnit_Framework_TestCase
+class DelegatingDispatcherTest extends TestCase
 {
 	/**
 	 * Test the triggerEvent method.

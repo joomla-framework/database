@@ -7,13 +7,14 @@
 namespace Joomla\Event\Tests;
 
 use Joomla\Event\AbstractEvent;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the AbstractEvent class.
  *
  * @since  1.0
  */
-class AbstractEventTest extends \PHPUnit_Framework_TestCase
+class AbstractEventTest extends TestCase
 {
 	/**
 	 * Object under tests.

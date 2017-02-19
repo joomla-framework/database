@@ -7,13 +7,14 @@
 namespace Joomla\Event\Tests;
 
 use Joomla\Event\EventImmutable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the EventImmutable class.
  *
  * @since  1.0
  */
-class EventImmutableTest extends \PHPUnit_Framework_TestCase
+class EventImmutableTest extends TestCase
 {
 	/**
 	 * Object under tests.

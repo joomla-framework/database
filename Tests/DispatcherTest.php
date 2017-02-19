@@ -16,13 +16,14 @@ use Joomla\Event\Tests\Stubs\FirstListener;
 use Joomla\Event\Tests\Stubs\SecondListener;
 use Joomla\Event\Tests\Stubs\SomethingListener;
 use Joomla\Event\Tests\Stubs\ThirdListener;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the Dispatcher class.
  *
  * @since  1.0
  */
-class DispatcherTest extends \PHPUnit_Framework_TestCase
+class DispatcherTest extends TestCase
 {
 	/**
 	 * Object under tests.
