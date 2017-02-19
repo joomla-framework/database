@@ -1076,7 +1076,12 @@ class ArrayHelperTest extends TestCase
 			'seventeen' => 17,
 			'eightteen' => 'eighteen ninety-five',
 			'nineteen' => 19,
-			'twenty' => 20
+			'twenty' => 20,
+			'level' => array(
+				'a' => 'Level 2 A',
+				'b' => 'Level 2 B',
+			),
+			'level.b' => 'Index with dot',
 		);
 
 		return array(
@@ -1105,6 +1110,15 @@ class ArrayHelperTest extends TestCase
 			),
 			'get word' => array(
 				$input, 'eightteen', 198, 'word', 'eighteenninetyfive', 'Should get it as a single word', false
+			),
+			'get level 2' => array(
+				$input, 'level.a', 'default level a', 'string', 'Level 2 A', 'Should get the value from 2nd level', false
+			),
+			'get level 1 skip level 2' => array(
+				$input, 'level.b', 'default level b', 'string', 'Index with dot', 'Should get the value from 1st level if exists ignoring 2nd', false
+			),
+			'get default if path invalid' => array(
+				$input, 'level.c', 'default level c', 'string', 'default level c', 'Should get the default value if index or path not found', false
 			),
 		);
 	}
