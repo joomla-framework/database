@@ -7,13 +7,14 @@
 namespace Joomla\Model\Tests;
 
 use Joomla\Registry\Registry;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the Joomla\Model\AbstractModel class.
  *
  * @since  1.0
  */
-class AbstractModelTest extends \PHPUnit_Framework_TestCase
+class AbstractModelTest extends TestCase
 {
 	/**
 	 * @var    \Joomla\Model\AbstractModel

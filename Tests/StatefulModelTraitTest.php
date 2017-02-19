@@ -6,10 +6,12 @@
 
 namespace Joomla\Model\Tests;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Tests for \Joomla\Model\StatefulModelTrait.
  */
-class StatefulModelTraitTest extends \PHPUnit_Framework_TestCase
+class StatefulModelTraitTest extends TestCase
 {
 	/**
 	 * @testdox  Calling getState() without a state set will throw an Exception

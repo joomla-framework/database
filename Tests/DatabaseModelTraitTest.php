@@ -6,10 +6,12 @@
 
 namespace Joomla\Model\Tests;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Tests for \Joomla\Model\DatabaseModelTrait.
  */
-class DatabaseModelTraitTest extends \PHPUnit_Framework_TestCase
+class DatabaseModelTraitTest extends TestCase
 {
 	/**
 	 * @testdox  Calling getDb() without a DatabaseDriver set will throw an Exception

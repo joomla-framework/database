@@ -6,12 +6,14 @@
 
 namespace Joomla\Model\Tests;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Tests for the Joomla\Model\AbstractDatabaseModel class.
  *
  * @since  1.0
  */
-class AbstractDatabaseModelTest extends \PHPUnit_Framework_TestCase
+class AbstractDatabaseModelTest extends TestCase
 {
 	/**
 	 * @var    \Joomla\Model\AbstractDatabaseModel
