@@ -7,11 +7,12 @@
 namespace Joomla\Profiler\Tests;
 
 use Joomla\Profiler\ProfilePoint;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the \Joomla\Profiler\ProfilePoint class.
  */
-class ProfilePointTest extends \PHPUnit_Framework_TestCase
+class ProfilePointTest extends TestCase
 {
 	/**
 	 * @var  ProfilePoint

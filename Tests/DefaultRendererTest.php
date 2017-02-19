@@ -9,11 +9,12 @@ namespace Joomla\Profiler\Tests;
 use Joomla\Profiler\Renderer\DefaultRenderer;
 use Joomla\Profiler\ProfilePoint;
 use Joomla\Profiler\Profiler;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the \Joomla\Profiler\Renderer\DefaultRenderer class.
  */
-class DefaultRendererTest extends \PHPUnit_Framework_TestCase
+class DefaultRendererTest extends TestCase
 {
 	/**
 	 * @var  DefaultRenderer
