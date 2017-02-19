@@ -7,14 +7,14 @@
 namespace Joomla\Filter\Tests;
 
 use Joomla\Filter\InputFilter;
-use Joomla\Filter\OutputFilter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Filter\InputFilter
  *
  * @since  1.0
  */
-class InputFilterTest extends \PHPUnit_Framework_TestCase
+class InputFilterTest extends TestCase
 {
 	/**
 	 * Produces the array of test cases common to all test runs.
