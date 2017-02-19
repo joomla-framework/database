@@ -7,6 +7,7 @@
 namespace Joomla\DI\Tests;
 
 use Joomla\DI\Container;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for ContainerAwareTrait class.
@@ -14,7 +15,7 @@ use Joomla\DI\Container;
  * @since   1.2
  * @covers  \Joomla\DI\ContainerAwareTrait
  */
-class ContainerAwareTraitTest extends \PHPUnit_Framework_TestCase
+class ContainerAwareTraitTest extends TestCase
 {
 	/**
 	 * Holds the Container instance for testing.
