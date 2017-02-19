@@ -6,12 +6,14 @@
 
 namespace Joomla\Database\Tests\Postgresql;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test the \Joomla\Database\Postgresql\PostgresqlImporter class.
  *
  * @since  1.0
  */
-class PostgresqlImporterTest extends \PHPUnit_Framework_TestCase
+class PostgresqlImporterTest extends TestCase
 {
 	/**
 	 * @var    object  The mocked database object for use by test methods.

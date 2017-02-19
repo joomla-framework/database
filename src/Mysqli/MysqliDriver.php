@@ -72,7 +72,7 @@ class MysqliDriver extends DatabaseDriver
 	 * The prepared statement.
 	 *
 	 * @var    \mysqli_stmt
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $prepared;
 
@@ -80,7 +80,7 @@ class MysqliDriver extends DatabaseDriver
 	 * Contains the current query execution status
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $executed = false;
 
@@ -734,7 +734,7 @@ class MysqliDriver extends DatabaseDriver
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function setQuery($query, $offset = null, $limit = null)
 	{
@@ -907,7 +907,7 @@ class MysqliDriver extends DatabaseDriver
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	protected function executeUnpreparedQuery($sql)
 	{

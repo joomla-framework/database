@@ -9,13 +9,14 @@ namespace Joomla\Database\Tests\Pgsql;
 use Joomla\Database\Pgsql\PgsqlQuery;
 use Joomla\Database\Tests\Mock\Driver;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Database\Pgsql\PgsqlQuery.
  *
  * @since  1.0
  */
-class PgsqlQueryTest extends \PHPUnit_Framework_TestCase
+class PgsqlQueryTest extends TestCase
 {
 	/**
 	 * @var    \Joomla\Database\DatabaseDriver  A mock of the DatabaseDriver object for testing purposes.

@@ -22,7 +22,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 	 * Holds key / value pair of bound objects.
 	 *
 	 * @var    mixed
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $bounded = [];
 
@@ -40,7 +40,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function bind($key = null, &$value = null, $dataType = \PDO::PARAM_STR, $length = 0, $driverOptions = array())
 	{
@@ -84,7 +84,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 	 *
 	 * @return  mixed
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function &getBounded($key = null)
 	{
@@ -106,7 +106,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function clear($clause = null)
 	{

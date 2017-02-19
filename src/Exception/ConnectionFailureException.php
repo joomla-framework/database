@@ -11,7 +11,7 @@ namespace Joomla\Database\Exception;
 /**
  * Exception class defining an error connecting to the database platform
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.5.0
  */
 class ConnectionFailureException extends \RuntimeException
 {

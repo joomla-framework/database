@@ -6,12 +6,14 @@
 
 namespace Joomla\Database\Tests\Mysql;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Tests the \Joomla\Database\Mysql\MysqlExporter class.
  *
  * @since  1.0
  */
-class MysqlExporterText extends \PHPUnit_Framework_TestCase
+class MysqlExporterText extends TestCase
 {
 	/**
 	 * @var    object  The mocked database object for use by test methods.

@@ -497,7 +497,7 @@ abstract class PdoDriver extends DatabaseDriver
 	 *
 	 * @return  string  The database connector version.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function getVersion()
 	{

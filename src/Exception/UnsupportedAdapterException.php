@@ -11,7 +11,7 @@ namespace Joomla\Database\Exception;
 /**
  * Exception class defining an unsupported database object
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.5.0
  */
 class UnsupportedAdapterException extends \RuntimeException
 {

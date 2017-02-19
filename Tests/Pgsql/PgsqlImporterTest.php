@@ -6,12 +6,14 @@
 
 namespace Joomla\Database\Tests\Pgsql;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test the \Joomla\Database\Pgsql\PgsqlImporter class.
  *
  * @since  1.0
  */
-class PgsqlImporterTest extends \PHPUnit_Framework_TestCase
+class PgsqlImporterTest extends TestCase
 {
 	/**
 	 * @var    object  The mocked database object for use by test methods.

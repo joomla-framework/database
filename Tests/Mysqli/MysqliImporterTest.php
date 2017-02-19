@@ -7,13 +7,14 @@
 namespace Joomla\Database\Tests\Mysqli;
 
 use Joomla\Database\Mysqli\MysqliImporter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the \Joomla\Database\Mysqli\MysqliImporter class.
  *
  * @since  1.0
  */
-class MysqliImporterTest extends \PHPUnit_Framework_TestCase
+class MysqliImporterTest extends TestCase
 {
 	/**
 	 * @var    object  The mocked database object for use by test methods.

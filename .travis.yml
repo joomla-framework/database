@@ -16,6 +16,7 @@ matrix:
       env: RUN_PHPCS="yes"
     - php: 7.0
     - php: 7.1
+    - php: nightly
     - php: hhvm
       sudo: true
       dist: trusty
@@ -30,6 +31,7 @@ matrix:
         - mysql
         - postgresql
   allow_failures:
+    - php: nightly
     - php: hhvm
 
 before_script:

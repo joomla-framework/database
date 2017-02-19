@@ -9,13 +9,14 @@ namespace Joomla\Database\Tests;
 use Joomla\Database\Postgresql\PostgresqlQuery;
 use Joomla\Database\Tests\Mock\Driver;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Database\Postgresql\PostgresqlQuery.
  *
  * @since  1.0
  */
-class PostgresqlQueryTest extends \PHPUnit_Framework_TestCase
+class PostgresqlQueryTest extends TestCase
 {
 	/**
 	 * @var    \Joomla\Database\DatabaseDriver  A mock of the DatabaseDriver object for testing purposes.
@@ -27,7 +28,7 @@ class PostgresqlQueryTest extends \PHPUnit_Framework_TestCase
 	 * The instance of the object to test.
 	 *
 	 * @var    PostgresqlQuery
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	private $instance;
 
@@ -122,7 +123,7 @@ class PostgresqlQueryTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return  PostgresqlQuery
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function mockGetQuery($new = false)
 	{

@@ -7,13 +7,14 @@
 namespace Joomla\Database\Tests\Query;
 
 use Joomla\Database\Query\QueryElement;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Database\Query\QueryElement.
  *
  * @since  1.0
  */
-class QueryElementTest extends \PHPUnit_Framework_TestCase
+class QueryElementTest extends TestCase
 {
 	/**
 	 * Test cases for append and __toString
