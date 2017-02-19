@@ -7,13 +7,14 @@
 namespace Joomla\Http\Tests;
 
 use Joomla\Uri\Uri;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Joomla\Http\TransportInterface instances.
  *
  * @since  1.0
  */
-class TransportTest extends \PHPUnit_Framework_TestCase
+class TransportTest extends TestCase
 {
 	/**
 	 * @var    array  Options for the Transport object.

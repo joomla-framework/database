@@ -9,13 +9,14 @@ namespace Joomla\Http\Tests;
 use Joomla\Http\Http;
 use Joomla\Uri\Uri;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Joomla\Http\Http.
  *
  * @since  1.0
  */
-class HttpTest extends \PHPUnit_Framework_TestCase
+class HttpTest extends TestCase
 {
 	/**
 	 * @var    array  Options for the Http object.
