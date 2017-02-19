@@ -8,17 +8,17 @@ namespace Joomla\Data\Tests;
 
 use Joomla\Data;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/Stubs/buran.php';
 require_once __DIR__ . '/Stubs/vostok.php';
-
 
 /**
  * Tests for the Joomla\Data\DataSet class.
  *
  * @since  1.0
  */
-class DataSetTest extends \PHPUnit_Framework_TestCase
+class DataSetTest extends TestCase
 {
 	/**
 	 * An instance of the object to test.

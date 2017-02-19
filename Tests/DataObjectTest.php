@@ -9,6 +9,7 @@ namespace Joomla\Data\Tests;
 use Joomla\Data\DataObject;
 use Joomla\Registry\Registry;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/Stubs/buran.php';
 require_once __DIR__ . '/Stubs/capitaliser.php';
@@ -18,7 +19,7 @@ require_once __DIR__ . '/Stubs/capitaliser.php';
  *
  * @since  1.0
  */
-class DataObjectTest extends \PHPUnit_Framework_TestCase
+class DataObjectTest extends TestCase
 {
 	/**
 	 * @var    Object
