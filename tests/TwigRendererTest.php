@@ -93,6 +93,12 @@ class TwigRendererTest extends TestCase
 	 */
 	public function testAPathCannotBeCheckedForExistenceWhenTheLoaderDoesNotImplementTwigExistsLoaderInterface()
 	{
+		// Only test when Twig_LoaderInterface does not contain the exists method
+		if (method_exists('Twig_LoaderInterface', 'exists'))
+		{
+			$this->markTestSkipped('Test only applies for Twig 1.x');
+		}
+
 		$loader = $this->getMockBuilder('Twig_LoaderInterface')
 			->getMock();
 
