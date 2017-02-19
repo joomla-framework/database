@@ -8,6 +8,7 @@ namespace Joomla\Router\Tests;
 
 use Joomla\Router\Router;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/Stubs/Bar.php';
 require_once __DIR__ . '/Stubs/Baz.php';
@@ -19,7 +20,7 @@ require_once __DIR__ . '/Stubs/GooGet.php';
  *
  * @since  1.0
  */
-class RouterTest extends \PHPUnit_Framework_TestCase
+class RouterTest extends TestCase
 {
 	/**
 	 * An instance of the object to be tested.
@@ -255,7 +256,15 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 		// If we should expect an exception set that up.
 		if ($e)
 		{
-			$this->setExpectedException('InvalidArgumentException');
+			// expectException was added in PHPUnit 5.2 and setExpectedException removed in 6.0
+			if (method_exists($this, 'expectException'))
+			{
+				$this->expectException('InvalidArgumentException');
+			}
+			else
+			{
+				$this->setExpectedException('InvalidArgumentException');
+			}
 		}
 
 		// Execute the route parsing.
@@ -303,7 +312,17 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testFetchControllerWithMissingClass()
 	{
-		$this->setExpectedException('RuntimeException', null, 404);
+		// expectException was added in PHPUnit 5.2 and setExpectedException removed in 6.0
+		if (method_exists($this, 'expectException'))
+		{
+			$this->expectException('RuntimeException');
+			$this->expectExceptionCode(404);
+		}
+		else
+		{
+			$this->setExpectedException('RuntimeException', null, 404);
+		}
+
 		$controller = TestHelper::invoke($this->instance, 'fetchController', 'goober');
 	}
 
@@ -317,7 +336,17 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testFetchControllerWithNonController()
 	{
-		$this->setExpectedException('RuntimeException', null, 500);
+		// expectException was added in PHPUnit 5.2 and setExpectedException removed in 6.0
+		if (method_exists($this, 'expectException'))
+		{
+			$this->expectException('RuntimeException');
+			$this->expectExceptionCode(500);
+		}
+		else
+		{
+			$this->setExpectedException('RuntimeException', null, 500);
+		}
+
 		$controller = TestHelper::invoke($this->instance, 'fetchController', 'MyTestControllerBaz');
 	}
 
@@ -345,7 +374,16 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testFetchControllerWithoutPrefixSetThoughNecessary()
 	{
-		$this->setExpectedException('RuntimeException');
+		// expectException was added in PHPUnit 5.2 and setExpectedException removed in 6.0
+		if (method_exists($this, 'expectException'))
+		{
+			$this->expectException('RuntimeException');
+		}
+		else
+		{
+			$this->setExpectedException('RuntimeException');
+		}
+
 		$controller = TestHelper::invoke($this->instance, 'fetchController', 'foo');
 	}
 

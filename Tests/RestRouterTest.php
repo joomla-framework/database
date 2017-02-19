@@ -8,6 +8,7 @@ namespace Joomla\Router\Tests;
 
 use Joomla\Router\RestRouter;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/Stubs/GooGet.php';
 
@@ -16,7 +17,7 @@ require_once __DIR__ . '/Stubs/GooGet.php';
  *
  * @since  1.0
  */
-class RestRouterTest extends \PHPUnit_Framework_TestCase
+class RestRouterTest extends TestCase
 {
 	/**
 	 * @var    \Joomla\Router\RestRouter  The object to be tested.
@@ -137,7 +138,15 @@ class RestRouterTest extends \PHPUnit_Framework_TestCase
 		// If we are expecting an exception set it.
 		if ($exception)
 		{
-			$this->setExpectedException('RuntimeException');
+			// expectException was added in PHPUnit 5.2 and setExpectedException removed in 6.0
+			if (method_exists($this, 'expectException'))
+			{
+				$this->expectException('RuntimeException');
+			}
+			else
+			{
+				$this->setExpectedException('RuntimeException');
+			}
 		}
 
 		// Execute the code to test.
@@ -159,7 +168,16 @@ class RestRouterTest extends \PHPUnit_Framework_TestCase
 	{
 		$_SERVER['REQUEST_METHOD'] = 'FOOBAR';
 
-		$this->setExpectedException('RuntimeException');
+		// expectException was added in PHPUnit 5.2 and setExpectedException removed in 6.0
+		if (method_exists($this, 'expectException'))
+		{
+			$this->expectException('RuntimeException');
+		}
+		else
+		{
+			$this->setExpectedException('RuntimeException');
+		}
+
 		$suffix = TestHelper::invoke($this->instance, 'fetchControllerSuffix');
 	}
 
@@ -216,7 +234,15 @@ class RestRouterTest extends \PHPUnit_Framework_TestCase
 		// If we should expect an exception set that up.
 		if (is_null($c))
 		{
-			$this->setExpectedException('InvalidArgumentException');
+			// expectException was added in PHPUnit 5.2 and setExpectedException removed in 6.0
+			if (method_exists($this, 'expectException'))
+			{
+				$this->expectException('InvalidArgumentException');
+			}
+			else
+			{
+				$this->setExpectedException('InvalidArgumentException');
+			}
 		}
 
 		// Execute the route parsing.
