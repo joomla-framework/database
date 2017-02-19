@@ -8,7 +8,7 @@
     "require": {
         "php": "^5.3.10|~7.0",
         "joomla/compat": "~1.0",
-        "joomla/registry": "~1.0"
+        "joomla/registry": "^1.4.5"
     },
     "require-dev": {
         "joomla/test": "~1.0",
