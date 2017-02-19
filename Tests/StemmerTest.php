@@ -5,13 +5,14 @@
  */
 
 use Joomla\Language\Stemmer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for JLanguageStemmer.
  *
  * @since  1.0
  */
-class JLanguageStemmerTest extends PHPUnit_Framework_TestCase
+class JLanguageStemmerTest extends TestCase
 {
 	/**
 	 * @var Joomla\Language\Stemmer

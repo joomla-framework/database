@@ -7,13 +7,14 @@
 use Joomla\Language\Text;
 use Joomla\Language\Language;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Language\Text.
  *
  * @since  1.0
  */
-class TextTest extends PHPUnit_Framework_TestCase
+class TextTest extends TestCase
 {
 	/**
 	 * @var    Joomla\Language\Text

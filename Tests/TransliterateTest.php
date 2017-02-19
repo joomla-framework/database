@@ -5,13 +5,14 @@
  */
 
 use Joomla\Language\Transliterate;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Transliterate.
  *
  * @since  1.0
  */
-class TransliterateTest extends PHPUnit_Framework_TestCase
+class TransliterateTest extends TestCase
 {
 	/**
 	 * @var Transliterate

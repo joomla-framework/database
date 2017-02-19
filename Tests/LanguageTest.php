@@ -9,13 +9,14 @@ require_once __DIR__ . '/data/language/en-GB/en-GB.localise.php';
 use Joomla\Language\Language;
 use Joomla\Filesystem\Folder;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Joomla\Language\Language.
  *
  * @since  1.0
  */
-class LanguageTest extends PHPUnit_Framework_TestCase
+class LanguageTest extends TestCase
 {
 	/**
 	 * Test language object
