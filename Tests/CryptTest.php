@@ -7,13 +7,14 @@
 namespace Joomla\Crypt\Tests;
 
 use Joomla\Crypt\Crypt;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for JCrypt.
  *
  * @since  1.0
  */
-class CryptTest extends \PHPUnit_Framework_TestCase
+class CryptTest extends TestCase
 {
 	/**
 	 * @var Joomla\Crypt\Crypt

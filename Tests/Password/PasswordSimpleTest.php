@@ -8,13 +8,14 @@ namespace Joomla\Crypt\Tests;
 
 use Joomla\Crypt\PasswordInterface;
 use Joomla\Crypt\Password\Simple;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for JCryptPasswordSimple.
  *
  * @since  1.0
  */
-class PasswordSimpleTest extends \PHPUnit_Framework_TestCase
+class PasswordSimpleTest extends TestCase
 {
 	/**
 	 * Data provider for testCreate method.

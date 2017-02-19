@@ -8,13 +8,14 @@ namespace Joomla\Crypt\Tests;
 
 use Joomla\Crypt\Key;
 use Joomla\Crypt\Cipher_3DES;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for JCryptCipher3DES.
  *
  * @since  1.0
  */
-class Cipher3DESTest extends \PHPUnit_Framework_TestCase
+class Cipher3DESTest extends TestCase
 {
 	/**
 	 * @var    JCryptCipher3DES

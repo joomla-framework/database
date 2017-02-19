@@ -8,13 +8,14 @@ namespace Joomla\Crypt\Tests;
 
 use Joomla\Crypt\Key;
 use Joomla\Crypt\Cipher_Rijndael256;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for JCryptCipherRijndael256.
  *
  * @since  1.0
  */
-class CipherRijndael256Test extends \PHPUnit_Framework_TestCase
+class CipherRijndael256Test extends TestCase
 {
 	/**
 	 * @var    JCryptCipherRijndael256

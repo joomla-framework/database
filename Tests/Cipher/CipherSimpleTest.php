@@ -8,13 +8,14 @@ namespace Joomla\Crypt\Tests;
 
 use Joomla\Crypt\Key;
 use Joomla\Crypt\Cipher_Simple;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for JCryptCipherSimple.
  *
  * @since  1.0
  */
-class CipherSimpleTest extends \PHPUnit_Framework_TestCase
+class CipherSimpleTest extends TestCase
 {
 	/**
 	 * @var    JCryptCipherSimple

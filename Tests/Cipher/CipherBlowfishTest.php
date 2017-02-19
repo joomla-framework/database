@@ -8,13 +8,14 @@ namespace Joomla\Crypt\Tests;
 
 use Joomla\Crypt\Key;
 use Joomla\Crypt\Cipher_Blowfish;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for JCryptCipherBlowfish.
  *
  * @since  1.0
  */
-class CipherBlowfishTest extends \PHPUnit_Framework_TestCase
+class CipherBlowfishTest extends TestCase
 {
 	/**
 	 * @var    JCryptCipherBlowfish

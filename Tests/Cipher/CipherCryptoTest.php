@@ -7,12 +7,13 @@
 namespace Joomla\Crypt\Tests;
 
 use Joomla\Crypt\Cipher_Crypto;
+use PHPUnit\Framework\TestCase;
 use Symfony\Polyfill\Util\Binary;
 
 /**
  * Test class for \Joomla\Crypt\Cipher_Crypto.
  */
-class CryptCipherCryptoTest extends \PHPUnit_Framework_TestCase
+class CryptCipherCryptoTest extends TestCase
 {
 	/**
 	 * This method is called before the first test of this test class is run.
