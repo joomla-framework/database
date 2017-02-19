@@ -74,11 +74,11 @@ class TwigRendererTest extends TestCase
 	}
 
 	/**
-	 * @testdox  Check that a path exists when the loader implements Twig_ExistsLoaderInterface
+	 * @testdox  Check that a path exists when the loader supports checking for existence
 	 *
 	 * @covers   \Joomla\Renderer\TwigRenderer::pathExists
 	 */
-	public function testCheckThatAPathExistsWhenTheLoaderImplementsTwigExistsLoaderInterface()
+	public function testCheckThatAPathExistsWhenTheLoaderSupportsCheckingForExistence()
 	{
 		$renderer = new TwigRenderer;
 		$renderer->addFolder(__DIR__ . '/stubs/twig');
@@ -87,11 +87,11 @@ class TwigRendererTest extends TestCase
 	}
 
 	/**
-	 * @testdox  A path cannot be checked for existence when the loader does not implement Twig_ExistsLoaderInterface
+	 * @testdox  A path cannot be checked for existence when the loader does not support checking it
 	 *
 	 * @covers   \Joomla\Renderer\TwigRenderer::pathExists
 	 */
-	public function testAPathCannotBeCheckedForExistenceWhenTheLoaderDoesNotImplementTwigExistsLoaderInterface()
+	public function testAPathCannotBeCheckedForExistenceWhenTheLoaderDoesNotSupportCheckingIt()
 	{
 		// Only test when Twig_LoaderInterface does not contain the exists method
 		if (method_exists('Twig_LoaderInterface', 'exists'))
