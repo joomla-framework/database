@@ -7,13 +7,14 @@
 namespace Joomla\Filesystem\Tests;
 
 use Joomla\Filesystem\Buffer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for JBuffer.
  *
  * @since  1.0
  */
-class BufferTest extends \PHPUnit_Framework_TestCase
+class BufferTest extends TestCase
 {
 	/**
 	 * @var JBuffer

@@ -5,13 +5,14 @@
  */
 
 use Joomla\Filesystem\Helper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Helper.
  *
  * @since  1.0
  */
-class FilesystemHelperTest extends PHPUnit_Framework_TestCase
+class FilesystemHelperTest extends TestCase
 {
 	/**
 	 * @var Helper

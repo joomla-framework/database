@@ -4,16 +4,16 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-use Joomla\Filesystem\Exception\FilesystemException;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Joomla\Filesystem\File.
  *
  * @since  1.0
  */
-class JFileTest extends PHPUnit_Framework_TestCase
+class JFileTest extends TestCase
 {
 	/**
 	 * @var Joomla\Filesystem\File

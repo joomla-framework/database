@@ -5,13 +5,14 @@
  */
 
 use Joomla\Filesystem\Path;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the Path class.
  *
  * @since  1.0
  */
-class PathTest extends PHPUnit_Framework_TestCase
+class PathTest extends TestCase
 {
 	/**
 	 * Data provider for testClean() method.

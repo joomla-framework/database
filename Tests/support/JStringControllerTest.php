@@ -5,13 +5,14 @@
  */
 
 use Joomla\Filesystem\Support\StringController;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for StringController.
  *
  * @since  1.0
  */
-class StringControllerTest extends PHPUnit_Framework_TestCase
+class StringControllerTest extends TestCase
 {
 	/**
 	 * @var StringController

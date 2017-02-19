@@ -5,13 +5,14 @@
  */
 
 use Joomla\Filesystem\Stream\StringWrapper as StreamString;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for StreamString.
  *
  * @since  1.0
  */
-class StreamStringTest extends PHPUnit_Framework_TestCase
+class StreamStringTest extends TestCase
 {
 	/**
 	 * @var StreamString

@@ -5,13 +5,14 @@
  */
 
 use Joomla\Filesystem\Stream;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Stream.
  *
  * @since  1.0
  */
-class StreamTest extends PHPUnit_Framework_TestCase
+class StreamTest extends TestCase
 {
 	/**
 	 * @var Stream

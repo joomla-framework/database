@@ -6,13 +6,14 @@
 
 use Joomla\Filesystem\Folder;
 use Joomla\Filesystem\Path;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for JFolder.
  *
  * @since  1.0
  */
-class FolderTest extends PHPUnit_Framework_TestCase
+class FolderTest extends TestCase
 {
 	/**
 	 * @var Joomla\Filesystem\Folder

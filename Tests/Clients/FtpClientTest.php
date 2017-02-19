@@ -7,13 +7,14 @@
 namespace Joomla\Filesystem\Clients\Tests;
 
 use Joomla\Filesystem\Clients\FtpClient;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for FtpClient.
  *
  * @since  1.0
  */
-class FtpClientTest extends \PHPUnit_Framework_TestCase
+class FtpClientTest extends TestCase
 {
 	/**
 	 * @var    FtpClient
