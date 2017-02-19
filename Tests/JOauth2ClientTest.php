@@ -9,13 +9,14 @@ use Joomla\Registry\Registry;
 use Joomla\Input\Input;
 use Joomla\Http\Http;
 use Joomla\Test\WebInspector;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Client.
  *
  * @since  1.0
  */
-class ClientTest extends PHPUnit_Framework_TestCase
+class ClientTest extends TestCase
 {
 	/**
 	 * @var    Registry  Options for the Client object.
