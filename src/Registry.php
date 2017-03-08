@@ -20,7 +20,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	/**
 	 * Registry Object
 	 *
-	 * @var    object
+	 * @var    \stdClass
 	 * @since  1.0
 	 */
 	protected $data;
@@ -36,7 +36,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	/**
 	 * Registry instances container.
 	 *
-	 * @var    array
+	 * @var    Registry[]
 	 * @since  1.0
 	 * @deprecated  1.5.0  Object caching will no longer be supported
 	 */
@@ -63,7 +63,11 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 		$this->data = new \stdClass;
 
 		// Optionally load supplied data.
-		if (is_array($data) || is_object($data))
+		if ($data instanceof Registry)
+		{
+			$this->merge($data);
+		}
+		elseif (is_array($data) || is_object($data))
 		{
 			$this->bindData($this->data, $data);
 		}

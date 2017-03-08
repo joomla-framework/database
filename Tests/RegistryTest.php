@@ -52,6 +52,19 @@ class RegistryTest extends TestCase
 	}
 
 	/**
+	 * @testdox  A Registry instance is instantiated with another Registry
+	 *
+	 * @covers   Joomla\Registry\Registry::__construct
+	 */
+	public function testARegistryInstanceIsInstantiatedWithAnotherRegistry()
+	{
+		$a = new Registry(array('foo' => 'bar'));
+		$b = new Registry($a);
+
+		$this->assertSame(1, count($b), 'The Registry data store should not be empty.');
+	}
+
+	/**
 	 * @testdox  A Registry instance instantiated with a string of data is correctly manipulated
 	 *
 	 * @covers   Joomla\Registry\Registry::__construct
