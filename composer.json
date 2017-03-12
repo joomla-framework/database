@@ -7,8 +7,8 @@
     "license": "GPL-2.0+",
     "require": {
         "php": "^5.3.10|~7.0",
-    	"joomla/controller": "~1.0",
-    	"joomla/input": "~1.0"
+    	"joomla/controller": "~1.0|~2.0",
+    	"joomla/input": "~1.0|~2.0"
     },
     "require-dev": {
     	"joomla/test": "~1.0",
@@ -25,6 +25,7 @@
             "Joomla\\Router\\Tests\\": "Tests/"
     	}
     },
+    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
             "dev-master": "1.x-dev"
