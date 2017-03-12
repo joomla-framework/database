@@ -8,7 +8,7 @@
     "require": {
         "php": "^5.3.10|~7.0",
         "joomla/compat": "~1.0",
-        "joomla/utilities": "~1.0",
+        "joomla/utilities": "^1.4.1|~2.0",
         "symfony/polyfill-php55": "~1.0"
     },
     "require-dev": {
@@ -30,6 +30,7 @@
             "Joomla\\Registry\\Tests\\": "Tests/"
         }
     },
+    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
             "dev-master": "1.x-dev"
