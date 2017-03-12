@@ -189,12 +189,12 @@ class ClientTest extends TestCase
 			{
 				$mockSession->expects($this->at(0))
 							->method('get')
-							->with('key', null, 'oauth_token')
+							->with('oauth_token.key', null)
 							->will($this->returnValue('bad'));
 
 				$mockSession->expects($this->at(1))
 							->method('get')
-							->with('secret', null, 'oauth_token')
+							->with('oauth_token.secret', null)
 							->will($this->returnValue('session'));
 
 				$this->application->setSession($mockSession);
@@ -214,12 +214,12 @@ class ClientTest extends TestCase
 
 			$mockSession->expects($this->at(0))
 						->method('get')
-						->with('key', null, 'oauth_token')
+						->with('oauth_token.key', null)
 						->will($this->returnValue('token'));
 
 			$mockSession->expects($this->at(1))
 						->method('get')
-						->with('secret', null, 'oauth_token')
+						->with('oauth_token.secret', null)
 						->will($this->returnValue('secret'));
 
 			$this->application->setSession($mockSession);
