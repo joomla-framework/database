@@ -560,7 +560,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	}
 
 	/**
-	 * Method to check the current client connnection status to ensure that it is alive.  We are
+	 * Method to check the current client connection status to ensure that it is alive.  We are
 	 * wrapping this to isolate the connection_status() function from our code base for testing reasons.
 	 *
 	 * @return  boolean  True if the connection is valid and normal.
