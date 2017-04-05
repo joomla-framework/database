@@ -34,7 +34,7 @@ class TestHelper
 	{
 		foreach ($array as $index => $method)
 		{
-			if (is_array($method))
+			if (is_callable($method))
 			{
 				$methodName = $index;
 				$callback = $method;
