@@ -95,26 +95,11 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 *
 	 * @note    This method assumes that the mock callback is named {mock}{method name}.
 	 * @since   1.0
+	 * @deprecated  2.0  Use TestHelper::assignMockCallbacks instead
 	 */
 	public function assignMockCallbacks($mockObject, $array)
 	{
-		foreach ($array as $index => $method)
-		{
-			if (is_array($method))
-			{
-				$methodName = $index;
-				$callback = $method;
-			}
-			else
-			{
-				$methodName = $method;
-				$callback = array(get_called_class(), 'mock' . $method);
-			}
-
-			$mockObject->expects($this->any())
-				->method($methodName)
-				->will($this->returnCallback($callback));
-		}
+		TestHelper::assignMockCallbacks($mockObject, $this, $array);
 	}
 
 	/**
@@ -128,15 +113,11 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use TestHelper::assignMockReturns instead
 	 */
 	public function assignMockReturns($mockObject, $array)
 	{
-		foreach ($array as $method => $return)
-		{
-			$mockObject->expects($this->any())
-				->method($method)
-				->will($this->returnValue($return));
-		}
+		TestHelper::assignMockReturns($mockObject, $this, $array);
 	}
 
 	/**
