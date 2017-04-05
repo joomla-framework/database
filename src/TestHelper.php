@@ -45,7 +45,7 @@ class TestHelper
 
 			$mockObject->expects($test->any())
 				->method($methodName)
-				->will($test->returnCallback($callback));
+				->willReturnCallback($callback);
 		}
 	}
 
@@ -67,7 +67,7 @@ class TestHelper
 		{
 			$mockObject->expects($test->any())
 				->method($method)
-				->will($test->returnValue($return));
+				->willReturn($return);
 		}
 	}
 
