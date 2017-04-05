@@ -38,7 +38,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	{
 		if (!class_exists('\\Joomla\\Database\\DatabaseDriver'))
 		{
-			static::fail('The joomla/database package is not installed, cannot use this test case.');
+			static::markTestSkipped('The joomla/database package is not installed, cannot use this test case.');
 		}
 
 		// Make sure the driver is supported
@@ -49,9 +49,9 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 
 		// We always want the default database test case to use an SQLite memory database.
 		$options = array(
-			'driver' => 'sqlite',
+			'driver'   => 'sqlite',
 			'database' => ':memory:',
-			'prefix' => 'jos_'
+			'prefix'   => 'jos_',
 		);
 
 		try
