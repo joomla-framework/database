@@ -10,7 +10,6 @@ namespace Joomla\Test;
 
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Sqlite\SqliteDriver;
-use Joomla\Test\TestHelper;
 
 /**
  * Abstract test case class for database testing.
@@ -38,7 +37,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	{
 		if (!class_exists('\\Joomla\\Database\\DatabaseDriver'))
 		{
-			static::fail('The joomla/database package is not installed, cannot use this test case.');
+			static::markTestSkipped('The joomla/database package is not installed, cannot use this test case.');
 		}
 
 		// Make sure the driver is supported
@@ -49,9 +48,9 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 
 		// We always want the default database test case to use an SQLite memory database.
 		$options = array(
-			'driver' => 'sqlite',
+			'driver'   => 'sqlite',
 			'database' => ':memory:',
-			'prefix' => 'jos_'
+			'prefix'   => 'jos_',
 		);
 
 		try
@@ -95,26 +94,11 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 *
 	 * @note    This method assumes that the mock callback is named {mock}{method name}.
 	 * @since   1.0
+	 * @deprecated  2.0  Use TestHelper::assignMockCallbacks instead
 	 */
 	public function assignMockCallbacks($mockObject, $array)
 	{
-		foreach ($array as $index => $method)
-		{
-			if (is_array($method))
-			{
-				$methodName = $index;
-				$callback = $method;
-			}
-			else
-			{
-				$methodName = $method;
-				$callback = array(get_called_class(), 'mock' . $method);
-			}
-
-			$mockObject->expects($this->any())
-				->method($methodName)
-				->will($this->returnCallback($callback));
-		}
+		TestHelper::assignMockCallbacks($mockObject, $this, $array);
 	}
 
 	/**
@@ -128,21 +112,17 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use TestHelper::assignMockReturns instead
 	 */
 	public function assignMockReturns($mockObject, $array)
 	{
-		foreach ($array as $method => $return)
-		{
-			$mockObject->expects($this->any())
-				->method($method)
-				->will($this->returnValue($return));
-		}
+		TestHelper::assignMockReturns($mockObject, $this, $array);
 	}
 
 	/**
 	 * Returns the default database connection for running the tests.
 	 *
-	 * @return  \PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection
+	 * @return  \PHPUnit_Extensions_Database_DB_IDatabaseConnection
 	 *
 	 * @since   1.0
 	 */
@@ -159,7 +139,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	/**
 	 * Gets the data set to be loaded into the database during setup
 	 *
-	 * @return  \PHPUnit_Extensions_Database_DataSet_XmlDataSet
+	 * @return  \PHPUnit_Extensions_Database_DataSet_IDataSet
 	 *
 	 * @since   1.0
 	 */
@@ -171,7 +151,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	/**
 	 * Returns the database operation executed in test setup.
 	 *
-	 * @return  \PHPUnit_Extensions_Database_Operation_Composite
+	 * @return  \PHPUnit_Extensions_Database_Operation_IDatabaseOperation
 	 *
 	 * @since   1.0
 	 */
@@ -189,7 +169,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	/**
 	 * Returns the database operation executed in test cleanup.
 	 *
-	 * @return  \PHPUnit_Extensions_Database_Operation_Factory
+	 * @return  \PHPUnit_Extensions_Database_Operation_IDatabaseOperation
 	 *
 	 * @since   1.0
 	 */

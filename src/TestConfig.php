@@ -11,7 +11,8 @@ namespace Joomla\Test;
 /**
  * Test stub configuration class.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Deprecated without replacement
  */
 class Config
 {

@@ -13,7 +13,8 @@ use Joomla\Application\AbstractWebApplication;
 /**
  * Inspector for the Joomla\Application\AbstractWebApplication class.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Deprecated without replacement
  */
 class WebInspector extends AbstractWebApplication
 {

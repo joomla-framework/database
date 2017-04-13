@@ -8,6 +8,8 @@
 
 namespace Joomla\Test;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Static helper methods to assist unit testing PHP code.
  *
@@ -21,18 +23,18 @@ class TestHelper
 	 * This method assumes that the mock callback is named {mock}{method name}.
 	 *
 	 * @param   \PHPUnit_Framework_MockObject_MockObject  $mockObject  The mock object that the callbacks are being assigned to.
-	 * @param   \PHPUnit_Framework_TestCase               $test        The test.
+	 * @param   TestCase                                  $test        The test.
 	 * @param   array                                     $array       An array of methods names to mock with callbacks.
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0
 	 */
-	public static function assignMockCallbacks(\PHPUnit_Framework_MockObject_MockObject $mockObject, \PHPUnit_Framework_TestCase $test, $array)
+	public static function assignMockCallbacks(\PHPUnit_Framework_MockObject_MockObject $mockObject, TestCase $test, $array)
 	{
 		foreach ($array as $index => $method)
 		{
-			if (is_array($method))
+			if (is_callable($method))
 			{
 				$methodName = $index;
 				$callback = $method;
@@ -45,7 +47,7 @@ class TestHelper
 
 			$mockObject->expects($test->any())
 				->method($methodName)
-				->will($test->returnCallback($callback));
+				->willReturnCallback($callback);
 		}
 	}
 
@@ -53,7 +55,7 @@ class TestHelper
 	 * Assigns mock values to methods.
 	 *
 	 * @param   \PHPUnit_Framework_MockObject_MockObject  $mockObject  The mock object.
-	 * @param   \PHPUnit_Framework_TestCase               $test        The test.
+	 * @param   TestCase                                  $test        The test.
 	 * @param   array                                     $array       An associative array of methods to mock with return values:<br />
 	 *                                                                 string (method name) => mixed (return value)
 	 *
@@ -61,13 +63,13 @@ class TestHelper
 	 *
 	 * @since   1.0
 	 */
-	public static function assignMockReturns(\PHPUnit_Framework_MockObject_MockObject $mockObject, \PHPUnit_Framework_TestCase $test, $array)
+	public static function assignMockReturns(\PHPUnit_Framework_MockObject_MockObject $mockObject, TestCase $test, $array)
 	{
 		foreach ($array as $method => $return)
 		{
 			$mockObject->expects($test->any())
 				->method($method)
-				->will($test->returnValue($return));
+				->willReturn($return);
 		}
 	}
 

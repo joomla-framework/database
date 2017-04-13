@@ -6,13 +6,16 @@
     "homepage": "https://github.com/joomla-framework/test",
     "license": "GPL-2.0+",
     "require": {
-        "php": ">=5.3.10"
+        "php": "^5.3.10|~7.0",
+        "phpunit/phpunit": "^4.8.35|^5.4.3|~6.0"
     },
     "require-dev": {
-        "joomla/database": "~1.0"
+        "joomla/database": "~1.0",
+        "phpunit/dbunit": "~1.3|~2.0"
     },
     "suggest": {
-        "joomla/database": "To use the database test case, install joomla/database"
+        "joomla/database": "To use the database test case, install joomla/database",
+        "phpunit/dbunit": "To use the database test case, install phpunit/dbunit"
     },
     "autoload": {
         "psr-4": {
