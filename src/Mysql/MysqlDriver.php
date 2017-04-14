@@ -15,7 +15,7 @@ use Psr\Log;
 /**
  * MySQL database driver supporting PDO based connections
  *
- * @see    http://php.net/manual/en/ref.pdo-mysql.php
+ * @link   https://secure.php.net/manual/en/ref.pdo-mysql.php
  * @since  1.0
  */
 class MysqlDriver extends PdoDriver

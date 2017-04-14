@@ -13,7 +13,7 @@ use Joomla\Database\Sqlsrv\SqlsrvDriver;
 /**
  * SQL Azure Database Driver
  *
- * @see    http://msdn.microsoft.com/en-us/library/ee336279.aspx
+ * @link   https://msdn.microsoft.com/en-us/library/ee336279.aspx
  * @since  1.0
  */
 class SqlazureDriver extends SqlsrvDriver

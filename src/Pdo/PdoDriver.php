@@ -19,7 +19,7 @@ use Joomla\Database\Query\PreparableInterface;
 /**
  * Joomla Framework PDO Database Driver Class
  *
- * @see    http://php.net/pdo
+ * @link   https://secure.php.net/pdo
  * @since  1.0
  */
 abstract class PdoDriver extends DatabaseDriver
