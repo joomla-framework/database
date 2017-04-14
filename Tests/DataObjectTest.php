@@ -449,7 +449,7 @@ class DataObjectTest extends TestCase
 	 * @return  void
 	 *
 	 * @covers  Joomla\Data\DataObject::setProperty
-	 * @see     http://us3.php.net/manual/en/language.types.array.php#language.types.array.casting
+	 * @link    https://secure.php.net/manual/en/language.types.array.php#language.types.array.casting
 	 * @since   1.0
 	 */
 	public function testSetPropertySkipsPropertyWithNullBytes()
