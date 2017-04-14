@@ -14,7 +14,7 @@ use Joomla\Http\Exception\UnexpectedResponseException;
 /**
  * GitHub API Repositories Commits class for the Joomla Framework.
  *
- * @documentation http://developer.github.com/v3/repos/commits
+ * @link https://developer.github.com/v3/repos/commits
  *
  * @since  1.0
  */

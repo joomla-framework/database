@@ -13,7 +13,7 @@ use Joomla\Github\AbstractPackage;
 /**
  * GitHub API Repositories Merging class for the Joomla Framework.
  *
- * @documentation http://developer.github.com/v3/repos/merging
+ * @link https://developer.github.com/v3/repos/merging
  *
  * @since  1.0
  */

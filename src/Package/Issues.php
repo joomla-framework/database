@@ -14,7 +14,7 @@ use Joomla\Uri\Uri;
 /**
  * GitHub API Issues class for the Joomla Framework.
  *
- * @documentation http://developer.github.com/v3/issues
+ * @link https://developer.github.com/v3/issues
  *
  * @since  1.0
  *

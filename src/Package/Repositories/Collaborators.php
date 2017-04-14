@@ -13,7 +13,7 @@ use Joomla\Github\AbstractPackage;
 /**
  * GitHub API Repositories Collaborators class for the Joomla Framework.
  *
- * @documentation http://developer.github.com/v3/repos/collaborators
+ * @link https://developer.github.com/v3/repos/collaborators
  *
  * @since  1.0
  */

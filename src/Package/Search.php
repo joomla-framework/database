@@ -13,7 +13,7 @@ use Joomla\Github\AbstractPackage;
 /**
  * GitHub API Search class for the Joomla Framework.
  *
- * @documentation http://developer.github.com/v3/search
+ * @link https://developer.github.com/v3/search
  *
  * @since  1.0
  */

@@ -14,7 +14,7 @@ use Joomla\Http\Exception\UnexpectedResponseException;
 /**
  * GitHub API Assignees class for the Joomla Framework.
  *
- * @documentation http://developer.github.com/v3/issues/assignees/
+ * @link https://developer.github.com/v3/issues/assignees/
  *
  * @since  1.0
  */

@@ -15,7 +15,7 @@ use Joomla\Github\AbstractPackage;
  *
  * This tags API only deals with tag objects - so only annotated tags, not lightweight tags.
  *
- * @documentation http://developer.github.com/v3/git/tags/
+ * @link https://developer.github.com/v3/git/tags/
  *
  * @since  1.0
  */

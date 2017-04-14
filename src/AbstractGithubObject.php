@@ -43,7 +43,7 @@ abstract class AbstractGithubObject
 	 *
 	 * @var    array
 	 * @since  1.5.2
-	 * @see    https://developer.github.com/webhooks/#events
+	 * @link   https://developer.github.com/webhooks/#events
 	 * @note   From 1.4.0 to 1.5.1 this was named $events, it was renamed due to naming conflicts with package subclasses
 	 */
 	protected $hookEvents = array(
