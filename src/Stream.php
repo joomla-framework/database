@@ -19,11 +19,11 @@ use Joomla\Filesystem\Exception\FilesystemException;
  *
  * This class adheres to the stream wrapper operations:
  *
- * @see    http://php.net/manual/en/function.stream-get-wrappers.php
- * @see    http://php.net/manual/en/intro.stream.php PHP Stream Manual
- * @see    http://php.net/manual/en/wrappers.php Stream Wrappers
- * @see    http://php.net/manual/en/filters.php Stream Filters
- * @see    http://php.net/manual/en/transports.php Socket Transports (used by some options, particularly HTTP proxy)
+ * @link   https://secure.php.net/manual/en/function.stream-get-wrappers.php
+ * @link   https://secure.php.net/manual/en/intro.stream.php PHP Stream Manual
+ * @link   https://secure.php.net/manual/en/wrappers.php Stream Wrappers
+ * @link   https://secure.php.net/manual/en/filters.php Stream Filters
+ * @link   https://secure.php.net/manual/en/transports.php Socket Transports (used by some options, particularly HTTP proxy)
  * @since  1.0
  */
 class Stream
@@ -113,7 +113,7 @@ class Stream
 	/**
 	 * Context to use when opening the connection
 	 *
-	 * @var
+	 * @var string
 	 * @since  1.0
 	 */
 	protected $context = null;
@@ -121,7 +121,7 @@ class Stream
 	/**
 	 * Context options; used to rebuild the context
 	 *
-	 * @var
+	 * @var array
 	 * @since  1.0
 	 */
 	protected $contextOptions;
@@ -129,7 +129,7 @@ class Stream
 	/**
 	 * The mode under which the file was opened
 	 *
-	 * @var
+	 * @var string
 	 * @since  1.0
 	 */
 	protected $openmode;
@@ -538,7 +538,7 @@ class Stream
 	 *
 	 * @return  mixed
 	 *
-	 * @see     http://php.net/manual/en/function.fread.php
+	 * @link    https://secure.php.net/manual/en/function.fread.php
 	 * @since   1.0
 	 * @throws  FilesystemException
 	 */
@@ -636,7 +636,7 @@ class Stream
 	 *
 	 * @return  boolean  True on success, false on failure
 	 *
-	 * @see     http://php.net/manual/en/function.fseek.php
+	 * @link    https://secure.php.net/manual/en/function.fseek.php
 	 * @since   1.0
 	 * @throws  FilesystemException
 	 */
@@ -741,7 +741,7 @@ class Stream
 	 *
 	 * @return  boolean
 	 *
-	 * @see     http://php.net/manual/en/function.fwrite.php
+	 * @link    https://secure.php.net/manual/en/function.fwrite.php
 	 * @since   1.0
 	 * @throws  FilesystemException
 	 */
@@ -873,7 +873,7 @@ class Stream
 	 *
 	 * @return  array  header/metadata
 	 *
-	 * @see     http://php.net/manual/en/function.stream-get-meta-data.php
+	 * @link    https://secure.php.net/manual/en/function.stream-get-meta-data.php
 	 * @since   1.0
 	 * @throws  FilesystemException
 	 */
@@ -917,7 +917,7 @@ class Stream
 	 *
 	 * @return  void
 	 *
-	 * @see     http://php.net/stream_context_create
+	 * @link    https://secure.php.net/stream_context_create
 	 * @since   1.0
 	 */
 	public function setContextOptions($context)
@@ -935,8 +935,8 @@ class Stream
 	 *
 	 * @return  void
 	 *
-	 * @see     http://php.net/stream_context_create Stream Context Creation
-	 * @see     http://php.net/manual/en/context.php Context Options for various streams
+	 * @link    https://secure.php.net/stream_context_create Stream Context Creation
+	 * @link    https://secure.php.net/manual/en/context.php Context Options for various streams
 	 * @since   1.0
 	 */
 	public function addContextEntry($wrapper, $name, $value)
@@ -953,7 +953,7 @@ class Stream
 	 *
 	 * @return  void
 	 *
-	 * @see     http://php.net/stream_context_create
+	 * @link    https://secure.php.net/stream_context_create
 	 * @since   1.0
 	 */
 	public function deleteContextEntry($wrapper, $name)
@@ -1024,7 +1024,7 @@ class Stream
 	 *
 	 * @return  mixed
 	 *
-	 * @see     http://php.net/manual/en/function.stream-filter-append.php
+	 * @link    https://secure.php.net/manual/en/function.stream-filter-append.php
 	 * @since   1.0
 	 * @throws  FilesystemException
 	 */
@@ -1064,7 +1064,7 @@ class Stream
 	 *
 	 * @return  mixed
 	 *
-	 * @see     http://php.net/manual/en/function.stream-filter-prepend.php
+	 * @link    https://secure.php.net/manual/en/function.stream-filter-prepend.php
 	 * @since   1.0
 	 * @throws  FilesystemException
 	 */
