@@ -14,7 +14,7 @@ use Joomla\Database\Pdo\PdoDriver;
 /**
  * SQLite database driver supporting PDO based connections
  *
- * @see    http://php.net/manual/en/ref.pdo-sqlite.php
+ * @link   https://secure.php.net/manual/en/ref.pdo-sqlite.php
  * @since  1.0
  */
 class SqliteDriver extends PdoDriver
