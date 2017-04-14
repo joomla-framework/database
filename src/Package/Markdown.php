@@ -14,7 +14,7 @@ use Joomla\Http\Exception\UnexpectedResponseException;
 /**
  * GitHub API Markdown class.
  *
- * @documentation http://developer.github.com/v3/markdown
+ * @link https://developer.github.com/v3/markdown
  *
  * @since  1.0
  */

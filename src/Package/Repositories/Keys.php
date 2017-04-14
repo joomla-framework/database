@@ -13,7 +13,7 @@ use Joomla\Github\AbstractPackage;
 /**
  * GitHub API Forks class for the Joomla Framework.
  *
- * @documentation http://developer.github.com/v3/repos/keys
+ * @link https://developer.github.com/v3/repos/keys
  *
  * @since  1.0
  */

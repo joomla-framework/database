@@ -14,7 +14,7 @@ use Joomla\Uri\Uri;
 /**
  * GitHub API Activity Events class for the Joomla Framework.
  *
- * @documentation http://developer.github.com/v3/activity/starring/
+ * @link https://developer.github.com/v3/activity/starring/
  *
  * @since  1.0
  */

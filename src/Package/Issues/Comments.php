@@ -16,7 +16,7 @@ use Joomla\Github\AbstractPackage;
  * The Issue Comments API supports listing, viewing, editing, and creating comments
  * on issues and pull requests.
  *
- * @documentation http://developer.github.com/v3/issues/comments/
+ * @link https://developer.github.com/v3/issues/comments/
  *
  * @since  1.0
  */
