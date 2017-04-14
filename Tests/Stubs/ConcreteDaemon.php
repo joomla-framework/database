@@ -78,7 +78,7 @@ class ConcreteDaemon extends AbstractDaemonApplication
 	 *
 	 * @param   mixed  $value  The value of the property.
 	 *
-	 * @return  void.
+	 * @return  void
 	 *
 	 * @since   1.0
 	 */
@@ -93,7 +93,7 @@ class ConcreteDaemon extends AbstractDaemonApplication
 	 * @param   string  $name   The name of the property.
 	 * @param   mixed   $value  The value of the property.
 	 *
-	 * @return  void.
+	 * @return  void
 	 *
 	 * @since   1.0
 	 * @throws  \Exception
