@@ -73,7 +73,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 *
 	 * @var    array
 	 * @since  1.6.0
-	 * @see    https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
+	 * @link   https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
 	 */
 	private $responseMap = array(
 		300 => 'HTTP/1.1 300 Multiple Choices',
