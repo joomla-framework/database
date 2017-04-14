@@ -81,7 +81,7 @@ class StringWrapper
 	 *
 	 * @var    array
 	 * @since  1.3.0
-	 * @see    http://us.php.net/manual/en/function.stat.php
+	 * @link   https://secure.php.net/manual/en/function.stat.php
 	 */
 	protected $stat;
 
@@ -118,7 +118,7 @@ class StringWrapper
 	 *
 	 * @return  array
 	 *
-	 * @see     http://www.php.net/manual/en/streamwrapper.stream-stat.php
+	 * @link    https://secure.php.net/manual/en/streamwrapper.stream-stat.php
 	 * @since   1.3.0
 	 */
 	public function stream_stat()
@@ -134,7 +134,7 @@ class StringWrapper
 	 *
 	 * @return  array
 	 *
-	 * @see     http://php.net/manual/en/streamwrapper.url-stat.php
+	 * @link    https://secure.php.net/manual/en/streamwrapper.url-stat.php
 	 * @since   1.3.0
 	 */
 	public function url_stat($path, $flags = 0)
@@ -168,7 +168,7 @@ class StringWrapper
 	 *
 	 * @return  string
 	 *
-	 * @see     http://www.php.net/manual/en/streamwrapper.stream-read.php
+	 * @link    https://secure.php.net/manual/en/streamwrapper.stream-read.php
 	 * @since   1.3.0
 	 */
 	public function stream_read($count)
