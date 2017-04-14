@@ -991,7 +991,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @return  boolean  True on success
 	 *
-	 * @see     http://shiflett.org/articles/the-truth-about-sessions
+	 * @link    http://shiflett.org/articles/the-truth-about-sessions
 	 * @since   1.0
 	 * @deprecated  2.0  Use validate instead
 	 */
@@ -1013,7 +1013,7 @@ class Session implements \IteratorAggregate
 	 *
 	 * @return  boolean  True on success
 	 *
-	 * @see     http://shiflett.org/articles/the-truth-about-sessions
+	 * @link    http://shiflett.org/articles/the-truth-about-sessions
 	 * @since   1.3.0
 	 */
 	protected function validate($restart = false)
