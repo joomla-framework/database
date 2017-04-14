@@ -13,7 +13,7 @@ use Joomla\Session\Storage;
 /**
  * APC session storage handler for PHP
  *
- * @see         http://www.php.net/manual/en/function.session-set-save-handler.php
+ * @link        https://secure.php.net/manual/en/function.session-set-save-handler.php
  * @since       1.0
  * @deprecated  2.0  The Storage class chain will be removed.
  */
