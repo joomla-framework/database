@@ -139,6 +139,17 @@ abstract class DatabaseImporter
 	}
 
 	/**
+	 * Get alters for table if there is a difference.
+	 *
+	 * @param   \SimpleXMLElement  $structure  The XML structure pf the table.
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	abstract protected function getAlterTableSQL(\SimpleXMLElement $structure);
+
+	/**
 	 * Get the syntax to alter a column.
 	 *
 	 * @param   string             $table  The name of the database table to alter.
