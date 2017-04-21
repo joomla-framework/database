@@ -1247,4 +1247,17 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
 	}
+
+	/**
+	 * Tears down the fixture.
+	 *
+	 * This method is called after a test is executed.
+	 *
+	 * @return void
+	 */
+	protected function tearDown()
+	{
+		self::$driver = null;
+		parent::tearDown();
+	}
 }
