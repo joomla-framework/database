@@ -53,7 +53,7 @@ class Issues extends AbstractPackage
 		{
 			$labels = array_values($labels);
 		}
-		
+
 		// Build the request data.
 		$data = array(
 			'title'     => $title,
@@ -61,7 +61,7 @@ class Issues extends AbstractPackage
 			'labels'    => $labels,
 			'body'      => $body
 		);
-		
+
 		if (!empty($assignees)) 
 		{
 			$data['assignees'] = array_values($assignees);
