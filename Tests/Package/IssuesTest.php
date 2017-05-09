@@ -38,7 +38,7 @@ class IssuesTest extends GitHubTestCase
 	}
 
 	/**
-	 * Tests the create method
+	 * Tests the create method with assignee
 	 *
 	 * @return void
 	 */
@@ -48,20 +48,47 @@ class IssuesTest extends GitHubTestCase
 		$this->response->body = $this->sampleString;
 
 		$issue = new \stdClass;
-		$issue->title = 'My issue';
-		$issue->assignee = 'JoeUser';
-		$issue->milestone = '11.5';
-		$issue->labels = array('TestLabel');
-		$issue->body = 'These are my changes - please review them';
-		$issue->assignees = array('joomla');
+		$issue->title = '{title}';
+		$issue->milestone = '{milestone}';
+		$issue->labels = ['{label1}'];
+		$issue->body = '{body}';
+		$issue->assignee = '{assignee}';
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/repos/joomla/joomla-platform/issues', json_encode($issue))
+			->with('/repos/{user}/{repo}/issues', json_encode($issue))
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
-			$this->object->create('joomla', 'joomla-platform', 'My issue', 'These are my changes - please review them', 'JoeUser', '11.5', array('TestLabel'), array('joomla')),
+			$this->object->create('{user}', '{repo}', '{title}', '{body}', '{assignee}', '{milestone}', ['{label1}']),
+			$this->equalTo(json_decode($this->sampleString))
+		);
+	}
+
+	/**
+	 * Tests the create method with assignees
+	 *
+	 * @return void
+	 */
+	public function testCreate2()
+	{
+		$this->response->code = 201;
+		$this->response->body = $this->sampleString;
+
+		$issue = new \stdClass;
+		$issue->title = '{title}';
+		$issue->milestone = '{milestone}';
+		$issue->labels = ['{label1}'];
+		$issue->body = '{body}';
+		$issue->assignees = ['{assignee1}'];
+
+		$this->client->expects($this->once())
+			->method('post')
+			->with('/repos/{user}/{repo}/issues', json_encode($issue))
+			->will($this->returnValue($this->response));
+
+		$this->assertThat(
+			$this->object->create('{user}', '{repo}', '{title}', '{body}', null, '{milestone}', ['{label1}'], ['{assignee1}']),
 			$this->equalTo(json_decode($this->sampleString))
 		);
 	}
@@ -79,19 +106,30 @@ class IssuesTest extends GitHubTestCase
 		$this->response->body = $this->errorString;
 
 		$issue = new \stdClass;
-		$issue->title = 'My issue';
-		$issue->assignee = 'JoeUser';
-		$issue->milestone = '11.5';
-		$issue->labels = array();
-		$issue->body = 'These are my changes - please review them';
-		$issue->assignees = array('joomla');
+		$issue->title = '{title}';
+		$issue->milestone = '{milestone}';
+		$issue->labels = [];
+		$issue->body = '{body}';
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/repos/joomla/joomla-platform/issues', json_encode($issue))
+			->with('/repos/{user}/{repo}/issues', json_encode($issue))
 			->will($this->returnValue($this->response));
 
-		$this->object->create('joomla', 'joomla-platform', 'My issue', 'These are my changes - please review them', 'JoeUser', '11.5', array(), array('joomla'));
+		$this->object->create('{user}', '{repo}', '{title}', '{body}', null, '{milestone}');
+	}
+
+	/**
+	 * Tests the create method - failure assigning both assignee and assignees.
+	 *
+	 * @expectedException  \UnexpectedValueException
+	 * @expectedExceptionMessage You cannot pass both assignee and assignees. Only one may be provided.
+	 *
+	 * @return void
+	 */
+	public function testCreateFailure2()
+	{
+		$this->object->create('{user}', '{repo}', '{title}', '{body}', '{assignee]', '{milestone}', ['{label1}'], ['{assignee1]']);
 	}
 
 	/**
