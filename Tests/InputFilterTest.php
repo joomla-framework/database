@@ -432,6 +432,12 @@ class InputFilterTest extends TestCase
 				array('fred', '$user69'),
 				'From generic cases'
 			),
+			'user_04' => array(
+				'username',
+				'محمد',
+				'محمد',
+				'From generic utf-8 multibyte cases'
+			),
 			'trim_01' => array(
 				'trim',
 				'nonbreaking nonbreaking',
@@ -546,11 +552,23 @@ class InputFilterTest extends TestCase
 				'<em><strong>Fred</strong></em>',
 				'From generic cases'
 			),
+			'Nested tags with utf-8 multibyte persian characters' => array(
+				'',
+				'<em><strong>محمد</strong></em>',
+				'<em><strong>محمد</strong></em>',
+				'From generic utf-8 multibyte cases'
+			),
 			'Malformed Nested tags' => array(
 				'',
 				'<em><strongFred</strong></em>',
 				'<em>strongFred</strong></em>',
 				'From generic cases'
+			),
+			'Malformed Nested tags with utf-8 multibyte persian characters' => array(
+				'',
+				'<em><strongمحمد</strong></em>',
+				'<em>strongمحمد</strong></em>',
+				'From generic utf-8 multibyte cases'
 			),
 			'Unquoted Attribute Without Space' => array(
 				'',
