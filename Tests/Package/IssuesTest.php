@@ -50,7 +50,7 @@ class IssuesTest extends GitHubTestCase
 		$issue = new \stdClass;
 		$issue->title = '{title}';
 		$issue->milestone = '{milestone}';
-		$issue->labels = ['{label1}'];
+		$issue->labels = array('{label1}');
 		$issue->body = '{body}';
 		$issue->assignee = '{assignee}';
 
@@ -60,7 +60,7 @@ class IssuesTest extends GitHubTestCase
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
-			$this->object->create('{user}', '{repo}', '{title}', '{body}', '{assignee}', '{milestone}', ['{label1}']),
+			$this->object->create('{user}', '{repo}', '{title}', '{body}', '{assignee}', '{milestone}', array('{label1}')),
 			$this->equalTo(json_decode($this->sampleString))
 		);
 	}
