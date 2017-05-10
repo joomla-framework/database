@@ -699,11 +699,23 @@ class InputFilterTest extends TestCase
 				'Fred',
 				'From specific cases'
 			),
+			'Nested tags with utf-8 multibyte persian characters' => array(
+				'',
+				'<em><strong>محمد</strong></em>',
+				'محمد',
+				'From specific utf-8 multibyte cases'
+			),
 			'Malformed Nested tags' => array(
 				'',
 				'<em><strongFred</strong></em>',
 				'strongFred',
 				'From specific cases'
+			),
+			'Malformed Nested tags with utf-8 multibyte persian characters' => array(
+				'',
+				'<em><strongمحمد</strong></em>',
+				'strongمحمد',
+				'From specific utf-8 multibyte cases'
 			),
 			'Unquoted Attribute Without Space' => array(
 				'',
@@ -816,11 +828,23 @@ class InputFilterTest extends TestCase
 				'Fred',
 				'From specific cases'
 			),
+			'Nested tags with utf-8 multibyte persian characters' => array(
+				'',
+				'<em><strong>محمد</strong></em>',
+				'محمد',
+				'From specific utf-8 multibyte cases'
+			),
 			'Malformed Nested tags' => array(
 				'',
 				'<em><strongFred</strong></em>',
 				'strongFred',
 				'From specific cases'
+			),
+			'Malformed Nested tags with utf-8 multibyte persian characters' => array(
+				'',
+				'<em><strongمحمد</strong></em>',
+				'strongمحمد',
+				'From specific utf-8 multibyte cases'
 			),
 			'Unquoted Attribute Without Space' => array(
 				'',
@@ -952,11 +976,23 @@ class InputFilterTest extends TestCase
 				'Fred',
 				'From specific cases'
 			),
+			'Nested tags with utf-8 multibyte persian characters' => array(
+				'',
+				'<em><strong>محمد</strong></em>',
+				'محمد',
+				'From specific utf-8 multibyte cases'
+			),
 			'Malformed Nested tags' => array(
 				'',
 				'<em><strongFred</strong></em>',
 				'strongFred',
 				'From specific cases'
+			),
+			'Malformed Nested tags with utf-8 multibyte persian characters' => array(
+				'',
+				'<em><strongمحمد</strong></em>',
+				'strongمحمد',
+				'From specific utf-8 multibyte cases'
 			),
 			'Unquoted Attribute Without Space' => array(
 				'',
@@ -1058,11 +1094,23 @@ class InputFilterTest extends TestCase
 				'Fred',
 				'From specific cases'
 			),
+			'Nested tags with utf-8 multibyte persian characters' => array(
+				'',
+				'<em><strong>محمد</strong></em>',
+				'محمد',
+				'From specific utf-8 multibyte cases'
+			),
 			'Malformed Nested tags' => array(
 				'',
 				'<em><strongFred</strong></em>',
 				'strongFred',
 				'From specific cases'
+			),
+			'Malformed Nested tags with utf-8 multibyte persian characters' => array(
+				'',
+				'<em><strongمحمد</strong></em>',
+				'strongمحمد',
+				'From specific utf-8 multibyte cases'
 			),
 			'Unquoted Attribute Without Space' => array(
 				'',
