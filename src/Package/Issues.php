@@ -55,16 +55,29 @@ class Issues extends AbstractPackage
 		}
 
 		// Build the request data.
-		$data = json_encode(
-			array(
-				'title'     => $title,
-				'assignee'  => $assignee,
-				'milestone' => $milestone,
-				'labels'    => $labels,
-				'body'      => $body,
-				'assignees' => $assignees,
-			)
+		$data = array(
+			'title'     => $title,
+			'milestone' => $milestone,
+			'labels'    => $labels,
+			'body'      => $body
 		);
+
+		if (is_string($assignee) && !empty($assignees))
+		{
+			throw new \UnexpectedValueException('You cannot pass both assignee and assignees. Only one may be provided.');
+		}
+
+		if (!empty($assignees)) 
+		{
+			$data['assignees'] = array_values($assignees);
+		} 
+		elseif (is_string($assignee)) 
+		{
+			$data['assignee'] = $assignee;
+		}
+
+		// Encode the request data.
+		$data = json_encode($data);
 
 		// Send the request.
 		return $this->processResponse($this->client->post($this->fetchUrl($path), $data), 201);
