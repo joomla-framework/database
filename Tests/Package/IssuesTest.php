@@ -108,7 +108,7 @@ class IssuesTest extends GitHubTestCase
 		$issue = new \stdClass;
 		$issue->title = '{title}';
 		$issue->milestone = '{milestone}';
-		$issue->labels = [];
+		$issue->labels = array();
 		$issue->body = '{body}';
 
 		$this->client->expects($this->once())
@@ -129,7 +129,7 @@ class IssuesTest extends GitHubTestCase
 	 */
 	public function testCreateFailure2()
 	{
-		$this->object->create('{user}', '{repo}', '{title}', '{body}', '{assignee]', '{milestone}', ['{label1}'], ['{assignee1]']);
+		$this->object->create('{user}', '{repo}', '{title}', '{body}', '{assignee]', '{milestone}', array('{label1}'), array('{assignee1]'));
 	}
 
 	/**
