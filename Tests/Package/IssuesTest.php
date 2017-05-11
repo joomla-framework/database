@@ -78,9 +78,9 @@ class IssuesTest extends GitHubTestCase
 		$issue = new \stdClass;
 		$issue->title = '{title}';
 		$issue->milestone = '{milestone}';
-		$issue->labels = ['{label1}'];
+		$issue->labels = array('{label1}');
 		$issue->body = '{body}';
-		$issue->assignees = ['{assignee1}'];
+		$issue->assignees = array('{assignee1}');
 
 		$this->client->expects($this->once())
 			->method('post')
@@ -88,7 +88,7 @@ class IssuesTest extends GitHubTestCase
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
-			$this->object->create('{user}', '{repo}', '{title}', '{body}', null, '{milestone}', ['{label1}'], ['{assignee1}']),
+			$this->object->create('{user}', '{repo}', '{title}', '{body}', null, '{milestone}', array('{label1}'), array('{assignee1}')),
 			$this->equalTo(json_decode($this->sampleString))
 		);
 	}
