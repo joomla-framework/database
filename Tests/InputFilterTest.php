@@ -414,6 +414,12 @@ class InputFilterTest extends TestCase
 				array('images/system', '/var/www/html/index.html'),
 				'From generic cases'
 			),
+			'path_06' => array(
+				'path',
+				'/var/www/html/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf',
+				'/var/www/html/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf',
+				'From generic cases'
+			),
 			'user_01' => array(
 				'username',
 				'&<f>r%e\'d',
@@ -433,6 +439,18 @@ class InputFilterTest extends TestCase
 				'From generic cases'
 			),
 			'user_04' => array(
+				'username',
+				'фамилия',
+				'фамилия',
+				'From generic cases'
+			),
+			'user_05' => array(
+				'username',
+				'Φρεντ',
+				'Φρεντ',
+				'From generic cases'
+			),
+			'user_06' => array(
 				'username',
 				'محمد',
 				'محمد',
@@ -550,6 +568,12 @@ class InputFilterTest extends TestCase
 				'',
 				'<em><strong>Fred</strong></em>',
 				'<em><strong>Fred</strong></em>',
+				'From generic cases'
+			),
+			'Nested tags 02' => array(
+				'',
+				'<em><strong>Φρεντ</strong></em>',
+				'<em><strong>Φρεντ</strong></em>',
 				'From generic cases'
 			),
 			'Nested tags with utf-8 multibyte persian characters' => array(
@@ -699,6 +723,12 @@ class InputFilterTest extends TestCase
 				'Fred',
 				'From specific cases'
 			),
+			'Nested tags 02' => array(
+				'',
+				'<em><strong>Φρεντ</strong></em>',
+				'Φρεντ',
+				'From specific cases'
+			),
 			'Nested tags with utf-8 multibyte persian characters' => array(
 				'',
 				'<em><strong>محمد</strong></em>',
@@ -826,6 +856,12 @@ class InputFilterTest extends TestCase
 				'',
 				'<em><strong>Fred</strong></em>',
 				'Fred',
+				'From specific cases'
+			),
+			'Nested tags 02' => array(
+				'',
+				'<em><strong>Φρεντ</strong></em>',
+				'Φρεντ',
 				'From specific cases'
 			),
 			'Nested tags with utf-8 multibyte persian characters' => array(
@@ -976,6 +1012,12 @@ class InputFilterTest extends TestCase
 				'Fred',
 				'From specific cases'
 			),
+			'Nested tags 02' => array(
+				'',
+				'<em><strong>Φρεντ</strong></em>',
+				'Φρεντ',
+				'From specific cases'
+			),
 			'Nested tags with utf-8 multibyte persian characters' => array(
 				'',
 				'<em><strong>محمد</strong></em>',
@@ -1092,6 +1134,12 @@ class InputFilterTest extends TestCase
 				'',
 				'<em><strong>Fred</strong></em>',
 				'Fred',
+				'From specific cases'
+			),
+			'Nested tags 02' => array(
+				'',
+				'<em><strong>Φρεντ</strong></em>',
+				'Φρεντ',
 				'From specific cases'
 			),
 			'Nested tags with utf-8 multibyte persian characters' => array(
