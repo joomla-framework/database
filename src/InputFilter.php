@@ -654,9 +654,9 @@ class InputFilter
 			 * OR no tagname
 			 * OR remove if xssauto is on and tag is blacklisted
 			 */
-			if ((!preg_match("/^[a-z][a-z0-9]*$/i", $tagName)) 
-			    || (!$tagName)
-			    || ((in_array(strtolower($tagName), $this->tagBlacklist)) && ($this->xssAuto)))
+			if ((!preg_match("/^[a-z][a-z0-9]*$/i", $tagName))
+				|| (!$tagName)
+				|| ((in_array(strtolower($tagName), $this->tagBlacklist)) && ($this->xssAuto)))
 			{
 				$postTag = StringHelper::substr($postTag, ($tagLength + 2));
 				$tagOpen_start = StringHelper::strpos($postTag, '<');
@@ -723,7 +723,7 @@ class InputFilter
 					 * otherwise grab until the next space.
 					 */
 					if (($openQuotes !== false)
-					    && (StringHelper::strpos(StringHelper::substr($fromSpace, ($openQuotes + 1)), '"') !== false))
+						&& (StringHelper::strpos(StringHelper::substr($fromSpace, ($openQuotes + 1)), '"') !== false))
 					{
 						$attr = StringHelper::substr($fromSpace, 0, ($closeQuotes + 1));
 					}
@@ -954,6 +954,7 @@ class InputFilter
 
 			// Get the portion after attribute value
 			$attributeValueRemainder = StringHelper::substr($remainder, $nextBefore);
+
 			if (preg_match($pregMatch, $attributeValueRemainder, $matches, PREG_OFFSET_CAPTURE))
 			{
 				// We have a closing quote, convert its byte position to a UTF-8 string length, using non-multibyte substr()
