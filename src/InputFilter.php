@@ -654,7 +654,9 @@ class InputFilter
 			 * OR no tagname
 			 * OR remove if xssauto is on and tag is blacklisted
 			 */
-			if ((!preg_match("/^[a-z][a-z0-9]*$/i", $tagName)) || (!$tagName) || ((in_array(strtolower($tagName), $this->tagBlacklist)) && ($this->xssAuto)))
+			if ((!preg_match("/^[a-z][a-z0-9]*$/i", $tagName))
+				|| (!$tagName)
+				|| ((in_array(strtolower($tagName), $this->tagBlacklist)) && ($this->xssAuto)))
 			{
 				$postTag = StringHelper::substr($postTag, ($tagLength + 2));
 				$tagOpen_start = StringHelper::strpos($postTag, '<');
@@ -682,8 +684,10 @@ class InputFilter
 				// Find position of equal and open quotes ignoring
 				if (preg_match('#\s*=\s*\"#', $fromSpace, $matches, PREG_OFFSET_CAPTURE))
 				{
+					// We have found an attribute, convert its byte position to a UTF-8 string length, using non-multibyte substr()
+					$stringBeforeAttr = substr($fromSpace, 0, $matches[0][1]);
+					$startAttPosition = StringHelper::strlen($stringBeforeAttr);
 					$startAtt = $matches[0][0];
-					$startAttPosition = $matches[0][1];
 					$closeQuotePos = StringHelper::strpos(
 						StringHelper::substr($fromSpace, ($startAttPosition + StringHelper::strlen($startAtt))), '"'
 					);
@@ -718,7 +722,8 @@ class InputFilter
 					 * If the attribute value is wrapped in quotes we need to grab the substring from the closing quote,
 					 * otherwise grab until the next space.
 					 */
-					if (($openQuotes !== false) && (StringHelper::strpos(StringHelper::substr($fromSpace, ($openQuotes + 1)), '"') !== false))
+					if (($openQuotes !== false)
+						&& (StringHelper::strpos(StringHelper::substr($fromSpace, ($openQuotes + 1)), '"') !== false))
 					{
 						$attr = StringHelper::substr($fromSpace, 0, ($closeQuotes + 1));
 					}
@@ -935,9 +940,12 @@ class InputFilter
 		// See if there are any more attributes to process
 		while (preg_match('#<[^>]*?=\s*?(\"|\')#s', $remainder, $matches, PREG_OFFSET_CAPTURE))
 		{
-			// Get the portion before the attribute value
-			$quotePosition = $matches[0][1];
-			$nextBefore = $quotePosition + StringHelper::strlen($matches[0][0]);
+			// We have found a tag with an attribute, convert its byte position to a UTF-8 string length, using non-multibyte substr()
+			$stringBeforeTag = substr($remainder, 0, $matches[0][1]);
+			$tagPosition = StringHelper::strlen($stringBeforeTag);
+
+			// Get the character length before the attribute value
+			$nextBefore = $tagPosition + StringHelper::strlen($matches[0][0]);
 
 			// Figure out if we have a single or double quote and look for the matching closing quote
 			// Closing quote should be "/>, ">, "<space>, or " at the end of the string
@@ -945,9 +953,13 @@ class InputFilter
 			$pregMatch = ($quote == '"') ? '#(\"\s*/\s*>|\"\s*>|\"\s+|\"$)#' : "#(\'\s*/\s*>|\'\s*>|\'\s+|\'$)#";
 
 			// Get the portion after attribute value
-			if (preg_match($pregMatch, StringHelper::substr($remainder, $nextBefore), $matches, PREG_OFFSET_CAPTURE))
+			$attributeValueRemainder = StringHelper::substr($remainder, $nextBefore);
+
+			if (preg_match($pregMatch, $attributeValueRemainder, $matches, PREG_OFFSET_CAPTURE))
 			{
-				// We have a closing quote
+				// We have a closing quote, convert its byte position to a UTF-8 string length, using non-multibyte substr()
+				$stringBeforeQuote = substr($attributeValueRemainder, 0, $matches[0][1]);
+				$closeQuoteChars = StringHelper::strlen($stringBeforeQuote);
 				$nextAfter = $nextBefore + $matches[0][1];
 			}
 			else
