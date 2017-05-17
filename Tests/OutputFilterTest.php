@@ -150,25 +150,25 @@ class OutputFilterTest extends TestCase
 
 		$this->assertEquals(
 			'index.php?&&george&amp;mary&#3son&amp;this=that',
-			JFilterOutput::ampReplace('index.php?&&george&mary&#3son&this=that'),
+			$this->object->ampReplace('index.php?&&george&mary&#3son&this=that'),
 			'Should replace single ampersands with HTML entity'
 		);
 
 		$this->assertEquals(
 			'index.php?&&george&amp;mary&#3son&&&this=that',
-			JFilterOutput::ampReplace('index.php?&&george&mary&#3son&&&this=that'),
+			$this->object->ampReplace('index.php?&&george&mary&#3son&&&this=that'),
 			'Should replace single ampersands with HTML entity'
 		);
 
 		$this->assertEquals(
 			'index.php?&amp;this="this &amp; and that"',
-			JFilterOutput::ampReplace('index.php?&this="this & and that"'),
+			$this->object->ampReplace('index.php?&this="this & and that"'),
 			'Should replace single ampersands with HTML entity'
 		);
 
 		$this->assertEquals(
 			'index.php?&amp;this="this &amp; &amp; &&amp; and that"',
-			JFilterOutput::ampReplace('index.php?&this="this &amp; & &&amp; and that"'),
+			$this->object->ampReplace('index.php?&this="this &amp; & &&amp; and that"'),
 			'Should replace single ampersands with HTML entity'
 		);
 	}
