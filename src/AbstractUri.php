@@ -154,7 +154,7 @@ abstract class AbstractUri implements UriInterface
 	 * @param   string  $name     Name of the query variable to get.
 	 * @param   string  $default  Default value to return if the variable is not set.
 	 *
-	 * @return  array   Query variables.
+	 * @return  mixed   Value of the specified query variable.
 	 *
 	 * @since   1.0
 	 */
