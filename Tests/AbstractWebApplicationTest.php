@@ -624,14 +624,21 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 
 		$url = 'index.php';
 
+		$date = new \DateTime();
+		$object->modifiedDate = $date;
+
 		$object->redirect($url, false);
 
 		$this->assertSame(
 			self::$headers,
 			array(
-				array('HTTP/1.1 303 See other', true, null),
+				array('HTTP/1.1 303 See other', true, 303),
 				array('Location: http://' . self::TEST_HTTP_HOST . "/$url", true, null),
 				array('Content-Type: text/html; charset=utf-8', true, null),
+				array('Expires: Wed, 17 Aug 2005 00:00:00 GMT', true, null),
+				array('Last-Modified: ' . $date->format('D, d M Y H:i:s') . ' GMT', true, null),
+				array('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0', true, null),
+				array('Pragma: no-cache', true, null),
 			)
 		);
 	}
@@ -705,14 +712,111 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 
 		$url = 'index.php';
 
+		$date = new \DateTime();
+		$object->modifiedDate = $date;
+
 		$object->redirect($url);
 
 		$this->assertSame(
 			self::$headers,
 			array(
-				array('HTTP/1.1 303 See other', true, null),
+				array('HTTP/1.1 303 See other', true, 303),
 				array('Location: http://' . self::TEST_HTTP_HOST . "/$url", true, null),
 				array('Content-Type: text/html; charset=utf-8', true, null),
+				array('Expires: Wed, 17 Aug 2005 00:00:00 GMT', true, null),
+				array('Last-Modified: ' . $date->format('D, d M Y H:i:s') . ' GMT', true, null),
+				array('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0', true, null),
+				array('Pragma: no-cache', true, null),
+			)
+		);
+	}
+
+	/**
+	 * @testdox  Tests that the application redirects successfully when there is already a status code set.
+	 *
+	 * @covers  Joomla\Application\AbstractWebApplication::redirect
+	 */
+	public function testRedirectWithExistingStatusCode1()
+	{
+		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
+		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(), '', true, true, true, false, true);
+		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(), '', true, true, true, false, true);
+
+		// Mock the Input object internals
+		$mockServerInput = $this->getMock(
+			'Joomla\Input\Input',
+			array('get', 'set'),
+			array(
+				array(
+					'HTTP_HOST'   => self::TEST_HTTP_HOST,
+					'REQUEST_URI' => self::TEST_REQUEST_URI,
+					'SCRIPT_NAME' => '/index.php'
+				)
+			),
+			'',
+			true,
+			true,
+			true,
+			false,
+			true
+		);
+
+		$inputInternals = array(
+			'server' => $mockServerInput
+		);
+
+		TestHelper::setValue($mockInput, 'inputs', $inputInternals);
+
+		// Mock the client internals to show engine has been detected.
+		TestHelper::setValue(
+			$mockClient,
+			'detection',
+			array('engine' => true)
+		);
+		TestHelper::setValue(
+			$mockClient,
+			'engine',
+			WebClient::GECKO
+		);
+
+		$object = $this->getMockForAbstractClass(
+			'Joomla\Application\AbstractWebApplication',
+			array($mockInput, $mockConfig, $mockClient),
+			'',
+			true,
+			true,
+			true,
+			array('checkHeadersSent', 'close', 'header')
+		);
+
+		$object->expects($this->once())
+			->method('close');
+		$object->expects($this->any())
+			->method('checkHeadersSent')
+			->willReturn(false);
+		$object->expects($this->any())
+			->method('header')
+			->willReturnCallback(array($this, 'mockHeader'));
+
+		$url = 'index.php';
+
+		$date = new \DateTime();
+		$object->modifiedDate = $date;
+		$object->setHeader('status', 201);
+
+		$object->redirect($url);
+
+		$this->assertSame(
+			self::$headers,
+			array(
+				array('HTTP/1.1 201 Created', true, 201),
+				array('HTTP/1.1 303 See other', true, 303),
+				array('Location: http://' . self::TEST_HTTP_HOST . "/$url", true, null),
+				array('Content-Type: text/html; charset=utf-8', true, null),
+				array('Expires: Wed, 17 Aug 2005 00:00:00 GMT', true, null),
+				array('Last-Modified: ' . $date->format('D, d M Y H:i:s') . ' GMT', true, null),
+				array('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0', true, null),
+				array('Pragma: no-cache', true, null),
 			)
 		);
 	}
@@ -785,21 +889,22 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 			->willReturnCallback(array($this, 'mockHeader'));
 
 		$url = 'index.php';
-		$expires = gmdate('D, d M Y H:i:s \G\M\T', time());
 
-		$object->setHeader('Cache-Control', 'no-cache')
-			->setHeader('Expires', $expires);
+		$date = new \DateTime();
+		$object->modifiedDate = $date;
 
 		$object->redirect($url);
 
 		$this->assertSame(
 			self::$headers,
 			array(
-				array('HTTP/1.1 303 See other', true, null),
+				array('HTTP/1.1 303 See other', true, 303),
 				array('Location: http://' . self::TEST_HTTP_HOST . "/$url", true, null),
 				array('Content-Type: text/html; charset=utf-8', true, null),
-				array('Cache-Control: no-cache', true, null),
-				array('Expires: ' . $expires, true, null),
+				array('Expires: Wed, 17 Aug 2005 00:00:00 GMT', true, null),
+				array('Last-Modified: ' . $date->format('D, d M Y H:i:s') . ' GMT', true, null),
+				array('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0', true, null),
+				array('Pragma: no-cache', true, null),
 			)
 		);
 	}
@@ -1013,14 +1118,21 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 
 		$url = 'http://j.org/index.php';
 
+		$date = new \DateTime();
+		$object->modifiedDate = $date;
+
 		$object->redirect($url, true);
 
 		$this->assertSame(
 			self::$headers,
 			array(
-				array('HTTP/1.1 301 Moved Permanently', true, null),
+				array('HTTP/1.1 301 Moved Permanently', true, 301),
 				array('Location: ' . $url, true, null),
 				array('Content-Type: text/html; charset=utf-8', true, null),
+				array('Expires: Wed, 17 Aug 2005 00:00:00 GMT', true, null),
+				array('Last-Modified: ' . $date->format('D, d M Y H:i:s') . ' GMT', true, null),
+				array('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0', true, null),
+				array('Pragma: no-cache', true, null),
 			)
 		);
 	}
@@ -1208,7 +1320,7 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 			self::$headers,
 			array(
 				array('foo: bar', true, null),
-				array('HTTP/1.1 200', null, 200)
+				array('HTTP/1.1 200 OK', true, 200)
 			)
 		);
 	}
