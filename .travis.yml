@@ -19,22 +19,8 @@ matrix:
     - php: 7.0
     - php: 7.1
     - php: nightly
-    - php: hhvm
-      sudo: true
-      dist: trusty
-      group: edge # until the next update
-      addons:
-        apt:
-          packages:
-            - mysql-server-5.6
-            - mysql-client-core-5.6
-            - mysql-client-5.6
-      services:
-        - mysql
-        - postgresql
   allow_failures:
     - php: nightly
-    - php: hhvm
 
 before_script:
   - composer self-update
