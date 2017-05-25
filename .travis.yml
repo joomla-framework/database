@@ -32,7 +32,7 @@ matrix:
     - php: 7.1
       env: SYMFONY_VERSION="4.0.*@dev"
     - php: 7.1
-      env: SYMFONY_VERSION="5.5.*@dev"
+      env: LARAVEL_VERSION="5.5.*@dev"
     - php: nightly
   allow_failures:
     - php: nightly
