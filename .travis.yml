@@ -5,6 +5,7 @@ sudo: false
 env:
   global:
     - SYMFONY_VERSION="2.8.*"
+    - LARAVEL_VERSION="5.1.*"
     - RUN_PHPCS="no"
     - COMPOSER_FLAGS=""
 
@@ -17,15 +18,21 @@ matrix:
     - php: 5.6
       env: SYMFONY_VERSION="2.7.*"
     - php: 5.6
+      env: LARAVEL_VERSION="5.3.*"
+    - php: 5.6
       env: RUN_PHPCS="yes" SYMFONY_VERSION="3.2.*"
     - php: 7.0
     - php: 7.0
       env: SYMFONY_VERSION="3.3.*@dev"
     - php: 7.0
       env: SYMFONY_VERSION="3.4.*@dev"
+    - php: 7.0
+      env: LARAVEL_VERSION="5.4.*"
     - php: 7.1
     - php: 7.1
       env: SYMFONY_VERSION="4.0.*@dev"
+    - php: 7.1
+      env: SYMFONY_VERSION="5.5.*@dev"
     - php: nightly
   allow_failures:
     - php: nightly
@@ -33,6 +40,7 @@ matrix:
 before_script:
   - composer self-update
   - composer require --no-update symfony/templating:${SYMFONY_VERSION}
+  - composer require --no-update illuminate/events:${LARAVEL_VERSION} illuminate/filesystem:${LARAVEL_VERSION} illuminate/view:${LARAVEL_VERSION}
   - composer update $COMPOSER_FLAGS
 
 script:
