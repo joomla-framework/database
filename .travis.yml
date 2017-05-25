@@ -22,10 +22,8 @@ matrix:
       env: COMPOSER_FLAGS=""
     - php: 7.1
     - php: nightly
-    - php: hhvm
   allow_failures:
     - php: nightly
-    - php: hhvm
 
 before_script:
   - composer self-update
