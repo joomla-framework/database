@@ -20,7 +20,7 @@ use Joomla\Database\DatabaseDriver;
 /**
  * SQL Server Database Driver
  *
- * @see    http://php.net/manual/en/book.sqlsrv.php
+ * @link   https://secure.php.net/manual/en/book.sqlsrv.php
  * @since  1.0
  */
 class SqlsrvDriver extends DatabaseDriver

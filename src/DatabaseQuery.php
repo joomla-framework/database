@@ -639,7 +639,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @return  string  The string with the appropriate sql for addition of dates
 	 *
-	 * @see     http://dev.mysql.com/doc/en/date-and-time-functions.html
+	 * @link    https://dev.mysql.com/doc/en/date-and-time-functions.html
 	 * @since   1.5.0
 	 */
 	public function dateAdd($date, $interval, $datePart)
@@ -1598,7 +1598,7 @@ abstract class DatabaseQuery implements QueryInterface
 	public function union($query, $distinct = false, $glue = '')
 	{
 		// Clear any ORDER BY clause in UNION query
-		// See http://dev.mysql.com/doc/en/union.html
+		// See https://dev.mysql.com/doc/en/union.html
 		if (!is_null($this->order))
 		{
 			$this->clear('order');

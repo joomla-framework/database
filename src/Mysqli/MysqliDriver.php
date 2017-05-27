@@ -20,7 +20,7 @@ use Psr\Log;
 /**
  * MySQLi Database Driver
  *
- * @see    http://php.net/manual/en/book.mysqli.php
+ * @link   https://secure.php.net/manual/en/book.mysqli.php
  * @since  1.0
  */
 class MysqliDriver extends DatabaseDriver

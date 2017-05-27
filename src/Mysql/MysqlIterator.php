@@ -13,7 +13,7 @@ use Joomla\Database\Pdo\PdoIterator;
 /**
  * MySQL Database Iterator
  *
- * @see    http://dev.mysql.com/doc/
+ * @link   https://dev.mysql.com/doc/
  * @since  1.0
  */
 class MysqlIterator extends PdoIterator
