@@ -619,7 +619,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 *
 	 * @return string
 	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.8.0
 	 */
 	protected function getHttpStatusValue($value)
 	{
@@ -742,7 +742,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 *
 	 * @return  bool
 	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.8.0
 	 */
 	protected function isRedirectState($state)
 	{
