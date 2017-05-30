@@ -9,7 +9,6 @@
 namespace Joomla\Database\Pgsql;
 
 use Joomla\Database\Pdo\PdoDriver;
-use Psr\Log;
 
 /**
  * PostgreSQL PDO Database Driver

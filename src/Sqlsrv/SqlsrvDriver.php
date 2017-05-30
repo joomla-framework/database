@@ -17,7 +17,6 @@ use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
-use Psr\Log;
 
 /**
  * SQL Server Database Driver
@@ -137,8 +136,6 @@ class SqlsrvDriver extends DatabaseDriver
 		// Attempt to connect to the server.
 		if (!($this->connection = @ sqlsrv_connect($this->options['host'], $config)))
 		{
-			$this->log(Log\LogLevel::ERROR, 'Could not connect to SQL Server', ['errors' => sqlsrv_errors()]);
-
 			throw new ConnectionFailureException('Could not connect to SQL Server');
 		}
 
@@ -642,12 +639,6 @@ class SqlsrvDriver extends DatabaseDriver
 					$this->errorMsg = $errors[0]['message'];
 
 					// Throw the normal query exception.
-					$this->log(
-						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}; Failed query: {sql}',
-						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-					);
-
 					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
@@ -661,12 +652,6 @@ class SqlsrvDriver extends DatabaseDriver
 			$this->errorMsg = $errors[0]['message'];
 
 			// Throw the normal query exception.
-			$this->log(
-				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}; Failed query: {sql}',
-				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-			);
-
 			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 

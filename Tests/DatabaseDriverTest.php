@@ -9,7 +9,6 @@ namespace Joomla\Database\Tests;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Test\TestHelper;
 use Joomla\Test\TestDatabase;
-use Psr\Log;
 
 require_once __DIR__ . '/Stubs/nosqldriver.php';
 
@@ -22,31 +21,6 @@ class DatabaseDriverTest extends TestDatabase
 	 * @var  DatabaseDriver
 	 */
 	protected $instance;
-
-	/**
-	 * A store to track if logging is working.
-	 *
-	 * @var  array
-	 */
-	protected $logs;
-
-	/**
-	 * Mocks the log method to track if logging is working.
-	 *
-	 * @param   Log\LogLevel  $level    The level.
-	 * @param   string        $message  The message.
-	 * @param   array         $context  The context.
-	 *
-	 * @return  void
-	 */
-	public function mockLog($level, $message, $context)
-	{
-		$this->logs[] = array(
-			'level' => $level,
-			'message' => $message,
-			'context' => $context,
-		);
-	}
 
 	/**
 	 * Test for the Joomla\Database\DatabaseDriver::__call method.
@@ -257,36 +231,6 @@ SQL
 			'12.1',
 			$this->instance->getMinimum()
 		);
-	}
-
-	/**
-	 * Tests the Driver::log method.
-	 *
-	 * @covers  Joomla\Database\DatabaseDriver::log
-	 * @covers  Joomla\Database\DatabaseDriver::setLogger
-	 */
-	public function testLog()
-	{
-		$this->logs = array();
-
-		$mockLogger = $this->getMockBuilder('Psr\Log\LoggerInterface')
-			->getMock();
-
-		$mockLogger->expects($this->any())
-			->method('log')
-			->willReturnCallback(array($this, 'mockLog'));
-
-		$this->instance->log(Log\LogLevel::DEBUG, 'Debug', array('sql' => true));
-
-		$this->assertEmpty($this->logs);
-
-		// Set the logger and try again.
-		$this->instance->setLogger($mockLogger);
-		$this->instance->log(Log\LogLevel::DEBUG, 'Debug', array('sql' => true));
-
-		$this->assertSame(Log\LogLevel::DEBUG, $this->logs[0]['level']);
-		$this->assertSame('Debug', $this->logs[0]['message']);
-		$this->assertSame(array('sql' => true), $this->logs[0]['context']);
 	}
 
 	/**

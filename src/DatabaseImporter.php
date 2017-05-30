@@ -8,8 +8,6 @@
 
 namespace Joomla\Database;
 
-use Psr\Log\LogLevel;
-
 /**
  * Joomla Framework Database Importer Class
  *

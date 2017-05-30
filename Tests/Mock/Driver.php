@@ -53,7 +53,6 @@ class Driver
 			'getConnectors',
 			'getDateFormat',
 			'getInstance',
-			'getLog',
 			'getNullDate',
 			'getNumRows',
 			'getPrefix',

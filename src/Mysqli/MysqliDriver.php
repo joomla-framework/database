@@ -17,7 +17,6 @@ use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\Query\LimitableInterface;
-use Psr\Log;
 
 /**
  * MySQLi Database Driver
@@ -222,9 +221,10 @@ class MysqliDriver extends DatabaseDriver
 
 		if (!$connected)
 		{
-			$this->log(Log\LogLevel::ERROR, 'Could not connect to MySQL: ' . $this->connection->connect_error);
-
-			throw new ConnectionFailureException('Could not connect to MySQL.', $this->connection->connect_errno);
+			throw new ConnectionFailureException(
+				'Could not connect to MySQL: ' . $this->connection->connect_error,
+				$this->connection->connect_errno
+			);
 		}
 
 		// If auto-select is enabled select the given database.
@@ -659,12 +659,6 @@ class MysqliDriver extends DatabaseDriver
 				catch (ConnectionFailureException $e)
 				// If connect fails, ignore that exception and throw the normal exception.
 				{
-					$this->log(
-						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}; Failed query: {sql}',
-						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-					);
-
 					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
@@ -673,12 +667,6 @@ class MysqliDriver extends DatabaseDriver
 			}
 
 			// The server was not disconnected.
-			$this->log(
-				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}; Failed query: {sql}',
-				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-			);
-
 			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
@@ -940,12 +928,6 @@ class MysqliDriver extends DatabaseDriver
 				catch (ConnectionFailureException $e)
 				// If connect fails, ignore that exception and throw the normal exception.
 				{
-					$this->log(
-						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}; Failed query: {sql}',
-						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-					);
-
 					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
@@ -954,12 +936,6 @@ class MysqliDriver extends DatabaseDriver
 			}
 
 			// The server was not disconnected.
-			$this->log(
-				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}; Failed query: {sql}',
-				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-			);
-
 			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 

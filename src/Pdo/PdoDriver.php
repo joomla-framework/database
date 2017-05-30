@@ -16,7 +16,6 @@ use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
-use Psr\Log;
 
 /**
  * Joomla Framework PDO Database Driver Class
@@ -315,11 +314,7 @@ abstract class PdoDriver extends DatabaseDriver
 		}
 		catch (\PDOException $e)
 		{
-			$message = 'Could not connect to PDO: ' . $e->getMessage();
-
-			$this->log(Log\LogLevel::ERROR, $message);
-
-			throw new ConnectionFailureException($message, $e->getCode(), $e);
+			throw new ConnectionFailureException('Could not connect to PDO: ' . $e->getMessage(), $e->getCode(), $e);
 		}
 
 		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_CONNECT, $this));
@@ -450,12 +445,6 @@ abstract class PdoDriver extends DatabaseDriver
 					$this->errorNum = (int) $this->connection->errorCode();
 					$this->errorMsg = (string) 'SQL: ' . implode(", ", $this->connection->errorInfo());
 
-					$this->log(
-						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}; Failed query: {sql}',
-						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-					);
-
 					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
@@ -468,12 +457,6 @@ abstract class PdoDriver extends DatabaseDriver
 			$this->errorMsg = $errorMsg;
 
 			// Throw the normal query exception.
-			$this->log(
-				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}; Failed query: {sql}',
-				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-			);
-
 			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 

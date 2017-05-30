@@ -11,17 +11,15 @@ namespace Joomla\Database;
 use Joomla\Event\DispatcherAwareInterface;
 use Joomla\Event\DispatcherAwareTrait;
 use Joomla\Event\EventInterface;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 
 /**
  * Joomla Framework Database Driver Class
  *
  * @since  1.0
  */
-abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface, DispatcherAwareInterface
+abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInterface
 {
-	use LoggerAwareTrait, DispatcherAwareTrait;
+	use DispatcherAwareTrait;
 
 	/**
 	 * The name of the database.
@@ -1183,27 +1181,6 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 		$this->freeResult($cursor);
 
 		return $array;
-	}
-
-	/**
-	 * Logs a message.
-	 *
-	 * @param   string  $level    The level for the log. Use constants belonging to Psr\Log\LogLevel.
-	 * @param   string  $message  The message.
-	 * @param   array   $context  Additional context.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function log($level, $message, array $context = [])
-	{
-		if ($this->logger)
-		{
-			$this->logger->log($level, $message, $context);
-		}
-
-		return $this;
 	}
 
 	/**

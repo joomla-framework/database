@@ -17,7 +17,6 @@ use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
-use Psr\Log;
 
 /**
  * PostgreSQL Database Driver
@@ -186,8 +185,6 @@ class PostgresqlDriver extends DatabaseDriver
 		// Attempt to connect to the server.
 		if (!($this->connection = @pg_connect($dsn)))
 		{
-			$this->log(Log\LogLevel::ERROR, 'Error connecting to PGSQL database.');
-
 			throw new ConnectionFailureException('Error connecting to PGSQL database.');
 		}
 
@@ -743,12 +740,6 @@ class PostgresqlDriver extends DatabaseDriver
 					}
 
 					// Throw the normal query exception.
-					$this->log(
-						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}; Failed query: {sql}',
-						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-					);
-
 					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
@@ -761,12 +752,6 @@ class PostgresqlDriver extends DatabaseDriver
 			$this->errorMsg = pg_last_error($this->connection);
 
 			// Throw the normal query exception.
-			$this->log(
-				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}; Failed query: {sql}',
-				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-			);
-
 			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
