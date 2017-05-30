@@ -242,17 +242,6 @@ SQL
 	}
 
 	/**
-	 * Tests the Joomla\Database\DatabaseDriver::setDebug method.
-	 */
-	public function testSetDebug()
-	{
-		$this->assertInternalType(
-			'boolean',
-			$this->instance->setDebug(true)
-		);
-	}
-
-	/**
 	 * Tests the Joomla\Database\DatabaseDriver::setQuery method.
 	 */
 	public function testSetQuery()
