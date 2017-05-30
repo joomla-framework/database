@@ -392,15 +392,10 @@ abstract class PdoDriver extends DatabaseDriver
 		// Increment the query counter.
 		$this->count++;
 
-		// If debugging is enabled then let's log the query.
-		if ($this->debug)
+		// If there is a monitor registered, let it know we are starting this query
+		if ($this->monitor)
 		{
-			// Add the query to the object queue.
-			$this->log(
-				Log\LogLevel::DEBUG,
-				'{sql}',
-				['sql' => $sql, 'category' => 'databasequery', 'trace' => debug_backtrace()]
-			);
+			$this->monitor->startQuery($sql);
 		}
 
 		// Reset the error values.
@@ -424,6 +419,12 @@ abstract class PdoDriver extends DatabaseDriver
 			}
 
 			$this->executed = $this->prepared->execute();
+		}
+
+		// If there is a monitor registered, let it know we have finished this query
+		if ($this->monitor)
+		{
+			$this->monitor->stopQuery();
 		}
 
 		// If an error occurred handle it.

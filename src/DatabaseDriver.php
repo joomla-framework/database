@@ -197,11 +197,18 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	/**
 	 * DatabaseFactory object
 	 *
-<<<<<<< HEAD
 	 * @var    DatabaseFactory
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $factory;
+
+	/**
+	 * Query monitor object
+	 *
+	 * @var    QueryMonitorInterface
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $monitor;
 
 	/**
 	 * Get a list of available database connectors.
@@ -277,6 +284,7 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 		$options['database'] = (isset($options['database'])) ? $options['database'] : null;
 		$options['select']   = (isset($options['select'])) ? $options['select'] : true;
 		$options['factory']  = (isset($options['factory'])) ? $options['factory'] : new DatabaseFactory;
+		$options['monitor']  = (isset($options['monitor'])) ? $options['monitor'] : null;
 
 		// Get the options signature for the database connector.
 		$signature = md5(serialize($options));
@@ -468,6 +476,9 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 
 		// Register the DatabaseFactory
 		$this->factory = isset($options['factory']) ? $options['factory'] : new DatabaseFactory;
+
+		// Register the query monitor if available
+		$this->monitor = isset($options['monitor']) ? $options['monitor'] : null;
 	}
 
 	/**
