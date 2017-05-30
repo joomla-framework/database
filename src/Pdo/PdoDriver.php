@@ -8,13 +8,15 @@
 
 namespace Joomla\Database\Pdo;
 
+use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseEvents;
+use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Psr\Log;
-use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
+use Psr\Log;
 
 /**
  * Joomla Framework PDO Database Driver Class
@@ -319,6 +321,8 @@ abstract class PdoDriver extends DatabaseDriver
 
 			throw new ConnectionFailureException($message, $e->getCode(), $e);
 		}
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_CONNECT, $this));
 	}
 
 	/**
@@ -333,6 +337,8 @@ abstract class PdoDriver extends DatabaseDriver
 		$this->freeResult();
 
 		$this->connection = null;
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_DISCONNECT, $this));
 	}
 
 	/**

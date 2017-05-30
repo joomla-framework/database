@@ -9,7 +9,9 @@
 namespace Joomla\Database\Mysqli;
 
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseEvents;
 use Joomla\Database\DatabaseQuery;
+use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
@@ -235,6 +237,8 @@ class MysqliDriver extends DatabaseDriver
 
 		// Set charactersets (needed for MySQL 4.1.2+).
 		$this->utf = $this->setUtf();
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_CONNECT, $this));
 	}
 
 	/**
@@ -284,6 +288,8 @@ class MysqliDriver extends DatabaseDriver
 		}
 
 		$this->connection = null;
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_DISCONNECT, $this));
 	}
 
 	/**

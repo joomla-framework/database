@@ -8,6 +8,9 @@
 
 namespace Joomla\Database;
 
+use Joomla\Event\DispatcherAwareInterface;
+use Joomla\Event\DispatcherAwareTrait;
+use Joomla\Event\EventInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
@@ -16,9 +19,9 @@ use Psr\Log\LoggerAwareTrait;
  *
  * @since  1.0
  */
-abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
+abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface, DispatcherAwareInterface
 {
-	use LoggerAwareTrait;
+	use LoggerAwareTrait, DispatcherAwareTrait;
 
 	/**
 	 * The name of the database.
@@ -465,6 +468,27 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 
 		// Register the DatabaseFactory
 		$this->factory = isset($options['factory']) ? $options['factory'] : new DatabaseFactory;
+	}
+
+	/**
+	 * Dispatch an event.
+	 *
+	 * @param   EventInterface  $event  The event to dispatch
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function dispatchEvent(EventInterface $event)
+	{
+		try
+		{
+			$this->getDispatcher()->dispatch($event->getName(), $event);
+		}
+		catch (\UnexpectedValueException $exception)
+		{
+			// Don't error if a dispatcher hasn't been set
+		}
 	}
 
 	/**

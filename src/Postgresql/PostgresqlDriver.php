@@ -9,7 +9,9 @@
 namespace Joomla\Database\Postgresql;
 
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseEvents;
 use Joomla\Database\DatabaseQuery;
+use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
@@ -192,6 +194,8 @@ class PostgresqlDriver extends DatabaseDriver
 		pg_set_error_verbosity($this->connection, PGSQL_ERRORS_DEFAULT);
 		pg_query($this->connection, 'SET standard_conforming_strings=off');
 		pg_query($this->connection, 'SET escape_string_warning=off');
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_CONNECT, $this));
 	}
 
 	/**
@@ -210,6 +214,8 @@ class PostgresqlDriver extends DatabaseDriver
 		}
 
 		$this->connection = null;
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_DISCONNECT, $this));
 	}
 
 	/**
