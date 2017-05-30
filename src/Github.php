@@ -19,6 +19,7 @@ use Joomla\Registry\Registry;
  * @property-read  Package\Emojis         $emojis         GitHub API object for the emojis package.
  * @property-read  Package\Gists          $gists          GitHub API object for the gists package.
  * @property-read  Package\Gitignore      $gitignore      GitHub API object for the gitignore package.
+ * @property-read  Package\Graphql        $graphql        GitHub API object for the GraphQL v4 API.
  * @property-read  Package\Issues         $issues         GitHub API object for the issues package.
  * @property-read  Package\Markdown       $markdown       GitHub API object for the markdown package.
  * @property-read  Package\Meta           $meta           GitHub API object for the meta package.
