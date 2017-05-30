@@ -80,14 +80,6 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	protected $cursor;
 
 	/**
-	 * The database driver debugging state.
-	 *
-	 * @var    boolean
-	 * @since  1.0
-	 */
-	protected $debug = false;
-
-	/**
 	 * The affected row limit for the current SQL statement.
 	 *
 	 * @var    integer
@@ -466,7 +458,6 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	{
 		// Initialise object variables.
 		$this->database    = (isset($options['database'])) ? $options['database'] : '';
-		$this->debug       = (isset($options['debug'])) ? $options['debug'] : false;
 		$this->tablePrefix = (isset($options['prefix'])) ? $options['prefix'] : '';
 		$this->count       = 0;
 		$this->errorNum    = 0;
@@ -1475,23 +1466,6 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	 * @throws  \RuntimeException
 	 */
 	abstract public function renameTable($oldTable, $newTable, $backup = null, $prefix = null);
-
-	/**
-	 * Sets the database debugging state for the driver.
-	 *
-	 * @param   boolean  $level  True to enable debugging.
-	 *
-	 * @return  boolean  The old debugging level.
-	 *
-	 * @since   1.0
-	 */
-	public function setDebug($level)
-	{
-		$previous    = $this->debug;
-		$this->debug = (bool) $level;
-
-		return $previous;
-	}
 
 	/**
 	 * Sets the SQL statement string for later execution.
