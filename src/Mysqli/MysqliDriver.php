@@ -9,13 +9,14 @@
 namespace Joomla\Database\Mysqli;
 
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseEvents;
 use Joomla\Database\DatabaseQuery;
+use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\Query\LimitableInterface;
-use Psr\Log;
 
 /**
  * MySQLi Database Driver
@@ -220,9 +221,10 @@ class MysqliDriver extends DatabaseDriver
 
 		if (!$connected)
 		{
-			$this->log(Log\LogLevel::ERROR, 'Could not connect to MySQL: ' . $this->connection->connect_error);
-
-			throw new ConnectionFailureException('Could not connect to MySQL.', $this->connection->connect_errno);
+			throw new ConnectionFailureException(
+				'Could not connect to MySQL: ' . $this->connection->connect_error,
+				$this->connection->connect_errno
+			);
 		}
 
 		// If auto-select is enabled select the given database.
@@ -235,6 +237,8 @@ class MysqliDriver extends DatabaseDriver
 
 		// Set charactersets (needed for MySQL 4.1.2+).
 		$this->utf = $this->setUtf();
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_CONNECT, $this));
 	}
 
 	/**
@@ -284,6 +288,8 @@ class MysqliDriver extends DatabaseDriver
 		}
 
 		$this->connection = null;
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_DISCONNECT, $this));
 	}
 
 	/**
@@ -572,15 +578,10 @@ class MysqliDriver extends DatabaseDriver
 		// Increment the query counter.
 		$this->count++;
 
-		// If debugging is enabled then let's log the query.
-		if ($this->debug)
+		// If there is a monitor registered, let it know we are starting this query
+		if ($this->monitor)
 		{
-			// Add the query to the object queue.
-			$this->log(
-				Log\LogLevel::DEBUG,
-				'{sql}',
-				['sql' => $sql, 'category' => 'databasequery', 'trace' => debug_backtrace()]
-			);
+			$this->monitor->startQuery($sql);
 		}
 
 		// Reset the error values.
@@ -634,6 +635,12 @@ class MysqliDriver extends DatabaseDriver
 			}
 		}
 
+		// If there is a monitor registered, let it know we have finished this query
+		if ($this->monitor)
+		{
+			$this->monitor->stopQuery();
+		}
+
 		// If an error occurred handle it.
 		if (!$this->executed)
 		{
@@ -652,12 +659,6 @@ class MysqliDriver extends DatabaseDriver
 				catch (ConnectionFailureException $e)
 				// If connect fails, ignore that exception and throw the normal exception.
 				{
-					$this->log(
-						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}; Failed query: {sql}',
-						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-					);
-
 					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
@@ -666,12 +667,6 @@ class MysqliDriver extends DatabaseDriver
 			}
 
 			// The server was not disconnected.
-			$this->log(
-				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}; Failed query: {sql}',
-				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-			);
-
 			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
@@ -933,12 +928,6 @@ class MysqliDriver extends DatabaseDriver
 				catch (ConnectionFailureException $e)
 				// If connect fails, ignore that exception and throw the normal exception.
 				{
-					$this->log(
-						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}; Failed query: {sql}',
-						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-					);
-
 					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
@@ -947,12 +936,6 @@ class MysqliDriver extends DatabaseDriver
 			}
 
 			// The server was not disconnected.
-			$this->log(
-				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}; Failed query: {sql}',
-				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-			);
-
 			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 

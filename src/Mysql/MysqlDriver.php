@@ -10,7 +10,6 @@ namespace Joomla\Database\Mysql;
 
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Pdo\PdoDriver;
-use Psr\Log;
 
 /**
  * MySQL database driver supporting PDO based connections

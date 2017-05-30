@@ -8,14 +8,15 @@
 
 namespace Joomla\Database\Sqlsrv;
 
+use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseEvents;
 use Joomla\Database\DatabaseQuery;
+use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
-use Psr\Log;
-use Joomla\Database\DatabaseDriver;
 
 /**
  * SQL Server Database Driver
@@ -135,8 +136,6 @@ class SqlsrvDriver extends DatabaseDriver
 		// Attempt to connect to the server.
 		if (!($this->connection = @ sqlsrv_connect($this->options['host'], $config)))
 		{
-			$this->log(Log\LogLevel::ERROR, 'Could not connect to SQL Server', ['errors' => sqlsrv_errors()]);
-
 			throw new ConnectionFailureException('Could not connect to SQL Server');
 		}
 
@@ -148,6 +147,8 @@ class SqlsrvDriver extends DatabaseDriver
 		{
 			$this->select($this->options['database']);
 		}
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_CONNECT, $this));
 	}
 
 	/**
@@ -166,6 +167,8 @@ class SqlsrvDriver extends DatabaseDriver
 		}
 
 		$this->connection = null;
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_DISCONNECT, $this));
 	}
 
 	/**
@@ -571,15 +574,10 @@ class SqlsrvDriver extends DatabaseDriver
 		// Increment the query counter.
 		$this->count++;
 
-		// If debugging is enabled then let's log the query.
-		if ($this->debug)
+		// If there is a monitor registered, let it know we are starting this query
+		if ($this->monitor)
 		{
-			// Add the query to the object queue.
-			$this->log(
-				Log\LogLevel::DEBUG,
-				'{sql}',
-				['sql' => $sql, 'category' => 'databasequery', 'trace' => debug_backtrace()]
-			);
+			$this->monitor->startQuery($sql);
 		}
 
 		// Reset the error values.
@@ -614,6 +612,12 @@ class SqlsrvDriver extends DatabaseDriver
 		// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
 		$this->cursor = @sqlsrv_query($this->connection, $sql, $params, $options);
 
+		// If there is a monitor registered, let it know we have finished this query
+		if ($this->monitor)
+		{
+			$this->monitor->stopQuery();
+		}
+
 		// If an error occurred handle it.
 		if (!$this->cursor)
 		{
@@ -635,12 +639,6 @@ class SqlsrvDriver extends DatabaseDriver
 					$this->errorMsg = $errors[0]['message'];
 
 					// Throw the normal query exception.
-					$this->log(
-						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}; Failed query: {sql}',
-						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-					);
-
 					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
@@ -654,12 +652,6 @@ class SqlsrvDriver extends DatabaseDriver
 			$this->errorMsg = $errors[0]['message'];
 
 			// Throw the normal query exception.
-			$this->log(
-				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}; Failed query: {sql}',
-				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-			);
-
 			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 

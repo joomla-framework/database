@@ -8,8 +8,6 @@
 
 namespace Joomla\Database;
 
-use Psr\Log\LogLevel;
-
 /**
  * Joomla Framework Database Importer Class
  *
@@ -259,18 +257,7 @@ abstract class DatabaseImporter
 					foreach ($queries as $query)
 					{
 						$this->db->setQuery((string) $query);
-
-						try
-						{
-							$this->db->execute();
-						}
-						catch (\RuntimeException $e)
-						{
-							$this->db->log(LogLevel::DEBUG, 'Fail: ' . $this->db->getQuery());
-							throw $e;
-						}
-
-						$this->db->log(LogLevel::DEBUG, 'Pass: ' . $this->db->getQuery());
+						$this->db->execute();
 					}
 				}
 			}
@@ -280,18 +267,7 @@ abstract class DatabaseImporter
 				$sql = $this->xmlToCreate($table);
 
 				$this->db->setQuery((string) $sql);
-
-				try
-				{
-					$this->db->execute();
-				}
-				catch (\RuntimeException $e)
-				{
-					$this->db->log(LogLevel::DEBUG, 'Fail: ' . $this->db->getQuery());
-					throw $e;
-				}
-
-				$this->db->log(LogLevel::DEBUG, 'Pass: ' . $this->db->getQuery());
+				$this->db->execute();
 			}
 		}
 	}

@@ -9,13 +9,14 @@
 namespace Joomla\Database\Postgresql;
 
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseEvents;
 use Joomla\Database\DatabaseQuery;
+use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
-use Psr\Log;
 
 /**
  * PostgreSQL Database Driver
@@ -184,14 +185,14 @@ class PostgresqlDriver extends DatabaseDriver
 		// Attempt to connect to the server.
 		if (!($this->connection = @pg_connect($dsn)))
 		{
-			$this->log(Log\LogLevel::ERROR, 'Error connecting to PGSQL database.');
-
 			throw new ConnectionFailureException('Error connecting to PGSQL database.');
 		}
 
 		pg_set_error_verbosity($this->connection, PGSQL_ERRORS_DEFAULT);
 		pg_query($this->connection, 'SET standard_conforming_strings=off');
 		pg_query($this->connection, 'SET escape_string_warning=off');
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_CONNECT, $this));
 	}
 
 	/**
@@ -210,6 +211,8 @@ class PostgresqlDriver extends DatabaseDriver
 		}
 
 		$this->connection = null;
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_DISCONNECT, $this));
 	}
 
 	/**
@@ -674,15 +677,10 @@ class PostgresqlDriver extends DatabaseDriver
 		// Increment the query counter.
 		$this->count++;
 
-		// If debugging is enabled then let's log the query.
-		if ($this->debug)
+		// If there is a monitor registered, let it know we are starting this query
+		if ($this->monitor)
 		{
-			// Add the query to the object queue.
-			$this->log(
-				Log\LogLevel::DEBUG,
-				'{sql}',
-				['sql' => $sql, 'category' => 'databasequery', 'trace' => debug_backtrace()]
-			);
+			$this->monitor->startQuery($sql);
 		}
 
 		// Reset the error values.
@@ -711,6 +709,12 @@ class PostgresqlDriver extends DatabaseDriver
 			$this->cursor = @pg_query($this->connection, $sql);
 		}
 
+		// If there is a monitor registered, let it know we have finished this query
+		if ($this->monitor)
+		{
+			$this->monitor->stopQuery();
+		}
+
 		// If an error occurred handle it.
 		if (!$this->cursor)
 		{
@@ -736,12 +740,6 @@ class PostgresqlDriver extends DatabaseDriver
 					}
 
 					// Throw the normal query exception.
-					$this->log(
-						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}; Failed query: {sql}',
-						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-					);
-
 					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
@@ -754,12 +752,6 @@ class PostgresqlDriver extends DatabaseDriver
 			$this->errorMsg = pg_last_error($this->connection);
 
 			// Throw the normal query exception.
-			$this->log(
-				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}; Failed query: {sql}',
-				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-			);
-
 			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 

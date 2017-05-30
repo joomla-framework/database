@@ -8,11 +8,12 @@
 
 namespace Joomla\Database\Pdo;
 
+use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseEvents;
+use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Psr\Log;
-use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
 
@@ -313,12 +314,10 @@ abstract class PdoDriver extends DatabaseDriver
 		}
 		catch (\PDOException $e)
 		{
-			$message = 'Could not connect to PDO: ' . $e->getMessage();
-
-			$this->log(Log\LogLevel::ERROR, $message);
-
-			throw new ConnectionFailureException($message, $e->getCode(), $e);
+			throw new ConnectionFailureException('Could not connect to PDO: ' . $e->getMessage(), $e->getCode(), $e);
 		}
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_CONNECT, $this));
 	}
 
 	/**
@@ -333,6 +332,8 @@ abstract class PdoDriver extends DatabaseDriver
 		$this->freeResult();
 
 		$this->connection = null;
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_DISCONNECT, $this));
 	}
 
 	/**
@@ -386,15 +387,10 @@ abstract class PdoDriver extends DatabaseDriver
 		// Increment the query counter.
 		$this->count++;
 
-		// If debugging is enabled then let's log the query.
-		if ($this->debug)
+		// If there is a monitor registered, let it know we are starting this query
+		if ($this->monitor)
 		{
-			// Add the query to the object queue.
-			$this->log(
-				Log\LogLevel::DEBUG,
-				'{sql}',
-				['sql' => $sql, 'category' => 'databasequery', 'trace' => debug_backtrace()]
-			);
+			$this->monitor->startQuery($sql);
 		}
 
 		// Reset the error values.
@@ -420,6 +416,12 @@ abstract class PdoDriver extends DatabaseDriver
 			$this->executed = $this->prepared->execute();
 		}
 
+		// If there is a monitor registered, let it know we have finished this query
+		if ($this->monitor)
+		{
+			$this->monitor->stopQuery();
+		}
+
 		// If an error occurred handle it.
 		if (!$this->executed)
 		{
@@ -443,12 +445,6 @@ abstract class PdoDriver extends DatabaseDriver
 					$this->errorNum = (int) $this->connection->errorCode();
 					$this->errorMsg = (string) 'SQL: ' . implode(", ", $this->connection->errorInfo());
 
-					$this->log(
-						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}; Failed query: {sql}',
-						['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-					);
-
 					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 				}
 
@@ -461,12 +457,6 @@ abstract class PdoDriver extends DatabaseDriver
 			$this->errorMsg = $errorMsg;
 
 			// Throw the normal query exception.
-			$this->log(
-				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}; Failed query: {sql}',
-				['code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql]
-			);
-
 			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 

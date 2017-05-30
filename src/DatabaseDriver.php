@@ -8,17 +8,18 @@
 
 namespace Joomla\Database;
 
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
+use Joomla\Event\DispatcherAwareInterface;
+use Joomla\Event\DispatcherAwareTrait;
+use Joomla\Event\EventInterface;
 
 /**
  * Joomla Framework Database Driver Class
  *
  * @since  1.0
  */
-abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
+abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInterface
 {
-	use LoggerAwareTrait;
+	use DispatcherAwareTrait;
 
 	/**
 	 * The name of the database.
@@ -75,14 +76,6 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	 * @since  1.0
 	 */
 	protected $cursor;
-
-	/**
-	 * The database driver debugging state.
-	 *
-	 * @var    boolean
-	 * @since  1.0
-	 */
-	protected $debug = false;
 
 	/**
 	 * The affected row limit for the current SQL statement.
@@ -194,11 +187,18 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	/**
 	 * DatabaseFactory object
 	 *
-<<<<<<< HEAD
 	 * @var    DatabaseFactory
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $factory;
+
+	/**
+	 * Query monitor object
+	 *
+	 * @var    QueryMonitorInterface
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $monitor;
 
 	/**
 	 * Get a list of available database connectors.
@@ -274,6 +274,7 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 		$options['database'] = (isset($options['database'])) ? $options['database'] : null;
 		$options['select']   = (isset($options['select'])) ? $options['select'] : true;
 		$options['factory']  = (isset($options['factory'])) ? $options['factory'] : new DatabaseFactory;
+		$options['monitor']  = (isset($options['monitor'])) ? $options['monitor'] : null;
 
 		// Get the options signature for the database connector.
 		$signature = md5(serialize($options));
@@ -455,7 +456,6 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	{
 		// Initialise object variables.
 		$this->database    = (isset($options['database'])) ? $options['database'] : '';
-		$this->debug       = (isset($options['debug'])) ? $options['debug'] : false;
 		$this->tablePrefix = (isset($options['prefix'])) ? $options['prefix'] : '';
 		$this->count       = 0;
 		$this->errorNum    = 0;
@@ -465,6 +465,30 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 
 		// Register the DatabaseFactory
 		$this->factory = isset($options['factory']) ? $options['factory'] : new DatabaseFactory;
+
+		// Register the query monitor if available
+		$this->monitor = isset($options['monitor']) ? $options['monitor'] : null;
+	}
+
+	/**
+	 * Dispatch an event.
+	 *
+	 * @param   EventInterface  $event  The event to dispatch
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function dispatchEvent(EventInterface $event)
+	{
+		try
+		{
+			$this->getDispatcher()->dispatch($event->getName(), $event);
+		}
+		catch (\UnexpectedValueException $exception)
+		{
+			// Don't error if a dispatcher hasn't been set
+		}
 	}
 
 	/**
@@ -1160,27 +1184,6 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	}
 
 	/**
-	 * Logs a message.
-	 *
-	 * @param   string  $level    The level for the log. Use constants belonging to Psr\Log\LogLevel.
-	 * @param   string  $message  The message.
-	 * @param   array   $context  Additional context.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function log($level, $message, array $context = [])
-	{
-		if ($this->logger)
-		{
-			$this->logger->log($level, $message, $context);
-		}
-
-		return $this;
-	}
-
-	/**
 	 * Alias for quote method
 	 *
 	 * @param   array|string  $text    A string or an array of strings to quote.
@@ -1440,23 +1443,6 @@ abstract class DatabaseDriver implements DatabaseInterface, LoggerAwareInterface
 	 * @throws  \RuntimeException
 	 */
 	abstract public function renameTable($oldTable, $newTable, $backup = null, $prefix = null);
-
-	/**
-	 * Sets the database debugging state for the driver.
-	 *
-	 * @param   boolean  $level  True to enable debugging.
-	 *
-	 * @return  boolean  The old debugging level.
-	 *
-	 * @since   1.0
-	 */
-	public function setDebug($level)
-	{
-		$previous    = $this->debug;
-		$this->debug = (bool) $level;
-
-		return $previous;
-	}
 
 	/**
 	 * Sets the SQL statement string for later execution.

@@ -7,6 +7,7 @@
     "license": "GPL-2.0+",
     "require": {
         "php": "^5.5.9|~7.0",
+        "joomla/event": "~2.0@dev",
         "psr/log": "~1.0"
     },
     "require-dev": {
