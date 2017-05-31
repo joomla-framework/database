@@ -10,7 +10,7 @@ namespace Joomla\Mediawiki;
 
 use Joomla\Http\Http as BaseHttp;
 use Joomla\Http\TransportInterface;
-use Joomla\Http\Transport\Stream;
+use Joomla\Http\HttpFactory;
 use Joomla\Registry;
 
 /**
@@ -30,8 +30,8 @@ class Http extends BaseHttp
 	 */
 	public function __construct($options = array(), TransportInterface $transport = null)
 	{
-		// Override the Http constructor to use Joomla\Http\Transport\Stream.
-		$transport = isset($transport) ? $transport : new Stream($this->options);
+		// Use $transport or get the available transport driver
+		$transport = isset($transport) ? $transport : HttpFactory::getAvailableDriver();
 		parent::__construct($options, $transport);
 
 		// Make sure the user agent string is defined.
