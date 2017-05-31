@@ -471,6 +471,59 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
+	 * Alter database's character set.
+	 *
+	 * @param   string  $dbName  The database name that will be altered
+	 *
+	 * @return  boolean|resource
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function alterDbCharacterSet($dbName)
+	{
+		if (is_null($dbName))
+		{
+			throw new \RuntimeException('Database name must not be null.');
+		}
+
+		$this->setQuery($this->getAlterDbCharacterSet($dbName));
+
+		return $this->execute();
+	}
+
+	/**
+	 * Create a new database using information from $options object.
+	 *
+	 * @param   stdClass  $options  Object used to pass user and database name to database driver. This object must have "db_name" and "db_user" set.
+	 * @param   boolean   $utf      True if the database supports the UTF-8 character set.
+	 *
+	 * @return  boolean|resource
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function createDatabase($options, $utf = true)
+	{
+		if (is_null($options))
+		{
+			throw new \RuntimeException('$options object must not be null.');
+		}
+		elseif (empty($options->db_name))
+		{
+			throw new \RuntimeException('$options object must have db_name set.');
+		}
+		elseif (empty($options->db_user))
+		{
+			throw new \RuntimeException('$options object must have db_user set.');
+		}
+
+		$this->setQuery($this->getCreateDatabaseQuery($options, $utf));
+
+		return $this->execute();
+	}
+
+	/**
 	 * Dispatch an event.
 	 *
 	 * @param   EventInterface  $event  The event to dispatch
@@ -490,19 +543,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 			// Don't error if a dispatcher hasn't been set
 		}
 	}
-
-	/**
-	 * Drops a table from the database.
-	 *
-	 * @param   string   $table     The name of the database table to drop.
-	 * @param   boolean  $ifExists  Optionally specify that the table must exist before it is dropped.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	abstract public function dropTable($table, $ifExists = true);
 
 	/**
 	 * Method to fetch a row from the result set cursor as an array.
@@ -571,6 +611,35 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	public function getCount()
 	{
 		return $this->count;
+	}
+
+	/**
+	 * Return the query string to alter the database character set.
+	 *
+	 * @param   string  $dbName  The database name
+	 *
+	 * @return  string  The query that alter the database query string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function getAlterDbCharacterSet($dbName)
+	{
+		return 'ALTER DATABASE ' . $this->quoteName($dbName) . ' CHARACTER SET ' . $this->quote('UTF8');
+	}
+
+	/**
+	 * Return the query string to create new Database.
+	 *
+	 * @param   stdClass  $options  Object used to pass user and database name to database driver. This object must have "db_name" and "db_user" set.
+	 * @param   boolean   $utf      True if the database supports the UTF-8 character set.
+	 *
+	 * @return  string  The query that creates database
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function getCreateDatabaseQuery($options, $utf)
+	{
+		return 'CREATE DATABASE ' . $this->quoteName($options->db_name);
 	}
 
 	/**
@@ -1428,21 +1497,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 
 		return $literal;
 	}
-
-	/**
-	 * Renames a table in the database.
-	 *
-	 * @param   string  $oldTable  The name of the table to be renamed
-	 * @param   string  $newTable  The new name for the table.
-	 * @param   string  $backup    Table prefix
-	 * @param   string  $prefix    For the table - used to rename constraints in non-mysql databases
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	abstract public function renameTable($oldTable, $newTable, $backup = null, $prefix = null);
 
 	/**
 	 * Sets the SQL statement string for later execution.

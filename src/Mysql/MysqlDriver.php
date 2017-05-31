@@ -10,6 +10,7 @@ namespace Joomla\Database\Mysql;
 
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Pdo\PdoDriver;
+use Joomla\Database\UTF8MB4SupportInterface;
 
 /**
  * MySQL database driver supporting PDO based connections
@@ -17,7 +18,7 @@ use Joomla\Database\Pdo\PdoDriver;
  * @link   https://secure.php.net/manual/en/ref.pdo-mysql.php
  * @since  1.0
  */
-class MysqlDriver extends PdoDriver
+class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 {
 	/**
 	 * The name of the database driver.
@@ -230,6 +231,22 @@ class MysqlDriver extends PdoDriver
 	}
 
 	/**
+	 * Return the query string to alter the database character set.
+	 *
+	 * @param   string  $dbName  The database name
+	 *
+	 * @return  string  The query that alter the database query string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getAlterDbCharacterSet($dbName)
+	{
+		$charset = $this->utf8mb4 ? 'utf8mb4' : 'utf8';
+
+		return 'ALTER DATABASE ' . $this->quoteName($dbName) . ' CHARACTER SET `' . $charset . '`';
+	}
+
+	/**
 	 * Method to get the database collation in use by sampling a text field of a table in the database.
 	 *
 	 * @return  mixed  The collation in use by the database (string) or boolean false if not supported.
@@ -242,6 +259,29 @@ class MysqlDriver extends PdoDriver
 		$this->connect();
 
 		return $this->setQuery('SELECT @@collation_database;')->loadResult();
+	}
+
+	/**
+	 * Return the query string to create new Database.
+	 *
+	 * @param   stdClass  $options  Object used to pass user and database name to database driver. This object must have "db_name" and "db_user" set.
+	 * @param   boolean   $utf      True if the database supports the UTF-8 character set.
+	 *
+	 * @return  string  The query that creates database
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function getCreateDatabaseQuery($options, $utf)
+	{
+		if ($utf)
+		{
+			$charset = $this->utf8mb4 ? 'utf8mb4' : 'utf8';
+			$collation = $charset . '_unicode_ci';
+
+			return 'CREATE DATABASE ' . $this->quoteName($options->db_name) . ' CHARACTER SET `' . $charset . '` COLLATE `' . $collation . '`';
+		}
+
+		return 'CREATE DATABASE ' . $this->quoteName($options->db_name);
 	}
 
 	/**
@@ -347,6 +387,18 @@ class MysqlDriver extends PdoDriver
 
 		// Set the query to get the tables statement.
 		return $this->setQuery('SHOW TABLES')->loadColumn();
+	}
+
+	/**
+	 * Determine whether the database engine support the UTF-8 Multibyte (utf8mb4) character encoding.
+	 *
+	 * @return  boolean  True if the database engine supports UTF-8 Multibyte.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function hasUTF8mb4Support()
+	{
+		return $this->utf8mb4;
 	}
 
 	/**
