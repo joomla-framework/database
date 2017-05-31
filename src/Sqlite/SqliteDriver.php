@@ -184,11 +184,11 @@ class SqliteDriver extends PdoDriver
 				// Do some dirty translation to MySQL output.
 				// TODO: Come up with and implement a standard across databases.
 				$columns[$field->NAME] = (object) array(
-					'Field' => $field->NAME,
-					'Type' => $field->TYPE,
-					'Null' => ($field->NOTNULL == '1' ? 'NO' : 'YES'),
+					'Field'   => $field->NAME,
+					'Type'    => $field->TYPE,
+					'Null'    => ($field->NOTNULL == '1' ? 'NO' : 'YES'),
 					'Default' => $field->DFLT_VALUE,
-					'Key' => ($field->PK == '1' ? 'PRI' : '')
+					'Key'     => ($field->PK != '0' ? 'PRI' : ''),
 				);
 			}
 		}
