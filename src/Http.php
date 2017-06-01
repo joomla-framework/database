@@ -30,8 +30,6 @@ class Http extends BaseHttp
 	 */
 	public function __construct($options = array(), TransportInterface $transport = null)
 	{
-		// Use $transport or get the available transport driver
-		$transport = isset($transport) ? $transport : HttpFactory::getAvailableDriver();
 		parent::__construct($options, $transport);
 
 		// Make sure the user agent string is defined.
