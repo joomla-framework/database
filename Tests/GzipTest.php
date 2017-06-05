@@ -48,7 +48,7 @@ class GzipTest extends ArchiveTestCase
 		$object = new ArchiveGzip;
 
 		$object->extract(
-			$this->inputPath . '/logo.gz',
+			$this->inputPath . '/logo.png.gz',
 			$this->outputPath . '/logo-gz.png'
 		);
 
@@ -78,7 +78,7 @@ class GzipTest extends ArchiveTestCase
 
 		$object = new ArchiveGzip(array('use_streams' => true));
 		$object->extract(
-			$this->inputPath . '/logo.gz',
+			$this->inputPath . '/logo.png.gz',
 			$this->outputPath . '/logo-gz.png'
 		);
 
@@ -117,7 +117,7 @@ class GzipTest extends ArchiveTestCase
 		TestHelper::setValue(
 			$object,
 			'data',
-			file_get_contents($this->inputPath . '/logo.gz')
+			file_get_contents($this->inputPath . '/logo.png.gz')
 		);
 
 		$this->assertEquals(

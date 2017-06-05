@@ -45,7 +45,7 @@ class Bzip2Test extends ArchiveTestCase
 		$object = new ArchiveBzip2;
 
 		$object->extract(
-			$this->inputPath . '/logo.bz2',
+			$this->inputPath . '/logo.png.bz2',
 			$this->outputPath . '/logo-bz2.png'
 		);
 
@@ -74,7 +74,7 @@ class Bzip2Test extends ArchiveTestCase
 
 		$object = new ArchiveBzip2(array('use_streams' => true));
 		$object->extract(
-			$this->inputPath . '/logo.bz2',
+			$this->inputPath . '/logo.png.bz2',
 			$this->outputPath . '/logo-bz2.png'
 		);
 
