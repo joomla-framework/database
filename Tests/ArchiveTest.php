@@ -57,12 +57,12 @@ class ArchiveTest extends ArchiveTestCase
 	{
 		// Filename, Adapter Type, Extracted Filename, Output is a File
 		return array(
-			array('logo.zip', 'Zip', 'logo-zip.png', false),
-			array('logo.tar', 'Tar', 'logo-tar.png', false),
-			array('logo.gz', 'Gzip', 'logo-gz.png', true),
-			array('logo.bz2', 'Bzip2', 'logo-bz2.png', true),
-			array('logo.tar.gz', 'Gzip', 'logo-tar-gz.png', false),
-			array('logo.tar.bz2', 'Bzip2', 'logo-tar-bz2.png', false),
+			array('logo.zip', 'Zip', 'logo-zip.png'),
+			array('logo.tar', 'Tar', 'logo-tar.png'),
+			array('logo.png.gz', 'Gzip', 'logo.png'),
+			array('logo.png.bz2', 'Bzip2', 'logo.png'),
+			array('logo.tar.gz', 'Gzip', 'logo-tar-gz.png'),
+			array('logo.tar.bz2', 'Bzip2', 'logo-tar-bz2.png'),
 		);
 	}
 
@@ -86,12 +86,11 @@ class ArchiveTest extends ArchiveTestCase
 	 * @param   string   $filename           Name of the file to extract
 	 * @param   string   $adapterType        Type of adaptar that will be used
 	 * @param   string   $extractedFilename  Name of the file to extracted file
-	 * @param   boolean  $isOutputFile       Whether output is a dirctory or file
 	 *
 	 * @covers        Joomla\Archive\Archive::extract
 	 * @dataProvider  dataExtract
 	 */
-	public function testExtract($filename, $adapterType, $extractedFilename, $isOutputFile = false)
+	public function testExtract($filename, $adapterType, $extractedFilename)
 	{
 		if (!is_writable($this->outputPath) || !is_writable($this->fixture->options['tmp_path']))
 		{
@@ -105,10 +104,8 @@ class ArchiveTest extends ArchiveTestCase
 			$this->markTestSkipped($adapterType . ' files can not be extracted.');
 		}
 
-		$outputPath = $this->outputPath . ($isOutputFile ? "/$extractedFilename" : '');
-
 		$this->assertTrue(
-			$this->fixture->extract($this->inputPath . "/$filename", $outputPath)
+			$this->fixture->extract($this->inputPath . "/$filename", $this->outputPath)
 		);
 
 		$this->assertFileExists($this->outputPath . "/$extractedFilename");

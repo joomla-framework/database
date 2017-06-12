@@ -108,7 +108,7 @@ class Archive
 				else
 				{
 					Folder::create($path);
-					$result = File::copy($tmpfname, $extractdir, null, 0);
+					$result = File::copy($tmpfname, $extractdir . '/' . $filename, null, 0);
 				}
 
 				@unlink($tmpfname);
@@ -139,7 +139,7 @@ class Archive
 				else
 				{
 					Folder::create($path);
-					$result = File::copy($tmpfname, $extractdir, null, 0);
+					$result = File::copy($tmpfname, $extractdir . '/' . $filename, null, 0);
 				}
 
 				@unlink($tmpfname);
