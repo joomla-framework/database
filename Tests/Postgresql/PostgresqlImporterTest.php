@@ -122,19 +122,11 @@ class PostgresqlImporterTest extends TestCase
 		->method('getVersion')
 		->will(
 			$this->returnValue(
-				'7.1.2'
+				'9.2.2'
 			)
 		);
 
-		if (version_compare($this->dbo->getVersion(), '9.1.0') >= 0)
-		{
-			$start_val = '1';
-		}
-		else
-		{
-			/* Older version */
-			$start_val = null;
-		}
+		$start_val = '1';
 
 		$this->dbo->expects(
 			$this->any()

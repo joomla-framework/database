@@ -28,12 +28,6 @@ class PgsqlExporterTest extends TestCase
 	protected $lastQuery = '';
 
 	/**
-	 * @var    bool  Boolean value to know if current database version is newer than 9.1.0
-	 * @since  1.0
-	 */
-	private $ver9dot1 = true;
-
-	/**
 	 * Sets up the testing conditions
 	 *
 	 * @return  void
@@ -135,21 +129,11 @@ class PgsqlExporterTest extends TestCase
 		->method('getVersion')
 		->will(
 			$this->returnValue(
-				'9.1.2'
+				'9.2.2'
 			)
 		);
 
-		if (version_compare($this->dbo->getVersion(), '9.1.0') >= 0)
-		{
-			$this->ver9dot1 = true;
-			$start_val = '1';
-		}
-		else
-		{
-			/* Older version */
-			$this->ver9dot1 = false;
-			$start_val = null;
-		}
+		$start_val = '1';
 
 		$this->dbo->expects(
 			$this->any()
@@ -263,12 +247,7 @@ class PgsqlExporterTest extends TestCase
 			->withStructure(true);
 
 		/* Depending on which version is running, 9.1.0 or older */
-		$start_val = null;
-
-		if ($this->ver9dot1)
-		{
-			$start_val = '1';
-		}
+		$start_val = '1';
 
 		$expecting = '<?xml version="1.0"?>
 <postgresqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -339,12 +318,7 @@ class PgsqlExporterTest extends TestCase
 			->withStructure(true);
 
 		/* Depending on which version is running, 9.1.0 or older */
-		$start_val = null;
-
-		if ($this->ver9dot1)
-		{
-			$start_val = '1';
-		}
+		$start_val = '1';
 
 		$expecting = '<?xml version="1.0"?>
 <postgresqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -389,12 +363,7 @@ class PgsqlExporterTest extends TestCase
 			->withStructure(true);
 
 		/* Depending on which version is running, 9.1.0 or older */
-		$start_val = null;
-
-		if ($this->ver9dot1)
-		{
-			$start_val = '1';
-		}
+		$start_val = '1';
 
 		$this->assertThat(
 			$instance->buildXmlStructure(),

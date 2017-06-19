@@ -374,22 +374,11 @@ class PostgresqlDriverTest extends PostgresqlCase
 		$seq->table = 'dbtest';
 		$seq->column = 'id';
 		$seq->data_type = 'bigint';
-
-		if (version_compare(self::$driver->getVersion(), '9.1.0') >= 0)
-		{
-			$seq->start_value = '1';
-			$seq->minimum_value = '1';
-			$seq->maximum_value = '9223372036854775807';
-			$seq->increment = '1';
-			$seq->cycle_option = 'NO';
-		}
-		else
-		{
-			$seq->minimum_value = null;
-			$seq->maximum_value = null;
-			$seq->increment = null;
-			$seq->cycle_option = null;
-		}
+		$seq->start_value = '1';
+		$seq->minimum_value = '1';
+		$seq->maximum_value = '9223372036854775807';
+		$seq->increment = '1';
+		$seq->cycle_option = 'NO';
 
 		$this->assertThat(self::$driver->getTableSequences('dbtest'), $this->equalTo(array($seq)), __LINE__);
 	}
@@ -1216,22 +1205,6 @@ class PostgresqlDriverTest extends PostgresqlCase
 		}
 
 		$result = self::$driver->getCreateDbQuery($options, $utf);
-
-		$this->assertThat($result, $this->equalTo($expected), __LINE__);
-	}
-
-	/**
-	 * Tests the getAlterDbCharacterSet method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetAlterDbCharacterSet()
-	{
-		$expected = 'ALTER DATABASE ' . self::$driver->quoteName('test') . ' SET CLIENT_ENCODING TO ' . self::$driver->quote('UTF8');
-
-		$result = self::$driver->getAlterDbCharacterSet('test');
 
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
 	}
