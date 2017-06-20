@@ -401,9 +401,8 @@ class MysqliDriver extends DatabaseDriver
 		$this->connect();
 
 		return $this->setQuery('SELECT @@collation_connection;')->loadResult();
-
 	}
-	
+
 	/**
 	 * Get the number of returned rows for the previous executed SQL statement.
 	 *
