@@ -628,20 +628,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
-	 * Method to get the database connection collation, as reported by the driver.
-	 *
-	 * If the connector doesn't support reporting this value please return an empty string.
-	 *
-	 * @return  string
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function getConnectionCollation()
-	{
-		return '';
-	}
-
-	/**
 	 * Return the query string to create new Database.
 	 *
 	 * @param   stdClass  $options  Object used to pass user and database name to database driver. This object must have "db_name" and "db_user" set.
