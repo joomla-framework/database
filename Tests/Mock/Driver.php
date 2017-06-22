@@ -50,6 +50,7 @@ class Driver
 			'freeResult',
 			'getAffectedRows',
 			'getCollation',
+			'getConnectionCollation',
 			'getConnectors',
 			'getDateFormat',
 			'getInstance',
