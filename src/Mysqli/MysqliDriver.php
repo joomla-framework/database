@@ -106,7 +106,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		/**
 		 * sql_mode to MySql 5.7.8+ default strict mode.
 		 *
-		 * @see https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-8.html#mysqld-5-7-8-sql-mode
+		 * @link https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-8.html#mysqld-5-7-8-sql-mode
 		 */
 		$sqlModes = [
 			'ONLY_FULL_GROUP_BY',
