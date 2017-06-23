@@ -16,11 +16,11 @@ namespace Joomla\Language;
 class Text
 {
 	/**
-	 * javascript strings
+	 * JavaScript strings
 	 *
 	 * @var         array
 	 * @since       1.0
-	 * @deprecated  1.3.0
+	 * @deprecated  2.0
 	 */
 	protected static $strings = array();
 
@@ -57,8 +57,6 @@ class Text
 	public static function setLanguage(Language $lang)
 	{
 		static::$lang = $lang;
-
-		return;
 	}
 
 	/**
@@ -72,11 +70,12 @@ class Text
 	 * @param   string   $string                The string to translate.
 	 * @param   mixed    $jsSafe                Boolean: Make the result javascript safe.
 	 * @param   boolean  $interpretBackSlashes  To interpret backslashes (\\=\, \n=carriage return, \t=tabulation)
-	 * @param   boolean  $script                To indicate that the string will be push in the javascript language store [@deprecated 1.3.0]
+	 * @param   boolean  $script                To indicate that the string will be push in the javascript language store [@deprecated 2.0]
 	 *
 	 * @return  string  The translated string or the key is $script is true
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Will be replaced with a `translate` method.
 	 */
 	public static function _($string, $jsSafe = false, $interpretBackSlashes = true, $script = false)
 	{
@@ -127,7 +126,7 @@ class Text
 	 * @param   string   $alt                   The alternate option for global string
 	 * @param   mixed    $jsSafe                Boolean: Make the result javascript safe.
 	 * @param   boolean  $interpretBackSlashes  To interpret backslashes (\\=\, \n=carriage return, \t=tabulation)
-	 * @param   boolean  $script                To indicate that the string will be pushed in the javascript language store [@deprecated 1.3.0]
+	 * @param   boolean  $script                To indicate that the string will be pushed in the javascript language store [@deprecated 2.0]
 	 *
 	 * @return  string  The translated string or the key if $script is true
 	 *
@@ -333,7 +332,7 @@ class Text
 	 * @return  string
 	 *
 	 * @since       1.0
-	 * @deprecated  1.3.0  Deprecated without replacement
+	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	public static function script($string = null, $jsSafe = false, $interpretBackSlashes = true)
 	{

@@ -13,15 +13,17 @@ use RuntimeException;
 /**
  * Stemmer base class.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Stemmer objects should directly implement the StemmerInterface
  */
-abstract class Stemmer
+abstract class Stemmer implements StemmerInterface
 {
 	/**
 	 * An internal cache of stemmed tokens.
 	 *
 	 * @var    array
 	 * @since  1.0
+	 * @deprecated  2.0  Subclasses should implement this property directly
 	 */
 	protected $cache = array();
 
@@ -30,7 +32,7 @@ abstract class Stemmer
 	 *
 	 * @var    Stemmer[]
 	 * @since  1.0
-	 * @deprecated  1.3.0
+	 * @deprecated  2.0
 	 */
 	protected static $instances = array();
 
@@ -42,7 +44,7 @@ abstract class Stemmer
 	 * @return  Stemmer
 	 *
 	 * @since   1.0
-	 * @deprecated  1.3.0  Use LanguageFactory::getStemmer() instead
+	 * @deprecated  2.0  Use LanguageFactory::getStemmer() instead
 	 * @throws  RuntimeException on invalid stemmer.
 	 */
 	public static function getInstance($adapter)
@@ -51,16 +53,4 @@ abstract class Stemmer
 
 		return $factory->getStemmer($adapter);
 	}
-
-	/**
-	 * Method to stem a token and return the root.
-	 *
-	 * @param   string  $token  The token to stem.
-	 * @param   string  $lang   The language of the token.
-	 *
-	 * @return  string  The root token.
-	 *
-	 * @since   1.0
-	 */
-	abstract public function stem($token, $lang);
 }

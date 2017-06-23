@@ -28,6 +28,7 @@ class LanguageFactory
 	 *
 	 * @var    array
 	 * @since  1.3.0
+	 * @deprecated  2.0  Singleton object storage will no longer be supported
 	 */
 	private static $loadedClasses = array(
 		'language' => array(),
@@ -88,14 +89,13 @@ class LanguageFactory
 	 *
 	 * @return  Stemmer
 	 *
-	 * @note    As of 2.0, this method will throw a RuntimeException if objects do not extend the Stemmer class
 	 * @since   1.3.0
 	 * @throws  \RuntimeException on invalid stemmer
 	 */
 	public function getStemmer($adapter)
 	{
 		// Setup the adapter for the stemmer.
-		$class = '\\Joomla\\Language\\Stemmer\\' . ucfirst(trim($adapter));
+		$class = __NAMESPACE__ . '\\Stemmer\\' . ucfirst(trim($adapter));
 
 		// If we've already found this object, no need to try and find it again
 		if (isset(self::$loadedClasses['stemmer'][$class]))
