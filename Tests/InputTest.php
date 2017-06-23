@@ -110,7 +110,7 @@ class InputTest extends TestCase
 	 */
 	public function test__get()
 	{
-		$instance = $this->getInputObject(array());
+		$instance = $this->getInputObject();
 
 		$this->assertAttributeEquals($_GET, 'data', $instance->get);
 
@@ -141,7 +141,7 @@ class InputTest extends TestCase
 	 */
 	public function testCountWithNoData()
 	{
-		$instance = $this->getInputObject(array());
+		$instance = $this->getInputObject();
 
 		$this->assertEquals(
 			0,
@@ -466,7 +466,7 @@ class InputTest extends TestCase
 	 */
 	public function testGetFromCookie()
 	{
-		$instance = $this->getInputObject(array());
+		$instance = $this->getInputObject();
 
 		$_COOKIE['foo'] = 'bar';
 
@@ -485,7 +485,7 @@ class InputTest extends TestCase
 	{
 		$_SERVER['REQUEST_METHOD'] = 'custom';
 
-		$instance = $this->getInputObject(array());
+		$instance = $this->getInputObject();
 
 		$this->assertEquals('CUSTOM', $instance->getMethod());
 	}
@@ -500,7 +500,7 @@ class InputTest extends TestCase
 	 */
 	public function testSerialize()
 	{
-		$instance = $this->getInputObject(array());
+		$instance = $this->getInputObject();
 
 		// Load the inputs so that the static $loaded is set to true.
 		TestHelper::invoke($instance, 'loadAllInputs');
@@ -528,7 +528,7 @@ class InputTest extends TestCase
 	{
 		$serialized = 'a:3:{i:0;a:1:{s:6:"filter";s:3:"raw";}i:1;s:4:"data";i:2;a:1:{s:7:"request";s:4:"keep";}}';
 
-		$instance = $this->getInputObject(array());
+		$instance = $this->getInputObject();
 
 		$instance->unserialize($serialized);
 
@@ -566,7 +566,7 @@ class InputTest extends TestCase
 	 */
 	public function testLoadAllInputs()
 	{
-		$instance = $this->getInputObject(array());
+		$instance = $this->getInputObject();
 		TestHelper::setValue($instance, 'loaded', false);
 
 		$inputs = TestHelper::getValue($instance, 'inputs');
@@ -587,7 +587,7 @@ class InputTest extends TestCase
 	 *
 	 * @since   1.0
 	 */
-	protected function getInputObject($data = null)
+	protected function getInputObject($data = array())
 	{
 		return new Input($data, array('filter' => $this->filterMock));
 	}
