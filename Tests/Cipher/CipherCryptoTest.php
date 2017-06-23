@@ -31,6 +31,10 @@ class CryptCipherCryptoTest extends TestCase
 		{
 			self::markTestSkipped('The environment cannot safely perform encryption with this cipher.');
 		}
+		catch (\CannotPerformOperationException $e)
+		{
+			self::markTestSkipped('The environment cannot safely perform encryption with this cipher.');
+		}
 	}
 
 	/**
