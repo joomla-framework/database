@@ -542,8 +542,8 @@ class InputFilterTest extends TestCase
 			),
 			'unknown_03' => array(
 				'',
-				array("key" => "Value", "key2" => "This&That", "key2" => "This&amp;That"),
-				array("key" => "Value", "key2" => "This&That", "key2" => "This&That"),
+				array("key" => "Value", "key2" => "This&amp;That"),
+				array("key" => "Value", "key2" => "This&That"),
 				'From generic cases'
 			),
 			'unknown_04' => array(
