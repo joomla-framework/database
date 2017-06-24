@@ -409,7 +409,7 @@ class MysqliDriver extends DatabaseDriver
 	 * @return  string
 	 *
 	 * @since   __DEPLOY_VERSION__
-	*/
+	 */
 	public function getNullDate()
 	{
 		$this->connect();
