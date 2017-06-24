@@ -408,7 +408,7 @@ class MysqliDriver extends DatabaseDriver
 	 *
 	 * @return  string
 	 *
-	 * @since    __DEPLOY_VERSION__
+	 * @since   __DEPLOY_VERSION__
 	*/
 	public function getNullDate()
 	{
@@ -418,7 +418,7 @@ class MysqliDriver extends DatabaseDriver
 
 		if (strpos($mode, 'NO_ZERO_DATE') !== false)
 		{
-			$this->nullDate='1000-01-01 00:00:00';
+			$this->nullDate = '1000-01-01 00:00:00';
 		}
 
 		return $this->nullDate;
