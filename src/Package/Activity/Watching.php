@@ -13,7 +13,7 @@ use Joomla\Github\AbstractPackage;
 /**
  * GitHub API Activity Watching Events class for the Joomla Framework.
  *
- * @link https://developer.github.com/v3/activity/watching/
+ * @link   https://developer.github.com/v3/activity/watching/
  *
  * @since  1.0
  */

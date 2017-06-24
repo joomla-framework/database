@@ -14,7 +14,7 @@ use Joomla\Uri\Uri;
 /**
  * GitHub API Issues class for the Joomla Framework.
  *
- * @link https://developer.github.com/v3/issues
+ * @link   https://developer.github.com/v3/issues
  *
  * @since  1.0
  *
@@ -67,11 +67,11 @@ class Issues extends AbstractPackage
 			throw new \UnexpectedValueException('You cannot pass both assignee and assignees. Only one may be provided.');
 		}
 
-		if (!empty($assignees)) 
+		if (!empty($assignees))
 		{
 			$data['assignees'] = array_values($assignees);
-		} 
-		elseif (is_string($assignee)) 
+		}
+		elseif (is_string($assignee))
 		{
 			$data['assignee'] = $assignee;
 		}

@@ -17,7 +17,7 @@ use Joomla\Http\Response;
  * The Repository Statistics API allows you to fetch the data that GitHub uses for
  * visualizing different types of repository activity.
  *
- * @link https://developer.github.com/v3/repos/statistics
+ * @link   https://developer.github.com/v3/repos/statistics
  *
  * @since  1.0
  */

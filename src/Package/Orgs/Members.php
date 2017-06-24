@@ -13,7 +13,7 @@ use Joomla\Github\AbstractPackage;
 /**
  * GitHub API Orgs Members class for the Joomla Framework.
  *
- * @link https://developer.github.com/v3/orgs/members/
+ * @link   https://developer.github.com/v3/orgs/members/
  *
  * @since  1.0
  */

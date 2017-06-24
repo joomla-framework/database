@@ -13,7 +13,7 @@ use Joomla\Github\AbstractPackage;
 /**
  * GitHub API Data Trees class for the Joomla Framework.
  *
- * @link https://developer.github.com/v3/git/trees/
+ * @link   https://developer.github.com/v3/git/trees/
  *
  * @since  1.0
  */

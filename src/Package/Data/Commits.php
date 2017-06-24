@@ -13,7 +13,7 @@ use Joomla\Github\AbstractPackage;
 /**
  * GitHub API Data Commits class for the Joomla Framework.
  *
- * @link https://developer.github.com/v3/git/commits/
+ * @link   https://developer.github.com/v3/git/commits/
  *
  * @since  1.0
  */

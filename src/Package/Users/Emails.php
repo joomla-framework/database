@@ -16,7 +16,7 @@ use Joomla\Github\AbstractPackage;
  * Management of email addresses via the API requires that you are authenticated
  * through basic auth or OAuth with the user scope.
  *
- * @link https://developer.github.com/v3/repos/users/emails
+ * @link   https://developer.github.com/v3/repos/users/emails
  *
  * @since  1.0
  */

@@ -14,7 +14,7 @@ use Joomla\Http\Exception\UnexpectedResponseException;
 /**
  * GitHub API Pull Requests class for the Joomla Framework.
  *
- * @link https://developer.github.com/v3/pulls
+ * @link   https://developer.github.com/v3/pulls
  *
  * @since  1.0
  *

@@ -13,7 +13,7 @@ use Joomla\Github\AbstractPackage;
 /**
  * GitHub API Pulls Comments class for the Joomla Framework.
  *
- * @link https://developer.github.com/v3/pulls/comments/
+ * @link   https://developer.github.com/v3/pulls/comments/
  *
  * @since  1.0
  */

@@ -16,7 +16,7 @@ use Joomla\Github\AbstractPackage;
  * All actions against teams require at a minimum an authenticated user who is a member
  * of the owner’s team in the :org being managed. Additionally, OAuth users require “user” scope.
  *
- * @link https://developer.github.com/v3/orgs/teams/
+ * @link   https://developer.github.com/v3/orgs/teams/
  *
  * @since  1.0
  */

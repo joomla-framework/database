@@ -14,7 +14,7 @@ use Joomla\Uri\Uri;
 /**
  * GitHub API Activity Events class for the Joomla Framework.
  *
- * @link https://developer.github.com/v3/activity/notifications/
+ * @link   https://developer.github.com/v3/activity/notifications/
  *
  * @since  1.0
  */

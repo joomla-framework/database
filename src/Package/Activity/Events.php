@@ -13,7 +13,7 @@ use Joomla\Github\AbstractPackage;
 /**
  * GitHub API Activity Events class for the Joomla Framework.
  *
- * @link https://developer.github.com/v3/activity/events/
+ * @link   https://developer.github.com/v3/activity/events/
  *
  * @since  1.0
  */

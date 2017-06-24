@@ -14,7 +14,7 @@ use Joomla\Http\Exception\UnexpectedResponseException;
 /**
  * GitHub API Gists class for the Joomla Framework.
  *
- * @link https://developer.github.com/v3/gists
+ * @link   https://developer.github.com/v3/gists
  *
  * @since  1.0
  *

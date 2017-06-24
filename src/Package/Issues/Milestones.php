@@ -13,7 +13,7 @@ use Joomla\Github\AbstractPackage;
 /**
  * GitHub API Milestones class for the Joomla Framework.
  *
- * @link https://developer.github.com/v3/issues/milestones/
+ * @link   https://developer.github.com/v3/issues/milestones/
  *
  * @since  1.0
  */

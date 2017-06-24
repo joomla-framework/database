@@ -17,7 +17,7 @@ use Joomla\Github\AbstractPackage;
  * This is useful both for display on issue/pull request information pages and also
  * to determine who should be notified of comments.
  *
- * @link https://developer.github.com/v3/issues/events/
+ * @link   https://developer.github.com/v3/issues/events/
  *
  * @since  1.0
  */
