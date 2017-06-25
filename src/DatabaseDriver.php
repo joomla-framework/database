@@ -1832,7 +1832,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			}
 
 			// Only process scalars that are not internal fields.
-			if (is_array($v) or is_object($v) or $k[0] == '_')
+			if (is_array($v) || is_object($v) || $k[0] === '_')
 			{
 				continue;
 			}
@@ -1840,7 +1840,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			// Set the primary key to the WHERE clause instead of a field to update.
 			if (in_array($k, $key))
 			{
-				$where[] = $this->quoteName($k) . '=' . $this->quote($v);
+				$where[] = $this->quoteName($k) . ($v === null ? ' IS NULL' : ' = ' . $this->quote($v));
 				continue;
 			}
 
