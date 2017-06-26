@@ -414,7 +414,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function getNumRows($cursor = null)
 	{
-		return mysqli_num_rows($cursor ? $cursor : $this->cursor);
+		return mysqli_num_rows($cursor ?: $this->cursor);
 	}
 
 	/**
@@ -986,7 +986,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	protected function fetchArray($cursor = null)
 	{
-		return mysqli_fetch_row($cursor ? $cursor : $this->cursor);
+		return mysqli_fetch_row($cursor ?: $this->cursor);
 	}
 
 	/**
@@ -1000,7 +1000,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	protected function fetchAssoc($cursor = null)
 	{
-		return mysqli_fetch_assoc($cursor ? $cursor : $this->cursor);
+		return mysqli_fetch_assoc($cursor ?: $this->cursor);
 	}
 
 	/**
@@ -1015,7 +1015,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	protected function fetchObject($cursor = null, $class = '\\stdClass')
 	{
-		return mysqli_fetch_object($cursor ? $cursor : $this->cursor, $class);
+		return mysqli_fetch_object($cursor ?: $this->cursor, $class);
 	}
 
 	/**

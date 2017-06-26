@@ -370,7 +370,7 @@ class SqlsrvDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		return sqlsrv_num_rows($cursor ? $cursor : $this->cursor);
+		return sqlsrv_num_rows($cursor ?: $this->cursor);
 	}
 
 	/**
@@ -979,7 +979,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	protected function fetchArray($cursor = null)
 	{
-		return sqlsrv_fetch_array($cursor ? $cursor : $this->cursor, SQLSRV_FETCH_NUMERIC);
+		return sqlsrv_fetch_array($cursor ?: $this->cursor, SQLSRV_FETCH_NUMERIC);
 	}
 
 	/**
@@ -993,7 +993,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	protected function fetchAssoc($cursor = null)
 	{
-		return sqlsrv_fetch_array($cursor ? $cursor : $this->cursor, SQLSRV_FETCH_ASSOC);
+		return sqlsrv_fetch_array($cursor ?: $this->cursor, SQLSRV_FETCH_ASSOC);
 	}
 
 	/**
@@ -1008,7 +1008,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	protected function fetchObject($cursor = null, $class = 'stdClass')
 	{
-		return sqlsrv_fetch_object($cursor ? $cursor : $this->cursor, $class);
+		return sqlsrv_fetch_object($cursor ?: $this->cursor, $class);
 	}
 
 	/**
