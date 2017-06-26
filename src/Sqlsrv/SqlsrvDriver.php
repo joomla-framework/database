@@ -83,11 +83,11 @@ class SqlsrvDriver extends DatabaseDriver
 	public function __construct($options)
 	{
 		// Get some basic values from the options.
-		$options['host'] = isset($options['host']) ? $options['host'] : 'localhost';
-		$options['user'] = isset($options['user']) ? $options['user'] : '';
+		$options['host']     = isset($options['host']) ? $options['host'] : 'localhost';
+		$options['user']     = isset($options['user']) ? $options['user'] : '';
 		$options['password'] = isset($options['password']) ? $options['password'] : '';
 		$options['database'] = isset($options['database']) ? $options['database'] : '';
-		$options['select'] = isset($options['select']) ? (bool) $options['select'] : true;
+		$options['select']   = isset($options['select']) ? (bool) $options['select'] : true;
 
 		// Finalize initialisation
 		parent::__construct($options);
@@ -123,11 +123,12 @@ class SqlsrvDriver extends DatabaseDriver
 
 		// Build the connection configuration array.
 		$config = array(
-			'Database' => $this->options['database'],
-			'uid' => $this->options['user'],
-			'pwd' => $this->options['password'],
-			'CharacterSet' => 'UTF-8',
-			'ReturnDatesAsStrings' => true);
+			'Database'             => $this->options['database'],
+			'uid'                  => $this->options['user'],
+			'pwd'                  => $this->options['password'],
+			'CharacterSet'         => 'UTF-8',
+			'ReturnDatesAsStrings' => true
+		);
 
 		// Make sure the SQLSRV extension for PHP is installed and enabled.
 		if (!static::isSupported())
