@@ -83,7 +83,6 @@ class NosqlDriver extends DatabaseDriver
 	 */
 	public function disconnect()
 	{
-		return;
 	}
 
 	/**
