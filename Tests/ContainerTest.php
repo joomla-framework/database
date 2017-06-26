@@ -8,6 +8,7 @@ namespace Joomla\DI\Tests;
 
 use Joomla\DI\Container;
 use PHPUnit\Framework\TestCase;
+use Joomla\DI\ServiceProviderInterface;
 
 include_once __DIR__.'Stubs/stubs.php';
 
@@ -90,7 +91,7 @@ class ContainerTest extends TestCase
 		$container = new Container($this->fixture);
 
 		$this->assertAttributeInstanceOf(
-			'Joomla\\DI\\Container',
+			Container::class,
 			'parent',
 			$container,
 			'A default new object should have a null $parent.'
@@ -101,7 +102,7 @@ class ContainerTest extends TestCase
 	 * Test the alias method.
 	 *
 	 * @return  void
-	 *
+	 *d
 	 * @since   1.0
 	 */
 	public function testAlias()
@@ -213,10 +214,10 @@ class ContainerTest extends TestCase
 	 */
 	public function testBuildObjectNoDependencies()
 	{
-		$object = $this->fixture->buildObject('Joomla\\DI\\Tests\\Stub1');
+		$object = $this->fixture->buildObject(Stub1::class);
 
 		$this->assertInstanceOf(
-			'Joomla\\DI\\Tests\\Stub1',
+			Stub1::class,
 			$object,
 			'When building an object, an instance of the requested class should be returned.'
 		);
@@ -231,15 +232,16 @@ class ContainerTest extends TestCase
 	 */
 	public function testBuildObjectGetDependencyFromContainer()
 	{
-		$this->fixture->set('Joomla\\DI\\Tests\\StubInterface', function () {
+		$this->fixture->set(
+			StubInterface::class, function () {
 			return new Stub1;
 		}
 		);
 
-		$object = $this->fixture->buildObject('Joomla\\DI\\Tests\\Stub2');
+		$object = $this->fixture->buildObject(Stub2::class);
 
 		$this->assertAttributeInstanceOf(
-			'Joomla\\DI\\Tests\\Stub1',
+			Stub1::class,
 			'stub',
 			$object,
 			'When building an object, the dependencies should resolve from the container.'
@@ -270,11 +272,11 @@ class ContainerTest extends TestCase
 	 */
 	public function testBuildSharedObject()
 	{
-		$object = $this->fixture->buildSharedObject('Joomla\\DI\\Tests\\Stub1');
+		$object = $this->fixture->buildSharedObject(Stub1::class);
 
 		$this->assertSame(
 			$object,
-			$this->fixture->get('Joomla\\DI\\Tests\\Stub1'),
+			$this->fixture->get(Stub1::class),
 			'Building a shared object should return the same object whenever requested.'
 		);
 	}
@@ -289,7 +291,7 @@ class ContainerTest extends TestCase
 		$child = $this->fixture->createChild();
 
 		$this->assertAttributeInstanceOf(
-			'Joomla\\DI\\Container',
+			Container::class,
 			'parent',
 			$child,
 			'When creating a child container, the $parent property should be an instance of Joomla\\DI\\Container.'
@@ -411,7 +413,7 @@ class ContainerTest extends TestCase
 	public function testGetMethodArgsFromContainer()
 	{
 		$this->fixture->set(
-			'Joomla\\DI\\Tests\\StubInterface',
+			StubInterface::class,
 			function ()
 			{
 				return new Stub1;
@@ -421,13 +423,13 @@ class ContainerTest extends TestCase
 		$reflectionMethod = new \ReflectionMethod($this->fixture, 'getMethodArgs');
 		$reflectionMethod->setAccessible(true);
 
-		$reflectionClass = new \ReflectionClass('Joomla\\DI\\Tests\\Stub2');
+		$reflectionClass = new \ReflectionClass(Stub2::class);
 		$constructor = $reflectionClass->getConstructor();
 
 		$args = $reflectionMethod->invoke($this->fixture, $constructor);
 
 		$this->assertInstanceOf(
-			'Joomla\\DI\\Tests\\Stub1',
+			Stub1::class,
 			$args[0],
 			'When getting method args, it should resolve dependencies from the container if set.'
 		);
@@ -445,13 +447,13 @@ class ContainerTest extends TestCase
 		$reflectionMethod = new \ReflectionMethod($this->fixture, 'getMethodArgs');
 		$reflectionMethod->setAccessible(true);
 
-		$reflectionClass = new \ReflectionClass('Joomla\\DI\\Tests\\Stub5');
+		$reflectionClass = new \ReflectionClass(Stub5::class);
 		$constructor = $reflectionClass->getConstructor();
 
 		$args = $reflectionMethod->invoke($this->fixture, $constructor);
 
 		$this->assertInstanceOf(
-			'Joomla\\DI\\Tests\\Stub4',
+			Stub4::class,
 			$args[0],
 			'When getting method args, it should create any concrete dependencies.'
 		);
@@ -469,7 +471,7 @@ class ContainerTest extends TestCase
 		$reflectionMethod = new \ReflectionMethod($this->fixture, 'getMethodArgs');
 		$reflectionMethod->setAccessible(true);
 
-		$reflectionClass = new \ReflectionClass('Joomla\\DI\\Tests\\Stub6');
+		$reflectionClass = new \ReflectionClass(Stub6::class);
 		$constructor = $reflectionClass->getConstructor();
 
 		$args = $reflectionMethod->invoke($this->fixture, $constructor);
@@ -495,7 +497,7 @@ class ContainerTest extends TestCase
 		$reflectionMethod = new \ReflectionMethod($this->fixture, 'getMethodArgs');
 		$reflectionMethod->setAccessible(true);
 
-		$reflectionClass = new \ReflectionClass('Joomla\\DI\\Tests\\Stub7');
+		$reflectionClass = new \ReflectionClass(Stub7::class);
 		$constructor = $reflectionClass->getConstructor();
 
 		$reflectionMethod->invoke($this->fixture, $constructor);
@@ -513,7 +515,7 @@ class ContainerTest extends TestCase
 	public function testGetMethodArgsResolvedIsNotInstanceOfHintedDependency()
 	{
 		$this->fixture->set(
-			'Joomla\\DI\\Tests\\StubInterface',
+			StubInterface::class,
 			function ()
 			{
 				return new Stub9;
@@ -523,7 +525,7 @@ class ContainerTest extends TestCase
 		$reflectionMethod = new \ReflectionMethod($this->fixture, 'getMethodArgs');
 		$reflectionMethod->setAccessible(true);
 
-		$reflectionClass = new \ReflectionClass('Joomla\\DI\\Tests\\Stub2');
+		$reflectionClass = new \ReflectionClass(Stub2::class);
 		$constructor = $reflectionClass->getConstructor();
 
 		$reflectionMethod->invoke($this->fixture, $constructor);
@@ -1011,7 +1013,7 @@ class ContainerTest extends TestCase
 	 */
 	public function testRegisterServiceProvider()
 	{
-		$mock = $this->getMockBuilder('Joomla\\DI\\ServiceProviderInterface')
+		$mock = $this->getMockBuilder(ServiceProviderInterface::class)
 			->getMock();
 
 		$mock->expects($this->once())
