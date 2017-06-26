@@ -233,7 +233,7 @@ class OracleDriver extends PdoDriver
 		$query->bind(':type', 'TABLE');
 
 		// Sanitize input to an array and iterate over the list.
-        $tables = (array) $tables;
+		$tables = (array) $tables;
 
 		foreach ($tables as $table)
 		{
