@@ -620,7 +620,7 @@ class SqlsrvDriver extends DatabaseDriver
 		$options = array();
 
 		// SQLSrv_num_rows requires a static or keyset cursor.
-		if (strncmp(ltrim(strtoupper($sql)), 'SELECT', strlen('SELECT')) == 0)
+		if (strncmp(strtoupper(ltrim($sql)), 'SELECT', strlen('SELECT')) == 0)
 		{
 			$options = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
 		}
