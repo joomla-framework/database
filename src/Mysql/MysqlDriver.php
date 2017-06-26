@@ -280,8 +280,8 @@ class MysqlDriver extends PdoDriver
 		// Initialise variables.
 		$result = array();
 
-		// Sanitize input to an array and iterate over the list.
-		settype($tables, 'array');
+        // Sanitize input to an array and iterate over the list.
+        $tables = (array) $tables;
 
 		foreach ($tables as $table)
 		{

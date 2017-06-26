@@ -434,7 +434,7 @@ class MysqliDriver extends DatabaseDriver
 		$result = array();
 
 		// Sanitize input to an array and iterate over the list.
-		settype($tables, 'array');
+        $tables = (array) $tables;
 
 		foreach ($tables as $table)
 		{
