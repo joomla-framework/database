@@ -128,7 +128,7 @@ class Container
 		$constructor = $reflection->getConstructor();
 
 		// If there are no parameters, just return a new object.
-		if (is_null($constructor))
+		if ($constructor === null)
 		{
 			$callback = function () use ($key) {
 				return new $key;
@@ -192,7 +192,7 @@ class Container
 		$key = $this->resolveAlias($key);
 		$raw = $this->getRaw($key);
 
-		if (is_null($raw))
+		if ($raw === null)
 		{
 			throw new \InvalidArgumentException(sprintf('The requested key %s does not exist to extend.', $key));
 		}
@@ -224,7 +224,7 @@ class Container
 			$dependencyVarName = $param->getName();
 
 			// If we have a dependency, that means it has been type-hinted.
-			if (!is_null($dependency))
+			if ($dependency !== null)
 			{
 				$dependencyClassName = $dependency->getName();
 
@@ -345,14 +345,14 @@ class Container
 		$key = $this->resolveAlias($key);
 		$raw = $this->getRaw($key);
 
-		if (is_null($raw))
+		if ($raw === null)
 		{
 			throw new \InvalidArgumentException(sprintf('Key %s has not been registered with the container.', $key));
 		}
 
 		if ($raw['shared'])
 		{
-			if (!isset($this->instances[$key]) || $forceNew)
+			if ($forceNew || !isset($this->instances[$key]))
 			{
 				$this->instances[$key] = $raw['callback']($this);
 			}
@@ -397,7 +397,7 @@ class Container
 
 		$aliasKey = $this->resolveAlias($key);
 
-		if ($aliasKey != $key && isset($this->dataStore[$aliasKey]))
+		if ($aliasKey !== $key && isset($this->dataStore[$aliasKey]))
 		{
 			return $this->dataStore[$aliasKey];
 		}
