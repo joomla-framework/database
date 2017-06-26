@@ -1736,7 +1736,7 @@ class QueryTest extends TestCase
 
 		$baseElement->testArray = array();
 
-		$cloneElement = clone($baseElement);
+		$cloneElement = clone $baseElement;
 
 		$baseElement->testArray[] = 'test';
 
@@ -1765,7 +1765,7 @@ class QueryTest extends TestCase
 
 		$baseElement->testObject = new \stdClass;
 
-		$cloneElement = clone($baseElement);
+		$cloneElement = clone $baseElement;
 
 		$this->assertThat(
 			TestHelper::getValue($baseElement, 'db'),

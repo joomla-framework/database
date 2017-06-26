@@ -75,7 +75,7 @@ class MysqlDriver extends PdoDriver
 	{
 		// Get some basic values from the options.
 		$options['driver']	= 'mysql';
-		$options['charset'] = (isset($options['charset'])) ? $options['charset'] : 'utf8';
+		$options['charset'] = isset($options['charset']) ? $options['charset'] : 'utf8';
 
 		$this->charset = $options['charset'];
 

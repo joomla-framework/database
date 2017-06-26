@@ -78,14 +78,14 @@ abstract class PdoDriver extends DatabaseDriver
 	public function __construct($options)
 	{
 		// Get some basic values from the options.
-		$options['driver']        = (isset($options['driver'])) ? $options['driver'] : 'odbc';
-		$options['dsn']           = (isset($options['dsn'])) ? $options['dsn'] : '';
-		$options['host']          = (isset($options['host'])) ? $options['host'] : 'localhost';
-		$options['database']      = (isset($options['database'])) ? $options['database'] : '';
-		$options['user']          = (isset($options['user'])) ? $options['user'] : '';
-		$options['port']          = (isset($options['port'])) ? (int) $options['port'] : null;
-		$options['password']      = (isset($options['password'])) ? $options['password'] : '';
-		$options['driverOptions'] = (isset($options['driverOptions'])) ? $options['driverOptions'] : array();
+		$options['driver']        = isset($options['driver']) ? $options['driver'] : 'odbc';
+		$options['dsn']           = isset($options['dsn']) ? $options['dsn'] : '';
+		$options['host']          = isset($options['host']) ? $options['host'] : 'localhost';
+		$options['database']      = isset($options['database']) ? $options['database'] : '';
+		$options['user']          = isset($options['user']) ? $options['user'] : '';
+		$options['port']          = isset($options['port']) ? (int) $options['port'] : null;
+		$options['password']      = isset($options['password']) ? $options['password'] : '';
+		$options['driverOptions'] = isset($options['driverOptions']) ? $options['driverOptions'] : array();
 
 		// Finalize initialisation
 		parent::__construct($options);
@@ -126,7 +126,7 @@ abstract class PdoDriver extends DatabaseDriver
 		switch ($this->options['driver'])
 		{
 			case 'cubrid':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 33000;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 33000;
 
 				$format = 'cubrid:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
 
@@ -136,7 +136,7 @@ abstract class PdoDriver extends DatabaseDriver
 				break;
 
 			case 'dblib':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 1433;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 1433;
 
 				$format = 'dblib:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
 
@@ -146,7 +146,7 @@ abstract class PdoDriver extends DatabaseDriver
 				break;
 
 			case 'firebird':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 3050;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 3050;
 
 				$format = 'firebird:dbname=#DBNAME#';
 
@@ -156,7 +156,7 @@ abstract class PdoDriver extends DatabaseDriver
 				break;
 
 			case 'ibm':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 56789;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 56789;
 
 				if (!empty($this->options['dsn']))
 				{
@@ -176,8 +176,8 @@ abstract class PdoDriver extends DatabaseDriver
 				break;
 
 			case 'informix':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 1526;
-				$this->options['protocol'] = (isset($this->options['protocol'])) ? $this->options['protocol'] : 'onsoctcp';
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 1526;
+				$this->options['protocol'] = isset($this->options['protocol']) ? $this->options['protocol'] : 'onsoctcp';
 
 				if (!empty($this->options['dsn']))
 				{
@@ -197,7 +197,7 @@ abstract class PdoDriver extends DatabaseDriver
 				break;
 
 			case 'mssql':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 1433;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 1433;
 
 				$format = 'mssql:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
 
@@ -207,7 +207,7 @@ abstract class PdoDriver extends DatabaseDriver
 				break;
 
 			case 'mysql':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 3306;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 3306;
 
 				$format = 'mysql:host=#HOST#;port=#PORT#;dbname=#DBNAME#;charset=#CHARSET#';
 
@@ -217,8 +217,8 @@ abstract class PdoDriver extends DatabaseDriver
 				break;
 
 			case 'oci':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 1521;
-				$this->options['charset'] = (isset($this->options['charset'])) ? $this->options['charset'] : 'AL32UTF8';
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 1521;
+				$this->options['charset'] = isset($this->options['charset']) ? $this->options['charset'] : 'AL32UTF8';
 
 				if (!empty($this->options['dsn']))
 				{
@@ -248,7 +248,7 @@ abstract class PdoDriver extends DatabaseDriver
 				break;
 
 			case 'pgsql':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 5432;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 5432;
 
 				$format = 'pgsql:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
 
@@ -273,7 +273,7 @@ abstract class PdoDriver extends DatabaseDriver
 				break;
 
 			case 'sybase':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 1433;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 1433;
 
 				$format = 'mssql:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
 
@@ -897,7 +897,7 @@ abstract class PdoDriver extends DatabaseDriver
 		// Execute the query and get the result set cursor.
 		if (!$this->executed)
 		{
-			if (!($this->execute()))
+			if (!$this->execute())
 			{
 				return $this->errorNum ? null : false;
 			}

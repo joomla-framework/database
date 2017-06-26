@@ -63,8 +63,8 @@ class OracleDriver extends PdoDriver
 	public function __construct($options)
 	{
 		$options['driver'] = 'oci';
-		$options['charset']    = (isset($options['charset'])) ? $options['charset']   : 'AL32UTF8';
-		$options['dateformat'] = (isset($options['dateformat'])) ? $options['dateformat'] : 'RRRR-MM-DD HH24:MI:SS';
+		$options['charset']    = isset($options['charset']) ? $options['charset']   : 'AL32UTF8';
+		$options['dateformat'] = isset($options['dateformat']) ? $options['dateformat'] : 'RRRR-MM-DD HH24:MI:SS';
 
 		$this->charset = $options['charset'];
 		$this->dateformat = $options['dateformat'];

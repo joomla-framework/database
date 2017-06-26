@@ -109,11 +109,11 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	public function __construct( $options )
 	{
-		$options['host'] = (isset($options['host'])) ? $options['host'] : 'localhost';
-		$options['user'] = (isset($options['user'])) ? $options['user'] : '';
-		$options['password'] = (isset($options['password'])) ? $options['password'] : '';
-		$options['database'] = (isset($options['database'])) ? $options['database'] : '';
-		$options['port'] = (isset($options['port'])) ? $options['port'] : null;
+		$options['host'] = isset($options['host']) ? $options['host'] : 'localhost';
+		$options['user'] = isset($options['user']) ? $options['user'] : '';
+		$options['password'] = isset($options['password']) ? $options['password'] : '';
+		$options['database'] = isset($options['database']) ? $options['database'] : '';
+		$options['port'] = isset($options['port']) ? $options['port'] : null;
 
 		// Finalize initialization
 		parent::__construct($options);
@@ -156,7 +156,7 @@ class PostgresqlDriver extends DatabaseDriver
 		 */
 
 		// Check for empty port
-		if (!($this->options['port']))
+		if (!$this->options['port'])
 		{
 			// Port is empty or not set via options, check for port annotation (:) in the host string
 			$tmp = substr(strstr($this->options['host'], ':'), 1);
@@ -1289,7 +1289,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	public static function isSupported()
 	{
-		return (function_exists('pg_connect'));
+		return function_exists('pg_connect');
 	}
 
 	/**

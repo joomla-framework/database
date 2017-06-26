@@ -238,7 +238,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 				$class = '\\Joomla\\Database\\' . ucfirst(strtolower($baseName)) . '\\' . ucfirst(strtolower($baseName)) . 'Driver';
 
 				// If the class doesn't exist, or if it's not supported on this system, move on to the next type.
-				if (!class_exists($class) || !($class::isSupported()))
+				if (!class_exists($class) || !$class::isSupported())
 				{
 					continue;
 				}
@@ -271,9 +271,9 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	public static function getInstance($options = array())
 	{
 		// Sanitize the database connector options.
-		$options['driver']   = (isset($options['driver'])) ? preg_replace('/[^A-Z0-9_\.-]/i', '', $options['driver']) : 'mysqli';
-		$options['database'] = (isset($options['database'])) ? $options['database'] : null;
-		$options['select']   = (isset($options['select'])) ? $options['select'] : true;
+		$options['driver']   = isset($options['driver']) ? preg_replace('/[^A-Z0-9_\.-]/i', '', $options['driver']) : 'mysqli';
+		$options['database'] = isset($options['database']) ? $options['database'] : null;
+		$options['select']   = isset($options['select']) ? $options['select'] : true;
 
 		// Get the options signature for the database connector.
 		$signature = md5(serialize($options));
@@ -397,7 +397,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 						if ($comment && $start < $i)
 						{
-							$query .= substr($sql, $start, ($i - $start));
+							$query .= substr($sql, $start, $i - $start);
 						}
 					}
 				}
@@ -412,7 +412,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			{
 				if ($start <= $i)
 				{
-					$query .= substr($sql, $start, ($i - $start + 1));
+					$query .= substr($sql, $start, $i - $start + 1);
 				}
 
 				$query = trim($query);
@@ -502,9 +502,9 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	public function __construct($options)
 	{
 		// Initialise object variables.
-		$this->database = (isset($options['database'])) ? $options['database'] : '';
+		$this->database = isset($options['database']) ? $options['database'] : '';
 
-		$this->tablePrefix = (isset($options['prefix'])) ? $options['prefix'] : 'jos_';
+		$this->tablePrefix = isset($options['prefix']) ? $options['prefix'] : 'jos_';
 		$this->count = 0;
 		$this->errorNum = 0;
 
@@ -1151,7 +1151,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		// Get all of the rows from the result set.
 		while ($row = $this->fetchAssoc($cursor))
 		{
-			$value = ($column) ? (isset($row[$column]) ? $row[$column] : $row) : $row;
+			$value = $column ? (isset($row[$column]) ? $row[$column] : $row) : $row;
 
 			if ($key)
 			{
