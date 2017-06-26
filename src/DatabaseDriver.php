@@ -397,7 +397,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 						if ($comment && $start < $i)
 						{
-							$query = $query . substr($sql, $start, ($i - $start));
+							$query .= substr($sql, $start, ($i - $start));
 						}
 					}
 				}
@@ -412,7 +412,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			{
 				if ($start <= $i)
 				{
-					$query = $query . substr($sql, $start, ($i - $start + 1));
+					$query .= substr($sql, $start, ($i - $start + 1));
 				}
 
 				$query = trim($query);
@@ -421,7 +421,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 				{
 					if (($i == $end - 1) && ($current != ';'))
 					{
-						$query = $query . ';';
+						$query .= ';';
 					}
 
 					$queries[] = $query;
