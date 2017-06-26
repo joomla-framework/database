@@ -1482,7 +1482,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 			if (!is_null($as))
 			{
-				settype($as, 'array');
+				$as       = (array) $as;
 				$quotedAs .= ' AS ' . $this->quoteNameStr($as);
 			}
 

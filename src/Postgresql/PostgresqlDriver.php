@@ -1146,7 +1146,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	protected function fetchArray($cursor = null)
 	{
-		return pg_fetch_row($cursor ? $cursor : $this->cursor);
+		return pg_fetch_row($cursor ?: $this->cursor);
 	}
 
 	/**
@@ -1160,7 +1160,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	protected function fetchAssoc($cursor = null)
 	{
-		return pg_fetch_assoc($cursor ? $cursor : $this->cursor);
+		return pg_fetch_assoc($cursor ?: $this->cursor);
 	}
 
 	/**
