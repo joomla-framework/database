@@ -149,7 +149,7 @@ class SqliteDriver extends PdoDriver
 		$this->connect();
 
 		// Sanitize input to an array and iterate over the list.
-        $tables = (array) $tables;
+		$tables = (array) $tables;
 
 		return $tables;
 	}
