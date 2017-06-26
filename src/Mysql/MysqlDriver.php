@@ -355,9 +355,7 @@ class MysqlDriver extends PdoDriver
 		// Get the details columns information.
 		$this->setQuery('SHOW KEYS FROM ' . $this->quoteName($table));
 
-		$keys = $this->loadObjectList();
-
-		return $keys;
+		return $this->loadObjectList();
 	}
 
 	/**
@@ -374,9 +372,8 @@ class MysqlDriver extends PdoDriver
 
 		// Set the query to get the tables statement.
 		$this->setQuery('SHOW TABLES');
-		$tables = $this->loadColumn();
 
-		return $tables;
+		return $this->loadColumn();
 	}
 
 	/**

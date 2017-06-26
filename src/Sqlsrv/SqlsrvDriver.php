@@ -469,9 +469,8 @@ class SqlsrvDriver extends DatabaseDriver
 
 		// Set the query to get the tables statement.
 		$this->setQuery('SELECT name FROM ' . $this->getDatabase() . '.sys.Tables WHERE type = \'U\';');
-		$tables = $this->loadColumn();
 
-		return $tables;
+		return $this->loadColumn();
 	}
 
 	/**

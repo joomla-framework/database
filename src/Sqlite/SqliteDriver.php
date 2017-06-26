@@ -278,9 +278,7 @@ class SqliteDriver extends PdoDriver
 
 		$this->setQuery($query);
 
-		$tables = $this->loadColumn();
-
-		return $tables;
+		return $this->loadColumn();
 	}
 
 	/**

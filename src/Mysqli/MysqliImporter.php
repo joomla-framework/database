@@ -348,9 +348,7 @@ class MysqliImporter extends DatabaseImporter
 	 */
 	protected function getDropPrimaryKeySql($table)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP PRIMARY KEY';
-
-		return $sql;
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP PRIMARY KEY';
 	}
 
 	/**

@@ -543,9 +543,8 @@ class PostgresqlDriver extends DatabaseDriver
 				LEFT JOIN pg_index AS pgIndex ON pgClassFirst.oid=pgIndex.indexrelid
 				WHERE tablename=' . $this->quote($table) . ' ORDER BY indkey'
 			);
-			$keys = $this->loadObjectList();
 
-			return $keys;
+			return $this->loadObjectList();
 		}
 
 		return false;
@@ -573,9 +572,8 @@ class PostgresqlDriver extends DatabaseDriver
 			->order('table_name ASC');
 
 		$this->setQuery($query);
-		$tables = $this->loadColumn();
 
-		return $tables;
+		return $this->loadColumn();
 	}
 
 	/**
@@ -619,9 +617,8 @@ class PostgresqlDriver extends DatabaseDriver
 				->leftJoin('information_schema.sequences AS info ON info.sequence_name=s.relname')
 				->where("s.relkind='S' AND d.deptype='a' AND t.relname=" . $this->quote($table));
 			$this->setQuery($query);
-			$seq = $this->loadObjectList();
 
-			return $seq;
+			return $this->loadObjectList();
 		}
 
 		return false;
@@ -1312,9 +1309,8 @@ class PostgresqlDriver extends DatabaseDriver
 			);
 
 		$this->setQuery($query);
-		$tableList = $this->loadColumn();
 
-		return $tableList;
+		return $this->loadColumn();
 	}
 
 	/**
