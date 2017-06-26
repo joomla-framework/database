@@ -1898,5 +1898,5 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public abstract function unlockTables();
+	abstract public function unlockTables();
 }
