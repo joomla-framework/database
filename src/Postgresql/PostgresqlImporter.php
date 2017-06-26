@@ -244,9 +244,7 @@ class PostgresqlImporter extends DatabaseImporter
 	 */
 	protected function getDropSequenceSql($name)
 	{
-		$sql = 'DROP SEQUENCE ' . $this->db->quoteName($name);
-
-		return $sql;
+		return 'DROP SEQUENCE ' . $this->db->quoteName($name);
 	}
 
 	/**
@@ -445,9 +443,7 @@ class PostgresqlImporter extends DatabaseImporter
 	 */
 	protected function getDropIndexSql($name)
 	{
-		$sql = 'DROP INDEX ' . $this->db->quoteName($name);
-
-		return $sql;
+		return 'DROP INDEX ' . $this->db->quoteName($name);
 	}
 
 	/**

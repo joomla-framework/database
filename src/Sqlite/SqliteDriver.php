@@ -199,9 +199,9 @@ class SqliteDriver extends PdoDriver
 				$columns[$field->NAME] = (object) array(
 					'Field'   => $field->NAME,
 					'Type'    => $field->TYPE,
-					'Null'    => ($field->NOTNULL == '1' ? 'NO' : 'YES'),
+					'Null'    => $field->NOTNULL == '1' ? 'NO' : 'YES',
 					'Default' => $field->DFLT_VALUE,
-					'Key'     => ($field->PK != '0' ? 'PRI' : ''),
+					'Key'     => $field->PK != '0' ? 'PRI' : '',
 				);
 			}
 		}
@@ -278,9 +278,7 @@ class SqliteDriver extends PdoDriver
 
 		$this->setQuery($query);
 
-		$tables = $this->loadColumn();
-
-		return $tables;
+		return $this->loadColumn();
 	}
 
 	/**

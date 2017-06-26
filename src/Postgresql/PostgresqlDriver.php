@@ -109,11 +109,11 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	public function __construct( $options )
 	{
-		$options['host'] = (isset($options['host'])) ? $options['host'] : 'localhost';
-		$options['user'] = (isset($options['user'])) ? $options['user'] : '';
-		$options['password'] = (isset($options['password'])) ? $options['password'] : '';
-		$options['database'] = (isset($options['database'])) ? $options['database'] : '';
-		$options['port'] = (isset($options['port'])) ? $options['port'] : null;
+		$options['host']     = isset($options['host']) ? $options['host'] : 'localhost';
+		$options['user']     = isset($options['user']) ? $options['user'] : '';
+		$options['password'] = isset($options['password']) ? $options['password'] : '';
+		$options['database'] = isset($options['database']) ? $options['database'] : '';
+		$options['port']     = isset($options['port']) ? $options['port'] : null;
 
 		// Finalize initialization
 		parent::__construct($options);
@@ -156,7 +156,7 @@ class PostgresqlDriver extends DatabaseDriver
 		 */
 
 		// Check for empty port
-		if (!($this->options['port']))
+		if (!$this->options['port'])
 		{
 			// Port is empty or not set via options, check for port annotation (:) in the host string
 			$tmp = substr(strstr($this->options['host'], ':'), 1);
@@ -486,13 +486,13 @@ class PostgresqlDriver extends DatabaseDriver
 				// @todo: Come up with and implement a standard across databases.
 				$result[$field->column_name] = (object) array(
 					'column_name' => $field->column_name,
-					'type' => $field->type,
-					'null' => $field->null,
-					'Default' => $field->Default,
-					'comments' => '',
-					'Field' => $field->column_name,
-					'Type' => $field->type,
-					'Null' => $field->null,
+					'type'        => $field->type,
+					'null'        => $field->null,
+					'Default'     => $field->Default,
+					'comments'    => '',
+					'Field'       => $field->column_name,
+					'Type'        => $field->type,
+					'Null'        => $field->null,
 					// @todo: Improve query above to return primary key info as well
 					// 'Key' => ($field->PK == '1' ? 'PRI' : '')
 				);
@@ -543,9 +543,8 @@ class PostgresqlDriver extends DatabaseDriver
 				LEFT JOIN pg_index AS pgIndex ON pgClassFirst.oid=pgIndex.indexrelid
 				WHERE tablename=' . $this->quote($table) . ' ORDER BY indkey'
 			);
-			$keys = $this->loadObjectList();
 
-			return $keys;
+			return $this->loadObjectList();
 		}
 
 		return false;
@@ -573,9 +572,8 @@ class PostgresqlDriver extends DatabaseDriver
 			->order('table_name ASC');
 
 		$this->setQuery($query);
-		$tables = $this->loadColumn();
 
-		return $tables;
+		return $this->loadColumn();
 	}
 
 	/**
@@ -619,9 +617,8 @@ class PostgresqlDriver extends DatabaseDriver
 				->leftJoin('information_schema.sequences AS info ON info.sequence_name=s.relname')
 				->where("s.relkind='S' AND d.deptype='a' AND t.relname=" . $this->quote($table));
 			$this->setQuery($query);
-			$seq = $this->loadObjectList();
 
-			return $seq;
+			return $this->loadObjectList();
 		}
 
 		return false;
@@ -676,7 +673,7 @@ class PostgresqlDriver extends DatabaseDriver
 	{
 		$this->connect();
 		$insertQuery = $this->getQuery(false, true);
-		$table = $insertQuery->insert->getElements();
+		$table       = $insertQuery->insert->getElements();
 
 		/* find sequence column name */
 		$colNameQuery = $this->getQuery(true);
@@ -690,7 +687,7 @@ class PostgresqlDriver extends DatabaseDriver
 			->where("column_default LIKE '%nextval%'");
 
 		$this->setQuery($colNameQuery);
-		$colName = $this->loadRow();
+		$colName        = $this->loadRow();
 		$changedColName = str_replace('nextval', 'currval', $colName);
 
 		$insertidQuery = $this->getQuery(true);
@@ -1289,7 +1286,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	public static function isSupported()
 	{
-		return (function_exists('pg_connect'));
+		return function_exists('pg_connect');
 	}
 
 	/**
@@ -1312,9 +1309,8 @@ class PostgresqlDriver extends DatabaseDriver
 			);
 
 		$this->setQuery($query);
-		$tableList = $this->loadColumn();
 
-		return $tableList;
+		return $this->loadColumn();
 	}
 
 	/**

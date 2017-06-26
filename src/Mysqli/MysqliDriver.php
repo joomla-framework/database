@@ -103,14 +103,14 @@ class MysqliDriver extends DatabaseDriver
 	public function __construct($options)
 	{
 		// Get some basic values from the options.
-		$options['host']     = (isset($options['host'])) ? $options['host'] : 'localhost';
-		$options['user']     = (isset($options['user'])) ? $options['user'] : 'root';
-		$options['password'] = (isset($options['password'])) ? $options['password'] : '';
-		$options['database'] = (isset($options['database'])) ? $options['database'] : '';
-		$options['select']   = (isset($options['select'])) ? (bool) $options['select'] : true;
-		$options['port']     = (isset($options['port'])) ? (int) $options['port'] : null;
-		$options['socket']   = (isset($options['socket'])) ? $options['socket'] : null;
-		$options['utf8mb4']  = (isset($options['utf8mb4'])) ? (bool) $options['utf8mb4'] : false;
+		$options['host']     = isset($options['host']) ? $options['host'] : 'localhost';
+		$options['user']     = isset($options['user']) ? $options['user'] : 'root';
+		$options['password'] = isset($options['password']) ? $options['password'] : '';
+		$options['database'] = isset($options['database']) ? $options['database'] : '';
+		$options['select']   = isset($options['select']) ? (bool) $options['select'] : true;
+		$options['port']     = isset($options['port']) ? (int) $options['port'] : null;
+		$options['socket']   = isset($options['socket']) ? $options['socket'] : null;
+		$options['utf8mb4']  = isset($options['utf8mb4']) ? (bool) $options['utf8mb4'] : false;
 
 		// Finalize initialisation.
 		parent::__construct($options);
@@ -506,9 +506,8 @@ class MysqliDriver extends DatabaseDriver
 
 		// Get the details columns information.
 		$this->setQuery('SHOW KEYS FROM ' . $this->quoteName($table));
-		$keys = $this->loadObjectList();
 
-		return $keys;
+		return $this->loadObjectList();
 	}
 
 	/**
@@ -525,9 +524,8 @@ class MysqliDriver extends DatabaseDriver
 
 		// Set the query to get the tables statement.
 		$this->setQuery('SHOW TABLES');
-		$tables = $this->loadColumn();
 
-		return $tables;
+		return $this->loadColumn();
 	}
 
 	/**
