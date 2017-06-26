@@ -637,7 +637,7 @@ class MysqliDriver extends DatabaseDriver
 					$bindParams = array();
 					$bindParams[] = &$typeString;
 
-					for ($i = 0; $i < count($params); $i++)
+					for ($i = 0, $iMax = count($params); $i < $iMax; $i++)
 					{
 						$bindParams[] = &$params[$i];
 					}

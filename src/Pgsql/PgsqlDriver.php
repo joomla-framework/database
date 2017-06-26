@@ -821,7 +821,7 @@ class PgsqlDriver extends PdoDriver
 			{
 				$sql = explode('currval', $sql);
 
-				for ($nIndex = 1; $nIndex < count($sql); $nIndex = $nIndex + 2)
+				for ($nIndex = 1, $nIndexMax = count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -834,7 +834,7 @@ class PgsqlDriver extends PdoDriver
 			{
 				$sql = explode('nextval', $sql);
 
-				for ($nIndex = 1; $nIndex < count($sql); $nIndex = $nIndex + 2)
+				for ($nIndex = 1, $nIndexMax = count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -847,7 +847,7 @@ class PgsqlDriver extends PdoDriver
 			{
 				$sql = explode('setval', $sql);
 
-				for ($nIndex = 1; $nIndex < count($sql); $nIndex = $nIndex + 2)
+				for ($nIndex = 1, $nIndexMax = count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -857,7 +857,7 @@ class PgsqlDriver extends PdoDriver
 
 			$explodedQuery = explode('\'', $sql);
 
-			for ($nIndex = 0; $nIndex < count($explodedQuery); $nIndex = $nIndex + 2)
+			for ($nIndex = 0, $nIndexMax = count($explodedQuery); $nIndex < $nIndexMax; $nIndex += 2)
 			{
 				if (strpos($explodedQuery[$nIndex], $prefix))
 				{
