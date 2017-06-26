@@ -322,7 +322,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 
 			foreach ($tmpCols as $name => $tmpColType)
 			{
-				array_push($cols, $alias . "." . $name);
+				$cols[] = $alias . "." . $name;
 			}
 		}
 
