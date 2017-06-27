@@ -997,6 +997,10 @@ class PostgresqlDriver extends DatabaseDriver
 			case 'boolean':
 				$val = 'NULL';
 
+				// Todo: I am no PostGresql expert, but this if/else check seems wrong to me. Check.
+				var_dump($field_name);
+				var_dump($field_value);
+
 				if ($field_value == 't')
 				{
 					$val = 'TRUE';
