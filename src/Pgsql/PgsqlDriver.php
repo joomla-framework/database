@@ -490,11 +490,11 @@ class PgsqlDriver extends PdoDriver
 			case 'boolean':
 				$val = 'NULL';
 
-				if ($field_value === 't')
+				if ($field_value == 't')
 				{
 					$val = 'TRUE';
 				}
-				elseif ($field_value === 'f')
+				elseif ($field_value == 'f')
 				{
 					$val = 'FALSE';
 				}
@@ -651,7 +651,7 @@ class PgsqlDriver extends PdoDriver
 			}
 
 			// Ignore any internal fields or primary keys with value 0.
-			if (($k[0] === '_') || ($k == $key && (($v === 0) || ($v === '0'))))
+			if (($k[0] == '_') || ($k == $key && (($v === 0) || ($v === '0'))))
 			{
 				continue;
 			}
@@ -932,7 +932,7 @@ class PgsqlDriver extends PdoDriver
 			}
 
 			// Only process scalars that are not internal fields.
-			if (is_array($v) or is_object($v) or $k[0] === '_')
+			if (is_array($v) or is_object($v) or $k[0] == '_')
 			{
 				continue;
 			}
