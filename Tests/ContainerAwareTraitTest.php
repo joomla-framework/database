@@ -95,7 +95,7 @@ class ContainerAwareTraitTest extends TestCase
 		$refProp->setValue($this->object, new Container);
 
 		$this->assertInstanceOf(
-			Container::class,
+			'\\Joomla\\DI\\Container',
 			$this->object->getContainer(),
 			'Validates the Container object was set.'
 		);
@@ -119,7 +119,7 @@ class ContainerAwareTraitTest extends TestCase
 		$container = $refProp->getValue($this->object);
 
 		$this->assertInstanceOf(
-			Container::class,
+			'\\Joomla\\DI\\Container',
 			$container,
 			'Validates a Container object was retrieved.'
 		);
