@@ -465,21 +465,21 @@ class PostgresqlDriver extends DatabaseDriver
 		{
 			foreach ($fields as $field)
 			{
-				$result[$field->column_name] = preg_replace("/[(0-9)]/", '', $field->type);
+				$result[$field->column_name] = preg_replace('/[(0-9)]/', '', $field->type);
 			}
 		}
 		else
 		{
 			foreach ($fields as $field)
 			{
-				if (stristr(strtolower($field->type), "character varying"))
+				if (stristr(strtolower($field->type), 'character varying'))
 				{
-					$field->Default = "";
+					$field->Default = '';
 				}
 
-				if (stristr(strtolower($field->type), "text"))
+				if (stristr(strtolower($field->type), 'text'))
 				{
-					$field->Default = "";
+					$field->Default = '';
 				}
 
 				// Do some dirty translation to MySQL output.
@@ -502,7 +502,7 @@ class PostgresqlDriver extends DatabaseDriver
 		/* Change Postgresql's NULL::* type with PHP's null one */
 		foreach ($fields as $field)
 		{
-			if (preg_match("/^NULL::*/", $field->Default))
+			if (preg_match('/^NULL::*/', $field->Default))
 			{
 				$field->Default = null;
 			}
@@ -680,7 +680,7 @@ class PostgresqlDriver extends DatabaseDriver
 		$colNameQuery->select('column_default')
 			->from('information_schema.columns')
 			->where(
-				"table_name=" . $this->quote(
+				'table_name=' . $this->quote(
 					$this->replacePrefix(str_replace('"', '', $table[0]))
 				), 'AND'
 			)
@@ -1229,7 +1229,7 @@ class PostgresqlDriver extends DatabaseDriver
 			}
 
 			// Ignore any internal fields or primary keys with value 0.
-			if (($k[0] == "_") || ($k == $key && (($v === 0) || ($v === '0'))))
+			if (($k[0] == '_') || ($k == $key && (($v === 0) || ($v === '0'))))
 			{
 				continue;
 			}
@@ -1601,7 +1601,7 @@ class PostgresqlDriver extends DatabaseDriver
 		}
 
 		// Set the query and execute the update.
-		$this->setQuery(sprintf($statement, implode(",", $fields), implode(' AND ', $where)));
+		$this->setQuery(sprintf($statement, implode(',', $fields), implode(' AND ', $where)));
 
 		return $this->execute();
 	}

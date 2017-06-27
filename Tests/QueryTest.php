@@ -62,7 +62,7 @@ class QueryTest extends TestCase
 		return array(
 			// @todo quoted, expected
 			array(true, "'_0000-00-00 00:00:00_'"),
-			array(false, "0000-00-00 00:00:00"),
+			array(false, '0000-00-00 00:00:00'),
 		);
 	}
 
@@ -150,8 +150,8 @@ class QueryTest extends TestCase
 		$this->assertThat(
 			(string) $this->instance,
 			$this->equalTo(
-				PHP_EOL . "SELECT col" . PHP_EOL .
-				"FROM ( " . PHP_EOL . "SELECT col2" . PHP_EOL . "FROM table" . PHP_EOL . "WHERE a=1 ) AS `alias`"
+				PHP_EOL . 'SELECT col' . PHP_EOL .
+				'FROM ( ' . PHP_EOL . 'SELECT col2' . PHP_EOL . 'FROM table' . PHP_EOL . 'WHERE a=1 ) AS `alias`'
 			)
 		);
 	}
@@ -172,14 +172,14 @@ class QueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $this->instance,
-			$this->equalTo(PHP_EOL . "INSERT INTO table" . PHP_EOL . "(col)" . PHP_EOL . "(" . PHP_EOL . "SELECT col2" . PHP_EOL . "WHERE a=1)")
+			$this->equalTo(PHP_EOL . 'INSERT INTO table' . PHP_EOL . '(col)' . PHP_EOL . '(' . PHP_EOL . 'SELECT col2' . PHP_EOL . 'WHERE a=1)')
 		);
 
 		$this->instance->clear();
 		$this->instance->insert('table')->columns('col')->values('3');
 		$this->assertThat(
 			(string) $this->instance,
-			$this->equalTo(PHP_EOL . "INSERT INTO table" . PHP_EOL . "(col) VALUES " . PHP_EOL . "(3)")
+			$this->equalTo(PHP_EOL . 'INSERT INTO table' . PHP_EOL . '(col) VALUES ' . PHP_EOL . '(3)')
 		);
 	}
 
@@ -196,7 +196,7 @@ class QueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $this->instance,
-			$this->equalTo(PHP_EOL . "SELECT YEAR(`col`)" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT YEAR(`col`)' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -213,7 +213,7 @@ class QueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $this->instance,
-			$this->equalTo(PHP_EOL . "SELECT MONTH(`col`)" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT MONTH(`col`)' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -230,7 +230,7 @@ class QueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $this->instance,
-			$this->equalTo(PHP_EOL . "SELECT DAY(`col`)" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT DAY(`col`)' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -247,7 +247,7 @@ class QueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $this->instance,
-			$this->equalTo(PHP_EOL . "SELECT HOUR(`col`)" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT HOUR(`col`)' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -264,7 +264,7 @@ class QueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $this->instance,
-			$this->equalTo(PHP_EOL . "SELECT MINUTE(`col`)" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT MINUTE(`col`)' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -281,7 +281,7 @@ class QueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $this->instance,
-			$this->equalTo(PHP_EOL . "SELECT SECOND(`col`)" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT SECOND(`col`)' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -305,13 +305,13 @@ class QueryTest extends TestCase
 		$this->assertThat(
 			(string) $this->instance,
 			$this->equalTo(
-				PHP_EOL . "SELECT a.id" .
-					PHP_EOL . "FROM a" .
-					PHP_EOL . "INNER JOIN b ON b.id = a.id" .
-					PHP_EOL . "WHERE b.id = 1" .
-					PHP_EOL . "GROUP BY a.id" .
-					PHP_EOL . "HAVING COUNT(a.id) > 3" .
-					PHP_EOL . "ORDER BY a.id"
+				PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'GROUP BY a.id' .
+					PHP_EOL . 'HAVING COUNT(a.id) > 3' .
+					PHP_EOL . 'ORDER BY a.id'
 			),
 			'Tests for correct rendering.'
 		);
@@ -334,10 +334,10 @@ class QueryTest extends TestCase
 		$this->assertThat(
 			(string) $this->instance,
 			$this->equalTo(
-				PHP_EOL . "UPDATE #__foo AS a" .
-					PHP_EOL . "INNER JOIN b ON b.id = a.id" .
-					PHP_EOL . "SET a.id = 2" .
-					PHP_EOL . "WHERE b.id = 1"
+				PHP_EOL . 'UPDATE #__foo AS a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'SET a.id = 2' .
+					PHP_EOL . 'WHERE b.id = 1'
 			),
 			'Tests for correct rendering.'
 		);
@@ -357,7 +357,7 @@ class QueryTest extends TestCase
 		$this->instance->select('*')
 			->union('SELECT id FROM a');
 
-		$this->assertEquals("UNION (SELECT id FROM a)", trim($this->instance));
+		$this->assertEquals('UNION (SELECT id FROM a)', trim($this->instance));
 	}
 
 	/**
@@ -788,7 +788,7 @@ class QueryTest extends TestCase
 			$this->instance->dump(),
 			$this->equalTo(
 				'<pre class="jdatabasequery">' .
-					PHP_EOL . "SELECT *" . PHP_EOL . "FROM foo" .
+					PHP_EOL . 'SELECT *' . PHP_EOL . 'FROM foo' .
 					'</pre>'
 			),
 			'Tests that the dump method replaces the prefix correctly.'
@@ -1259,8 +1259,8 @@ class QueryTest extends TestCase
 	public function testQuoteName()
 	{
 		$this->assertThat(
-			$this->instance->quoteName("test"),
-			$this->equalTo("`test`"),
+			$this->instance->quoteName('test'),
+			$this->equalTo('`test`'),
 			'The quoteName method should be a proxy for the JDatabase::escape method.'
 		);
 	}
@@ -1383,7 +1383,7 @@ class QueryTest extends TestCase
 		);
 
 		$this->instance->set('bar = 2');
-		$this->assertEquals("SET foo = 1" . PHP_EOL . "\t, bar = 2", trim(TestHelper::getValue($this->instance, 'set')), 'Tests appending with set().');
+		$this->assertEquals('SET foo = 1' . PHP_EOL . "\t, bar = 2", trim(TestHelper::getValue($this->instance, 'set')), 'Tests appending with set().');
 
 		// Clear the set.
 		TestHelper::setValue($this->instance, 'set', null);
@@ -1396,7 +1396,7 @@ class QueryTest extends TestCase
 
 		$this->assertThat(
 			trim(TestHelper::getValue($this->instance, 'set')),
-			$this->identicalTo("SET foo = 1" . PHP_EOL . "\t, bar = 2"),
+			$this->identicalTo('SET foo = 1' . PHP_EOL . "\t, bar = 2"),
 			'Tests set with an array.'
 		);
 
@@ -1412,7 +1412,7 @@ class QueryTest extends TestCase
 
 		$this->assertThat(
 			trim(TestHelper::getValue($this->instance, 'set')),
-			$this->identicalTo("SET foo = 1" . PHP_EOL . "\t; bar = 2"),
+			$this->identicalTo('SET foo = 1' . PHP_EOL . "\t; bar = 2"),
 			'Tests set with an array and glue.'
 		);
 	}
@@ -1832,7 +1832,7 @@ class QueryTest extends TestCase
 		$teststring = (string) TestHelper::getValue($this->instance, 'union');
 		$this->assertThat(
 			$teststring,
-			$this->equalTo(PHP_EOL . "UNION (SELECT name FROM foo)"),
+			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)'),
 			'Tests rendered query with union.'
 		);
 	}
@@ -1852,7 +1852,7 @@ class QueryTest extends TestCase
 		$teststring = (string) TestHelper::getValue($this->instance, 'union');
 		$this->assertThat(
 			$teststring,
-			$this->equalTo(PHP_EOL . "UNION DISTINCT (SELECT name FROM foo)"),
+			$this->equalTo(PHP_EOL . 'UNION DISTINCT (SELECT name FROM foo)'),
 			'Tests rendered query with union distinct as a string.'
 		);
 	}
@@ -1872,7 +1872,7 @@ class QueryTest extends TestCase
 		$teststring = (string) TestHelper::getValue($this->instance, 'union');
 		$this->assertThat(
 			$teststring,
-			$this->equalTo(PHP_EOL . "UNION DISTINCT (SELECT name FROM foo)"),
+			$this->equalTo(PHP_EOL . 'UNION DISTINCT (SELECT name FROM foo)'),
 			'Tests rendered query with union distinct true.'
 		);
 	}
@@ -1892,7 +1892,7 @@ class QueryTest extends TestCase
 		$teststring = (string) TestHelper::getValue($this->instance, 'union');
 		$this->assertThat(
 			$teststring,
-			$this->equalTo(PHP_EOL . "UNION (SELECT name FROM foo)"),
+			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)'),
 			'Tests rendered query with union distinct false.'
 		);
 	}
@@ -1912,7 +1912,7 @@ class QueryTest extends TestCase
 		$teststring = (string) TestHelper::getValue($this->instance, 'union');
 		$this->assertThat(
 			$teststring,
-			$this->equalTo(PHP_EOL . "UNION (SELECT name FROM foo)" . PHP_EOL . "UNION (SELECT name FROM bar)"),
+			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)' . PHP_EOL . 'UNION (SELECT name FROM bar)'),
 			'Tests rendered query with two unions as an array.'
 		);
 	}
@@ -1933,7 +1933,7 @@ class QueryTest extends TestCase
 		$teststring = (string) TestHelper::getValue($this->instance, 'union');
 		$this->assertThat(
 			$teststring,
-			$this->equalTo(PHP_EOL . "UNION (SELECT name FROM foo)" . PHP_EOL . "UNION (SELECT name FROM bar)"),
+			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)' . PHP_EOL . 'UNION (SELECT name FROM bar)'),
 			'Tests rendered query with two unions sequentially.'
 		);
 	}
@@ -1953,7 +1953,7 @@ class QueryTest extends TestCase
 		$teststring = (string) TestHelper::getValue($this->instance, 'union');
 		$this->assertThat(
 			trim($teststring),
-			$this->equalTo("UNION DISTINCT (SELECT name FROM foo)"),
+			$this->equalTo('UNION DISTINCT (SELECT name FROM foo)'),
 			'Tests rendered query with unionDistinct.'
 		);
 	}
@@ -1973,7 +1973,7 @@ class QueryTest extends TestCase
 		$teststring = (string) TestHelper::getValue($this->instance, 'union');
 		$this->assertThat(
 			$teststring,
-			$this->equalTo(PHP_EOL . "UNION DISTINCT (SELECT name FROM foo)" . PHP_EOL . "UNION DISTINCT (SELECT name FROM bar)"),
+			$this->equalTo(PHP_EOL . 'UNION DISTINCT (SELECT name FROM foo)' . PHP_EOL . 'UNION DISTINCT (SELECT name FROM bar)'),
 			'Tests rendered query with two unions distinct.'
 		);
 	}

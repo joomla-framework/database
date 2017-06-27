@@ -419,7 +419,7 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			// Get the error number and message before we execute any more queries.
 			$errorNum = (int) $this->connection->errorCode();
-			$errorMsg = (string) 'SQL: ' . implode(", ", $this->connection->errorInfo());
+			$errorMsg = (string) 'SQL: ' . implode(', ', $this->connection->errorInfo());
 
 			// Check if the server was disconnected.
 			if (!$this->connected())
@@ -435,7 +435,7 @@ abstract class PdoDriver extends DatabaseDriver
 				{
 					// Get the error number and message.
 					$this->errorNum = (int) $this->connection->errorCode();
-					$this->errorMsg = (string) 'SQL: ' . implode(", ", $this->connection->errorInfo());
+					$this->errorMsg = (string) 'SQL: ' . implode(', ', $this->connection->errorInfo());
 
 					$this->log(
 						Log\LogLevel::ERROR,
