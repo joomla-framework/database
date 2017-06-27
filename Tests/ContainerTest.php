@@ -10,7 +10,7 @@ use Joomla\DI\Container;
 use PHPUnit\Framework\TestCase;
 use Joomla\DI\ServiceProviderInterface;
 
-include_once __DIR__.'Stubs/stubs.php';
+include_once __DIR__ . 'Stubs/stubs.php';
 
 /**
  * Tests for Container class.
