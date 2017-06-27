@@ -490,18 +490,15 @@ class PgsqlDriver extends PdoDriver
 			case 'boolean':
 				$val = 'NULL';
 
-				// Todo: I am no PostGresql expert, but this if/else check seems wrong to me. Check.
-				var_dump($field_name);
-				var_dump($field_value);
-
-				if ($field_value == 't')
+				if ($field_value === 't' || $field_value === true || $field_value === 1 || $field_value ==='1')
 				{
 					$val = 'TRUE';
 				}
-				elseif ($field_value == 'f')
+				elseif ($field_value === 'f' || $field_value === false || $field_value === 0 || $field_value ==='0')
 				{
 					$val = 'FALSE';
 				}
+
 				break;
 
 			case 'bigint':
