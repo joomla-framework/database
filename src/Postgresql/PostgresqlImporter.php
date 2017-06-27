@@ -342,7 +342,7 @@ class PostgresqlImporter extends DatabaseImporter
 		$fName = (string) $field['Field'];
 		$fType = (string) $field['Type'];
 		$fNull = (string) $field['Null'];
-		$fDefault = (isset($field['Default']) && $field['Default'] !== 'NULL' ) ?
+		$fDefault = (isset($field['Default']) && $field['Default'] != 'NULL' ) ?
 					preg_match('/^[0-9]$/', $field['Default']) ? $field['Default'] : $this->db->quote((string) $field['Default'])
 					: null;
 
@@ -350,7 +350,7 @@ class PostgresqlImporter extends DatabaseImporter
 
 		if ($fNull === 'NO')
 		{
-			if (in_array($fType, $blobs) || $fDefault === null)
+			if (in_array($fType, $blobs, true) || $fDefault == null)
 			{
 				$sql .= ",\nALTER COLUMN " . $this->db->quoteName($fName) . ' SET NOT NULL'
 					. ",\nALTER COLUMN " . $this->db->quoteName($fName) . ' DROP DEFAULT';
@@ -396,7 +396,7 @@ class PostgresqlImporter extends DatabaseImporter
 		$fName = (string) $field['Field'];
 		$fType = (string) $field['Type'];
 		$fNull = (string) $field['Null'];
-		$fDefault = (isset($field['Default']) && $field['Default'] !== 'NULL' ) ?
+		$fDefault = (isset($field['Default']) && $field['Default'] != 'NULL' ) ?
 					preg_match('/^[0-9]$/', $field['Default']) ? $field['Default'] : $this->db->quote((string) $field['Default'])
 					: null;
 
