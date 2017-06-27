@@ -490,11 +490,11 @@ class PgsqlDriver extends PdoDriver
 			case 'boolean':
 				$val = 'NULL';
 
-				if ($field_value === 't' || $field_value === true || $field_value === 1 || $field_value ==='1')
+				if ($field_value === 't' || $field_value === true || $field_value === 1 || $field_value === '1')
 				{
 					$val = 'TRUE';
 				}
-				elseif ($field_value === 'f' || $field_value === false || $field_value === 0 || $field_value ==='0')
+				elseif ($field_value === 'f' || $field_value === false || $field_value === 0 || $field_value === '0')
 				{
 					$val = 'FALSE';
 				}
