@@ -509,7 +509,7 @@ class PgsqlDriver extends PdoDriver
 			case 'smallint':
 			case 'serial':
 			case 'numeric,':
-				$val = $field_value === '' ? 'NULL' : $field_value;
+				$val = $field_value == '' ? 'NULL' : $field_value;
 				break;
 
 			case 'date':
@@ -651,7 +651,7 @@ class PgsqlDriver extends PdoDriver
 			}
 
 			// Ignore any internal fields or primary keys with value 0.
-			if (($k[0] === '_') || ($k === $key && (($v === 0) || ($v === '0'))))
+			if (($k[0] === '_') || ($k == $key && (($v === 0) || ($v === '0'))))
 			{
 				continue;
 			}
