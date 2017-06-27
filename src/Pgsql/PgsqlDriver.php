@@ -490,11 +490,11 @@ class PgsqlDriver extends PdoDriver
 			case 'boolean':
 				$val = 'NULL';
 
-				if ($field_value == 't')
+				if ($field_value === 't')
 				{
 					$val = 'TRUE';
 				}
-				elseif ($field_value == 'f')
+				elseif ($field_value === 'f')
 				{
 					$val = 'FALSE';
 				}
@@ -509,7 +509,7 @@ class PgsqlDriver extends PdoDriver
 			case 'smallint':
 			case 'serial':
 			case 'numeric,':
-				$val = strlen($field_value) == 0 ? 'NULL' : $field_value;
+				$val = strlen($field_value) === 0 ? 'NULL' : $field_value;
 				break;
 
 			case 'date':
