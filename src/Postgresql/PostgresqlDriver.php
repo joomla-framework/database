@@ -1016,7 +1016,7 @@ class PostgresqlDriver extends DatabaseDriver
 			case 'smallint':
 			case 'serial':
 			case 'numeric,':
-				$val = strlen($field_value) === 0 ? 'NULL' : $field_value;
+				$val = strlen($field_value) == 0 ? 'NULL' : $field_value;
 				break;
 
 			case 'date':
