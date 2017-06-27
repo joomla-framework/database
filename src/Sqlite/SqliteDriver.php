@@ -292,7 +292,7 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$this->setQuery("SELECT sqlite_version()");
+		$this->setQuery('SELECT sqlite_version()');
 
 		return $this->loadResult();
 	}

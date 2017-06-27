@@ -402,29 +402,30 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	public function testGetTableList()
 	{
 		$expected = array(
-			"0" => "jos_assets",
-			"1" => "jos_categories",
-			"2" => "jos_content",
-			"3" => "jos_core_log_searches",
-			"4" => "jos_dbtest",
-			"5" => "jos_extensions",
-			"6" => "jos_languages",
-			"7" => "jos_log_entries",
-			"8" => "jos_menu",
-			"9" => "jos_menu_types",
-			"10" => "jos_modules",
-			"11" => "jos_modules_menu",
-			"12" => "jos_schemas",
-			"13" => "jos_session",
-			"14" => "jos_update_categories",
-			"15" => "jos_update_sites",
-			"16" => "jos_update_sites_extensions",
-			"17" => "jos_updates",
-			"18" => "jos_user_profiles",
-			"19" => "jos_user_usergroup_map",
-			"20" => "jos_usergroups",
-			"21" => "jos_users",
-			"22" => "jos_viewlevels");
+			'0'  => 'jos_assets',
+			'1'  => 'jos_categories',
+			'2'  => 'jos_content',
+			'3'  => 'jos_core_log_searches',
+			'4'  => 'jos_dbtest',
+			'5'  => 'jos_extensions',
+			'6'  => 'jos_languages',
+			'7'  => 'jos_log_entries',
+			'8'  => 'jos_menu',
+			'9'  => 'jos_menu_types',
+			'10' => 'jos_modules',
+			'11' => 'jos_modules_menu',
+			'12' => 'jos_schemas',
+			'13' => 'jos_session',
+			'14' => 'jos_update_categories',
+			'15' => 'jos_update_sites',
+			'16' => 'jos_update_sites_extensions',
+			'17' => 'jos_updates',
+			'18' => 'jos_user_profiles',
+			'19' => 'jos_user_usergroup_map',
+			'20' => 'jos_usergroups',
+			'21' => 'jos_users',
+			'22' => 'jos_viewlevels'
+		);
 
 		$result = self::$driver->getTableList();
 
@@ -521,9 +522,9 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		self::$driver->setQuery('TRUNCATE TABLE "jos_dbtest"')->execute();
 
 		$tst = new \stdClass;
-		$tst->title = "PostgreSQL test insertObject";
+		$tst->title = 'PostgreSQL test insertObject';
 		$tst->start_date = '2012-04-07 15:00:00';
-		$tst->description = "Test insertObject";
+		$tst->description = 'Test insertObject';
 
 		// Insert object without retrieving key
 		$ret = self::$driver->insertObject('#__dbtest', $tst);
@@ -541,9 +542,9 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 
 		// Insert object retrieving the key
 		$tstK = new \stdClass;
-		$tstK->title = "PostgreSQL test insertObject with key";
+		$tstK->title = 'PostgreSQL test insertObject with key';
 		$tstK->start_date = '2012-04-07 15:00:00';
-		$tstK->description = "Test insertObject with key";
+		$tstK->description = 'Test insertObject with key';
 		$retK = self::$driver->insertObject('#__dbtest', $tstK, 'id');
 
 		$this->assertThat($tstK->id, $this->equalTo(2), __LINE__);
@@ -851,10 +852,10 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		// Object containing fields of integer, character varying, timestamp and text type
 		$tst = new \stdClass;
 		$tst->id = '5';
-		$tst->charVar = "PostgreSQL test insertObject";
+		$tst->charVar = 'PostgreSQL test insertObject';
 		$tst->timeStamp = '2012-04-07 15:00:00';
 		$tst->nullDate = null;
-		$tst->txt = "Test insertObject";
+		$tst->txt = 'Test insertObject';
 		$tst->boolTrue = 't';
 		$tst->boolFalse = 'f';
 		$tst->num = '43.2';

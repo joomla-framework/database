@@ -717,11 +717,11 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	{
 		if (substr($interval, 0, 1) != '-')
 		{
-			return "timestamp '" . $date . "' + interval '" . $interval . " " . $datePart . "'";
+			return "timestamp '" . $date . "' + interval '" . $interval . ' ' . $datePart . "'";
 		}
 		else
 		{
-			return "timestamp '" . $date . "' - interval '" . ltrim($interval, '-') . " " . $datePart . "'";
+			return "timestamp '" . $date . "' - interval '" . ltrim($interval, '-') . ' ' . $datePart . "'";
 		}
 	}
 

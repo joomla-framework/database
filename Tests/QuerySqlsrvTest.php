@@ -35,7 +35,7 @@ class QuerySqlsrvTest extends TestCase
 		return array(
 			// Quoted, expected
 			array(true, "'_0000-00-00 00:00:00_'"),
-			array(false, "0000-00-00 00:00:00"),
+			array(false, '0000-00-00 00:00:00'),
 		);
 	}
 
@@ -151,13 +151,13 @@ class QuerySqlsrvTest extends TestCase
 		$this->assertThat(
 			(string) $q,
 			$this->equalTo(
-				PHP_EOL . "SELECT a.id" .
-				PHP_EOL . "FROM a" .
-				PHP_EOL . "INNER JOIN b ON b.id = a.id" .
-				PHP_EOL . "WHERE b.id = 1" .
-				PHP_EOL . "GROUP BY a.id" .
-				PHP_EOL . "HAVING COUNT(a.id) > 3" .
-				PHP_EOL . "ORDER BY a.id"
+				PHP_EOL . 'SELECT a.id' .
+				PHP_EOL . 'FROM a' .
+				PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+				PHP_EOL . 'WHERE b.id = 1' .
+				PHP_EOL . 'GROUP BY a.id' .
+				PHP_EOL . 'HAVING COUNT(a.id) > 3' .
+				PHP_EOL . 'ORDER BY a.id'
 			),
 			'Tests for correct rendering.'
 		);
@@ -182,10 +182,10 @@ class QuerySqlsrvTest extends TestCase
 		$this->assertThat(
 			(string) $q,
 			$this->equalTo(
-				PHP_EOL . "UPDATE #__foo AS a" .
-				PHP_EOL . "INNER JOIN b ON b.id = a.id" .
-				PHP_EOL . "SET a.id = 2" .
-				PHP_EOL . "WHERE b.id = 1"
+				PHP_EOL . 'UPDATE #__foo AS a' .
+				PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+				PHP_EOL . 'SET a.id = 2' .
+				PHP_EOL . 'WHERE b.id = 1'
 			),
 			'Tests for correct rendering.'
 		);
@@ -322,14 +322,14 @@ class QuerySqlsrvTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "INSERT INTO table" . PHP_EOL . "(col)VALUES " . PHP_EOL . "(" . PHP_EOL . "SELECT col2" . PHP_EOL . "WHERE a=1)")
+			$this->equalTo(PHP_EOL . 'INSERT INTO table' . PHP_EOL . '(col)VALUES ' . PHP_EOL . '(' . PHP_EOL . 'SELECT col2' . PHP_EOL . 'WHERE a=1)')
 		);
 
 		$q->clear();
 		$q->insert('table')->columns('col')->values('3');
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "INSERT INTO table" . PHP_EOL . "(col)VALUES " . PHP_EOL . "(3)")
+			$this->equalTo(PHP_EOL . 'INSERT INTO table' . PHP_EOL . '(col)VALUES ' . PHP_EOL . '(3)')
 		);
 	}
 
