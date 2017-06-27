@@ -715,7 +715,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 */
 	public function dateAdd($date, $interval, $datePart)
 	{
-		if (substr($interval, 0, 1) != '-')
+		if (substr($interval, 0, 1) !== '-')
 		{
 			return "timestamp '" . $date . "' + interval '" . $interval . ' ' . $datePart . "'";
 		}

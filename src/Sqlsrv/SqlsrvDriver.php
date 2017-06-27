@@ -528,13 +528,13 @@ class SqlsrvDriver extends DatabaseDriver
 				continue;
 			}
 
-			if ($k[0] == '_')
+			if ($k[0] === '_')
 			{
 				// Internal field
 				continue;
 			}
 
-			if ($k == $key && $key == 0)
+			if ($k === $key && $key == 0)
 			{
 				continue;
 			}
@@ -620,7 +620,7 @@ class SqlsrvDriver extends DatabaseDriver
 		$options = array();
 
 		// SQLSrv_num_rows requires a static or keyset cursor.
-		if (strncmp(strtoupper(ltrim($sql)), 'SELECT', strlen('SELECT')) == 0)
+		if (strncmp(strtoupper(ltrim($sql)), 'SELECT', strlen('SELECT')) === 0)
 		{
 			$options = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
 		}
@@ -771,7 +771,7 @@ class SqlsrvDriver extends DatabaseDriver
 
 				$l = $k - 1;
 
-				while ($l >= 0 && $sql{$l} == '\\')
+				while ($l >= 0 && $sql{$l} === '\\')
 				{
 					$l--;
 					$escaped = !$escaped;

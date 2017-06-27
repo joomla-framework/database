@@ -533,7 +533,7 @@ class QueryTest extends TestCase
 			// Check the state of the other clauses.
 			foreach ($clauses as $clause2)
 			{
-				if ($clause != $clause2)
+				if ($clause !== $clause2)
 				{
 					$this->assertThat(
 						TestHelper::getValue($q, $clause2),
@@ -1749,7 +1749,7 @@ class QueryTest extends TestCase
 		);
 
 		$this->assertFalse($baseElement === $cloneElement);
-		$this->assertTrue(count($cloneElement->testArray) == 0);
+		$this->assertTrue(count($cloneElement->testArray) === 0);
 	}
 
 	/**

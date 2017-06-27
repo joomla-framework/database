@@ -84,7 +84,7 @@ class MysqlDriver extends PdoDriver
 		 * and we cannot connect to it unless we know if it supports utf8mb4, which requires us knowing the server version. Because of this
 		 * chicken and egg issue, we _assume_ it's supported and we'll just catch any problems at connection time.
 		 */
-		$this->utf8mb4 = $options['charset'] == 'utf8mb4';
+		$this->utf8mb4 = $options['charset'] === 'utf8mb4';
 
 		// Finalize initialisation.
 		parent::__construct($options);

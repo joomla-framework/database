@@ -589,7 +589,7 @@ class DriverMysqlTest extends DatabaseMysqlCase
 
 		// Check name change
 		$tableList = self::$driver->getTableList();
-		$this->assertThat(in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
+		$this->assertThat(in_array($newTableName, $tableList, true), $this->isTrue(), __LINE__);
 
 		// Restore initial state
 		self::$driver->renameTable($newTableName, 'jos_dbtest');
