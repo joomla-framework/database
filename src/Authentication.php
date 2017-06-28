@@ -93,8 +93,6 @@ class Authentication
 	 */
 	public function authenticate($strategies = array())
 	{
-		$strategyObjects = array();
-
 		if (empty($strategies))
 		{
 			$strategyObjects = $this->strategies;
