@@ -47,7 +47,7 @@ class Simple implements PasswordInterface
 	 */
 	public function create($password, $type = null)
 	{
-		if ($type !== null)
+		if ($type === null)
 		{
 			$type = $this->defaultType;
 		}

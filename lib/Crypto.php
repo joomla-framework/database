@@ -495,9 +495,9 @@ class Crypto
         $info = self::hexToBytes('f0f1f2f3f4f5f6f7f8f9');
         $length = 42;
         $okm = self::hexToBytes(
-	        '3cb25f25faacd57a90434f64d0362f2a' .
-            '2d2d0a90cf1a5a4c5db02d56ecc4c5bf' .
-            '34007208d5b887185865'
+			'3cb25f25faacd57a90434f64d0362f2a' .
+			'2d2d0a90cf1a5a4c5db02d56ecc4c5bf' .
+			'34007208d5b887185865'
         );
         $computed_okm = self::HKDF('sha256', $ikm, $length, $info, $salt);
         if ($computed_okm !== $okm) {
@@ -508,9 +508,9 @@ class Crypto
         $ikm = str_repeat("\x0c", 22);
         $length = 42;
         $okm = self::hexToBytes(
-	        '2c91117204d745f3500d636a62f64f0a' .
-            'b3bae548aa53d423b0d1f27ebba6f5e5' .
-            '673a081d70cce7acfc48'
+			'2c91117204d745f3500d636a62f64f0a' .
+			'b3bae548aa53d423b0d1f27ebba6f5e5' .
+			'673a081d70cce7acfc48'
         );
         $computed_okm = self::HKDF('sha1', $ikm, $length);
         if ($computed_okm !== $okm) {
