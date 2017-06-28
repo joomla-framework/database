@@ -163,7 +163,7 @@ class Zip implements ExtractableInterface
 			throw new \RuntimeException('Archive does not exist');
 		}
 
-		if ($this->hasNativeSupport())
+		if (static::hasNativeSupport())
 		{
 			return $this->extractNative($archive, $destination);
 		}
@@ -291,12 +291,12 @@ class Zip implements ExtractableInterface
 		// Read files in the archive
 		while ($file = @zip_read($zip))
 		{
-			if (!zip_entry_open($zip, $file, "r"))
+			if (!zip_entry_open($zip, $file, 'r'))
 			{
 				throw new \RuntimeException('Unable to read entry');
 			}
 
-			if (substr(zip_entry_name($file), strlen(zip_entry_name($file)) - 1) != "/")
+			if (substr(zip_entry_name($file), strlen(zip_entry_name($file)) - 1) != '/')
 			{
 				$buffer = zip_entry_read($file, zip_entry_filesize($file));
 
@@ -379,7 +379,7 @@ class Zip implements ExtractableInterface
 
 			$entries[$name] = array(
 				'attr' => null,
-				'crc' => sprintf("%08s", dechex($info['CRC32'])),
+				'crc' => sprintf('%08s', dechex($info['CRC32'])),
 				'csize' => $info['Compressed'],
 				'date' => null,
 				'_dataStart' => null,
@@ -391,12 +391,12 @@ class Zip implements ExtractableInterface
 			);
 
 			$entries[$name]['date'] = mktime(
-				(($info['Time'] >> 11) & 0x1f),
-				(($info['Time'] >> 5) & 0x3f),
-				(($info['Time'] << 1) & 0x3e),
-				(($info['Time'] >> 21) & 0x07),
-				(($info['Time'] >> 16) & 0x1f),
-				((($info['Time'] >> 25) & 0x7f) + 1980)
+				($info['Time'] >> 11) & 0x1f,
+				($info['Time'] >> 5) & 0x3f,
+				($info['Time'] << 1) & 0x3e,
+				($info['Time'] >> 21) & 0x07,
+				($info['Time'] >> 16) & 0x1f,
+				(($info['Time'] >> 25) & 0x7f) + 1980
 			);
 
 			if ($dataLength < $fhStart + 43)
@@ -427,7 +427,7 @@ class Zip implements ExtractableInterface
 			@set_time_limit(ini_get('max_execution_time'));
 		}
 
-		while ((($fhStart = strpos($data, $this->ctrlDirHeader, $fhStart + 46)) !== false));
+		while (($fhStart = strpos($data, $this->ctrlDirHeader, $fhStart + 46)) !== false);
 
 		$this->metadata = array_values($entries);
 
@@ -479,7 +479,7 @@ class Zip implements ExtractableInterface
 	 */
 	protected function unix2DosTime($unixtime = null)
 	{
-		$timearray = (is_null($unixtime)) ? getdate() : getdate($unixtime);
+		$timearray = $unixtime === null ? getdate() : getdate($unixtime);
 
 		if ($timearray['year'] < 1980)
 		{
