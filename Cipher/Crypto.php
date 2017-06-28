@@ -30,7 +30,7 @@ class Cipher_Crypto implements CipherInterface
 	public function decrypt($data, Key $key)
 	{
 		// Validate key.
-		if ($key->type != 'crypto')
+		if ($key->type !== 'crypto')
 		{
 			throw new \InvalidArgumentException('Invalid key of type: ' . $key->type . '.  Expected crypto.');
 		}
@@ -69,7 +69,7 @@ class Cipher_Crypto implements CipherInterface
 	public function encrypt($data, Key $key)
 	{
 		// Validate key.
-		if ($key->type != 'crypto')
+		if ($key->type !== 'crypto')
 		{
 			throw new \InvalidArgumentException('Invalid key of type: ' . $key->type . '.  Expected crypto.');
 		}

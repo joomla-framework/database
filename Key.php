@@ -65,13 +65,11 @@ class Key
 	 */
 	public function __get($name)
 	{
-		if ($name == 'type')
+		if ($name === 'type')
 		{
 			return $this->type;
 		}
-		else
-		{
-			trigger_error('Cannot access property ' . __CLASS__ . '::' . $name, E_USER_WARNING);
-		}
+
+		trigger_error('Cannot access property ' . __CLASS__ . '::' . $name, E_USER_WARNING);
 	}
 }

@@ -47,7 +47,7 @@ class Simple implements PasswordInterface
 	 */
 	public function create($password, $type = null)
 	{
-		if (empty($type))
+		if ($type === null)
 		{
 			$type = $this->defaultType;
 		}
@@ -126,22 +126,15 @@ class Simple implements PasswordInterface
 	public function verify($password, $hash)
 	{
 		// Check if the hash is a blowfish hash.
-		if (substr($hash, 0, 4) == '$2a$' || substr($hash, 0, 4) == '$2y$')
-		{
-			if (version_compare(PHP_VERSION, '5.3.7') >= 0)
-			{
-				$type = '$2y$';
-			}
-			else
-			{
-				$type = '$2a$';
-			}
+		$substrHash = substr($hash, 0, 4);
 
+		if ($substrHash === '$2a$' || $substrHash === '$2y$')
+		{
 			return password_verify($password, $hash);
 		}
 
 		// Check if the hash is an MD5 hash.
-		if (substr($hash, 0, 3) == '$1$')
+		if (strpos($hash, '$1$') === 0)
 		{
 			return hash_equals(crypt($password, $hash), $hash);
 		}

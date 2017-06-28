@@ -69,7 +69,7 @@ abstract class Cipher_Mcrypt implements CipherInterface
 	public function decrypt($data, Key $key)
 	{
 		// Validate key.
-		if ($key->type != $this->keyType)
+		if ($key->type !== $this->keyType)
 		{
 			throw new \InvalidArgumentException('Invalid key of type: ' . $key->type . '.  Expected ' . $this->keyType . '.');
 		}
@@ -95,7 +95,7 @@ abstract class Cipher_Mcrypt implements CipherInterface
 	public function encrypt($data, Key $key)
 	{
 		// Validate key.
-		if ($key->type != $this->keyType)
+		if ($key->type !== $this->keyType)
 		{
 			throw new \InvalidArgumentException('Invalid key of type: ' . $key->type . '.  Expected ' . $this->keyType . '.');
 		}
@@ -125,8 +125,8 @@ abstract class Cipher_Mcrypt implements CipherInterface
 		$key->public = mcrypt_create_iv(mcrypt_get_iv_size($this->type, $this->mode), MCRYPT_DEV_URANDOM);
 
 		// Get the salt and password setup.
-		$salt = (isset($options['salt'])) ? $options['salt'] : substr(pack("h*", md5(mt_rand())), 0, 16);
-		$password = (isset($options['password'])) ? $options['password'] : 'J00ml4R0ck$!';
+		$salt = isset($options['salt']) ? $options['salt'] : substr(pack('h*', md5(mt_rand())), 0, 16);
+		$password = isset($options['password']) ? $options['password'] : 'J00ml4R0ck$!';
 
 		// Generate the derived key.
 		$key->private = $this->pbkdf2($password, $salt, mcrypt_get_key_size($this->type, $this->mode));
