@@ -44,7 +44,7 @@ class PostgresqlQueryTest extends TestCase
 		return array(
 			// Quoted, expected
 			array(true, "'_1970-01-01 00:00:00_'"),
-			array(false, "1970-01-01 00:00:00"),
+			array(false, '1970-01-01 00:00:00'),
 		);
 	}
 
@@ -181,13 +181,13 @@ class PostgresqlQueryTest extends TestCase
 		$this->assertThat(
 			(string) $q,
 			$this->equalTo(
-				PHP_EOL . "SELECT a.id" .
-				PHP_EOL . "FROM a" .
-				PHP_EOL . "INNER JOIN b ON b.id = a.id" .
-				PHP_EOL . "WHERE b.id = 1" .
-				PHP_EOL . "GROUP BY a.id" .
-				PHP_EOL . "HAVING COUNT(a.id) > 3" .
-				PHP_EOL . "ORDER BY a.id"
+				PHP_EOL . 'SELECT a.id' .
+				PHP_EOL . 'FROM a' .
+				PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+				PHP_EOL . 'WHERE b.id = 1' .
+				PHP_EOL . 'GROUP BY a.id' .
+				PHP_EOL . 'HAVING COUNT(a.id) > 3' .
+				PHP_EOL . 'ORDER BY a.id'
 			),
 			'Tests for correct rendering.'
 		);
@@ -211,10 +211,10 @@ class PostgresqlQueryTest extends TestCase
 		$string = (string) $this->instance;
 
 		$this->assertEquals(
-			PHP_EOL . "UPDATE #__foo AS a" .
-			PHP_EOL . "SET a.hits = 0" .
-			PHP_EOL . "FROM b" .
-			PHP_EOL . "WHERE b.id = a.id",
+			PHP_EOL . 'UPDATE #__foo AS a' .
+			PHP_EOL . 'SET a.hits = 0' .
+			PHP_EOL . 'FROM b' .
+			PHP_EOL . 'WHERE b.id = a.id',
 			$string
 		);
 
@@ -228,10 +228,10 @@ class PostgresqlQueryTest extends TestCase
 		$string = (string) $this->instance;
 
 		$this->assertEquals(
-			PHP_EOL . "UPDATE #__foo AS a" .
-			PHP_EOL . "SET a.id = 2" .
-			PHP_EOL . "FROM b" .
-			PHP_EOL . "WHERE b.id = 1 AND b.id = a.id",
+			PHP_EOL . 'UPDATE #__foo AS a' .
+			PHP_EOL . 'SET a.id = 2' .
+			PHP_EOL . 'FROM b' .
+			PHP_EOL . 'WHERE b.id = 1 AND b.id = a.id',
 			$string
 		);
 
@@ -257,7 +257,7 @@ class PostgresqlQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "SELECT EXTRACT (YEAR FROM \"col\")" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT EXTRACT (YEAR FROM "col")' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -276,7 +276,7 @@ class PostgresqlQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "SELECT EXTRACT (MONTH FROM \"col\")" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT EXTRACT (MONTH FROM "col")' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -295,7 +295,7 @@ class PostgresqlQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "SELECT EXTRACT (DAY FROM \"col\")" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT EXTRACT (DAY FROM "col")' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -314,7 +314,7 @@ class PostgresqlQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "SELECT EXTRACT (HOUR FROM \"col\")" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT EXTRACT (HOUR FROM "col")' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -333,7 +333,7 @@ class PostgresqlQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "SELECT EXTRACT (MINUTE FROM \"col\")" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT EXTRACT (MINUTE FROM "col")' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -352,7 +352,7 @@ class PostgresqlQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "SELECT EXTRACT (SECOND FROM \"col\")" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT EXTRACT (SECOND FROM "col")' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -373,14 +373,14 @@ class PostgresqlQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "INSERT INTO table" . PHP_EOL . "(col)" . PHP_EOL . "(" . PHP_EOL . "SELECT col2" . PHP_EOL . "WHERE a=1)")
+			$this->equalTo(PHP_EOL . 'INSERT INTO table' . PHP_EOL . '(col)' . PHP_EOL . '(' . PHP_EOL . 'SELECT col2' . PHP_EOL . 'WHERE a=1)')
 		);
 
 		$q->clear();
 		$q->insert('table')->columns('col')->values('3');
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "INSERT INTO table" . PHP_EOL . "(col) VALUES " . PHP_EOL . "(3)")
+			$this->equalTo(PHP_EOL . 'INSERT INTO table' . PHP_EOL . '(col) VALUES ' . PHP_EOL . '(3)')
 		);
 	}
 
@@ -544,7 +544,7 @@ class PostgresqlQueryTest extends TestCase
 			// Check the state of the other clauses.
 			foreach ($clauses as $clause2)
 			{
-				if ($clause != $clause2)
+				if ($clause !== $clause2)
 				{
 					$this->assertThat(
 						$q->$clause2,

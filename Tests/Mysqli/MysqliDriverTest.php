@@ -615,7 +615,7 @@ class MysqliDriverTest extends MysqliCase
 		/** @var \Joomla\Database\Mysqli\MysqliQuery $query */
 		$query = self::$driver->getQuery(true);
 		$query->setQuery(
-			"REPLACE INTO `dbtest` SET `id` = ?, `title` = ?, `start_date` = ?, `description` = ?"
+			'REPLACE INTO `dbtest` SET `id` = ?, `title` = ?, `start_date` = ?, `description` = ?'
 		);
 		$query->bind(1, $id, 'i');
 		$query->bind(2, $title);

@@ -113,11 +113,11 @@ class Driver
 			$mockObject,
 			$test,
 			array(
-				'escape' => array((is_callable(array($test, 'mockEscape')) ? $test : __CLASS__), 'mockEscape'),
-				'getQuery' => array((is_callable(array($test, 'mockGetQuery')) ? $test : __CLASS__), 'mockGetQuery'),
-				'quote' => array((is_callable(array($test, 'mockQuote')) ? $test : __CLASS__), 'mockQuote'),
-				'quoteName' => array((is_callable(array($test, 'mockQuoteName')) ? $test : __CLASS__), 'mockQuoteName'),
-				'setQuery' => array((is_callable(array($test, 'mockSetQuery')) ? $test : __CLASS__), 'mockSetQuery'),
+				'escape'    => array(is_callable(array($test, 'mockEscape')) ? $test : __CLASS__, 'mockEscape'),
+				'getQuery'  => array(is_callable(array($test, 'mockGetQuery')) ? $test : __CLASS__, 'mockGetQuery'),
+				'quote'     => array(is_callable(array($test, 'mockQuote')) ? $test : __CLASS__, 'mockQuote'),
+				'quoteName' => array(is_callable(array($test, 'mockQuoteName')) ? $test : __CLASS__, 'mockQuoteName'),
+				'setQuery'  => array(is_callable(array($test, 'mockSetQuery')) ? $test : __CLASS__, 'mockSetQuery'),
 			)
 		);
 
@@ -143,7 +143,7 @@ class Driver
 	 *
 	 * @param   boolean  $new  True to get a new query, false to get the last query.
 	 *
-	 * @return  void
+	 * @return Query | string
 	 *
 	 * @since   1.0
 	 */

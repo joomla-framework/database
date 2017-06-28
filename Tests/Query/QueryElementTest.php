@@ -131,25 +131,25 @@ class QueryElementTest extends TestCase
 				'FROM',
 				'table1',
 				',',
-				PHP_EOL . "FROM table1"
+				PHP_EOL . 'FROM table1'
 			),
 			array(
 				'SELECT',
 				array('column1', 'column2'),
 				',',
-				PHP_EOL . "SELECT column1,column2"
+				PHP_EOL . 'SELECT column1,column2'
 			),
 			array(
 				'()',
 				array('column1', 'column2'),
 				',',
-				PHP_EOL . "(column1,column2)"
+				PHP_EOL . '(column1,column2)'
 			),
 			array(
 				'CONCAT()',
 				array('column1', 'column2'),
 				',',
-				PHP_EOL . "CONCAT(column1,column2)"
+				PHP_EOL . 'CONCAT(column1,column2)'
 			),
 		);
 	}
@@ -241,7 +241,7 @@ class QueryElementTest extends TestCase
 
 		$baseElement->testArray = array();
 
-		$cloneElement = clone($baseElement);
+		$cloneElement = clone $baseElement;
 
 		$baseElement->testArray[] = 'a';
 
@@ -262,7 +262,7 @@ class QueryElementTest extends TestCase
 
 		$baseElement->testObject = new \stdClass;
 
-		$cloneElement = clone($baseElement);
+		$cloneElement = clone $baseElement;
 
 		$this->assertFalse($baseElement === $cloneElement);
 		$this->assertFalse($baseElement->testObject === $cloneElement->testObject);
