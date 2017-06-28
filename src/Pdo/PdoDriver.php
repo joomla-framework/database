@@ -743,7 +743,7 @@ abstract class PdoDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		if (!$toSavepoint || $this->transactionDepth == 1)
+		if (!$toSavepoint || $this->transactionDepth === 1)
 		{
 			$this->connection->commit();
 		}
@@ -765,7 +765,7 @@ abstract class PdoDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		if (!$toSavepoint || $this->transactionDepth == 1)
+		if (!$toSavepoint || $this->transactionDepth === 1)
 		{
 			$this->connection->rollBack();
 		}
@@ -942,7 +942,7 @@ abstract class PdoDriver extends DatabaseDriver
 		foreach ($properties as $property)
 		{
 			// Do not serialize properties that are PDO
-			if ($property->isStatic() == false && !($this->{$property->name} instanceof \PDO))
+			if ($property->isStatic() === false && !($this->{$property->name} instanceof \PDO))
 			{
 				$serializedProperties[] = $property->name;
 			}

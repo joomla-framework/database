@@ -839,7 +839,7 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 		$this->assertThat(
 			implode(',', $values),
 			$this->equalTo(
-				"5,'PostgreSQL test insertObject','2012-04-07 15:00:00','1970-01-01 00:00:00','Test insertObject',TRUE,NULL,43.2,NULL"
+				"5,'PostgreSQL test insertObject','2012-04-07 15:00:00','1970-01-01 00:00:00','Test insertObject',TRUE,FALSE,43.2,NULL"
 			),
 			__LINE__
 		);

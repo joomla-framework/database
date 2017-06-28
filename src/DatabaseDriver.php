@@ -334,25 +334,25 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			$lenEndString = strlen($endString);
 			$testEnd      = substr($sql, $i, $lenEndString);
 
-			if ($current == '"' || $current == "'" || $current2 == '--'
-				|| ($current2 == '/*' && $current3 != '/*!' && $current3 != '/*+')
-				|| ($current == '#' && $current3 != '#__')
-				|| ($comment && $testEnd == $endString))
+			if ($current === '"' || $current === "'" || $current2 === '--'
+				|| ($current2 === '/*' && $current3 !== '/*!' && $current3 !== '/*+')
+				|| ($current === '#' && $current3 !== '#__')
+				|| ($comment && $testEnd === $endString))
 			{
 				// Check if quoted with previous backslash
 				$n = 2;
 
-				while (substr($sql, $i - $n + 1, 1) == '\\' && $n < $i)
+				while (substr($sql, $i - $n + 1, 1) === '\\' && $n < $i)
 				{
 					$n++;
 				}
 
 				// Not quoted
-				if ($n % 2 == 0)
+				if ($n % 2 === 0)
 				{
 					if ($open)
 					{
-						if ($testEnd == $endString)
+						if ($testEnd === $endString)
 						{
 							if ($comment)
 							{
@@ -375,17 +375,17 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 					{
 						$open = true;
 
-						if ($current2 == '--')
+						if ($current2 === '--')
 						{
 							$endString = "\n";
 							$comment   = true;
 						}
-						elseif ($current2 == '/*')
+						elseif ($current2 === '/*')
 						{
 							$endString = '*/';
 							$comment   = true;
 						}
-						elseif ($current == '#')
+						elseif ($current === '#')
 						{
 							$endString = "\n";
 							$comment   = true;
@@ -408,7 +408,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 				$start = $i + 1;
 			}
 
-			if (($current == ';' && !$open) || $i == $end - 1)
+			if (($current === ';' && !$open) || $i === $end - 1)
 			{
 				if ($start <= $i)
 				{
@@ -419,7 +419,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 				if ($query)
 				{
-					if (($i == $end - 1) && ($current != ';'))
+					if (($i === $end - 1) && ($current !== ';'))
 					{
 						$query .= ';';
 					}
@@ -1038,7 +1038,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			}
 
 			// Ignore any internal fields.
-			if ($k[0] == '_')
+			if ($k[0] === '_')
 			{
 				continue;
 			}
@@ -1499,7 +1499,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 					$fin[] = $this->quoteName($str);
 				}
 			}
-			elseif (is_array($name) && (count($name) == count($as)))
+			elseif (is_array($name) && (count($name) === count($as)))
 			{
 				$count = count($name);
 
@@ -1534,7 +1534,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 				continue;
 			}
 
-			if (strlen($q) == 1)
+			if (strlen($q) === 1)
 			{
 				$parts[] = $q . $part . $q;
 			}
@@ -1618,7 +1618,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 				$l = $k - 1;
 
-				while ($l >= 0 && $sql{$l} == '\\')
+				while ($l >= 0 && $sql{$l} === '\\')
 				{
 					$l--;
 					$escaped = !$escaped;
@@ -1838,7 +1838,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			}
 
 			// Set the primary key to the WHERE clause instead of a field to update.
-			if (in_array($k, $key))
+			if (in_array($k, $key, true))
 			{
 				$where[] = $this->quoteName($k) . ($v === null ? ' IS NULL' : ' = ' . $this->quote($v));
 				continue;

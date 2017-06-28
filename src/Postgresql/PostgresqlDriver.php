@@ -173,7 +173,7 @@ class PostgresqlDriver extends DatabaseDriver
 				$this->options['host'] = substr($this->options['host'], 0, strlen($this->options['host']) - (strlen($tmp) + 1));
 
 				// This will take care of the following notation: ":5432"
-				if ($this->options['host'] == '')
+				if ($this->options['host'] === '')
 				{
 					$this->options['host'] = 'localhost';
 				}
@@ -528,7 +528,7 @@ class PostgresqlDriver extends DatabaseDriver
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
-		if ( in_array($table, $tableList) )
+		if (in_array($table, $tableList, true))
 		{
 			// Get the details columns information.
 			$this->setQuery('
@@ -593,7 +593,7 @@ class PostgresqlDriver extends DatabaseDriver
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
-		if ( in_array($table, $tableList) )
+		if (in_array($table, $tableList, true))
 		{
 			$name = array('s.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
 							'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option');
@@ -852,7 +852,7 @@ class PostgresqlDriver extends DatabaseDriver
 		$tableList = $this->getTableList();
 
 		// Origin Table does not exist
-		if ( !in_array($oldTable, $tableList) )
+		if (!in_array($oldTable, $tableList, true))
 		{
 			// Origin Table not found
 			throw new \RuntimeException('Table not found in Postgresql database.');
@@ -997,11 +997,11 @@ class PostgresqlDriver extends DatabaseDriver
 			case 'boolean':
 				$val = 'NULL';
 
-				if ($field_value == 't')
+				if ($field_value === 't' || $field_value === true || $field_value === 1 || $field_value === '1')
 				{
 					$val = 'TRUE';
 				}
-				elseif ($field_value == 'f')
+				elseif ($field_value === 'f' || $field_value === false || $field_value === 0 || $field_value === '0')
 				{
 					$val = 'FALSE';
 				}
@@ -1016,7 +1016,7 @@ class PostgresqlDriver extends DatabaseDriver
 			case 'smallint':
 			case 'serial':
 			case 'numeric,':
-				$val = strlen($field_value) == 0 ? 'NULL' : $field_value;
+				$val = $field_value === '' ? 'NULL' : $field_value;
 				break;
 
 			case 'date':
@@ -1223,13 +1223,13 @@ class PostgresqlDriver extends DatabaseDriver
 			}
 
 			// Only process non-null scalars.
-			if (is_array($v) or is_object($v) or $v === null)
+			if (is_array($v) || is_object($v) || $v === null)
 			{
 				continue;
 			}
 
 			// Ignore any internal fields or primary keys with value 0.
-			if (($k[0] == '_') || ($k == $key && (($v === 0) || ($v === '0'))))
+			if (($k[0] === '_') || ($k == $key && (($v === 0) || ($v === '0'))))
 			{
 				continue;
 			}
@@ -1557,13 +1557,13 @@ class PostgresqlDriver extends DatabaseDriver
 			}
 
 			// Only process scalars that are not internal fields.
-			if (is_array($v) or is_object($v) or $k[0] == '_')
+			if (is_array($v) || is_object($v) || $k[0] === '_')
 			{
 				continue;
 			}
 
 			// Set the primary key to the WHERE clause instead of a field to update.
-			if (in_array($k, $key))
+			if (in_array($k, $key, true))
 			{
 				$key_val = $this->sqlValue($columns, $k, $v);
 				$where[] = $this->quoteName($k) . '=' . $key_val;

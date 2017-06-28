@@ -143,7 +143,7 @@ class Driver
 	 *
 	 * @param   boolean  $new  True to get a new query, false to get the last query.
 	 *
-	 * @return  void
+	 * @return Query | string
 	 *
 	 * @since   1.0
 	 */

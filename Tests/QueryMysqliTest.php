@@ -482,7 +482,7 @@ class QueryMysqliTest extends TestCase
 			// Check the state of the other clauses.
 			foreach ($clauses as $clause2)
 			{
-				if ($clause != $clause2)
+				if ($clause !== $clause2)
 				{
 					$this->assertThat(
 						$q->$clause2,
