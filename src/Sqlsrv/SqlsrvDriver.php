@@ -508,6 +508,9 @@ class SqlsrvDriver extends DatabaseDriver
 		$values = array();
 		$tableColumns = $this->getTableColumns($table);
 		$statement = 'INSERT INTO ' . $this->quoteName($table) . ' (%s) VALUES (%s)';
+		var_dump($table);
+		var_dump($object);
+		var_dump($key);
 
 		foreach (get_object_vars($object) as $k => $v)
 		{

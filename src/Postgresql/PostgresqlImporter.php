@@ -338,7 +338,7 @@ class PostgresqlImporter extends DatabaseImporter
 	{
 		// TODO Incorporate into parent class and use $this.
 		$blobs = array('text', 'smalltext', 'mediumtext', 'largetext');
-
+		var_dump($field);
 		$fName = (string) $field['Field'];
 		$fType = (string) $field['Type'];
 		$fNull = (string) $field['Null'];
@@ -350,7 +350,7 @@ class PostgresqlImporter extends DatabaseImporter
 
 		if ($fNull === 'NO')
 		{
-			if (in_array($fType, $blobs, true) || $fDefault === null)
+			if ($fDefault === null || in_array($fType, $blobs, true))
 			{
 				$sql .= ",\nALTER COLUMN " . $this->db->quoteName($fName) . ' SET NOT NULL'
 					. ",\nALTER COLUMN " . $this->db->quoteName($fName) . ' DROP DEFAULT';
@@ -392,6 +392,7 @@ class PostgresqlImporter extends DatabaseImporter
 	{
 		// TODO Incorporate into parent class and use $this.
 		$blobs = array('text', 'smalltext', 'mediumtext', 'largetext');
+		var_dump($field);
 
 		$fName = (string) $field['Field'];
 		$fType = (string) $field['Type'];
@@ -411,7 +412,7 @@ class PostgresqlImporter extends DatabaseImporter
 
 			if ($fNull === 'NO')
 			{
-				if (in_array($fType, $blobs, true) || $fDefault === null)
+				if ($fDefault === null || in_array($fType, $blobs, true))
 				{
 					$sql .= ' NOT NULL';
 				}
