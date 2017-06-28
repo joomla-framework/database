@@ -127,13 +127,14 @@ class Simple implements PasswordInterface
 	{
 		// Check if the hash is a blowfish hash.
 		$substrHash = substr($hash, 0, 4);
+
 		if ($substrHash === '$2a$' || $substrHash === '$2y$')
 		{
 			return password_verify($password, $hash);
 		}
 
 		// Check if the hash is an MD5 hash.
-		if (strpos($hash,'$1$') === 0)
+		if (strpos($hash, '$1$') === 0)
 		{
 			return hash_equals(crypt($password, $hash), $hash);
 		}

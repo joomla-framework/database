@@ -194,7 +194,7 @@ class Cipher_Simple implements CipherInterface
 				$k += 0;
 				break;
 			default:
-				$k += (16 * (int) $c);
+				$k += 16 * (int) $c;
 				break;
 		}
 
