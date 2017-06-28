@@ -31,7 +31,7 @@ class Cipher_Simple implements CipherInterface
 	public function decrypt($data, Key $key)
 	{
 		// Validate key.
-		if ($key->type != 'simple')
+		if ($key->type !== 'simple')
 		{
 			throw new \InvalidArgumentException('Invalid key of type: ' . $key->type . '.  Expected simple.');
 		}
@@ -46,7 +46,7 @@ class Cipher_Simple implements CipherInterface
 		// Repeat the key as many times as necessary to ensure that the key is at least as long as the input.
 		for ($i = 0; $i < $charCount; $i = strlen($tmp))
 		{
-			$tmp = $tmp . $tmp;
+			$tmp .= $tmp;
 		}
 
 		// Get the XOR values between the ASCII values of the input and key characters for all input offsets.
@@ -73,7 +73,7 @@ class Cipher_Simple implements CipherInterface
 	public function encrypt($data, Key $key)
 	{
 		// Validate key.
-		if ($key->type != 'simple')
+		if ($key->type !== 'simple')
 		{
 			throw new \InvalidArgumentException('Invalid key of type: ' . $key->type . '.  Expected simple.');
 		}
@@ -88,7 +88,7 @@ class Cipher_Simple implements CipherInterface
 		// Repeat the key as many times as necessary to ensure that the key is at least as long as the input.
 		for ($i = 0; $i < $charCount; $i = strlen($tmp))
 		{
-			$tmp = $tmp . $tmp;
+			$tmp .= $tmp;
 		}
 
 		// Get the XOR values between the ASCII values of the input and key characters for all input offsets.
@@ -194,7 +194,7 @@ class Cipher_Simple implements CipherInterface
 				$k += 0;
 				break;
 			default:
-				$k = $k + (16 * (int) $c);
+				$k += (16 * (int) $c);
 				break;
 		}
 
@@ -282,7 +282,7 @@ class Cipher_Simple implements CipherInterface
 
 		// Get the second character of the hexadecimal string.
 		$k = $i - $j * 16;
-		$s = $s . strtoupper(dechex($k));
+		$s .= strtoupper(dechex($k));
 
 		return $s;
 	}
