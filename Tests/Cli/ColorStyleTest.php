@@ -69,7 +69,7 @@ class ColorStyleTest extends \PHPUnit_Framework_TestCase
 		$style = new ColorStyle('white', 'red', array('blink', 'bold'));
 
 		$this->assertThat(
-			$this->object->fromString('fg=white;bg=red;options=blink,bold'),
+			($this->object)::fromString('fg=white;bg=red;options=blink,bold'),
 			$this->equalTo($style)
 		);
 	}
@@ -83,7 +83,7 @@ class ColorStyleTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testFromStringInvalid()
 	{
-		$this->object->fromString('XXX;XX=YY');
+		($this->object)::fromString('XXX;XX=YY');
 	}
 
 	/**

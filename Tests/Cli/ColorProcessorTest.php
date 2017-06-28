@@ -78,7 +78,7 @@ class ColorProcessorTest extends \PHPUnit_Framework_TestCase
 	public function testStripColors()
 	{
 		$this->assertThat(
-			$this->object->stripColors('<foo>foo</foo>'),
+			($this->object)::stripColors('<foo>foo</foo>'),
 			$this->equalTo('foo')
 		);
 	}
