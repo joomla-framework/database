@@ -163,7 +163,7 @@ class Zip implements ExtractableInterface
 			throw new \RuntimeException('Archive does not exist');
 		}
 
-		if ($this::hasNativeSupport())
+		if (static::hasNativeSupport())
 		{
 			return $this->extractNative($archive, $destination);
 		}
