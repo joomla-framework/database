@@ -6,7 +6,7 @@
 
 namespace Joomla\Archive\Tests;
 
-use Joomla\Archive\Archive as Archive;
+use Joomla\Archive\Archive;
 use Joomla\Archive\Zip as ArchiveZip;
 
 /**
@@ -94,7 +94,7 @@ class ArchiveTest extends ArchiveTestCase
 	{
 		if (!is_writable($this->outputPath) || !is_writable($this->fixture->options['tmp_path']))
 		{
-			$this->markTestSkipped("Folder not writable.");
+			$this->markTestSkipped('Folder not writable.');
 		}
 
 		$adapter = "Joomla\\Archive\\$adapterType";

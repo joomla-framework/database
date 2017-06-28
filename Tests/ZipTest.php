@@ -189,7 +189,7 @@ class ZipTest extends ArchiveTestCase
 	public function testIsSupported()
 	{
 		$this->assertEquals(
-			(ArchiveZip::hasNativeSupport() || extension_loaded('zlib')),
+			ArchiveZip::hasNativeSupport() || extension_loaded('zlib'),
 			ArchiveZip::isSupported()
 		);
 	}
