@@ -839,6 +839,7 @@ class ContainerTest extends TestCase
 			},
 			false
 		);
+
 		$this->assertNotSame($this->fixture->get('foo'), $this->fixture->get('foo'));
 	}
 

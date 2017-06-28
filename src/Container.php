@@ -109,8 +109,8 @@ class Container
 	 * @param   string   $key     The class name to build.
 	 * @param   boolean  $shared  True to create a shared resource.
 	 *
-	 * @return  mixed  Instance of class specified by $key with all dependencies injected.
-	 *                 Returns an object if the class exists and false otherwise
+	 * @return  object|false  Instance of class specified by $key with all dependencies injected.
+	 *                        Returns an object if the class exists and false otherwise
 	 *
 	 * @since   1.0
 	 */
@@ -152,7 +152,8 @@ class Container
 	 *
 	 * @param   string  $key  The class name to build.
 	 *
-	 * @return  object  Instance of class specified by $key with all dependencies injected.
+	 * @return  object|false  Instance of class specified by $key with all dependencies injected.
+	 *                        Returns an object if the class exists and false otherwise
 	 *
 	 * @since   1.0
 	 */
