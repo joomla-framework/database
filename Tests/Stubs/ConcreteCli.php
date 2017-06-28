@@ -46,6 +46,5 @@ class ConcreteCli extends AbstractCliApplication
 	 */
 	public function doExecute()
 	{
-		return;
 	}
 }
