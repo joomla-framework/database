@@ -57,7 +57,7 @@ class MysqliImporter extends DatabaseImporter
 		$existingTables = $this->db->getTableList();
 		$tableName = (string) $table['name'];
 
-		if (in_array($tableName, $existingTables))
+		if (in_array($tableName, $existingTables, true))
 		{
 			throw new \RuntimeException('The table you are trying to create already exists');
 		}
@@ -289,7 +289,7 @@ class MysqliImporter extends DatabaseImporter
 
 		if ($fNull === 'NO')
 		{
-			if (in_array($fType, $blobs) || $fDefault === null)
+			if (in_array($fType, $blobs, true) || $fDefault === null)
 			{
 				$sql .= ' NOT NULL';
 			}

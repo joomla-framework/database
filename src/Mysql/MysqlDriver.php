@@ -169,7 +169,7 @@ class MysqlDriver extends PdoDriver
 		$beginningOfQuery = substr($query, 0, 12);
 		$beginningOfQuery = strtoupper($beginningOfQuery);
 
-		if (!in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE')))
+		if (!in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE'), true))
 		{
 			return $query;
 		}
@@ -187,7 +187,7 @@ class MysqlDriver extends PdoDriver
 	 */
 	public static function isSupported()
 	{
-		return class_exists('\\PDO') && in_array('mysql', \PDO::getAvailableDrivers());
+		return class_exists('\\PDO') && in_array('mysql', \PDO::getAvailableDrivers(), true);
 	}
 
 	/**

@@ -227,7 +227,7 @@ class MysqlImporter extends DatabaseImporter
 
 		if ($fNull === 'NO')
 		{
-			if (in_array($fType, $blobs) || $fDefault === null)
+			if ($fDefault === null || in_array($fType, $blobs, true))
 			{
 				$sql .= ' NOT NULL';
 			}

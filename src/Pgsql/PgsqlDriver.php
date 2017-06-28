@@ -283,7 +283,7 @@ class PgsqlDriver extends PdoDriver
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
-		if (in_array($table, $tableList))
+		if (in_array($table, $tableList, true))
 		{
 			// Get the details columns information.
 			$this->setQuery('
@@ -342,7 +342,7 @@ class PgsqlDriver extends PdoDriver
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
-		if (in_array($table, $tableList))
+		if (in_array($table, $tableList, true))
 		{
 			$name = array(
 				's.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
@@ -414,7 +414,7 @@ class PgsqlDriver extends PdoDriver
 		$tableList = $this->getTableList();
 
 		// Origin Table does not exist
-		if (!in_array($oldTable, $tableList))
+		if (!in_array($oldTable, $tableList, true))
 		{
 			// Origin Table not found
 			throw new \RuntimeException('Table not found in Postgresql database.');
@@ -510,7 +510,7 @@ class PgsqlDriver extends PdoDriver
 			case 'smallint':
 			case 'serial':
 			case 'numeric,':
-				$val = strlen($field_value) === 0 ? 'NULL' : $field_value;
+				$val = $field_value === '' ? 'NULL' : $field_value;
 				break;
 
 			case 'date':
@@ -640,19 +640,19 @@ class PgsqlDriver extends PdoDriver
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (! array_key_exists($k, $columns))
+			if (!array_key_exists($k, $columns))
 			{
 				continue;
 			}
 
 			// Only process non-null scalars.
-			if (is_array($v) or is_object($v) or $v === null)
+			if (is_array($v) || is_object($v) || $v === null)
 			{
 				continue;
 			}
 
 			// Ignore any internal fields or primary keys with value 0.
-			if (($k[0] == '_') || ($k == $key && (($v === 0) || ($v === '0'))))
+			if (($k[0] === '_') || ($k == $key && (($v === 0) || ($v === '0'))))
 			{
 				continue;
 			}
@@ -709,7 +709,7 @@ class PgsqlDriver extends PdoDriver
 	 */
 	public static function isSupported()
 	{
-		return class_exists('\\PDO') && in_array('pgsql', \PDO::getAvailableDrivers());
+		return class_exists('\\PDO') && in_array('pgsql', \PDO::getAvailableDrivers(), true);
 	}
 
 	/**
@@ -933,13 +933,13 @@ class PgsqlDriver extends PdoDriver
 			}
 
 			// Only process scalars that are not internal fields.
-			if (is_array($v) or is_object($v) or $k[0] == '_')
+			if (is_array($v) || is_object($v) || $k[0] === '_')
 			{
 				continue;
 			}
 
 			// Set the primary key to the WHERE clause instead of a field to update.
-			if (in_array($k, $key))
+			if (in_array($k, $key, true))
 			{
 				$key_val = $this->sqlValue($columns, $k, $v);
 				$where[] = $this->quoteName($k) . '=' . $key_val;

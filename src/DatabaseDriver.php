@@ -1838,7 +1838,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			}
 
 			// Set the primary key to the WHERE clause instead of a field to update.
-			if (in_array($k, $key))
+			if (in_array($k, $key, true))
 			{
 				$where[] = $this->quoteName($k) . ($v === null ? ' IS NULL' : ' = ' . $this->quote($v));
 				continue;
