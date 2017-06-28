@@ -43,7 +43,7 @@ class ColorProcessorTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		$this->object = new ColorProcessor;
-		$this->winOs = ((strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'));
+		$this->winOs = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
 	}
 
 	/**
@@ -59,7 +59,7 @@ class ColorProcessorTest extends \PHPUnit_Framework_TestCase
 		$style = new ColorStyle('red');
 		$this->object->addStyle('foo', $style);
 
-		$check = ($this->winOs) ? 'foo' : '[31mfoo[0m';
+		$check = $this->winOs ? 'foo' : '[31mfoo[0m';
 
 		$this->assertThat(
 			$this->object->process('<foo>foo</foo>'),
@@ -77,8 +77,10 @@ class ColorProcessorTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testStripColors()
 	{
+		$colorProcessor = $this->object;
+
 		$this->assertThat(
-			$this->object->stripColors('<foo>foo</foo>'),
+			$colorProcessor::stripColors('<foo>foo</foo>'),
 			$this->equalTo('foo')
 		);
 	}
@@ -93,7 +95,7 @@ class ColorProcessorTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testProcess()
 	{
-		$check = ($this->winOs) ? 'foo' : '[31mfoo[0m';
+		$check = $this->winOs ? 'foo' : '[31mfoo[0m';
 
 		$this->assertThat(
 			$this->object->process('<fg=red>foo</fg=red>'),
@@ -114,7 +116,7 @@ class ColorProcessorTest extends \PHPUnit_Framework_TestCase
 		$style = new ColorStyle('red');
 		$this->object->addStyle('foo', $style);
 
-		$check = ($this->winOs) ? 'foo' : '[31mfoo[0m';
+		$check = $this->winOs ? 'foo' : '[31mfoo[0m';
 
 		$this->assertThat(
 			$this->object->process('<foo>foo</foo>'),
@@ -132,7 +134,7 @@ class ColorProcessorTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testProcessReplace()
 	{
-		$check = ($this->winOs) ? 'foo' : '[31mfoo[0m';
+		$check = $this->winOs ? 'foo' : '[31mfoo[0m';
 
 		$this->assertThat(
 			$this->object->process('<fg=red>foo</fg=red>'),

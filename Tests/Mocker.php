@@ -241,7 +241,7 @@ class Mocker
 	 */
 	public function mockWebAppendBody($content)
 	{
-		array_push($this->body, (string) $content);
+		$this->body[] = (string) $content;
 	}
 
 	/**

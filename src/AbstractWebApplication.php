@@ -380,7 +380,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 		else
 		{
 			// We have to use a JavaScript redirect here because MSIE doesn't play nice with utf-8 URLs.
-			if (($this->client->engine == Web\WebClient::TRIDENT) && !$this->isAscii($url))
+			if (($this->client->engine == Web\WebClient::TRIDENT) && !$this::isAscii($url))
 			{
 				$html = '<html><head>';
 				$html .= '<meta http-equiv="content-type" content="text/html; charset=' . $this->charSet . '" />';
@@ -576,7 +576,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 */
 	public function appendBody($content)
 	{
-		array_push($this->response->body, (string) $content);
+		$this->response->body[] = (string) $content;
 
 		return $this;
 	}
@@ -823,7 +823,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 			$requestUri = $this->input->server->getString('REQUEST_URI', '');
 
 			// If we are working from a CGI SAPI with the 'cgi.fix_pathinfo' directive disabled we use PHP_SELF.
-			if (strpos(php_sapi_name(), 'cgi') !== false && !ini_get('cgi.fix_pathinfo') && !empty($requestUri))
+			if (strpos(PHP_SAPI, 'cgi') !== false && !ini_get('cgi.fix_pathinfo') && !empty($requestUri))
 			{
 				// We aren't expecting PATH_INFO within PHP_SELF so this should work.
 				$path = dirname($this->input->server->getString('PHP_SELF', ''));
