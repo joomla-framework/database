@@ -392,12 +392,15 @@ class PostgresqlImporter extends DatabaseImporter
 	{
 		// TODO Incorporate into parent class and use $this.
 		$blobs = array('text', 'smalltext', 'mediumtext', 'largetext');
-		var_dump($field);
+		if ($field['Default'] !== 'NULL')
+		{
+			var_dump($field);
+		}
 
 		$fName = (string) $field['Field'];
 		$fType = (string) $field['Type'];
 		$fNull = (string) $field['Null'];
-		$fDefault = (isset($field['Default']) && $field['Default'] != 'NULL' ) ?
+		$fDefault = (isset($field['Default']) && $field['Default'] !== 'NULL' ) ?
 					preg_match('/^[0-9]$/', $field['Default']) ? $field['Default'] : $this->db->quote((string) $field['Default'])
 					: null;
 
