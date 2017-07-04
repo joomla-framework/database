@@ -151,7 +151,7 @@ class InputFilter
 	 * A special list of blacklisted chars
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.3
 	 */
 	private $blacklistedChars = array(
 		'&tab;',
