@@ -20,8 +20,8 @@ class Json extends AbstractRegistryFormat
 	/**
 	 * Converts an object into a JSON formatted string.
 	 *
-	 * @param   object $object  Data source object.
-	 * @param   array  $options Options used by the formatter.
+	 * @param   object  $object   Data source object.
+	 * @param   array   $options  Options used by the formatter.
 	 *
 	 * @return  string  JSON formatted string.
 	 *
@@ -58,10 +58,12 @@ class Json extends AbstractRegistryFormat
 	public function stringToObject($data, array $options = array('processSections' => false))
 	{
 		$data = trim($data);
+
 		if ($data !== '' && $data[0] !== '{')
 		{
 			return AbstractRegistryFormat::getInstance('Ini')->stringToObject($data, $options);
 		}
+
 		$decoded = json_decode($data);
 
 		// Check for an error decoding the data
