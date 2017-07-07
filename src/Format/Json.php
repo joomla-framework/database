@@ -29,17 +29,17 @@ class Json extends AbstractRegistryFormat
 	 */
 	public function objectToString($object, $options = array())
 	{
-		$bitmask = isset($options['bitmask']) ? $options['bitmask'] : 0;
+		$bitMask = isset($options['bitmask']) ? $options['bitmask'] : 0;
 
 		// The depth parameter is only present as of PHP 5.5
 		if (version_compare(PHP_VERSION, '5.5', '>='))
 		{
 			$depth = isset($options['depth']) ? $options['depth'] : 512;
 
-			return json_encode($object, $bitmask, $depth);
+			return json_encode($object, $bitMask, $depth);
 		}
 
-		return json_encode($object, $bitmask);
+		return json_encode($object, $bitMask);
 	}
 
 	/**
@@ -59,7 +59,7 @@ class Json extends AbstractRegistryFormat
 	{
 		$data = trim($data);
 
-		if ((substr($data, 0, 1) != '{') && (substr($data, -1, 1) != '}'))
+		if ($data !== '' && $data[0] !== '{')
 		{
 			return AbstractRegistryFormat::getInstance('Ini')->stringToObject($data, $options);
 		}

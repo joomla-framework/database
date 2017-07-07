@@ -36,26 +36,24 @@ class XmlTest extends TestCase
 		$object->array = array('nestedarray' => array('test1' => 'value1'));
 
 		// Check for different PHP behavior of displaying boolean false in XML.
-		$checkFalse = '<check/>' == simplexml_load_string('<test/>')->addChild('check', false)->asXML()
-			? '/>'
-			: '></node>';
+		$checkFalse = '<check/>' === simplexml_load_string('<test/>')->addChild('check', false)->asXML() ? '/>' : '></node>';
 
 		$string = "<?xml version=\"1.0\"?>\n<registry>" .
-			"<node name=\"foo\" type=\"string\">bar</node>" .
-			"<node name=\"quoted\" type=\"string\">\"stringwithquotes\"</node>" .
-			"<node name=\"booleantrue\" type=\"boolean\">1</node>" .
-			"<node name=\"booleanfalse\" type=\"boolean\"" . $checkFalse .
-			"<node name=\"numericint\" type=\"integer\">42</node>" .
-			"<node name=\"numericfloat\" type=\"double\">3.1415</node>" .
-			"<node name=\"section\" type=\"object\">" .
-			"<node name=\"key\" type=\"string\">value</node>" .
-			"</node>" .
-			"<node name=\"array\" type=\"array\">" .
-			"<node name=\"nestedarray\" type=\"array\">" .
-			"<node name=\"test1\" type=\"string\">value1</node>" .
-			"</node>" .
-			"</node>" .
-			"</registry>\n";
+			'<node name="foo" type="string">bar</node>' .
+			'<node name="quoted" type="string">"stringwithquotes"</node>' .
+			'<node name="booleantrue" type="boolean">1</node>' .
+			'<node name="booleanfalse" type="boolean"' . $checkFalse .
+			'<node name="numericint" type="integer">42</node>' .
+			'<node name="numericfloat" type="double">3.1415</node>' .
+			'<node name="section" type="object">' .
+			'<node name="key" type="string">value</node>' .
+			'</node>' .
+			'<node name="array" type="array">' .
+			'<node name="nestedarray" type="array">' .
+			'<node name="test1" type="string">value1</node>' .
+			'</node>' .
+			'</node>' .
+			'</registry>' . "\n";
 
 		// Test basic object to string.
 		$this->assertSame($string, $class->objectToString($object));
@@ -83,19 +81,19 @@ class XmlTest extends TestCase
 		$object->array = array('test1' => 'value1');
 
 		$string = "<?xml version=\"1.0\"?>\n<registry>" .
-			"<node name=\"foo\" type=\"string\">bar</node>" .
-			"<node name=\"booleantrue\" type=\"boolean\">1</node>" .
-			"<node name=\"booleanfalse1\" type=\"boolean\"></node>" .
-			"<node name=\"booleanfalse2\" type=\"boolean\"/>" .
-			"<node name=\"numericint\" type=\"integer\">42</node>" .
-			"<node name=\"numericfloat\" type=\"double\">3.1415</node>" .
-			"<node name=\"section\" type=\"object\">" .
-			"<node name=\"key\" type=\"string\">value</node>" .
-			"</node>" .
-			"<node name=\"array\" type=\"array\">" .
-			"<node name=\"test1\" type=\"string\">value1</node>" .
-			"</node>" .
-			"</registry>\n";
+			'<node name="foo" type="string">bar</node>' .
+			'<node name="booleantrue" type="boolean">1</node>' .
+			'<node name="booleanfalse1" type="boolean"></node>' .
+			'<node name="booleanfalse2" type="boolean"/>' .
+			'<node name="numericint" type="integer">42</node>' .
+			'<node name="numericfloat" type="double">3.1415</node>' .
+			'<node name="section" type="object">' .
+			'<node name="key" type="string">value</node>' .
+			'</node>' .
+			'<node name="array" type="array">' .
+			'<node name="test1" type="string">value1</node>' .
+			'</node>' .
+			'</registry>' . "\n";
 
 		// Test basic object to string.
 		$this->assertEquals($object, $class->stringToObject($string));
@@ -112,23 +110,21 @@ class XmlTest extends TestCase
 		$class = new Xml;
 
 		// Check for different PHP behavior of displaying boolean false in XML.
-		$checkFalse = '<check/>' == simplexml_load_string('<test/>')->addChild('check', false)->asXML()
-			? '/>'
-			: '></node>';
+		$checkFalse = '<check/>' === simplexml_load_string('<test/>')->addChild('check', false)->asXML() ? '/>' : '></node>';
 
 		$input = "<?xml version=\"1.0\"?>\n<registry>" .
-			"<node name=\"foo\" type=\"string\">bar</node>" .
-			"<node name=\"booleantrue\" type=\"boolean\">1</node>" .
-			"<node name=\"booleanfalse\" type=\"boolean\"" . $checkFalse .
-			"<node name=\"numericint\" type=\"integer\">42</node>" .
-			"<node name=\"numericfloat\" type=\"double\">3.1415</node>" .
-			"<node name=\"section\" type=\"object\">" .
-			"<node name=\"key\" type=\"string\">value</node>" .
-			"</node>" .
-			"<node name=\"array\" type=\"array\">" .
-			"<node name=\"test1\" type=\"string\">value1</node>" .
-			"</node>" .
-			"</registry>\n";
+			'<node name="foo" type="string">bar</node>' .
+			'<node name="booleantrue" type="boolean">1</node>' .
+			'<node name="booleanfalse" type="boolean"' . $checkFalse .
+			'<node name="numericint" type="integer">42</node>' .
+			'<node name="numericfloat" type="double">3.1415</node>' .
+			'<node name="section" type="object">' .
+			'<node name="key" type="string">value</node>' .
+			'</node>' .
+			'<node name="array" type="array">' .
+			'<node name="test1" type="string">value1</node>' .
+			'</node>' .
+			'</registry>' . "\n";
 
 		$object = $class->stringToObject($input);
 		$output = $class->objectToString($object);
