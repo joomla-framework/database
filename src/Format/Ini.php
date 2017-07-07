@@ -32,7 +32,7 @@ class Ini extends AbstractRegistryFormat
 	);
 
 	/**
-	 * A cache used by stringToobject.
+	 * A cache used by stringToObject.
 	 *
 	 * @var    array
 	 * @since  1.0
