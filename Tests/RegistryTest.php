@@ -24,7 +24,7 @@ class RegistryTest extends TestCase
 	{
 		$a = new Registry;
 
-		$this->assertSame(0, count($a), 'The Registry data store should be empty.');
+		$this->assertCount(0, $a, 'The Registry data store should be empty.');
 	}
 
 	/**
@@ -36,7 +36,7 @@ class RegistryTest extends TestCase
 	{
 		$a = new Registry(array('foo' => 'bar'));
 
-		$this->assertSame(1, count($a), 'The Registry data store should not be empty.');
+		$this->assertCount(1, $a, 'The Registry data store should not be empty.');
 	}
 
 	/**
@@ -48,7 +48,7 @@ class RegistryTest extends TestCase
 	{
 		$a = new Registry(json_encode(array('foo' => 'bar')));
 
-		$this->assertSame(1, count($a), 'The Registry data store should not be empty.');
+		$this->assertCount(1, $a, 'The Registry data store should not be empty.');
 	}
 
 	/**
@@ -61,7 +61,7 @@ class RegistryTest extends TestCase
 		$a = new Registry(array('foo' => 'bar'));
 		$b = new Registry($a);
 
-		$this->assertSame(1, count($b), 'The Registry data store should not be empty.');
+		$this->assertCount(1, $b, 'The Registry data store should not be empty.');
 	}
 
 	/**
@@ -137,7 +137,7 @@ class RegistryTest extends TestCase
 			)
 		);
 
-		$this->assertSame(3, count($a), 'count() should correctly count the number of data elements.');
+		$this->assertCount(3, $a, 'count() should correctly count the number of data elements.');
 	}
 
 	/**
@@ -522,7 +522,7 @@ class RegistryTest extends TestCase
 	{
 		$instance = new Registry;
 
-		$this->assertTrue(empty($instance['foo.bar']), 'Checks an offset is empty.');
+		$this->assertEmpty($instance['foo.bar'], 'Checks an offset is empty.');
 
 		$instance->set('foo.bar', 'value');
 
