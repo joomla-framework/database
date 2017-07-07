@@ -80,8 +80,6 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	/**
 	 * Magic function to clone the registry object.
 	 *
-	 * @return  Registry
-	 *
 	 * @since   1.0
 	 */
 	public function __clone()
@@ -389,7 +387,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 * @param   Registry  $source     Source Registry object to merge.
 	 * @param   boolean   $recursive  True to support recursive merge the children values.
 	 *
-	 * @return  Registry  Return this object to support chaining.
+	 * @return  Registry|false  Return this object to support chaining or false if $source is not an instance of Registry.
 	 *
 	 * @since   1.0
 	 */

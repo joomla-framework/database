@@ -168,7 +168,7 @@ class Ini extends AbstractRegistryFormat
 			$line = trim($line);
 
 			// Ignore empty lines and comments.
-			if (empty($line) || ($line{0} === ';'))
+			if (empty($line) || ($line[0] === ';'))
 			{
 				continue;
 			}
@@ -178,14 +178,14 @@ class Ini extends AbstractRegistryFormat
 				$length = strlen($line);
 
 				// If we are processing sections and the line is a section add the object and continue.
-				if (($line[0] === '[') && ($line[$length - 1] === ']'))
+				if ($line[0] === '[' && ($line[$length - 1] === ']'))
 				{
 					$section       = substr($line, 1, $length - 2);
 					$obj->$section = new stdClass;
 					continue;
 				}
 			}
-			elseif ($line{0} === '[')
+			elseif ($line[0] === '[')
 			{
 				continue;
 			}

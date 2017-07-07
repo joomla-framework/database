@@ -89,7 +89,7 @@ class Php extends AbstractRegistryFormat
 	 *
 	 * @param   array  $a  The array to get as a string.
 	 *
-	 * @return  array
+	 * @return  string
 	 *
 	 * @since   1.0
 	 */
