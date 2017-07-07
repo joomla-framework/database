@@ -167,7 +167,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 		$nodes = explode($this->separator, $path);
 
 		// Initialize the current node to be the registry root.
-		$node = $this->data;
+		$node  = $this->data;
 		$found = false;
 
 		// Traverse the registry to find the correct node for the result.
@@ -175,7 +175,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 		{
 			if (is_array($node) && isset($node[$n]))
 			{
-				$node = $node[$n];
+				$node  = $node[$n];
 				$found = true;
 				continue;
 			}
@@ -185,7 +185,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 				return false;
 			}
 
-			$node = $node->$n;
+			$node  = $node->$n;
 			$found = true;
 		}
 
@@ -219,7 +219,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 		$nodes = explode($this->separator, trim($path));
 
 		// Initialize the current node to be the registry root.
-		$node = $this->data;
+		$node  = $this->data;
 		$found = false;
 
 		// Traverse the registry to find the correct node for the result.
@@ -227,7 +227,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 		{
 			if (is_array($node) && isset($node[$n]))
 			{
-				$node = $node[$n];
+				$node  = $node[$n];
 				$found = true;
 
 				continue;
@@ -238,7 +238,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 				return $default;
 			}
 
-			$node = $node->$n;
+			$node  = $node->$n;
 			$found = true;
 		}
 
@@ -616,7 +616,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 			}
 
 			if (!is_array($node))
-			// Convert the node to array to make append possible
+				// Convert the node to array to make append possible
 			{
 				$node = get_object_vars($node);
 			}
@@ -688,9 +688,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 		$this->initialized = true;
 
 		// Ensure the input data is an array.
-		$data = is_object($data)
-			? get_object_vars($data)
-			: (array) $data;
+		$data = is_object($data) ? get_object_vars($data) : (array) $data;
 
 		foreach ($data as $k => $v)
 		{

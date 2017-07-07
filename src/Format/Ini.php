@@ -253,7 +253,7 @@ class Ini extends AbstractRegistryFormat
 				{
 					$value = true;
 				}
-				elseif ($options['parseBooleanWords'] && in_array(strtolower($value), array('yes', 'no')))
+				elseif ($options['parseBooleanWords'] && in_array(strtolower($value), array('yes', 'no'), true))
 					// If the value is 'yes' or 'no' and option is enabled assume appropriate boolean
 				{
 					$value = (strtolower($value) === 'yes');
