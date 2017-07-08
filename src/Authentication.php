@@ -53,7 +53,7 @@ class Authentication
 	/**
 	 * The array of strategies.
 	 *
-	 * @var    array
+	 * @var    AuthenticationStrategyInterface[]
 	 * @since  1.0
 	 */
 	private $strategies = array();
@@ -61,7 +61,7 @@ class Authentication
 	/**
 	 * The array of results.
 	 *
-	 * @var    array
+	 * @var    integer[]
 	 * @since  1.0
 	 */
 	private $results = array();
@@ -84,7 +84,7 @@ class Authentication
 	/**
 	 * Perform authentication
 	 *
-	 * @param   array  $strategies  Array of strategies to try - empty to try all strategies.
+	 * @param   AuthenticationStrategyInterface[]  $strategies  Array of strategies to try - empty to try all strategies.
 	 *
 	 * @return  string|boolean  A string containing a username if authentication is successful, false otherwise.
 	 *
@@ -118,6 +118,7 @@ class Authentication
 			throw new \RuntimeException('No strategies have been set');
 		}
 
+		/** @var AuthenticationStrategyInterface $strategyObject */
 		foreach ($strategyObjects as $strategy => $strategyObject)
 		{
 			$username = $strategyObject->authenticate();
@@ -138,7 +139,7 @@ class Authentication
 	 *
 	 * Use this if you want to get more detailed information about the results of an authentication attempts.
 	 *
-	 * @return  array  An array containing authentication results.
+	 * @return  integer[]  An array containing authentication results.
 	 *
 	 * @since   1.0
 	 */
