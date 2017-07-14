@@ -615,7 +615,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	/**
 	 * Check if a given value can be successfully mapped to a valid http status value
 	 *
-	 * @param   string  $value  The given status as int or string
+	 * @param   string|int  $value  The given status as int or string
 	 *
 	 * @return string
 	 *
@@ -631,6 +631,20 @@ abstract class AbstractWebApplication extends AbstractApplication
 		}
 
 		return 'HTTP/1.1 ' . $code;
+	}
+
+	/**
+	 * Check if the value is a valid HTTP 1.1 status code
+	 *
+	 * @param   int  $code  The potential status code
+	 *
+	 * @return  bool
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	public function isValidHttpStatus($code)
+	{
+		return array_key_exists($code, $this->responseMap);
 	}
 
 	/**
