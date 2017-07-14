@@ -640,7 +640,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 *
 	 * @return  bool
 	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.8.1
 	 */
 	public function isValidHttpStatus($code)
 	{
