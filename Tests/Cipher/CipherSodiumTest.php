@@ -10,6 +10,7 @@ use Joomla\Crypt\Cipher_Sodium;
 use Joomla\Crypt\Crypt;
 use ParagonIE\Sodium\Compat;
 use PHPUnit\Framework\TestCase;
+use Symfony\Polyfill\Util\Binary;
 
 /**
  * Test class for \Joomla\Crypt\Cipher_Sodium.
@@ -89,8 +90,8 @@ class CipherSodiumTest extends TestCase
 		$this->assertInstanceOf('Joomla\\Crypt\\Key', $key);
 
 		// Assert the keys pass validation
-		$this->assertSame(Crypt::safeStrlen($key->private), 32);
-		$this->assertSame(Crypt::safeStrlen($key->public), 32);
+		$this->assertSame(Binary::strlen($key->private), 32);
+		$this->assertSame(Binary::strlen($key->public), 32);
 
 		// Assert the key is of the correct type.
 		$this->assertAttributeEquals('sodium', 'type', $key);
