@@ -36,4 +36,4 @@ before_script:
 
 script:
   - vendor/bin/phpunit
-  - if [ "$RUN_PHPCS" == "yes" ]; then vendor/bin/phpcs -p --report=full --extensions=php --standard=.travis/phpcs/Joomla/ruleset.xml src/; fi;
+  - if [ "$RUN_PHPCS" == "yes" ]; then vendor/bin/phpcs -p --report=full --extensions=php --standard=.travis/phpcs/Joomla/ruleset.xml Cipher/ Password/ CipherInterface.php Crypt.php Key.php PasswordInterface.php; fi;
