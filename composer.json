@@ -11,6 +11,7 @@
     },
     "require-dev": {
         "ircmaxell/password-compat": "~1.0",
+        "paragonie/sodium_compat": "~1.0",
         "phpunit/phpunit": "^4.8.35|^5.4.3|~6.0",
         "squizlabs/php_codesniffer": "1.*",
         "symfony/polyfill-php56": "~1.0",
@@ -18,6 +19,7 @@
     },
     "suggest": {
         "ircmaxell/password-compat": "Required to use Joomla\\Crypt\\Password\\Simple on PHP 5.4 or earlier",
+        "paragonie/sodium_compat": "To use Sodium cipher",
         "symfony/polyfill-php56": "Required to use Joomla\\Crypt\\Password\\Simple on PHP 5.5 or earlier"
     },
     "target-dir": "Joomla/Crypt",
