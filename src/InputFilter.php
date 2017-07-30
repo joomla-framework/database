@@ -113,6 +113,7 @@ class InputFilter
 		'bgsound',
 		'base',
 		'basefont',
+		'canvas',
 		'embed',
 		'frame',
 		'frameset',
