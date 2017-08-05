@@ -11,6 +11,7 @@ namespace Joomla\Database\Oracle;
 use Joomla\Database\DatabaseEvents;
 use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Pdo\PdoDriver;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Oracle Database Driver supporting PDO based connections
@@ -64,15 +65,12 @@ class OracleDriver extends PdoDriver
 	 */
 	public function __construct(array $options)
 	{
-		$options['driver']     = 'oci';
-		$options['charset']    = isset($options['charset']) ? $options['charset']   : 'AL32UTF8';
-		$options['dateformat'] = isset($options['dateformat']) ? $options['dateformat'] : 'RRRR-MM-DD HH24:MI:SS';
+		$options['driver'] = 'oci';
 
-		$this->charset    = $options['charset'];
-		$this->dateformat = $options['dateformat'];
-
-		// Finalize initialisation
 		parent::__construct($options);
+
+		$this->charset    = $this->options['charset'];
+		$this->dateformat = $this->options['dateformat'];
 	}
 
 	/**
@@ -83,6 +81,31 @@ class OracleDriver extends PdoDriver
 	public function __destruct()
 	{
 		$this->disconnect();
+	}
+
+	/**
+	 * Resolve the options for the database driver.
+	 *
+	 * @param   OptionsResolver  $resolver  The options resolver.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function configureOptions(OptionsResolver $resolver)
+	{
+		parent::configureOptions($resolver);
+
+		$resolver->setDefaults(
+			[
+				'charset'    => 'AL32UTF8',
+				'dateformat' => 'RRRR-MM-DD HH24:MI:SS',
+				'schema'     => '',
+			]
+		);
+
+		$resolver->setAllowedTypes('dateformat', ['string']);
+		$resolver->setAllowedTypes('schema', ['string']);
 	}
 
 	/**
@@ -102,7 +125,7 @@ class OracleDriver extends PdoDriver
 
 		parent::connect();
 
-		if (isset($this->options['schema']))
+		if ($this->options['schema'])
 		{
 			$this->setQuery('ALTER SESSION SET CURRENT_SCHEMA = ' . $this->quoteName($this->options['schema']))
 				->execute();

@@ -11,6 +11,7 @@ namespace Joomla\Database\Mysql;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Pdo\PdoDriver;
 use Joomla\Database\UTF8MB4SupportInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * MySQL database driver supporting PDO based connections
@@ -20,6 +21,21 @@ use Joomla\Database\UTF8MB4SupportInterface;
  */
 class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 {
+	/**
+	 * The default SQL mode used by the driver, this matches the sql_mode for MySQL 5.7.8+ default strict mode.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 * @link   https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-8.html#mysqld-5-7-8-sql-mode
+	 */
+	protected $defaultSqlModes = [
+		'ONLY_FULL_GROUP_BY',
+		'STRICT_TRANS_TABLES',
+		'ERROR_FOR_DIVISION_BY_ZERO',
+		'NO_AUTO_CREATE_USER',
+		'NO_ENGINE_SUBSTITUTION',
+	];
+
 	/**
 	 * The name of the database driver.
 	 *
@@ -72,35 +88,41 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 */
 	public function __construct(array $options)
 	{
-		/**
-		 * sql_mode to MySql 5.7.8+ default strict mode.
-		 *
-		 * @link https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-8.html#mysqld-5-7-8-sql-mode
-		 */
-		$sqlModes = [
-			'ONLY_FULL_GROUP_BY',
-			'STRICT_TRANS_TABLES',
-			'ERROR_FOR_DIVISION_BY_ZERO',
-			'NO_AUTO_CREATE_USER',
-			'NO_ENGINE_SUBSTITUTION',
-		];
+		$options['driver'] = 'mysql';
 
-		// Get some basic values from the options.
-		$options['driver']   = 'mysql';
-		$options['charset']  = isset($options['charset']) ? $options['charset'] : 'utf8';
-		$options['sqlModes'] = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
+		parent::__construct($options);
 
-		$this->charset = $options['charset'];
+		$this->charset = $this->options['charset'];
 
 		/*
 		 * Pre-populate the UTF-8 Multibyte compatibility flag. Unfortunately PDO won't report the server version unless we're connected to it,
 		 * and we cannot connect to it unless we know if it supports utf8mb4, which requires us knowing the server version. Because of this
 		 * chicken and egg issue, we _assume_ it's supported and we'll just catch any problems at connection time.
 		 */
-		$this->utf8mb4 = $options['charset'] === 'utf8mb4';
+		$this->utf8mb4 = $this->options['charset'] === 'utf8mb4';
+	}
 
-		// Finalize initialisation.
-		parent::__construct($options);
+	/**
+	 * Resolve the options for the database driver.
+	 *
+	 * @param   OptionsResolver  $resolver  The options resolver.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function configureOptions(OptionsResolver $resolver)
+	{
+		parent::configureOptions($resolver);
+
+		$resolver->setDefaults(
+			[
+				'charset'   => 'utf8',
+				'sqlModes'  => $this->defaultSqlModes
+			]
+		);
+
+		$resolver->setAllowedTypes('sqlModes', ['array']);
 	}
 
 	/**

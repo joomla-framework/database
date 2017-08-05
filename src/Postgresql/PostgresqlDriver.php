@@ -93,25 +93,6 @@ class PostgresqlDriver extends DatabaseDriver
 	protected $concat_operator = '||';
 
 	/**
-	 * Database object constructor
-	 *
-	 * @param   array  $options  List of options used to configure the connection
-	 *
-	 * @since	1.0
-	 */
-	public function __construct(array $options)
-	{
-		$options['host']     = isset($options['host']) ? $options['host'] : 'localhost';
-		$options['user']     = isset($options['user']) ? $options['user'] : '';
-		$options['password'] = isset($options['password']) ? $options['password'] : '';
-		$options['database'] = isset($options['database']) ? $options['database'] : '';
-		$options['port']     = isset($options['port']) ? $options['port'] : null;
-
-		// Finalize initialization
-		parent::__construct($options);
-	}
-
-	/**
 	 * Database object destructor
 	 *
 	 * @since   1.0

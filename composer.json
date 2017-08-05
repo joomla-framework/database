@@ -7,8 +7,9 @@
     "license": "GPL-2.0+",
     "require": {
         "php": "~7.0",
-        "joomla/event": "~2.0@dev",
-        "psr/log": "~1.0"
+        "joomla/event": "~2.0",
+        "psr/log": "~1.0",
+        "symfony/options-resolver": "~3.0|~4.0"
     },
     "require-dev": {
         "joomla/di": "~1.0|~2.0",

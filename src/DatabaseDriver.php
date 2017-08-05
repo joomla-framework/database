@@ -11,6 +11,7 @@ namespace Joomla\Database;
 use Joomla\Event\DispatcherAwareInterface;
 use Joomla\Event\DispatcherAwareTrait;
 use Joomla\Event\EventInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Joomla Framework Database Driver Class
@@ -270,11 +271,8 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	public static function getInstance(array $options = [])
 	{
 		// Sanitize the database connector options.
-		$options['driver']   = isset($options['driver']) ? preg_replace('/[^A-Z0-9_\.-]/i', '', $options['driver']) : 'mysqli';
-		$options['database'] = isset($options['database']) ? $options['database'] : null;
-		$options['select']   = isset($options['select']) ? $options['select'] : true;
-		$options['factory']  = isset($options['factory']) ? $options['factory'] : new DatabaseFactory;
-		$options['monitor']  = isset($options['monitor']) ? $options['monitor'] : null;
+		$options['driver']  = isset($options['driver']) ? preg_replace('/[^A-Z0-9_\.-]/i', '', $options['driver']) : 'mysqli';
+		$options['factory'] = $options['factory'] ?? new DatabaseFactory;
 
 		// Get the options signature for the database connector.
 		$signature = md5(serialize($options));
@@ -454,20 +452,23 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 */
 	public function __construct(array $options)
 	{
+		$resolver = new OptionsResolver;
+		$this->configureOptions($resolver);
+
+		// Set class options.
+		$this->options = $resolver->resolve($options);
+
 		// Initialise object variables.
-		$this->database    = isset($options['database']) ? $options['database'] : '';
-		$this->tablePrefix = isset($options['prefix']) ? $options['prefix'] : '';
+		$this->database    = $this->options['database'];
+		$this->tablePrefix = $this->options['prefix'];
 		$this->count       = 0;
 		$this->errorNum    = 0;
 
-		// Set class options.
-		$this->options = $options;
-
 		// Register the DatabaseFactory
-		$this->factory = isset($options['factory']) ? $options['factory'] : new DatabaseFactory;
+		$this->factory = $this->options['factory'];
 
 		// Register the query monitor if available
-		$this->monitor = isset($options['monitor']) ? $options['monitor'] : null;
+		$this->monitor = $this->options['monitor'];
 	}
 
 	/**
@@ -490,6 +491,44 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		$this->setQuery($this->getAlterDbCharacterSet($dbName));
 
 		return $this->execute();
+	}
+
+	/**
+	 * Resolve the options for the database driver.
+	 *
+	 * @param   OptionsResolver  $resolver  The options resolver.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function configureOptions(OptionsResolver $resolver)
+	{
+		$resolver->setDefaults(
+			[
+				'database' => null,
+				'factory'  => new DatabaseFactory,
+				'monitor'  => null,
+				'prefix'   => '',
+				'select'   => true,
+				'host'     => 'localhost',
+				'user'     => '',
+				'password' => '',
+				'port'     => null,
+				'driver'   => '',
+			]
+		);
+
+		$resolver->setAllowedTypes('factory', [DatabaseFactory::class]);
+		$resolver->setAllowedTypes('monitor', ['null', QueryMonitorInterface::class]);
+		$resolver->setAllowedTypes('database', ['null', 'string']);
+		$resolver->setAllowedTypes('prefix', ['string']);
+		$resolver->setAllowedTypes('select', ['bool']);
+		$resolver->setAllowedTypes('host', ['string']);
+		$resolver->setAllowedTypes('user', ['string']);
+		$resolver->setAllowedTypes('password', ['string']);
+		$resolver->setAllowedTypes('port', ['null', 'int']);
+		$resolver->setAllowedTypes('driver', ['string']);
 	}
 
 	/**
