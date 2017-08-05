@@ -8,6 +8,8 @@
 
 namespace Joomla\Crypt;
 
+use Joomla\Crypt\Exception\InvalidKeyTypeException;
+
 /**
  * Cipher class for Simple encryption, decryption and key generation.
  *
@@ -33,7 +35,7 @@ class Cipher_Simple implements CipherInterface
 		// Validate key.
 		if ($key->type !== 'simple')
 		{
-			throw new \InvalidArgumentException('Invalid key of type: ' . $key->type . '.  Expected simple.');
+			throw new InvalidKeyTypeException('simple', $key->type);
 		}
 
 		$decrypted = '';
@@ -75,7 +77,7 @@ class Cipher_Simple implements CipherInterface
 		// Validate key.
 		if ($key->type !== 'simple')
 		{
-			throw new \InvalidArgumentException('Invalid key of type: ' . $key->type . '.  Expected simple.');
+			throw new InvalidKeyTypeException('simple', $key->type);
 		}
 
 		$encrypted = '';

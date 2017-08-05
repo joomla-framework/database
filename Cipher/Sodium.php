@@ -8,6 +8,7 @@
 
 namespace Joomla\Crypt;
 
+use Joomla\Crypt\Exception\InvalidKeyTypeException;
 use ParagonIE\Sodium\Compat;
 
 /**
@@ -41,7 +42,7 @@ class Cipher_Sodium implements CipherInterface
 		// Validate key.
 		if ($key->type !== 'sodium')
 		{
-			throw new \InvalidArgumentException('Invalid key of type: ' . $key->type . '.  Expected sodium.');
+			throw new InvalidKeyTypeException('sodium', $key->type);
 		}
 
 		if (!$this->nonce)
@@ -79,7 +80,7 @@ class Cipher_Sodium implements CipherInterface
 		// Validate key.
 		if ($key->type !== 'sodium')
 		{
-			throw new \InvalidArgumentException('Invalid key of type: ' . $key->type . '.  Expected sodium.');
+			throw new InvalidKeyTypeException('sodium', $key->type);
 		}
 
 		if (!$this->nonce)

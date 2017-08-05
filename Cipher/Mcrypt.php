@@ -8,6 +8,8 @@
 
 namespace Joomla\Crypt;
 
+use Joomla\Crypt\Exception\InvalidKeyTypeException;
+
 /**
  * Cipher class for mcrypt algorithm encryption, decryption and key generation.
  *
@@ -71,7 +73,7 @@ abstract class Cipher_Mcrypt implements CipherInterface
 		// Validate key.
 		if ($key->type !== $this->keyType)
 		{
-			throw new \InvalidArgumentException('Invalid key of type: ' . $key->type . '.  Expected ' . $this->keyType . '.');
+			throw new InvalidKeyTypeException($this->keyType, $key->type);
 		}
 
 		// Decrypt the data.
@@ -97,7 +99,7 @@ abstract class Cipher_Mcrypt implements CipherInterface
 		// Validate key.
 		if ($key->type !== $this->keyType)
 		{
-			throw new \InvalidArgumentException('Invalid key of type: ' . $key->type . '.  Expected ' . $this->keyType . '.');
+			throw new InvalidKeyTypeException($this->keyType, $key->type);
 		}
 
 		// Encrypt the data.

@@ -8,6 +8,8 @@
 
 namespace Joomla\Crypt;
 
+use Joomla\Crypt\Exception\InvalidKeyTypeException;
+
 /**
  * Joomla cipher for encryption, decryption and key generation via the php-encryption library.
  *
@@ -32,7 +34,7 @@ class Cipher_Crypto implements CipherInterface
 		// Validate key.
 		if ($key->type !== 'crypto')
 		{
-			throw new \InvalidArgumentException('Invalid key of type: ' . $key->type . '.  Expected crypto.');
+			throw new InvalidKeyTypeException('crypto', $key->type);
 		}
 
 		// Decrypt the data.
@@ -71,7 +73,7 @@ class Cipher_Crypto implements CipherInterface
 		// Validate key.
 		if ($key->type !== 'crypto')
 		{
-			throw new \InvalidArgumentException('Invalid key of type: ' . $key->type . '.  Expected crypto.');
+			throw new InvalidKeyTypeException('crypto', $key->type);
 		}
 
 		// Encrypt the data.
