@@ -48,6 +48,7 @@ abstract class SqliteCase extends TestDatabase
 			static::$driver = DatabaseDriver::getInstance(self::$options);
 
 			// Get the PDO instance for an SQLite memory database and load the test schema into it.
+			static::$driver->connect();
 			static::$driver->getConnection()->exec(file_get_contents(dirname(__DIR__) . '/Stubs/ddl.sql'));
 		}
 		catch (\RuntimeException $e)
