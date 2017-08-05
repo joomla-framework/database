@@ -499,7 +499,7 @@ class SqlsrvDriverTest extends SqlsrvCase
 
 		/** @var \Joomla\Database\Sqlsrv\SqlsrvQuery $query */
 		$query = self::$driver->getQuery(true);
-		$query->insert('jos_dbtest')
+		$query->insert('dbtest')
 			->columns('title,start_date,description')
 			->values('?, ?, ?');
 		$query->bind(1, $title);

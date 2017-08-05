@@ -1108,9 +1108,9 @@ class PostgresqlDriverTest extends PostgresqlCase
 		// Data is from `DatabasePostgresqlCase::getDataSet()`
 		$this->assertThat(self::$driver->loadResult(), $this->equalTo(4), __LINE__);
 
-		// jos_dbtest_id_seq == 2 because of `testInsertObject()`
-		// Reset jos_dbtest_id_seq
-		self::$driver->setQuery('ALTER SEQUENCE jos_dbtest_id_seq RESTART WITH 5')->execute();
+		// dbtest_id_seq == 2 because of `testInsertObject()`
+		// Reset dbtest_id_seq
+		self::$driver->setQuery('ALTER SEQUENCE dbtest_id_seq RESTART WITH 5')->execute();
 
 		$query = self::$driver->getQuery(true);
 		$query->insert('dbtest')
