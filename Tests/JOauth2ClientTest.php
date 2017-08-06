@@ -4,11 +4,11 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+use Joomla\Application\AbstractWebApplication;
+use Joomla\Http\Http;
+use Joomla\Input\Input;
 use Joomla\OAuth2\Client;
 use Joomla\Registry\Registry;
-use Joomla\Input\Input;
-use Joomla\Http\Http;
-use Joomla\Test\WebInspector;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,7 +34,7 @@ class ClientTest extends TestCase
 	protected $input;
 
 	/**
-	 * @var    \Joomla\Application\AbstractWebApplication  The application object to send HTTP headers for redirects.
+	 * @var    AbstractWebApplication|\PHPUnit_Framework_MockObject_MockObject  The application object to send HTTP headers for redirects.
 	 */
 	protected $application;
 
@@ -62,7 +62,17 @@ class ClientTest extends TestCase
 		$this->http = $this->getMockBuilder('Joomla\Http\Http')->getMock();
 		$array = array();
 		$this->input = new Input($array);
-		$this->application = new WebInspector;
+
+		$this->application = $this->getMockForAbstractClass(
+			'Joomla\Application\AbstractWebApplication',
+			array(),
+			'',
+			true,
+			true,
+			true,
+			array('redirect')
+		);
+
 		$this->object = new Client($this->options, $this->http, $this->input, $this->application);
 	}
 
@@ -81,8 +91,11 @@ class ClientTest extends TestCase
 		$this->object->setOption('requestparams', array('access_type' => 'offline', 'approval_prompt' => 'auto'));
 		$this->object->setOption('sendheaders', true);
 
+		$this->application->expects($this->any())
+			->method('redirect')
+			->willReturn(true);
+
 		$this->object->authenticate();
-		$this->assertEquals(0, $this->application->closed);
 
 		$this->object->setOption('tokenurl', 'https://accounts.google.com/o/oauth2/token');
 		$this->object->setOption('clientsecret', 'jeDs8rKw_jDJW8MMf-ff8ejs');
