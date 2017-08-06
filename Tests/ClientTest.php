@@ -6,10 +6,10 @@
 
 namespace Joomla\OAuth1\Tests;
 
+use Joomla\Application\AbstractWebApplication;
+use Joomla\Input\Input;
 use Joomla\OAuth1\Client;
 use Joomla\Registry\Registry;
-use Joomla\Input\Input;
-use Joomla\Test\WebInspector;
 use Joomla\Test\TestHelper;
 use PHPUnit\Framework\TestCase;
 
@@ -49,7 +49,7 @@ class ClientTest extends TestCase
 	protected $object;
 
 	/**
-	 * @var   \Joomla\Application\AbstractWebApplication  The application object to send HTTP headers for redirects.
+	 * @var   AbstractWebApplication|\PHPUnit_Framework_MockObject_MockObject  The application object to send HTTP headers for redirects.
 	 */
 	protected $application;
 
@@ -85,7 +85,7 @@ class ClientTest extends TestCase
 		$this->options = new Registry;
 		$this->client = $this->getMockBuilder('Joomla\\Http\\Http')->getMock();
 		$this->input = new Input;
-		$this->application = new WebInspector;
+		$this->application = $this->getMockForAbstractClass('Joomla\\Application\\AbstractWebApplication');
 
 		$mockSession = $this->getMockBuilder('Joomla\\Session\\Session')->getMock();
 
@@ -241,7 +241,7 @@ class ClientTest extends TestCase
 	}
 
 	/**
-	 * Tests the _generateRequestToken method - failure
+	 * Tests the generateRequestToken method - failure
 	 *
 	 * @return  void
 	 *
@@ -261,7 +261,7 @@ class ClientTest extends TestCase
 			->with($this->object->getOption('requestTokenURL'))
 			->will($this->returnValue($returnData));
 
-		TestHelper::invoke($this->object, '_generateRequestToken');
+		TestHelper::invoke($this->object, 'generateRequestToken');
 	}
 
 	/**
