@@ -23,6 +23,7 @@ class Router
 	 *
 	 * @var    string
 	 * @since  1.0
+	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	protected $controllerPrefix;
 
@@ -31,6 +32,7 @@ class Router
 	 *
 	 * @var    string
 	 * @since  1.0
+	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	protected $default;
 
@@ -39,6 +41,7 @@ class Router
 	 *
 	 * @var    Input
 	 * @since  1.0
+	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	protected $input;
 
@@ -48,6 +51,7 @@ class Router
 	 *
 	 * @var    array
 	 * @since  1.0
+	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	protected $maps = array();
 
@@ -72,6 +76,7 @@ class Router
 	 * @return  Router  Returns itself to support chaining.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	public function addMap($pattern, $controller)
 	{
@@ -143,6 +148,7 @@ class Router
 	 * @return  Router  Returns itself to support chaining.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	public function addMaps($maps)
 	{
@@ -164,6 +170,7 @@ class Router
 	 * @since   1.0
 	 * @throws  \InvalidArgumentException
 	 * @throws  \RuntimeException
+	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	public function getController($route)
 	{
@@ -182,6 +189,7 @@ class Router
 	 * @return  Router  Returns itself to support chaining.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	public function setControllerPrefix($prefix)
 	{
@@ -198,6 +206,7 @@ class Router
 	 * @return  Router  Returns itself to support chaining.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	public function setDefaultController($name)
 	{
@@ -207,7 +216,7 @@ class Router
 	}
 
 	/**
-	 * Get a JController object for a given name.
+	 * Get a Controller object for a given name.
 	 *
 	 * @param   string  $name  The controller name (excluding prefix) for which to fetch and instance.
 	 *
@@ -215,6 +224,7 @@ class Router
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
+	 * @deprecated  2.0  Deprecated without replacement
 	 */
 	protected function fetchController($name)
 	{

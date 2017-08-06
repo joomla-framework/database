@@ -11,20 +11,26 @@ namespace Joomla\Router;
 /**
  * RESTful Web application router class for the Joomla Framework.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Use the base Router class instead
  */
 class RestRouter extends Router
 {
 	/**
-	 * @var     boolean  A boolean allowing to pass _method as parameter in POST requests
+	 * A boolean allowing to pass _method as parameter in POST requests
 	 *
+	 * @var    boolean
 	 * @since  1.0
+	 * @deprecated  2.0  Use the base Router class instead
 	 */
 	protected $methodInPostRequest = false;
 
 	/**
-	 * @var    array  An array of HTTP Method => controller suffix pairs for routing the request.
+	 * An array of HTTP Method => controller suffix pairs for routing the request.
+	 *
+	 * @var    array
 	 * @since  1.0
+	 * @deprecated  2.0  Use the base Router class instead
 	 */
 	protected $suffixMap = array(
 		'GET' => 'Get',
@@ -42,6 +48,7 @@ class RestRouter extends Router
 	 * @return  boolean
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use the base Router class instead
 	 */
 	public function isMethodInPostRequest()
 	{
@@ -57,6 +64,7 @@ class RestRouter extends Router
 	 * @return  Router  Returns itself to support chaining.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use the base Router class instead
 	 */
 	public function setHttpMethodSuffix($method, $suffix)
 	{
@@ -73,6 +81,7 @@ class RestRouter extends Router
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use the base Router class instead
 	 */
 	public function setMethodInPostRequest($value)
 	{
@@ -86,6 +95,7 @@ class RestRouter extends Router
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
+	 * @deprecated  2.0  Use the base Router class instead
 	 */
 	protected function fetchControllerSuffix()
 	{
@@ -120,6 +130,7 @@ class RestRouter extends Router
 	 *
 	 * @since   1.0
 	 * @throws  \InvalidArgumentException
+	 * @deprecated  2.0  Use the base Router class instead
 	 */
 	protected function parseRoute($route)
 	{
