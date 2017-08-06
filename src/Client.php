@@ -113,10 +113,10 @@ abstract class Client
 		if (empty($verifier))
 		{
 			// Generate a request token.
-			$this->_generateRequestToken();
+			$this->generateRequestToken();
 
 			// Authenticate the user and authorise the app.
-			$this->_authorise();
+			$this->authorise();
 		}
 
 		// Callback
@@ -140,7 +140,7 @@ abstract class Client
 			}
 
 			// Generate access token.
-			$this->_generateAccessToken();
+			$this->generateAccessToken();
 
 			// Return the access token.
 			return $this->token;
@@ -152,10 +152,10 @@ abstract class Client
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 * @throws  \DomainException
 	 */
-	private function _generateRequestToken()
+	private function generateRequestToken()
 	{
 		// Set the callback URL.
 		if ($this->getOption('callback'))
@@ -193,9 +193,9 @@ abstract class Client
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
-	private function _authorise()
+	private function authorise()
 	{
 		$url = $this->getOption('authoriseURL') . '?oauth_token=' . $this->token['key'];
 
@@ -216,9 +216,9 @@ abstract class Client
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
-	private function _generateAccessToken()
+	private function generateAccessToken()
 	{
 		// Set the parameters.
 		$parameters = array(
@@ -269,21 +269,21 @@ abstract class Client
 		// Do not encode multipart parameters. Do not include $data in the signature if $data is not array.
 		if (isset($headers['Content-Type']) && strpos($headers['Content-Type'], 'multipart/form-data') !== false || !is_array($data))
 		{
-			$oauth_headers = $parameters;
+			$oauthHeaders = $parameters;
 		}
 		else
 		{
 			// Use all parameters for the signature.
-			$oauth_headers = array_merge($parameters, $data);
+			$oauthHeaders = array_merge($parameters, $data);
 		}
 
 		// Sign the request.
-		$oauth_headers = $this->_signRequest($url, $method, $oauth_headers);
+		$oauthHeaders = $this->signRequest($url, $method, $oauthHeaders);
 
 		// Get parameters for the Authorisation header.
 		if (is_array($data))
 		{
-			$oauth_headers = array_diff_key($oauth_headers, $data);
+			$oauthHeaders = array_diff_key($oauthHeaders, $data);
 		}
 
 		// Send the request.
@@ -291,18 +291,18 @@ abstract class Client
 		{
 			case 'GET':
 				$url = $this->toUrl($url, $data);
-				$response = $this->client->get($url, array('Authorization' => $this->_createHeader($oauth_headers)));
+				$response = $this->client->get($url, array('Authorization' => $this->createHeader($oauthHeaders)));
 				break;
 			case 'POST':
-				$headers = array_merge($headers, array('Authorization' => $this->_createHeader($oauth_headers)));
+				$headers = array_merge($headers, array('Authorization' => $this->createHeader($oauthHeaders)));
 				$response = $this->client->post($url, $data, $headers);
 				break;
 			case 'PUT':
-				$headers = array_merge($headers, array('Authorization' => $this->_createHeader($oauth_headers)));
+				$headers = array_merge($headers, array('Authorization' => $this->createHeader($oauthHeaders)));
 				$response = $this->client->put($url, $data, $headers);
 				break;
 			case 'DELETE':
-				$headers = array_merge($headers, array('Authorization' => $this->_createHeader($oauth_headers)));
+				$headers = array_merge($headers, array('Authorization' => $this->createHeader($oauthHeaders)));
 				$response = $this->client->delete($url, $headers);
 				break;
 		}
@@ -333,9 +333,9 @@ abstract class Client
 	 *
 	 * @return  string  The header.
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
-	private function _createHeader($parameters)
+	private function createHeader($parameters)
 	{
 		$header = 'OAuth ';
 
@@ -412,18 +412,18 @@ abstract class Client
 	 *
 	 * @return  array  The array containing the request parameters, including signature.
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
-	private function _signRequest($url, $method, $parameters)
+	private function signRequest($url, $method, $parameters)
 	{
 		// Create the signature base string.
-		$base = $this->_baseString($url, $method, $parameters);
+		$base = $this->baseString($url, $method, $parameters);
 
 		$parameters['oauth_signature'] = $this->safeEncode(
 			base64_encode(
-				hash_hmac('sha1', $base, $this->_prepareSigningKey(), true)
-				)
-			);
+				hash_hmac('sha1', $base, $this->prepareSigningKey(), true)
+			)
+		);
 
 		return $parameters;
 	}
@@ -437,9 +437,9 @@ abstract class Client
 	 *
 	 * @return  string  The base string.
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
-	private function _baseString($url, $method, $parameters)
+	private function baseString($url, $method, $parameters)
 	{
 		// Sort the parameters alphabetically
 		uksort($parameters, 'strcmp');
@@ -494,18 +494,17 @@ abstract class Client
 		{
 			return array_map(array($this, 'safeEncode'), $data);
 		}
-		elseif (is_scalar($data))
+
+		if (is_scalar($data))
 		{
 			return str_ireplace(
 				array('+', '%7E'),
 				array(' ', '~'),
 				rawurlencode($data)
-				);
+			);
 		}
-		else
-		{
-			return '';
-		}
+
+		return '';
 	}
 
 	/**
@@ -529,9 +528,9 @@ abstract class Client
 	 *
 	 * @return  string  The prepared signing key.
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
-	private function _prepareSigningKey()
+	private function prepareSigningKey()
 	{
 		return $this->safeEncode($this->getOption('consumer_secret')) . '&' . $this->safeEncode(($this->token) ? $this->token['secret'] : '');
 	}
