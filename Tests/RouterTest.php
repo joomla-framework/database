@@ -6,6 +6,7 @@
 
 namespace Joomla\Router\Tests;
 
+use Joomla\Input\Input;
 use Joomla\Router\Router;
 use Joomla\Test\TestHelper;
 use PHPUnit\Framework\TestCase;
@@ -411,6 +412,6 @@ class RouterTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->instance = new Router;
+		$this->instance = new Router(new Input(array()));
 	}
 }
