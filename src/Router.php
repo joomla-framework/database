@@ -54,14 +54,13 @@ class Router
 	/**
 	 * Constructor.
 	 *
-	 * @param   Input  $input  An optional input object from which to derive the route.  If none
-	 *                         is given than the input from the application object will be used.
+	 * @param   Input  $input  An optional input object from which to derive the route.
 	 *
 	 * @since   1.0
 	 */
 	public function __construct(Input $input = null)
 	{
-		$this->input = ($input === null) ? new Input : $input;
+		$this->input = $input ?: new Input;
 	}
 
 	/**
