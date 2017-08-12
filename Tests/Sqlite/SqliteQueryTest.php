@@ -171,6 +171,10 @@ class SqliteQueryTest extends TestCase
 	 */
 	public function test__toStringUpdate()
 	{
+		$this->dbo->expects($this->any())
+			->method('getTableColumns')
+			->willReturn([]);
+
 		$q = new SqliteQuery($this->dbo);
 
 		$q->update('#__foo AS a')
@@ -181,8 +185,8 @@ class SqliteQueryTest extends TestCase
 		$this->assertThat(
 			(string) $q,
 			$this->equalTo(
-				PHP_EOL . 'INSERT OR REPLACE INTO #__foo (0,a.id)' .
-				PHP_EOL . 'SELECT ,2' .
+				'INSERT OR REPLACE INTO #__foo (a.id)' .
+				PHP_EOL . 'SELECT 2' .
 				PHP_EOL . 'FROM #__foo AS a' .
 				PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
 				PHP_EOL . 'WHERE b.id = 1'
