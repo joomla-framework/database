@@ -181,9 +181,10 @@ class SqliteQueryTest extends TestCase
 		$this->assertThat(
 			(string) $q,
 			$this->equalTo(
-				PHP_EOL . 'UPDATE #__foo AS a' .
+				PHP_EOL . 'INSERT OR REPLACE INTO #__foo (0,a.id)' .
+				PHP_EOL . 'SELECT ,2' .
+				PHP_EOL . 'FROM #__foo AS a' .
 				PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-				PHP_EOL . 'SET a.id = 2' .
 				PHP_EOL . 'WHERE b.id = 1'
 			),
 			'Tests for correct rendering.'

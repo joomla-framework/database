@@ -183,9 +183,10 @@ class SqlsrvQueryTest extends TestCase
 		$this->assertThat(
 			(string) $q,
 			$this->equalTo(
-				PHP_EOL . 'UPDATE #__foo AS a' .
-				PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+				PHP_EOL . 'UPDATE a' .
 				PHP_EOL . 'SET a.id = 2' .
+				PHP_EOL . 'FROM #__foo AS a' .
+				PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
 				PHP_EOL . 'WHERE b.id = 1'
 			),
 			'Tests for correct rendering.'
@@ -207,7 +208,7 @@ class SqlsrvQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT YEAR("col")' . PHP_EOL . 'FROM table')
+			$this->equalTo(PHP_EOL . 'SELECT YEAR("col") AS "columnAlias0"' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -226,7 +227,7 @@ class SqlsrvQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT MONTH("col")' . PHP_EOL . 'FROM table')
+			$this->equalTo(PHP_EOL . 'SELECT MONTH("col") AS "columnAlias0"' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -245,7 +246,7 @@ class SqlsrvQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT DAY("col")' . PHP_EOL . 'FROM table')
+			$this->equalTo(PHP_EOL . 'SELECT DAY("col") AS "columnAlias0"' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -264,7 +265,7 @@ class SqlsrvQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT HOUR("col")' . PHP_EOL . 'FROM table')
+			$this->equalTo(PHP_EOL . 'SELECT HOUR("col") AS "columnAlias0"' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -283,7 +284,7 @@ class SqlsrvQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT MINUTE("col")' . PHP_EOL . 'FROM table')
+			$this->equalTo(PHP_EOL . 'SELECT MINUTE("col") AS "columnAlias0"' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -302,7 +303,7 @@ class SqlsrvQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT SECOND("col")' . PHP_EOL . 'FROM table')
+			$this->equalTo(PHP_EOL . 'SELECT SECOND("col") AS "columnAlias0"' . PHP_EOL . 'FROM table')
 		);
 	}
 
