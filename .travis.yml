@@ -10,16 +10,15 @@ env:
 matrix:
   fast_finish: true
   include:
-    - php: 5.5
-    - php: 5.5
+    - php: 7.0
+    - php: 7.0
       env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
-    - php: 5.6
+    - php: 7.0
       env: RUN_PHPCS="yes"
-    - php: 7.0
-    - php: 7.0
+    - php: 7.1
+    - php: 7.1
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
       env: COMPOSER_FLAGS=""
-    - php: 7.1
     - php: 7.2
     - php: nightly
   allow_failures:
