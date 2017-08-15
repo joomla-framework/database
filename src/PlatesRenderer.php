@@ -48,9 +48,9 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \InvalidArgumentException
 	 */
-	public function addFolder($directory, $alias = null)
+	public function addFolder(string $directory, string $alias = '')
 	{
-		if ($alias === null)
+		if ($alias === '')
 		{
 			throw new \InvalidArgumentException('Setting an alias is required in Plates');
 		}
@@ -81,7 +81,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function pathExists($path)
+	public function pathExists(string $path): bool
 	{
 		return $this->getRenderer()->exists($path);
 	}
@@ -96,7 +96,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function render($template, array $data = array())
+	public function render(string $template, array $data = array()): string
 	{
 		$data = array_merge($this->data, $data);
 
@@ -112,7 +112,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setFileExtension($extension)
+	public function setFileExtension(string $extension)
 	{
 		$this->getRenderer()->setFileExtension($extension);
 

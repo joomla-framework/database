@@ -24,7 +24,7 @@ interface RendererInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function pathExists($path);
+	public function pathExists(string $path): bool;
 
 	/**
 	 * Get the rendering engine
@@ -45,7 +45,7 @@ interface RendererInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function render($template, array $data = array());
+	public function render(string $template, array $data = array()): string;
 
 	/**
 	 * Sets a piece of data
@@ -57,7 +57,7 @@ interface RendererInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function set($key, $value);
+	public function set(string $key, $value);
 
 	/**
 	 * Loads data from array into the renderer
@@ -68,7 +68,7 @@ interface RendererInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setData($data);
+	public function setData(array $data);
 
 	/**
 	 * Unloads data from renderer

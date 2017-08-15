@@ -25,5 +25,5 @@ interface AddTemplateFolderInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function addFolder($directory, $alias = null);
+	public function addFolder(string $directory, string $alias = '');
 }

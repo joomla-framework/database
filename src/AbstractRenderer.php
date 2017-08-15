@@ -33,7 +33,7 @@ abstract class AbstractRenderer implements RendererInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function set($key, $value)
+	public function set(string $key, $value)
 	{
 		$this->data[$key] = $value;
 
@@ -49,7 +49,7 @@ abstract class AbstractRenderer implements RendererInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setData($data)
+	public function setData(array $data)
 	{
 		$this->data = $data;
 

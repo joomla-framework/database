@@ -73,7 +73,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function addFolder($directory, $alias = null)
+	public function addFolder(string $directory, string $alias = '')
 	{
 		$this->getRenderer()->addLocation($directory);
 
@@ -101,7 +101,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function pathExists($path)
+	public function pathExists(string $path): bool
 	{
 		return $this->getRenderer()->exists($path);
 	}
@@ -116,7 +116,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function render($template, array $data = array())
+	public function render(string $template, array $data = array()): string
 	{
 		$data = array_merge($this->data, $data);
 

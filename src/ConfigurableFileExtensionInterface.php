@@ -24,5 +24,5 @@ interface ConfigurableFileExtensionInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setFileExtension($extension);
+	public function setFileExtension(string $extension);
 }

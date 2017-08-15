@@ -47,14 +47,14 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function addFolder($directory, $alias = null)
+	public function addFolder(string $directory, string $alias = '')
 	{
 		$loader = $this->getRenderer()->getLoader();
 
 		// This can only be reliably tested with a loader using the filesystem loader's API
 		if (method_exists($loader, 'addPath'))
 		{
-			if ($alias === null)
+			if ($alias === '')
 			{
 				$alias = \Twig_Loader_Filesystem::MAIN_NAMESPACE;
 			}
@@ -86,7 +86,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function pathExists($path)
+	public function pathExists(string $path): bool
 	{
 		$loader = $this->getRenderer()->getLoader();
 
@@ -114,11 +114,9 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function render($template, array $data = array())
+	public function render(string $template, array $data = array()): string
 	{
 		$data = array_merge($this->data, $data);
-
-		// TODO Process template name
 
 		return $this->getRenderer()->render($template, $data);
 	}
