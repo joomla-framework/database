@@ -7,15 +7,15 @@
 namespace Joomla\Database\Tests;
 
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\Tests\Cases\SqliteCase;
 use Joomla\Test\TestHelper;
-use Joomla\Test\TestDatabase;
 
 require_once __DIR__ . '/Stubs/nosqldriver.php';
 
 /**
  * Test class for \Joomla\Database\DatabaseDriver.
  */
-class DatabaseDriverTest extends TestDatabase
+class DatabaseDriverTest extends SqliteCase
 {
 	/**
 	 * @var  DatabaseDriver

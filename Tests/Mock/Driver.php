@@ -6,37 +6,34 @@
 
 namespace Joomla\Database\Tests\Mock;
 
+use Joomla\Database\DatabaseDriver;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class to mock JDatabaseDriver.
- *
- * @since  1.0
+ * Class to mock DatabaseDriver.
  */
 class Driver
 {
 	/**
 	 * A query string or object.
 	 *
-	 * @var    mixed
-	 * @since  1.0
+	 * @var  mixed
 	 */
 	public static $lastQuery = null;
 
 	/**
-	 * Creates and instance of the mock JDatabase object.
+	 * Creates and instance of the mock DatabaseDriver object.
 	 *
-	 * @param   \PHPUnit_Framework_TestCase  $test        A test object.
-	 * @param   string                       $nullDate    A null date string for the driver.
-	 * @param   string                       $dateFormat  A date format for the driver.
+	 * @param   TestCase  $test        A test object.
+	 * @param   string    $nullDate    A null date string for the driver.
+	 * @param   string    $dateFormat  A date format for the driver.
 	 *
-	 * @return  object
-	 *
-	 * @since   1.0
+	 * @return  DatabaseDriver|\PHPUnit_Framework_MockObject_MockObject
 	 */
-	public static function create(\PHPUnit_Framework_TestCase $test, $nullDate = '0000-00-00 00:00:00', $dateFormat = 'Y-m-d H:i:s')
+	public static function create(TestCase $test, $nullDate = '0000-00-00 00:00:00', $dateFormat = 'Y-m-d H:i:s')
 	{
-		// Collect all the relevant methods in JDatabase.
+		// Collect all the relevant methods in DatabaseDriver.
 		$methods = array(
 			'connect',
 			'connected',
@@ -94,7 +91,7 @@ class Driver
 		);
 
 		// Create the mock.
-		$mockObject = $test->getMockBuilder('\Joomla\Database\DatabaseDriver')
+		$mockObject = $test->getMockBuilder(DatabaseDriver::class)
 			->setConstructorArgs(array(array()))
 			->setMethods($methods)
 			->getMock();
@@ -130,8 +127,6 @@ class Driver
 	 * @param   string  $text  The input text.
 	 *
 	 * @return  string
-	 *
-	 * @since   1.0
 	 */
 	public static function mockEscape($text)
 	{
@@ -143,9 +138,7 @@ class Driver
 	 *
 	 * @param   boolean  $new  True to get a new query, false to get the last query.
 	 *
-	 * @return Query | string
-	 *
-	 * @since   1.0
+	 * @return  Query|string
 	 */
 	public static function mockGetQuery($new = false)
 	{
@@ -166,8 +159,6 @@ class Driver
 	 * @param   boolean  $escape  Optional parameter to provide extra escaping.
 	 *
 	 * @return  string  The value passed wrapped in MySQL quotes.
-	 *
-	 * @since   1.0
 	 */
 	public static function mockQuote($value, $escape = true)
 	{
@@ -190,8 +181,6 @@ class Driver
 	 * @param   string  $value  The value to be quoted.
 	 *
 	 * @return  string  The value passed wrapped in MySQL quotes.
-	 *
-	 * @since   1.0
 	 */
 	public static function mockQuoteName($value)
 	{
@@ -204,8 +193,6 @@ class Driver
 	 * @param   string  $query  The query.
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public static function mockSetQuery($query)
 	{

@@ -7,11 +7,17 @@
 namespace Joomla\Database\Tests\Cases;
 
 use Joomla\Database\DatabaseDriver;
+use PHPUnit\DbUnit\Database\DefaultConnection;
+use PHPUnit\DbUnit\DataSet\XmlDataSet;
+use PHPUnit\DbUnit\Operation\Composite;
+use PHPUnit\DbUnit\Operation\Factory;
+use PHPUnit\DbUnit\Operation\Operation;
+use PHPUnit\DbUnit\TestCase;
 
 /**
  * Base test case for the database package
  */
-abstract class AbstractDatabaseTestCase extends \PHPUnit_Extensions_Database_TestCase
+abstract class AbstractDatabaseTestCase extends TestCase
 {
 	/**
 	 * The active database driver being used for the tests.
@@ -48,8 +54,6 @@ abstract class AbstractDatabaseTestCase extends \PHPUnit_Extensions_Database_Tes
 	 * This method is called after the last test of this test class is run.
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public static function tearDownAfterClass()
 	{
@@ -63,9 +67,7 @@ abstract class AbstractDatabaseTestCase extends \PHPUnit_Extensions_Database_Tes
 	/**
 	 * Gets the data set to be loaded into the database during setup
 	 *
-	 * @return  \PHPUnit_Extensions_Database_DataSet_XmlDataSet
-	 *
-	 * @since   1.0
+	 * @return  XmlDataSet
 	 */
 	protected function getDataSet()
 	{
@@ -75,9 +77,7 @@ abstract class AbstractDatabaseTestCase extends \PHPUnit_Extensions_Database_Tes
 	/**
 	 * Returns the default database connection for running the tests.
 	 *
-	 * @return  \PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection
-	 *
-	 * @since   1.0
+	 * @return  DefaultConnection
 	 */
 	protected function getConnection()
 	{
@@ -94,15 +94,15 @@ abstract class AbstractDatabaseTestCase extends \PHPUnit_Extensions_Database_Tes
 	/**
 	 * Returns the database operation executed in test setup.
 	 *
-	 * @return  \PHPUnit_Extensions_Database_Operation_IDatabaseOperation
+	 * @return  Operation
 	 */
 	protected function getSetUpOperation()
 	{
 		// Required given the use of InnoDB contraints.
-		return new \PHPUnit_Extensions_Database_Operation_Composite(
+		return new Composite(
 			[
-				\PHPUnit_Extensions_Database_Operation_Factory::DELETE_ALL(),
-				\PHPUnit_Extensions_Database_Operation_Factory::INSERT(),
+				Factory::DELETE_ALL(),
+				Factory::INSERT(),
 			]
 		);
 	}
@@ -110,11 +110,11 @@ abstract class AbstractDatabaseTestCase extends \PHPUnit_Extensions_Database_Tes
 	/**
 	 * Returns the database operation executed in test cleanup.
 	 *
-	 * @return  \PHPUnit_Extensions_Database_Operation_IDatabaseOperation
+	 * @return  Operation
 	 */
 	protected function getTearDownOperation()
 	{
 		// Required given the use of InnoDB contraints.
-		return \PHPUnit_Extensions_Database_Operation_Factory::DELETE_ALL();
+		return Factory::DELETE_ALL();
 	}
 }

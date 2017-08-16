@@ -7,15 +7,15 @@
 namespace Joomla\Database\Tests;
 
 use Joomla\Database\DatabaseFactory;
+use Joomla\Database\Tests\Cases\SqliteCase;
 use Joomla\Test\TestHelper;
-use Joomla\Test\TestDatabase;
 
 /**
  * Test class for Joomla\Database\DatabaseFactory.
  *
  * @since  1.0
  */
-class DatabaseFactoryTest extends TestDatabase
+class DatabaseFactoryTest extends SqliteCase
 {
 	/**
 	 * Object being tested

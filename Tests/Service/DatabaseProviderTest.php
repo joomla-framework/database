@@ -11,11 +11,12 @@ namespace Joomla\Database\Tests\Service;
 use Joomla\Database\Service\DatabaseProvider;
 use Joomla\DI\Container;
 use Joomla\Registry\Registry;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Joomla\Database\Service\DatabaseProvider.
  */
-class DatabaseProviderTest extends \PHPUnit_Framework_TestCase
+class DatabaseProviderTest extends TestCase
 {
 	/**
 	 * DI Container for testing
