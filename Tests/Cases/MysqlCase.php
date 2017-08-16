@@ -6,24 +6,20 @@
 
 namespace Joomla\Database\Tests\Cases;
 
-use Joomla\Database\Mysql\MysqlDriver;
-use Joomla\Test\TestDatabase;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\Mysql\MysqlDriver;
 
 /**
  * Abstract test case class for MySQL database testing.
- *
- * @since  1.0
  */
-abstract class MysqlCase extends TestDatabase
+abstract class MysqlCase extends AbstractDatabaseTestCase
 {
 	/**
 	 * The database driver options for the connection.
 	 *
-	 * @var    array
-	 * @since  1.0
+	 * @var  array
 	 */
-	private static $options = array('driver' => 'mysql');
+	protected static $options = ['driver' => 'mysql'];
 
 	/**
 	 * This method is called before the first test of this test class is run.
@@ -31,8 +27,6 @@ abstract class MysqlCase extends TestDatabase
 	 * An example DSN would be: host=localhost;dbname=joomla_ut;user=utuser;pass=ut1234
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public static function setUpBeforeClass()
 	{
@@ -67,19 +61,19 @@ abstract class MysqlCase extends TestDatabase
 			switch ($k)
 			{
 				case 'host':
-					self::$options['host'] = $v;
+					static::$options['host'] = $v;
 					break;
 				case 'dbname':
-					self::$options['database'] = $v;
+					static::$options['database'] = $v;
 					break;
 				case 'user':
-					self::$options['user'] = $v;
+					static::$options['user'] = $v;
 					break;
 				case 'pass':
-					self::$options['password'] = $v;
+					static::$options['password'] = $v;
 					break;
 				case 'charset':
-					self::$options['charset'] = $v;
+					static::$options['charset'] = $v;
 					break;
 			}
 		}
@@ -87,58 +81,11 @@ abstract class MysqlCase extends TestDatabase
 		try
 		{
 			// Attempt to instantiate the driver.
-			static::$driver = DatabaseDriver::getInstance(self::$options);
+			static::$driver = DatabaseDriver::getInstance(static::$options);
 		}
 		catch (\RuntimeException $e)
 		{
 			static::$driver = null;
 		}
-	}
-
-	/**
-	 * This method is called after the last test of this test class is run.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public static function tearDownAfterClass()
-	{
-		if (static::$driver !== null)
-		{
-			static::$driver->disconnect();
-			static::$driver = null;
-		}
-	}
-
-	/**
-	 * Gets the data set to be loaded into the database during setup
-	 *
-	 * @return  \PHPUnit_Extensions_Database_DataSet_XmlDataSet
-	 *
-	 * @since   1.0
-	 */
-	protected function getDataSet()
-	{
-		return $this->createXMLDataSet(dirname(__DIR__) . '/Stubs/database.xml');
-	}
-
-	/**
-	 * Returns the default database connection for running the tests.
-	 *
-	 * @return  \PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection
-	 *
-	 * @since   1.0
-	 */
-	protected function getConnection()
-	{
-		if (static::$driver === null)
-		{
-			static::fail('Could not fetch a database driver to establish the connection.');
-		}
-
-		static::$driver->connect();
-
-		return $this->createDefaultDBConnection(static::$driver->getConnection(), self::$options['database']);
 	}
 }

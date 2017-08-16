@@ -6,24 +6,20 @@
 
 namespace Joomla\Database\Tests\Cases;
 
-use Joomla\Database\Oracle\OracleDriver;
-use Joomla\Test\TestDatabase;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\Oracle\OracleDriver;
 
 /**
  * Abstract test case class for Oracle database testing.
- *
- * @since  1.0
  */
-abstract class OracleCase extends TestDatabase
+abstract class OracleCase extends AbstractDatabaseTestCase
 {
 	/**
 	 * The database driver options for the connection.
 	 *
-	 * @var    array
-	 * @since  1.0
+	 * @var  array
 	 */
-	private static $options = array('driver' => 'oracle');
+	protected static $options = ['driver' => 'oracle'];
 
 	/**
 	 * This method is called before the first test of this test class is run.
@@ -31,8 +27,6 @@ abstract class OracleCase extends TestDatabase
 	 * An example DSN would be: dbname=//localhost:1521/joomla_ut;charset=AL32UTF8;user=utuser;pass=ut1234
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public static function setUpBeforeClass()
 	{
@@ -67,88 +61,41 @@ abstract class OracleCase extends TestDatabase
 			switch ($k)
 			{
 				case 'charset':
-					self::$options['charset'] = $v;
+					static::$options['charset'] = $v;
 					break;
 				case 'dbname':
 					$components = parse_url($v);
-					self::$options['host'] = $components['host'];
-					self::$options['port'] = $components['port'];
-					self::$options['database'] = ltrim($components['path'], '/');
+					static::$options['host'] = $components['host'];
+					static::$options['port'] = $components['port'];
+					static::$options['database'] = ltrim($components['path'], '/');
 					break;
 				case 'user':
-					self::$options['user'] = $v;
+					static::$options['user'] = $v;
 					break;
 				case 'pass':
-					self::$options['password'] = $v;
+					static::$options['password'] = $v;
 					break;
 				case 'dbschema':
-					self::$options['schema'] = $v;
+					static::$options['schema'] = $v;
 					break;
 				case 'prefix':
-					self::$options['prefix'] = $v;
+					static::$options['prefix'] = $v;
 					break;
 			}
 		}
 
 		// Ensure some defaults.
-		self::$options['charset'] = isset(self::$options['charset']) ? self::$options['charset'] : 'AL32UTF8';
-		self::$options['port'] = isset(self::$options['port']) ? self::$options['port'] : 1521;
+		static::$options['charset'] = static::$options['charset'] ?? 'AL32UTF8';
+		static::$options['port']    = static::$options['port'] ?? 1521;
 
 		try
 		{
 			// Attempt to instantiate the driver.
-			static::$driver = DatabaseDriver::getInstance(self::$options);
+			static::$driver = DatabaseDriver::getInstance(static::$options);
 		}
 		catch (\RuntimeException $e)
 		{
 			static::$driver = null;
 		}
-	}
-
-	/**
-	 * This method is called after the last test of this test class is run.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public static function tearDownAfterClass()
-	{
-		if (static::$driver !== null)
-		{
-			static::$driver->disconnect();
-			static::$driver = null;
-		}
-	}
-
-	/**
-	 * Gets the data set to be loaded into the database during setup
-	 *
-	 * @return  \PHPUnit_Extensions_Database_DataSet_XmlDataSet
-	 *
-	 * @since   1.0
-	 */
-	protected function getDataSet()
-	{
-		return $this->createXMLDataSet(dirname(__DIR__) . '/Stubs/database.xml');
-	}
-
-	/**
-	 * Returns the default database connection for running the tests.
-	 *
-	 * @return  \PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection
-	 *
-	 * @since   1.0
-	 */
-	protected function getConnection()
-	{
-		if (static::$driver === null)
-		{
-			static::fail('Could not fetch a database driver to establish the connection.');
-		}
-
-		static::$driver->connect();
-
-		return $this->createDefaultDBConnection(static::$driver->getConnection(), self::$options['database']);
 	}
 }
