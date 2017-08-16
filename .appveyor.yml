@@ -57,7 +57,7 @@ install:
     - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
     - appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar
     - cd c:\projects\database
-    - appveyor-retry composer install --no-progress --profile --prefer-stable
+    - appveyor-retry composer update --no-progress --profile --prefer-stable
 
 before_test:
 #  Database setup for mysql via PowerShell tools
