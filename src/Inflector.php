@@ -354,7 +354,7 @@ class Inflector
 	 */
 	public function isPlural($word)
 	{
-		// Try the cache for an known inflection.
+		// Try the cache for a known inflection.
 		$inflection = $this->getCachedSingular($word);
 
 		if ($inflection !== false)
@@ -384,7 +384,7 @@ class Inflector
 	 */
 	public function isSingular($word)
 	{
-		// Try the cache for an known inflection.
+		// Try the cache for a known inflection.
 		$inflection = $this->getCachedPlural($word);
 
 		if ($inflection !== false)
