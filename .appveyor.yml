@@ -25,8 +25,7 @@ services:
 ## Install PHP and composer, and run the appropriate composer command
 install:
     - IF EXIST c:\tools\php (SET PHP=0)
-    - ps: >-
-      appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php_ver_target | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
+    - ps: appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php_ver_target | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
     - appveyor-retry cinst -y sqlite
     - cd c:\tools\php
     # Get the MSSQL DLL's
