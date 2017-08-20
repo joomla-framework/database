@@ -19,7 +19,21 @@ use Joomla\Registry\Registry;
  */
 class Application extends AbstractApplication
 {
+	/**
+	 * The default command for the application.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
 	private $defaultCommand = '';
+
+	/**
+	 * Output handler.
+	 *
+	 * @var    IO\AbstractOutput
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $output;
 
 	/**
 	 * Class constructor.
@@ -39,6 +53,8 @@ class Application extends AbstractApplication
 		{
 			$this->close();
 		}
+
+		$this->output = new IO\StreamOutput;
 
 		// Call the constructor as late as possible (it runs `initialise`).
 		parent::__construct($input ?: new Cli, $config);
@@ -60,10 +76,22 @@ class Application extends AbstractApplication
 
 		if (!$commandName)
 		{
-			echo 'Command name not given.';
+			$this->out('<comment>Command name not given.</comment>');
 
 			$this->close(1);
 		}
+	}
+
+	/**
+	 * Get the output handler.
+	 *
+	 * @return  IO\AbstractOutput
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getOutputHandler(): IO\AbstractOutput
+	{
+		return $this->output;
 	}
 
 	/**
@@ -78,5 +106,38 @@ class Application extends AbstractApplication
 		$args = $this->input->args;
 
 		return !empty($args[0]) ? $args[0] : $this->defaultCommand;
+	}
+
+	/**
+	 * Write a string to the output handler.
+	 *
+	 * @param   string   $text  The text to display.
+	 * @param   boolean  $nl    True (default) to append a new line at the end of the output string.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function out(string $text = '', bool $nl = true)
+	{
+		$this->getOutputHandler()->out($text, $nl);
+
+		return $this;
+	}
+
+	/**
+	 * Set the output handler.
+	 *
+	 * @param   IO\AbstractOutput  $output  The new output handler.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setOutputHandler(IO\AbstractOutput $output)
+	{
+		$this->output = $output;
+
+		return $this;
 	}
 }
