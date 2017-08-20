@@ -153,17 +153,17 @@ class Application extends AbstractApplication
 	}
 
 	/**
-	 * Check if the application has a command with the given name.
+	 * Get the name of the command to run.
 	 *
-	 * @param   string  $name  The name of the command to check for existence.
-	 *
-	 * @return  boolean
+	 * @return  string
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function hasCommand(string $name): bool
+	protected function getCommandName(): string
 	{
-		return isset($this->commands[$name]);
+		$args = $this->input->args;
+
+		return !empty($args[0]) ? $args[0] : $this->defaultCommand;
 	}
 
 	/**
@@ -179,17 +179,17 @@ class Application extends AbstractApplication
 	}
 
 	/**
-	 * Get the name of the command to run.
+	 * Check if the application has a command with the given name.
 	 *
-	 * @return  string
+	 * @param   string  $name  The name of the command to check for existence.
+	 *
+	 * @return  boolean
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function getCommandName(): string
+	public function hasCommand(string $name): bool
 	{
-		$args = $this->input->args;
-
-		return !empty($args[0]) ? $args[0] : $this->defaultCommand;
+		return isset($this->commands[$name]);
 	}
 
 	/**
