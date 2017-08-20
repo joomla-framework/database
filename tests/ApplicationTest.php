@@ -7,11 +7,13 @@
 namespace Joomla\Console\Tests;
 
 use Joomla\Console\Application;
+use Joomla\Console\Loader\ContainerLoader;
 use Joomla\Console\Tests\Fixtures\Command\TestAliasedCommand;
 use Joomla\Console\Tests\Fixtures\Command\TestDisabledCommand;
 use Joomla\Console\Tests\Fixtures\Command\TestNoAliasCommand;
 use Joomla\Console\Tests\Fixtures\Command\TestUnnamedCommand;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 /**
  * Test class for \Joomla\Console\Application
@@ -102,6 +104,30 @@ class ApplicationTest extends TestCase
 	}
 
 	/**
+	 * @covers  Joomla\Console\Application::hasCommand
+	 * @uses    Joomla\Console\Application::addCommand
+	 * @uses    Joomla\Console\Application::setCommandLoader
+	 */
+	public function testACommandIsReportedAsAvailableThroughACommandLoader()
+	{
+		$command = new TestNoAliasCommand;
+
+		$commandName = $command->getName();
+		$serviceId   = 'test.loader';
+
+		$container = $this->createMock(ContainerInterface::class);
+
+		$container->expects($this->once())
+			->method('has')
+			->with($serviceId)
+			->willReturn(true);
+
+		$this->object->setCommandLoader(new ContainerLoader($container, [$commandName => $serviceId]));
+
+		$this->assertTrue($this->object->hasCommand($command->getName()));
+	}
+
+	/**
 	 * @covers  Joomla\Console\Application::getCommand
 	 * @uses    Joomla\Console\Application::addCommand
 	 */
@@ -110,6 +136,35 @@ class ApplicationTest extends TestCase
 		$command = new TestNoAliasCommand;
 
 		$this->object->addCommand($command);
+		$this->assertSame($command, $this->object->getCommand($command->getName()));
+	}
+
+	/**
+	 * @covers  Joomla\Console\Application::getCommand
+	 * @uses    Joomla\Console\Application::addCommand
+	 * @uses    Joomla\Console\Application::setCommandLoader
+	 */
+	public function testACommandIsRetrievedThroughACommandLoader()
+	{
+		$command = new TestNoAliasCommand;
+
+		$commandName = $command->getName();
+		$serviceId   = 'test.loader';
+
+		$container = $this->createMock(ContainerInterface::class);
+
+		$container->expects($this->exactly(2))
+			->method('has')
+			->with($serviceId)
+			->willReturn(true);
+
+		$container->expects($this->once())
+			->method('get')
+			->with($serviceId)
+			->willReturn($command);
+
+		$this->object->setCommandLoader(new ContainerLoader($container, [$commandName => $serviceId]));
+
 		$this->assertSame($command, $this->object->getCommand($command->getName()));
 	}
 }

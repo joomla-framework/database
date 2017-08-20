@@ -29,6 +29,14 @@ class Application extends AbstractApplication
 	private $commands = [];
 
 	/**
+	 * The command loader.
+	 *
+	 * @var    Loader\LoaderInterface
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $commandLoader;
+
+	/**
 	 * The default command for the application.
 	 *
 	 * @var    string
@@ -144,12 +152,21 @@ class Application extends AbstractApplication
 	 */
 	public function getCommand(string $name): CommandInterface
 	{
-		if (!isset($this->commands[$name]))
+		if (isset($this->commands[$name]))
 		{
-			throw new CommandNotFoundException("There is not a command with the name '$name'.");
+			return $this->commands[$name];
 		}
 
-		return $this->commands[$name];
+		if ($this->commandLoader && $this->commandLoader->has($name))
+		{
+			$command = $this->commandLoader->get($name);
+
+			$this->addCommand($command);
+
+			return $command;
+		}
+
+		throw new CommandNotFoundException("There is not a command with the name '$name'.");
 	}
 
 	/**
@@ -189,7 +206,7 @@ class Application extends AbstractApplication
 	 */
 	public function hasCommand(string $name): bool
 	{
-		return isset($this->commands[$name]);
+		return isset($this->commands[$name]) || ($this->commandLoader && $this->commandLoader->has($name));
 	}
 
 	/**
@@ -205,6 +222,22 @@ class Application extends AbstractApplication
 	public function out(string $text = '', bool $nl = true)
 	{
 		$this->getOutputHandler()->out($text, $nl);
+
+		return $this;
+	}
+
+	/**
+	 * Set the command loader.
+	 *
+	 * @param   Loader\LoaderInterface  $loader  The new command loader.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setCommandLoader(Loader\LoaderInterface $loader)
+	{
+		$this->commandLoader = $loader;
 
 		return $this;
 	}
