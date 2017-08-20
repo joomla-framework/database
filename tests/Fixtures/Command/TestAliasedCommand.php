@@ -21,16 +21,9 @@ class TestAliasedCommand extends AbstractCommand
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getAliases(): array
+	protected function initialise()
 	{
-		return ['test:alias'];
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getName(): string
-	{
-		return 'test:aliased';
+		$this->setAliases(['test:alias']);
+		$this->setName('test:aliased');
 	}
 }

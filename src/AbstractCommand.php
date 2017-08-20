@@ -34,6 +34,16 @@ abstract class AbstractCommand extends AbstractController implements CommandInte
 	private $name = '';
 
 	/**
+	 * Constructor.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function __construct()
+	{
+		$this->initialise();
+	}
+
+	/**
 	 * Get the command's aliases.
 	 *
 	 * @return  string[]
@@ -67,6 +77,17 @@ abstract class AbstractCommand extends AbstractController implements CommandInte
 	public function isEnabled(): bool
 	{
 		return true;
+	}
+
+	/**
+	 * Initialise the command.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function initialise()
+	{
 	}
 
 	/**

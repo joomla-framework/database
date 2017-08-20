@@ -21,8 +21,8 @@ class TestNoAliasCommand extends AbstractCommand
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getName(): string
+	protected function initialise()
 	{
-		return 'test:noalias';
+		$this->setName('test:noalias');
 	}
 }

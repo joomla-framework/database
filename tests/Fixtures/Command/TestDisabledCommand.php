@@ -21,16 +21,16 @@ class TestDisabledCommand extends AbstractCommand
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getName(): string
+	public function isEnabled(): bool
 	{
-		return 'test:disabled';
+		return false;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function isEnabled(): bool
+	protected function initialise()
 	{
-		return false;
+		$this->setName('test:disabled');
 	}
 }
