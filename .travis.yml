@@ -1,0 +1,34 @@
+language: php
+sudo: false
+dist: trusty
+
+env:
+  global:
+    - RUN_PHPCS="no"
+    - COMPOSER_FLAGS="--prefer-stable"
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 7.0
+    - php: 7.0
+      env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
+    - php: 7.0
+      env: RUN_PHPCS="yes"
+    - php: 7.1
+    - php: 7.1
+      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
+      env: COMPOSER_FLAGS=""
+    - php: 7.2
+    - php: nightly
+  allow_failures:
+    - php: 7.2
+    - php: nightly
+
+before_script:
+  - composer self-update
+  - composer update $COMPOSER_FLAGS
+
+script:
+  - vendor/bin/phpunit
+  - if [ "$RUN_PHPCS" == "yes" ]; then vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards && vendor/bin/phpcs -p --report=full --extensions=php --standard=ruleset.xml src/; fi;

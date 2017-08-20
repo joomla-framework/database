@@ -1,0 +1,32 @@
+{
+    "name": "joomla/console",
+    "type": "joomla-package",
+    "description": "Joomla Console Package",
+    "keywords": ["joomla", "framework", "console"],
+    "homepage": "https://github.com/joomla-framework/console",
+    "license": "GPL-2.0+",
+    "require": {
+        "php": "~7.0",
+        "joomla/application": "~2.0"
+    },
+    "require-dev": {
+        "joomla/coding-standards": "~2.0@alpha",
+        "phpunit/phpunit": "~6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Joomla\\Console\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Joomla\\Console\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0-dev"
+        }
+    }
+}
