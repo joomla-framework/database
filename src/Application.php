@@ -19,6 +19,8 @@ use Joomla\Registry\Registry;
  */
 class Application extends AbstractApplication
 {
+	private $defaultCommand = '';
+
 	/**
 	 * Class constructor.
 	 *
@@ -54,6 +56,27 @@ class Application extends AbstractApplication
 	 */
 	protected function doExecute()
 	{
+		$commandName = $this->getCommandName();
 
+		if (!$commandName)
+		{
+			echo 'Command name not given.';
+
+			$this->close(1);
+		}
+	}
+
+	/**
+	 * Get the name of the command to run.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function getCommandName(): string
+	{
+		$args = $this->input->args;
+
+		return !empty($args[0]) ? $args[0] : $this->defaultCommand;
 	}
 }
