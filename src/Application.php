@@ -9,6 +9,7 @@
 namespace Joomla\Console;
 
 use Joomla\Application\AbstractApplication;
+use Joomla\Console\Exception\CommandNotFoundException;
 use Joomla\Input\Cli;
 use Joomla\Registry\Registry;
 
@@ -19,6 +20,14 @@ use Joomla\Registry\Registry;
  */
 class Application extends AbstractApplication
 {
+	/**
+	 * The available commands.
+	 *
+	 * @var    CommandInterface[]
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $commands = [];
+
 	/**
 	 * The default command for the application.
 	 *
@@ -64,6 +73,43 @@ class Application extends AbstractApplication
 	}
 
 	/**
+	 * Add a command to the application.
+	 *
+	 * @param   CommandInterface $command  The command to add
+	 *
+	 * @return  CommandInterface|void  The registered command or null if the command is not enabled
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function addCommand(CommandInterface $command)
+	{
+		if (!$command->isEnabled())
+		{
+			return;
+		}
+
+		if ($command instanceof AbstractCommand)
+		{
+			$command->setApplication($this);
+			$command->setInput($this->input);
+		}
+
+		if (!$command->getName())
+		{
+			throw new \LogicException(sprintf('The command class %s does not have a name.', get_class($command)));
+		}
+
+		$this->commands[$command->getName()] = $command;
+
+		foreach ($command->getAliases() as $alias)
+		{
+			$this->commands[$alias] = $command;
+		}
+
+		return $command;
+	}
+
+	/**
 	 * Method to run the application routines.
 	 *
 	 * @return  void
@@ -80,6 +126,44 @@ class Application extends AbstractApplication
 
 			$this->close(1);
 		}
+
+		$command = $this->getCommand($commandName);
+
+		$command->execute();
+	}
+
+	/**
+	 * Get a command by name.
+	 *
+	 * @param   string  $name  The name of the command to retrieve.
+	 *
+	 * @return  CommandInterface
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  CommandNotFoundException
+	 */
+	public function getCommand(string $name): CommandInterface
+	{
+		if (!isset($this->commands[$name]))
+		{
+			throw new CommandNotFoundException("There is not a command with the name '$name'.");
+		}
+
+		return $this->commands[$name];
+	}
+
+	/**
+	 * Check if the application has a command with the given name.
+	 *
+	 * @param   string  $name  The name of the command to check for existence.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function hasCommand(string $name): bool
+	{
+		return isset($this->commands[$name]);
 	}
 
 	/**
