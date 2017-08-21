@@ -42,7 +42,7 @@ class Application extends AbstractApplication
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	private $defaultCommand = '';
+	private $defaultCommand = 'list';
 
 	/**
 	 * Output handler.
@@ -78,6 +78,9 @@ class Application extends AbstractApplication
 
 		// Set the current directory.
 		$this->set('cwd', getcwd());
+
+		// Register default commands
+		$this->addCommand(new Command\ListCommand);
 	}
 
 	/**
@@ -183,6 +186,18 @@ class Application extends AbstractApplication
 		$args = $this->input->args;
 
 		return !empty($args[0]) ? $args[0] : $this->defaultCommand;
+	}
+
+	/**
+	 * Get the registered commands.
+	 *
+	 * @return  CommandInterface[]
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getCommands(): array
+	{
+		return $this->commands;
 	}
 
 	/**
