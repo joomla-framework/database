@@ -8,6 +8,7 @@
 
 namespace Joomla\Console;
 
+use Joomla\Console\Input\InputDefinition;
 use Joomla\Controller\ControllerInterface;
 
 /**
@@ -25,6 +26,15 @@ interface CommandInterface extends ControllerInterface
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getAliases(): array;
+
+	/**
+	 * Get the command's input definition.
+	 *
+	 * @return  InputDefinition
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getDefinition(): InputDefinition;
 
 	/**
 	 * Get the command's name.

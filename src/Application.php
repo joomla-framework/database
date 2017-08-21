@@ -137,10 +137,7 @@ class Application extends AbstractApplication
 
 		$command = $this->getCommand($commandName);
 
-		if ($command instanceof AbstractCommand)
-		{
-			$this->validateCommand($command);
-		}
+		$this->validateCommand($command);
 
 		$command->execute();
 	}
@@ -264,16 +261,16 @@ class Application extends AbstractApplication
 	}
 
 	/**
-	 * Validates a command meets its definition
+	 * Validates a command meets its definition.
 	 *
-	 * @param   AbstractCommand  $command  The command to validate
+	 * @param   CommandInterface  $command  The command to validate.
 	 *
 	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \RuntimeException
 	 */
-	public function validateCommand(AbstractCommand $command)
+	public function validateCommand(CommandInterface $command)
 	{
 		$definition = $command->getDefinition();
 
