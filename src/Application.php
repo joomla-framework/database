@@ -137,6 +137,11 @@ class Application extends AbstractApplication
 
 		$command = $this->getCommand($commandName);
 
+		if ($command instanceof AbstractCommand)
+		{
+			$this->validateCommand($command);
+		}
+
 		$command->execute();
 	}
 
@@ -256,5 +261,61 @@ class Application extends AbstractApplication
 		$this->output = $output;
 
 		return $this;
+	}
+
+	/**
+	 * Validates a command meets its definition
+	 *
+	 * @param   AbstractCommand  $command  The command to validate
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function validateCommand(AbstractCommand $command)
+	{
+		$definition = $command->getDefinition();
+
+		// First, make sure options with default values are set to the global input
+		foreach ($definition->getOptions() as $option)
+		{
+			if ($option->getDefault())
+			{
+				$this->input->def($option->getName(), $option->getDefault());
+
+				foreach ($option->getShortcuts() as $shortcut)
+				{
+					$this->input->def($shortcut, $option->getDefault());
+				}
+			}
+		}
+
+		$missingOptions = array_filter(
+			$definition->getOptions(),
+			function (Input\InputOption $option) use ($definition)
+			{
+				$optionPresent = $this->input->get($option->getName()) && $option->isRequired();
+
+				// If the option isn't present by its full name and is required, check for a shortcut
+				if ($option->isRequired() && !$optionPresent && !empty($option->getShortcuts()))
+				{
+					foreach ($option->getShortcuts() as $shortcut)
+					{
+						if ($this->input->get($shortcut) !== null)
+						{
+							return false;
+						}
+					}
+				}
+
+				return !$optionPresent;
+			}
+		);
+
+		if (count($missingOptions) > 0)
+		{
+			throw new \RuntimeException(sprintf('Not enough options (missing: %s).', count($missingOptions)));
+		}
 	}
 }

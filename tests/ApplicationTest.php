@@ -11,7 +11,9 @@ use Joomla\Console\Loader\ContainerLoader;
 use Joomla\Console\Tests\Fixtures\Command\TestAliasedCommand;
 use Joomla\Console\Tests\Fixtures\Command\TestDisabledCommand;
 use Joomla\Console\Tests\Fixtures\Command\TestNoAliasCommand;
+use Joomla\Console\Tests\Fixtures\Command\TestNoAliasWithOptionsCommand;
 use Joomla\Console\Tests\Fixtures\Command\TestUnnamedCommand;
+use Joomla\Input\Cli;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -166,5 +168,32 @@ class ApplicationTest extends TestCase
 		$this->object->setCommandLoader(new ContainerLoader($container, [$commandName => $serviceId]));
 
 		$this->assertSame($command, $this->object->getCommand($command->getName()));
+	}
+
+	/**
+	 * @covers  Joomla\Console\Application::validateCommand
+	 */
+	public function testACommandWithAllOptionsValidatesCorrectly()
+	{
+		$command = new TestNoAliasWithOptionsCommand;
+
+		$input = new Cli(['foo' => 'test', 'bar' => 'defined']);
+
+		(new Application($input))->validateCommand($command);
+	}
+
+	/**
+	 * @covers  Joomla\Console\Application::validateCommand
+	 *
+	 * @expectedException  RuntimeException
+	 * @expectedExceptionMessage  Not enough options (missing: 1).
+	 */
+	public function testACommandWithMissingOptionsIsNotValidated()
+	{
+		$command = new TestNoAliasWithOptionsCommand;
+
+		$input = new Cli(['bar' => 'defined']);
+
+		(new Application($input))->validateCommand($command);
 	}
 }
