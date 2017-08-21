@@ -13,6 +13,8 @@ use Joomla\Console\Exception\CommandNotFoundException;
 use Joomla\Input\Cli;
 use Joomla\Registry\Registry;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Base application class for a Joomla! command line application.
@@ -48,7 +50,7 @@ class Application extends AbstractApplication
 	/**
 	 * Output handler.
 	 *
-	 * @var    IO\AbstractOutput
+	 * @var    OutputInterface
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $output;
@@ -72,7 +74,7 @@ class Application extends AbstractApplication
 			$this->close();
 		}
 
-		$this->output = new IO\StreamOutput;
+		$this->output = new ConsoleOutput;
 
 		// Call the constructor as late as possible (it runs `initialise`).
 		parent::__construct($input ?: new Cli, $config);
@@ -204,11 +206,11 @@ class Application extends AbstractApplication
 	/**
 	 * Get the output handler.
 	 *
-	 * @return  IO\AbstractOutput
+	 * @return  OutputInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getOutputHandler(): IO\AbstractOutput
+	public function getOutputHandler(): OutputInterface
 	{
 		return $this->output;
 	}
@@ -225,49 +227,6 @@ class Application extends AbstractApplication
 	public function hasCommand(string $name): bool
 	{
 		return isset($this->commands[$name]) || ($this->commandLoader && $this->commandLoader->has($name));
-	}
-
-	/**
-	 * Write a string to the output handler.
-	 *
-	 * @param   string   $text  The text to display.
-	 * @param   boolean  $nl    True (default) to append a new line at the end of the output string.
-	 *
-	 * @return  $this
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function out(string $text = '', bool $nl = true)
-	{
-		$this->getOutputHandler()->out($text, $nl);
-
-		return $this;
-	}
-
-	/**
-	 * Output a nicely formatted title for the application
-	 *
-	 * @param   string  $title     The title to display
-	 * @param   string  $subTitle  An optional subtitle
-	 * @param   int     $width     Total width of the title section
-	 *
-	 * @return  $this
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function outputTitle(string $title, string $subTitle = '', int $width = 60)
-	{
-		$this->out(str_repeat('-', $width));
-		$this->out(str_repeat(' ', $width / 2 - (strlen($title) / 2)) . '<title>' . $title . '</title>');
-
-		if ($subTitle)
-		{
-			$this->out(str_repeat(' ', $width / 2 - (strlen($subTitle) / 2)) . '<b>' . $subTitle . '</b>');
-		}
-
-		$this->out(str_repeat('-', $width));
-
-		return $this;
 	}
 
 	/**
@@ -289,13 +248,13 @@ class Application extends AbstractApplication
 	/**
 	 * Set the output handler.
 	 *
-	 * @param   IO\AbstractOutput  $output  The new output handler.
+	 * @param   OutputInterface  $output  The new output handler.
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setOutputHandler(IO\AbstractOutput $output)
+	public function setOutputHandler(OutputInterface $output)
 	{
 		$this->output = $output;
 

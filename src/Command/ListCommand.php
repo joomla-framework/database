@@ -9,8 +9,9 @@
 namespace Joomla\Console\Command;
 
 use Joomla\Console\AbstractCommand;
-use Joomla\Console\IO\ColorProcessor;
-use Joomla\Console\IO\ColorStyle;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Command listing all available commands.
@@ -31,32 +32,27 @@ class ListCommand extends AbstractCommand
 	 */
 	public function execute()
 	{
-		/** @var ColorProcessor $processor */
-		$processor = $this->getApplication()->getOutputHandler()->getProcessor();
+		$output = $this->getApplication()->getOutputHandler();
 
-		if ($processor instanceof ColorProcessor)
-		{
-			$processor->addStyle('title', new ColorStyle('yellow', '', ['bold']));
-			$processor->addStyle('cmd', new ColorStyle('magenta'));
-		}
+		$formatter = $output->getFormatter();
+		$formatter->setStyle('cmd', new OutputFormatterStyle('magenta'));
 
 		$executable = $this->getInput()->executable;
 
-		$this->getApplication()->outputTitle('Command Listing')
-			->out(
-				sprintf('Usage: <info>%s</info> <cmd><command></cmd>',
-					$executable
-				)
-			);
+		$symfonyStyle = new SymfonyStyle(new ArrayInput($this->getInput()->getArray(), $this->getDefinition()), $output);
+		$symfonyStyle->title('Command Listing');
+		$symfonyStyle->write(
+			sprintf('Usage: <info>%s</info> <cmd><command></cmd>',
+				$executable
+			),
+			true
+		);
 
-		$this->getApplication()->out()
-			->out('Available commands:')
-			->out();
+		$symfonyStyle->write("\nAvailable commands:\n\n");
 
 		foreach ($this->getApplication()->getCommands() as $command)
 		{
-			$this->getApplication()->out('<cmd>' . $command->getName() . '</cmd>')
-				->out();
+			$symfonyStyle->write('<cmd>' . $command->getName() . '</cmd>', true);
 		}
 
 		return true;
