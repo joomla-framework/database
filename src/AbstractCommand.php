@@ -8,9 +8,9 @@
 
 namespace Joomla\Console;
 
-use Joomla\Console\Input\InputDefinition;
-use Joomla\Console\Input\InputOption;
 use Joomla\Controller\AbstractController;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Base class for a console command.
@@ -58,17 +58,17 @@ abstract class AbstractCommand extends AbstractController implements CommandInte
 	/**
 	 * Adds an option to the input definition.
 	 *
-	 * @param   string   $name         The argument name.
-	 * @param   mixed    $shortcut     An optional shortcut for the option, either a string or an array of strings.
-	 * @param   integer  $mode         The option mode.
-	 * @param   string   $description  A description text.
-	 * @param   mixed    $default      The default value when the argument is optional.
+	 * @param   string        $name         The option name
+	 * @param   string|array  $shortcut     The shortcuts, can be null, a string of shortcuts delimited by | or an array of shortcuts
+	 * @param   integer       $mode         The option mode: One of the VALUE_* constants
+	 * @param   string        $description  A description text
+	 * @param   mixed         $default      The default value (must be null for InputOption::VALUE_NONE)
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function addOption(string $name, $shortcut = null, int $mode = InputOption::OPTIONAL, string $description = '', $default = null)
+	public function addOption($name, $shortcut = null, $mode = null, $description = '', $default = null)
 	{
 		$this->definition->addOption(new InputOption($name, $shortcut, $mode, $description, $default));
 

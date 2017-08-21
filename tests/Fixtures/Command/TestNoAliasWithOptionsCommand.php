@@ -7,7 +7,7 @@
 namespace Joomla\Console\Tests\Fixtures\Command;
 
 use Joomla\Console\AbstractCommand;
-use Joomla\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputOption;
 
 class TestNoAliasWithOptionsCommand extends AbstractCommand
 {
@@ -25,7 +25,7 @@ class TestNoAliasWithOptionsCommand extends AbstractCommand
 	protected function initialise()
 	{
 		$this->setName('test:noalias:options');
-		$this->addOption('foo', 'f', InputOption::REQUIRED);
-		$this->addOption('bar', 'b', InputOption::REQUIRED, '', 'defined');
+		$this->addOption('foo', 'f', InputOption::VALUE_REQUIRED);
+		$this->addOption('bar', 'b', InputOption::VALUE_REQUIRED, '', 'defined');
 	}
 }

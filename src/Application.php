@@ -12,6 +12,7 @@ use Joomla\Application\AbstractApplication;
 use Joomla\Console\Exception\CommandNotFoundException;
 use Joomla\Input\Cli;
 use Joomla\Registry\Registry;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Base application class for a Joomla! command line application.
@@ -322,7 +323,7 @@ class Application extends AbstractApplication
 			{
 				$this->input->def($option->getName(), $option->getDefault());
 
-				foreach ($option->getShortcuts() as $shortcut)
+				foreach (explode('|', $option->getShortcut()) as $shortcut)
 				{
 					$this->input->def($shortcut, $option->getDefault());
 				}
@@ -331,14 +332,14 @@ class Application extends AbstractApplication
 
 		$missingOptions = array_filter(
 			$definition->getOptions(),
-			function (Input\InputOption $option) use ($definition)
+			function (InputOption $option) use ($definition)
 			{
-				$optionPresent = $this->input->get($option->getName()) && $option->isRequired();
+				$optionPresent = $this->input->get($option->getName()) && $option->isValueRequired();
 
 				// If the option isn't present by its full name and is required, check for a shortcut
-				if ($option->isRequired() && !$optionPresent && !empty($option->getShortcuts()))
+				if ($option->isValueRequired() && !$optionPresent && !empty($option->getShortcut()))
 				{
-					foreach ($option->getShortcuts() as $shortcut)
+					foreach (explode('|', $option->getShortcut()) as $shortcut)
 					{
 						if ($this->input->get($shortcut) !== null)
 						{

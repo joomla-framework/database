@@ -8,8 +8,8 @@
 
 namespace Joomla\Console;
 
-use Joomla\Console\Input\InputDefinition;
 use Joomla\Controller\ControllerInterface;
+use Symfony\Component\Console\Input\InputDefinition;
 
 /**
  * Interface defining console commands.
