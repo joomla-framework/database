@@ -8,6 +8,8 @@
 
 namespace Joomla\Console;
 
+use Joomla\Console\Input\InputDefinition;
+use Joomla\Console\Input\InputOption;
 use Joomla\Controller\AbstractController;
 
 /**
@@ -26,6 +28,14 @@ abstract class AbstractCommand extends AbstractController implements CommandInte
 	private $aliases = [];
 
 	/**
+	 * The command's input definition.
+	 *
+	 * @var    InputDefinition
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $definition;
+
+	/**
 	 * The command's name.
 	 *
 	 * @var    string
@@ -40,7 +50,29 @@ abstract class AbstractCommand extends AbstractController implements CommandInte
 	 */
 	public function __construct()
 	{
+		$this->definition = new InputDefinition;
+
 		$this->initialise();
+	}
+
+	/**
+	 * Adds an option to the input definition.
+	 *
+	 * @param   string   $name         The argument name.
+	 * @param   mixed    $shortcut     An optional shortcut for the option, either a string or an array of strings.
+	 * @param   integer  $mode         The option mode.
+	 * @param   string   $description  A description text.
+	 * @param   mixed    $default      The default value when the argument is optional.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function addOption(string $name, $shortcut = null, int $mode = InputOption::OPTIONAL, string $description = '', $default = null)
+	{
+		$this->definition->addOption(new InputOption($name, $shortcut, $mode, $description, $default));
+
+		return $this;
 	}
 
 	/**
@@ -53,6 +85,18 @@ abstract class AbstractCommand extends AbstractController implements CommandInte
 	public function getAliases(): array
 	{
 		return $this->aliases;
+	}
+
+	/**
+	 * Get the command's input definition.
+	 *
+	 * @return  InputDefinition
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getDefinition(): InputDefinition
+	{
+		return $this->definition;
 	}
 
 	/**
@@ -102,6 +146,29 @@ abstract class AbstractCommand extends AbstractController implements CommandInte
 	public function setAliases(array $aliases)
 	{
 		$this->aliases = $aliases;
+	}
+
+	/**
+	 * Sets the input definition for the command.
+	 *
+	 * @param   array|InputDefinition  $definition  Either an InputDefinition object or an array of objects to write to the definition.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setDefinition($definition)
+	{
+		if ($definition instanceof InputDefinition)
+		{
+			$this->definition = $definition;
+		}
+		else
+		{
+			$this->definition->setDefinition($definition);
+		}
+
+		return $this;
 	}
 
 	/**
