@@ -229,6 +229,32 @@ class Application extends AbstractApplication
 	}
 
 	/**
+	 * Output a nicely formatted title for the application
+	 *
+	 * @param   string  $title     The title to display
+	 * @param   string  $subTitle  An optional subtitle
+	 * @param   int     $width     Total width of the title section
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function outputTitle(string $title, string $subTitle = '', int $width = 60)
+	{
+		$this->out(str_repeat('-', $width));
+		$this->out(str_repeat(' ', $width / 2 - (strlen($title) / 2)) . '<title>' . $title . '</title>');
+
+		if ($subTitle)
+		{
+			$this->out(str_repeat(' ', $width / 2 - (strlen($subTitle) / 2)) . '<b>' . $subTitle . '</b>');
+		}
+
+		$this->out(str_repeat('-', $width));
+
+		return $this;
+	}
+
+	/**
 	 * Set the command loader.
 	 *
 	 * @param   Loader\LoaderInterface  $loader  The new command loader.
