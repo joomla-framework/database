@@ -94,22 +94,8 @@ class Application extends AbstractApplication
 			$this->close();
 		}
 
-		$this->consoleInput  = new ArgvInput;
-		$this->consoleOutput = new ConsoleOutput;
-
 		// Call the constructor as late as possible (it runs `initialise`).
 		parent::__construct($input ?: new Cli, $config);
-
-		// Set the current directory.
-		$this->set('cwd', getcwd());
-
-		$this->definition = $this->getBaseInputDefinition();
-
-		// Register default commands
-		foreach ($this->getDefaultCommands() as $command)
-		{
-			$this->addCommand($command);
-		}
 	}
 
 	/**
@@ -390,6 +376,30 @@ class Application extends AbstractApplication
 	public function hasCommand(string $name): bool
 	{
 		return isset($this->commands[$name]) || ($this->commandLoader && $this->commandLoader->has($name));
+	}
+
+	/**
+	 * Custom initialisation method.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function initialise()
+	{
+		// Set the current directory.
+		$this->set('cwd', getcwd());
+
+		$this->consoleInput  = new ArgvInput;
+		$this->consoleOutput = new ConsoleOutput;
+
+		$this->definition = $this->getBaseInputDefinition();
+
+		// Register default commands
+		foreach ($this->getDefaultCommands() as $command)
+		{
+			$this->addCommand($command);
+		}
 	}
 
 	/**
