@@ -16,6 +16,9 @@ use Symfony\Component\Console\Input\InputOption;
 /**
  * Base class for a console command.
  *
+ * @method         \Joomla\Console\Application  getApplication()  Get the application object.
+ * @property-read  \Joomla\Console\Application  $app              Application object
+ *
  * @since  __DEPLOY_VERSION__
  */
 abstract class AbstractCommand extends AbstractController implements CommandInterface
@@ -27,6 +30,14 @@ abstract class AbstractCommand extends AbstractController implements CommandInte
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $aliases = [];
+
+	/**
+	 * Flag tracking whether the application definition has been merged to this command.
+	 *
+	 * @var    boolean
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $applicationDefinitionMerged = false;
 
 	/**
 	 * The command's input definition.
@@ -152,6 +163,35 @@ abstract class AbstractCommand extends AbstractController implements CommandInte
 	 */
 	protected function initialise()
 	{
+	}
+
+	/**
+	 * Merges the definition from the application to this command.
+	 *
+	 * @param   boolean  $mergeArgs  Flag indicating whether the application's definition arguments should be merged
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @internal  This method should not be relied on as part of the public API
+	 */
+	final public function mergeApplicationDefinition(InputDefinition $definition, $mergeArgs = true)
+	{
+		if (!$this->getApplication() || $this->applicationDefinitionMerged)
+		{
+			return;
+		}
+
+		$this->definition->addOptions($definition->getOptions());
+
+		if ($mergeArgs)
+		{
+			$currentArguments = $this->definition->getArguments();
+			$this->definition->setArguments($definition->getArguments());
+			$this->definition->addArguments($currentArguments);
+		}
+
+		$this->applicationDefinitionMerged = true;
 	}
 
 	/**

@@ -13,8 +13,9 @@ use Joomla\Console\Exception\CommandNotFoundException;
 use Joomla\Input\Cli;
 use Joomla\Registry\Registry;
 use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -66,6 +67,14 @@ class Application extends AbstractApplication
 	private $defaultCommand = 'list';
 
 	/**
+	 * The base application input definition.
+	 *
+	 * @var    InputDefinition
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $definition;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @param   Cli       $input   An optional argument to provide dependency injection for the application's input object.  If the argument is an
@@ -92,6 +101,8 @@ class Application extends AbstractApplication
 
 		// Set the current directory.
 		$this->set('cwd', getcwd());
+
+		$this->definition = $this->getBaseInputDefinition();
 
 		// Register default commands
 		$this->addCommand(new Command\ListCommand);
@@ -153,10 +164,27 @@ class Application extends AbstractApplication
 		}
 
 		$command = $this->getCommand($commandName);
+		$command->mergeApplicationDefinition($this->definition);
 
-		$this->validateCommand($command);
+		$this->getConsoleInput()->bind($command->getDefinition());
 
 		$command->execute();
+	}
+
+	/**
+	 * Gets the base input definition.
+	 *
+	 * @return  InputDefinition
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function getBaseInputDefinition(): InputDefinition
+	{
+		return new InputDefinition(
+			[
+				new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
+			]
+		);
 	}
 
 	/**
@@ -239,6 +267,18 @@ class Application extends AbstractApplication
 	}
 
 	/**
+	 * Get the application definition.
+	 *
+	 * @return  InputDefinition
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getDefinition(): InputDefinition
+	{
+		return $this->definition;
+	}
+
+	/**
 	 * Check if the application has a command with the given name.
 	 *
 	 * @param   string  $name  The name of the command to check for existence.
@@ -298,61 +338,5 @@ class Application extends AbstractApplication
 		$this->consoleOutput = $output;
 
 		return $this;
-	}
-
-	/**
-	 * Validates a command meets its definition.
-	 *
-	 * @param   CommandInterface  $command  The command to validate.
-	 *
-	 * @return  void
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 * @throws  \RuntimeException
-	 */
-	public function validateCommand(CommandInterface $command)
-	{
-		$definition = $command->getDefinition();
-
-		// First, make sure options with default values are set to the global input
-		foreach ($definition->getOptions() as $option)
-		{
-			if ($option->getDefault())
-			{
-				$this->input->def($option->getName(), $option->getDefault());
-
-				foreach (explode('|', $option->getShortcut()) as $shortcut)
-				{
-					$this->input->def($shortcut, $option->getDefault());
-				}
-			}
-		}
-
-		$missingOptions = array_filter(
-			$definition->getOptions(),
-			function (InputOption $option) use ($definition)
-			{
-				$optionPresent = $this->input->get($option->getName()) && $option->isValueRequired();
-
-				// If the option isn't present by its full name and is required, check for a shortcut
-				if ($option->isValueRequired() && !$optionPresent && !empty($option->getShortcut()))
-				{
-					foreach (explode('|', $option->getShortcut()) as $shortcut)
-					{
-						if ($this->input->get($shortcut) !== null)
-						{
-							return false;
-						}
-					}
-				}
-
-				return !$optionPresent;
-			}
-		);
-
-		if (count($missingOptions) > 0)
-		{
-			throw new \RuntimeException(sprintf('Not enough options (missing: %s).', count($missingOptions)));
-		}
 	}
 }

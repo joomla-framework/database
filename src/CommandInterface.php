@@ -55,6 +55,18 @@ interface CommandInterface extends ControllerInterface
 	public function isEnabled(): bool;
 
 	/**
+	 * Merges the definition from the application to this command.
+	 *
+	 * @param   boolean  $mergeArgs  Flag indicating whether the application's definition arguments should be merged
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @internal  This method should not be relied on as part of the public API
+	 */
+	public function mergeApplicationDefinition(InputDefinition $definition, $mergeArgs = true);
+
+	/**
 	 * Set the command's aliases.
 	 *
 	 * @param   string[]  $aliases  The command aliases
