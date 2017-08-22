@@ -114,11 +114,7 @@ class Application extends AbstractApplication
 			return;
 		}
 
-		if ($command instanceof AbstractCommand)
-		{
-			$command->setApplication($this);
-			$command->setInput($this->input);
-		}
+		$command->setApplication($this);
 
 		if (!$command->getName())
 		{

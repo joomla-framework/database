@@ -8,7 +8,6 @@
     "require": {
         "php": "~7.0",
         "joomla/application": "~2.0",
-        "joomla/controller": "~2.0",
         "symfony/console": "~3.4|~4.0"
     },
     "require-dev": {

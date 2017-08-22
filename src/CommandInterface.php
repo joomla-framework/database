@@ -8,7 +8,6 @@
 
 namespace Joomla\Console;
 
-use Joomla\Controller\ControllerInterface;
 use Symfony\Component\Console\Input\InputDefinition;
 
 /**
@@ -16,8 +15,17 @@ use Symfony\Component\Console\Input\InputDefinition;
  *
  * @since  __DEPLOY_VERSION__
  */
-interface CommandInterface extends ControllerInterface
+interface CommandInterface
 {
+	/**
+	 * Execute the command.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function execute();
+
 	/**
 	 * Get the command's aliases.
 	 *
@@ -77,6 +85,17 @@ interface CommandInterface extends ControllerInterface
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setAliases(array $aliases);
+
+	/**
+	 * Set the application object.
+	 *
+	 * @param   Application  $app  The application object.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setApplication(Application $app);
 
 	/**
 	 * Set the command's name.

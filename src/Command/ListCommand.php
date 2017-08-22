@@ -15,9 +15,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Command listing all available commands.
  *
- * @method         \Joomla\Console\Application  getApplication()  Get the application object.
- * @property-read  \Joomla\Console\Application  $app              Application object
- *
  * @since  __DEPLOY_VERSION__
  */
 class ListCommand extends AbstractCommand
@@ -36,7 +33,7 @@ class ListCommand extends AbstractCommand
 		$formatter = $output->getFormatter();
 		$formatter->setStyle('cmd', new OutputFormatterStyle('magenta'));
 
-		$executable = $this->getInput()->executable;
+		$executable = $this->getApplication()->input->executable;
 
 		$symfonyStyle = new SymfonyStyle($this->getApplication()->getConsoleInput(), $output);
 		$symfonyStyle->title('Command Listing');

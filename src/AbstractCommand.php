@@ -8,7 +8,6 @@
 
 namespace Joomla\Console;
 
-use Joomla\Controller\AbstractController;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,12 +15,9 @@ use Symfony\Component\Console\Input\InputOption;
 /**
  * Base class for a console command.
  *
- * @method         \Joomla\Console\Application  getApplication()  Get the application object.
- * @property-read  \Joomla\Console\Application  $app              Application object
- *
  * @since  __DEPLOY_VERSION__
  */
-abstract class AbstractCommand extends AbstractController implements CommandInterface
+abstract class AbstractCommand implements CommandInterface
 {
 	/**
 	 * The command's aliases.
@@ -30,6 +26,14 @@ abstract class AbstractCommand extends AbstractController implements CommandInte
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $aliases = [];
+
+	/**
+	 * The application object.
+	 *
+	 * @var    Application
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $app;
 
 	/**
 	 * Flag tracking whether the application definition has been merged to this command.
@@ -116,6 +120,24 @@ abstract class AbstractCommand extends AbstractController implements CommandInte
 	public function getAliases(): array
 	{
 		return $this->aliases;
+	}
+
+	/**
+	 * Get the application object.
+	 *
+	 * @return  Application  The application object.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \UnexpectedValueException if the application has not been set.
+	 */
+	protected function getApplication(): Application
+	{
+		if ($this->app)
+		{
+			return $this->app;
+		}
+
+		throw new \UnexpectedValueException('Application not set in ' . get_class($this));
 	}
 
 	/**
@@ -207,6 +229,20 @@ abstract class AbstractCommand extends AbstractController implements CommandInte
 	public function setAliases(array $aliases)
 	{
 		$this->aliases = $aliases;
+	}
+
+	/**
+	 * Set the application object.
+	 *
+	 * @param   Application  $app  The application object.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setApplication(Application $app)
+	{
+		$this->app = $app;
 	}
 
 	/**
