@@ -105,7 +105,10 @@ class Application extends AbstractApplication
 		$this->definition = $this->getBaseInputDefinition();
 
 		// Register default commands
-		$this->addCommand(new Command\ListCommand);
+		foreach ($this->getDefaultCommands() as $command)
+		{
+			$this->addCommand($command);
+		}
 	}
 
 	/**
@@ -264,6 +267,20 @@ class Application extends AbstractApplication
 	public function getConsoleOutput(): OutputInterface
 	{
 		return $this->consoleOutput;
+	}
+
+	/**
+	 * Get the commands which should be registered by default to the application.
+	 *
+	 * @return  CommandInterface[]
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function getDefaultCommands(): array
+	{
+		return [
+			new Command\ListCommand,
+		];
 	}
 
 	/**
