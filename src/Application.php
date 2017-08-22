@@ -28,6 +28,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Application extends AbstractApplication
 {
 	/**
+	 * Flag indicating the application should automatically exit after the command is run.
+	 *
+	 * @var    boolean
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $autoExit = false;
+
+	/**
 	 * The available commands.
 	 *
 	 * @var    CommandInterface[]
@@ -237,6 +245,13 @@ class Application extends AbstractApplication
 		$this->configureIO();
 
 		$this->doExecute();
+
+		if ($this->autoExit)
+		{
+			$exitCode = $this->exitCode > 255 ? 255 : $this->exitCode;
+
+			$this->close($exitCode);
+		}
 	}
 
 	/**
@@ -371,6 +386,18 @@ class Application extends AbstractApplication
 	}
 
 	/**
+	 * Get the command's exit code.
+	 *
+	 * @return  integer
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getExitCode(): int
+	{
+		return $this->exitCode;
+	}
+
+	/**
 	 * Check if the application has a command with the given name.
 	 *
 	 * @param   string  $name  The name of the command to check for existence.
@@ -406,6 +433,20 @@ class Application extends AbstractApplication
 		{
 			$this->addCommand($command);
 		}
+	}
+
+	/**
+	 * Set whether the application should auto exit.
+	 *
+	 * @param   boolean  $autoExit  The auto exit state.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setAutoExit(bool $autoExit)
+	{
+		$this->autoExit = $autoExit;
 	}
 
 	/**
@@ -454,5 +495,17 @@ class Application extends AbstractApplication
 		$this->consoleOutput = $output;
 
 		return $this;
+	}
+
+	/**
+	 * Get the application's auto exit state.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function shouldAutoExit(): bool
+	{
+		return $this->autoExit;
 	}
 }
