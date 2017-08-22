@@ -57,14 +57,15 @@ interface CommandInterface extends ControllerInterface
 	/**
 	 * Merges the definition from the application to this command.
 	 *
-	 * @param   boolean  $mergeArgs  Flag indicating whether the application's definition arguments should be merged
+	 * @param   InputDefinition  $definition  The InputDefinition from the application to be merged.
+	 * @param   boolean          $mergeArgs   Flag indicating whether the application's definition arguments should be merged
 	 *
 	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @internal  This method should not be relied on as part of the public API
 	 */
-	public function mergeApplicationDefinition(InputDefinition $definition, $mergeArgs = true);
+	public function mergeApplicationDefinition(InputDefinition $definition, bool $mergeArgs = true);
 
 	/**
 	 * Set the command's aliases.

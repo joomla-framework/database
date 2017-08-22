@@ -115,7 +115,7 @@ class Application extends AbstractApplication
 	/**
 	 * Add a command to the application.
 	 *
-	 * @param   CommandInterface $command  The command to add
+	 * @param   CommandInterface  $command  The command to add
 	 *
 	 * @return  CommandInterface|void  The registered command or null if the command is not enabled
 	 *
@@ -259,11 +259,16 @@ class Application extends AbstractApplication
 		return new InputDefinition(
 			[
 				new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
-				new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Do not output any message'),
-				new InputOption('--verbose', '-v|vv|vvv', InputOption::VALUE_NONE, 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug'),
+				new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Flag indicating that all output should be silenced'),
+				new InputOption(
+					'--verbose',
+					'-v|vv|vvv',
+					InputOption::VALUE_NONE,
+					'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug'
+				),
 				new InputOption('--ansi', '', InputOption::VALUE_NONE, 'Force ANSI output'),
 				new InputOption('--no-ansi', '', InputOption::VALUE_NONE, 'Disable ANSI output'),
-				new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question'),
+				new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Flag to disable interacting with the user'),
 			]
 		);
 	}
