@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -149,6 +150,64 @@ class Application extends AbstractApplication
 	}
 
 	/**
+	 * Configures the console input and output instances for the process.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function configureIO()
+	{
+		$input  = $this->getConsoleInput();
+		$output = $this->getConsoleOutput();
+
+		if ($input->hasParameterOption(['--ansi'], true))
+		{
+			$output->setDecorated(true);
+		}
+		elseif ($input->hasParameterOption(['--no-ansi'], true))
+		{
+			$output->setDecorated(false);
+		}
+
+		if ($input->hasParameterOption(['--no-interaction', '-n'], true))
+		{
+			$input->setInteractive(false);
+		}
+
+		if ($input->hasParameterOption(['--quiet', '-q'], true))
+		{
+			$output->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+			$input->setInteractive(false);
+		}
+		else
+		{
+			if ($input->hasParameterOption('-vvv', true)
+				|| $input->hasParameterOption('--verbose=3', true)
+				|| $input->getParameterOption('--verbose', false, true) === 3
+			)
+			{
+				$output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
+			}
+			elseif ($input->hasParameterOption('-vv', true)
+				|| $input->hasParameterOption('--verbose=2', true)
+				|| $input->getParameterOption('--verbose', false, true) === 2
+			)
+			{
+				$output->setVerbosity(OutputInterface::VERBOSITY_VERY_VERBOSE);
+			}
+			elseif ($input->hasParameterOption('-v', true)
+				|| $input->hasParameterOption('--verbose=1', true)
+				|| $input->hasParameterOption('--verbose', true)
+				|| $input->getParameterOption('--verbose', false, true)
+			)
+			{
+				$output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
+			}
+		}
+	}
+
+	/**
 	 * Method to run the application routines.
 	 *
 	 * @return  void
@@ -175,6 +234,20 @@ class Application extends AbstractApplication
 	}
 
 	/**
+	 * Execute the application.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function execute()
+	{
+		$this->configureIO();
+
+		$this->doExecute();
+	}
+
+	/**
 	 * Gets the base input definition.
 	 *
 	 * @return  InputDefinition
@@ -186,6 +259,11 @@ class Application extends AbstractApplication
 		return new InputDefinition(
 			[
 				new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
+				new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Do not output any message'),
+				new InputOption('--verbose', '-v|vv|vvv', InputOption::VALUE_NONE, 'Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug'),
+				new InputOption('--ansi', '', InputOption::VALUE_NONE, 'Force ANSI output'),
+				new InputOption('--no-ansi', '', InputOption::VALUE_NONE, 'Disable ANSI output'),
+				new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question'),
 			]
 		);
 	}
