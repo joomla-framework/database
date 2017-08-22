@@ -76,6 +76,14 @@ class Application extends AbstractApplication
 	private $definition;
 
 	/**
+	 * The exit code from the command.
+	 *
+	 * @var    integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $exitCode = 0;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @param   Cli       $input   An optional argument to provide dependency injection for the application's input object.  If the argument is an
@@ -212,7 +220,9 @@ class Application extends AbstractApplication
 
 		$this->getConsoleInput()->bind($command->getDefinition());
 
-		$command->execute();
+		$exitCode = $command->execute();
+
+		$this->exitCode = is_numeric($exitCode) ? (int) $exitCode : 0;
 	}
 
 	/**

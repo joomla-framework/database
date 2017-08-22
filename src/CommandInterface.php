@@ -20,7 +20,7 @@ interface CommandInterface
 	/**
 	 * Execute the command.
 	 *
-	 * @return  boolean
+	 * @return  integer|void  An optional command code, if ommitted will be treated as a successful return (code 0)
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */

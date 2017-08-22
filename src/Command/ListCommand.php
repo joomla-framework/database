@@ -22,7 +22,7 @@ class ListCommand extends AbstractCommand
 	/**
 	 * Execute the command.
 	 *
-	 * @return  boolean
+	 * @return  integer|void  An optional command code, if ommitted will be treated as a successful return (code 0)
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -50,8 +50,6 @@ class ListCommand extends AbstractCommand
 		{
 			$symfonyStyle->write('<cmd>' . $command->getName() . '</cmd>', true);
 		}
-
-		return true;
 	}
 
 	/**
