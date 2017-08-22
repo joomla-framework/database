@@ -12,6 +12,8 @@ use Joomla\Application\AbstractApplication;
 use Joomla\Console\Exception\CommandNotFoundException;
 use Joomla\Input\Cli;
 use Joomla\Registry\Registry;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,6 +40,14 @@ class Application extends AbstractApplication
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $commandLoader;
+
+	/**
+	 * Console input handler.
+	 *
+	 * @var    InputInterface
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $consoleInput;
 
 	/**
 	 * Console output handler.
@@ -74,6 +84,7 @@ class Application extends AbstractApplication
 			$this->close();
 		}
 
+		$this->consoleInput  = new ArgvInput;
 		$this->consoleOutput = new ConsoleOutput;
 
 		// Call the constructor as late as possible (it runs `initialise`).
@@ -204,6 +215,18 @@ class Application extends AbstractApplication
 	}
 
 	/**
+	 * Get the console input handler.
+	 *
+	 * @return  InputInterface
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getConsoleInput(): InputInterface
+	{
+		return $this->consoleInput;
+	}
+
+	/**
 	 * Get the console output handler.
 	 *
 	 * @return  OutputInterface
@@ -241,6 +264,22 @@ class Application extends AbstractApplication
 	public function setCommandLoader(Loader\LoaderInterface $loader)
 	{
 		$this->commandLoader = $loader;
+
+		return $this;
+	}
+
+	/**
+	 * Set the console input handler.
+	 *
+	 * @param   InputInterface  $input  The new console input handler.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setConsoleInput(InputInterface $input)
+	{
+		$this->consoleInput = $input;
 
 		return $this;
 	}

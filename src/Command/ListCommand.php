@@ -10,7 +10,6 @@ namespace Joomla\Console\Command;
 
 use Joomla\Console\AbstractCommand;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
@@ -39,7 +38,7 @@ class ListCommand extends AbstractCommand
 
 		$executable = $this->getInput()->executable;
 
-		$symfonyStyle = new SymfonyStyle(new ArrayInput($this->getInput()->getArray(), $this->getDefinition()), $output);
+		$symfonyStyle = new SymfonyStyle($this->getApplication()->getConsoleInput(), $output);
 		$symfonyStyle->title('Command Listing');
 		$symfonyStyle->write(
 			sprintf('Usage: <info>%s</info> <cmd><command></cmd>',
