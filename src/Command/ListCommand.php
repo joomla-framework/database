@@ -32,7 +32,7 @@ class ListCommand extends AbstractCommand
 	 */
 	public function execute()
 	{
-		$output = $this->getApplication()->getOutputHandler();
+		$output = $this->getApplication()->getConsoleOutput();
 
 		$formatter = $output->getFormatter();
 		$formatter->setStyle('cmd', new OutputFormatterStyle('magenta'));

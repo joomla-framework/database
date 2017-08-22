@@ -9,6 +9,7 @@
 namespace Joomla\Console;
 
 use Joomla\Controller\AbstractController;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -53,6 +54,25 @@ abstract class AbstractCommand extends AbstractController implements CommandInte
 		$this->definition = new InputDefinition;
 
 		$this->initialise();
+	}
+
+	/**
+	 * Adds an argument to the input definition.
+	 *
+	 * @param   string   $name         The argument name
+	 * @param   integer  $mode         The argument mode: InputArgument::REQUIRED or InputArgument::OPTIONAL
+	 * @param   string   $description  A description text
+	 * @param   mixed    $default      The default value (for InputArgument::OPTIONAL mode only)
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function addArgument($name, $mode = null, $description = '', $default = null)
+	{
+		$this->definition->addArgument(new InputArgument($name, $mode, $description, $default));
+
+		return $this;
 	}
 
 	/**

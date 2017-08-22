@@ -40,20 +40,20 @@ class Application extends AbstractApplication
 	private $commandLoader;
 
 	/**
+	 * Console output handler.
+	 *
+	 * @var    OutputInterface
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $consoleOutput;
+
+	/**
 	 * The default command for the application.
 	 *
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $defaultCommand = 'list';
-
-	/**
-	 * Output handler.
-	 *
-	 * @var    OutputInterface
-	 * @since  __DEPLOY_VERSION__
-	 */
-	private $output;
 
 	/**
 	 * Class constructor.
@@ -74,7 +74,7 @@ class Application extends AbstractApplication
 			$this->close();
 		}
 
-		$this->output = new ConsoleOutput;
+		$this->consoleOutput = new ConsoleOutput;
 
 		// Call the constructor as late as possible (it runs `initialise`).
 		parent::__construct($input ?: new Cli, $config);
@@ -204,15 +204,15 @@ class Application extends AbstractApplication
 	}
 
 	/**
-	 * Get the output handler.
+	 * Get the console output handler.
 	 *
 	 * @return  OutputInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getOutputHandler(): OutputInterface
+	public function getConsoleOutput(): OutputInterface
 	{
-		return $this->output;
+		return $this->consoleOutput;
 	}
 
 	/**
@@ -246,17 +246,17 @@ class Application extends AbstractApplication
 	}
 
 	/**
-	 * Set the output handler.
+	 * Set the console output handler.
 	 *
-	 * @param   OutputInterface  $output  The new output handler.
+	 * @param   OutputInterface  $output  The new console output handler.
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setOutputHandler(OutputInterface $output)
+	public function setConsoleOutput(OutputInterface $output)
 	{
-		$this->output = $output;
+		$this->consoleOutput = $output;
 
 		return $this;
 	}
