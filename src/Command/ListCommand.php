@@ -62,5 +62,6 @@ class ListCommand extends AbstractCommand
 	protected function initialise()
 	{
 		$this->setName('list');
+		$this->setDescription("List the application's available commands");
 	}
 }

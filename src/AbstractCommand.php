@@ -53,6 +53,14 @@ abstract class AbstractCommand implements CommandInterface
 	private $definition;
 
 	/**
+	 * The command's description.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $description = '';
+
+	/**
 	 * The command's input helper set.
 	 *
 	 * @var    HelperSet
@@ -159,6 +167,18 @@ abstract class AbstractCommand implements CommandInterface
 	public function getDefinition(): InputDefinition
 	{
 		return $this->definition;
+	}
+
+	/**
+	 * Get the command's description.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getDescription(): string
+	{
+		return $this->description;
 	}
 
 	/**
@@ -271,7 +291,7 @@ abstract class AbstractCommand implements CommandInterface
 	 *
 	 * @param   array|InputDefinition  $definition  Either an InputDefinition object or an array of objects to write to the definition.
 	 *
-	 * @return  $this
+	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -285,8 +305,20 @@ abstract class AbstractCommand implements CommandInterface
 		{
 			$this->definition->setDefinition($definition);
 		}
+	}
 
-		return $this;
+	/**
+	 * Sets the description for the command.
+	 *
+	 * @param   string  $description  The description for the command
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setDescription(string $description)
+	{
+		$this->description = $description;
 	}
 
 	/**

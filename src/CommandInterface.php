@@ -46,6 +46,15 @@ interface CommandInterface
 	public function getDefinition(): InputDefinition;
 
 	/**
+	 * Get the command's description.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getDescription(): string;
+
+	/**
 	 * Get the command's input helper set.
 	 *
 	 * @return  HelperSet
@@ -106,6 +115,28 @@ interface CommandInterface
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setApplication(Application $app);
+
+	/**
+	 * Sets the input definition for the command.
+	 *
+	 * @param   array|InputDefinition  $definition  Either an InputDefinition object or an array of objects to write to the definition.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setDefinition($definition);
+
+	/**
+	 * Sets the description for the command.
+	 *
+	 * @param   string  $description  The description for the command
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setDescription(string $description);
 
 	/**
 	 * Set the command's input helper set.
