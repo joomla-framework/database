@@ -8,6 +8,7 @@
 
 namespace Joomla\Console;
 
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputDefinition;
 
 /**
@@ -43,6 +44,15 @@ interface CommandInterface
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getDefinition(): InputDefinition;
+
+	/**
+	 * Get the command's input helper set.
+	 *
+	 * @return  HelperSet
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getHelperSet(): HelperSet;
 
 	/**
 	 * Get the command's name.
@@ -96,6 +106,17 @@ interface CommandInterface
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setApplication(Application $app);
+
+	/**
+	 * Set the command's input helper set.
+	 *
+	 * @param   HelperSet  $helperSet  The helper set.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setHelperSet(HelperSet $helperSet);
 
 	/**
 	 * Set the command's name.

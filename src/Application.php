@@ -13,7 +13,13 @@ use Joomla\Console\Exception\CommandNotFoundException;
 use Joomla\Console\Input\JoomlaInput;
 use Joomla\Input\Cli;
 use Joomla\Registry\Registry;
+use Symfony\Component\Console\Helper\DebugFormatterHelper;
+use Symfony\Component\Console\Helper\FormatterHelper;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\ProcessHelper;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputAwareInterface;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -92,6 +98,14 @@ class Application extends AbstractApplication
 	private $exitCode = 0;
 
 	/**
+	 * The application helper set.
+	 *
+	 * @var    HelperSet
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $helperSet;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @param   Cli       $input   An optional argument to provide dependency injection for the application's input object.  If the argument is an
@@ -131,6 +145,7 @@ class Application extends AbstractApplication
 		}
 
 		$command->setApplication($this);
+		$command->setHelperSet($this->helperSet);
 
 		if (!$command->getName())
 		{
@@ -238,6 +253,15 @@ class Application extends AbstractApplication
 
 		$this->getConsoleInput()->validate();
 
+		// Push the console input into any helpers which are input aware
+		foreach ($command->getHelperSet() as $helper)
+		{
+			if ($helper instanceof InputAwareInterface)
+			{
+				$helper->setInput($this->getConsoleInput());
+			}
+		}
+
 		$exitCode = $command->execute();
 
 		$this->exitCode = is_numeric($exitCode) ? (int) $exitCode : 0;
@@ -262,6 +286,25 @@ class Application extends AbstractApplication
 
 			$this->close($exitCode);
 		}
+	}
+
+	/**
+	 * Gets the base helper set.
+	 *
+	 * @return  HelperSet
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function getBaseHelperSet()
+	{
+		return new HelperSet(
+			[
+				new FormatterHelper,
+				new DebugFormatterHelper,
+				new ProcessHelper,
+				new QuestionHelper,
+			]
+		);
 	}
 
 	/**
@@ -408,6 +451,18 @@ class Application extends AbstractApplication
 	}
 
 	/**
+	 * Get the application helper set.
+	 *
+	 * @return  HelperSet
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getHelperSet(): HelperSet
+	{
+		return $this->helperSet;
+	}
+
+	/**
 	 * Check if the application has a command with the given name.
 	 *
 	 * @param   string  $name  The name of the command to check for existence.
@@ -437,6 +492,7 @@ class Application extends AbstractApplication
 		$this->consoleOutput = new ConsoleOutput;
 
 		$this->definition = $this->getBaseInputDefinition();
+		$this->helperSet  = $this->getBaseHelperSet();
 
 		// Register default commands
 		foreach ($this->getDefaultCommands() as $command)
