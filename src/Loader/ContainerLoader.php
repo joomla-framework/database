@@ -70,6 +70,18 @@ final class ContainerLoader implements LoaderInterface
 	}
 
 	/**
+	 * Get the names of the registered commands.
+	 *
+	 * @return  string[]
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getNames(): array
+	{
+		return array_keys($this->commandMap);
+	}
+
+	/**
 	 * Checks if a command exists.
 	 *
 	 * @param   string  $name  The command to check.

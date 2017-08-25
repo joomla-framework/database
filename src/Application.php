@@ -29,6 +29,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Base application class for a Joomla! command line application.
  *
+ * Portions of this class are based heavily on the Symfony\Component\Console\Application class.
+ *
  * @since  __DEPLOY_VERSION__
  */
 class Application extends AbstractApplication
@@ -289,6 +291,61 @@ class Application extends AbstractApplication
 	}
 
 	/**
+	 * Gets all commands, including those available through a command loader, optionally filtered on a command namespace.
+	 *
+	 * @param   string  $namespace  An optional command namespace to filter by.
+	 *
+	 * @return  CommandInterface[]
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getAllCommands(string $namespace = ''): array
+	{
+		if ($namespace === '')
+		{
+			$commands = $this->commands;
+
+			if (!$this->commandLoader)
+			{
+				return $commands;
+			}
+
+			foreach ($this->commandLoader->getNames() as $name)
+			{
+				if (!isset($commands[$name]))
+				{
+					$commands[$name] = $this->getCommand($name);
+				}
+			}
+
+			return $commands;
+		}
+
+		$commands = [];
+
+		foreach ($this->commands as $name => $command)
+		{
+			if ($namespace === $this->extractNamespace($name, substr_count($namespace, ':') + 1))
+			{
+				$commands[$name] = $command;
+			}
+		}
+
+		if ($this->commandLoader)
+		{
+			foreach ($this->commandLoader->getNames() as $name)
+			{
+				if (!isset($commands[$name]) && $namespace === $this->extractNamespace($name, substr_count($namespace, ':') + 1))
+				{
+					$commands[$name] = $this->get($name);
+				}
+			}
+		}
+
+		return $commands;
+	}
+
+	/**
 	 * Gets the base helper set.
 	 *
 	 * @return  HelperSet
@@ -378,6 +435,9 @@ class Application extends AbstractApplication
 
 	/**
 	 * Get the registered commands.
+	 *
+	 * This method only retrieves commands which have been explicitly registered.  To get all commands including those from a
+	 * command loader, use the `getAllCommands()` method.
 	 *
 	 * @return  CommandInterface[]
 	 *
@@ -573,5 +633,23 @@ class Application extends AbstractApplication
 	public function shouldAutoExit(): bool
 	{
 		return $this->autoExit;
+	}
+
+	/**
+	 * Returns the namespace part of the command name.
+	 *
+	 * @param   string   $name   The command name to process
+	 * @param   integer  $limit  The maximum number of parts of the namespace
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	private function extractNamespace(string $name, $limit = null)
+	{
+		$parts = explode(':', $name);
+		array_pop($parts);
+
+		return implode(':', $limit === null ? $parts : array_slice($parts, 0, $limit));
 	}
 }

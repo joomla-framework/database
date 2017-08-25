@@ -46,7 +46,7 @@ class ListCommand extends AbstractCommand
 
 		$symfonyStyle->write("\nAvailable commands:\n\n");
 
-		foreach ($this->getApplication()->getCommands() as $command)
+		foreach ($this->getApplication()->getAllCommands() as $command)
 		{
 			$symfonyStyle->write('<cmd>' . $command->getName() . '</cmd>', true);
 		}

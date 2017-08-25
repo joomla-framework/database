@@ -31,6 +31,15 @@ interface LoaderInterface
 	public function get(string $name): CommandInterface;
 
 	/**
+	 * Get the names of the registered commands.
+	 *
+	 * @return  string[]
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getNames(): array;
+
+	/**
 	 * Checks if a command exists.
 	 *
 	 * @param   string  $name  The command to check.
