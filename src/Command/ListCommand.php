@@ -9,8 +9,7 @@
 namespace Joomla\Console\Command;
 
 use Joomla\Console\AbstractCommand;
-use Symfony\Component\Console\Formatter\OutputFormatterStyle;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Joomla\Console\Helper\DescriptorHelper;
 
 /**
  * Command listing all available commands.
@@ -30,26 +29,11 @@ class ListCommand extends AbstractCommand
 	{
 		$output = $this->getApplication()->getConsoleOutput();
 
-		$formatter = $output->getFormatter();
-		$formatter->setStyle('cmd', new OutputFormatterStyle('magenta'));
+		$descriptor = new DescriptorHelper;
 
-		$executable = $this->getApplication()->input->executable;
+		$this->getHelperSet()->set($descriptor);
 
-		$symfonyStyle = new SymfonyStyle($this->getApplication()->getConsoleInput(), $output);
-		$symfonyStyle->title('Command Listing');
-		$symfonyStyle->write(
-			sprintf('Usage: <info>%s</info> <cmd><command></cmd>',
-				$executable
-			),
-			true
-		);
-
-		$symfonyStyle->write("\nAvailable commands:\n\n");
-
-		foreach ($this->getApplication()->getAllCommands() as $command)
-		{
-			$symfonyStyle->write('<cmd>' . $command->getName() . '</cmd>', true);
-		}
+		$descriptor->describe($this->getApplication()->getConsoleOutput(), $this->getApplication());
 	}
 
 	/**

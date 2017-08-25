@@ -69,6 +69,14 @@ abstract class AbstractCommand implements CommandInterface
 	private $helperSet;
 
 	/**
+	 * Flag tracking whether the command is hidden from the command listing.
+	 *
+	 * @var    boolean
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $hidden = false;
+
+	/**
 	 * The command's name.
 	 *
 	 * @var    string
@@ -206,6 +214,17 @@ abstract class AbstractCommand implements CommandInterface
 	}
 
 	/**
+	 * Initialise the command.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function initialise()
+	{
+	}
+
+	/**
 	 * Check if the command is enabled in this environment.
 	 *
 	 * @return  boolean
@@ -218,14 +237,15 @@ abstract class AbstractCommand implements CommandInterface
 	}
 
 	/**
-	 * Initialise the command.
+	 * Check if the command is hidden from the command listing.
 	 *
-	 * @return  void
+	 * @return  boolean
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function initialise()
+	public function isHidden(): bool
 	{
+		return $this->hidden;
 	}
 
 	/**
@@ -333,6 +353,20 @@ abstract class AbstractCommand implements CommandInterface
 	public function setHelperSet(HelperSet $helperSet)
 	{
 		$this->helperSet = $helperSet;
+	}
+
+	/**
+	 * Set whether this command is hidden from the command listing.
+	 *
+	 * @param   boolean  $hidden  Flag if this command is hidden.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setHidden(bool $hidden)
+	{
+		$this->hidden = $hidden;
 	}
 
 	/**

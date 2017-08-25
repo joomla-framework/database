@@ -82,6 +82,15 @@ interface CommandInterface
 	public function isEnabled(): bool;
 
 	/**
+	 * Check if the command is hidden from the command listing.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function isHidden(): bool;
+
+	/**
 	 * Merges the definition from the application to this command.
 	 *
 	 * @param   InputDefinition  $definition  The InputDefinition from the application to be merged.
@@ -148,6 +157,17 @@ interface CommandInterface
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setHelperSet(HelperSet $helperSet);
+
+	/**
+	 * Set whether this command is hidden from the command listing.
+	 *
+	 * @param   boolean  $hidden  Flag if this command is hidden.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setHidden(bool $hidden);
 
 	/**
 	 * Set the command's name.
