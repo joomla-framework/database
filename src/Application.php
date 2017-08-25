@@ -10,9 +10,9 @@ namespace Joomla\Console;
 
 use Joomla\Application\AbstractApplication;
 use Joomla\Console\Exception\CommandNotFoundException;
+use Joomla\Console\Input\JoomlaInput;
 use Joomla\Input\Cli;
 use Joomla\Registry\Registry;
-use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -228,6 +228,16 @@ class Application extends AbstractApplication
 
 		$this->getConsoleInput()->bind($command->getDefinition());
 
+		// Make sure the command argument is defined to both inputs, validation may fail otherwise
+		if ($this->getConsoleInput()->hasArgument('command') && $this->getConsoleInput()->getArgument('command') === null)
+		{
+			$this->getConsoleInput()->setArgument('command', $command->getName());
+		}
+
+		$this->input->def('command', $command->getName());
+
+		$this->getConsoleInput()->validate();
+
 		$exitCode = $command->execute();
 
 		$this->exitCode = is_numeric($exitCode) ? (int) $exitCode : 0;
@@ -423,7 +433,7 @@ class Application extends AbstractApplication
 		// Set the current directory.
 		$this->set('cwd', getcwd());
 
-		$this->consoleInput  = new ArgvInput;
+		$this->consoleInput  = new JoomlaInput($this->input);
 		$this->consoleOutput = new ConsoleOutput;
 
 		$this->definition = $this->getBaseInputDefinition();
