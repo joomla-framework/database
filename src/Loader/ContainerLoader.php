@@ -9,8 +9,8 @@
 namespace Joomla\Console\Loader;
 
 use Joomla\Console\CommandInterface;
-use Joomla\Console\Exception\CommandNotFoundException;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Console\Exception\CommandNotFoundException;
 
 /**
  * PSR-11 compatible command loader.

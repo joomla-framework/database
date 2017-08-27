@@ -9,11 +9,12 @@
 namespace Joomla\Console;
 
 use Joomla\Application\AbstractApplication;
-use Joomla\Console\Exception\CommandNotFoundException;
 use Joomla\Console\Input\JoomlaInput;
 use Joomla\Input\Cli;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
+use Symfony\Component\Console\Exception\CommandNotFoundException;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Helper\DebugFormatterHelper;
 use Symfony\Component\Console\Helper\FormatterHelper;
@@ -167,6 +168,7 @@ class Application extends AbstractApplication
 	 * @return  CommandInterface|void  The registered command or null if the command is not enabled
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  LogicException
 	 */
 	public function addCommand(CommandInterface $command)
 	{
@@ -180,7 +182,7 @@ class Application extends AbstractApplication
 
 		if (!$command->getName())
 		{
-			throw new \LogicException(sprintf('The command class %s does not have a name.', get_class($command)));
+			throw new LogicException(sprintf('The command class %s does not have a name.', get_class($command)));
 		}
 
 		$this->commands[$command->getName()] = $command;

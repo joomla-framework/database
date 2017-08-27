@@ -63,7 +63,7 @@ class ContainerLoaderTest extends TestCase
 	 * @covers  Joomla\Console\Loader\ContainerLoader::get
 	 * @uses    Joomla\Console\Loader\ContainerLoader::has
 	 *
-	 * @expectedException  Joomla\Console\Exception\CommandNotFoundException
+	 * @expectedException  Symfony\Component\Console\Exception\CommandNotFoundException
 	 */
 	public function testTheLoaderDoesNotRetrieveAnUnknownCommand()
 	{
