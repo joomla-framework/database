@@ -401,6 +401,8 @@ abstract class AbstractCommand implements CommandInterface
 		{
 			$this->definition->setDefinition($definition);
 		}
+
+		$this->applicationDefinitionMerged = false;
 	}
 
 	/**
