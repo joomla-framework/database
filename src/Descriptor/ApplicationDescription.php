@@ -69,21 +69,21 @@ final class ApplicationDescription
 	 */
 	private $showHidden;
 
-    /**
-     * Constructor.
-     *
-     * @param   Application  $application  The application being described.
-     * @param   string|null  $namespace    The command namespace to process.
-     * @param   boolean      $showHidden   Flag indicating hidden commands should be displayed.
-     *
-     * @since   __DEPLOY_VERSION__
-     */
-    public function __construct(Application $application, string $namespace = '', bool $showHidden = false)
-    {
-	    $this->application = $application;
-	    $this->namespace   = $namespace;
-	    $this->showHidden  = $showHidden;
-    }
+	/**
+	 * Constructor.
+	 *
+	 * @param   Application  $application  The application being described.
+	 * @param   string       $namespace    The command namespace to process.
+	 * @param   boolean      $showHidden   Flag indicating hidden commands should be displayed.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function __construct(Application $application, string $namespace = '', bool $showHidden = false)
+	{
+		$this->application = $application;
+		$this->namespace   = $namespace;
+		$this->showHidden  = $showHidden;
+	}
 
 	/**
 	 * Get the application's command namespaces.
@@ -235,7 +235,7 @@ final class ApplicationDescription
 			ksort($commandsSet);
 		}
 
-		// unset reference to keep scope clear
+		// Unset reference to keep scope clear
 		unset($commandsSet);
 
 		return $namespacedCommands;

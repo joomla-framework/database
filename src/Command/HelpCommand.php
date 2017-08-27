@@ -56,7 +56,7 @@ The <info>%command.name%</info> command displays a command's help information:
 
 To display the list of available commands, please use the <info>list</info> command.
 EOF
-        );
+		);
 
 		$this->addArgument('command_name', InputArgument::OPTIONAL, 'The command name', 'help');
 	}

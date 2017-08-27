@@ -25,6 +25,8 @@ class DescriptorHelper extends Helper
 	 * @param   OutputInterface  $output  The output object to use.
 	 * @param   object           $object  The object to describe.
 	 *
+	 * @return  void
+	 *
 	 * @since   ___DEPLOY_VERSION__
 	 */
 	public function describe(OutputInterface $output, $object)
