@@ -110,6 +110,15 @@ final class TextDescriptor extends SymfonyTextDescriptor
 			$this->describeInputDefinition($definition, $options);
 			$this->writeText("\n");
 		}
+
+		if ($help = $command->getProcessedHelp())
+		{
+			$this->writeText("\n");
+			$this->writeText('<comment>Help:</comment>', $options);
+			$this->writeText("\n");
+			$this->writeText('  ' . str_replace("\n", "\n  ", $help), $options);
+			$this->writeText("\n");
+		}
 	}
 
 	/**

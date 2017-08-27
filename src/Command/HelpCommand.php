@@ -49,6 +49,15 @@ class HelpCommand extends AbstractCommand
 	{
 		$this->setName('help');
 		$this->setDescription('Show the help for a command');
+		$this->setHelp(<<<'EOF'
+The <info>%command.name%</info> command displays a command's help information:
+
+<info>php %command.full_name% list</info>
+
+To display the list of available commands, please use the <info>list</info> command.
+EOF
+        );
+
 		$this->addArgument('command_name', InputArgument::OPTIONAL, 'The command name', 'help');
 	}
 }

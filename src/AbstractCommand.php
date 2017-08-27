@@ -61,6 +61,14 @@ abstract class AbstractCommand implements CommandInterface
 	private $description = '';
 
 	/**
+	 * The command's help.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $help = '';
+
+	/**
 	 * The command's input helper set.
 	 *
 	 * @var    HelperSet
@@ -198,6 +206,18 @@ abstract class AbstractCommand implements CommandInterface
 	}
 
 	/**
+	 * Get the command's help.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getHelp(): string
+	{
+		return $this->help;
+	}
+
+	/**
 	 * Get the command's input helper set.
 	 *
 	 * @return  HelperSet
@@ -219,6 +239,33 @@ abstract class AbstractCommand implements CommandInterface
 	public function getName(): string
 	{
 		return $this->name;
+	}
+
+	/**
+	 * Returns the processed help for the command.
+	 *
+	 * This method is used to replace placeholders in commands with the real values.
+	 * By default, this supports `%command.name%` and `%command.full_name`.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getProcessedHelp(): string
+	{
+		$name = $this->getName();
+
+		$placeholders = [
+			'%command.name%',
+			'%command.full_name%',
+		];
+
+		$replacements = [
+			$name,
+			$this->getApplication()->input->server->getRaw('PHP_SELF', '') . ' ' . $name,
+		];
+
+		return str_replace($placeholders, $replacements, $this->getHelp() ?: $this->getDescription());
 	}
 
 	/**
@@ -368,6 +415,20 @@ abstract class AbstractCommand implements CommandInterface
 	public function setDescription(string $description)
 	{
 		$this->description = $description;
+	}
+
+	/**
+	 * Sets the help for the command.
+	 *
+	 * @param   string  $help  The help for the command
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setHelp(string $help)
+	{
+		$this->help = $help;
 	}
 
 	/**

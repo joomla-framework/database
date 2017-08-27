@@ -65,6 +65,15 @@ interface CommandInterface
 	public function getDescription(): string;
 
 	/**
+	 * Get the command's help.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getHelp(): string;
+
+	/**
 	 * Get the command's input helper set.
 	 *
 	 * @return  HelperSet
@@ -81,6 +90,18 @@ interface CommandInterface
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getName(): string;
+
+	/**
+	 * Returns the processed help for the command.
+	 *
+	 * This method is used to replace placeholders in commands with the real values.
+	 * By default, this supports `%command.name%` and `%command.full_name`.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getProcessedHelp(): string;
 
 	/**
 	 * Get the command's synopsis.
@@ -167,6 +188,17 @@ interface CommandInterface
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function setDescription(string $description);
+
+	/**
+	 * Sets the help for the command.
+	 *
+	 * @param   string  $help  The help for the command
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setHelp(string $help);
 
 	/**
 	 * Set the command's input helper set.

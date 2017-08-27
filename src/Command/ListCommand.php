@@ -45,5 +45,11 @@ class ListCommand extends AbstractCommand
 	{
 		$this->setName('list');
 		$this->setDescription("List the application's available commands");
+		$this->setHelp(<<<'EOF'
+The <info>%command.name%</info> command lists all of the application's commands:
+
+  <info>php %command.full_name%</info>
+EOF
+		);
 	}
 }
