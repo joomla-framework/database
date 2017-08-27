@@ -10,13 +10,14 @@ namespace Joomla\Console\Command;
 
 use Joomla\Console\AbstractCommand;
 use Joomla\Console\Helper\DescriptorHelper;
+use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * Command listing all available commands.
+ * Command to render a command's help data.
  *
  * @since  __DEPLOY_VERSION__
  */
-class ListCommand extends AbstractCommand
+class HelpCommand extends AbstractCommand
 {
 	/**
 	 * Execute the command.
@@ -27,11 +28,14 @@ class ListCommand extends AbstractCommand
 	 */
 	public function execute()
 	{
+		$commandName = $this->getApplication()->input->get('command_name');
+		$command     = $commandName === $this->getName() ? $this : $this->getApplication()->getCommand($commandName);
+
 		$descriptor = new DescriptorHelper;
 
 		$this->getHelperSet()->set($descriptor);
 
-		$descriptor->describe($this->getApplication()->getConsoleOutput(), $this->getApplication());
+		$descriptor->describe($this->getApplication()->getConsoleOutput(), $command);
 	}
 
 	/**
@@ -43,7 +47,8 @@ class ListCommand extends AbstractCommand
 	 */
 	protected function initialise()
 	{
-		$this->setName('list');
-		$this->setDescription("List the application's available commands");
+		$this->setName('help');
+		$this->setDescription('Show the help for a command');
+		$this->addArgument('command_name', InputArgument::OPTIONAL, 'The command name', 'help');
 	}
 }

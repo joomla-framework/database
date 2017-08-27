@@ -231,6 +231,8 @@ class Application extends AbstractApplication
 	 */
 	protected function doExecute()
 	{
+		$helpCommand = false;
+
 		$commandName = $this->getCommandName();
 
 		if (!$commandName)
@@ -240,10 +242,23 @@ class Application extends AbstractApplication
 			$this->close(1);
 		}
 
+		if ($this->getConsoleInput()->hasParameterOption(['--help', '-h'], true))
+		{
+			$helpCommand = $commandName;
+			$commandName = 'help';
+		}
+
 		$command = $this->getCommand($commandName);
 		$command->mergeApplicationDefinition($this->definition);
 
 		$this->getConsoleInput()->bind($command->getDefinition());
+
+		// If the user is looking for help, set the command name for use
+		if ($helpCommand !== false)
+		{
+			$this->getConsoleInput()->setArgument('command_name', $helpCommand);
+			$this->input->set('command_name', $helpCommand);
+		}
 
 		// Make sure the command argument is defined to both inputs, validation may fail otherwise
 		if ($this->getConsoleInput()->hasArgument('command') && $this->getConsoleInput()->getArgument('command') === null)
@@ -376,6 +391,7 @@ class Application extends AbstractApplication
 		return new InputDefinition(
 			[
 				new InputArgument('command', InputArgument::REQUIRED, 'The command to execute'),
+				new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display the help information'),
 				new InputOption('--quiet', '-q', InputOption::VALUE_NONE, 'Flag indicating that all output should be silenced'),
 				new InputOption(
 					'--verbose',
@@ -483,6 +499,7 @@ class Application extends AbstractApplication
 	{
 		return [
 			new Command\ListCommand,
+			new Command\HelpCommand,
 		];
 	}
 
