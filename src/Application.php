@@ -311,6 +311,46 @@ class Application extends AbstractApplication
 	}
 
 	/**
+	 * Finds a registered namespace by a name or an abbreviation.
+	 *
+	 * @param string $namespace A namespace or abbreviation to search for
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  CommandNotFoundException When namespace is incorrect or ambiguous
+	 */
+	public function findNamespace($namespace)
+	{
+		$allNamespaces = $this->getNamespaces();
+		$expr          = preg_replace_callback(
+			'{([^:]+|)}',
+			function ($matches)
+			{
+				return preg_quote($matches[1]) . '[^:]*';
+			},
+			$namespace
+		);
+		$namespaces    = preg_grep('{^' . $expr . '}', $allNamespaces);
+
+		if (empty($namespaces))
+		{
+			$message = sprintf('There are no commands defined in the "%s" namespace.', $namespace);
+
+			throw new CommandNotFoundException($message);
+		}
+
+		$exact = in_array($namespace, $namespaces, true);
+
+		if (count($namespaces) > 1 && !$exact)
+		{
+			throw new CommandNotFoundException(sprintf('The namespace "%s" is ambiguous.', $namespace));
+		}
+
+		return $exact ? $namespace : reset($namespaces);
+	}
+
+	/**
 	 * Gets all commands, including those available through a command loader, optionally filtered on a command namespace.
 	 *
 	 * @param   string  $namespace  An optional command namespace to filter by.
@@ -545,6 +585,32 @@ class Application extends AbstractApplication
 	}
 
 	/**
+	 * Returns an array of all unique namespaces used by currently registered commands.
+	 *
+	 * Note that this does not include the global namespace which always exists.
+	 *
+	 * @return  string[]
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getNamespaces(): array
+	{
+		$namespaces = [];
+
+		foreach ($this->getAllCommands() as $command)
+		{
+			$namespaces = array_merge($namespaces, $this->extractAllNamespaces($command->getName()));
+
+			foreach ($command->getAliases() as $alias)
+			{
+				$namespaces = array_merge($namespaces, $this->extractAllNamespaces($alias));
+			}
+		}
+
+		return array_values(array_unique(array_filter($namespaces)));
+	}
+
+	/**
 	 * Check if the application has a command with the given name.
 	 *
 	 * @param   string  $name  The name of the command to check for existence.
@@ -655,6 +721,36 @@ class Application extends AbstractApplication
 	public function shouldAutoExit(): bool
 	{
 		return $this->autoExit;
+	}
+
+	/**
+	 * Returns all namespaces of the command name.
+	 *
+	 * @param   string  $name  The name of the command
+	 *
+	 * @return  string[] The command's namespaces
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	private function extractAllNamespaces(string $name): array
+	{
+		// -1 as third argument is needed to skip the command short name when exploding
+		$parts      = explode(':', $name, -1);
+		$namespaces = [];
+
+		foreach ($parts as $part)
+		{
+			if (count($namespaces))
+			{
+				$namespaces[] = end($namespaces) . ':' . $part;
+			}
+			else
+			{
+				$namespaces[] = $part;
+			}
+		}
+
+		return $namespaces;
 	}
 
 	/**

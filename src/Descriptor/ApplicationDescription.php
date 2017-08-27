@@ -169,7 +169,7 @@ final class ApplicationDescription
 		$this->commands   = [];
 		$this->namespaces = [];
 
-		$all = $this->application->getAllCommands();
+		$all = $this->application->getAllCommands($this->namespace ? $this->application->findNamespace($this->namespace) : '');
 
 		foreach ($this->sortCommands($all) as $namespace => $commands)
 		{

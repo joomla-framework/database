@@ -10,6 +10,7 @@ namespace Joomla\Console\Command;
 
 use Joomla\Console\AbstractCommand;
 use Joomla\Console\Helper\DescriptorHelper;
+use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Command listing all available commands.
@@ -31,7 +32,13 @@ class ListCommand extends AbstractCommand
 
 		$this->getHelperSet()->set($descriptor);
 
-		$descriptor->describe($this->getApplication()->getConsoleOutput(), $this->getApplication());
+		$descriptor->describe(
+			$this->getApplication()->getConsoleOutput(),
+			$this->getApplication(),
+			[
+				'namespace' => $this->getApplication()->input->getString('namespace', ''),
+			]
+		);
 	}
 
 	/**
@@ -45,6 +52,7 @@ class ListCommand extends AbstractCommand
 	{
 		$this->setName('list');
 		$this->setDescription("List the application's available commands");
+		$this->addArgument('namespace', InputArgument::OPTIONAL, 'The namespace name');
 		$this->setHelp(<<<'EOF'
 The <info>%command.name%</info> command lists all of the application's commands:
 

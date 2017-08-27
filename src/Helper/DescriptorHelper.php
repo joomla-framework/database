@@ -22,16 +22,17 @@ class DescriptorHelper extends Helper
 	/**
 	 * Describes an object if supported.
 	 *
-	 * @param   OutputInterface  $output  The output object to use.
-	 * @param   object           $object  The object to describe.
+	 * @param   OutputInterface  $output   The output object to use.
+	 * @param   object           $object   The object to describe.
+	 * @param   array            $options  Options for the descriptor.
 	 *
 	 * @return  void
 	 *
 	 * @since   ___DEPLOY_VERSION__
 	 */
-	public function describe(OutputInterface $output, $object)
+	public function describe(OutputInterface $output, $object, array $options = [])
 	{
-		(new TextDescriptor)->describe($output, $object);
+		(new TextDescriptor)->describe($output, $object, $options);
 	}
 
 	/**
