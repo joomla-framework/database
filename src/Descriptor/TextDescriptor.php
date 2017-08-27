@@ -10,7 +10,7 @@ namespace Joomla\Console\Descriptor;
 
 use Joomla\Console\Application;
 use Joomla\Console\CommandInterface;
-use Symfony\Component\Console\Helper\Helper;
+use Joomla\String\StringHelper;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Descriptor\TextDescriptor as SymfonyTextDescriptor;
@@ -205,7 +205,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 			foreach ($namespace['commands'] as $name)
 			{
 				$this->writeText("\n");
-				$spacingWidth   = $width - Helper::strlen($name);
+				$spacingWidth   = $width - StringHelper::strlen($name);
 				$command        = $commands[$name];
 				$commandAliases = $name === $command->getName() ? $this->getCommandAliasesText($command) : '';
 
@@ -238,16 +238,16 @@ final class TextDescriptor extends SymfonyTextDescriptor
 		{
 			if ($command instanceof CommandInterface)
 			{
-				$widths[] = Helper::strlen($command->getName());
+				$widths[] = StringHelper::strlen($command->getName());
 
 				foreach ($command->getAliases() as $alias)
 				{
-					$widths[] = Helper::strlen($alias);
+					$widths[] = StringHelper::strlen($alias);
 				}
 			}
 			else
 			{
-				$widths[] = Helper::strlen($command);
+				$widths[] = StringHelper::strlen($command);
 			}
 		}
 
