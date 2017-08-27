@@ -249,6 +249,11 @@ class Application extends AbstractApplication
 		}
 
 		$command = $this->getCommand($commandName);
+
+		// Create the command synopsis before merging the application input definition
+		$command->getSynopsis(true);
+		$command->getSynopsis(false);
+
 		$command->mergeApplicationDefinition($this->definition);
 
 		$this->getConsoleInput()->bind($command->getDefinition());

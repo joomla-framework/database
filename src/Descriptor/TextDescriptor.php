@@ -44,6 +44,11 @@ final class TextDescriptor extends SymfonyTextDescriptor
 
 				break;
 
+			case $object instanceof CommandInterface:
+				$this->describeConsoleCommand($object, $options);
+
+				break;
+
 			default:
 				parent::describe($output, $object, $options);
 		}
@@ -69,6 +74,42 @@ final class TextDescriptor extends SymfonyTextDescriptor
 		}
 
 		return $text;
+	}
+
+	/**
+	 * Describes a command.
+	 *
+	 * @param   CommandInterface  $command  The command being described.
+	 * @param   array             $options  Descriptor options.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	private function describeConsoleCommand(CommandInterface $command, array $options)
+	{
+		$command->getSynopsis(true);
+		$command->getSynopsis(false);
+		$command->mergeApplicationDefinition($command->getApplication()->getDefinition(), false);
+
+		$this->writeText('<comment>Usage:</comment>', $options);
+
+		foreach (array_merge([$command->getSynopsis(true)], $command->getAliases()) as $usage)
+		{
+			$this->writeText("\n");
+			$this->writeText('  ' . $usage, $options);
+		}
+
+		$this->writeText("\n");
+
+		$definition = $command->getDefinition();
+
+		if ($definition->getOptions() || $definition->getArguments())
+		{
+			$this->writeText("\n");
+			$this->describeInputDefinition($definition, $options);
+			$this->writeText("\n");
+		}
 	}
 
 	/**

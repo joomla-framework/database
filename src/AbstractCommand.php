@@ -85,6 +85,14 @@ abstract class AbstractCommand implements CommandInterface
 	private $name = '';
 
 	/**
+	 * The command's synopses.
+	 *
+	 * @var    string[]
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $synopsis = ['short' => '', 'long' => ''];
+
+	/**
 	 * Constructor.
 	 *
 	 * @since   __DEPLOY_VERSION__
@@ -155,7 +163,7 @@ abstract class AbstractCommand implements CommandInterface
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \UnexpectedValueException if the application has not been set.
 	 */
-	protected function getApplication(): Application
+	public function getApplication(): Application
 	{
 		if ($this->app)
 		{
@@ -211,6 +219,27 @@ abstract class AbstractCommand implements CommandInterface
 	public function getName(): string
 	{
 		return $this->name;
+	}
+
+	/**
+	 * Get the command's synopsis.
+	 *
+	 * @param   boolean  $short  Flag indicating whether the short or long version of the synopsis should be returned
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getSynopsis(bool $short = false): string
+	{
+		$key = $short ? 'short' : 'long';
+
+		if ($this->synopsis[$key] === '')
+		{
+			$this->synopsis[$key] = trim(sprintf('%s %s', $this->getName(), $this->getDefinition()->getSynopsis($short)));
+		}
+
+		return $this->synopsis[$key];
 	}
 
 	/**

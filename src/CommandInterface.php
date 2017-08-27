@@ -37,6 +37,16 @@ interface CommandInterface
 	public function getAliases(): array;
 
 	/**
+	 * Get the application object.
+	 *
+	 * @return  Application  The application object.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \UnexpectedValueException if the application has not been set.
+	 */
+	public function getApplication(): Application;
+
+	/**
 	 * Get the command's input definition.
 	 *
 	 * @return  InputDefinition
@@ -71,6 +81,17 @@ interface CommandInterface
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function getName(): string;
+
+	/**
+	 * Get the command's synopsis.
+	 *
+	 * @param   boolean  $short  Flag indicating whether the short or long version of the synopsis should be returned
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getSynopsis(bool $short = false): string;
 
 	/**
 	 * Check if the command is enabled in this environment.
