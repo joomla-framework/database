@@ -13,6 +13,8 @@ use Joomla\Console\Exception\CommandNotFoundException;
 use Joomla\Console\Input\JoomlaInput;
 use Joomla\Input\Cli;
 use Joomla\Registry\Registry;
+use Joomla\String\StringHelper;
+use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Helper\DebugFormatterHelper;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -24,7 +26,10 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Terminal;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 /**
  * Base application class for a Joomla! command line application.
@@ -36,12 +41,28 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Application extends AbstractApplication
 {
 	/**
+	 * The active command.
+	 *
+	 * @var    CommandInterface
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $activeCommand;
+
+	/**
 	 * Flag indicating the application should automatically exit after the command is run.
 	 *
 	 * @var    boolean
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $autoExit = false;
+
+	/**
+	 * Flag indicating the application should catch and handle Throwables.
+	 *
+	 * @var    boolean
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $catchThrowables = true;
 
 	/**
 	 * The available commands.
@@ -106,6 +127,14 @@ class Application extends AbstractApplication
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $helperSet;
+
+	/**
+	 * The console terminal helper.
+	 *
+	 * @var    Terminal
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $terminal;
 
 	/**
 	 * Class constructor.
@@ -248,7 +277,7 @@ class Application extends AbstractApplication
 			$commandName = 'help';
 		}
 
-		$command = $this->getCommand($commandName);
+		$command = $this->activeCommand = $this->getCommand($commandName);
 
 		// Create the command synopsis before merging the application input definition
 		$command->getSynopsis(true);
@@ -286,6 +315,8 @@ class Application extends AbstractApplication
 
 		$exitCode = $command->execute();
 
+		$this->activeCommand = null;
+
 		$this->exitCode = is_numeric($exitCode) ? (int) $exitCode : 0;
 	}
 
@@ -298,9 +329,59 @@ class Application extends AbstractApplication
 	 */
 	public function execute()
 	{
+		putenv('LINES=' . $this->terminal->getHeight());
+		putenv('COLUMNS=' . $this->terminal->getWidth());
+
 		$this->configureIO();
 
-		$this->doExecute();
+		try
+		{
+			$thrown = null;
+			$this->doExecute();
+		}
+		catch (\Exception $thrown)
+		{
+			$exception = $thrown;
+		}
+		catch (\Throwable $thrown)
+		{
+			$exception = new FatalThrowableError($thrown);
+		}
+
+		if ($thrown !== null)
+		{
+			if (!$this->shouldCatchThrowables() || !$exception instanceof \Exception)
+			{
+				throw $thrown;
+			}
+
+			if ($this->getConsoleOutput() instanceof ConsoleOutputInterface)
+			{
+				$this->renderException($exception, $this->getConsoleOutput()->getErrorOutput());
+			}
+			else
+			{
+				$this->renderException($exception, $this->getConsoleOutput());
+			}
+
+			$exitCode = $exception->getCode();
+
+			if (is_numeric($exitCode))
+			{
+				$exitCode = (int) $exitCode;
+
+				if ($exitCode === 0)
+				{
+					$exitCode = 1;
+				}
+			}
+			else
+			{
+				$exitCode = 1;
+			}
+
+			$this->exitCode = $exitCode;
+		}
 
 		if ($this->autoExit)
 		{
@@ -638,6 +719,7 @@ class Application extends AbstractApplication
 
 		$this->consoleInput  = new JoomlaInput($this->input);
 		$this->consoleOutput = new ConsoleOutput;
+		$this->terminal      = new Terminal;
 
 		$this->definition = $this->getBaseInputDefinition();
 		$this->helperSet  = $this->getBaseHelperSet();
@@ -661,6 +743,20 @@ class Application extends AbstractApplication
 	public function setAutoExit(bool $autoExit)
 	{
 		$this->autoExit = $autoExit;
+	}
+
+	/**
+	 * Set whether the application should catch Throwables.
+	 *
+	 * @param   boolean  $catchThrowables  The catch Throwables state.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setCatchThrowables(bool $catchThrowables)
+	{
+		$this->catchThrowables = $catchThrowables;
 	}
 
 	/**
@@ -724,6 +820,18 @@ class Application extends AbstractApplication
 	}
 
 	/**
+	 * Get the application's catch Throwables state.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function shouldCatchThrowables(): bool
+	{
+		return $this->catchThrowables;
+	}
+
+	/**
 	 * Returns all namespaces of the command name.
 	 *
 	 * @param   string  $name  The name of the command
@@ -769,5 +877,95 @@ class Application extends AbstractApplication
 		array_pop($parts);
 
 		return implode(':', $limit === null ? $parts : array_slice($parts, 0, $limit));
+	}
+	/**
+	 * Renders a caught exception.
+	 *
+	 * @param   \Exception  $exception  The Exception instance to render
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	private function renderException(\Exception $exception)
+	{
+		$this->getConsoleOutput()->writeln('', OutputInterface::VERBOSITY_QUIET);
+
+		do
+		{
+			$title = sprintf(
+				'  [%s%s]  ',
+				get_class($exception),
+				$this->getConsoleOutput()->isVerbose() && $exception->getCode() !== 0 ? ' (' . $exception->getCode() . ')' : ''
+			);
+
+			$len = StringHelper::strlen($title);
+
+			$width = $this->terminal->getWidth() ? $this->terminal->getWidth() - 1 : PHP_INT_MAX;
+			$lines = [];
+
+			foreach (preg_split('/\r?\n/', $exception->getMessage()) as $line)
+			{
+				foreach (StringHelper::str_split($line, $width - 4) as $line)
+				{
+					// Format lines to get the right string length
+					$lineLength = StringHelper::strlen($line) + 4;
+					$lines[]    = [$line, $lineLength];
+
+					$len = max($lineLength, $len);
+				}
+			}
+
+			$messages   = [];
+			$messages[] = $emptyLine = sprintf('<error>%s</error>', str_repeat(' ', $len));
+			$messages[] = sprintf('<error>%s%s</error>', $title, str_repeat(' ', max(0, $len - StringHelper::strlen($title))));
+
+			foreach ($lines as $line)
+			{
+				$messages[] = sprintf('<error>  %s  %s</error>', OutputFormatter::escape($line[0]), str_repeat(' ', $len - $line[1]));
+			}
+
+			$messages[] = $emptyLine;
+			$messages[] = '';
+
+			$this->getConsoleOutput()->writeln($messages, OutputInterface::VERBOSITY_QUIET);
+
+			if (OutputInterface::VERBOSITY_VERBOSE <= $this->getConsoleOutput()->getVerbosity())
+			{
+				$this->getConsoleOutput()->writeln('<comment>Exception trace:</comment>', OutputInterface::VERBOSITY_QUIET);
+
+				$trace = $exception->getTrace();
+
+				array_unshift(
+					$trace,
+					[
+						'function' => '',
+						'file'     => $exception->getFile() ?: 'Unavailable',
+						'line'     => $exception->getLine() ?: 'Unavailable',
+						'args'     => [],
+					]
+				);
+
+				for ($i = 0, $count = count($trace); $i < $count; ++$i)
+				{
+					$class    = $trace[$i]['class'] ?? '';
+					$type     = $trace[$i]['type'] ?? '';
+					$function = $trace[$i]['function'];
+					$file     = $trace[$i]['file'] ?? 'Unavailable';
+					$line     = $trace[$i]['line'] ?? 'Unavailable';
+
+					$this->getConsoleOutput()->writeln(sprintf(' %s%s%s() at <info>%s:%s</info>', $class, $type, $function, $file, $line), OutputInterface::VERBOSITY_QUIET);
+				}
+
+				$this->getConsoleOutput()->writeln('', OutputInterface::VERBOSITY_QUIET);
+			}
+		}
+		while ($exception = $exception->getPrevious());
+
+		if ($this->activeCommand instanceof CommandInterface)
+		{
+			$this->getConsoleOutput()->writeln(sprintf('<info>%s</info>', sprintf($this->activeCommand->getSynopsis())), OutputInterface::VERBOSITY_QUIET);
+			$this->getConsoleOutput()->writeln('', OutputInterface::VERBOSITY_QUIET);
+		}
 	}
 }
