@@ -394,9 +394,9 @@ class Application extends AbstractApplication
 	}
 
 	/**
-	 * Finds a registered namespace by a name or an abbreviation.
+	 * Finds a registered namespace by a name.
 	 *
-	 * @param string $namespace A namespace or abbreviation to search for
+	 * @param   string  $namespace  A namespace to search for
 	 *
 	 * @return  string
 	 *
@@ -956,7 +956,10 @@ class Application extends AbstractApplication
 					$file     = $trace[$i]['file'] ?? 'Unavailable';
 					$line     = $trace[$i]['line'] ?? 'Unavailable';
 
-					$this->getConsoleOutput()->writeln(sprintf(' %s%s%s() at <info>%s:%s</info>', $class, $type, $function, $file, $line), OutputInterface::VERBOSITY_QUIET);
+					$this->getConsoleOutput()->writeln(
+						sprintf(' %s%s%s() at <info>%s:%s</info>', $class, $type, $function, $file, $line),
+						OutputInterface::VERBOSITY_QUIET
+					);
 				}
 
 				$this->getConsoleOutput()->writeln('', OutputInterface::VERBOSITY_QUIET);
@@ -966,7 +969,13 @@ class Application extends AbstractApplication
 
 		if ($this->activeCommand instanceof CommandInterface)
 		{
-			$this->getConsoleOutput()->writeln(sprintf('<info>%s</info>', sprintf($this->activeCommand->getSynopsis())), OutputInterface::VERBOSITY_QUIET);
+			$this->getConsoleOutput()->writeln(
+				sprintf(
+					'<info>%s</info>',
+					sprintf($this->activeCommand->getSynopsis())
+				),
+				OutputInterface::VERBOSITY_QUIET
+			);
 			$this->getConsoleOutput()->writeln('', OutputInterface::VERBOSITY_QUIET);
 		}
 	}
