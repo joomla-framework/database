@@ -21,8 +21,8 @@ interface ContainerAwareInterface
 	 * @return  Container
 	 *
 	 * @since   1.0
-	 *
 	 * @throws  \UnexpectedValueException May be thrown if the container has not been set.
+	 * @deprecated  2.0  The getter will no longer be part of the interface.
 	 */
 	public function getContainer();
 
