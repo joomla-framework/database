@@ -9,7 +9,10 @@
 namespace Joomla\Console;
 
 use Joomla\Application\AbstractApplication;
+use Joomla\Console\Event\BeforeCommandExecuteEvent;
 use Joomla\Console\Input\JoomlaInput;
+use Joomla\Event\DispatcherAwareInterface;
+use Joomla\Event\DispatcherAwareTrait;
 use Joomla\Input\Cli;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
@@ -39,8 +42,10 @@ use Symfony\Component\Debug\Exception\FatalThrowableError;
  *
  * @since  __DEPLOY_VERSION__
  */
-class Application extends AbstractApplication
+class Application extends AbstractApplication implements DispatcherAwareInterface
 {
+	use DispatcherAwareTrait;
+
 	/**
 	 * The active command.
 	 *
@@ -316,9 +321,27 @@ class Application extends AbstractApplication
 			}
 		}
 
-		$this->exitCode = $command->execute();
+		if (!$this->dispatcher)
+		{
+			$this->runCommand($command);
 
-		$this->activeCommand = null;
+			return;
+		}
+
+		$event = new BeforeCommandExecuteEvent($this, $command);
+
+		$this->dispatcher->dispatch(ConsoleEvents::BEFORE_COMMAND_EXECUTE, $event);
+
+		if ($event->isCommandEnabled())
+		{
+			$this->runCommand($command);
+		}
+		else
+		{
+			$this->exitCode = BeforeCommandExecuteEvent::RETURN_CODE_DISABLED;
+
+			$this->activeCommand = null;
+		}
 	}
 
 	/**
@@ -873,6 +896,7 @@ class Application extends AbstractApplication
 
 		return implode(':', $limit === null ? $parts : array_slice($parts, 0, $limit));
 	}
+
 	/**
 	 * Renders a caught exception.
 	 *
@@ -973,5 +997,21 @@ class Application extends AbstractApplication
 			);
 			$output->writeln('', OutputInterface::VERBOSITY_QUIET);
 		}
+	}
+
+	/**
+	 * Run the command.
+	 *
+	 * @param   CommandInterface  $command  The command to run.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	private function runCommand(CommandInterface $command)
+	{
+		$this->exitCode = $command->execute();
+
+		$this->activeCommand = null;
 	}
 }

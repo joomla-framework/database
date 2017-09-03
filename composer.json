@@ -8,6 +8,7 @@
     "require": {
         "php": "~7.0",
         "joomla/application": "~2.0",
+        "joomla/event": "~2.0",
         "joomla/string": "~2.0",
         "symfony/console": "~3.4|~4.0"
     },
