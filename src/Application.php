@@ -268,9 +268,11 @@ class Application extends AbstractApplication
 
 		if (!$commandName)
 		{
-			$this->out('<comment>Command name not given.</comment>');
+			$this->out('<error>Command name not given.</error>');
 
-			$this->close(1);
+			$this->exitCode = 1;
+
+			return;
 		}
 
 		if ($this->getConsoleInput()->hasParameterOption(['--help', '-h'], true))
