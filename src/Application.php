@@ -328,6 +328,7 @@ class Application extends AbstractApplication
 	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  \Throwable
 	 */
 	public function execute()
 	{
@@ -357,14 +358,7 @@ class Application extends AbstractApplication
 				throw $thrown;
 			}
 
-			if ($this->getConsoleOutput() instanceof ConsoleOutputInterface)
-			{
-				$this->renderException($exception, $this->getConsoleOutput()->getErrorOutput());
-			}
-			else
-			{
-				$this->renderException($exception, $this->getConsoleOutput());
-			}
+			$this->renderException($exception);
 
 			$exitCode = $exception->getCode();
 
@@ -891,14 +885,16 @@ class Application extends AbstractApplication
 	 */
 	private function renderException(\Exception $exception)
 	{
-		$this->getConsoleOutput()->writeln('', OutputInterface::VERBOSITY_QUIET);
+		$output = $this->getConsoleOutput() instanceof ConsoleOutputInterface ? $this->getConsoleOutput()->getErrorOutput() : $this->getConsoleOutput();
+
+		$output->writeln('', OutputInterface::VERBOSITY_QUIET);
 
 		do
 		{
 			$title = sprintf(
 				'  [%s%s]  ',
 				get_class($exception),
-				$this->getConsoleOutput()->isVerbose() && $exception->getCode() !== 0 ? ' (' . $exception->getCode() . ')' : ''
+				$output->isVerbose() && $exception->getCode() !== 0 ? ' (' . $exception->getCode() . ')' : ''
 			);
 
 			$len = StringHelper::strlen($title);
@@ -930,11 +926,11 @@ class Application extends AbstractApplication
 			$messages[] = $emptyLine;
 			$messages[] = '';
 
-			$this->getConsoleOutput()->writeln($messages, OutputInterface::VERBOSITY_QUIET);
+			$output->writeln($messages, OutputInterface::VERBOSITY_QUIET);
 
-			if (OutputInterface::VERBOSITY_VERBOSE <= $this->getConsoleOutput()->getVerbosity())
+			if (OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity())
 			{
-				$this->getConsoleOutput()->writeln('<comment>Exception trace:</comment>', OutputInterface::VERBOSITY_QUIET);
+				$output->writeln('<comment>Exception trace:</comment>', OutputInterface::VERBOSITY_QUIET);
 
 				$trace = $exception->getTrace();
 
@@ -956,27 +952,27 @@ class Application extends AbstractApplication
 					$file     = $trace[$i]['file'] ?? 'Unavailable';
 					$line     = $trace[$i]['line'] ?? 'Unavailable';
 
-					$this->getConsoleOutput()->writeln(
+					$output->writeln(
 						sprintf(' %s%s%s() at <info>%s:%s</info>', $class, $type, $function, $file, $line),
 						OutputInterface::VERBOSITY_QUIET
 					);
 				}
 
-				$this->getConsoleOutput()->writeln('', OutputInterface::VERBOSITY_QUIET);
+				$output->writeln('', OutputInterface::VERBOSITY_QUIET);
 			}
 		}
 		while ($exception = $exception->getPrevious());
 
 		if ($this->activeCommand instanceof CommandInterface)
 		{
-			$this->getConsoleOutput()->writeln(
+			$output->writeln(
 				sprintf(
 					'<info>%s</info>',
 					sprintf($this->activeCommand->getSynopsis())
 				),
 				OutputInterface::VERBOSITY_QUIET
 			);
-			$this->getConsoleOutput()->writeln('', OutputInterface::VERBOSITY_QUIET);
+			$output->writeln('', OutputInterface::VERBOSITY_QUIET);
 		}
 	}
 }
