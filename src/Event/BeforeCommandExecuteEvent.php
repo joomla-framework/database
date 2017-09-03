@@ -11,14 +11,13 @@ namespace Joomla\Console\Event;
 use Joomla\Console\Application;
 use Joomla\Console\CommandInterface;
 use Joomla\Console\ConsoleEvents;
-use Joomla\Event\Event;
 
 /**
  * Event triggered before a command is executed.
  *
  * @since  __DEPLOY_VERSION__
  */
-class BeforeCommandExecuteEvent extends Event
+class BeforeCommandExecuteEvent extends ConsoleEvent
 {
 	/**
 	 * The return code for a command disabled by this event.
@@ -27,22 +26,6 @@ class BeforeCommandExecuteEvent extends Event
 	 * @since  __DEPLOY_VERSION__
 	 */
 	const RETURN_CODE_DISABLED = 113;
-
-	/**
-	 * The active application.
-	 *
-	 * @var    Application
-	 * @since  __DEPLOY_VERSION__
-	 */
-	private $application;
-
-	/**
-	 * The command being executed.
-	 *
-	 * @var    CommandInterface
-	 * @since  __DEPLOY_VERSION__
-	 */
-	private $command;
 
 	/**
 	 * Flag indicating the command is enabled
@@ -62,10 +45,7 @@ class BeforeCommandExecuteEvent extends Event
 	 */
 	public function __construct(Application $application, CommandInterface $command = null)
 	{
-		parent::__construct(ConsoleEvents::BEFORE_COMMAND_EXECUTE);
-
-		$this->application = $application;
-		$this->command     = $command;
+		parent::__construct(ConsoleEvents::BEFORE_COMMAND_EXECUTE, $application, $command);
 
 		if ($command)
 		{
@@ -95,30 +75,6 @@ class BeforeCommandExecuteEvent extends Event
 	public function enableCommand()
 	{
 		$this->commandEnabled = false;
-	}
-
-	/**
-	 * Get the active application.
-	 *
-	 * @return  Application
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function getApplication(): Application
-	{
-		return $this->application;
-	}
-
-	/**
-	 * Get the command being executed.
-	 *
-	 * @return  CommandInterface|null
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function getCommand()
-	{
-		return $this->command;
 	}
 
 	/**
