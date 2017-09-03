@@ -9,8 +9,6 @@
 namespace Joomla\Console;
 
 use Joomla\Application\AbstractApplication;
-use Joomla\Console\Event\BeforeCommandExecuteEvent;
-use Joomla\Console\Event\ConsoleErrorEvent;
 use Joomla\Console\Input\JoomlaInput;
 use Joomla\Event\DispatcherAwareInterface;
 use Joomla\Event\DispatcherAwareTrait;
@@ -329,7 +327,7 @@ class Application extends AbstractApplication implements DispatcherAwareInterfac
 			return;
 		}
 
-		$event = new BeforeCommandExecuteEvent($this, $command);
+		$event = new Event\BeforeCommandExecuteEvent($this, $command);
 
 		$this->dispatcher->dispatch(ConsoleEvents::BEFORE_COMMAND_EXECUTE, $event);
 
@@ -339,9 +337,7 @@ class Application extends AbstractApplication implements DispatcherAwareInterfac
 		}
 		else
 		{
-			$this->exitCode = BeforeCommandExecuteEvent::RETURN_CODE_DISABLED;
-
-			$this->activeCommand = null;
+			$this->exitCode = Event\BeforeCommandExecuteEvent::RETURN_CODE_DISABLED;
 		}
 	}
 
@@ -376,7 +372,7 @@ class Application extends AbstractApplication implements DispatcherAwareInterfac
 
 		if ($this->dispatcher && $thrown !== null)
 		{
-			$event = new ConsoleErrorEvent($thrown, $this, $this->activeCommand);
+			$event = new Event\ConsoleErrorEvent($thrown, $this, $this->activeCommand);
 			$this->dispatcher->dispatch(ConsoleEvents::ERROR, $event);
 
 			$thrown = $event->getError();
@@ -413,6 +409,14 @@ class Application extends AbstractApplication implements DispatcherAwareInterfac
 			}
 
 			$this->exitCode = $exitCode;
+		}
+
+		if ($this->dispatcher)
+		{
+			$event = new Event\TerminateEvent($this->exitCode, $this, $this->activeCommand);
+			$this->dispatcher->dispatch(ConsoleEvents::TERMINATE, $event);
+
+			$this->exitCode = $event->getExitCode();
 		}
 
 		if ($this->autoExit)
@@ -1025,7 +1029,5 @@ class Application extends AbstractApplication implements DispatcherAwareInterfac
 	private function runCommand(CommandInterface $command)
 	{
 		$this->exitCode = $command->execute();
-
-		$this->activeCommand = null;
 	}
 }
