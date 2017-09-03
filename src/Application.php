@@ -165,16 +165,16 @@ class Application extends AbstractApplication
 	 *
 	 * @param   CommandInterface  $command  The command to add
 	 *
-	 * @return  CommandInterface|void  The registered command or null if the command is not enabled
+	 * @return  CommandInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  LogicException
 	 */
-	public function addCommand(CommandInterface $command)
+	public function addCommand(CommandInterface $command): CommandInterface
 	{
 		if (!$command->isEnabled())
 		{
-			return;
+			return $command;
 		}
 
 		$command->setApplication($this);

@@ -21,11 +21,11 @@ interface CommandInterface
 	/**
 	 * Execute the command.
 	 *
-	 * @return  integer|void  An optional command code, if ommitted will be treated as a successful return (code 0)
+	 * @return  integer  The exit code for the command.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function execute();
+	public function execute(): int;
 
 	/**
 	 * Get the command's aliases.
