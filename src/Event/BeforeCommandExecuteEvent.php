@@ -29,6 +29,22 @@ class BeforeCommandExecuteEvent extends Event
 	const RETURN_CODE_DISABLED = 113;
 
 	/**
+	 * The active application.
+	 *
+	 * @var    Application
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $application;
+
+	/**
+	 * The command being executed.
+	 *
+	 * @var    CommandInterface
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $command;
+
+	/**
 	 * Flag indicating the command is enabled
 	 *
 	 * @var    boolean
@@ -48,8 +64,8 @@ class BeforeCommandExecuteEvent extends Event
 	{
 		parent::__construct(ConsoleEvents::BEFORE_COMMAND_EXECUTE);
 
-		$this->setArgument('application', $application);
-		$this->setArgument('command', $command);
+		$this->application = $application;
+		$this->command     = $command;
 
 		if ($command)
 		{
@@ -90,7 +106,7 @@ class BeforeCommandExecuteEvent extends Event
 	 */
 	public function getApplication(): Application
 	{
-		return $this->getArgument('application');
+		return $this->application;
 	}
 
 	/**
@@ -102,7 +118,7 @@ class BeforeCommandExecuteEvent extends Event
 	 */
 	public function getCommand()
 	{
-		return $this->getArgument('command');
+		return $this->command;
 	}
 
 	/**
