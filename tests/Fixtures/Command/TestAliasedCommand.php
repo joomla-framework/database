@@ -13,9 +13,9 @@ class TestAliasedCommand extends AbstractCommand
 	/**
 	 * {@inheritdoc}
 	 */
-	public function execute()
+	public function execute(): int
 	{
-		return true;
+		return 0;
 	}
 
 	/**

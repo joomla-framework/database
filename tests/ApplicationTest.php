@@ -75,7 +75,7 @@ class ApplicationTest extends TestCase
 	{
 		$command = new TestDisabledCommand;
 
-		$this->assertNull($this->object->addCommand($command));
+		$this->assertSame($command, $this->object->addCommand($command));
 		$this->assertFalse($this->object->hasCommand($command->getName()));
 	}
 
