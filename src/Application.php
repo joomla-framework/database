@@ -315,11 +315,9 @@ class Application extends AbstractApplication
 			}
 		}
 
-		$exitCode = $command->execute();
+		$this->exitCode = $command->execute();
 
 		$this->activeCommand = null;
-
-		$this->exitCode = is_numeric($exitCode) ? (int) $exitCode : 0;
 	}
 
 	/**
