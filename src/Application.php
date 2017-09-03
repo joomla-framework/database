@@ -10,6 +10,7 @@ namespace Joomla\Console;
 
 use Joomla\Application\AbstractApplication;
 use Joomla\Console\Event\BeforeCommandExecuteEvent;
+use Joomla\Console\Event\ConsoleErrorEvent;
 use Joomla\Console\Input\JoomlaInput;
 use Joomla\Event\DispatcherAwareInterface;
 use Joomla\Event\DispatcherAwareTrait;
@@ -371,6 +372,19 @@ class Application extends AbstractApplication implements DispatcherAwareInterfac
 		catch (\Throwable $thrown)
 		{
 			$exception = new FatalThrowableError($thrown);
+		}
+
+		if ($this->dispatcher && $thrown !== null)
+		{
+			$event = new ConsoleErrorEvent($thrown, $this, $this->activeCommand);
+			$this->dispatcher->dispatch(ConsoleEvents::ERROR, $event);
+
+			$thrown = $event->getError();
+
+			if ($event->getExitCode() === 0)
+			{
+				$thrown = null;
+			}
 		}
 
 		if ($thrown !== null)
