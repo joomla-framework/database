@@ -302,9 +302,8 @@ class Application extends AbstractApplication
 		if ($this->getConsoleInput()->hasArgument('command') && $this->getConsoleInput()->getArgument('command') === null)
 		{
 			$this->getConsoleInput()->setArgument('command', $command->getName());
+			$this->input->set('command', $command->getName());
 		}
-
-		$this->input->def('command', $command->getName());
 
 		$this->getConsoleInput()->validate();
 
