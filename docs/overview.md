@@ -35,6 +35,11 @@ When using the `AbstractCommand`, generally two methods are required in your cla
 - `initialise` is a hook for configuring the command class, conceptually this is similar to `Symfony\Component\Console\Command\Command::configure()`
 - `execute` is the method which runs the command's logic
 
+The package comes with two commands commonly used in applications:
+
+- `help` to display help information about a command
+- `list` to display a list of the available commands
+
 ### Lazy Loading Commands
 
 As of Symfony 3.4, Symfony supports lazy loading command classes through a command loader. Our Console package provides a similar feature that can
