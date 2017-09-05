@@ -69,3 +69,40 @@ $application->setCommandLoader($loader);
 
 $application->execute();
 ```
+
+### Application Events
+
+Similar to Symfony's Console component, the application supports dispatching events at key spots in the process.
+A `Joomla\Event\DispatcherInterface` must be injected into the application for events to be dispatched.
+
+```php
+<?php
+use Joomla\Console\Application;
+use Joomla\Console\ConsoleEvents;
+use Joomla\Console\Event\ConsoleErrorEvent;
+use Joomla\Event\Dispatcher;
+
+$dispatcher = new Dispatcher;
+
+// Sample listener for the ConsoleEvents::ERROR event
+$dispatcher->addListener(
+	ConsoleEvents::ERROR,
+	function (ConsoleErrorEvent $event)
+	{
+		$event->getApplication()->getConsoleOutput()->writeln('<comment>Error event triggered.</comment>');
+	}
+);
+
+$application = new Application;
+$application->setDispatcher($dispatcher);
+
+// Register commands via $application->addCommand();
+
+$application->execute();
+```
+
+There are three events available:
+
+- `ConsoleEvents::BEFORE_COMMAND_EXECUTE` is triggered immediately before executing a command, developers may listen for this event to optionally disable a command at runtime
+- `ConsoleEvents::ERROR` is triggered when the application catches any `Throwable` object that is not caught elsewhere in the application, this can be used to integrate extra error handling/reporting tools
+- `ConsoleEvents::TERMINATE` is triggered immediately before the process is completed, developers may listen for this event to perform any actions required at the end of the process
