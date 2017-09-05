@@ -272,7 +272,7 @@ class Application extends AbstractApplication implements DispatcherAwareInterfac
 
 		if (!$commandName)
 		{
-			$this->out('<error>Command name not given.</error>');
+			$this->getConsoleOutput()->write('<error>Command name not given.</error>');
 
 			$this->exitCode = 1;
 
