@@ -134,12 +134,28 @@ class Application extends AbstractApplication implements DispatcherAwareInterfac
 	private $helperSet;
 
 	/**
+	 * The name of the application.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $name = '';
+
+	/**
 	 * The console terminal helper.
 	 *
 	 * @var    Terminal
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $terminal;
+
+	/**
+	 * The version of the application.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $version = '';
 
 	/**
 	 * Class constructor.
@@ -702,6 +718,42 @@ class Application extends AbstractApplication implements DispatcherAwareInterfac
 	}
 
 	/**
+	 * Get the long version string for the application.
+	 *
+	 * Typically, this is the application name and version and is used in the application help output.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getLongVersion(): string
+	{
+		if ($this->getName() !== '')
+		{
+			if ($this->getVersion() !== '')
+			{
+				return sprintf('%s <info>%s</info>', $this->getName(), $this->getVersion());
+			}
+
+			return $this->getName();
+		}
+
+		return 'Joomla Console Application';
+	}
+
+	/**
+	 * Get the name of the application.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getName(): string
+	{
+		return $this->name;
+	}
+
+	/**
 	 * Returns an array of all unique namespaces used by currently registered commands.
 	 *
 	 * Note that this does not include the global namespace which always exists.
@@ -725,6 +777,18 @@ class Application extends AbstractApplication implements DispatcherAwareInterfac
 		}
 
 		return array_values(array_unique(array_filter($namespaces)));
+	}
+
+	/**
+	 * Get the version of the application.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getVersion(): string
+	{
+		return $this->version;
 	}
 
 	/**
@@ -839,6 +903,38 @@ class Application extends AbstractApplication implements DispatcherAwareInterfac
 	public function setConsoleOutput(OutputInterface $output)
 	{
 		$this->consoleOutput = $output;
+
+		return $this;
+	}
+
+	/**
+	 * Set the name of the application.
+	 *
+	 * @param   string  $name  The new application name.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setName(string $name)
+	{
+		$this->name = $name;
+
+		return $this;
+	}
+
+	/**
+	 * Set the version of the application.
+	 *
+	 * @param   string  $version  The new application version.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setVersion(string $version)
+	{
+		$this->version = $version;
 
 		return $this;
 	}

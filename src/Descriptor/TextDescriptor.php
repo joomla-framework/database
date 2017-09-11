@@ -136,7 +136,13 @@ final class TextDescriptor extends SymfonyTextDescriptor
 		$describedNamespace = $options['namespace'] ?? '';
 		$description        = new ApplicationDescription($app, $describedNamespace);
 
-		$this->writeText("Joomla Console Application\n\n");
+		$version = $app->getLongVersion();
+
+		if ($version !== '')
+		{
+			$this->writeText("$version\n\n", $options);
+		}
+
 		$this->writeText("<comment>Usage:</comment>\n");
 		$this->writeText("  command [options] [arguments]\n\n");
 
