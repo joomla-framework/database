@@ -10,8 +10,6 @@ namespace Joomla\Console;
 
 use Joomla\Application\AbstractApplication;
 use Joomla\Console\Input\JoomlaInput;
-use Joomla\Event\DispatcherAwareInterface;
-use Joomla\Event\DispatcherAwareTrait;
 use Joomla\Input\Cli;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
@@ -41,10 +39,8 @@ use Symfony\Component\Debug\Exception\FatalThrowableError;
  *
  * @since  __DEPLOY_VERSION__
  */
-class Application extends AbstractApplication implements DispatcherAwareInterface
+class Application extends AbstractApplication
 {
-	use DispatcherAwareTrait;
-
 	/**
 	 * The active command.
 	 *
