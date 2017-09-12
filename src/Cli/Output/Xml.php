@@ -13,7 +13,8 @@ use Joomla\Application\Cli\CliOutput;
 /**
  * Class Xml.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Use the `joomla/console` package instead
  */
 class Xml extends CliOutput
 {

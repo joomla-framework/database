@@ -13,7 +13,8 @@ use Joomla\Application\Cli\CliOutput;
 /**
  * Class Stdout.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Use the `joomla/console` package instead
  */
 class Stdout extends CliOutput
 {

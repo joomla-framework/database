@@ -11,7 +11,8 @@ namespace Joomla\Application\Cli;
 /**
  * Class CliInput
  *
- * @since  1.6.0
+ * @since       1.6.0
+ * @deprecated  2.0  Use the `joomla/console` package instead
  */
 class CliInput
 {
