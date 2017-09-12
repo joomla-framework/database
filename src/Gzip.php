@@ -102,7 +102,7 @@ class Gzip implements ExtractableInterface
 
 			if (!File::write($destination, $buffer))
 			{
-				throw new \RuntimeException('Unable to write archive');
+				throw new \RuntimeException('Unable to write archive to file ' . $destination);
 			}
 		}
 		else
@@ -115,7 +115,7 @@ class Gzip implements ExtractableInterface
 
 			if (!$input->open($archive))
 			{
-				throw new \RuntimeException('Unable to read archive (gz)');
+				throw new \RuntimeException('Unable to read archive');
 			}
 
 			$output = Stream::getStream();
@@ -124,7 +124,7 @@ class Gzip implements ExtractableInterface
 			{
 				$input->close();
 
-				throw new \RuntimeException('Unable to write archive (gz)');
+				throw new \RuntimeException('Unable to open file "' . $destination . '" for writing');
 			}
 
 			do
@@ -137,7 +137,7 @@ class Gzip implements ExtractableInterface
 					{
 						$input->close();
 
-						throw new \RuntimeException('Unable to write file (gz)');
+						throw new \RuntimeException('Unable to write archive to file ' . $destination);
 					}
 				}
 			}

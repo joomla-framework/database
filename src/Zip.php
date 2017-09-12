@@ -160,7 +160,7 @@ class Zip implements ExtractableInterface
 	{
 		if (!is_file($archive))
 		{
-			throw new \RuntimeException('Archive does not exist');
+			throw new \RuntimeException('Archive does not exist at ' . $archive);
 		}
 
 		if (static::hasNativeSupport())
@@ -229,7 +229,7 @@ class Zip implements ExtractableInterface
 
 		if (!$this->data)
 		{
-			throw new \RuntimeException('Unable to read archive (zip)');
+			throw new \RuntimeException('Unable to read archive');
 		}
 
 		if (!$this->readZipInfo($this->data))
@@ -249,12 +249,12 @@ class Zip implements ExtractableInterface
 				// Make sure the destination folder exists
 				if (!Folder::create(dirname($path)))
 				{
-					throw new \RuntimeException('Unable to create destination');
+					throw new \RuntimeException('Unable to create destination folder ' . dirname($path));
 				}
 
 				if (!File::write($path, $buffer))
 				{
-					throw new \RuntimeException('Unable to write entry');
+					throw new \RuntimeException('Unable to write entry to file ' . $path);
 				}
 			}
 		}
@@ -285,7 +285,7 @@ class Zip implements ExtractableInterface
 		// Make sure the destination folder exists
 		if (!Folder::create($destination))
 		{
-			throw new \RuntimeException('Unable to create destination');
+			throw new \RuntimeException('Unable to create destination folder ' . dirname($path));
 		}
 
 		// Read files in the archive
@@ -293,7 +293,7 @@ class Zip implements ExtractableInterface
 		{
 			if (!zip_entry_open($zip, $file, 'r'))
 			{
-				throw new \RuntimeException('Unable to read entry');
+				throw new \RuntimeException('Unable to read ZIP entry');
 			}
 
 			if (substr(zip_entry_name($file), strlen(zip_entry_name($file)) - 1) != '/')
@@ -302,7 +302,7 @@ class Zip implements ExtractableInterface
 
 				if (File::write($destination . '/' . zip_entry_name($file), $buffer) === false)
 				{
-					throw new \RuntimeException('Unable to write entry');
+					throw new \RuntimeException('Unable to write ZIP entry to file ' . $destination . '/' . zip_entry_name($file));
 				}
 
 				zip_entry_close($file);
@@ -371,7 +371,7 @@ class Zip implements ExtractableInterface
 		{
 			if ($dataLength < $fhStart + 31)
 			{
-				throw new \RuntimeException('Invalid Zip Data');
+				throw new \RuntimeException('Invalid ZIP Data');
 			}
 
 			$info = unpack('vMethod/VTime/VCRC32/VCompressed/VUncompressed/vLength', substr($data, $fhStart + 10, 20));
@@ -416,7 +416,7 @@ class Zip implements ExtractableInterface
 
 			if ($dataLength < $lfhStart + 34)
 			{
-				throw new \RuntimeException('Invalid Zip Data');
+				throw new \RuntimeException('Invalid ZIP Data');
 			}
 
 			$info = unpack('vMethod/VTime/VCRC32/VCompressed/VUncompressed/vLength/vExtraLength', substr($data, $lfhStart + 8, 25));

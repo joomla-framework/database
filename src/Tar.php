@@ -124,12 +124,12 @@ class Tar implements ExtractableInterface
 				// Make sure the destination folder exists
 				if (!Folder::create(dirname($path)))
 				{
-					throw new \RuntimeException('Unable to create destination');
+					throw new \RuntimeException('Unable to create destination folder ' . dirname($path));
 				}
 
 				if (!File::write($path, $buffer))
 				{
-					throw new \RuntimeException('Unable to write entry');
+					throw new \RuntimeException('Unable to write entry to file ' . $path);
 				}
 			}
 		}

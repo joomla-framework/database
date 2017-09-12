@@ -89,7 +89,7 @@ class Bzip2 implements ExtractableInterface
 
 			if (!File::write($destination, $buffer))
 			{
-				throw new \RuntimeException('Unable to write archive');
+				throw new \RuntimeException('Unable to write archive to file ' . $destination);
 			}
 		}
 		else
@@ -102,7 +102,7 @@ class Bzip2 implements ExtractableInterface
 
 			if (!$input->open($archive))
 			{
-				throw new \RuntimeException('Unable to read archive (bz2)');
+				throw new \RuntimeException('Unable to read archive');
 			}
 
 			$output = Stream::getStream();
@@ -111,7 +111,7 @@ class Bzip2 implements ExtractableInterface
 			{
 				$input->close();
 
-				throw new \RuntimeException('Unable to write archive (bz2)');
+				throw new \RuntimeException('Unable to open file "' . $destination . '" for writing');
 			}
 
 			do
@@ -124,7 +124,7 @@ class Bzip2 implements ExtractableInterface
 					{
 						$input->close();
 
-						throw new \RuntimeException('Unable to write archive (bz2)');
+						throw new \RuntimeException('Unable to write archive to file ' . $destination);
 					}
 				}
 			}
