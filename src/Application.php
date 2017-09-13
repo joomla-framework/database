@@ -1031,7 +1031,12 @@ class Application extends AbstractApplication
 	 */
 	private function renderException(\Exception $exception)
 	{
-		$output = $this->getConsoleOutput() instanceof ConsoleOutputInterface ? $this->getConsoleOutput()->getErrorOutput() : $this->getConsoleOutput();
+		$output = $this->getConsoleOutput();
+
+		if ($output instanceof ConsoleOutputInterface)
+		{
+			$output = $output->getErrorOutput();
+		}
 
 		$output->writeln('', OutputInterface::VERBOSITY_QUIET);
 
