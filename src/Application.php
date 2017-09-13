@@ -332,7 +332,11 @@ class Application extends AbstractApplication
 			}
 		}
 
-		if (!$this->dispatcher)
+		try
+		{
+			$dispatcher = $this->getDispatcher();
+		}
+		catch (\UnexpectedValueException $exception)
 		{
 			$this->runCommand($command);
 
@@ -341,7 +345,7 @@ class Application extends AbstractApplication
 
 		$event = new Event\BeforeCommandExecuteEvent($this, $command);
 
-		$this->dispatcher->dispatch(ConsoleEvents::BEFORE_COMMAND_EXECUTE, $event);
+		$dispatcher->dispatch(ConsoleEvents::BEFORE_COMMAND_EXECUTE, $event);
 
 		if ($event->isCommandEnabled())
 		{
@@ -382,10 +386,19 @@ class Application extends AbstractApplication
 			$exception = new FatalThrowableError($thrown);
 		}
 
-		if ($this->dispatcher && $thrown !== null)
+		try
+		{
+			$dispatcher = $this->getDispatcher();
+		}
+		catch (\UnexpectedValueException $exception)
+		{
+			$dispatcher = null;
+		}
+
+		if ($dispatcher && $thrown !== null)
 		{
 			$event = new Event\ConsoleErrorEvent($thrown, $this, $this->activeCommand);
-			$this->dispatcher->dispatch(ConsoleEvents::ERROR, $event);
+			$dispatcher->dispatch(ConsoleEvents::ERROR, $event);
 
 			$thrown = $event->getError();
 
@@ -423,10 +436,10 @@ class Application extends AbstractApplication
 			$this->exitCode = $exitCode;
 		}
 
-		if ($this->dispatcher)
+		if ($dispatcher)
 		{
 			$event = new Event\TerminateEvent($this->exitCode, $this, $this->activeCommand);
-			$this->dispatcher->dispatch(ConsoleEvents::TERMINATE, $event);
+			$dispatcher->dispatch(ConsoleEvents::TERMINATE, $event);
 
 			$this->exitCode = $event->getExitCode();
 		}
@@ -1049,11 +1062,19 @@ class Application extends AbstractApplication
 
 			$messages   = [];
 			$messages[] = $emptyLine = sprintf('<error>%s</error>', str_repeat(' ', $len));
-			$messages[] = sprintf('<error>%s%s</error>', $title, str_repeat(' ', max(0, $len - StringHelper::strlen($title))));
+			$messages[] = sprintf(
+				'<error>%s%s</error>',
+				$title,
+				str_repeat(' ', max(0, $len - StringHelper::strlen($title)))
+			);
 
 			foreach ($lines as $line)
 			{
-				$messages[] = sprintf('<error>  %s  %s</error>', OutputFormatter::escape($line[0]), str_repeat(' ', $len - $line[1]));
+				$messages[] = sprintf(
+					'<error>  %s  %s</error>',
+					OutputFormatter::escape($line[0]),
+					str_repeat(' ', $len - $line[1])
+				);
 			}
 
 			$messages[] = $emptyLine;
