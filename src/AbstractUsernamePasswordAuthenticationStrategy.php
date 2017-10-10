@@ -8,6 +8,9 @@
 
 namespace Joomla\Authentication;
 
+use Joomla\Authentication\Password\BCryptHandler;
+use Joomla\Authentication\Password\HandlerInterface;
+
 /**
  * Abstract AuthenticationStrategy for username/password based authentication
  *
@@ -16,12 +19,32 @@ namespace Joomla\Authentication;
 abstract class AbstractUsernamePasswordAuthenticationStrategy implements AuthenticationStrategyInterface
 {
 	/**
+	 * The password handler to validate the password against.
+	 *
+	 * @var    HandlerInterface
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $passwordHandler;
+
+	/**
 	 * The last authentication status.
 	 *
 	 * @var    integer
 	 * @since  1.1.0
 	 */
 	protected $status;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param   HandlerInterface  $passwordHandler  The password handler.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function __construct(HandlerInterface $passwordHandler = null)
+	{
+		$this->passwordHandler = $passwordHandler ?: new BCryptHandler;
+	}
 
 	/**
 	 * Attempt to authenticate the username and password pair.
@@ -92,6 +115,6 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
 	 */
 	protected function verifyPassword($username, $password, $hashedPassword)
 	{
-		return password_verify($password, $hashedPassword);
+		return $this->passwordHandler->validatePassword($password, $hashedPassword);
 	}
 }
