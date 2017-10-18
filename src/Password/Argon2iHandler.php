@@ -42,7 +42,7 @@ class Argon2iHandler implements HandlerInterface
 				SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
 				SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
 			);
-			sodium_memzero($raw);
+			sodium_memzero($plaintext);
 
 			return $hash;
 		}
@@ -55,9 +55,9 @@ class Argon2iHandler implements HandlerInterface
 				\Sodium\CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
 				\Sodium\CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
 			);
-			\Sodium\memzero($raw);
+			\Sodium\memzero($plaintext);
 
-			return $valid;
+			return $hash;
 		}
 
 		throw new \LogicException('Argon2i algorithm is not supported.');
