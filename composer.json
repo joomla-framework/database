@@ -18,7 +18,7 @@
         "squizlabs/php_codesniffer": "1.*"
     },
     "suggest": {
-        "ircmaxell/password-compat": "Required for PHP < 5.5 if you want to use Joomla\\Authentication\\AbstractUsernamePasswordAuthenticationStrategy",
+        "ircmaxell/password-compat": "Required for PHP < 5.5 if you want to use the BCrypt password encoder",
         "joomla/database": "Required if you want to use Joomla\\Authentication\\Strategies\\DatabaseStrategy",
         "joomla/input": "Required if you want to use classes in the Joomla\\Authentication\\Strategies namespace"
     },

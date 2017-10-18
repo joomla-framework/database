@@ -6,8 +6,10 @@
 
 namespace Joomla\Authentication\Tests\Strategies;
 
-use Joomla\Authentication\Strategies\DatabaseStrategy;
 use Joomla\Authentication\Authentication;
+use Joomla\Authentication\Password\HandlerInterface;
+use Joomla\Authentication\Strategies\DatabaseStrategy;
+use Joomla\Input\Input;
 use Joomla\Test\TestDatabase;
 
 /**
@@ -15,6 +17,16 @@ use Joomla\Test\TestDatabase;
  */
 class DatabaseStrategyTest extends TestDatabase
 {
+	/**
+	 * @var  Input|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	private $input;
+
+	/**
+	 * @var  HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	private $passwordHandler;
+
 	/**
 	 * Inserts a user into the test database
 	 *
@@ -39,7 +51,8 @@ class DatabaseStrategyTest extends TestDatabase
 	 */
 	protected function setUp()
 	{
-		$this->input = $this->getMockBuilder('Joomla\\Input\\Input')->getMock();
+		$this->input           = $this->getMockBuilder('Joomla\\Input\\Input')->getMock();
+		$this->passwordHandler = $this->getMockBuilder('Joomla\\Authentication\\Password\\HandlerInterface')->getMock();
 	}
 
 	/**
@@ -65,9 +78,13 @@ class DatabaseStrategyTest extends TestDatabase
 			->method('get')
 			->willReturnArgument(0);
 
+		$this->passwordHandler->expects($this->any())
+			->method('validatePassword')
+			->willReturn(true);
+
 		$this->addUser('username', '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJG');
 
-		$strategy = new DatabaseStrategy($this->input, self::$driver);
+		$strategy = new DatabaseStrategy($this->input, self::$driver, array(), $this->passwordHandler);
 
 		$this->assertEquals('username', $strategy->authenticate());
 		$this->assertEquals(Authentication::SUCCESS, $strategy->getResult());
@@ -82,9 +99,13 @@ class DatabaseStrategyTest extends TestDatabase
 			->method('get')
 			->willReturnArgument(0);
 
+		$this->passwordHandler->expects($this->any())
+			->method('validatePassword')
+			->willReturn(false);
+
 		$this->addUser('username', '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH');
 
-		$strategy = new DatabaseStrategy($this->input, self::$driver);
+		$strategy = new DatabaseStrategy($this->input, self::$driver, array(), $this->passwordHandler);
 
 		$this->assertEquals(false, $strategy->authenticate());
 		$this->assertEquals(Authentication::INVALID_CREDENTIALS, $strategy->getResult());
@@ -99,9 +120,12 @@ class DatabaseStrategyTest extends TestDatabase
 			->method('get')
 			->willReturn(false);
 
+		$this->passwordHandler->expects($this->never())
+			->method('validatePassword');
+
 		$this->addUser('username', '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH');
 
-		$strategy = new DatabaseStrategy($this->input, self::$driver);
+		$strategy = new DatabaseStrategy($this->input, self::$driver, array(), $this->passwordHandler);
 
 		$this->assertEquals(false, $strategy->authenticate());
 		$this->assertEquals(Authentication::NO_CREDENTIALS, $strategy->getResult());
@@ -116,9 +140,12 @@ class DatabaseStrategyTest extends TestDatabase
 			->method('get')
 			->willReturnArgument(0);
 
+		$this->passwordHandler->expects($this->never())
+			->method('validatePassword');
+
 		$this->addUser('jimbob', '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH');
 
-		$strategy = new DatabaseStrategy($this->input, self::$driver);
+		$strategy = new DatabaseStrategy($this->input, self::$driver, array(), $this->passwordHandler);
 
 		$this->assertEquals(false, $strategy->authenticate());
 		$this->assertEquals(Authentication::NO_SUCH_USER, $strategy->getResult());

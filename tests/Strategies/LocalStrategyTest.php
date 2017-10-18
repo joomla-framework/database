@@ -6,8 +6,10 @@
 
 namespace Joomla\Authentication\Tests\Strategies;
 
-use Joomla\Authentication\Strategies\LocalStrategy;
 use Joomla\Authentication\Authentication;
+use Joomla\Authentication\Password\HandlerInterface;
+use Joomla\Authentication\Strategies\LocalStrategy;
+use Joomla\Input\Input;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,11 +18,22 @@ use PHPUnit\Framework\TestCase;
 class LocalStrategyTest extends TestCase
 {
 	/**
+	 * @var  Input|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	private $input;
+
+	/**
+	 * @var  HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	private $passwordHandler;
+
+	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 */
 	protected function setUp()
 	{
-		$this->input = $this->getMockBuilder('Joomla\\Input\\Input')->getMock();
+		$this->input           = $this->getMockBuilder('Joomla\\Input\\Input')->getMock();
+		$this->passwordHandler = $this->getMockBuilder('Joomla\\Authentication\\Password\\HandlerInterface')->getMock();
 	}
 
 	/**
@@ -32,11 +45,15 @@ class LocalStrategyTest extends TestCase
 			->method('get')
 			->willReturnArgument(0);
 
+		$this->passwordHandler->expects($this->any())
+			->method('validatePassword')
+			->willReturn(true);
+
 		$credentialStore = array(
 			'username' => '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJG'
 		);
 
-		$localStrategy = new LocalStrategy($this->input, $credentialStore);
+		$localStrategy = new LocalStrategy($this->input, $credentialStore, $this->passwordHandler);
 
 		$this->assertEquals('username', $localStrategy->authenticate());
 
@@ -52,11 +69,15 @@ class LocalStrategyTest extends TestCase
 			->method('get')
 			->willReturnArgument(0);
 
+		$this->passwordHandler->expects($this->any())
+			->method('validatePassword')
+			->willReturn(false);
+
 		$credentialStore = array(
 			'username' => '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH'
 		);
 
-		$localStrategy = new LocalStrategy($this->input, $credentialStore);
+		$localStrategy = new LocalStrategy($this->input, $credentialStore, $this->passwordHandler);
 
 		$this->assertEquals(false, $localStrategy->authenticate());
 
@@ -72,11 +93,14 @@ class LocalStrategyTest extends TestCase
 			->method('get')
 			->willReturn(false);
 
+		$this->passwordHandler->expects($this->never())
+			->method('validatePassword');
+
 		$credentialStore = array(
 			'username' => '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH'
 		);
 
-		$localStrategy = new LocalStrategy($this->input, $credentialStore);
+		$localStrategy = new LocalStrategy($this->input, $credentialStore, $this->passwordHandler);
 
 		$this->assertEquals(false, $localStrategy->authenticate());
 
@@ -92,11 +116,14 @@ class LocalStrategyTest extends TestCase
 			->method('get')
 			->willReturnArgument(0);
 
+		$this->passwordHandler->expects($this->never())
+			->method('validatePassword');
+
 		$credentialStore = array(
 			'jimbob' => '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH'
 		);
 
-		$localStrategy = new LocalStrategy($this->input, $credentialStore);
+		$localStrategy = new LocalStrategy($this->input, $credentialStore, $this->passwordHandler);
 
 		$this->assertEquals(false, $localStrategy->authenticate());
 

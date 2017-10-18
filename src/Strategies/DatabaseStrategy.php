@@ -8,6 +8,7 @@
 
 namespace Joomla\Authentication\Strategies;
 
+use Joomla\Authentication\Password\HandlerInterface;
 use Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy;
 use Joomla\Authentication\Authentication;
 use Joomla\Database\DatabaseDriver;
@@ -47,14 +48,17 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	/**
 	 * Strategy Constructor
 	 *
-	 * @param   Input           $input     The input object from which to retrieve the request credentials.
-	 * @param   DatabaseDriver  $database  DatabaseDriver for retrieving user credentials.
-	 * @param   array           $options   Optional options array for configuring the credential storage connection.
+	 * @param   Input             $input            The input object from which to retrieve the request credentials.
+	 * @param   DatabaseDriver    $database         DatabaseDriver for retrieving user credentials.
+	 * @param   array             $options          Optional options array for configuring the credential storage connection.
+	 * @param   HandlerInterface  $passwordHandler  The password handler.
 	 *
 	 * @since   1.1.0
 	 */
-	public function __construct(Input $input, DatabaseDriver $database, array $options = array())
+	public function __construct(Input $input, DatabaseDriver $database, array $options = array(), HandlerInterface $passwordHandler = null)
 	{
+		parent::__construct($passwordHandler);
+
 		$this->input = $input;
 		$this->db    = $database;
 
