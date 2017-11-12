@@ -11,7 +11,7 @@ namespace Joomla\Authentication\Password;
 /**
  * Password handler for Argon2i hashed passwords
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.2.0
  */
 class Argon2iHandler implements HandlerInterface
 {
@@ -23,7 +23,7 @@ class Argon2iHandler implements HandlerInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 * @throws  \LogicException
 	 */
 	public function hashPassword($plaintext, array $options = array())
@@ -68,7 +68,7 @@ class Argon2iHandler implements HandlerInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 */
 	public static function isSupported()
 	{
@@ -86,7 +86,7 @@ class Argon2iHandler implements HandlerInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 * @throws  \LogicException
 	 */
 	public function validatePassword($plaintext, $hashed)
