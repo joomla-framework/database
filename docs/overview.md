@@ -101,7 +101,8 @@ $application->setDispatcher($dispatcher);
 $application->execute();
 ```
 
-There are three events available:
+The Application has inbuilt support for four events. In addition to the Application package's `BEFORE_EXECUTE` event,
+there are three console specific events:
 
 - `ConsoleEvents::BEFORE_COMMAND_EXECUTE` is triggered immediately before executing a command, developers may listen for this event to optionally disable a command at runtime
 - `ConsoleEvents::ERROR` is triggered when the application catches any `Throwable` object that is not caught elsewhere in the application, this can be used to integrate extra error handling/reporting tools
