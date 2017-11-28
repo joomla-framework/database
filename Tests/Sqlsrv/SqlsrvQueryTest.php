@@ -1052,4 +1052,46 @@ class SqlsrvQueryTest extends TestCase
 			$this->equalTo('foo')
 		);
 	}
+
+	/**
+	 * Test for the SqlsrvQuery::processLimit method.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testProcessLimit()
+	{
+		$q = new SqlsrvQuery($this->dbo);
+
+		$q->select('id, COUNT(*) AS count')
+			->from('a')
+			->where('id = 1');
+
+		$this->assertEquals(
+			PHP_EOL . 'SELECT id,COUNT(*) AS count' .
+			PHP_EOL . 'FROM a' .
+			PHP_EOL . 'WHERE id = 1',
+			$q->processLimit((string) $q, 0)
+		);
+
+		$this->assertEquals(
+			PHP_EOL . 'SELECT TOP 30 id,COUNT(*) AS count' .
+			PHP_EOL . 'FROM a' .
+			PHP_EOL . 'WHERE id = 1',
+			$q->processLimit((string) $q, 30)
+		);
+
+		$this->assertEquals(
+			PHP_EOL . 'SELECT * FROM (' .
+			PHP_EOL . 'SELECT *, ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS RowNumber' .
+			PHP_EOL . 'FROM (' .
+			PHP_EOL . 'SELECT TOP 4 id,COUNT(*) AS count' .
+			PHP_EOL . 'FROM a' .
+			PHP_EOL . 'WHERE id = 1) AS A' .
+			PHP_EOL . ') AS A' .
+			PHP_EOL . 'WHERE RowNumber > 3',
+			$q->processLimit((string) $q, 1, 3)
+		);
+	}
 }

@@ -1199,21 +1199,34 @@ class SqlsrvQuery extends DatabaseQuery implements LimitableInterface
 	 */
 	public function processLimit($query, $limit, $offset = 0)
 	{
-		$orderBy = stristr($query, 'ORDER BY');
-
-		if (is_null($orderBy) || empty($orderBy))
+		if ($limit)
 		{
-			$orderBy = 'ORDER BY (select 0)';
+			$total = $offset + $limit;
+
+			$position = stripos($query, 'SELECT');
+			$distinct = stripos($query, 'SELECT DISTINCT');
+
+			if ($position === $distinct)
+			{
+				$query = substr_replace($query, 'SELECT DISTINCT TOP ' . (int) $total, $position, 15);
+			}
+			else
+			{
+				$query = substr_replace($query, 'SELECT TOP ' . (int) $total, $position, 6);
+			}
 		}
 
-		$query = str_ireplace($orderBy, '', $query);
+		if (!$offset)
+		{
+			return $query;
+		}
 
-		$rowNumberText = ',ROW_NUMBER() OVER (' . $orderBy . ') AS RowNumber FROM ';
-
-		$query = preg_replace('/\\s+FROM/', '\\1 ' . $rowNumberText . ' ', $query, 1);
-		$query = 'SELECT TOP ' . $limit . ' * FROM (' . $query . ') _myResults WHERE RowNumber > ' . $offset;
-
-		return $query;
+		return PHP_EOL
+			. 'SELECT * FROM ('
+			. PHP_EOL . 'SELECT *, ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS RowNumber'
+			. PHP_EOL . 'FROM (' . $query . ') AS A'
+			. PHP_EOL . ') AS A'
+			. PHP_EOL . 'WHERE RowNumber > ' . (int) $offset;
 	}
 
 	/**
