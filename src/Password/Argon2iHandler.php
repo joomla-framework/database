@@ -72,8 +72,18 @@ class Argon2iHandler implements HandlerInterface
 	 */
 	public static function isSupported()
 	{
-		// Check for native PHP engine support in the password extension then fall back to support in the sodium extension
-		return (version_compare(PHP_VERSION, '7.2', '>=') && defined('PASSWORD_ARGON2I'))
+		$nativeSupport = version_compare(PHP_VERSION, '7.2', '>=') && defined('PASSWORD_ARGON2I');
+
+		$compatSupport = class_exists('\\ParagonIE_Sodium_Compat')
+			&& method_exists('\\ParagonIE_Sodium_Compat', 'crypto_pwhash_is_available')
+			&& \ParagonIE_Sodium_Compat::crypto_pwhash_is_available();
+		/*
+		 * 1) Check for native PHP engine support in the password extension
+		 * 2) Check if the sodium_compat polyfill is installed and look for compatibility through that
+		 * 3) Check for support from the (lib)sodium extension
+		 */
+		return $nativeSupport
+			|| $compatSupport
 			|| function_exists('sodium_crypto_pwhash_str')
 			|| extension_loaded('libsodium');
 	}
