@@ -908,7 +908,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 	/**
 	 * Method to wait on or return the status of a forked child.
 	 *
-	 * @param   integer  &$status  Status information.
+	 * @param   integer  $status   Status information.
 	 * @param   integer  $options  If wait3 is available on your system (mostly BSD-style systems),
 	 *                             you can provide the optional options parameter.
 	 *
