@@ -152,7 +152,7 @@ class Tar implements ExtractableInterface
 	/**
 	 * Get the list of files/data from a Tar archive buffer.
 	 *
-	 * @param   string  &$data  The Tar archive buffer.
+	 * @param   string  $data  The Tar archive buffer.
 	 *
 	 * @return  array  Archive metadata array
 	 * <pre>
@@ -170,8 +170,8 @@ class Tar implements ExtractableInterface
 	 */
 	protected function getTarInfo(&$data)
 	{
-		$position = 0;
-		$return_array = array();
+		$position    = 0;
+		$returnArray = array();
 
 		while ($position < strlen($data))
 		{
@@ -225,9 +225,16 @@ class Tar implements ExtractableInterface
 					$file['data'] = $contents;
 
 					$mode = hexdec(substr($info['mode'], 4, 3));
-					$file['attr'] = (($info['typeflag'] == 0x35) ? 'd' : '-') . (($mode & 0x400) ? 'r' : '-') . (($mode & 0x200) ? 'w' : '-') .
-						(($mode & 0x100) ? 'x' : '-') . (($mode & 0x040) ? 'r' : '-') . (($mode & 0x020) ? 'w' : '-') . (($mode & 0x010) ? 'x' : '-') .
-						(($mode & 0x004) ? 'r' : '-') . (($mode & 0x002) ? 'w' : '-') . (($mode & 0x001) ? 'x' : '-');
+					$file['attr'] = (($info['typeflag'] == 0x35) ? 'd' : '-')
+						. (($mode & 0x400) ? 'r' : '-')
+						. (($mode & 0x200) ? 'w' : '-')
+						. (($mode & 0x100) ? 'x' : '-')
+						. (($mode & 0x040) ? 'r' : '-')
+						. (($mode & 0x020) ? 'w' : '-')
+						. (($mode & 0x010) ? 'x' : '-')
+						. (($mode & 0x004) ? 'r' : '-')
+						. (($mode & 0x002) ? 'w' : '-')
+						. (($mode & 0x001) ? 'x' : '-');
 				}
 				elseif (chr($info['typeflag']) == 'L' && $info['filename'] == '././@LongLink')
 				{
@@ -242,11 +249,11 @@ class Tar implements ExtractableInterface
 					// Some other type.
 				}
 
-				$return_array[] = $file;
+				$returnArray[] = $file;
 			}
 		}
 
-		$this->metadata = $return_array;
+		$this->metadata = $returnArray;
 
 		return true;
 	}

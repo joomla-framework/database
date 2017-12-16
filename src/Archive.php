@@ -52,7 +52,7 @@ class Archive
 		}
 
 		// Make sure we have a tmp directory.
-		isset($options['tmp_path']) or $options['tmp_path'] = realpath(sys_get_temp_dir());
+		isset($options['tmp_path']) || $options['tmp_path'] = realpath(sys_get_temp_dir());
 
 		$this->options = $options;
 	}
@@ -211,7 +211,7 @@ class Archive
 		if (!isset($this->adapters[$type]))
 		{
 			// Try to load the adapter object
-			/* @var  ExtractableInterface  $class */
+			/** @var ExtractableInterface $class */
 			$class = 'Joomla\\Archive\\' . ucfirst($type);
 
 			if (!class_exists($class) || !$class::isSupported())
