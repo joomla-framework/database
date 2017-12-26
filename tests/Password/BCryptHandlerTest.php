@@ -23,7 +23,7 @@ class BCryptHandlerTest extends TestCase
 	public function testAPasswordIsHashedAndValidated()
 	{
 		$handler = new BCryptHandler;
-		$hash = $handler->hashPassword('password');
+		$hash = $handler->hashPassword('password', array('cost' => 4));
 		$this->assertTrue($handler->validatePassword('password', $hash), 'The hashed password was not validated.');
 	}
 }
