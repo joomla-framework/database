@@ -441,4 +441,16 @@ class Container
 
 		return $this;
 	}
+
+	/**
+	 * Retrieve the keys for services assigned to this container.
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getKeys()
+	{
+		return array_unique(array_merge(array_keys($this->aliases), array_keys($this->dataStore)));
+	}
 }

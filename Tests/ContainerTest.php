@@ -1127,4 +1127,23 @@ class ContainerTest extends TestCase
 			. ' both the original and the alias should return a similar object.'
 		);
 	}
+
+	/**
+	 * Test that the unique service keys for the container are returned.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testRetrievingTheContainerKeys()
+	{
+		$this->fixture->set('foo', 'bar');
+		$this->fixture->set('goo', 'car');
+		$this->fixture->alias('boo', 'foo');
+
+		$this->assertSame(
+			array('boo', 'foo', 'goo'),
+			$this->fixture->getKeys()
+		);
+	}
 }
