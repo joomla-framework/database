@@ -10,6 +10,7 @@ namespace Joomla\Database\Service;
 
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\DatabaseFactory;
+use Joomla\Database\DatabaseInterface;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
 
@@ -31,17 +32,18 @@ class DatabaseProvider implements ServiceProviderInterface
 	 */
 	public function register(Container $container)
 	{
-		$container->share(
-			DatabaseDriver::class,
-			function (Container $container)
-			{
-				/** @var \Joomla\Registry\Registry $config */
-				$config  = $container->get('config');
-				$options = (array) $config->get('database');
+		$container->alias(DatabaseInterface::class, DatabaseDriver::class)
+			->share(
+				DatabaseDriver::class,
+				function (Container $container)
+				{
+					/** @var \Joomla\Registry\Registry $config */
+					$config  = $container->get('config');
+					$options = (array) $config->get('database');
 
-				return $container->get(DatabaseFactory::class)->getDriver($options['driver'], $options);
-			}
-		);
+					return $container->get(DatabaseFactory::class)->getDriver($options['driver'], $options);
+				}
+			);
 
 		$container->share(
 			DatabaseFactory::class,
