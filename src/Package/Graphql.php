@@ -50,8 +50,7 @@ class Graphql extends AbstractPackage
 
 		// Send the request.
 		return $this->processResponse(
-			$this->client->post($this->fetchUrl($path), json_encode($data), $headers),
-			201
+			$this->client->post($this->fetchUrl($path), json_encode($data), $headers)
 		);
 	}
 }

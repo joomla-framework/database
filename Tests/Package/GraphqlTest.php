@@ -43,7 +43,7 @@ class GraphqlTest extends GitHubTestCase
 	 */
 	public function testCreate()
 	{
-		$this->response->code = 201;
+		$this->response->code = 200;
 		$this->response->body = $this->sampleString;
 
 		// Build the query.
@@ -56,7 +56,8 @@ class GraphqlTest extends GitHubTestCase
 
 		// Build the headers.
 		$headers = array(
-			'Accept' => 'application/vnd.github.v4+json',
+			'Accept'       => 'application/vnd.github.v4+json',
+			'Content-Type' => 'application/json',
 		);
 
 		$this->client->expects($this->once())
@@ -92,7 +93,8 @@ class GraphqlTest extends GitHubTestCase
 
 		// Build the headers.
 		$headers = array(
-			'Accept' => 'application/vnd.github.v4+json',
+			'Accept'       => 'application/vnd.github.v4+json',
+			'Content-Type' => 'application/json',
 		);
 
 		$this->client->expects($this->once())
