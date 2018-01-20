@@ -35,7 +35,8 @@ class Graphql extends AbstractPackage
 		$path = '/graphql';
 
 		$headers = array(
-			'Accept' => 'application/vnd.github.v4+json',
+			'Accept'       => 'application/vnd.github.v4+json',
+			'Content-Type' => 'application/json',
 		);
 
 		$data = array(
@@ -49,7 +50,7 @@ class Graphql extends AbstractPackage
 
 		// Send the request.
 		return $this->processResponse(
-			$this->client->post($this->fetchUrl($path), $data, $headers),
+			$this->client->post($this->fetchUrl($path), json_encode($data), $headers),
 			201
 		);
 	}
