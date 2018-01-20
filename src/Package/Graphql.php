@@ -22,13 +22,14 @@ class Graphql extends AbstractPackage
 	/**
 	 * Execute a query against the GraphQL API.
 	 *
-	 * @param   string  $query  The query to perform.
+	 * @param   string  $query      The query to perform.
+	 * @param   array   $variables  An optional array of variables to include in the request.
 	 *
 	 * @return  string
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function execute($query)
+	public function execute($query, array $variables = array())
 	{
 		// Build the request path.
 		$path = '/graphql';
@@ -40,6 +41,11 @@ class Graphql extends AbstractPackage
 		$data = array(
 			'query' => $query,
 		);
+
+		if (!empty($variables))
+		{
+			$data['variables'] = $variables;
+		}
 
 		// Send the request.
 		return $this->processResponse(
