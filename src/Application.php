@@ -447,20 +447,22 @@ class Application extends AbstractApplication
 				$this->exitCode = $exitCode;
 			}
 		}
-
-		if ($dispatcher)
+		finally
 		{
-			$event = new Event\TerminateEvent($this->exitCode, $this, $this->activeCommand);
-			$dispatcher->dispatch(ConsoleEvents::TERMINATE, $event);
+			if ($dispatcher)
+			{
+				$event = new Event\TerminateEvent($this->exitCode, $this, $this->activeCommand);
+				$dispatcher->dispatch(ConsoleEvents::TERMINATE, $event);
 
-			$this->exitCode = $event->getExitCode();
-		}
+				$this->exitCode = $event->getExitCode();
+			}
 
-		if ($this->autoExit)
-		{
-			$exitCode = $this->exitCode > 255 ? 255 : $this->exitCode;
+			if ($this->autoExit)
+			{
+				$exitCode = $this->exitCode > 255 ? 255 : $this->exitCode;
 
-			$this->close($exitCode);
+				$this->close($exitCode);
+			}
 		}
 	}
 
