@@ -392,54 +392,60 @@ class Application extends AbstractApplication
 			$thrown = null;
 			$this->doExecute();
 		}
-		catch (\Exception $thrown)
-		{
-			$exception = $thrown;
-		}
 		catch (\Throwable $thrown)
 		{
-			$exception = new FatalThrowableError($thrown);
-		}
-
-		if ($dispatcher && $thrown !== null)
-		{
-			$event = new Event\ConsoleErrorEvent($thrown, $this, $this->activeCommand);
-			$dispatcher->dispatch(ConsoleEvents::ERROR, $event);
-
-			$thrown = $event->getError();
-
-			if ($event->getExitCode() === 0)
+			if (!$thrown instanceof \Exception)
 			{
-				$thrown = null;
+				if (class_exists(FatalThrowableError::class))
+				{
+					$thrown = new FatalThrowableError($e);
+				}
+				else
+				{
+					$thrown = new \ErrorException($e->getMessage(), $e->getCode(), E_ERROR, $e->getFile(), $e->getLine());
+				}
 			}
-		}
 
-		if ($thrown !== null)
-		{
-			if (!$this->shouldCatchThrowables() || !$exception instanceof \Exception)
+			if (!$this->shouldCatchThrowables())
 			{
 				throw $thrown;
 			}
 
-			$this->renderException($exception);
-
-			$exitCode = $exception->getCode();
-
-			if (is_numeric($exitCode))
+			if ($dispatcher)
 			{
-				$exitCode = (int) $exitCode;
+				$event = new Event\ConsoleErrorEvent($thrown, $this, $this->activeCommand);
+				$dispatcher->dispatch(ConsoleEvents::ERROR, $event);
 
-				if ($exitCode === 0)
+				$thrown = $event->getError();
+
+				if ($event->getExitCode() === 0)
+				{
+					$thrown = null;
+				}
+			}
+
+			if ($thrown !== null)
+			{
+				$this->renderException($thrown);
+
+				$exitCode = $thrown->getCode();
+
+				if (is_numeric($exitCode))
+				{
+					$exitCode = (int) $exitCode;
+
+					if ($exitCode === 0)
+					{
+						$exitCode = 1;
+					}
+				}
+				else
 				{
 					$exitCode = 1;
 				}
-			}
-			else
-			{
-				$exitCode = 1;
-			}
 
-			$this->exitCode = $exitCode;
+				$this->exitCode = $exitCode;
+			}
 		}
 
 		if ($dispatcher)
