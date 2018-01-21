@@ -4,7 +4,7 @@
     "description": "Joomla Console Package",
     "keywords": ["joomla", "framework", "console"],
     "homepage": "https://github.com/joomla-framework/console",
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "require": {
         "php": "~7.0",
         "joomla/application": "~2.0",
