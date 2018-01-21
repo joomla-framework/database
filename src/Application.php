@@ -398,11 +398,11 @@ class Application extends AbstractApplication
 			{
 				if (class_exists(FatalThrowableError::class))
 				{
-					$thrown = new FatalThrowableError($e);
+					$thrown = new FatalThrowableError($thrown);
 				}
 				else
 				{
-					$thrown = new \ErrorException($e->getMessage(), $e->getCode(), E_ERROR, $e->getFile(), $e->getLine());
+					$thrown = new \ErrorException($thrown->getMessage(), $thrown->getCode(), E_ERROR, $thrown->getFile(), $thrown->getLine());
 				}
 			}
 
