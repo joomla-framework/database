@@ -74,26 +74,6 @@ class SqlsrvDriver extends DatabaseDriver
 	}
 
 	/**
-	 * Constructor.
-	 *
-	 * @param   array  $options  List of options used to configure the connection
-	 *
-	 * @since   1.0
-	 */
-	public function __construct(array $options)
-	{
-		// Get some basic values from the options.
-		$options['host']     = isset($options['host']) ? $options['host'] : 'localhost';
-		$options['user']     = isset($options['user']) ? $options['user'] : '';
-		$options['password'] = isset($options['password']) ? $options['password'] : '';
-		$options['database'] = isset($options['database']) ? $options['database'] : '';
-		$options['select']   = isset($options['select']) ? (bool) $options['select'] : true;
-
-		// Finalize initialisation
-		parent::__construct($options);
-	}
-
-	/**
 	 * Destructor.
 	 *
 	 * @since   1.0

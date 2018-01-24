@@ -68,7 +68,7 @@ abstract class PostgresqlCase extends AbstractDatabaseTestCase
 					static::$options['host'] = $v;
 					break;
 				case 'port':
-					static::$options['port'] = $v;
+					static::$options['port'] = (int) $v;
 					break;
 				case 'dbname':
 					static::$options['database'] = $v;

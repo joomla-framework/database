@@ -18,6 +18,7 @@ use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\UTF8MB4SupportInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * MySQLi Database Driver
@@ -34,6 +35,21 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 * @since  1.0
 	 */
 	protected $connection;
+
+	/**
+	 * The default SQL mode used by the driver, this matches the sql_mode for MySQL 5.7.8+ default strict mode.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 * @link   https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-8.html#mysqld-5-7-8-sql-mode
+	 */
+	protected $defaultSqlModes = [
+		'ONLY_FULL_GROUP_BY',
+		'STRICT_TRANS_TABLES',
+		'ERROR_FOR_DIVISION_BY_ZERO',
+		'NO_AUTO_CREATE_USER',
+		'NO_ENGINE_SUBSTITUTION',
+	];
 
 	/**
 	 * The name of the database driver.
@@ -95,43 +111,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	protected static $dbMinimum = '5.5.3';
 
 	/**
-	 * Constructor.
-	 *
-	 * @param   array  $options  List of options used to configure the connection
-	 *
-	 * @since   1.0
-	 */
-	public function __construct(array $options)
-	{
-		/**
-		 * sql_mode to MySql 5.7.8+ default strict mode.
-		 *
-		 * @link https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-8.html#mysqld-5-7-8-sql-mode
-		 */
-		$sqlModes = [
-			'ONLY_FULL_GROUP_BY',
-			'STRICT_TRANS_TABLES',
-			'ERROR_FOR_DIVISION_BY_ZERO',
-			'NO_AUTO_CREATE_USER',
-			'NO_ENGINE_SUBSTITUTION',
-		];
-
-		// Get some basic values from the options.
-		$options['host']     = isset($options['host']) ? $options['host'] : 'localhost';
-		$options['user']     = isset($options['user']) ? $options['user'] : 'root';
-		$options['password'] = isset($options['password']) ? $options['password'] : '';
-		$options['database'] = isset($options['database']) ? $options['database'] : '';
-		$options['select']   = isset($options['select']) ? (bool) $options['select'] : true;
-		$options['port']     = isset($options['port']) ? (int) $options['port'] : null;
-		$options['socket']   = isset($options['socket']) ? $options['socket'] : null;
-		$options['utf8mb4']  = isset($options['utf8mb4']) ? (bool) $options['utf8mb4'] : false;
-		$options['sqlModes'] = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
-
-		// Finalize initialisation.
-		parent::__construct($options);
-	}
-
-	/**
 	 * Destructor.
 	 *
 	 * @since   1.0
@@ -139,6 +118,32 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	public function __destruct()
 	{
 		$this->disconnect();
+	}
+
+	/**
+	 * Resolve the options for the database driver.
+	 *
+	 * @param   OptionsResolver  $resolver  The options resolver.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function configureOptions(OptionsResolver $resolver)
+	{
+		parent::configureOptions($resolver);
+
+		$resolver->setDefaults(
+			[
+				'socket'   => null,
+				'utf8mb4'  => false,
+				'sqlModes' => $this->defaultSqlModes,
+			]
+		);
+
+		$resolver->setAllowedTypes('socket', ['null', 'string']);
+		$resolver->setAllowedTypes('utf8mb4', ['bool']);
+		$resolver->setAllowedTypes('sqlModes', ['array']);
 	}
 
 	/**
@@ -166,7 +171,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		 * Unlike mysql_connect(), mysqli_connect() takes the port and socket as separate arguments. Therefore, we
 		 * have to extract them from the host string.
 		 */
-		$port = isset($this->options['port']) ? $this->options['port'] : 3306;
+		$port = $this->options['port'] ?: 3306;
 
 		if (preg_match(
 			'/^(?P<host>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(:(?P<port>.+))?$/',

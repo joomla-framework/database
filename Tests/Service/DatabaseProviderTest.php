@@ -39,7 +39,7 @@ class DatabaseProviderTest extends TestCase
 		$this->container = new Container;
 		$config = new Registry;
 		$config->set('database.driver', 'sqlite');
-		$config->set('database.name', ':memory:');
+		$config->set('database.database', ':memory:');
 		$config->set('database.prefix', 'jos_');
 		$this->container->set('config', $config);
 	}
@@ -51,7 +51,7 @@ class DatabaseProviderTest extends TestCase
 	 * @uses     Joomla\Database\DatabaseDriver
 	 * @uses     Joomla\Database\Pdo\PdoDriver
 	 */
-	public function testVerifyTheLanguageObjectIsRegisteredToTheContainer()
+	public function testVerifyTheDatabaseObjectIsRegisteredToTheContainer()
 	{
 		$this->container->registerServiceProvider(new DatabaseProvider);
 
