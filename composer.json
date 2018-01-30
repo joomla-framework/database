@@ -4,7 +4,7 @@
     "description": "Joomla Database Package",
     "keywords": ["joomla", "framework", "database"],
     "homepage": "https://github.com/joomla-framework/database",
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "require": {
         "php": "^5.3.10|~7.0",
         "psr/log": "~1.0"
