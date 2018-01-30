@@ -4,7 +4,7 @@
     "description": "Joomla Mediawiki Package",
     "keywords": ["joomla", "framework", "mediawiki"],
     "homepage": "https://github.com/joomla-framework/mediawiki-api",
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "require": {
         "php": "^5.3.10|~7.0",
         "joomla/http": "^1.2.2|~2.0",
