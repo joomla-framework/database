@@ -4,7 +4,7 @@
     "description": "Joomla Session Package",
     "keywords": ["joomla", "framework", "session"],
     "homepage": "https://github.com/joomla-framework/session",
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "require": {
         "php": "^5.3.10|~7.0",
         "joomla/filter": "~1.0",
