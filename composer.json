@@ -4,7 +4,7 @@
     "description": "Joomla Renderer Package",
     "keywords": ["joomla", "framework", "renderer"],
     "homepage": "https://github.com/joomla-framework/renderer",
-    "license": "LGPL-2.1+",
+    "license": "LGPL-2.1-or-later",
     "require": {
         "php": "~7.0"
     },
