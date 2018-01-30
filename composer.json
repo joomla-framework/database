@@ -4,7 +4,7 @@
     "description": "Joomla Data Package",
     "keywords": ["joomla", "framework", "data"],
     "homepage": "https://github.com/joomla-framework/data",
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "require": {
         "php": "^5.3.10|~7.0",
         "joomla/compat": "~1.0",
