@@ -4,7 +4,7 @@
     "description": "Joomla Input Package",
     "keywords": ["joomla", "framework", "input"],
     "homepage": "https://github.com/joomla-framework/input",
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "require": {
         "php": "^5.3.10|~7.0",
         "joomla/filter": "~1.0"
