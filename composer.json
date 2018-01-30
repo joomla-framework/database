@@ -4,7 +4,7 @@
     "description": "Joomla Model Package",
     "keywords": ["joomla", "framework", "model"],
     "homepage": "https://github.com/joomla-framework/model",
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "require": {
         "php": "^5.3.10|~7.0",
         "joomla/registry": "^1.4.5|~2.0"
