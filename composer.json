@@ -4,7 +4,7 @@
     "description": "Joomla Authentication Package",
     "keywords": ["joomla", "framework", "authentication"],
     "homepage": "https://github.com/joomla-framework/authentication",
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "require": {
         "php": "^5.3.10|~7.0"
     },
