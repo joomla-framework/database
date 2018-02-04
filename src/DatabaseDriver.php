@@ -165,6 +165,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @var    DatabaseDriver[]
 	 * @since  1.0
+	 * @deprecated  3.0  Singleton storage will no longer be supported.
 	 */
 	protected static $instances = [];
 
@@ -266,9 +267,19 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
+	 * @deprecated  3.0  Use DatabaseFactory::getDriver() instead
 	 */
 	public static function getInstance(array $options = [])
 	{
+		@trigger_error(
+			sprintf(
+				'%1$s() is deprecated and will be removed in 3.0, use %2$s::getDriver() instead.',
+				__METHOD__,
+				DatabaseFactory::class
+			),
+			E_USER_DEPRECATED
+		);
+
 		// Sanitize the database connector options.
 		$options['driver']   = isset($options['driver']) ? preg_replace('/[^A-Z0-9_\.-]/i', '', $options['driver']) : 'mysqli';
 		$options['database'] = isset($options['database']) ? $options['database'] : null;
