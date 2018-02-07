@@ -371,9 +371,9 @@ class Container
 	 *
 	 * @since   1.0
 	 */
-	public function protect($key, $callback, $shared = false)
+	public function protect($key, $value, $shared = false)
 	{
-		return $this->set($key, $callback, $shared, true);
+		return $this->set($key, $value, $shared, true);
 	}
 
 	/**
@@ -387,9 +387,9 @@ class Container
 	 *
 	 * @since   1.0
 	 */
-	public function share($key, $callback, $protected = false)
+	public function share($key, $value, $protected = false)
 	{
-		return $this->set($key, $callback, true, $protected);
+		return $this->set($key, $value, true, $protected);
 	}
 
 	/**
