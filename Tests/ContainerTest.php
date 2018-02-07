@@ -205,6 +205,67 @@ class ContainerTest extends TestCase
 	}
 
 	/**
+	 * Test the tag method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testTag()
+	{
+		$this->fixture->tag('service', array('foo'));
+
+		$tags = $this->readAttribute($this->fixture, 'tags');
+
+		$this->assertEquals(
+			array('service' => array('foo')),
+			$tags,
+			'When setting a tag, it should be set in the $tags Container property.'
+		);
+	}
+
+	/**
+	 * Test the tag method with an aliased service.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testTagWithAliasedService()
+	{
+		$this->fixture->set('foo', 'bar');
+		$this->fixture->alias('goo', 'foo');
+		$this->fixture->tag('service', array('goo'));
+
+		$tags = $this->readAttribute($this->fixture, 'tags');
+
+		$this->assertEquals(
+			array('service' => array('foo')),
+			$tags,
+			'When setting a tag using an alias, the key stored to the $tags Container property should be the resolved service ID.'
+		);
+	}
+
+	/**
+	 * Test the getTagged method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testGetTagged()
+	{
+		$this->fixture->set('foo', 'bar');
+		$this->fixture->tag('service', array('foo'));
+
+		$this->assertEquals(
+			array('bar'),
+			$this->fixture->getTagged('service'),
+			'Resolved services for the named tag should be returned.'
+		);
+	}
+
+	/**
 	 * Tests the buildObject with no dependencies.
 	 *
 	 * @return  void
