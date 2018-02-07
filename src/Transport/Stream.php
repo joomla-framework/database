@@ -123,6 +123,9 @@ class Stream implements TransportInterface
 		// Follow redirects.
 		$options['follow_location'] = isset($this->options['follow_location']) ? (int) $this->options['follow_location'] : 1;
 
+		// Configure protocol version, use transport's default if not set otherwise.
+		$options['follow_location'] = isset($this->options['protocolVersion']) ? $this->options['protocolVersion'] : '1.0';
+
 		// Add the proxy configuration if enabled
 		$proxyEnabled = isset($this->options['proxy.enabled']) ? (bool) $this->options['proxy.enabled'] : false;
 
