@@ -20,7 +20,7 @@ class Container
 	/**
 	 * Holds the key aliases.
 	 *
-	 * @var    array  $aliases
+	 * @var    array
 	 * @since  1.0
 	 */
 	protected $aliases = array();
@@ -28,7 +28,7 @@ class Container
 	/**
 	 * Holds the shared instances.
 	 *
-	 * @var    array  $instances
+	 * @var    array
 	 * @since  1.0
 	 */
 	protected $instances = array();
@@ -37,7 +37,7 @@ class Container
 	 * Holds the keys, their callbacks, and whether or not
 	 * the item is meant to be a shared resource.
 	 *
-	 * @var    array  $dataStore
+	 * @var    array
 	 * @since  1.0
 	 */
 	protected $dataStore = array();
@@ -49,6 +49,14 @@ class Container
 	 * @since  1.0
 	 */
 	protected $parent;
+
+	/**
+	 * Holds the service tag mapping.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $tags = array();
 
 	/**
 	 * Constructor for the DI Container
@@ -101,6 +109,60 @@ class Container
 		}
 
 		return $key;
+	}
+
+	/**
+	 * Assign a tag to services.
+	 *
+	 * @param   string  $tag   The tag name
+	 * @param   array   $keys  The service keys to tag
+	 *
+	 * @return  Container  This object for chaining.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function tag($tag, array $keys)
+	{
+		foreach ($keys as $key)
+		{
+			$resolvedKey = $this->resolveAlias($key);
+
+			if (!isset($this->tags[$tag]))
+			{
+				$this->tags[$tag] = array();
+			}
+
+			$this->tags[$tag][] = $resolvedKey;
+		}
+
+		// Prune duplicates
+		$this->tags[$tag] = array_unique($this->tags[$tag]);
+
+		return $this;
+	}
+
+	/**
+	 * Fetch all services registered to the given tag.
+	 *
+	 * @param   string  $tag  The tag name
+	 *
+	 * @return  array  The resolved services for the given tag
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getTagged($tag)
+	{
+		$services = array();
+
+		if (isset($this->tags[$tag]))
+		{
+			foreach ($this->tags[$tag] as $service)
+			{
+				$services[] = $this->get($service);
+			}
+		}
+
+		return $services;
 	}
 
 	/**
@@ -309,9 +371,9 @@ class Container
 	 *
 	 * @since   1.0
 	 */
-	public function protect($key, $callback, $shared = false)
+	public function protect($key, $value, $shared = false)
 	{
-		return $this->set($key, $callback, $shared, true);
+		return $this->set($key, $value, $shared, true);
 	}
 
 	/**
@@ -325,9 +387,9 @@ class Container
 	 *
 	 * @since   1.0
 	 */
-	public function share($key, $callback, $protected = false)
+	public function share($key, $value, $protected = false)
 	{
-		return $this->set($key, $callback, true, $protected);
+		return $this->set($key, $value, true, $protected);
 	}
 
 	/**
