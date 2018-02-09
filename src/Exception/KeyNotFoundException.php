@@ -13,7 +13,7 @@ use Psr\Container\NotFoundExceptionInterface;
 /**
  * No entry was found in the container.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.5.0
  */
 class KeyNotFoundException extends \InvalidArgumentException implements NotFoundExceptionInterface
 {

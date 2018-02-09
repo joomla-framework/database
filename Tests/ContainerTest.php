@@ -1235,7 +1235,7 @@ class ContainerTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function testRetrievingTheContainerKeys()
 	{

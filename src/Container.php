@@ -57,7 +57,7 @@ class Container implements ContainerInterface
 	 * Holds the service tag mapping.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $tags = array();
 
@@ -122,7 +122,7 @@ class Container implements ContainerInterface
 	 *
 	 * @return  Container  This object for chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function tag($tag, array $keys)
 	{
@@ -151,7 +151,7 @@ class Container implements ContainerInterface
 	 *
 	 * @return  array  The resolved services for the given tag
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function getTagged($tag)
 	{
@@ -435,7 +435,7 @@ class Container implements ContainerInterface
 	 *
 	 * @return  boolean  True for success
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function has($key)
 	{
@@ -551,7 +551,7 @@ class Container implements ContainerInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function getKeys()
 	{
