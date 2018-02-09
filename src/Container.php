@@ -9,13 +9,16 @@
 namespace Joomla\DI;
 
 use Joomla\DI\Exception\DependencyResolutionException;
+use Joomla\DI\Exception\KeyNotFoundException;
+use Joomla\DI\Exception\ProtectedKeyException;
+use Psr\Container\ContainerInterface;
 
 /**
  * The Container class.
  *
  * @since  1.0
  */
-class Container
+class Container implements ContainerInterface
 {
 	/**
 	 * Holds the key aliases.
@@ -45,7 +48,7 @@ class Container
 	/**
 	 * Parent for hierarchical containers.
 	 *
-	 * @var    Container
+	 * @var    Container|ContainerInterface
 	 * @since  1.0
 	 */
 	protected $parent;
@@ -61,11 +64,11 @@ class Container
 	/**
 	 * Constructor for the DI Container
 	 *
-	 * @param   Container  $parent  Parent for hierarchical containers.
+	 * @param   ContainerInterface  $parent  Parent for hierarchical containers.
 	 *
 	 * @since   1.0
 	 */
-	public function __construct(Container $parent = null)
+	public function __construct(ContainerInterface $parent = null)
 	{
 		$this->parent = $parent;
 	}
@@ -248,7 +251,7 @@ class Container
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @throws  \InvalidArgumentException
+	 * @throws  KeyNotFoundException
 	 */
 	public function extend($key, \Closure $callable)
 	{
@@ -257,7 +260,7 @@ class Container
 
 		if ($raw === null)
 		{
-			throw new \InvalidArgumentException(sprintf('The requested key %s does not exist to extend.', $key));
+			throw new KeyNotFoundException(sprintf('The requested key %s does not exist to extend.', $key));
 		}
 
 		$closure = function ($c) use($callable, $raw) {
@@ -332,15 +335,14 @@ class Container
 	 *
 	 * @return  Container  This object for chaining.
 	 *
-	 * @throws  \OutOfBoundsException  Thrown if the provided key is already set and is protected.
-	 *
 	 * @since   1.0
+	 * @throws  ProtectedKeyException  Thrown if the provided key is already set and is protected.
 	 */
 	public function set($key, $value, $shared = false, $protected = false)
 	{
 		if (isset($this->dataStore[$key]) && $this->dataStore[$key]['protected'] === true)
 		{
-			throw new \OutOfBoundsException(sprintf('Key %s is protected and can\'t be overwritten.', $key));
+			throw new ProtectedKeyException(sprintf("Key %s is protected and can't be overwritten.", $key));
 		}
 
 		// If the provided $value is not a closure, make it one now for easy resolution.
@@ -401,7 +403,7 @@ class Container
 	 * @return  mixed   Results of running the $callback for the specified $key.
 	 *
 	 * @since   1.0
-	 * @throws  \InvalidArgumentException
+	 * @throws  KeyNotFoundException
 	 */
 	public function get($key, $forceNew = false)
 	{
@@ -410,7 +412,7 @@ class Container
 
 		if ($raw === null)
 		{
-			throw new \InvalidArgumentException(sprintf('Key %s has not been registered with the container.', $key));
+			throw new KeyNotFoundException(sprintf('Key %s has not been registered with the container.', $key));
 		}
 
 		if ($raw['shared'])
@@ -433,13 +435,35 @@ class Container
 	 *
 	 * @return  boolean  True for success
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
-	public function exists($key)
+	public function has($key)
 	{
 		$key = $this->resolveAlias($key);
 
-		return (bool) $this->getRaw($key);
+		$exists = (bool) $this->getRaw($key);
+
+		if ($exists === false && $this->parent instanceof ContainerInterface)
+		{
+			$exists = $this->parent->has($key);
+		}
+
+		return $exists;
+	}
+
+	/**
+	 * Method to check if specified dataStore key exists.
+	 *
+	 * @param   string  $key  Name of the dataStore key to check.
+	 *
+	 * @return  boolean  True for success
+	 *
+	 * @since   1.0
+	 * @deprecated  3.0  Use ContainerInterface::has() instead
+	 */
+	public function exists($key)
+	{
+		return $this->has($key);
 	}
 
 	/**
@@ -468,6 +492,24 @@ class Container
 		if ($this->parent instanceof Container)
 		{
 			return $this->parent->getRaw($key);
+		}
+
+		if ($this->parent instanceof ContainerInterface && $this->parent->has($key))
+		{
+			$callback = $this->parent->get($key);
+
+			if (!is_callable($callback))
+			{
+				$callback = function () use ($callback) {
+					return $callback;
+				};
+			}
+
+			return array(
+				'callback'  => $callback,
+				'shared'    => true,
+				'protected' => true,
+			);
 		}
 
 		return null;

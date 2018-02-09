@@ -919,6 +919,22 @@ class ContainerTest extends TestCase
 	}
 
 	/**
+	 * Tests the get method with a parent PSR-11 container.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testGetFromParentPsr11()
+	{
+		$psrContainer = new StubPsrContainer;
+
+		$child = new Container($psrContainer);
+
+		$this->assertSame($child->get('foo'), $psrContainer->get('foo'));
+	}
+
+	/**
 	 * Tests the get method for passing the
 	 * Joomla\DI\Container instance to the callback.
 	 *
@@ -1040,6 +1056,31 @@ class ContainerTest extends TestCase
 			$function,
 			$raw['callback'],
 			'getRaw should return the raw object uncalled'
+		);
+	}
+
+	/**
+	 * Test getRaw
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testGetRawFromParentPsr11()
+	{
+		$reflectionMethod = new \ReflectionMethod($this->fixture, 'getRaw');
+		$reflectionMethod->setAccessible(true);
+
+		$psrContainer = new StubPsrContainer;
+
+		$child = new Container($psrContainer);
+
+		$raw = $reflectionMethod->invoke($child, 'foo');
+
+		$this->assertSame(
+			$psrContainer->get('foo'),
+			$raw['callback'](),
+			'The result of the callback for a getRaw call to a parent PSR-11 container should be the same as the return from the parent container'
 		);
 	}
 

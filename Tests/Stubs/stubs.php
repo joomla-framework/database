@@ -8,6 +8,9 @@ namespace Joomla\DI\Tests;
 
 // @codingStandardsIgnoreStart
 
+use Joomla\DI\Exception\KeyNotFoundException;
+use Psr\Container\ContainerInterface;
+
 interface StubInterface {}
 
 class Stub1 implements StubInterface {}
@@ -78,4 +81,26 @@ class Stub8
 
 class Stub9
 {
+}
+
+class StubPsrContainer implements ContainerInterface
+{
+	private $services = array(
+		'foo' => 'bar',
+	);
+
+	public function get($id)
+	{
+		if (!$this->has($id))
+		{
+			throw new KeyNotFoundException;
+		}
+
+		return $this->services[$id];
+	}
+
+	public function has($id)
+	{
+		return isset($this->services[$id]);
+	}
 }
