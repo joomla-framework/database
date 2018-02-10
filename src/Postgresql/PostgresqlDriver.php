@@ -143,7 +143,7 @@ class PostgresqlDriver extends DatabaseDriver
 		}
 
 		/*
-		 * pg_connect() takes the port as separate argument. Therefore, we
+		 * The pg_connect() function takes the port as separate argument. Therefore, we
 		 * have to extract it from the host string (if povided).
 		 */
 
@@ -615,7 +615,7 @@ class PostgresqlDriver extends DatabaseDriver
 		$insertQuery = $this->getQuery();
 		$table       = $insertQuery->insert->getElements();
 
-		/* find sequence column name */
+		// Find sequence column name
 		$colNameQuery = $this->getQuery(true);
 		$colNameQuery->select('column_default')
 			->from('information_schema.columns')
@@ -779,7 +779,7 @@ class PostgresqlDriver extends DatabaseDriver
 			throw new \RuntimeException('Table not found in PostgreSQL database.');
 		}
 
-		/* Rename indexes */
+		// Rename indexes
 		$this->setQuery(
 			'SELECT relname
 				FROM pg_class
@@ -800,7 +800,7 @@ class PostgresqlDriver extends DatabaseDriver
 				->execute();
 		}
 
-		/* Rename sequence */
+		// Rename sequence
 		$this->setQuery(
 			'SELECT relname
 				FROM pg_class
@@ -824,7 +824,7 @@ class PostgresqlDriver extends DatabaseDriver
 				->execute();
 		}
 
-		/* Rename table */
+		// Rename table
 		$this->setQuery('ALTER TABLE ' . $this->escape($oldTable) . ' RENAME TO ' . $this->escape($newTable))
 			->execute();
 
@@ -1110,11 +1110,11 @@ class PostgresqlDriver extends DatabaseDriver
 	/**
 	 * Inserts a row into a table based on an object's properties.
 	 *
-	 * @param   string  $table    The name of the database table to insert into.
-	 * @param   object  &$object  A reference to an object whose public properties match the table fields.
-	 * @param   string  $key      The name of the primary key. If provided the object property is updated.
+	 * @param   string  $table   The name of the database table to insert into.
+	 * @param   object  $object  A reference to an object whose public properties match the table fields.
+	 * @param   string  $key     The name of the primary key. If provided the object property is updated.
 	 *
-	 * @return  boolean    True on success.
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -1417,10 +1417,10 @@ class PostgresqlDriver extends DatabaseDriver
 	/**
 	 * Updates a row in a table based on an object's properties.
 	 *
-	 * @param   string   $table    The name of the database table to update.
-	 * @param   object   &$object  A reference to an object whose public properties match the table fields.
-	 * @param   array    $key      The name of the primary key.
-	 * @param   boolean  $nulls    True to update null fields or false to ignore them.
+	 * @param   string   $table   The name of the database table to update.
+	 * @param   object   $object  A reference to an object whose public properties match the table fields.
+	 * @param   array    $key     The name of the primary key.
+	 * @param   boolean  $nulls   True to update null fields or false to ignore them.
 	 *
 	 * @return  boolean  True on success.
 	 *
