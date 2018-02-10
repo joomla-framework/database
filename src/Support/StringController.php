@@ -21,8 +21,21 @@ class StringController
 	 * @return  array
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use `getArray` instead.
 	 */
 	public function _getArray()
+	{
+		return $this->getArray();
+	}
+
+	/**
+	 * Defines a variable as an array
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getArray()
 	{
 		static $strings = array();
 
@@ -33,7 +46,7 @@ class StringController
 	 * Create a reference
 	 *
 	 * @param   string  $reference  The key
-	 * @param   string  &$string    The value
+	 * @param   string  $string     The value
 	 *
 	 * @return  void
 	 *
@@ -41,7 +54,7 @@ class StringController
 	 */
 	public function createRef($reference, &$string)
 	{
-		$ref = &self::_getArray();
+		$ref = &$this->getArray();
 		$ref[$reference] = & $string;
 	}
 
@@ -56,7 +69,7 @@ class StringController
 	 */
 	public function getRef($reference)
 	{
-		$ref = &self::_getArray();
+		$ref = &$this->getArray();
 
 		if (isset($ref[$reference]))
 		{

@@ -137,21 +137,21 @@ class Path
 			return '---------';
 		}
 
-		$parsed_mode = '';
+		$parsedMode = '';
 
 		for ($i = 0; $i < 3; $i++)
 		{
 			// Read
-			$parsed_mode .= ($mode{$i} & 04) ? "r" : "-";
+			$parsedMode .= ($mode{$i} & 04) ? "r" : "-";
 
 			// Write
-			$parsed_mode .= ($mode{$i} & 02) ? "w" : "-";
+			$parsedMode .= ($mode{$i} & 02) ? "w" : "-";
 
 			// Execute
-			$parsed_mode .= ($mode{$i} & 01) ? "x" : "-";
+			$parsedMode .= ($mode{$i} & 01) ? "x" : "-";
 		}
 
-		return $parsed_mode;
+		return $parsedMode;
 	}
 
 	/**

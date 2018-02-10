@@ -267,7 +267,7 @@ class Helper
 		{
 			$files = new \DirectoryIterator(__DIR__ . '/Stream');
 
-			/* @var  $file  \DirectoryIterator */
+			/** @var $file \DirectoryIterator */
 			foreach ($files as $file)
 			{
 				// Only load for php files.

@@ -833,8 +833,8 @@ class FtpClient
 	/**
 	 * Method to read a file from the FTP server's contents into a buffer
 	 *
-	 * @param   string  $remote   Path to remote file to read on the FTP server
-	 * @param   string  &$buffer  Buffer variable to read file contents into
+	 * @param   string  $remote  Path to remote file to read on the FTP server
+	 * @param   string  $buffer  Buffer variable to read file contents into
 	 *
 	 * @return  boolean  True if successful
 	 *
@@ -1325,7 +1325,7 @@ class FtpClient
 	 */
 	public function listDetails($path = null, $type = 'all')
 	{
-		$dir_list = array();
+		$dirList = array();
 		$data = null;
 		$regs = null;
 
@@ -1404,7 +1404,7 @@ class FtpClient
 		// If we received the listing of an empty directory, we are done as well
 		if (empty($contents[0]))
 		{
-			return $dir_list;
+			return $dirList;
 		}
 
 		// If the server returned the number of results in the first response, let's dump it
@@ -1414,7 +1414,7 @@ class FtpClient
 
 			if (!isset($contents[0]) || empty($contents[0]))
 			{
-				return $dir_list;
+				return $dirList;
 			}
 		}
 
@@ -1452,40 +1452,40 @@ class FtpClient
 		{
 			foreach ($contents as $file)
 			{
-				$tmp_array = null;
+				$tmpArray = null;
 
 				if (@preg_match($regexp, $file, $regs))
 				{
 					$fType = (int) strpos("-dl", $regs[1]{0});
 
-					// $tmp_array['line'] = $regs[0];
-					$tmp_array['type'] = $fType;
-					$tmp_array['rights'] = $regs[1];
+					// $tmpArray['line'] = $regs[0];
+					$tmpArray['type'] = $fType;
+					$tmpArray['rights'] = $regs[1];
 
-					// $tmp_array['number'] = $regs[2];
-					$tmp_array['user'] = $regs[3];
-					$tmp_array['group'] = $regs[4];
-					$tmp_array['size'] = $regs[5];
-					$tmp_array['date'] = @date("m-d", strtotime($regs[6]));
-					$tmp_array['time'] = $regs[7];
-					$tmp_array['name'] = $regs[9];
+					// $tmpArray['number'] = $regs[2];
+					$tmpArray['user'] = $regs[3];
+					$tmpArray['group'] = $regs[4];
+					$tmpArray['size'] = $regs[5];
+					$tmpArray['date'] = @date("m-d", strtotime($regs[6]));
+					$tmpArray['time'] = $regs[7];
+					$tmpArray['name'] = $regs[9];
 				}
 
 				// If we just want files, do not add a folder
-				if ($type == 'files' && $tmp_array['type'] == 1)
+				if ($type == 'files' && $tmpArray['type'] == 1)
 				{
 					continue;
 				}
 
 				// If we just want folders, do not add a file
-				if ($type == 'folders' && $tmp_array['type'] == 0)
+				if ($type == 'folders' && $tmpArray['type'] == 0)
 				{
 					continue;
 				}
 
-				if (is_array($tmp_array) && $tmp_array['name'] != '.' && $tmp_array['name'] != '..')
+				if (is_array($tmpArray) && $tmpArray['name'] != '.' && $tmpArray['name'] != '..')
 				{
-					$dir_list[] = $tmp_array;
+					$dirList[] = $tmpArray;
 				}
 			}
 		}
@@ -1493,46 +1493,46 @@ class FtpClient
 		{
 			foreach ($contents as $file)
 			{
-				$tmp_array = null;
+				$tmpArray = null;
 
 				if (@preg_match($regexp, $file, $regs))
 				{
 					$fType = (int) ($regs[7] == '<DIR>');
 					$timestamp = strtotime("$regs[3]-$regs[1]-$regs[2] $regs[4]:$regs[5]$regs[6]");
 
-					// $tmp_array['line'] = $regs[0];
-					$tmp_array['type'] = $fType;
-					$tmp_array['rights'] = '';
+					// $tmpArray['line'] = $regs[0];
+					$tmpArray['type'] = $fType;
+					$tmpArray['rights'] = '';
 
-					// $tmp_array['number'] = 0;
-					$tmp_array['user'] = '';
-					$tmp_array['group'] = '';
-					$tmp_array['size'] = (int) $regs[7];
-					$tmp_array['date'] = date('m-d', $timestamp);
-					$tmp_array['time'] = date('H:i', $timestamp);
-					$tmp_array['name'] = $regs[8];
+					// $tmpArray['number'] = 0;
+					$tmpArray['user'] = '';
+					$tmpArray['group'] = '';
+					$tmpArray['size'] = (int) $regs[7];
+					$tmpArray['date'] = date('m-d', $timestamp);
+					$tmpArray['time'] = date('H:i', $timestamp);
+					$tmpArray['name'] = $regs[8];
 				}
 
 				// If we just want files, do not add a folder
-				if ($type == 'files' && $tmp_array['type'] == 1)
+				if ($type == 'files' && $tmpArray['type'] == 1)
 				{
 					continue;
 				}
 
 				// If we just want folders, do not add a file
-				if ($type == 'folders' && $tmp_array['type'] == 0)
+				if ($type == 'folders' && $tmpArray['type'] == 0)
 				{
 					continue;
 				}
 
-				if (is_array($tmp_array) && $tmp_array['name'] != '.' && $tmp_array['name'] != '..')
+				if (is_array($tmpArray) && $tmpArray['name'] != '.' && $tmpArray['name'] != '..')
 				{
-					$dir_list[] = $tmp_array;
+					$dirList[] = $tmpArray;
 				}
 			}
 		}
 
-		return $dir_list;
+		return $dirList;
 	}
 
 	/**
