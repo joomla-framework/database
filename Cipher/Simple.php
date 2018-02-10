@@ -42,7 +42,7 @@ class Cipher_Simple implements CipherInterface
 		$tmp = $key->public;
 
 		// Convert the HEX input into an array of integers and get the number of characters.
-		$chars = $this->_hexToIntArray($data);
+		$chars = $this->hexToIntArray($data);
 		$charCount = count($chars);
 
 		// Repeat the key as many times as necessary to ensure that the key is at least as long as the input.
@@ -96,7 +96,7 @@ class Cipher_Simple implements CipherInterface
 		// Get the XOR values between the ASCII values of the input and key characters for all input offsets.
 		for ($i = 0; $i < $charCount; $i++)
 		{
-			$encrypted .= $this->_intToHex(ord($tmp[$i]) ^ ord($chars[$i]));
+			$encrypted .= $this->intToHex(ord($tmp[$i]) ^ ord($chars[$i]));
 		}
 
 		return $encrypted;
@@ -118,7 +118,7 @@ class Cipher_Simple implements CipherInterface
 		$key = new Key('simple');
 
 		// Just a random key of a given length.
-		$key->private = $this->_getRandomKey();
+		$key->private = $this->getRandomKey();
 		$key->public  = $key->private;
 
 		return $key;
@@ -134,7 +134,7 @@ class Cipher_Simple implements CipherInterface
 	 * @since   1.0
 	 * @deprecated  2.0  Use \Joomla\Crypt\Cipher_Crypto instead
 	 */
-	private function _getRandomKey($length = 256)
+	private function getRandomKey($length = 256)
 	{
 		$key = '';
 		$salt = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -160,7 +160,7 @@ class Cipher_Simple implements CipherInterface
 	 * @since   1.0
 	 * @deprecated  2.0  Use \Joomla\Crypt\Cipher_Crypto instead
 	 */
-	private function _hexToInt($s, $i)
+	private function hexToInt($s, $i)
 	{
 		$j = (int) $i * 2;
 		$k = 0;
@@ -241,7 +241,7 @@ class Cipher_Simple implements CipherInterface
 	 * @since   1.0
 	 * @deprecated  2.0  Use \Joomla\Crypt\Cipher_Crypto instead
 	 */
-	private function _hexToIntArray($hex)
+	private function hexToIntArray($hex)
 	{
 		$array = array();
 
@@ -249,7 +249,7 @@ class Cipher_Simple implements CipherInterface
 
 		for ($i = 0; $i < $j; $i++)
 		{
-			$array[$i] = (int) $this->_hexToInt($hex, $i);
+			$array[$i] = (int) $this->hexToInt($hex, $i);
 		}
 
 		return $array;
@@ -265,7 +265,7 @@ class Cipher_Simple implements CipherInterface
 	 * @since   1.0
 	 * @deprecated  2.0  Use \Joomla\Crypt\Cipher_Crypto instead
 	 */
-	private function _intToHex($i)
+	private function intToHex($i)
 	{
 		// Sanitize the input.
 		$i = (int) $i;
