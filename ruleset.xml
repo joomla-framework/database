@@ -15,14 +15,7 @@
     <exclude-pattern>*/vendor/*</exclude-pattern>
 
     <rule ref="Joomla">
-        <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
         <!-- Required due to converting to variable names matching GitHub API spec which are named in snake case -->
         <exclude name="Joomla.NamingConventions.ValidVariableName"/>
-    </rule>
-
-    <rule ref="Joomla.Classes.InstantiateNewClasses">
-        <properties>
-            <property name="shortArraySyntax" value="true"/>
-        </properties>
     </rule>
 </ruleset>
