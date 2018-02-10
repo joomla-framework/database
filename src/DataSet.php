@@ -43,7 +43,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	public function __construct(array $objects = array())
 	{
 		// Set the objects.
-		$this->_initialise($objects);
+		$this->initialise($objects);
 	}
 
 	/**
@@ -217,14 +217,14 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 		{
 			if (version_compare(PHP_VERSION, '5.4.0', '<'))
 			{
-				$object_vars = json_decode(json_encode($object->jsonSerialize()), true);
+				$objectVars = json_decode(json_encode($object->jsonSerialize()), true);
 			}
 			else
 			{
-				$object_vars = json_decode(json_encode($object), true);
+				$objectVars = json_decode(json_encode($object), true);
 			}
 
-			$keys = (is_null($keys)) ? $object_vars : $function($keys, $object_vars);
+			$keys = (is_null($keys)) ? $objectVars : $function($keys, $objectVars);
 		}
 
 		return array_keys($keys);
@@ -256,7 +256,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 
 		foreach ($this->objects as $key => $object)
 		{
-			$array_item = array();
+			$arrayItem = array();
 
 			$key = ($associative) ? $key : $i++;
 
@@ -264,11 +264,11 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 
 			foreach ($keys as $property)
 			{
-				$property_key              = ($associative) ? $property : $j++;
-				$array_item[$property_key] = (isset($object->$property)) ? $object->$property : null;
+				$propertyKey             = ($associative) ? $property : $j++;
+				$arrayItem[$propertyKey] = (isset($object->$property)) ? $object->$property : null;
 			}
 
-			$return[$key] = $array_item;
+			$return[$key] = $arrayItem;
 		}
 
 		return $return;
@@ -413,11 +413,11 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 
 	/**
 	 * Applies a function to every object in the set (emulates array_walk).
-	 * 
-	 * @param   callable  $funcname  Callback function.  
-	 * 
+	 *
+	 * @param   callable  $funcname  Callback function.
+	 *
 	 * @return  boolean
-	 * 
+	 *
 	 * @since   1.2.0
 	 * @throws  \InvalidArgumentException
 	 */
@@ -619,7 +619,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	 * @since   1.0
 	 * @throws  \InvalidArgumentException if an object is not an instance of Data\DataObject.
 	 */
-	private function _initialise(array $input = array())
+	private function initialise(array $input = array())
 	{
 		foreach ($input as $key => $object)
 		{
