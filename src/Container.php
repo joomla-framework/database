@@ -263,7 +263,7 @@ class Container implements ContainerInterface
 			throw new KeyNotFoundException(sprintf('The requested key %s does not exist to extend.', $key));
 		}
 
-		$closure = function ($c) use($callable, $raw) {
+		$closure = function ($c) use ($callable, $raw) {
 			return $callable($raw['callback']($c), $c);
 		};
 
