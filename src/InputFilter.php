@@ -173,7 +173,8 @@ class InputFilter
 	 * @since   1.0
 	 */
 	public function __construct($tagsArray = array(), $attrArray = array(), $tagsMethod = self::TAGS_WHITELIST, $attrMethod = self::ATTR_WHITELIST,
-		$xssAuto = 1)
+		$xssAuto = 1
+	)
 	{
 		// Make sure user defined arrays are in lowercase
 		$tagsArray = array_map('strtolower', (array) $tagsArray);
@@ -599,49 +600,49 @@ class InputFilter
 		$attr = '';
 
 		// Is there a tag? If so it will certainly start with a '<'.
-		$tagOpen_start = StringHelper::strpos($source, '<');
+		$tagOpenStart = StringHelper::strpos($source, '<');
 
-		while ($tagOpen_start !== false)
+		while ($tagOpenStart !== false)
 		{
 			// Get some information about the tag we are processing
-			$preTag .= StringHelper::substr($postTag, 0, $tagOpen_start);
-			$postTag = StringHelper::substr($postTag, $tagOpen_start);
+			$preTag .= StringHelper::substr($postTag, 0, $tagOpenStart);
+			$postTag = StringHelper::substr($postTag, $tagOpenStart);
 			$fromTagOpen = StringHelper::substr($postTag, 1);
-			$tagOpen_end = StringHelper::strpos($fromTagOpen, '>');
+			$tagOpenEnd = StringHelper::strpos($fromTagOpen, '>');
 
 			// Check for mal-formed tag where we have a second '<' before the first '>'
-			$nextOpenTag = (StringHelper::strlen($postTag) > $tagOpen_start) ? StringHelper::strpos($postTag, '<', $tagOpen_start + 1) : false;
+			$nextOpenTag = (StringHelper::strlen($postTag) > $tagOpenStart) ? StringHelper::strpos($postTag, '<', $tagOpenStart + 1) : false;
 
-			if (($nextOpenTag !== false) && ($nextOpenTag < $tagOpen_end))
+			if (($nextOpenTag !== false) && ($nextOpenTag < $tagOpenEnd))
 			{
 				// At this point we have a mal-formed tag -- remove the offending open
-				$postTag = StringHelper::substr($postTag, 0, $tagOpen_start) . StringHelper::substr($postTag, $tagOpen_start + 1);
-				$tagOpen_start = StringHelper::strpos($postTag, '<');
+				$postTag = StringHelper::substr($postTag, 0, $tagOpenStart) . StringHelper::substr($postTag, $tagOpenStart + 1);
+				$tagOpenStart = StringHelper::strpos($postTag, '<');
 				continue;
 			}
 
 			// Let's catch any non-terminated tags and skip over them
-			if ($tagOpen_end === false)
+			if ($tagOpenEnd === false)
 			{
-				$postTag = StringHelper::substr($postTag, $tagOpen_start + 1);
-				$tagOpen_start = StringHelper::strpos($postTag, '<');
+				$postTag = StringHelper::substr($postTag, $tagOpenStart + 1);
+				$tagOpenStart = StringHelper::strpos($postTag, '<');
 				continue;
 			}
 
 			// Do we have a nested tag?
-			$tagOpen_nested = StringHelper::strpos($fromTagOpen, '<');
+			$tagOpenNested = StringHelper::strpos($fromTagOpen, '<');
 
-			if (($tagOpen_nested !== false) && ($tagOpen_nested < $tagOpen_end))
+			if (($tagOpenNested !== false) && ($tagOpenNested < $tagOpenEnd))
 			{
-				$preTag .= StringHelper::substr($postTag, 0, ($tagOpen_nested + 1));
-				$postTag = StringHelper::substr($postTag, ($tagOpen_nested + 1));
-				$tagOpen_start = StringHelper::strpos($postTag, '<');
+				$preTag .= StringHelper::substr($postTag, 0, ($tagOpenNested + 1));
+				$postTag = StringHelper::substr($postTag, ($tagOpenNested + 1));
+				$tagOpenStart = StringHelper::strpos($postTag, '<');
 				continue;
 			}
 
 			// Let's get some information about our tag and setup attribute pairs
-			$tagOpen_nested = (StringHelper::strpos($fromTagOpen, '<') + $tagOpen_start + 1);
-			$currentTag = StringHelper::substr($fromTagOpen, 0, $tagOpen_end);
+			$tagOpenNested = (StringHelper::strpos($fromTagOpen, '<') + $tagOpenStart + 1);
+			$currentTag = StringHelper::substr($fromTagOpen, 0, $tagOpenEnd);
 			$tagLength = StringHelper::strlen($currentTag);
 			$tagLeft = $currentTag;
 			$attrSet = array();
@@ -672,7 +673,7 @@ class InputFilter
 				|| ((in_array(strtolower($tagName), $this->tagBlacklist)) && ($this->xssAuto)))
 			{
 				$postTag = StringHelper::substr($postTag, ($tagLength + 2));
-				$tagOpen_start = StringHelper::strpos($postTag, '<');
+				$tagOpenStart = StringHelper::strpos($postTag, '<');
 
 				// Strip tag
 				continue;
@@ -805,7 +806,7 @@ class InputFilter
 
 			// Find next tag's start and continue iteration
 			$postTag = StringHelper::substr($postTag, ($tagLength + 2));
-			$tagOpen_start = StringHelper::strpos($postTag, '<');
+			$tagOpenStart = StringHelper::strpos($postTag, '<');
 		}
 
 		// Append any code after the end of tags and return
@@ -845,8 +846,8 @@ class InputFilter
 			$attrSubSet = explode('=', trim($attrSet[$i]), 2);
 
 			// Take the last attribute in case there is an attribute with no value
-			$attrSubSet_0  = explode(' ', trim($attrSubSet[0]));
-			$attrSubSet[0] = array_pop($attrSubSet_0);
+			$attrSubSet0   = explode(' ', trim($attrSubSet[0]));
+			$attrSubSet[0] = array_pop($attrSubSet0);
 
 			$attrSubSet[0] = strtolower($attrSubSet[0]);
 			$quoteStyle = version_compare(PHP_VERSION, '5.4', '>=') ? ENT_QUOTES | ENT_HTML401 : ENT_QUOTES;
