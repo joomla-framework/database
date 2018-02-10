@@ -57,22 +57,22 @@ class Search extends AbstractPackage
 	 * This method returns up to 100 results per page and pages can be fetched
 	 * using the start_page parameter.
 	 *
-	 * @param   string   $keyword     The search term.
-	 * @param   string   $language    Filter results by language https://github.com/languages
-	 * @param   integer  $start_page  Page number to fetch
+	 * @param   string   $keyword    The search term.
+	 * @param   string   $language   Filter results by language https://github.com/languages
+	 * @param   integer  $startPage  Page number to fetch
 	 *
 	 * @return  object
 	 *
 	 * @since   1.0
 	 * @deprecated  The legacy API is deprecated
 	 */
-	public function repositories($keyword, $language = '', $start_page = 0)
+	public function repositories($keyword, $language = '', $startPage = 0)
 	{
 		// Build the request path.
 		$path = '/legacy/repos/search/' . $keyword . '?';
 
 		$path .= ($language) ? '&language=' . $language : '';
-		$path .= ($start_page) ? '&start_page=' . $start_page : '';
+		$path .= ($startPage) ? '&start_page=' . $startPage : '';
 
 		// Send the request.
 		return $this->processResponse(
@@ -85,20 +85,20 @@ class Search extends AbstractPackage
 	 *
 	 * Find users by keyword.
 	 *
-	 * @param   string   $keyword     The search term.
-	 * @param   integer  $start_page  Page number to fetch
+	 * @param   string   $keyword    The search term.
+	 * @param   integer  $startPage  Page number to fetch
 	 *
 	 * @return  object
 	 *
 	 * @since   1.0
 	 * @deprecated  The legacy API is deprecated
 	 */
-	public function users($keyword, $start_page = 0)
+	public function users($keyword, $startPage = 0)
 	{
 		// Build the request path.
 		$path = '/legacy/user/search/' . $keyword . '?';
 
-		$path .= ($start_page) ? '&start_page=' . $start_page : '';
+		$path .= ($startPage) ? '&start_page=' . $startPage : '';
 
 		// Send the request.
 		return $this->processResponse(

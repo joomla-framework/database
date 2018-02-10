@@ -50,35 +50,34 @@ class Tags extends AbstractPackage
 	 * and then create the refs/tags/[tag] reference. If you want to create a lightweight tag,
 	 * you simply have to create the reference - this call would be unnecessary.
 	 *
-	 * @param   string  $owner         The name of the owner of the GitHub repository.
-	 * @param   string  $repo          The name of the GitHub repository.
-	 * @param   string  $tag           The tag string.
-	 * @param   string  $message       The tag message.
-	 * @param   string  $object        The SHA of the git object this is tagging.
-	 * @param   string  $type          The type of the object we’re tagging. Normally this is a commit
-	 *                                 but it can also be a tree or a blob.
-	 * @param   string  $tagger_name   The name of the author of the tag.
-	 * @param   string  $tagger_email  The email of the author of the tag.
-	 * @param   string  $tagger_date   Timestamp of when this object was tagged.
+	 * @param   string  $owner        The name of the owner of the GitHub repository.
+	 * @param   string  $repo         The name of the GitHub repository.
+	 * @param   string  $tag          The tag string.
+	 * @param   string  $message      The tag message.
+	 * @param   string  $object       The SHA of the git object this is tagging.
+	 * @param   string  $type         The type of the object we’re tagging. Normally this is a commit but it can also be a tree or a blob.
+	 * @param   string  $taggerName   The name of the author of the tag.
+	 * @param   string  $taggerEmail  The email of the author of the tag.
+	 * @param   string  $taggerDate   Timestamp of when this object was tagged.
+	 *
+	 * @return  object
 	 *
 	 * @since   1.0
-	 *
-	 * @return object
 	 */
-	public function create($owner, $repo, $tag, $message, $object, $type, $tagger_name, $tagger_email, $tagger_date)
+	public function create($owner, $repo, $tag, $message, $object, $type, $taggerName, $taggerEmail, $taggerDate)
 	{
 		// Build the request path.
 		$path = '/repos/' . $owner . '/' . $repo . '/git/tags';
 
 		$data = array(
-			'tag'          => $tag,
-			'message'      => $message,
-			'object'       => $object,
-			'type'         => $type,
+			'tag'     => $tag,
+			'message' => $message,
+			'object'  => $object,
+			'type'    => $type,
 			'tagger'  => array(
-				'name' => $tagger_name,
-				'email' => $tagger_email,
-				'date'  => $tagger_date
+				'name'  => $taggerName,
+				'email' => $taggerEmail,
+				'date'  => $taggerDate
 			)
 		);
 

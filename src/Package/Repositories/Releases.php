@@ -102,7 +102,8 @@ class Releases extends AbstractPackage
 	 * @throws  \DomainException
 	 */
 	public function edit($user, $repo, $releaseId, $tagName,
-		$targetCommitish = null, $name = null, $body = null, $draft = null, $preRelease = null)
+		$targetCommitish = null, $name = null, $body = null, $draft = null, $preRelease = null
+	)
 	{
 		// Build the request path.
 		$path = '/repos/' . $user . '/' . $repo . '/releases/' . (int) $releaseId;

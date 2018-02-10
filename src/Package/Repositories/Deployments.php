@@ -75,7 +75,7 @@ class Deployments extends AbstractPackage
 	 * @param   string      $repo              The name of the GitHub repository.
 	 * @param   string      $ref               The ref to deploy. This can be a branch, tag, or SHA.
 	 * @param   string      $task              Optional parameter to specify a task to execute.
-	 * @param   boolean     $autoMerge         Optional parameter to merge the default branch into the requested ref if it is behind the default branch.
+	 * @param   boolean     $autoMerge         Optional parameter to merge the default branch into the requested ref if behind the default branch.
 	 * @param   array|null  $requiredContexts  Optional array of status contexts verified against commit status checks. If this parameter is omitted
 	 *                                         from the parameters then all unique contexts will be verified before a deployment is created. To bypass
 	 *                                         checking entirely pass an empty array. Defaults to all unique contexts.
@@ -89,7 +89,8 @@ class Deployments extends AbstractPackage
 	 * @throws  \RuntimeException
 	 */
 	public function create($owner, $repo, $ref, $task = '', $autoMerge = true, $requiredContexts = null, $payload = '', $environment = '',
-		$description = '')
+		$description = ''
+	)
 	{
 		// Build the request path.
 		$path = "/repos/$owner/$repo/deployments";

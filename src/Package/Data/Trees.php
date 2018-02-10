@@ -68,7 +68,7 @@ class Trees extends AbstractPackage
 	 * modifying that tree are specified, it will overwrite the contents of that tree with the
 	 * new path contents and write a new tree out.
 	 *
-	 * Parameters fir the tree:
+	 * Parameters for the tree:
 	 *
 	 * tree.path
 	 *     String of the file referenced in the tree
@@ -84,17 +84,16 @@ class Trees extends AbstractPackage
 	 *     String of content you want this file to have - GitHub will write this blob out and use
 	 *     that SHA for this entry. Use either this or tree.sha
 	 *
-	 * @param   string  $owner      The name of the owner of the GitHub repository.
-	 * @param   string  $repo       The name of the GitHub repository.
-	 * @param   array   $tree       Array of Hash objects (of path, mode, type and sha) specifying
-	 *                              a tree structure
-	 * @param   string  $base_tree  The SHA1 of the tree you want to update with new data.
+	 * @param   string  $owner     The name of the owner of the GitHub repository.
+	 * @param   string  $repo      The name of the GitHub repository.
+	 * @param   array   $tree      Array of Hash objects (of path, mode, type and sha) specifying a tree structure
+	 * @param   string  $baseTree  The SHA1 of the tree you want to update with new data.
+	 *
+	 * @return  object
 	 *
 	 * @since   1.0
-	 *
-	 * @return object
 	 */
-	public function create($owner, $repo, $tree, $base_tree = '')
+	public function create($owner, $repo, $tree, $baseTree = '')
 	{
 		// Build the request path.
 		$path = '/repos/' . $owner . '/' . $repo . '/git/trees';
@@ -103,9 +102,9 @@ class Trees extends AbstractPackage
 
 		$data['tree'] = $tree;
 
-		if ($base_tree)
+		if ($baseTree)
 		{
-			$data['base_tree'] = $base_tree;
+			$data['base_tree'] = $baseTree;
 		}
 
 		return $this->processResponse(

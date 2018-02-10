@@ -102,7 +102,8 @@ class Hooks extends AbstractPackage
 	 * @throws  \RuntimeException
 	 */
 	public function edit($user, $repo, $id, $name, $config, array $events = array('push'), array $addEvents = array(),
-		array $removeEvents = array(), $active = true)
+		array $removeEvents = array(), $active = true
+	)
 	{
 		// Check to ensure all events are in the allowed list
 		foreach ($events as $event)

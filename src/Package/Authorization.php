@@ -264,25 +264,24 @@ class Authorization extends AbstractPackage
 	/**
 	 * 1. Request authorization on GitHub.
 	 *
-	 * @param   string  $client_id     The client ID you received from GitHub when you registered.
-	 * @param   string  $redirect_uri  URL in your app where users will be sent after authorization.
-	 * @param   string  $scope         Comma separated list of scopes.
-	 * @param   string  $state         An unguessable random string. It is used to protect against
-	 *                                 cross-site request forgery attacks.
+	 * @param   string  $clientId     The client ID you received from GitHub when you registered.
+	 * @param   string  $redirectUri  URL in your app where users will be sent after authorization.
+	 * @param   string  $scope        Comma separated list of scopes.
+	 * @param   string  $state        An unguessable random string. It is used to protect against cross-site request forgery attacks.
 	 *
 	 * @return  string
 	 *
 	 * @since   1.0
 	 */
-	public function getAuthorizationLink($client_id, $redirect_uri = '', $scope = '', $state = '')
+	public function getAuthorizationLink($clientId, $redirectUri = '', $scope = '', $state = '')
 	{
 		$uri = new Uri('https://github.com/login/oauth/authorize');
 
-		$uri->setVar('client_id', $client_id);
+		$uri->setVar('client_id', $clientId);
 
-		if ($redirect_uri)
+		if ($redirectUri)
 		{
-			$uri->setVar('redirect_uri', urlencode($redirect_uri));
+			$uri->setVar('redirect_uri', urlencode($redirectUri));
 		}
 
 		if ($scope)
@@ -301,30 +300,30 @@ class Authorization extends AbstractPackage
 	/**
 	 * 2. Request the access token.
 	 *
-	 * @param   string  $client_id      The client ID you received from GitHub when you registered.
-	 * @param   string  $client_secret  The client secret you received from GitHub when you registered.
-	 * @param   string  $code           The code you received as a response to Step 1.
-	 * @param   string  $redirect_uri   URL in your app where users will be sent after authorization.
-	 * @param   string  $format         The response format (json, xml, ).
+	 * @param   string  $clientId      The client ID you received from GitHub when you registered.
+	 * @param   string  $clientSecret  The client secret you received from GitHub when you registered.
+	 * @param   string  $code          The code you received as a response to Step 1.
+	 * @param   string  $redirectUri   URL in your app where users will be sent after authorization.
+	 * @param   string  $format        The response format (json, xml, ).
 	 *
 	 * @return  string
 	 *
 	 * @since   1.0
 	 * @throws  \UnexpectedValueException
 	 */
-	public function requestToken($client_id, $client_secret, $code, $redirect_uri = '', $format = '')
+	public function requestToken($clientId, $clientSecret, $code, $redirectUri = '', $format = '')
 	{
 		$uri = 'https://github.com/login/oauth/access_token';
 
 		$data = array(
-			'client_id'     => $client_id,
-			'client_secret' => $client_secret,
+			'client_id'     => $clientId,
+			'client_secret' => $clientSecret,
 			'code'          => $code
 		);
 
-		if ($redirect_uri)
+		if ($redirectUri)
 		{
-			$data['redirect_uri'] = $redirect_uri;
+			$data['redirect_uri'] = $redirectUri;
 		}
 
 		$headers = array();
