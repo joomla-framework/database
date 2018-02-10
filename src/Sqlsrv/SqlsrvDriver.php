@@ -186,7 +186,7 @@ class SqlsrvDriver extends DatabaseDriver
 		$this->connect();
 
 		$this->setQuery(
-			'SELECT CONSTRAINT_NAME FROM' . ' INFORMATION_SCHEMA.TABLE_CONSTRAINTS' . ' WHERE TABLE_NAME = ' . $this->quote($tableName)
+			'SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_NAME = ' . $this->quote($tableName)
 		);
 
 		return $this->loadColumn();
@@ -304,7 +304,8 @@ class SqlsrvDriver extends DatabaseDriver
 		if ($ifExists)
 		{
 			$this->setQuery(
-				'IF EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = ' . $query->quote($tableName) . ') DROP TABLE ' . $tableName
+				'IF EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '
+					. $query->quote($tableName) . ') DROP TABLE ' . $tableName
 			);
 		}
 		else
@@ -394,7 +395,7 @@ class SqlsrvDriver extends DatabaseDriver
 		// Set the query to get the table fields statement.
 		$this->setQuery(
 			'SELECT column_name as Field, data_type as Type, is_nullable as \'Null\', column_default as \'Default\'' .
-			' FROM information_schema.columns' . ' WHERE table_name = ' . $this->quote($table_temp)
+			' FROM information_schema.columns WHERE table_name = ' . $this->quote($table_temp)
 		);
 		$fields = $this->loadObjectList();
 
@@ -493,9 +494,9 @@ class SqlsrvDriver extends DatabaseDriver
 	/**
 	 * Inserts a row into a table based on an object's properties.
 	 *
-	 * @param   string  $table    The name of the database table to insert into.
-	 * @param   object  &$object  A reference to an object whose public properties match the table fields.
-	 * @param   string  $key      The name of the primary key. If provided the object property is updated.
+	 * @param   string  $table   The name of the database table to insert into.
+	 * @param   object  $object  A reference to an object whose public properties match the table fields.
+	 * @param   string  $key     The name of the primary key. If provided the object property is updated.
 	 *
 	 * @return  boolean  True on success.
 	 *
@@ -518,7 +519,7 @@ class SqlsrvDriver extends DatabaseDriver
 			}
 
 			// Only process non-null scalars.
-			if (is_array($v) or is_object($v) or $v === null)
+			if (is_array($v) || is_object($v) || $v === null)
 			{
 				continue;
 			}
@@ -872,7 +873,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public function setUtf()
 	{
-		// TODO: Remove this?
+		return true;
 	}
 
 	/**

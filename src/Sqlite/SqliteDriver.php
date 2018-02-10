@@ -265,7 +265,7 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		/* @type  SqliteQuery  $query */
+		/** @var SqliteQuery $query */
 		$query = $this->getQuery(true);
 
 		$type = 'table';

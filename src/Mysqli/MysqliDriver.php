@@ -154,7 +154,7 @@ class MysqliDriver extends DatabaseDriver
 			'/^(?P<host>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(:(?P<port>.+))?$/',
 			$this->options['host'],
 			$matches
-			))
+		))
 		{
 			// It's an IPv4 address with or without port
 			$this->options['host'] = $matches['host'];

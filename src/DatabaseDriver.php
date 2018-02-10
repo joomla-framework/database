@@ -222,7 +222,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			$dir = __DIR__;
 			$iterator = new \DirectoryIterator($dir);
 
-			/* @var  $file  \DirectoryIterator */
+			/** @var $file \DirectoryIterator */
 			foreach ($iterator as $file)
 			{
 				// Only load for php files.
@@ -234,7 +234,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 				$baseName = $file->getBasename();
 
 				// Derive the class name from the type.
-				/* @var  $class  DatabaseDriver */
+				/** @var $class DatabaseDriver */
 				$class = '\\Joomla\\Database\\' . ucfirst(strtolower($baseName)) . '\\' . ucfirst(strtolower($baseName)) . 'Driver';
 
 				// If the class doesn't exist, or if it's not supported on this system, move on to the next type.
@@ -836,7 +836,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			throw new Exception\UnsupportedAdapterException('Database Exporter not found.');
 		}
 
-		/* @var  $o  DatabaseExporter */
+		/** @var $o DatabaseExporter */
 		$o = new $class;
 		$o->setDbo($this);
 
@@ -863,7 +863,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			throw new Exception\UnsupportedAdapterException('Database Importer not found');
 		}
 
-		/* @var  $o  DatabaseImporter */
+		/** @var $o DatabaseImporter */
 		$o = new $class;
 		$o->setDbo($this);
 
@@ -1007,9 +1007,9 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	/**
 	 * Inserts a row into a table based on an object's properties.
 	 *
-	 * @param   string  $table    The name of the database table to insert into.
-	 * @param   object  &$object  A reference to an object whose public properties match the table fields.
-	 * @param   string  $key      The name of the primary key. If provided the object property is updated.
+	 * @param   string  $table   The name of the database table to insert into.
+	 * @param   object  $object  A reference to an object whose public properties match the table fields.
+	 * @param   string  $key     The name of the primary key. If provided the object property is updated.
 	 *
 	 * @return  boolean  True on success.
 	 *
@@ -1032,7 +1032,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			}
 
 			// Only process non-null scalars.
-			if (is_array($v) or is_object($v) or $v === null)
+			if (is_array($v) || is_object($v) || $v === null)
 			{
 				continue;
 			}
@@ -1793,10 +1793,10 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	/**
 	 * Updates a row in a table based on an object's properties.
 	 *
-	 * @param   string   $table    The name of the database table to update.
-	 * @param   object   &$object  A reference to an object whose public properties match the table fields.
-	 * @param   array    $key      The name of the primary key.
-	 * @param   boolean  $nulls    True to update null fields or false to ignore them.
+	 * @param   string   $table   The name of the database table to update.
+	 * @param   object   $object  A reference to an object whose public properties match the table fields.
+	 * @param   array    $key     The name of the primary key.
+	 * @param   boolean  $nulls   True to update null fields or false to ignore them.
 	 *
 	 * @return  boolean  True on success.
 	 *

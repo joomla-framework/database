@@ -78,7 +78,10 @@ class PostgresqlImporter extends DatabaseImporter
 		$newKeys = $structure->xpath('key');
 		$newSequence = $structure->xpath('sequence');
 
-		/* Sequence section */
+		/*
+		 * Sequence section
+		 */
+
 		$oldSeq = $this->getSeqLookup($oldSequence);
 		$newSequenceLook = $this->getSeqLookup($newSequence);
 
@@ -128,7 +131,10 @@ class PostgresqlImporter extends DatabaseImporter
 			$alters[] = $this->getDropSequenceSql($name);
 		}
 
-		/* Field section */
+		/*
+		 * Field section
+		 */
+
 		// Loop through each field in the new structure.
 		foreach ($newFields as $field)
 		{
@@ -165,7 +171,10 @@ class PostgresqlImporter extends DatabaseImporter
 			$alters[] = $this->getDropColumnSql($table, $name);
 		}
 
-		/* Index section */
+		/*
+		 * Index section
+		 */
+
 		// Get the lookups for the old and new keys
 		$oldLookup = $this->getKeyLookup($oldKeys);
 		$newLookup = $this->getKeyLookup($newKeys);
@@ -258,7 +267,7 @@ class PostgresqlImporter extends DatabaseImporter
 	 */
 	protected function getAddSequenceSql(\SimpleXMLElement $field)
 	{
-		/* For older database version that doesn't support these fields use default values */
+		// For older database version that doesn't support these fields use default values
 		if (version_compare($this->db->getVersion(), '9.1.0') < 0)
 		{
 			$field['Min_Value'] = '1';
@@ -288,7 +297,7 @@ class PostgresqlImporter extends DatabaseImporter
 	 */
 	protected function getChangeSequenceSql(\SimpleXMLElement $field)
 	{
-		/* For older database version that doesn't support these fields use default values */
+		// For older database version that doesn't support these fields use default values
 		if (version_compare($this->db->getVersion(), '9.1.0') < 0)
 		{
 			$field['Min_Value'] = '1';
@@ -372,7 +381,10 @@ class PostgresqlImporter extends DatabaseImporter
 		// Sequence was created in other function, here is associated a default value but not yet owner
 		if (strpos($fDefault, 'nextval') !== false)
 		{
-			$sql .= ";\nALTER SEQUENCE " . $this->db->quoteName($table . '_' . $fName . '_seq') . ' OWNED BY ' . $this->db->quoteName($table . '.' . $fName);
+			$sequence = $table . '_' . $fName . '_seq';
+			$owner    = $table . '.' . $fName;
+
+			$sql .= ";\nALTER SEQUENCE " . $this->db->quoteName($sequence) . ' OWNED BY ' . $this->db->quoteName($owner);
 		}
 
 		return $sql;
