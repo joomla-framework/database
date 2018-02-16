@@ -201,7 +201,7 @@ abstract class DatabaseQuery
 	 * @param   string  $method  The called method.
 	 * @param   array   $args    The array of arguments passed to the method.
 	 *
-	 * @return  string  The aliased method's return value or null.
+	 * @return  mixed  The aliased method's return value or null.
 	 *
 	 * @since   1.0
 	 */
