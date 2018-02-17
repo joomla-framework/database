@@ -212,7 +212,7 @@ class Stream implements TransportInterface
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		// Open the stream for reading.
@@ -228,13 +228,13 @@ class Stream implements TransportInterface
 			}
 
 			// Restore error tracking to give control to the exception handler
-			ini_set('track_errors', $track_errors);
+			ini_set('track_errors', $trackErrors);
 
 			throw new \RuntimeException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before.
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		// Get the metadata for the stream, including response headers.
 		$metadata = stream_get_meta_data($stream);

@@ -308,7 +308,7 @@ class Socket implements TransportInterface
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		// PHP sends a warning if the uri does not exists; we silence it and throw an exception instead.
@@ -324,13 +324,13 @@ class Socket implements TransportInterface
 			}
 
 			// Restore error tracking to give control to the exception handler
-			ini_set('track_errors', $track_errors);
+			ini_set('track_errors', $trackErrors);
 
 			throw new \RuntimeException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before.
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		// Since the connection was successful let's store it in case we need to use it later.
 		$this->connections[$key] = $connection;

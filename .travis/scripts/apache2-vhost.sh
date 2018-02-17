@@ -4,7 +4,7 @@ BASEDIR=$(dirname $0)
 BASEDIR=$(readlink -f "$BASEDIR/..")
 ROOTDIR=$(readlink -f "$BASEDIR/..")
 
-VHOSTNAME="virtualhost.local"
+VHOSTNAME="virtualhost.local.conf"
 if [ "$1" ]
 then
     VHOSTNAME="$1"
@@ -16,7 +16,7 @@ then
     DOCROOT="$2"
 fi
 
-CONFIGFILE="$BASEDIR/apache2/virtualhost.local-dist"
+CONFIGFILE="$BASEDIR/apache2/virtualhost.local.conf"
 if [ "$3" ]
 then
     CONFIGFILE="$3"
