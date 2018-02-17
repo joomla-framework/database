@@ -16,7 +16,7 @@ then
     DOCROOT="$2"
 fi
 
-CONFIGFILE="$BASEDIR/apache2/virtualhost.local-dist"
+CONFIGFILE="$BASEDIR/apache2/virtualhost.conf"
 if [ "$3" ]
 then
     CONFIGFILE="$3"
