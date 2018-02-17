@@ -2,7 +2,7 @@
 <phpunit bootstrap="vendor/autoload.php" colors="false">
 	<!-- These constants help setup environment configurations for running optional tests. -->
 	<php>
-		<const name="JTEST_HTTP_STUB" value="http://virtualhost.local/Tests/stubs/jhttp_stub.php" />
+		<const name="JTEST_HTTP_STUB" value="http://virtualhost.local.conf/Tests/stubs/jhttp_stub.php" />
 	</php>
 
 	<testsuites>
