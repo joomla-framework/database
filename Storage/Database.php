@@ -70,8 +70,8 @@ class Database extends Storage
 			// Get the session data from the database table.
 			$query = $this->db->getQuery(true);
 			$query->select($this->db->quoteName('data'))
-			->from($this->db->quoteName('#__session'))
-			->where($this->db->quoteName('session_id') . ' = ' . $this->db->quote($id));
+				->from($this->db->quoteName('#__session'))
+				->where($this->db->quoteName('session_id') . ' = ' . $this->db->quote($id));
 
 			$this->db->setQuery($query);
 
@@ -100,9 +100,9 @@ class Database extends Storage
 		{
 			$query = $this->db->getQuery(true);
 			$query->update($this->db->quoteName('#__session'))
-			->set($this->db->quoteName('data') . ' = ' . $this->db->quote($data))
-			->set($this->db->quoteName('time') . ' = ' . $this->db->quote((int) time()))
-			->where($this->db->quoteName('session_id') . ' = ' . $this->db->quote($id));
+				->set($this->db->quoteName('data') . ' = ' . $this->db->quote($data))
+				->set($this->db->quoteName('time') . ' = ' . $this->db->quote((int) time()))
+				->where($this->db->quoteName('session_id') . ' = ' . $this->db->quote($id));
 
 			// Try to update the session data in the database table.
 			$this->db->setQuery($query);
@@ -139,7 +139,7 @@ class Database extends Storage
 		{
 			$query = $this->db->getQuery(true);
 			$query->delete($this->db->quoteName('#__session'))
-			->where($this->db->quoteName('session_id') . ' = ' . $this->db->quote($id));
+				->where($this->db->quoteName('session_id') . ' = ' . $this->db->quote($id));
 
 			// Remove a session from the database.
 			$this->db->setQuery($query);
@@ -171,7 +171,7 @@ class Database extends Storage
 		{
 			$query = $this->db->getQuery(true);
 			$query->delete($this->db->quoteName('#__session'))
-			->where($this->db->quoteName('time') . ' < ' . $this->db->quote((int) $past));
+				->where($this->db->quoteName('time') . ' < ' . $this->db->quote((int) $past));
 
 			// Remove expired sessions from the database.
 			$this->db->setQuery($query);

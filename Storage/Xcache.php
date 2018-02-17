@@ -54,7 +54,7 @@ class Xcache extends Storage
 		// Check if id exists
 		if (!xcache_isset($sess_id))
 		{
-			return;
+			return '';
 		}
 
 		return (string) xcache_get($sess_id);

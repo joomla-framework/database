@@ -139,7 +139,7 @@ abstract class Storage
 	 */
 	public function read($id)
 	{
-		return;
+		return '';
 	}
 
 	/**
