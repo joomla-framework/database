@@ -82,7 +82,7 @@ class HttpFactory
 
 		foreach ($availableAdapters as $adapter)
 		{
-			// @var  $class  TransportInterface
+			/** @var  $class  TransportInterface */
 			$class = 'Joomla\\Http\\Transport\\' . ucfirst($adapter);
 
 			if (class_exists($class))
@@ -109,7 +109,7 @@ class HttpFactory
 		$names = array();
 		$iterator = new \DirectoryIterator(__DIR__ . '/Transport');
 
-		//  @var  $file  \DirectoryIterator
+		/** @var  $file  \DirectoryIterator */
 		foreach ($iterator as $file)
 		{
 			$fileName = $file->getFilename();
