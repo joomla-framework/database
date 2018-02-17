@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VHOSTNAME="virtualhost.local.conf"
+VHOSTNAME="virtualhost.local"
 if [ "$1" ]
 then
     VHOSTNAME="$1"
