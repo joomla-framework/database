@@ -145,6 +145,11 @@ class TransportTest extends TestCase
 	{
 		$transport = new $transportClass($this->options);
 		$response = $transport->request('get', new Uri($this->stubUrl . ':80'));
+
+		$this->assertThat(
+			$response->code,
+			$this->equalTo(404)
+		);
 	}
 
 	/**
