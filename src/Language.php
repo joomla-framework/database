@@ -111,6 +111,7 @@ class Language
 	 *
 	 * @var    array
 	 * @since  1.0
+	 * @deprecated  2.0
 	 */
 	protected $strings = null;
 
