@@ -12,9 +12,9 @@
         "joomla/uri": "~1.0|~2.0"
     },
     "require-dev": {
+        "joomla/coding-standards": "~2.0@alpha",
         "joomla/test": "~1.0",
-        "phpunit/phpunit": "~4.8|>=5.0 <5.4",
-        "squizlabs/php_codesniffer": "1.*"
+        "phpunit/phpunit": "~4.8|>=5.0 <5.4"
     },
     "autoload": {
         "psr-4": {

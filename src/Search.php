@@ -32,7 +32,8 @@ class Search extends AbstractMediawikiObject
 	 * @since   1.0
 	 */
 	public function search($srsearch, array $srnamespace = null, $srwhat = null, array $srinfo = null, array $srprop = null,
-		$srredirects = null, $sroffest = null, $srlimit = null)
+		$srredirects = null, $sroffest = null, $srlimit = null
+	)
 	{
 		// Build the request.
 		$path = '?action=query&list=search';

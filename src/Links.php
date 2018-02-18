@@ -273,7 +273,8 @@ class Links extends AbstractMediawikiObject
 	 * @since   1.0
 	 */
 	public function enumerateLinks($alcontinue = false, $alfrom = null, $alto = null, $alprefix = null, $alunique = null, array $alprop = null,
-		$alnamespace = null, $allimit = null)
+		$alnamespace = null, $allimit = null
+	)
 	{
 		// Build the request.
 		$path = '?action=query&meta=siteinfo';

@@ -103,7 +103,8 @@ class Images extends AbstractMediawikiObject
 	 * @since   1.0
 	 */
 	public function getImageInfo(array $liprop = null, $lilimit = null, $listart = null, $liend = null, $liurlwidth = null,
-		$liurlheight = null, $limetadataversion = null, $liurlparam = null, $licontinue = null)
+		$liurlheight = null, $limetadataversion = null, $liurlparam = null, $licontinue = null
+	)
 	{
 		// Build the request.
 		$path = '?action=query&prop=imageinfo';
@@ -179,7 +180,8 @@ class Images extends AbstractMediawikiObject
 	 * @since   1.0
 	 */
 	public function enumerateImages($aifrom = null, $aito = null, $aiprefix = null, $aiminsize = null, $aimaxsize = null, $ailimit = null,
-		$aidir = null, $aisha1 = null, $aisha1base36 = null, array $aiprop = null, $aimime = null)
+		$aidir = null, $aisha1 = null, $aisha1base36 = null, array $aiprop = null, $aimime = null
+	)
 	{
 		// Build the request.
 		$path = '?action=query&list=allimages';

@@ -55,12 +55,12 @@ class Users extends AbstractMediawikiObject
 
 		// Send the request again with the token.
 		$response = $this->client->post($this->fetchUrl($path), null);
-		$response_body = $this->validateResponse($response);
+		$responseBody = $this->validateResponse($response);
 
 		$headers = (array) $this->options->get('headers');
-		$cookie_prefix = $response_body->login['cookieprefix'];
-		$cookie = $cookie_prefix . 'UserID=' . $response_body->login['lguserid'] . '; ' . $cookie_prefix
-			. 'UserName=' . $response_body->login['lgusername'];
+		$cookiePrefix = $responseBody->login['cookieprefix'];
+		$cookie = $cookiePrefix . 'UserID=' . $responseBody->login['lguserid'] . '; ' . $cookiePrefix
+			. 'UserName=' . $responseBody->login['lgusername'];
 		$headers['Cookie'] = $headers['Cookie'] . '; ' . $response->headers['Set-Cookie'] . '; ' . $cookie;
 		$this->options->set('headers', $headers);
 
@@ -162,7 +162,8 @@ class Users extends AbstractMediawikiObject
 	 * @since   1.0
 	 */
 	public function getUserContribs($ucuser = null, $ucuserprefix = null, $uclimit = null, $ucstart = null, $ucend = null, $uccontinue = null,
-		$ucdir = null, array $ucnamespace = null, array $ucprop = null, array $ucshow = null, $uctag = null, $uctoponly = null)
+		$ucdir = null, array $ucnamespace = null, array $ucprop = null, array $ucshow = null, $uctag = null, $uctoponly = null
+	)
 	{
 		// Build the request path.
 		$path = '?action=query&list=usercontribs';
@@ -253,7 +254,8 @@ class Users extends AbstractMediawikiObject
 	 * @since   1.0
 	 */
 	public function blockUser($user, $expiry = null, $reason = null, $anononly = null, $nocreate = null, $autoblock = null, $noemail = null,
-		$hidename = null, $allowusertalk = null, $reblock = null, $watchuser = null)
+		$hidename = null, $allowusertalk = null, $reblock = null, $watchuser = null
+	)
 	{
 		// Get the token.
 		$token = $this->getToken($user, 'block');

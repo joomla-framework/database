@@ -105,7 +105,7 @@ abstract class AbstractMediawikiObject
 	 *
 	 * @param   Response  $response  The response from the mediawiki server.
 	 *
-	 * @return  Object
+	 * @return  \SimpleXMLElement
 	 *
 	 * @since   1.0
 	 * @throws  \DomainException

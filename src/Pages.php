@@ -174,7 +174,8 @@ class Pages extends AbstractMediawikiObject
 	 * @since   1.0
 	 */
 	public function movePageByName($from, $to, $reason = null, $movetalk = null, $movesubpages = null, $noredirect = null,
-		$watchlist =null, $ignorewarnings = null)
+		$watchlist =null, $ignorewarnings = null
+	)
 	{
 		// Get the token.
 		$token = $this->getToken($from, 'move');
@@ -218,7 +219,8 @@ class Pages extends AbstractMediawikiObject
 	 * @since   1.0
 	 */
 	public function movePageByID($fromid, $to, $reason = null, $movetalk = null, $movesubpages = null, $noredirect = null,
-		$watchlist =null, $ignorewarnings = null)
+		$watchlist =null, $ignorewarnings = null
+	)
 	{
 		// Get the token.
 		$token = $this->getToken($fromid, 'move');
@@ -452,7 +454,9 @@ class Pages extends AbstractMediawikiObject
 	 *
 	 * @since   1.0
 	 */
-	public function getPageTemplates(array $titles, array $tlnamespace = null, $tllimit = null, $tlcontinue = null, $tltemplates = null, $tldir = null)
+	public function getPageTemplates(array $titles, array $tlnamespace = null, $tllimit = null, $tlcontinue = null, $tltemplates = null,
+		$tldir = null
+	)
 	{
 		// Build the request.
 		$path = '?action=query&prop=templates';
@@ -507,7 +511,8 @@ class Pages extends AbstractMediawikiObject
 	 * @since   1.0
 	 */
 	public function getBackLinks($bltitle, $blpageid = null, $blcontinue = null, array $blnamespace = null, $blfilterredirect = null,
-		$bllimit = null, $blredirect = null)
+		$bllimit = null, $blredirect = null
+	)
 	{
 		// Build the request.
 		$path = '?action=query&list=backlinks';

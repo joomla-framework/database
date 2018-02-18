@@ -28,7 +28,9 @@ class Sites extends AbstractMediawikiObject
 	 *
 	 * @since   1.0
 	 */
-	public function getSiteInfo(array $siprop = null, $sifilteriw = null, $sishowalldb = false, $sinumberingroup = false, array $siinlanguagecode = null)
+	public function getSiteInfo(array $siprop = null, $sifilteriw = null, $sishowalldb = false, $sinumberingroup = false,
+		array $siinlanguagecode = null
+	)
 	{
 		// Build the request.
 		$path = '?action=query&meta=siteinfo';
@@ -84,7 +86,8 @@ class Sites extends AbstractMediawikiObject
 	 * @since   1.0
 	 */
 	public function getEvents(array $leprop = null, $letype = null, $leaction = null, $letitle = null, $leprefix = null, $letag = null,
-		$leuser = null, $lestart = null, $leend = null, $ledir = null, $lelimit = null)
+		$leuser = null, $lestart = null, $leend = null, $ledir = null, $lelimit = null
+	)
 	{
 		// Build the request
 		$path = '?action=query&list=logevents';
@@ -172,7 +175,8 @@ class Sites extends AbstractMediawikiObject
 	 * @since   1.0
 	 */
 	public function getRecentChanges($rcstart = null, $rcend = null, $rcdir = null, array $rcnamespace = null, $rcuser = null, $rcexcludeuser = null,
-		$rctag = null, array $rcprop = null, array $rctoken = null, array $rcshow = null, $rclimit = null, $rctype = null, $rctoponly = null)
+		$rctag = null, array $rcprop = null, array $rctoken = null, array $rcshow = null, $rclimit = null, $rctype = null, $rctoponly = null
+	)
 	{
 		// Build the request.
 		$path = '?action=query&list=recentchanges';
@@ -264,7 +268,8 @@ class Sites extends AbstractMediawikiObject
 	 * @since   1.0
 	 */
 	public function getProtectedTitles(array $ptnamespace = null, array $ptlevel = null, $ptlimit = null, $ptdir = null, $ptstart = null,
-		$ptend = null, array $ptprop = null)
+		$ptend = null, array $ptprop = null
+	)
 	{
 		// Build the request.
 		$path = '?action=query&list=protectedtitles';
