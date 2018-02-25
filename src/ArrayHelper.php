@@ -90,15 +90,15 @@ final class ArrayHelper
 	 * Utility function to map an array to a string.
 	 *
 	 * @param   array    $array         The array to map.
-	 * @param   string   $inner_glue    The glue (optional, defaults to '=') between the key and the value.
-	 * @param   string   $outer_glue    The glue (optional, defaults to ' ') between array elements.
+	 * @param   string   $innerGlue     The glue (optional, defaults to '=') between the key and the value.
+	 * @param   string   $outerGlue     The glue (optional, defaults to ' ') between array elements.
 	 * @param   boolean  $keepOuterKey  True if final key should be kept.
 	 *
 	 * @return  string
 	 *
 	 * @since   1.0
 	 */
-	public static function toString(array $array, $inner_glue = '=', $outer_glue = ' ', $keepOuterKey = false)
+	public static function toString(array $array, $innerGlue = '=', $outerGlue = ' ', $keepOuterKey = false)
 	{
 		$output = array();
 
@@ -112,21 +112,21 @@ final class ArrayHelper
 				}
 
 				// This is value is an array, go and do it again!
-				$output[] = static::toString($item, $inner_glue, $outer_glue, $keepOuterKey);
+				$output[] = static::toString($item, $innerGlue, $outerGlue, $keepOuterKey);
 			}
 			else
 			{
-				$output[] = $key . $inner_glue . '"' . $item . '"';
+				$output[] = $key . $innerGlue . '"' . $item . '"';
 			}
 		}
 
-		return implode($outer_glue, $output);
+		return implode($outerGlue, $output);
 	}
 
 	/**
 	 * Utility function to map an object to an array
 	 *
-	 * @param   object   $p_obj    The source object
+	 * @param   object   $source   The source object
 	 * @param   boolean  $recurse  True to recurse through multi-level objects
 	 * @param   string   $regex    An optional regular expression to match on field names
 	 *
@@ -134,11 +134,11 @@ final class ArrayHelper
 	 *
 	 * @since   1.0
 	 */
-	public static function fromObject($p_obj, $recurse = true, $regex = null)
+	public static function fromObject($source, $recurse = true, $regex = null)
 	{
-		if (is_object($p_obj) || is_array($p_obj))
+		if (is_object($source) || is_array($source))
 		{
-			return self::arrayFromObject($p_obj, $recurse, $regex);
+			return self::arrayFromObject($source, $recurse, $regex);
 		}
 
 		return array();
