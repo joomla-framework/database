@@ -31,7 +31,7 @@ class DefaultRenderer implements ProfilerRendererInterface
 	{
 		$render = '';
 
-		/** @var \Joomla\Profiler\ProfilePointInterface $lastPoint **/
+		/** @var \Joomla\Profiler\ProfilePointInterface $lastPoint */
 		$lastPoint = null;
 
 		$points = $profiler->getPoints();
