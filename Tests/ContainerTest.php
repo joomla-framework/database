@@ -323,6 +323,33 @@ class ContainerTest extends TestCase
 	}
 
 	/**
+	 * Tests attempting to build a class with a circular dependency
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 * @expectedException \Joomla\DI\Exception\DependencyResolutionException
+	 */
+	public function testBug4()
+	{
+		$fqcn = 'Extension\\vendor\\FooComponent\\FooComponent';
+		$data = array();
+
+		$this->fixture->set(
+			$fqcn,
+			function (Container $c) use ($fqcn, $data)
+			{
+				$instance = $c->buildObject($fqcn);
+				$instance->setData($data);
+
+				return $instance;
+			}
+		);
+
+		$this->fixture->get($fqcn);
+	}
+
+	/**
 	 * Tests the buildSharedObject.
 	 *
 	 * @return  void

@@ -181,13 +181,43 @@ class Container implements ContainerInterface
 	 */
 	public function buildObject($key, $shared = false)
 	{
+		static $buildStack = array();
+
+		$resolvedKey = $this->resolveAlias($key);
+
+		if (in_array($resolvedKey, $buildStack, true))
+		{
+			$buildStack = array();
+
+			throw new DependencyResolutionException("Can't resolve circular dependency");
+		}
+
+		$buildStack[] = $resolvedKey;
+
+		if ($this->has($resolvedKey))
+		{
+			$resource = $this->get($resolvedKey);
+			array_pop($buildStack);
+
+			return $resource;
+		}
+
 		try
 		{
-			$reflection = new \ReflectionClass($key);
+			$reflection = new \ReflectionClass($resolvedKey);
 		}
 		catch (\ReflectionException $e)
 		{
+			array_pop($buildStack);
+
 			return false;
+		}
+
+		if (!$reflection->isInstantiable())
+		{
+			$buildStack = array();
+
+			throw new DependencyResolutionException("$resolvedKey can not be instantiated.");
 		}
 
 		$constructor = $reflection->getConstructor();
@@ -195,8 +225,8 @@ class Container implements ContainerInterface
 		// If there are no parameters, just return a new object.
 		if ($constructor === null)
 		{
-			$callback = function () use ($key) {
-				return new $key;
+			$callback = function () use ($resolvedKey) {
+				return new $resolvedKey;
 			};
 		}
 		else
@@ -209,7 +239,12 @@ class Container implements ContainerInterface
 			};
 		}
 
-		return $this->set($key, $callback, $shared)->get($key);
+		$this->set($resolvedKey, $callback, $shared);
+
+		$resource = $this->get($resolvedKey);
+		array_pop($buildStack);
+
+		return $resource;
 	}
 
 	/**
