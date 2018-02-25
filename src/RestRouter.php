@@ -106,7 +106,7 @@ class RestRouter extends Router
 		}
 
 		// Check if request method is POST
-		if ( $this->methodInPostRequest == true && strcmp(strtoupper($this->input->server->getMethod()), 'POST') === 0)
+		if ($this->methodInPostRequest == true && strcmp(strtoupper($this->input->server->getMethod()), 'POST') === 0)
 		{
 			// Get the method from input
 			$postMethod = $this->input->get->getWord('_method');
