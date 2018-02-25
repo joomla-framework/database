@@ -12,12 +12,12 @@
         "illuminate/events": "~5.1",
         "illuminate/filesystem": "~5.1",
         "illuminate/view": "~5.1",
+        "joomla/coding-standards": "~2.0@alpha",
         "league/plates": "~3.0",
         "mustache/mustache": "~2.3",
         "phpunit/phpunit": "~6.3",
         "symfony/templating": "~2.7|~3.0|~4.0",
-        "twig/twig": "~1.14|~2.0",
-        "squizlabs/php_codesniffer": "1.*"
+        "twig/twig": "~1.14|~2.0"
     },
     "suggest": {
         "illuminate/view": "Install ~5.1 if you are using Laravel's Blade template engine.",
