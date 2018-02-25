@@ -65,7 +65,7 @@ class Ini extends AbstractRegistryFormat
 		$last = count($variables);
 
 		// Assume that the first element is in section
-		$in_section = true;
+		$inSection = true;
 
 		// Iterate over the object to set the properties.
 		foreach ($variables as $key => $value)
@@ -74,7 +74,7 @@ class Ini extends AbstractRegistryFormat
 			if (is_object($value))
 			{
 				// Add an empty line if previous string wasn't in a section
-				if (!$in_section)
+				if (!$inSection)
 				{
 					$local[] = '';
 				}
@@ -89,10 +89,10 @@ class Ini extends AbstractRegistryFormat
 					{
 						$assoc = ArrayHelper::isAssociative($v);
 
-						foreach ($v as $array_key => $item)
+						foreach ($v as $arrayKey => $item)
 						{
-							$array_key = $assoc ? $array_key : '';
-							$local[]   = $k . '[' . $array_key . ']=' . $this->getValueAsIni($item);
+							$arrayKey = $assoc ? $arrayKey : '';
+							$local[]  = $k . '[' . $arrayKey . ']=' . $this->getValueAsIni($item);
 						}
 					}
 					else
@@ -111,17 +111,17 @@ class Ini extends AbstractRegistryFormat
 			{
 				$assoc = ArrayHelper::isAssociative($value);
 
-				foreach ($value as $array_key => $item)
+				foreach ($value as $arrayKey => $item)
 				{
-					$array_key = $assoc ? $array_key : '';
-					$global[]  = $key . '[' . $array_key . ']=' . $this->getValueAsIni($item);
+					$arrayKey = $assoc ? $arrayKey : '';
+					$global[] = $key . '[' . $arrayKey . ']=' . $this->getValueAsIni($item);
 				}
 			}
 			else
 			{
 				// Not in a section so add the property to the global array.
-				$global[]   = $key . '=' . $this->getValueAsIni($value);
-				$in_section = false;
+				$global[]  = $key . '=' . $this->getValueAsIni($value);
+				$inSection = false;
 			}
 		}
 
@@ -201,21 +201,21 @@ class Ini extends AbstractRegistryFormat
 			list ($key, $value) = explode('=', $line, 2);
 
 			// If we have an array item
-			if (substr($key, -1) === ']' && ($open_brace = strpos($key, '[', 1)) !== false)
+			if (substr($key, -1) === ']' && ($openBrace = strpos($key, '[', 1)) !== false)
 			{
 				if ($options['supportArrayValues'])
 				{
-					$array     = true;
-					$array_key = substr($key, $open_brace + 1, -1);
+					$array    = true;
+					$arrayKey = substr($key, $openBrace + 1, -1);
 
 					// If we have a multi-dimensional array or malformed key
-					if (strpos($array_key, '[') !== false || strpos($array_key, ']') !== false)
+					if (strpos($arrayKey, '[') !== false || strpos($arrayKey, ']') !== false)
 					{
 						// Maybe throw exception?
 						continue;
 					}
 
-					$key = substr($key, 0, $open_brace);
+					$key = substr($key, 0, $openBrace);
 				}
 				else
 				{
@@ -283,9 +283,9 @@ class Ini extends AbstractRegistryFormat
 						$obj->$section->$key = array();
 					}
 
-					if (!empty($array_key))
+					if (!empty($arrayKey))
 					{
-						$obj->$section->{$key}[$array_key] = $value;
+						$obj->$section->{$key}[$arrayKey] = $value;
 					}
 					else
 					{
@@ -306,9 +306,9 @@ class Ini extends AbstractRegistryFormat
 						$obj->$key = array();
 					}
 
-					if (!empty($array_key))
+					if (!empty($arrayKey))
 					{
-						$obj->{$key}[$array_key] = $value;
+						$obj->{$key}[$arrayKey] = $value;
 					}
 					else
 					{
