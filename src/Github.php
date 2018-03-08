@@ -71,7 +71,7 @@ class Github
 	 *
 	 * @param   string  $name  Name of property to retrieve
 	 *
-	 * @return  Object  GitHub API object (gists, issues, pulls, etc).
+	 * @return  AbstractGithubObject  GitHub API object (gists, issues, pulls, etc).
 	 *
 	 * @since   1.0
 	 * @throws  \InvalidArgumentException If $name is not a valid sub class.
