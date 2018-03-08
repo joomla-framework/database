@@ -62,7 +62,7 @@ class GraphqlTest extends GitHubTestCase
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/graphql', $data, $headers)
+			->with('/graphql', json_encode($data), $headers)
 			->will($this->returnValue($this->response));
 
 		$this->assertThat(
@@ -99,7 +99,7 @@ class GraphqlTest extends GitHubTestCase
 
 		$this->client->expects($this->once())
 			->method('post')
-			->with('/graphql', $data, $headers)
+			->with('/graphql', json_encode($data), $headers)
 			->will($this->returnValue($this->response));
 
 		try
