@@ -144,7 +144,7 @@ class TransportTest extends TestCase
 	public function testRequestGet404($transportClass)
 	{
 		$transport = new $transportClass($this->options);
-		$response = $transport->request('get', new Uri($this->stubUrl . ':80'));
+		$response = $transport->request('get', new Uri(str_replace('.php', '.html', $this->stubUrl)));
 
 		$this->assertThat(
 			$response->code,

@@ -31,14 +31,16 @@ matrix:
     - php: nightly
 
 before_install:
-  - sh -e .travis/scripts/apt-get.sh
-  - sh -e .travis/scripts/apache2-vhost.sh
-  - sh -e .travis/scripts/apache2-configure.sh
+  # On PHP 5.3 set up our own Apache instance; PHP 5.4 and newer will use the built in PHP web server
+  - if [[ $TRAVIS_PHP_VERSION = 5.3 ]]; then sh -e .travis/scripts/apt-get.sh; fi
+  - if [[ $TRAVIS_PHP_VERSION = 5.3 ]]; then sh -e .travis/scripts/apache2-vhost.sh; fi
+  - if [[ $TRAVIS_PHP_VERSION = 5.3 ]]; then sh -e .travis/scripts/apache2-configure.sh; fi
 
 before_script:
   - composer self-update
   - composer update $COMPOSER_FLAGS
 
 script:
-  - vendor/bin/phpunit --configuration phpunit.travis.xml
+  - if [[ $TRAVIS_PHP_VERSION = 5.3 ]]; then vendor/bin/phpunit --configuration phpunit.travis_53.xml; fi
+  - if [[ $TRAVIS_PHP_VERSION != 5.3 ]]; then php -S 127.0.0.1:8080 & vendor/bin/phpunit --configuration phpunit.travis.xml
   - if [ "$RUN_PHPCS" == "yes" ]; then vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards && vendor/bin/phpcs -p --report=full --extensions=php --standard=Joomla src/; fi;
