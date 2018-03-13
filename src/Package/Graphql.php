@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Github Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -13,9 +13,9 @@ use Joomla\Github\AbstractPackage;
 /**
  * GitHub API GraphQL class for the Joomla Framework.
  *
- * @since  __DEPLOY_VERSION__
+ * @link   https://developer.github.com/v4/
  *
- * @documentation  https://developer.github.com/v4/
+ * @since  1.6.0
  */
 class Graphql extends AbstractPackage
 {
@@ -27,7 +27,7 @@ class Graphql extends AbstractPackage
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 */
 	public function execute($query, array $variables = array())
 	{
