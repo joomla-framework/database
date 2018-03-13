@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Http Package
  *
- * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -323,7 +323,7 @@ class Curl implements TransportInterface
 	 *
 	 * @return  integer
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.1
 	 */
 	private function mapProtocolVersion($version)
 	{
