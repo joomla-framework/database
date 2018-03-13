@@ -350,7 +350,7 @@ class CliTest extends TestCase
 
 		$this->assertGreaterThan(
 			0,
-			count($instance->serialize())
+			strlen($instance->serialize())
 		);
 	}
 
