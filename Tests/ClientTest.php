@@ -87,7 +87,9 @@ class ClientTest extends TestCase
 		$this->input = new Input;
 		$this->application = $this->getMockForAbstractClass('Joomla\\Application\\AbstractWebApplication');
 
-		$mockSession = $this->getMockBuilder('Joomla\\Session\\Session')->getMock();
+		$mockSession = $this->getMockBuilder('Joomla\\Session\\Session')
+			->disableOriginalConstructor()
+			->getMock();
 
 		$this->application->setSession($mockSession);
 
@@ -183,7 +185,9 @@ class ClientTest extends TestCase
 			TestHelper::setValue($input, 'data', $data);
 
 			// Get mock session
-			$mockSession = $this->getMockBuilder('Joomla\\Session\\Session')->getMock();
+			$mockSession = $this->getMockBuilder('Joomla\\Session\\Session')
+				->disableOriginalConstructor()
+				->getMock();
 
 			if ($fail)
 			{
