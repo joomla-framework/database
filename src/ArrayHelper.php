@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Utilities Package
  *
- * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -204,7 +204,7 @@ final class ArrayHelper
 	 *
 	 * @return  array  An array with the new column added to the source array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @see     https://secure.php.net/manual/en/language.types.array.php
 	 */
 	public static function addColumn(array $array, array $column, $colName, $keyCol = null)
@@ -264,7 +264,7 @@ final class ArrayHelper
 	 *
 	 * @return  array  Column of values from the source array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @see     https://secure.php.net/manual/en/language.types.array.php
 	 */
 	public static function dropColumn(array $array, $colName)

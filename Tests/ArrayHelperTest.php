@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -249,7 +249,7 @@ class ArrayHelperTest extends TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function seedTestAddColumn()
 	{
@@ -652,7 +652,7 @@ class ArrayHelperTest extends TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function seedTestDropColumn()
 	{
@@ -2182,7 +2182,7 @@ class ArrayHelperTest extends TestCase
 	 *
 	 * @dataProvider  seedTestAddColumn
 	 * @covers        Joomla\Utilities\ArrayHelper::addColumn
-	 * @since         __DEPLOY_VERSION__
+	 * @since         1.5.0
 	 */
 	public function testAddColumn($input, $column, $colName, $keyCol, $expect, $message)
 	{
@@ -2201,7 +2201,7 @@ class ArrayHelperTest extends TestCase
 	 *
 	 * @dataProvider  seedTestDropColumn
 	 * @covers        Joomla\Utilities\ArrayHelper::dropColumn
-	 * @since         __DEPLOY_VERSION__
+	 * @since         1.5.0
 	 */
 	public function testDropColumn($input, $colName, $expect, $message)
 	{
