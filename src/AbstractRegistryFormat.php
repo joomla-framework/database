@@ -12,14 +12,14 @@ namespace Joomla\Registry;
  * Abstract Format for Registry
  *
  * @since       1.0
- * @deprecated  1.5.0  Format objects should directly implement the FormatInterface
+ * @deprecated  2.0  Format objects should directly implement the FormatInterface
  */
 abstract class AbstractRegistryFormat implements FormatInterface
 {
 	/**
 	 * @var    AbstractRegistryFormat[]  Format instances container.
 	 * @since  1.0
-	 * @deprecated  1.5.0  Object caching will no longer be supported
+	 * @deprecated  2.0  Object caching will no longer be supported
 	 */
 	protected static $instances = array();
 
@@ -32,7 +32,7 @@ abstract class AbstractRegistryFormat implements FormatInterface
 	 *
 	 * @return  AbstractRegistryFormat  Registry format handler
 	 *
-	 * @deprecated  1.5.0  Use Factory::getFormat() instead
+	 * @deprecated  2.0  Use Factory::getFormat() instead
 	 * @since   1.0
 	 * @throws  \InvalidArgumentException
 	 */

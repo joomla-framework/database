@@ -20,7 +20,7 @@ class Factory
 	 *
 	 * @var    FormatInterface[]
 	 * @since  1.5.0
-	 * @deprecated  1.5.0  Object caching will no longer be supported
+	 * @deprecated  2.0  Object caching will no longer be supported
 	 */
 	protected static $formatInstances = array();
 
@@ -42,7 +42,7 @@ class Factory
 
 		/*
 		 * Only instantiate the object if it doesn't already exist.
-		 * @deprecated 1.5.0 Object caching will be removed in 2.0, a new instance will be returned every time
+		 * @deprecated 2.0 Object caching will no longer be supported, a new instance will be returned every time
 		 */
 		if (!isset(self::$formatInstances[$type]))
 		{
