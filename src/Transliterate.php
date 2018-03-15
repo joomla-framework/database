@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Language Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -20,7 +20,7 @@ class Transliterate
 	 * Map of lowercased UTF-8 characters with their latin equivalents
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private static $utf8LowerAccents = array(
 		'à' => 'a',
@@ -134,7 +134,7 @@ class Transliterate
 	 * Map of uppercased UTF-8 characters with their latin equivalents
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private static $utf8UpperAccents = array(
 		'À' => 'A',
