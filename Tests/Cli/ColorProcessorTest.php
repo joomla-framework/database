@@ -8,13 +8,14 @@ namespace Joomla\Application\Tests;
 
 use Joomla\Application\Cli\ColorProcessor;
 use Joomla\Application\Cli\ColorStyle;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class.
  *
  * @since  1.0
  */
-class ColorProcessorTest extends \PHPUnit_Framework_TestCase
+class ColorProcessorTest extends TestCase
 {
 	/**
 	 * Object under test

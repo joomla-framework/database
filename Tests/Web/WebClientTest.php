@@ -4,6 +4,11 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+namespace Joomla\Application\Tests;
+
+use Joomla\Application\Web\WebClient;
+use PHPUnit\Framework\TestCase;
+
 require_once __DIR__ . '/Stubs/JWebClientInspector.php';
 
 /**
@@ -11,7 +16,7 @@ require_once __DIR__ . '/Stubs/JWebClientInspector.php';
  *
  * @since  1.0
  */
-class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
+class WebClientTest extends TestCase
 {
 	/**
 	 * An instance of a JWebClient inspector.
@@ -32,89 +37,89 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 	{
 		// Platform, Mobile, Engine, Browser, Version, User Agent
 		return array(
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE,
+			array(WebClient::WINDOWS, false, WebClient::TRIDENT, WebClient::IE,
 				'10', 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE,
+			array(WebClient::WINDOWS, false, WebClient::TRIDENT, WebClient::IE,
 				'9', 'Mozilla/5.0 (Windows; U; MSIE 9.0; WIndows NT 9.0; en-US))'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::EDGE, Joomla\Application\Web\WebClient::EDGE,
+			array(WebClient::WINDOWS, false, WebClient::EDGE, WebClient::EDGE,
 				'14.14393', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE, '8',
+			array(WebClient::WINDOWS, false, WebClient::TRIDENT, WebClient::IE, '8',
 				'Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; ' .
 				'.NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 1.0.3705; .NET CLR 1.1.4322)'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE, '7.0b',
+			array(WebClient::WINDOWS, false, WebClient::TRIDENT, WebClient::IE, '7.0b',
 				'Mozilla/4.0(compatible; MSIE 7.0b; Windows NT 6.0)'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE, '7.0b',
+			array(WebClient::WINDOWS, false, WebClient::TRIDENT, WebClient::IE, '7.0b',
 				'Mozilla/4.0 (compatible; MSIE 7.0b; Windows NT 5.1; Media Center PC 3.0; .NET CLR 1.0.3705; .NET CLR 1.1.4322; .NET CLR 2.0.50727; InfoPath.1)'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE, '7',
+			array(WebClient::WINDOWS, false, WebClient::TRIDENT, WebClient::IE, '7',
 				'Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 5.2)'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE, '6.1',
+			array(WebClient::WINDOWS, false, WebClient::TRIDENT, WebClient::IE, '6.1',
 				'Mozilla/4.0 (compatible; MSIE 6.1; Windows XP)'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE, '6',
+			array(WebClient::WINDOWS, false, WebClient::TRIDENT, WebClient::IE, '6',
 				'Mozilla/4.0 (compatible;MSIE 6.0;Windows 98;Q312461)'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE, '7',
+			array(WebClient::WINDOWS, false, WebClient::TRIDENT, WebClient::IE, '7',
 				'Mozilla/4.0 (compatible; MSIE 7.0; AOL 9.6; AOLBuild 4340.128; Windows NT 5.1; Trident/4.0; .NET CLR 1.1.4322; ' .
 				'.NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022)'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE, '8',
+			array(WebClient::WINDOWS, false, WebClient::TRIDENT, WebClient::IE, '8',
 				'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; ' .
 				'.NET CLR 3.0.30729; .NET4.0C; Maxthon 2.0)'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::TRIDENT, Joomla\Application\Web\WebClient::IE, '7',
+			array(WebClient::WINDOWS, false, WebClient::TRIDENT, WebClient::IE, '7',
 				'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; SlimBrowser)'),
-			array(Joomla\Application\Web\WebClient::MAC, false, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::CHROME, '13.0.782.32',
+			array(WebClient::MAC, false, WebClient::WEBKIT, WebClient::CHROME, '13.0.782.32',
 				'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_3) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.32 Safari/535.1'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::CHROME, '12.0.742.113',
+			array(WebClient::WINDOWS, false, WebClient::WEBKIT, WebClient::CHROME, '12.0.742.113',
 				'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.113 Safari/534.30'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::BLINK, Joomla\Application\Web\WebClient::CHROME, '54.0.2840.71',
+			array(WebClient::WINDOWS, false, WebClient::BLINK, WebClient::CHROME, '54.0.2840.71',
 				'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36'),
-			array(Joomla\Application\Web\WebClient::LINUX, false, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::CHROME, '12.0.742.112',
+			array(WebClient::LINUX, false, WebClient::WEBKIT, WebClient::CHROME, '12.0.742.112',
 				'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/534.30 (KHTML, like Gecko) Ubuntu/10.04 Chromium/12.0.742.112 Chrome/12.0.742.112 Safari/534.30'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::CHROME, '15.0.864.0',
+			array(WebClient::WINDOWS, false, WebClient::WEBKIT, WebClient::CHROME, '15.0.864.0',
 				'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.864.0 Safari/535.2'),
-			array(Joomla\Application\Web\WebClient::BLACKBERRY, true, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::SAFARI, '6.0.0.546',
+			array(WebClient::BLACKBERRY, true, WebClient::WEBKIT, WebClient::SAFARI, '6.0.0.546',
 				'Mozilla/5.0 (BlackBerry; U; BlackBerry 9700; pt) AppleWebKit/534.8+ (KHTML, like Gecko) Version/6.0.0.546 Mobile Safari/534.8+'),
-			array(Joomla\Application\Web\WebClient::BLACKBERRY, true, Joomla\Application\Web\WebClient::WEBKIT, '', '',
+			array(WebClient::BLACKBERRY, true, WebClient::WEBKIT, '', '',
 				'BlackBerry9700/5.0.0.862 Profile/MIDP-2.1 Configuration/CLDC-1.1 VendorID/120'),
-			array(Joomla\Application\Web\WebClient::ANDROIDTABLET, true, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::SAFARI, '999.9',
+			array(WebClient::ANDROIDTABLET, true, WebClient::WEBKIT, WebClient::SAFARI, '999.9',
 				'Mozilla/5.0 (Linux; U; Android 2.3; en-us) AppleWebKit/999+ (KHTML, like Gecko) Safari/999.9'),
-			array(Joomla\Application\Web\WebClient::ANDROID, true, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::SAFARI, '4',
+			array(WebClient::ANDROID, true, WebClient::WEBKIT, WebClient::SAFARI, '4',
 				'Mozilla/5.0 (Linux; U; Android 2.2.1; en-ca; LG-P505R Build/FRG83) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1'),
-			array(Joomla\Application\Web\WebClient::ANDROIDTABLET, true, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::SAFARI, '4',
+			array(WebClient::ANDROIDTABLET, true, WebClient::WEBKIT, WebClient::SAFARI, '4',
 				'Mozilla/5.0 (Linux; U; Android 3.0; en-us; Xoom Build/HRI39) AppleWebKit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13'),
-			array(Joomla\Application\Web\WebClient::ANDROIDTABLET, true, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::SAFARI, '4',
+			array(WebClient::ANDROIDTABLET, true, WebClient::WEBKIT, WebClient::SAFARI, '4',
 				'Mozilla/5.0 (Linux; U; Android 2.3.4; en-us; Silk/1.1.0-84) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 ' .
 				'Mobile Safari/533.1 Silk-Accelerated=false'),
-			array(Joomla\Application\Web\WebClient::ANDROIDTABLET, true, Joomla\Application\Web\WebClient::GECKO, Joomla\Application\Web\WebClient::FIREFOX, '12',
+			array(WebClient::ANDROIDTABLET, true, WebClient::GECKO, WebClient::FIREFOX, '12',
 				' Mozilla/5.0 (Android; Tablet; rv:12.0) Gecko/12.0 Firefox/12.0'),
-			array(Joomla\Application\Web\WebClient::ANDROIDTABLET, true, Joomla\Application\Web\WebClient::PRESTO, Joomla\Application\Web\WebClient::OPERA, '11.5',
+			array(WebClient::ANDROIDTABLET, true, WebClient::PRESTO, WebClient::OPERA, '11.5',
 				'Opera/9.80 (Android 3.2.1; Linux; Opera Tablet/ADR-1111101157; U; en) Presto/2.9.201 Version/11.50'),
-			array(Joomla\Application\Web\WebClient::IPAD, true, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::SAFARI, '4.0.4',
+			array(WebClient::IPAD, true, WebClient::WEBKIT, WebClient::SAFARI, '4.0.4',
 				'Mozilla/5.0(iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 ' .
 				'Mobile/7B314 Safari/531.21.10gin_lib.cc'),
-			array(Joomla\Application\Web\WebClient::IPHONE, true, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::SAFARI, '4.0.5',
+			array(WebClient::IPHONE, true, WebClient::WEBKIT, WebClient::SAFARI, '4.0.5',
 				'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_1 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 ' .
 				'Mobile/8B5097d Safari/6531.22.7'),
-			array(Joomla\Application\Web\WebClient::IPAD, true, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::SAFARI, '4.0.4',
+			array(WebClient::IPAD, true, WebClient::WEBKIT, WebClient::SAFARI, '4.0.4',
 				'Mozilla/5.0(iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 ' .
 				'Mobile/7B314 Safari/531.21.10gin_lib.cc'),
-			array(Joomla\Application\Web\WebClient::IPOD, true, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::SAFARI, '4.0.4',
+			array(WebClient::IPOD, true, WebClient::WEBKIT, WebClient::SAFARI, '4.0.4',
 				'Mozilla/5.0(iPod; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 ' .
 				'Mobile/7B314 Safari/531.21.10gin_lib.cc'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::SAFARI, '5.0.4',
+			array(WebClient::WINDOWS, false, WebClient::WEBKIT, WebClient::SAFARI, '5.0.4',
 				'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27'),
-			array(Joomla\Application\Web\WebClient::MAC, false, Joomla\Application\Web\WebClient::WEBKIT, Joomla\Application\Web\WebClient::SAFARI, '5.0.3',
+			array(WebClient::MAC, false, WebClient::WEBKIT, WebClient::SAFARI, '5.0.3',
 				'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_5; ar) AppleWebKit/533.19.4 (KHTML, like Gecko) Version/5.0.3 Safari/533.19.4'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::GECKO, Joomla\Application\Web\WebClient::FIREFOX, '3.6.9',
+			array(WebClient::WINDOWS, false, WebClient::GECKO, WebClient::FIREFOX, '3.6.9',
 				'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.9.2.9) Gecko/20100824 Firefox/3.6.9 ( .NET CLR 3.5.30729; .NET CLR 4.0.20506)'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::GECKO, Joomla\Application\Web\WebClient::FIREFOX, '4.0b8pre',
+			array(WebClient::WINDOWS, false, WebClient::GECKO, WebClient::FIREFOX, '4.0b8pre',
 				'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:2.0b8pre) Gecko/20101213 Firefox/4.0b8pre'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::GECKO, Joomla\Application\Web\WebClient::FIREFOX, '5',
+			array(WebClient::WINDOWS, false, WebClient::GECKO, WebClient::FIREFOX, '5',
 				'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:5.0) Gecko/20100101 Firefox/5.0'),
-			array(Joomla\Application\Web\WebClient::WINDOWS, false, Joomla\Application\Web\WebClient::GECKO, Joomla\Application\Web\WebClient::FIREFOX, '6',
+			array(WebClient::WINDOWS, false, WebClient::GECKO, WebClient::FIREFOX, '6',
 				'Mozilla/5.0 (Windows NT 5.0; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0'),
-			array(Joomla\Application\Web\WebClient::MAC, false, Joomla\Application\Web\WebClient::GECKO, '', '',
+			array(WebClient::MAC, false, WebClient::GECKO, '', '',
 				'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en; rv:1.9.2.14pre) Gecko/20101212 Camino/2.1a1pre (like Firefox/3.6.14pre)'),
-			array(Joomla\Application\Web\WebClient::LINUX, false, Joomla\Application\Web\WebClient::KHTML, '', '',
+			array(WebClient::LINUX, false, WebClient::KHTML, '', '',
 				'Mozilla/5.0 (compatible; Konqueror/4.4; Linux 2.6.32-22-generic; X11; en_US) KHTML/4.4.3 (like Gecko) Kubuntu'),
-			array('', false, Joomla\Application\Web\WebClient::AMAYA, '', '', 'amaya/11.3.1 libwww/5.4.1')
+			array('', false, WebClient::AMAYA, '', '', 'amaya/11.3.1 libwww/5.4.1')
 		);
 	}
 
@@ -204,11 +209,11 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 		$_SERVER['HTTP_AUTHORIZATION'] = 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==';
 
 		// Get a new JWebInspector instance.
-		$this->inspector = new JWebClientInspector;
+		$this->inspector = new \JWebClientInspector;
 	}
 
 	/**
-	 * Tests the Joomla\Application\Web\WebClient::__construct method.
+	 * Tests the WebClient::__construct method.
 	 *
 	 * @return void
 	 *
@@ -220,7 +225,7 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the Joomla\Application\Web\WebClient::__get method.
+	 * Tests the WebClient::__get method.
 	 *
 	 * @return void
 	 *
@@ -232,7 +237,7 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the Joomla\Application\Web\WebClient::detectBrowser method.
+	 * Tests the WebClient::detectBrowser method.
 	 *
 	 * @param   string   $p   The expected platform.
 	 * @param   boolean  $m   The expected mobile result.
@@ -256,7 +261,7 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the Joomla\Application\Web\WebClient::detectheaders method.
+	 * Tests the WebClient::detectheaders method.
 	 *
 	 * @return  void
 	 *
@@ -275,7 +280,7 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the Joomla\Application\Web\WebClient::detectEncoding method.
+	 * Tests the WebClient::detectEncoding method.
 	 *
 	 * @param   string  $ae  The input accept encoding.
 	 * @param   array   $e   The expected array of encodings.
@@ -294,7 +299,7 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the Joomla\Application\Web\WebClient::detectEngine method.
+	 * Tests the WebClient::detectEngine method.
 	 *
 	 * @param   string   $p   The expected platform.
 	 * @param   boolean  $m   The expected mobile result.
@@ -317,7 +322,7 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the Joomla\Application\Web\WebClient::detectLanguage method.
+	 * Tests the WebClient::detectLanguage method.
 	 *
 	 * @param   string  $al  The input accept language.
 	 * @param   array   $l   The expected array of languages.
@@ -336,7 +341,7 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the Joomla\Application\Web\WebClient::detectPlatform method.
+	 * Tests the WebClient::detectPlatform method.
 	 *
 	 * @param   string   $p   The expected platform.
 	 * @param   boolean  $m   The expected mobile result.
@@ -360,7 +365,7 @@ class JApplicationWebClientTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests the Joomla\Application\Web\WebClient::detectRobot method.
+	 * Tests the WebClient::detectRobot method.
 	 *
 	 * @param   string   $userAgent  The user agent
 	 * @param   boolean  $expected   The expected results of the function

@@ -6,10 +6,12 @@
 
 namespace Joomla\Application\Tests;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test class for Joomla\Application\AbstractApplication.
  */
-class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
+class AbstractApplicationTest extends TestCase
 {
 	/**
 	 * @testdox  Tests the constructor creates default object instances
@@ -41,8 +43,8 @@ class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test__constructDependencyInjection()
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Input');
-		$mockConfig = $this->getMock('Joomla\Registry\Registry');
+		$mockInput  = $this->getMockBuilder('Joomla\Input\Input')->getMock();
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')->getMock();
 		$object     = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication', array($mockInput, $mockConfig));
 
 		$this->assertAttributeSame($mockInput, 'input', $object);
@@ -86,9 +88,14 @@ class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGet()
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Input');
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get'), array(array('foo' => 'bar')), '', true, true, true, false, true);
-		$object     = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication', array($mockInput, $mockConfig));
+		$mockInput = $this->getMockBuilder('Joomla\Input\Input')->getMock();
+
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->setConstructorArgs(array(array('foo' => 'bar')))
+			->enableProxyingToOriginalMethods()
+			->getMock();
+
+		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication', array($mockInput, $mockConfig));
 
 		$this->assertSame('bar', $object->get('foo', 'car'), 'Checks a known configuration setting is returned.');
 		$this->assertSame('car', $object->get('goo', 'car'), 'Checks an unknown configuration setting returns the default.');
@@ -114,9 +121,14 @@ class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSet()
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Input');
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(array('foo' => 'bar')), '', true, true, true, false, true);
-		$object     = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication', array($mockInput, $mockConfig));
+		$mockInput = $this->getMockBuilder('Joomla\Input\Input')->getMock();
+
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->setConstructorArgs(array(array('foo' => 'bar')))
+			->enableProxyingToOriginalMethods()
+			->getMock();
+
+		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication', array($mockInput, $mockConfig));
 
 		$this->assertEquals('bar', $object->set('foo', 'car'), 'Checks set returns the previous value.');
 		$this->assertEquals('car', $object->get('foo'), 'Checks the new value has been set.');
@@ -130,7 +142,7 @@ class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
 	public function testSetConfiguration()
 	{
 		$object     = $this->getMockForAbstractClass('Joomla\Application\AbstractApplication');
-		$mockConfig = $this->getMock('Joomla\Registry\Registry');
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')->getMock();
 
 		// First validate the two objects are different
 		$this->assertAttributeNotSame($mockConfig, 'config', $object);

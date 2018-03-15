@@ -6,10 +6,12 @@
 
 namespace Joomla\Application\Tests;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test class for Joomla\Application\AbstractCliApplication.
  */
-class AbstractCliApplicationTest extends \PHPUnit_Framework_TestCase
+class AbstractCliApplicationTest extends TestCase
 {
 	/**
 	 * @testdox  Tests the constructor creates default object instances
@@ -33,10 +35,10 @@ class AbstractCliApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test__constructDependencyInjection()
 	{
-		$mockInput    = $this->getMock('Joomla\Input\Cli');
-		$mockConfig   = $this->getMock('Joomla\Registry\Registry');
-		$mockOutput   = $this->getMock('Joomla\Application\Cli\Output\Stdout');
-		$mockCliInput = $this->getMock('Joomla\Application\Cli\CliInput');
+		$mockInput    = $this->getMockBuilder('Joomla\Input\Cli')->getMock();
+		$mockConfig   = $this->getMockBuilder('Joomla\Registry\Registry')->getMock();;
+		$mockOutput   = $this->getMockBuilder('Joomla\Application\Cli\Output\Stdout')->getMock();;
+		$mockCliInput = $this->getMockBuilder('Joomla\Application\Cli\CliInput')->getMock();;
 
 		$object = $this->getMockForAbstractClass(
 			'Joomla\Application\AbstractCliApplication', array($mockInput, $mockConfig, $mockOutput, $mockCliInput)
@@ -79,7 +81,9 @@ class AbstractCliApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testOut()
 	{
-		$mockOutput = $this->getMock('Joomla\Application\Cli\Output\Stdout', array('out'));
+		$mockOutput = $this->getMockBuilder('Joomla\Application\Cli\Output\Stdout')
+			->setMethods(array('out'))
+			->getMock();
 		$mockOutput->expects($this->once())
 			->method('out');
 

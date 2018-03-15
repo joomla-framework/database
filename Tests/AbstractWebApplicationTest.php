@@ -7,12 +7,14 @@
 namespace Joomla\Application\Tests;
 
 use Joomla\Application\Web\WebClient;
+use Joomla\Input\Input;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Joomla\Application\AbstractWebApplication.
  */
-class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
+class AbstractWebApplicationTest extends TestCase
 {
 	/**
 	 * Value for test host.
@@ -111,12 +113,16 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test__constructDependencyInjection()
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(), '', true, true, true, false, true);
-		$mockClient = $this->getMock('Joomla\Application\Web\WebClient');
+		$mockInput = new Input(array());
+
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->enableProxyingToOriginalMethods()
+			->getMock();
+
+		$mockClient = $this->getMockBuilder('Joomla\Application\Web\WebClient')->getMock();
 
 		// Mock the Input object internals
-		$mockServerInput = $this->getMock('Joomla\Input\Input', array('get', 'set'), array(array('HTTP_HOST' => self::TEST_HTTP_HOST)), '', true, true, true, false, true);
+		$mockServerInput = new Input(array('HTTP_HOST' => self::TEST_HTTP_HOST));
 
 		$inputInternals = array(
 			'server' => $mockServerInput
@@ -181,7 +187,10 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 			$this->markTestSkipped('Output compression is unsupported in this environment.');
 		}
 
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(array('gzip' => true)), '', true, true, true, false, true);
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->setConstructorArgs(array(array('gzip' => true)))
+			->enableProxyingToOriginalMethods()
+			->getMock();
 
 		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractWebApplication', array(null, $mockConfig));
 		$object->expects($this->once())
@@ -214,7 +223,10 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCompressWithGzipEncoding()
 	{
-		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(null, 'gzip, deflate'), '', true, true, true, false, true);
+		$mockClient = $this->getMockBuilder('Joomla\Application\Web\WebClient')
+			->setConstructorArgs(array(null, 'gzip, deflate'))
+			->enableProxyingToOriginalMethods()
+			->getMock();
 
 		// Mock the client internals to show encoding has been detected.
 		TestHelper::setValue(
@@ -279,7 +291,10 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCompressWithDeflateEncoding()
 	{
-		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(null, 'deflate'), '', true, true, true, false, true);
+		$mockClient = $this->getMockBuilder('Joomla\Application\Web\WebClient')
+			->setConstructorArgs(array(null, 'deflate'))
+			->enableProxyingToOriginalMethods()
+			->getMock();
 
 		// Mock the client internals to show encoding has been detected.
 		TestHelper::setValue(
@@ -344,7 +359,9 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCompressWithNoAcceptEncodings()
 	{
-		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(), '', true, true, true, false, true);
+		$mockClient = $this->getMockBuilder('Joomla\Application\Web\WebClient')
+			->enableProxyingToOriginalMethods()
+			->getMock();
 
 		// Mock the client internals to show encoding has been detected.
 		TestHelper::setValue(
@@ -394,7 +411,10 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCompressWithHeadersSent()
 	{
-		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(null, 'deflate'), '', true, true, true, false, true);
+		$mockClient = $this->getMockBuilder('Joomla\Application\Web\WebClient')
+			->setConstructorArgs(array(null, 'deflate'))
+			->enableProxyingToOriginalMethods()
+			->getMock();
 
 		// Mock the client internals to show encoding has been detected.
 		TestHelper::setValue(
@@ -449,7 +469,9 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testCompressWithUnsupportedEncodings()
 	{
-		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(), '', true, true, true, false, true);
+		$mockClient = $this->getMockBuilder('Joomla\Application\Web\WebClient')
+			->enableProxyingToOriginalMethods()
+			->getMock();
 
 		// Mock the client internals to show encoding has been detected.
 		TestHelper::setValue(
@@ -564,27 +586,21 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRedirectLegacyBehavior()
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(), '', true, true, true, false, true);
-		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(), '', true, true, true, false, true);
+		$mockInput = new Input(array());
+
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->enableProxyingToOriginalMethods()
+			->getMock();
+
+		$mockClient = $this->getMockBuilder('Joomla\Application\Web\WebClient')->getMock();
 
 		// Mock the Input object internals
-		$mockServerInput = $this->getMock(
-			'Joomla\Input\Input',
-			array('get', 'set'),
+		$mockServerInput = new Input(
 			array(
-				array(
-					'HTTP_HOST'   => self::TEST_HTTP_HOST,
-					'REQUEST_URI' => self::TEST_REQUEST_URI,
-					'SCRIPT_NAME' => '/index.php'
-				)
-			),
-			'',
-			true,
-			true,
-			true,
-			false,
-			true
+				'HTTP_HOST'   => self::TEST_HTTP_HOST,
+				'REQUEST_URI' => self::TEST_REQUEST_URI,
+				'SCRIPT_NAME' => '/index.php'
+			)
 		);
 
 		$inputInternals = array(
@@ -626,7 +642,7 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 
 		$url = 'index.php';
 
-		$date = new \DateTime();
+		$date = new \DateTime('now', new \DateTimeZone('UTC'));
 		$object->modifiedDate = $date;
 
 		$object->redirect($url, false);
@@ -652,27 +668,21 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRedirect()
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(), '', true, true, true, false, true);
-		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(), '', true, true, true, false, true);
+		$mockInput = new Input(array());
+
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->enableProxyingToOriginalMethods()
+			->getMock();
+
+		$mockClient = $this->getMockBuilder('Joomla\Application\Web\WebClient')->getMock();
 
 		// Mock the Input object internals
-		$mockServerInput = $this->getMock(
-			'Joomla\Input\Input',
-			array('get', 'set'),
+		$mockServerInput = new Input(
 			array(
-				array(
-					'HTTP_HOST'   => self::TEST_HTTP_HOST,
-					'REQUEST_URI' => self::TEST_REQUEST_URI,
-					'SCRIPT_NAME' => '/index.php'
-				)
-			),
-			'',
-			true,
-			true,
-			true,
-			false,
-			true
+				'HTTP_HOST'   => self::TEST_HTTP_HOST,
+				'REQUEST_URI' => self::TEST_REQUEST_URI,
+				'SCRIPT_NAME' => '/index.php'
+			)
 		);
 
 		$inputInternals = array(
@@ -714,9 +724,8 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 
 		$url = 'index.php';
 
-		$date = new \DateTime();
+		$date = new \DateTime('now', new \DateTimeZone('UTC'));
 		$object->modifiedDate = $date;
-
 		$object->redirect($url);
 
 		$this->assertSame(
@@ -740,27 +749,21 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRedirectWithExistingStatusCode1()
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(), '', true, true, true, false, true);
-		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(), '', true, true, true, false, true);
+		$mockInput = new Input(array());
+
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->enableProxyingToOriginalMethods()
+			->getMock();
+
+		$mockClient = $this->getMockBuilder('Joomla\Application\Web\WebClient')->getMock();
 
 		// Mock the Input object internals
-		$mockServerInput = $this->getMock(
-			'Joomla\Input\Input',
-			array('get', 'set'),
+		$mockServerInput = new Input(
 			array(
-				array(
-					'HTTP_HOST'   => self::TEST_HTTP_HOST,
-					'REQUEST_URI' => self::TEST_REQUEST_URI,
-					'SCRIPT_NAME' => '/index.php'
-				)
-			),
-			'',
-			true,
-			true,
-			true,
-			false,
-			true
+				'HTTP_HOST'   => self::TEST_HTTP_HOST,
+				'REQUEST_URI' => self::TEST_REQUEST_URI,
+				'SCRIPT_NAME' => '/index.php'
+			)
 		);
 
 		$inputInternals = array(
@@ -802,7 +805,7 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 
 		$url = 'index.php';
 
-		$date = new \DateTime();
+		$date = new \DateTime('now', new \DateTimeZone('UTC'));
 		$object->modifiedDate = $date;
 		$object->setHeader('status', 201);
 
@@ -830,27 +833,21 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRedirectWithAdditionalHeaders()
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(), '', true, true, true, false, true);
-		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(), '', true, true, true, false, true);
+		$mockInput = new Input(array());
+
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->enableProxyingToOriginalMethods()
+			->getMock();
+
+		$mockClient = $this->getMockBuilder('Joomla\Application\Web\WebClient')->getMock();
 
 		// Mock the Input object internals
-		$mockServerInput = $this->getMock(
-			'Joomla\Input\Input',
-			array('get', 'set'),
+		$mockServerInput = new Input(
 			array(
-				array(
-					'HTTP_HOST'   => self::TEST_HTTP_HOST,
-					'REQUEST_URI' => self::TEST_REQUEST_URI,
-					'SCRIPT_NAME' => '/index.php'
-				)
-			),
-			'',
-			true,
-			true,
-			true,
-			false,
-			true
+				'HTTP_HOST'   => self::TEST_HTTP_HOST,
+				'REQUEST_URI' => self::TEST_REQUEST_URI,
+				'SCRIPT_NAME' => '/index.php'
+			)
 		);
 
 		$inputInternals = array(
@@ -892,7 +889,7 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 
 		$url = 'index.php';
 
-		$date = new \DateTime();
+		$date = new \DateTime('now', new \DateTimeZone('UTC'));
 		$object->modifiedDate = $date;
 
 		$object->redirect($url);
@@ -918,26 +915,19 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRedirectWithHeadersSent()
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(), '', true, true, true, false, true);
+		$mockInput = new Input(array());
+
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->enableProxyingToOriginalMethods()
+			->getMock();
 
 		// Mock the Input object internals
-		$mockServerInput = $this->getMock(
-			'Joomla\Input\Input',
-			array('get', 'set'),
+		$mockServerInput = new Input(
 			array(
-				array(
-					'HTTP_HOST'   => self::TEST_HTTP_HOST,
-					'REQUEST_URI' => self::TEST_REQUEST_URI,
-					'SCRIPT_NAME' => '/index.php'
-				)
-			),
-			'',
-			true,
-			true,
-			true,
-			false,
-			true
+				'HTTP_HOST'   => self::TEST_HTTP_HOST,
+				'REQUEST_URI' => self::TEST_REQUEST_URI,
+				'SCRIPT_NAME' => '/index.php'
+			)
 		);
 
 		$inputInternals = array(
@@ -982,26 +972,23 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRedirectWithJavascriptRedirect()
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(), '', true, true, true, false, true);
-		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array('MSIE'), '', true, true, true, false, true);
+		$mockInput = new Input(array());
+
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->enableProxyingToOriginalMethods()
+			->getMock();
+
+		$mockClient = $this->getMockBuilder('Joomla\Application\Web\WebClient')
+			->setConstructorArgs(array('MSIE'))
+			->enableProxyingToOriginalMethods()
+			->getMock();
 
 		// Mock the Input object internals
-		$mockServerInput = $this->getMock(
-			'Joomla\Input\Input',
-			array('get', 'set'),
+		$mockServerInput = new Input(
 			array(
-				array(
-					'HTTP_HOST'   => self::TEST_HTTP_HOST,
-					'REQUEST_URI' => self::TEST_REQUEST_URI
-				)
-			),
-			'',
-			true,
-			true,
-			true,
-			false,
-			true
+				'HTTP_HOST'   => self::TEST_HTTP_HOST,
+				'REQUEST_URI' => self::TEST_REQUEST_URI,
+			)
 		);
 
 		$inputInternals = array(
@@ -1059,26 +1046,20 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRedirectWithMoved()
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(), '', true, true, true, false, true);
-		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(), '', true, true, true, false, true);
+		$mockInput = new Input(array());
+
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->enableProxyingToOriginalMethods()
+			->getMock();
+
+		$mockClient = $this->getMockBuilder('Joomla\Application\Web\WebClient')->getMock();
 
 		// Mock the Input object internals
-		$mockServerInput = $this->getMock(
-			'Joomla\Input\Input',
-			array('get', 'set'),
+		$mockServerInput = new Input(
 			array(
-				array(
-					'HTTP_HOST'   => self::TEST_HTTP_HOST,
-					'REQUEST_URI' => self::TEST_REQUEST_URI
-				)
-			),
-			'',
-			true,
-			true,
-			true,
-			false,
-			true
+				'HTTP_HOST'   => self::TEST_HTTP_HOST,
+				'REQUEST_URI' => self::TEST_REQUEST_URI,
+			)
 		);
 
 		$inputInternals = array(
@@ -1120,7 +1101,7 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 
 		$url = 'http://j.org/index.php';
 
-		$date = new \DateTime();
+		$date = new \DateTime('now', new \DateTimeZone('UTC'));
 		$object->modifiedDate = $date;
 
 		$object->redirect($url, true);
@@ -1150,26 +1131,20 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRedirectWithUrl($url, $expected)
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(), '', true, true, true, false, true);
-		$mockClient = $this->getMock('Joomla\Application\Web\WebClient', array(), array(), '', true, true, true, false, true);
+		$mockInput = new Input(array());
+
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->enableProxyingToOriginalMethods()
+			->getMock();
+
+		$mockClient = $this->getMockBuilder('Joomla\Application\Web\WebClient')->getMock();
 
 		// Mock the Input object internals
-		$mockServerInput = $this->getMock(
-			'Joomla\Input\Input',
-			array('get', 'set'),
+		$mockServerInput = new Input(
 			array(
-				array(
-					'HTTP_HOST'   => self::TEST_HTTP_HOST,
-					'REQUEST_URI' => self::TEST_REQUEST_URI
-				)
-			),
-			'',
-			true,
-			true,
-			true,
-			false,
-			true
+				'HTTP_HOST'   => self::TEST_HTTP_HOST,
+				'REQUEST_URI' => self::TEST_REQUEST_URI,
+			)
 		);
 
 		$inputInternals = array(
@@ -1402,7 +1377,7 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testDetectRequestUri($https, $phpSelf, $requestUri, $httpHost, $scriptName, $queryString, $expects)
 	{
-		$mockInput = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
+		$mockInput = new Input(array());
 
 		$serverInputData = array(
 			'PHP_SELF'     => $phpSelf,
@@ -1418,7 +1393,7 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 		}
 
 		// Mock the Input object internals
-		$mockServerInput = $this->getMock('Joomla\Input\Input', array('get', 'set'), array($serverInputData), '', true, true, true, false, true);
+		$mockServerInput = new Input($serverInputData);
 
 		$inputInternals = array(
 			'server' => $mockServerInput
@@ -1442,7 +1417,10 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testLoadSystemUrisWithSiteUriSet()
 	{
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(array('site_uri' => 'http://test.joomla.org/path/')), '', true, true, true, false, true);
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->setConstructorArgs(array(array('site_uri' => 'http://test.joomla.org/path/')))
+			->enableProxyingToOriginalMethods()
+			->getMock();
 
 		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractWebApplication', array(null, $mockConfig));
 
@@ -1482,25 +1460,14 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testLoadSystemUrisWithoutSiteUriSet()
 	{
-		$mockInput = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
+		$mockInput = new Input(array());
 
 		// Mock the Input object internals
-		$mockServerInput = $this->getMock(
-			'Joomla\Input\Input',
-			array('get', 'set'),
+		$mockServerInput = new Input(
 			array(
-				array(
-					'SCRIPT_NAME' => '/index.php'
-				)
-			),
-			'',
-			true,
-			true,
-			true,
-			false,
-			true
+				'SCRIPT_NAME' => '/index.php'
+			)
 		);
-
 		$inputInternals = array(
 			'server' => $mockServerInput
 		);
@@ -1545,24 +1512,18 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testLoadSystemUrisWithoutSiteUriWithMediaUriSet()
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(array('media_uri' => 'http://cdn.joomla.org/media/')), '', true, true, true, false, true);
+		$mockInput = new Input(array());
+
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->setConstructorArgs(array(array('media_uri' => 'http://cdn.joomla.org/media/')))
+			->enableProxyingToOriginalMethods()
+			->getMock();
 
 		// Mock the Input object internals
-		$mockServerInput = $this->getMock(
-			'Joomla\Input\Input',
-			array('get', 'set'),
+		$mockServerInput = new Input(
 			array(
-				array(
-					'SCRIPT_NAME' => '/index.php'
-				)
-			),
-			'',
-			true,
-			true,
-			true,
-			false,
-			true
+				'SCRIPT_NAME' => '/index.php'
+			)
 		);
 
 		$inputInternals = array(
@@ -1609,24 +1570,18 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testLoadSystemUrisWithoutSiteUriWithRelativeMediaUriSet()
 	{
-		$mockInput  = $this->getMock('Joomla\Input\Input', array('get', 'getString'), array(), '', true, true, true, false, true);
-		$mockConfig = $this->getMock('Joomla\Registry\Registry', array('get', 'set'), array(array('media_uri' => '/media/')), '', true, true, true, false, true);
+		$mockInput = new Input(array());
+
+		$mockConfig = $this->getMockBuilder('Joomla\Registry\Registry')
+			->setConstructorArgs(array(array('media_uri' => '/media/')))
+			->enableProxyingToOriginalMethods()
+			->getMock();
 
 		// Mock the Input object internals
-		$mockServerInput = $this->getMock(
-			'Joomla\Input\Input',
-			array('get', 'set'),
+		$mockServerInput = new Input(
 			array(
-				array(
-					'SCRIPT_NAME' => '/index.php'
-				)
-			),
-			'',
-			true,
-			true,
-			true,
-			false,
-			true
+				'SCRIPT_NAME' => '/index.php'
+			)
 		);
 
 		$inputInternals = array(
@@ -1674,7 +1629,9 @@ class AbstractWebApplicationTest extends \PHPUnit_Framework_TestCase
 	public function testSetSession()
 	{
 		$object = $this->getMockForAbstractClass('Joomla\Application\AbstractWebApplication');
-		$mockSession = $this->getMock('Joomla\Session\Session', array(), array(), '', false);
+		$mockSession = $this->getMockBuilder('Joomla\Session\Session')
+			->disableOriginalConstructor()
+			->getMock();
 
 		$this->assertSame($object, $object->setSession($mockSession));
 		$this->assertSame($mockSession, $object->getSession());

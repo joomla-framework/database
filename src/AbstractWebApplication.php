@@ -389,7 +389,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 		else
 		{
 			// We have to use a JavaScript redirect here because MSIE doesn't play nice with utf-8 URLs.
-			if (($this->client->engine == Web\WebClient::TRIDENT) && !$this::isAscii($url))
+			if (($this->client->engine == Web\WebClient::TRIDENT) && !static::isAscii($url))
 			{
 				$html = '<html><head>';
 				$html .= '<meta http-equiv="content-type" content="text/html; charset=' . $this->charSet . '" />';

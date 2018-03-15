@@ -9,13 +9,14 @@ namespace Joomla\Application\Tests\Cli\Output;
 use Joomla\Application\Cli\Output\Stdout;
 use Joomla\Application\Tests\Cli\Output\Processor\TestProcessor;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Joomla\Application\Cli\Output\Stdout.
  *
  * @since  1.1.2
  */
-class StdoutTest extends \PHPUnit_Framework_TestCase
+class StdoutTest extends TestCase
 {
 	/**
 	 * Object under test

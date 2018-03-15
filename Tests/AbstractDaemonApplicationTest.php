@@ -6,9 +6,7 @@
 
 namespace Joomla\Application\Tests;
 
-use Joomla\Application\AbstractDaemonApplication;
-use Joomla\Registry\Registry;
-use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 include_once __DIR__ . '/Stubs/ConcreteDaemon.php';
 
@@ -17,7 +15,7 @@ include_once __DIR__ . '/Stubs/ConcreteDaemon.php';
  *
  * @since  1.0
  */
-class AbstractDaemonApplicationTest extends \PHPUnit_Framework_TestCase
+class AbstractDaemonApplicationTest extends TestCase
 {
 	/**
 	 * An instance of a Daemon inspector.

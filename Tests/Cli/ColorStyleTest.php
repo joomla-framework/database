@@ -7,13 +7,14 @@
 namespace Joomla\Application\Cli\Tests;
 
 use Joomla\Application\Cli\ColorStyle;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class.
  *
  * @since  1.0
  */
-class ColorStyleTest extends \PHPUnit_Framework_TestCase
+class ColorStyleTest extends TestCase
 {
 	/**
 	 * @var ColorStyle

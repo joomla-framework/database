@@ -6,7 +6,7 @@
 
 namespace Joomla\Application\Tests;
 
-use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class to mock the \Joomla\Application package.
@@ -34,7 +34,7 @@ class Mocker
 	public $headers;
 
 	/**
-	 * @var    \PHPUnit_Framework_TestCase
+	 * @var    TestCase
 	 * @since  1.0
 	 */
 	private $test;
@@ -42,11 +42,11 @@ class Mocker
 	/**
 	 * Class contructor.
 	 *
-	 * @param   \PHPUnit_Framework_TestCase  $test  A test class.
+	 * @param   TestCase  $test  A test class.
 	 *
 	 * @since   1.0
 	 */
-	public function __construct(\PHPUnit_Framework_TestCase $test)
+	public function __construct(TestCase $test)
 	{
 		$this->body = array();
 		$this->headers = array();
