@@ -241,7 +241,7 @@ class KeychainManager extends \Joomla\Application\AbstractCliApplication
 			$this->close(1);
 		}
 		$this->updated = true;
-		$this->keychain->setValue($this->input->args[1], $this->input->args[2]);
+		$this->keychain->set($this->input->args[1], $this->input->args[2]);
 	}
 
 	/**
