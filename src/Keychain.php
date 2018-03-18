@@ -73,36 +73,11 @@ class Keychain extends Registry
 	 * @return  mixed  Value of old value or boolean false if operation failed
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use `Registry::remove()` instead.
 	 */
 	public function deleteValue($path)
 	{
-		$result = null;
-
-		// Explode the registry path into an array
-		$nodes = explode('.', $path);
-
-		if ($nodes)
-		{
-			// Initialize the current node to be the registry root.
-			$node = $this->data;
-
-			// Traverse the registry to find the correct node for the result.
-			for ($i = 0, $n = count($nodes) - 1; $i < $n; $i++)
-			{
-				if (!isset($node->$nodes[$i]) && ($i != $n))
-				{
-					$node->{$nodes[$i]} = new \stdClass;
-				}
-
-				$node = $node->{$nodes[$i]};
-			}
-
-			// Get the old value if exists so we can return it
-			$result = $node->{$nodes[$i]};
-			unset($node->{$nodes[$i]});
-		}
-
-		return $result;
+		return $this->remove($path);
 	}
 
 	/**
