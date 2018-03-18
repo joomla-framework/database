@@ -635,7 +635,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 *
 	 * @return  mixed  The value of the removed node or null if not set
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 */
 	public function remove($path)
 	{
