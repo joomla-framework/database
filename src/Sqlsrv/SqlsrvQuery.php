@@ -10,6 +10,7 @@ namespace Joomla\Database\Sqlsrv;
 
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\DatabaseQuery;
+use Joomla\Database\ParameterType;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\Query\QueryElement;
@@ -244,7 +245,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 	 *
 	 * @since   1.5.0
 	 */
-	public function bind($key = null, &$value = null, $dataType = 's', $length = 0, $driverOptions = array())
+	public function bind($key = null, &$value = null, $dataType = ParameterType::STRING, $length = 0, $driverOptions = array())
 	{
 		// Case 1: Empty Key (reset $bounded array)
 		if (empty($key))

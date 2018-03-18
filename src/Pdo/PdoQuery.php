@@ -9,6 +9,7 @@
 namespace Joomla\Database\Pdo;
 
 use Joomla\Database\DatabaseQuery;
+use Joomla\Database\ParameterType;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
 
@@ -44,6 +45,20 @@ abstract class PdoQuery extends DatabaseQuery implements LimitableInterface, Pre
 	protected $bounded = [];
 
 	/**
+	 * Mapping array for parameter types.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $parameterMapping = [
+		ParameterType::BOOLEAN      => \PDO::PARAM_BOOL,
+		ParameterType::INTEGER      => \PDO::PARAM_INT,
+		ParameterType::LARGE_OBJECT => \PDO::PARAM_LOB,
+		ParameterType::NULL         => \PDO::PARAM_NULL,
+		ParameterType::STRING       => \PDO::PARAM_STR,
+	];
+
+	/**
 	 * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution. Also
 	 * removes a variable that has been bounded from the internal bounded array when the passed in value is null.
 	 *
@@ -59,7 +74,7 @@ abstract class PdoQuery extends DatabaseQuery implements LimitableInterface, Pre
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function bind($key = null, &$value = null, $dataType = \PDO::PARAM_STR, $length = 0, $driverOptions = [])
+	public function bind($key = null, &$value = null, $dataType = ParameterType::STRING, $length = 0, $driverOptions = [])
 	{
 		// Case 1: Empty Key (reset $bounded array)
 		if (empty($key))
@@ -80,10 +95,16 @@ abstract class PdoQuery extends DatabaseQuery implements LimitableInterface, Pre
 			return $this;
 		}
 
+		// Validate parameter type
+		if (!isset($this->parameterMapping[$dataType]))
+		{
+			throw new \InvalidArgumentException(sprintf('Unsupported parameter type `%s`', $dataType));
+		}
+
 		$obj = new \stdClass;
 
 		$obj->value         = &$value;
-		$obj->dataType      = $dataType;
+		$obj->dataType      = $this->parameterMapping[$dataType];
 		$obj->length        = $length;
 		$obj->driverOptions = $driverOptions;
 

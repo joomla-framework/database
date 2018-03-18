@@ -6,6 +6,7 @@
 
 namespace Joomla\Database\Tests\Mysqli;
 
+use Joomla\Database\ParameterType;
 use Joomla\Database\Tests\Cases\MysqliCase;
 
 /**
@@ -617,7 +618,7 @@ class MysqliDriverTest extends MysqliCase
 		$query->setQuery(
 			'REPLACE INTO `dbtest` SET `id` = ?, `title` = ?, `start_date` = ?, `description` = ?'
 		);
-		$query->bind(1, $id, 'i');
+		$query->bind(1, $id, ParameterType::INTEGER);
 		$query->bind(2, $title);
 		$query->bind(3, $startDate);
 		$query->bind(4, $description);

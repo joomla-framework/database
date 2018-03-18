@@ -9,6 +9,7 @@
 namespace Joomla\Database\Postgresql;
 
 use Joomla\Database\DatabaseQuery;
+use Joomla\Database\ParameterType;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PostgresqlQueryBuilder;
 use Joomla\Database\Query\PreparableInterface;
@@ -46,7 +47,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * @since   1.5.0
 	 */
-	public function bind($key = null, &$value = null, $dataType = '', $length = 0, $driverOptions = array())
+	public function bind($key = null, &$value = null, $dataType = ParameterType::STRING, $length = 0, $driverOptions = array())
 	{
 		// Case 1: Empty Key (reset $bounded array)
 		if (empty($key))
