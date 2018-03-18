@@ -8,7 +8,7 @@
 
 namespace Joomla\Database\Mysql;
 
-use Joomla\Database\DatabaseQuery;
+use Joomla\Database\Pdo\PdoQuery;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
 
@@ -17,7 +17,7 @@ use Joomla\Database\Query\PreparableInterface;
  *
  * @since  1.0
  */
-class MysqlQuery extends DatabaseQuery implements LimitableInterface, PreparableInterface
+class MysqlQuery extends PdoQuery implements LimitableInterface, PreparableInterface
 {
 	/**
 	 * The offset for the result set.

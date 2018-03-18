@@ -15,6 +15,6 @@ use Joomla\Database\DatabaseQuery;
  *
  * @since  1.0
  */
-class PdoQuery extends DatabaseQuery
+abstract class PdoQuery extends DatabaseQuery
 {
 }
