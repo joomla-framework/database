@@ -9,6 +9,7 @@
 namespace Joomla\Database\Mysql;
 
 use Joomla\Database\Pdo\PdoQuery;
+use Joomla\Database\Query\MysqlQueryBuilder;
 
 /**
  * MySQL Query Building Class.
@@ -17,71 +18,46 @@ use Joomla\Database\Pdo\PdoQuery;
  */
 class MysqlQuery extends PdoQuery
 {
-	/**
-	 * Method to modify a query already in string format with the needed additions to make the query limited to a particular number of
-	 * results, or start at a particular offset.
-	 *
-	 * @param   string   $query   The query in string format
-	 * @param   integer  $limit   The limit for the result set
-	 * @param   integer  $offset  The offset for the result set
-	 *
-	 * @return  string
-	 *
-	 * @since   1.0
-	 */
-	public function processLimit($query, $limit, $offset = 0)
-	{
-		if ($limit > 0 && $offset > 0)
-		{
-			$query .= ' LIMIT ' . $offset . ', ' . $limit;
-		}
-		elseif ($limit > 0)
-		{
-			$query .= ' LIMIT ' . $limit;
-		}
-
-		return $query;
-	}
+	use MysqlQueryBuilder;
 
 	/**
-	 * Concatenates an array of column names or values.
+	 * Magic function to convert the query to a string.
 	 *
-	 * @param   array   $values     An array of values to concatenate.
-	 * @param   string  $separator  As separator to place between each value.
+	 * @return  string  The completed query.
 	 *
-	 * @return  string  The concatenated values.
-	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
-	public function concatenate($values, $separator = null)
+	public function __toString()
 	{
-		if ($separator)
+		switch ($this->type)
 		{
-			$concat_string = 'CONCAT_WS(' . $this->quote($separator);
+			case 'select':
+				if ($this->selectRowNumber)
+				{
+					$orderBy      = $this->selectRowNumber['orderBy'];
+					$tmpOffset    = $this->offset;
+					$tmpLimit     = $this->limit;
+					$this->offset = 0;
+					$this->limit  = 0;
+					$tmpOrder     = $this->order;
+					$this->order  = null;
+					$query        = parent::__toString();
+					$this->order  = $tmpOrder;
+					$this->offset = $tmpOffset;
+					$this->limit  = $tmpLimit;
 
-			foreach ($values as $value)
-			{
-				$concat_string .= ', ' . $value;
-			}
+					// Add support for second order by, offset and limit
+					$query = PHP_EOL . 'SELECT * FROM (' . $query . PHP_EOL . "ORDER BY $orderBy" . PHP_EOL . ') w';
 
-			return $concat_string . ')';
+					if ($this->order)
+					{
+						$query .= (string) $this->order;
+					}
+
+					return $this->processLimit($query, $this->limit, $this->offset);
+				}
 		}
 
-		return 'CONCAT(' . implode(',', $values) . ')';
-	}
-
-	/**
-	 * Get the function to return a random floating-point value
-	 *
-	 * Usage:
-	 * $query->rand();
-	 *
-	 * @return  string
-	 *
-	 * @since   1.5.0
-	 */
-	public function rand()
-	{
-		return ' RANDOM() ';
+		return parent::__toString();
 	}
 }
