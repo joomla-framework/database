@@ -21,6 +21,158 @@ class PgsqlQuery extends PdoQuery
 	use PostgresqlQueryBuilder;
 
 	/**
+	 * Magic function to convert the query to a string, only for PostgreSQL specific queries
+	 *
+	 * @return  string	The completed query.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function __toString()
+	{
+		$query = '';
+
+		switch ($this->type)
+		{
+			case 'select':
+				$query .= (string) $this->select;
+				$query .= (string) $this->from;
+
+				if ($this->join)
+				{
+					// Special case for joins
+					foreach ($this->join as $join)
+					{
+						$query .= (string) $join;
+					}
+				}
+
+				if ($this->where)
+				{
+					$query .= (string) $this->where;
+				}
+
+				if ($this->selectRowNumber)
+				{
+					if ($this->order)
+					{
+						$query .= (string) $this->order;
+					}
+
+					break;
+				}
+
+				if ($this->group)
+				{
+					$query .= (string) $this->group;
+				}
+
+				if ($this->having)
+				{
+					$query .= (string) $this->having;
+				}
+
+				if ($this->order)
+				{
+					$query .= (string) $this->order;
+				}
+
+				if ($this->forUpdate)
+				{
+					$query .= (string) $this->forUpdate;
+				}
+				else
+				{
+					if ($this->forShare)
+					{
+						$query .= (string) $this->forShare;
+					}
+				}
+
+				if ($this->noWait)
+				{
+					$query .= (string) $this->noWait;
+				}
+
+				break;
+
+			case 'update':
+				$query .= (string) $this->update;
+				$query .= (string) $this->set;
+
+				if ($this->join)
+				{
+					$tmpFrom     = $this->from;
+					$tmpWhere    = $this->where ? clone $this->where : null;
+					$this->from  = null;
+
+					// Workaround for special case of JOIN with UPDATE
+					foreach ($this->join as $join)
+					{
+						$joinElem = $join->getElements();
+
+						$joinArray = preg_split('/\sON\s/i', $joinElem[0], 2);
+
+						$this->from($joinArray[0]);
+
+						if (isset($joinArray[1]))
+						{
+							$this->where($joinArray[1]);
+						}
+					}
+
+					$query .= (string) $this->from;
+
+					if ($this->where)
+					{
+						$query .= (string) $this->where;
+					}
+
+					$this->from  = $tmpFrom;
+					$this->where = $tmpWhere;
+				}
+				elseif ($this->where)
+				{
+					$query .= (string) $this->where;
+				}
+
+				break;
+
+			case 'insert':
+				$query .= (string) $this->insert;
+
+				if ($this->values)
+				{
+					if ($this->columns)
+					{
+						$query .= (string) $this->columns;
+					}
+
+					$elements = $this->values->getElements();
+
+					if (!($elements[0] instanceof $this))
+					{
+						$query .= ' VALUES ';
+					}
+
+					$query .= (string) $this->values;
+
+					if ($this->returning)
+					{
+						$query .= (string) $this->returning;
+					}
+				}
+
+				break;
+
+			default:
+				$query = parent::__toString();
+				break;
+		}
+
+		return $this->processLimit($query, $this->limit, $this->offset);
+	}
+
+	/**
 	 * Clear data from the query or a specific clause of the query.
 	 *
 	 * @param   string  $clause  Optionally, the name of the clause to clear, or nothing to clear the whole query.

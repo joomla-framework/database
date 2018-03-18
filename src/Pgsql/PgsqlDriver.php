@@ -664,35 +664,20 @@ class PgsqlDriver extends PdoDriver
 			->columns($fields)
 			->values(implode(',', $values));
 
-		$retVal = false;
-
 		if ($key)
 		{
 			$query->returning($key);
 
 			// Set the query and execute the insert.
-			$this->setQuery($query);
-
-			$id = $this->loadResult();
-
-			if ($id)
-			{
-				$object->$key = $id;
-				$retVal = true;
-			}
+			$object->$key = $this->setQuery($query)->loadResult();
 		}
 		else
 		{
 			// Set the query and execute the insert.
-			$this->setQuery($query);
-
-			if ($this->execute())
-			{
-				$retVal = true;
-			}
+			$this->setQuery($query)->execute();
 		}
 
-		return $retVal;
+		return true;
 	}
 
 	/**
