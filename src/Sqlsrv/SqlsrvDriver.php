@@ -16,7 +16,6 @@ use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\LimitableInterface;
-use Joomla\Database\Query\PreparableInterface;
 
 /**
  * SQL Server Database Driver
@@ -609,18 +608,15 @@ class SqlsrvDriver extends DatabaseDriver
 
 		$params = [];
 
-		// Bind the variables:
-		if ($this->sql instanceof PreparableInterface)
-		{
-			$bounded =& $this->sql->getBounded();
+		// Bind the variables
+		$bounded =& $this->sql->getBounded();
 
-			if (count($bounded))
+		if (count($bounded))
+		{
+			foreach ($bounded as $key => $obj)
 			{
-				foreach ($bounded as $key => $obj)
-				{
-					// And add the value as an additional param
-					$params[] = $obj->value;
-				}
+				// And add the value as an additional param
+				$params[] = $obj->value;
 			}
 		}
 

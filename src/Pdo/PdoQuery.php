@@ -11,14 +11,13 @@ namespace Joomla\Database\Pdo;
 use Joomla\Database\DatabaseQuery;
 use Joomla\Database\ParameterType;
 use Joomla\Database\Query\LimitableInterface;
-use Joomla\Database\Query\PreparableInterface;
 
 /**
  * PDO Query Building Class.
  *
  * @since  1.0
  */
-abstract class PdoQuery extends DatabaseQuery implements LimitableInterface, PreparableInterface
+abstract class PdoQuery extends DatabaseQuery implements LimitableInterface
 {
 	/**
 	 * The offset for the result set.

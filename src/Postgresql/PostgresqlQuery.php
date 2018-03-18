@@ -12,14 +12,13 @@ use Joomla\Database\DatabaseQuery;
 use Joomla\Database\ParameterType;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PostgresqlQueryBuilder;
-use Joomla\Database\Query\PreparableInterface;
 
 /**
  * PostgreSQL Query Building Class.
  *
  * @since  1.0
  */
-class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, PreparableInterface
+class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 {
 	use PostgresqlQueryBuilder;
 
