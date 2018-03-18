@@ -597,6 +597,47 @@ class RegistryTest extends TestCase
 	}
 
 	/**
+	 * @testdox  A key is removed from the Registry
+	 *
+	 * @covers   Joomla\Registry\Registry::remove
+	 */
+	public function testAKeyIsRemovedFromTheRegistry()
+	{
+		$a = new Registry(array('foo' => 'bar'));
+
+		$this->assertSame('bar', $a->remove('foo'), 'When removing a key from the Registry its old value should be returned.');
+		$this->assertFalse($a->exists('foo'));
+	}
+
+	/**
+	 * @testdox  A nested key is removed from the Registry
+	 *
+	 * @covers   Joomla\Registry\Registry::remove
+	 */
+	public function testANestedKeyIsRemovedFromTheRegistry()
+	{
+		$a = new Registry(array('nested' => array('foo' => 'bar')));
+
+		$this->assertSame('bar', $a->remove('nested.foo'), 'When removing a key from the Registry its old value should be returned.');
+		$this->assertFalse($a->exists('nested.foo'));
+	}
+
+	/**
+	 * @testdox  The Registry is unchanged when deleting a non-existing value
+	 *
+	 * @covers   Joomla\Registry\Registry::remove
+	 */
+	public function testTheRegistryIsUnchangedWhenDeletingANonExistingValue()
+	{
+		$a = new Registry(array('foo' => 'bar'));
+
+		$this->assertNull($a->remove('goo'));
+		$this->assertNull($a->remove('nested.goo'));
+
+		$this->assertEquals($a->toArray(), array('foo' => 'bar'));
+	}
+
+	/**
 	 * @testdox  The Registry handles mixed array structures correctly
 	 *
 	 * @covers   Joomla\Registry\Registry::get
