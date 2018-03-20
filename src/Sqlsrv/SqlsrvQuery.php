@@ -12,7 +12,6 @@ use Joomla\Database\DatabaseInterface;
 use Joomla\Database\DatabaseQuery;
 use Joomla\Database\ParameterType;
 use Joomla\Database\Query\LimitableInterface;
-use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\Query\QueryElement;
 
 /**
@@ -20,7 +19,7 @@ use Joomla\Database\Query\QueryElement;
  *
  * @since  1.0
  */
-class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
+class SqlsrvQuery extends DatabaseQuery
 {
 	/**
 	 * The character(s) used to quote SQL statement names such as table names or field names, etc.

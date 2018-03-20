@@ -12,14 +12,13 @@ use Joomla\Database\DatabaseQuery;
 use Joomla\Database\ParameterType;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\MysqlQueryBuilder;
-use Joomla\Database\Query\PreparableInterface;
 
 /**
  * MySQLi Query Building Class.
  *
  * @since  1.0
  */
-class MysqliQuery extends DatabaseQuery implements LimitableInterface, PreparableInterface
+class MysqliQuery extends DatabaseQuery implements LimitableInterface
 {
 	use MysqlQueryBuilder;
 

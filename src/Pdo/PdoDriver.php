@@ -15,7 +15,6 @@ use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\LimitableInterface;
-use Joomla\Database\Query\PreparableInterface;
 
 /**
  * Joomla Framework PDO Database Driver Class
@@ -402,15 +401,12 @@ abstract class PdoDriver extends DatabaseDriver
 
 		if ($this->prepared instanceof \PDOStatement)
 		{
-			// Bind the variables:
-			if ($this->sql instanceof PreparableInterface)
-			{
-				$bounded =& $this->sql->getBounded();
+			// Bind the variables
+			$bounded =& $this->sql->getBounded();
 
-				foreach ($bounded as $key => $obj)
-				{
-					$this->prepared->bindParam($key, $obj->value, $obj->dataType, $obj->length, $obj->driverOptions);
-				}
+			foreach ($bounded as $key => $obj)
+			{
+				$this->prepared->bindParam($key, $obj->value, $obj->dataType, $obj->length, $obj->driverOptions);
 			}
 
 			$this->executed = $this->prepared->execute();

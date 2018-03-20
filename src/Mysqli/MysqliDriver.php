@@ -15,7 +15,6 @@ use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\UTF8MB4SupportInterface;
 
@@ -681,36 +680,33 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 
 		if ($this->prepared instanceof \mysqli_stmt)
 		{
-			// Bind the variables:
-			if ($this->sql instanceof PreparableInterface)
+			// Bind the variables
+			$bounded =& $this->sql->getBounded();
+
+			if (count($bounded))
 			{
-				$bounded =& $this->sql->getBounded();
+				$params     = [];
+				$typeString = '';
 
-				if (count($bounded))
+				foreach ($bounded as $key => $obj)
 				{
-					$params     = [];
-					$typeString = '';
+					// Add the type to the type string
+					$typeString .= $obj->dataType;
 
-					foreach ($bounded as $key => $obj)
-					{
-						// Add the type to the type string
-						$typeString .= $obj->dataType;
-
-						// And add the value as an additional param
-						$params[] = $obj->value;
-					}
-
-					// Make everything references for call_user_func_array()
-					$bindParams = array();
-					$bindParams[] = &$typeString;
-
-					for ($i = 0, $iMax = count($params); $i < $iMax; $i++)
-					{
-						$bindParams[] = &$params[$i];
-					}
-
-					call_user_func_array([$this->prepared, 'bind_param'], $bindParams);
+					// And add the value as an additional param
+					$params[] = $obj->value;
 				}
+
+				// Make everything references for call_user_func_array()
+				$bindParams = array();
+				$bindParams[] = &$typeString;
+
+				for ($i = 0, $iMax = count($params); $i < $iMax; $i++)
+				{
+					$bindParams[] = &$params[$i];
+				}
+
+				call_user_func_array([$this->prepared, 'bind_param'], $bindParams);
 			}
 
 			$this->executed = $this->prepared->execute();

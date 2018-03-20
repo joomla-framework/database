@@ -16,7 +16,6 @@ use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\LimitableInterface;
-use Joomla\Database\Query\PreparableInterface;
 
 /**
  * PostgreSQL Database Driver
@@ -682,20 +681,12 @@ class PostgresqlDriver extends DatabaseDriver
 		$this->errorMsg = '';
 
 		// Bind the variables
-		if ($this->sql instanceof PreparableInterface)
-		{
-			$bounded =& $this->sql->getBounded();
+		$bounded =& $this->sql->getBounded();
 
-			if (count($bounded))
-			{
-				// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
-				$this->cursor = @pg_execute($this->connection, $this->queryName . $count, array_values($bounded));
-			}
-			else
-			{
-				// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
-				$this->cursor = @pg_query($this->connection, $sql);
-			}
+		if (count($bounded))
+		{
+			// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
+			$this->cursor = @pg_execute($this->connection, $this->queryName . $count, array_values($bounded));
 		}
 		else
 		{
