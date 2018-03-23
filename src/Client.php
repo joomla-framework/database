@@ -9,11 +9,11 @@
 namespace Joomla\OAuth2;
 
 use Joomla\Application\AbstractWebApplication;
+use Joomla\Http\Exception\UnexpectedResponseException;
 use Joomla\Input\Input;
 use Joomla\Http\Http;
 use InvalidArgumentException;
 use RuntimeException;
-use Exception;
 
 /**
  * Joomla Framework class for interacting with an OAuth 2.0 server.
@@ -76,10 +76,13 @@ class Client
 	{
 		if ($data['code'] = $this->input->get('code', false, 'raw'))
 		{
-			$data['grant_type'] = 'authorization_code';
-			$data['redirect_uri'] = $this->getOption('redirecturi');
-			$data['client_id'] = $this->getOption('clientid');
-			$data['client_secret'] = $this->getOption('clientsecret');
+			$data = array(
+				'grant_type'    => 'authorization_code',
+				'redirect_uri'  => $this->getOption('redirecturi'),
+				'client_id'     => $this->getOption('clientid'),
+				'client_secret' => $this->getOption('clientsecret'),
+			);
+
 			$response = $this->http->post($this->getOption('tokenurl'), $data);
 
 			if ($response->code >= 200 && $response->code < 400)
@@ -100,6 +103,7 @@ class Client
 			}
 			else
 			{
+				// As of 2.0 this will throw an UnexpectedResponseException
 				throw new RuntimeException('Error code ' . $response->code . ' received requesting access token: ' . $response->body . '.');
 			}
 		}
@@ -147,7 +151,7 @@ class Client
 	/**
 	 * Create the URL for authentication.
 	 *
-	 * @return  \Joomla\Http\Response  The HTTP response
+	 * @return  string
 	 *
 	 * @since   1.0
 	 * @throws  InvalidArgumentException
@@ -269,6 +273,7 @@ class Client
 
 		if ($response->code < 200 || $response->code >= 400)
 		{
+			// As of 2.0 this will throw an UnexpectedResponseException
 			throw new RuntimeException('Error code ' . $response->code . ' received requesting data: ' . $response->body . '.');
 		}
 
@@ -348,7 +353,7 @@ class Client
 	 * @return  array  The new access token
 	 *
 	 * @since   1.0
-	 * @throws  Exception
+	 * @throws  UnexpectedResponseException
 	 * @throws  RuntimeException
 	 */
 	public function refreshToken($token = null)
@@ -370,10 +375,13 @@ class Client
 			$token = $token['refresh_token'];
 		}
 
-		$data['grant_type'] = 'refresh_token';
-		$data['refresh_token'] = $token;
-		$data['client_id'] = $this->getOption('clientid');
-		$data['client_secret'] = $this->getOption('clientsecret');
+		$data = array(
+			'grant_type'    => 'refresh_token',
+			'refresh_token' => $token,
+			'client_id'     => $this->getOption('clientid'),
+			'client_secret' => $this->getOption('clientsecret'),
+		);
+
 		$response = $this->http->post($this->getOption('tokenurl'), $data);
 
 		if ($response->code >= 200 || $response->code < 400)
@@ -394,7 +402,14 @@ class Client
 		}
 		else
 		{
-			throw new Exception('Error code ' . $response->code . ' received refreshing token: ' . $response->body . '.');
+			throw new UnexpectedResponseException(
+				$response,
+				sprintf(
+					'Error code %s received refreshing token: %s.',
+					$response->code,
+					$response->body
+				)
+			);
 		}
 	}
 }
