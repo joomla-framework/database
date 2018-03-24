@@ -40,15 +40,15 @@ class Contents extends AbstractPackage
 		// Build the request path.
 		$path = '/repos/' . $owner . '/' . $repo . '/readme';
 
+		$uri = new Uri($this->fetchUrl($path));
+
 		if ($ref)
 		{
-			$path .= '?ref=' . $ref;
+			$uri->setVar('ref', $ref);
 		}
 
 		// Send the request.
-		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path))
-		);
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**
@@ -70,15 +70,15 @@ class Contents extends AbstractPackage
 		// Build the request path.
 		$rPath = '/repos/' . $owner . '/' . $repo . '/contents/' . $path;
 
+		$uri = new Uri($this->fetchUrl($rPath));
+
 		if ($ref)
 		{
-			$rPath .= '?ref=' . $ref;
+			$uri->setVar('ref', $ref);
 		}
 
 		// Send the request.
-		return $this->processResponse(
-			$this->client->get($this->fetchUrl($rPath))
-		);
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**
@@ -112,17 +112,15 @@ class Contents extends AbstractPackage
 
 		// Build the request path.
 		$path = '/repos/' . $owner . '/' . $repo . '/' . $archiveFormat;
+		$uri = new Uri($this->fetchUrl($path));
 
 		if ($ref)
 		{
-			$path .= '?ref=' . $ref;
+			$uri->setVar('ref', $ref);
 		}
 
 		// Send the request.
-		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path)),
-			302
-		);
+		return $this->processResponse($this->client->get($uri), 302);
 	}
 
 	/**

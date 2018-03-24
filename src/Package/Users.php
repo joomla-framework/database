@@ -9,6 +9,7 @@
 namespace Joomla\Github\Package;
 
 use Joomla\Github\AbstractPackage;
+use Joomla\Uri\Uri;
 
 /**
  * GitHub API References class for the Joomla Framework.
@@ -115,13 +116,14 @@ class Users extends AbstractPackage
 	public function getList($since = 0)
 	{
 		// Build the request path.
-		$path = '/users';
+		$uri = new Uri($this->fetchUrl('/users'));
 
-		$path .= ($since) ? '?since=' . $since : '';
+		if ($since)
+		{
+			$uri->setVar('since', $since);
+		}
 
 		// Send the request.
-		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path))
-		);
+		return $this->processResponse($this->client->get($uri));
 	}
 }

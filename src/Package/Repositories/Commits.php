@@ -44,16 +44,37 @@ class Commits extends AbstractPackage
 	public function getList($user, $repo, $sha = '', $path = '', $author = '', \DateTime $since = null, \DateTime $until = null)
 	{
 		// Build the request path.
-		$rPath = '/repos/' . $user . '/' . $repo . '/commits?';
+		$rPath = '/repos/' . $user . '/' . $repo . '/commits';
 
-		$rPath .= ($sha) ? '&sha=' . $sha : '';
-		$rPath .= ($path) ? '&path=' . $path : '';
-		$rPath .= ($author) ? '&author=' . $author : '';
-		$rPath .= ($since) ? '&since=' . $since->format(\DateTime::RFC3339) : '';
-		$rPath .= ($until) ? '&until=' . $until->format(\DateTime::RFC3339) : '';
+		$uri = new Uri($this->fetchUrl($rPath));
+
+		if ($sha)
+		{
+			$uri->setVar('sha', $sha);
+		}
+
+		if ($path)
+		{
+			$uri->setVar('path', $path);
+		}
+
+		if ($author)
+		{
+			$uri->setVar('author', $author);
+		}
+
+		if ($since)
+		{
+			$uri->setVar('since', $since->format(\DateTime::RFC3339));
+		}
+
+		if ($until)
+		{
+			$uri->setVar('until', $until->format(\DateTime::RFC3339));
+		}
 
 		// Send the request.
-		return $this->processResponse($this->client->get($this->fetchUrl($rPath)));
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**

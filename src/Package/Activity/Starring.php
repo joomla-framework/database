@@ -84,11 +84,12 @@ class Starring extends AbstractPackage
 			? '/users' . $user . '/starred'
 			: '/user/starred';
 
-		$path .= "?sort=$sort&direction=$direction";
+		$uri = new Uri($this->fetchUrl($path));
+		$uri->setVar('sort', $sort);
+		$uri->setVar('direction', $direction);
 
-		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path))
-		);
+		// Send the request.
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**

@@ -9,6 +9,7 @@
 namespace Joomla\Github\Package;
 
 use Joomla\Github\AbstractPackage;
+use Joomla\Uri\Uri;
 
 /**
  * GitHub API Activity class for the Joomla Framework.
@@ -70,15 +71,13 @@ class Repositories extends AbstractPackage
 		}
 
 		// Build the request path.
-		$path = '/user/repos'
-			. '?type=' . $type
-			. '&sort=' . $sort
-			. '&direction=' . $direction;
+		$uri = new Uri($this->fetchUrl('/user/repos'));
+		$uri->setVar('type', $type);
+		$uri->setVar('sort', $sort);
+		$uri->setVar('direction', $direction);
 
 		// Send the request.
-		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path))
-		);
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**
@@ -117,15 +116,13 @@ class Repositories extends AbstractPackage
 		}
 
 		// Build the request path.
-		$path = '/users/' . $user . '/repos'
-			. '?type=' . $type
-			. '&sort=' . $sort
-			. '&direction=' . $direction;
+		$uri = new Uri($this->fetchUrl('/users/' . $user . '/repos'));
+		$uri->setVar('type', $type);
+		$uri->setVar('sort', $sort);
+		$uri->setVar('direction', $direction);
 
 		// Send the request.
-		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path))
-		);
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**
@@ -149,13 +146,11 @@ class Repositories extends AbstractPackage
 		}
 
 		// Build the request path.
-		$path = '/orgs/' . $org . '/repos'
-			. '?type=' . $type;
+		$uri = new Uri($this->fetchUrl('/orgs/' . $org . '/repos'));
+		$uri->setVar('type', $type);
 
 		// Send the request.
-		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path))
-		);
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**
@@ -173,13 +168,15 @@ class Repositories extends AbstractPackage
 	public function getList($id = 0)
 	{
 		// Build the request path.
-		$path = '/repositories';
-		$path .= ($id) ? '?since=' . (int) $id : '';
+		$uri = new Uri($this->fetchUrl('/repositories'));
+
+		if ($id)
+		{
+			$uri->setVar('since', (int) $id);
+		}
 
 		// Send the request.
-		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path))
-		);
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**
@@ -314,14 +311,15 @@ class Repositories extends AbstractPackage
 	public function getListContributors($owner, $repo, $anon = false)
 	{
 		// Build the request path.
-		$path = '/repos/' . $owner . '/' . $repo . '/contributors';
+		$uri = new Uri($this->fetchUrl('/repos/' . $owner . '/' . $repo . '/contributors'));
 
-		$path .= ($anon) ? '?anon=true' : '';
+		if ($anon)
+		{
+			$uri->setVar('anon', 'true');
+		}
 
 		// Send the request.
-		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path))
-		);
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**

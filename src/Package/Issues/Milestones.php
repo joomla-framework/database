@@ -9,6 +9,7 @@
 namespace Joomla\Github\Package\Issues;
 
 use Joomla\Github\AbstractPackage;
+use Joomla\Uri\Uri;
 
 /**
  * GitHub API Milestones class for the Joomla Framework.
@@ -38,14 +39,15 @@ class Milestones extends AbstractPackage
 	public function getList($user, $repo, $state = 'open', $sort = 'due_date', $direction = 'desc', $page = 0, $limit = 0)
 	{
 		// Build the request path.
-		$path = '/repos/' . $user . '/' . $repo . '/milestones?';
+		$path = '/repos/' . $user . '/' . $repo . '/milestones';
 
-		$path .= 'state=' . $state;
-		$path .= '&sort=' . $sort;
-		$path .= '&direction=' . $direction;
+		$uri = new Uri($this->fetchUrl($path, $page, $limit));
+		$uri->setVar('state', $state);
+		$uri->setVar('sort', $sort);
+		$uri->setVar('direction', $direction);
 
 		// Send the request.
-		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**

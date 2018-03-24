@@ -63,9 +63,7 @@ class Deployments extends AbstractPackage
 			$uri->setVar('environment', $environment);
 		}
 
-		return $this->processResponse(
-			$this->client->get((string) $uri)
-		);
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**

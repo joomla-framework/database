@@ -9,6 +9,7 @@
 namespace Joomla\Github\Package;
 
 use Joomla\Github\AbstractPackage;
+use Joomla\Uri\Uri;
 
 /**
  * GitHub API Search class for the Joomla Framework.
@@ -69,15 +70,20 @@ class Search extends AbstractPackage
 	public function repositories($keyword, $language = '', $startPage = 0)
 	{
 		// Build the request path.
-		$path = '/legacy/repos/search/' . $keyword . '?';
+		$uri = new Uri($this->fetchUrl('/legacy/repos/search/' . $keyword));
 
-		$path .= ($language) ? '&language=' . $language : '';
-		$path .= ($startPage) ? '&start_page=' . $startPage : '';
+		if ($language)
+		{
+			$uri->setVar('language', $language);
+		}
+
+		if ($startPage)
+		{
+			$uri->setVar('start_page', $startPage);
+		}
 
 		// Send the request.
-		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path))
-		);
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**
@@ -96,14 +102,15 @@ class Search extends AbstractPackage
 	public function users($keyword, $startPage = 0)
 	{
 		// Build the request path.
-		$path = '/legacy/user/search/' . $keyword . '?';
+		$uri = new Uri($this->fetchUrl('/legacy/user/search/' . $keyword));
 
-		$path .= ($startPage) ? '&start_page=' . $startPage : '';
+		if ($startPage)
+		{
+			$uri->setVar('start_page', $startPage);
+		}
 
 		// Send the request.
-		return $this->processResponse(
-			$this->client->get($this->fetchUrl($path))
-		);
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**

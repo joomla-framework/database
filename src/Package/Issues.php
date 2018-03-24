@@ -205,9 +205,7 @@ class Issues extends AbstractPackage
 	)
 	{
 		// Build the request path.
-		$path = '/issues';
-
-		$uri = new Uri($this->fetchUrl($path, $page, $limit));
+		$uri = new Uri($this->fetchUrl('/issues', $page, $limit));
 
 		if ($filter)
 		{
@@ -240,7 +238,7 @@ class Issues extends AbstractPackage
 		}
 
 		// Send the request.
-		return $this->processResponse($this->client->get((string) $uri));
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**
@@ -314,7 +312,7 @@ class Issues extends AbstractPackage
 		}
 
 		// Send the request.
-		return $this->processResponse($this->client->get((string) $uri));
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**

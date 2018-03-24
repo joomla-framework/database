@@ -10,6 +10,7 @@ namespace Joomla\Github\Package;
 
 use Joomla\Github\AbstractPackage;
 use Joomla\Http\Exception\UnexpectedResponseException;
+use Joomla\Uri\Uri;
 
 /**
  * GitHub API Gists class for the Joomla Framework.
@@ -236,11 +237,15 @@ class Gists extends AbstractPackage
 	public function getListByUser($user, $page = 0, $limit = 0, \DateTime $since = null)
 	{
 		// Build the request path.
-		$path = '/users/' . $user . '/gists';
-		$path .= ($since) ? '?since=' . $since->format(\DateTime::RFC3339) : '';
+		$uri = new Uri($this->fetchUrl('/users/' . $user . '/gists', $page, $limit));
+
+		if ($since)
+		{
+			$uri->setVar('since', $since->format(\DateTime::RFC3339));
+		}
 
 		// Send the request.
-		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**
@@ -258,11 +263,15 @@ class Gists extends AbstractPackage
 	public function getListPublic($page = 0, $limit = 0, \DateTime $since = null)
 	{
 		// Build the request path.
-		$path = '/gists/public';
-		$path .= ($since) ? '?since=' . $since->format(\DateTime::RFC3339) : '';
+		$uri = new Uri($this->fetchUrl('/gists/public', $page, $limit));
+
+		if ($since)
+		{
+			$uri->setVar('since', $since->format(\DateTime::RFC3339));
+		}
 
 		// Send the request.
-		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**
@@ -280,11 +289,15 @@ class Gists extends AbstractPackage
 	public function getListStarred($page = 0, $limit = 0, \DateTime $since = null)
 	{
 		// Build the request path.
-		$path = '/gists/starred';
-		$path .= ($since) ? '?since=' . $since->format(\DateTime::RFC3339) : '';
+		$uri = new Uri($this->fetchUrl('/gists/starred', $page, $limit));
+
+		if ($since)
+		{
+			$uri->setVar('since', $since->format(\DateTime::RFC3339));
+		}
 
 		// Send the request.
-		return $this->processResponse($this->client->get($this->fetchUrl($path, $page, $limit)));
+		return $this->processResponse($this->client->get($uri));
 	}
 
 	/**
