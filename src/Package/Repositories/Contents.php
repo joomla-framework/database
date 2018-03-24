@@ -9,6 +9,7 @@
 namespace Joomla\Github\Package\Repositories;
 
 use Joomla\Github\AbstractPackage;
+use Joomla\Uri\Uri;
 
 /**
  * GitHub API Repositories Contents class for the Joomla Framework.

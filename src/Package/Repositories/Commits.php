@@ -10,6 +10,7 @@ namespace Joomla\Github\Package\Repositories;
 
 use Joomla\Github\AbstractPackage;
 use Joomla\Http\Exception\UnexpectedResponseException;
+use Joomla\Uri\Uri;
 
 /**
  * GitHub API Repositories Commits class for the Joomla Framework.
