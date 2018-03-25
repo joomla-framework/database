@@ -33,6 +33,14 @@ abstract class PdoDriver extends DatabaseDriver
 	public $name = 'pdo';
 
 	/**
+	 * The database connection resource.
+	 *
+	 * @var    \PDO
+	 * @since  1.0
+	 */
+	protected $connection;
+
+	/**
 	 * The character(s) used to quote SQL statement names such as table names or field names,
 	 * etc.  The child classes should define this as necessary.  If a single character string the
 	 * same character is used for both sides of the quoted name, else the first character will be
@@ -55,7 +63,7 @@ abstract class PdoDriver extends DatabaseDriver
 	/**
 	 * The prepared statement.
 	 *
-	 * @var    resource
+	 * @var    \PDOStatement|boolean
 	 * @since  1.0
 	 */
 	protected $prepared;
