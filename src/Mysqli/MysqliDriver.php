@@ -43,6 +43,14 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	public $name = 'mysqli';
 
 	/**
+	 * The database connection cursor from the last query.
+	 *
+	 * @var    \mysqli_result|boolean
+	 * @since  1.0
+	 */
+	protected $cursor;
+
+	/**
 	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
 	 *
 	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the

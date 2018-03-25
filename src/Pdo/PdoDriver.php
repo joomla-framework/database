@@ -62,7 +62,7 @@ abstract class PdoDriver extends DatabaseDriver
 	/**
 	 * The prepared statement.
 	 *
-	 * @var    \PDOStatement
+	 * @var    \PDOStatement|boolean
 	 * @since  1.0
 	 */
 	protected $prepared;
