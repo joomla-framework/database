@@ -15,7 +15,6 @@ use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\StatementInterface;
 
 /**
@@ -60,22 +59,6 @@ abstract class PdoDriver extends DatabaseDriver
 	 * @since  1.0
 	 */
 	protected $nullDate = '0000-00-00 00:00:00';
-
-	/**
-	 * The prepared statement.
-	 *
-	 * @var    \PDOStatement|boolean
-	 * @since  1.0
-	 */
-	protected $prepared;
-
-	/**
-	 * Contains the current query execution status
-	 *
-	 * @var    boolean
-	 * @since  1.0
-	 */
-	protected $executed = false;
 
 	/**
 	 * Constructor.
@@ -319,6 +302,7 @@ abstract class PdoDriver extends DatabaseDriver
 		}
 
 		$this->setOption(\PDO::ATTR_STATEMENT_CLASS, [PdoStatement::class, []]);
+		$this->setOption(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
 		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_CONNECT, $this));
 	}
@@ -396,38 +380,40 @@ abstract class PdoDriver extends DatabaseDriver
 			$this->monitor->startQuery($sql);
 		}
 
-		// Reset the error values.
-		$this->errorNum = 0;
-		$this->errorMsg = '';
-
 		// Execute the query.
 		$this->executed = false;
 
-		if ($this->prepared instanceof \PDOStatement)
-		{
-			// Bind the variables
-			$bounded =& $this->sql->getBounded();
+		// Bind the variables
+		$bounded =& $this->sql->getBounded();
 
-			foreach ($bounded as $key => $obj)
+		foreach ($bounded as $key => $obj)
+		{
+			$this->prepared->bindParam($key, $obj->value, $obj->dataType, $obj->length, $obj->driverOptions);
+		}
+
+		try
+		{
+			$this->executed = $this->prepared->execute();
+
+			// If there is a monitor registered, let it know we have finished this query
+			if ($this->monitor)
 			{
-				$this->prepared->bindParam($key, $obj->value, $obj->dataType, $obj->length, $obj->driverOptions);
+				$this->monitor->stopQuery();
 			}
 
-			$this->executed = $this->prepared->execute();
+			return true;
 		}
-
-		// If there is a monitor registered, let it know we have finished this query
-		if ($this->monitor)
+		catch (\PDOException $exception)
 		{
-			$this->monitor->stopQuery();
-		}
+			// If there is a monitor registered, let it know we have finished this query
+			if ($this->monitor)
+			{
+				$this->monitor->stopQuery();
+			}
 
-		// If an error occurred handle it.
-		if (!$this->executed)
-		{
 			// Get the error number and message before we execute any more queries.
-			$errorNum = (int) $this->connection->errorCode();
-			$errorMsg = (string) 'SQL: ' . implode(', ', $this->connection->errorInfo());
+			$errorNum = (int) $this->prepared->errorCode();
+			$errorMsg = (string) implode(', ', $this->prepared->errorInfo());
 
 			// Check if the server was disconnected.
 			if (!$this->connected())
@@ -439,28 +425,18 @@ abstract class PdoDriver extends DatabaseDriver
 					$this->connect();
 				}
 				catch (ConnectionFailureException $e)
-				// If connect fails, ignore that exception and throw the normal exception.
 				{
-					// Get the error number and message.
-					$this->errorNum = (int) $this->connection->errorCode();
-					$this->errorMsg = (string) 'SQL: ' . implode(', ', $this->connection->errorInfo());
-
-					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
+					// If connect fails, ignore that exception and throw the normal exception.
+					throw new ExecutionFailureException($sql, $errorMsg, $errorNum);
 				}
 
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
 
-			// Get the error number and message from before we tried to reconnect.
-			$this->errorNum = $errorNum;
-			$this->errorMsg = $errorMsg;
-
 			// Throw the normal query exception.
-			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
+			throw new ExecutionFailureException($sql, $errorMsg, $errorNum);
 		}
-
-		return $this->prepared;
 	}
 
 	/**
@@ -605,7 +581,7 @@ abstract class PdoDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		if ($this->prepared instanceof \PDOStatement)
+		if ($this->prepared)
 		{
 			return $this->prepared->rowCount();
 		}
@@ -616,22 +592,15 @@ abstract class PdoDriver extends DatabaseDriver
 	/**
 	 * Get the number of returned rows for the previous executed SQL statement.
 	 *
-	 * @param   resource  $cursor  An optional database cursor resource to extract the row count from.
-	 *
 	 * @return  integer   The number of returned rows.
 	 *
 	 * @since   1.0
 	 */
-	public function getNumRows($cursor = null)
+	public function getNumRows()
 	{
 		$this->connect();
 
-		if ($cursor instanceof \PDOStatement)
-		{
-			return $cursor->rowCount();
-		}
-
-		if ($this->prepared instanceof \PDOStatement)
+		if ($this->prepared)
 		{
 			return $this->prepared->rowCount();
 		}
@@ -752,20 +721,13 @@ abstract class PdoDriver extends DatabaseDriver
 	/**
 	 * Method to fetch a row from the result set cursor as an array.
 	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
 	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
 	 *
 	 * @since   1.0
 	 */
-	protected function fetchArray($cursor = null)
+	protected function fetchArray()
 	{
-		if (!empty($cursor) && $cursor instanceof \PDOStatement)
-		{
-			return $cursor->fetch(\PDO::FETCH_NUM);
-		}
-
-		if ($this->prepared instanceof \PDOStatement)
+		if ($this->prepared)
 		{
 			return $this->prepared->fetch(\PDO::FETCH_NUM);
 		}
@@ -774,20 +736,13 @@ abstract class PdoDriver extends DatabaseDriver
 	/**
 	 * Method to fetch a row from the result set cursor as an associative array.
 	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
 	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
 	 *
 	 * @since   1.0
 	 */
-	protected function fetchAssoc($cursor = null)
+	protected function fetchAssoc()
 	{
-		if (!empty($cursor) && $cursor instanceof \PDOStatement)
-		{
-			return $cursor->fetch(\PDO::FETCH_ASSOC);
-		}
-
-		if ($this->prepared instanceof \PDOStatement)
+		if ($this->prepared)
 		{
 			return $this->prepared->fetch(\PDO::FETCH_ASSOC);
 		}
@@ -796,49 +751,17 @@ abstract class PdoDriver extends DatabaseDriver
 	/**
 	 * Method to fetch a row from the result set cursor as an object.
 	 *
-	 * @param   mixed   $cursor  The optional result set cursor from which to fetch the row.
-	 * @param   string  $class   Unused, only necessary so method signature will be the same as parent.
+	 * @param   string  $class  The class name to use for the returned row object.
 	 *
 	 * @return  mixed   Either the next row from the result set or false if there are no more rows.
 	 *
 	 * @since   1.0
 	 */
-	protected function fetchObject($cursor = null, $class = '\\stdClass')
+	protected function fetchObject($class = '\\stdClass')
 	{
-		if (!empty($cursor) && $cursor instanceof \PDOStatement)
-		{
-			return $cursor->fetchObject($class);
-		}
-
-		if ($this->prepared instanceof \PDOStatement)
+		if ($this->prepared)
 		{
 			return $this->prepared->fetchObject($class);
-		}
-	}
-
-	/**
-	 * Method to free up the memory used for the result set.
-	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	protected function freeResult($cursor = null)
-	{
-		$this->executed = false;
-
-		if ($cursor instanceof \PDOStatement)
-		{
-			$cursor->closeCursor();
-			$cursor = null;
-		}
-
-		if ($this->prepared instanceof \PDOStatement)
-		{
-			$this->prepared->closeCursor();
-			$this->prepared = null;
 		}
 	}
 
@@ -862,41 +785,6 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			throw new PrepareStatementFailureException($exception->getMessage(), $exception->getCode(), $exception);
 		}
-	}
-
-	/**
-	 * Method to get the next row in the result set from the database query as an array.
-	 *
-	 * @return  mixed  The result of the query as an array, false if there are no more rows.
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	public function loadNextAssoc()
-	{
-		$this->connect();
-
-		// Execute the query and get the result set cursor.
-		if (!$this->executed)
-		{
-			if (!$this->execute())
-			{
-				return $this->errorNum ? null : false;
-			}
-		}
-
-		// Get the next row from the result set as an object of type $class.
-		$row = $this->fetchAssoc();
-
-		if ($row)
-		{
-			return $row;
-		}
-
-		// Free up system resources and return.
-		$this->freeResult();
-
-		return false;
 	}
 
 	/**

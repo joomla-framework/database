@@ -80,6 +80,14 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	protected $cursor;
 
 	/**
+	 * Contains the current query execution status
+	 *
+	 * @var    boolean
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $executed = false;
+
+	/**
 	 * The affected row limit for the current SQL statement.
 	 *
 	 * @var    integer
@@ -121,6 +129,14 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * @since  1.0
 	 */
 	protected $options;
+
+	/**
+	 * The prepared statement.
+	 *
+	 * @var    StatementInterface
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $prepared;
 
 	/**
 	 * The current SQL statement to execute.
@@ -570,47 +586,49 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	/**
 	 * Method to fetch a row from the result set cursor as an array.
 	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
 	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
 	 *
 	 * @since   1.0
 	 */
-	abstract protected function fetchArray($cursor = null);
+	abstract protected function fetchArray();
 
 	/**
 	 * Method to fetch a row from the result set cursor as an associative array.
 	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
 	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
 	 *
 	 * @since   1.0
 	 */
-	abstract protected function fetchAssoc($cursor = null);
+	abstract protected function fetchAssoc();
 
 	/**
 	 * Method to fetch a row from the result set cursor as an object.
 	 *
-	 * @param   mixed   $cursor  The optional result set cursor from which to fetch the row.
-	 * @param   string  $class   The class name to use for the returned row object.
+	 * @param   string  $class  The class name to use for the returned row object.
 	 *
 	 * @return  mixed   Either the next row from the result set or false if there are no more rows.
 	 *
 	 * @since   1.0
 	 */
-	abstract protected function fetchObject($cursor = null, $class = 'stdClass');
+	abstract protected function fetchObject($class = 'stdClass');
 
 	/**
 	 * Method to free up the memory used for the result set.
-	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0
 	 */
-	abstract protected function freeResult($cursor = null);
+	protected function freeResult()
+	{
+		$this->executed = false;
+
+		if ($this->prepared)
+		{
+			$this->prepared->closeCursor();
+			$this->prepared = null;
+		}
+	}
 
 	/**
 	 * Method that provides access to the underlying database connection.
@@ -977,13 +995,10 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		$ret = null;
 
 		// Execute the query and get the result set cursor.
-		if (!($cursor = $this->execute()))
-		{
-			return null;
-		}
+		$this->execute();
 
 		// Get the first row from the result set as an associative array.
-		$array = $this->fetchAssoc($cursor);
+		$array = $this->fetchAssoc();
 
 		if ($array)
 		{
@@ -991,7 +1006,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		}
 
 		// Free up system resources and return.
-		$this->freeResult($cursor);
+		$this->freeResult();
 
 		return $ret;
 	}
@@ -1020,13 +1035,10 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		$array = [];
 
 		// Execute the query and get the result set cursor.
-		if (!($cursor = $this->execute()))
-		{
-			return null;
-		}
+		$this->execute();
 
 		// Get all of the rows from the result set.
-		while ($row = $this->fetchAssoc($cursor))
+		while ($row = $this->fetchAssoc())
 		{
 			$value = $column ? (isset($row[$column]) ? $row[$column] : $row) : $row;
 
@@ -1041,7 +1053,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		}
 
 		// Free up system resources and return.
-		$this->freeResult($cursor);
+		$this->freeResult();
 
 		return $array;
 	}
@@ -1063,19 +1075,16 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		$array = [];
 
 		// Execute the query and get the result set cursor.
-		if (!($cursor = $this->execute()))
-		{
-			return null;
-		}
+		$this->execute();
 
 		// Get all of the rows from the result set as arrays.
-		while ($row = $this->fetchArray($cursor))
+		while ($row = $this->fetchArray())
 		{
 			$array[] = $row[$offset];
 		}
 
 		// Free up system resources and return.
-		$this->freeResult($cursor);
+		$this->freeResult();
 
 		return $array;
 	}
@@ -1097,13 +1106,10 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		$ret = null;
 
 		// Execute the query and get the result set cursor.
-		if (!($cursor = $this->execute()))
-		{
-			return null;
-		}
+		$this->execute();
 
 		// Get the first row from the result set as an object of type $class.
-		$object = $this->fetchObject($cursor, $class);
+		$object = $this->fetchObject($class);
 
 		if ($object)
 		{
@@ -1111,7 +1117,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		}
 
 		// Free up system resources and return.
-		$this->freeResult($cursor);
+		$this->freeResult();
 
 		return $ret;
 	}
@@ -1137,13 +1143,10 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		$array = [];
 
 		// Execute the query and get the result set cursor.
-		if (!($cursor = $this->execute()))
-		{
-			return null;
-		}
+		$this->execute();
 
 		// Get all of the rows from the result set as objects of type $class.
-		while ($row = $this->fetchObject($cursor, $class))
+		while ($row = $this->fetchObject($class))
 		{
 			if ($key)
 			{
@@ -1156,7 +1159,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		}
 
 		// Free up system resources and return.
-		$this->freeResult($cursor);
+		$this->freeResult();
 
 		return $array;
 	}
@@ -1176,13 +1179,10 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		$ret = null;
 
 		// Execute the query and get the result set cursor.
-		if (!($cursor = $this->execute()))
-		{
-			return null;
-		}
+		$this->execute();
 
 		// Get the first row from the result set as an array.
-		$row = $this->fetchArray($cursor);
+		$row = $this->fetchArray();
 
 		if ($row)
 		{
@@ -1190,7 +1190,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		}
 
 		// Free up system resources and return.
-		$this->freeResult($cursor);
+		$this->freeResult();
 
 		return $ret;
 	}
@@ -1212,13 +1212,10 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		$ret = null;
 
 		// Execute the query and get the result set cursor.
-		if (!($cursor = $this->execute()))
-		{
-			return null;
-		}
+		$this->execute();
 
 		// Get the first row from the result set as an array.
-		$row = $this->fetchArray($cursor);
+		$row = $this->fetchArray();
 
 		if ($row)
 		{
@@ -1226,7 +1223,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		}
 
 		// Free up system resources and return.
-		$this->freeResult($cursor);
+		$this->freeResult();
 
 		return $ret;
 	}
@@ -1251,13 +1248,10 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		$array = [];
 
 		// Execute the query and get the result set cursor.
-		if (!($cursor = $this->execute()))
-		{
-			return null;
-		}
+		$this->execute();
 
 		// Get all of the rows from the result set as arrays.
-		while ($row = $this->fetchArray($cursor))
+		while ($row = $this->fetchArray())
 		{
 			if ($key !== null)
 			{
@@ -1270,7 +1264,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		}
 
 		// Free up system resources and return.
-		$this->freeResult($cursor);
+		$this->freeResult();
 
 		return $array;
 	}

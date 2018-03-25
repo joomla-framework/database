@@ -16,15 +16,6 @@ namespace Joomla\Database;
 final class ParameterType
 {
 	/**
-	 * Private constructor to prevent instantiation of this class
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	private function __construct()
-	{
-	}
-
-	/**
 	 * Defines a boolean parameter
 	 *
 	 * @var    string
@@ -63,4 +54,13 @@ final class ParameterType
 	 * @since  __DEPLOY_VERSION__
 	 */
 	const STRING = 'string';
+
+	/**
+	 * Private constructor to prevent instantiation of this class
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	private function __construct()
+	{
+	}
 }

@@ -168,13 +168,11 @@ interface DatabaseInterface
 	/**
 	 * Get the number of returned rows for the previous executed SQL statement.
 	 *
-	 * @param   resource  $cursor  An optional database cursor resource to extract the row count from.
-	 *
 	 * @return  integer
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getNumRows($cursor = null);
+	public function getNumRows();
 
 	/**
 	 * Get the current query object or a new QueryInterface object.
