@@ -13,8 +13,10 @@ use Joomla\Database\DatabaseEvents;
 use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\LimitableInterface;
+use Joomla\Database\StatementInterface;
 
 /**
  * Joomla Framework PDO Database Driver Class
@@ -670,42 +672,6 @@ abstract class PdoDriver extends DatabaseDriver
 	}
 
 	/**
-	 * Sets the SQL statement string for later execution.
-	 *
-	 * @param   string|DatabaseQuery  $query   The SQL statement to set either as a DatabaseQuery object or a string.
-	 * @param   integer               $offset  The affected row offset to set.
-	 * @param   integer               $limit   The maximum affected rows to set.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function setQuery($query, $offset = null, $limit = null)
-	{
-		$this->connect();
-
-		$this->freeResult();
-
-		if (is_string($query))
-		{
-			// Allows taking advantage of bound variables in a direct query:
-			$query = $this->getQuery(true)->setQuery($query);
-		}
-
-		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
-		{
-			$query->setLimit($limit, $offset);
-		}
-
-		$sql = $this->replacePrefix((string) $query);
-
-		$this->prepared = $this->connection->prepare($sql, $this->options['driverOptions']);
-
-		// Store reference to the DatabaseQuery instance:
-		return parent::setQuery($query, $offset, $limit);
-	}
-
-	/**
 	 * Set the connection to use UTF-8 character encoding.
 	 *
 	 * @return  boolean  True on success.
@@ -873,6 +839,28 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			$this->prepared->closeCursor();
 			$this->prepared = null;
+		}
+	}
+
+	/**
+	 * Prepares a SQL statement for execution
+	 *
+	 * @param   string  $query
+	 *
+	 * @return  StatementInterface
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  PrepareStatementFailureException
+	 */
+	protected function prepareStatement(string $query): StatementInterface
+	{
+		try
+		{
+			return $this->connection->prepare($query, $this->options['driverOptions']);
+		}
+		catch (\PDOException $exception)
+		{
+			throw new PrepareStatementFailureException($exception->getMessage(), $exception->getCode(), $exception);
 		}
 	}
 

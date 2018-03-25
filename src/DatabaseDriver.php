@@ -8,6 +8,8 @@
 
 namespace Joomla\Database;
 
+use Joomla\Database\Exception\PrepareStatementFailureException;
+use Joomla\Database\Query\LimitableInterface;
 use Joomla\Event\DispatcherAwareInterface;
 use Joomla\Event\DispatcherAwareTrait;
 use Joomla\Event\EventInterface;
@@ -1274,6 +1276,18 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
+	 * Prepares a SQL statement for execution
+	 *
+	 * @param   string  $query
+	 *
+	 * @return  StatementInterface
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  PrepareStatementFailureException
+	 */
+	abstract protected function prepareStatement(string $query): StatementInterface;
+
+	/**
 	 * Alias for quote method
 	 *
 	 * @param   array|string  $text    A string or an array of strings to quote.
@@ -1538,16 +1552,46 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	/**
 	 * Sets the SQL statement string for later execution.
 	 *
-	 * @param   mixed    $query   The SQL statement to set either as a Query object or a string.
-	 * @param   integer  $offset  The affected row offset to set.
-	 * @param   integer  $limit   The maximum affected rows to set.
+	 * @param   string|QueryInterface  $query   The SQL statement to set either as a Query object or a string.
+	 * @param   integer                $offset  The affected row offset to set.
+	 * @param   integer                $limit   The maximum affected rows to set.
 	 *
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  \InvalidArgumentException
 	 */
 	public function setQuery($query, $offset = 0, $limit = 0)
 	{
+		$this->connect();
+
+		$this->freeResult();
+
+		if (is_string($query))
+		{
+			// Allows taking advantage of bound variables in a direct query:
+			$query = $this->getQuery(true)->setQuery($query);
+		}
+		elseif (!($query instanceof QueryInterface))
+		{
+			throw new \InvalidArgumentException(
+				sprintf(
+					'A query must be a string or a %s instance, a %s was given.',
+					QueryInterface::class,
+					gettype($query) === 'object' ? (get_class($query) . ' instance') : gettype($query)
+				)
+			);
+		}
+
+		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
+		{
+			$query->setLimit($limit, $offset);
+		}
+
+		$sql = $this->replacePrefix((string) $query);
+
+		$this->prepared = $this->prepareStatement($sql);
+
 		$this->sql    = $query;
 		$this->limit  = (int) max(0, $limit);
 		$this->offset = (int) max(0, $offset);
