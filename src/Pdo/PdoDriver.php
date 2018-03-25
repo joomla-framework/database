@@ -316,6 +316,8 @@ abstract class PdoDriver extends DatabaseDriver
 			throw new ConnectionFailureException('Could not connect to PDO: ' . $e->getMessage(), $e->getCode(), $e);
 		}
 
+		$this->setOption(\PDO::ATTR_STATEMENT_CLASS, [PdoStatement::class, []]);
+
 		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_CONNECT, $this));
 	}
 
