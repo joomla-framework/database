@@ -14,8 +14,10 @@ use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\LimitableInterface;
+use Joomla\Database\StatementInterface;
 
 /**
  * PostgreSQL Database Driver
@@ -50,30 +52,6 @@ class PostgresqlDriver extends DatabaseDriver
 	 * @since  1.0
 	 */
 	protected $nullDate = '1970-01-01 00:00:00';
-
-	/**
-	 * The prepared statement.
-	 *
-	 * @var    resource
-	 * @since  1.5.0
-	 */
-	protected $prepared;
-
-	/**
-	 * Contains the current query execution status
-	 *
-	 * @var    array
-	 * @since  1.5.0
-	 */
-	protected $executed = false;
-
-	/**
-	 * Contains the name of the prepared query
-	 *
-	 * @var    string
-	 * @since  1.5.0
-	 */
-	protected $queryName = 'query';
 
 	/**
 	 * The minimum supported database version.
@@ -321,22 +299,6 @@ class PostgresqlDriver extends DatabaseDriver
 	public function getConnectionCollation()
 	{
 		return pg_client_encoding($this->connection);
-	}
-
-	/**
-	 * Get the number of returned rows for the previous executed SQL statement.
-	 *
-	 * @param   resource  $cur  An optional database cursor resource to extract the row count from.
-	 *
-	 * @return  integer   The number of returned rows.
-	 *
-	 * @since   1.0
-	 */
-	public function getNumRows($cur = null)
-	{
-		$this->connect();
-
-		return pg_num_rows((int) $cur ? $cur : $this->cursor);
 	}
 
 	/**
@@ -651,99 +613,6 @@ class PostgresqlDriver extends DatabaseDriver
 	}
 
 	/**
-	 * Execute the SQL statement.
-	 *
-	 * @return  mixed  A database cursor resource on success, boolean false on failure.
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	public function execute()
-	{
-		$this->connect();
-
-		// Take a local copy so that we don't modify the original query and cause issues later
-		$sql = $this->replacePrefix((string) $this->sql);
-
-		$count = $this->getCount();
-
-		// Increment the query counter.
-		$this->count++;
-
-		// If there is a monitor registered, let it know we are starting this query
-		if ($this->monitor)
-		{
-			$this->monitor->startQuery($sql);
-		}
-
-		// Reset the error values.
-		$this->errorNum = 0;
-		$this->errorMsg = '';
-
-		// Bind the variables
-		$bounded =& $this->sql->getBounded();
-
-		if (count($bounded))
-		{
-			// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
-			$this->cursor = @pg_execute($this->connection, $this->queryName . $count, array_values($bounded));
-		}
-		else
-		{
-			// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
-			$this->cursor = @pg_query($this->connection, $sql);
-		}
-
-		// If there is a monitor registered, let it know we have finished this query
-		if ($this->monitor)
-		{
-			$this->monitor->stopQuery();
-		}
-
-		// If an error occurred handle it.
-		if (!$this->cursor)
-		{
-			// Check if the server was disconnected.
-			if (!$this->connected())
-			{
-				try
-				{
-					// Attempt to reconnect.
-					$this->connection = null;
-					$this->connect();
-				}
-				catch (ConnectionFailureException $e)
-				// If connect fails, ignore that exception and throw the normal exception.
-				{
-					// Get the error number and message.
-					$this->errorMsg = pg_last_error($this->connection);
-
-					// Only get an error number if we have a non-boolean false cursor, otherwise use default 0
-					if ($this->cursor !== false)
-					{
-						$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
-					}
-
-					// Throw the normal query exception.
-					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
-				}
-
-				// Since we were able to reconnect, run the query again.
-				return $this->execute();
-			}
-
-			// Get the error number and message.
-			$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
-			$this->errorMsg = pg_last_error($this->connection);
-
-			// Throw the normal query exception.
-			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
-		}
-
-		return $this->cursor;
-	}
-
-	/**
 	 * Renames a table in the database.
 	 *
 	 * @param   string  $oldTable  The name of the table to be renamed
@@ -837,39 +706,18 @@ class PostgresqlDriver extends DatabaseDriver
 	}
 
 	/**
-	 * Sets the SQL statement string for later execution.
+	 * Prepares a SQL statement for execution
 	 *
-	 * @param   DatabaseQuery|string  $query   The SQL statement to set either as a DatabaseQuery object or a string.
-	 * @param   integer               $offset  The affected row offset to set.
-	 * @param   integer               $limit   The maximum affected rows to set.
+	 * @param   string  $query
 	 *
-	 * @return  PostgresqlDriver  This object to support method chaining.
+	 * @return  StatementInterface
 	 *
-	 * @since   1.5.0
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  PrepareStatementFailureException
 	 */
-	public function setQuery($query, $offset = null, $limit = null)
+	protected function prepareStatement(string $query): StatementInterface
 	{
-		$this->connect();
-
-		$this->freeResult();
-
-		if (is_string($query))
-		{
-			// Allows taking advantage of bound variables in a direct query:
-			$query = $this->getQuery(true)->setQuery($query);
-		}
-
-		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
-		{
-			$query->setLimit($limit, $offset);
-		}
-
-		$sql = $this->replacePrefix((string) $query);
-
-		$this->prepared = pg_prepare($this->connection, $this->queryName . $this->getCount(), $sql);
-
-		// Store reference to the DatabaseQuery instance
-		return parent::setQuery($query, $offset, $limit);
+		return new PostgresqlStatement($this->connection, $query, $this->getCount());
 	}
 
 	/**
@@ -1034,68 +882,6 @@ class PostgresqlDriver extends DatabaseDriver
 		$this->setQuery('SAVEPOINT ' . $this->quoteName($savepoint))->execute();
 
 		$this->transactionDepth++;
-	}
-
-	/**
-	 * Method to fetch a row from the result set cursor as an array.
-	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
-	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
-	 *
-	 * @since   1.0
-	 */
-	protected function fetchArray($cursor = null)
-	{
-		return pg_fetch_row($cursor ?: $this->cursor);
-	}
-
-	/**
-	 * Method to fetch a row from the result set cursor as an associative array.
-	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
-	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
-	 *
-	 * @since   1.0
-	 */
-	protected function fetchAssoc($cursor = null)
-	{
-		return pg_fetch_assoc($cursor ?: $this->cursor);
-	}
-
-	/**
-	 * Method to fetch a row from the result set cursor as an object.
-	 *
-	 * @param   mixed   $cursor  The optional result set cursor from which to fetch the row.
-	 * @param   string  $class   The class name to use for the returned row object.
-	 *
-	 * @return  mixed   Either the next row from the result set or false if there are no more rows.
-	 *
-	 * @since   1.0
-	 */
-	protected function fetchObject($cursor = null, $class = 'stdClass')
-	{
-		return pg_fetch_object(is_null($cursor) ? $this->cursor : $cursor, null, $class);
-	}
-
-	/**
-	 * Method to free up the memory used for the result set.
-	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	protected function freeResult($cursor = null)
-	{
-		$useCursor = $cursor ?: $this->cursor;
-
-		if (is_resource($useCursor))
-		{
-			pg_free_result($useCursor);
-		}
 	}
 
 	/**
