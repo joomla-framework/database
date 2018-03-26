@@ -327,6 +327,6 @@ class PostgresqlStatement implements StatementInterface
 	 */
 	public function rowCount()
 	{
-		return pg_num_rows($this->statement);
+		return pg_affected_rows($this->statement);
 	}
 }

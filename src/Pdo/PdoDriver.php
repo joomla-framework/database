@@ -570,26 +570,6 @@ abstract class PdoDriver extends DatabaseDriver
 	}
 
 	/**
-	 * Get the number of affected rows for the previous executed SQL statement.
-	 * Only applicable for DELETE, INSERT, or UPDATE statements.
-	 *
-	 * @return  integer  The number of affected rows.
-	 *
-	 * @since   1.0
-	 */
-	public function getAffectedRows()
-	{
-		$this->connect();
-
-		if ($this->prepared)
-		{
-			return $this->prepared->rowCount();
-		}
-
-		return 0;
-	}
-
-	/**
 	 * Method to get the auto-incremented value from the last INSERT statement.
 	 *
 	 * @return  string  The value of the auto-increment field from the last inserted row.

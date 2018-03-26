@@ -730,6 +730,25 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
+	 * Get the number of affected rows for the previous executed SQL statement.
+	 *
+	 * @return  integer  The number of affected rows in the previous operation
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getAffectedRows()
+	{
+		$this->connect();
+
+		if ($this->prepared)
+		{
+			return $this->prepared->rowCount();
+		}
+
+		return 0;
+	}
+
+	/**
 	 * Method that provides access to the underlying database connection.
 	 *
 	 * @return  resource  The underlying database connection resource.

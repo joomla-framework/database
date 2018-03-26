@@ -374,20 +374,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	}
 
 	/**
-	 * Get the number of affected rows for the previous executed SQL statement.
-	 *
-	 * @return  integer  The number of affected rows.
-	 *
-	 * @since   1.0
-	 */
-	public function getAffectedRows()
-	{
-		$this->connect();
-
-		return $this->connection->affected_rows;
-	}
-
-	/**
 	 * Return the query string to alter the database character set.
 	 *
 	 * @param   string  $dbName  The database name

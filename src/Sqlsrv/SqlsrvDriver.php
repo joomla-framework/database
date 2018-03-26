@@ -313,20 +313,6 @@ class SqlsrvDriver extends DatabaseDriver
 	}
 
 	/**
-	 * Get the number of affected rows for the previous executed SQL statement.
-	 *
-	 * @return  integer  The number of affected rows.
-	 *
-	 * @since   1.0
-	 */
-	public function getAffectedRows()
-	{
-		$this->connect();
-
-		return sqlsrv_rows_affected($this->cursor);
-	}
-
-	/**
 	 * Method to get the database collation in use by sampling a text field of a table in the database.
 	 *
 	 * @return  mixed  The collation in use by the database or boolean false if not supported.

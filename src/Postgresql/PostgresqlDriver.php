@@ -257,20 +257,6 @@ class PostgresqlDriver extends DatabaseDriver
 	}
 
 	/**
-	 * Get the number of affected rows for the previous executed SQL statement.
-	 *
-	 * @return  integer  The number of affected rows in the previous operation
-	 *
-	 * @since   1.0
-	 */
-	public function getAffectedRows()
-	{
-		$this->connect();
-
-		return pg_affected_rows($this->cursor);
-	}
-
-	/**
 	 * Method to get the database collation in use by sampling a text field of a table in the database.
 	 *
 	 * @return  mixed  The collation in use by the database or boolean false if not supported.
@@ -610,6 +596,85 @@ class PostgresqlDriver extends DatabaseDriver
 		$this->setQuery('LOCK TABLE ' . $this->quoteName($tableName) . ' IN ACCESS EXCLUSIVE MODE')->execute();
 
 		return $this;
+	}
+
+	/**
+	 * Execute the SQL statement.
+	 *
+	 * @return  mixed  A database cursor resource on success, boolean false on failure.
+	 *
+	 * @since   1.0
+	 * @throws  \RuntimeException
+	 */
+	public function execute()
+	{
+		$this->connect();
+
+		// Take a local copy so that we don't modify the original query and cause issues later
+		$sql = $this->replacePrefix((string) $this->sql);
+
+		// Increment the query counter.
+		$this->count++;
+
+		// If there is a monitor registered, let it know we are starting this query
+		if ($this->monitor)
+		{
+			$this->monitor->startQuery($sql);
+		}
+
+		// Execute the query.
+		$this->executed = false;
+
+		// Bind the variables
+		$bounded =& $this->sql->getBounded();
+
+		foreach ($bounded as $key => $value)
+		{
+			$this->prepared->bindParam($key, $value);
+		}
+
+		try
+		{
+			$this->executed = $this->prepared->execute();
+
+			// If there is a monitor registered, let it know we have finished this query
+			if ($this->monitor)
+			{
+				$this->monitor->stopQuery();
+			}
+
+			return true;
+		}
+		catch (ExecutionFailureException $exception)
+		{
+			// If there is a monitor registered, let it know we have finished this query
+			if ($this->monitor)
+			{
+				$this->monitor->stopQuery();
+			}
+
+			// Check if the server was disconnected.
+			if (!$this->connected())
+			{
+				try
+				{
+					// Attempt to reconnect.
+					$this->connection = null;
+					$this->connect();
+				}
+				catch (ConnectionFailureException $e)
+				{
+					// If connect fails, ignore that exception and throw the normal exception.
+					throw $exception;
+				}
+
+				// Since we were able to reconnect, run the query again.
+				return $this->execute();
+			}
+
+			// Throw the normal query exception.
+			throw $exception;
+		}
 	}
 
 	/**
