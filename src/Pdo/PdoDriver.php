@@ -590,25 +590,6 @@ abstract class PdoDriver extends DatabaseDriver
 	}
 
 	/**
-	 * Get the number of returned rows for the previous executed SQL statement.
-	 *
-	 * @return  integer   The number of returned rows.
-	 *
-	 * @since   1.0
-	 */
-	public function getNumRows()
-	{
-		$this->connect();
-
-		if ($this->prepared)
-		{
-			return $this->prepared->rowCount();
-		}
-
-		return 0;
-	}
-
-	/**
 	 * Method to get the auto-incremented value from the last INSERT statement.
 	 *
 	 * @return  string  The value of the auto-increment field from the last inserted row.
@@ -716,53 +697,6 @@ abstract class PdoDriver extends DatabaseDriver
 		}
 
 		$this->transactionDepth++;
-	}
-
-	/**
-	 * Method to fetch a row from the result set cursor as an array.
-	 *
-	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
-	 *
-	 * @since   1.0
-	 */
-	protected function fetchArray()
-	{
-		if ($this->prepared)
-		{
-			return $this->prepared->fetch(\PDO::FETCH_NUM);
-		}
-	}
-
-	/**
-	 * Method to fetch a row from the result set cursor as an associative array.
-	 *
-	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
-	 *
-	 * @since   1.0
-	 */
-	protected function fetchAssoc()
-	{
-		if ($this->prepared)
-		{
-			return $this->prepared->fetch(\PDO::FETCH_ASSOC);
-		}
-	}
-
-	/**
-	 * Method to fetch a row from the result set cursor as an object.
-	 *
-	 * @param   string  $class  The class name to use for the returned row object.
-	 *
-	 * @return  mixed   Either the next row from the result set or false if there are no more rows.
-	 *
-	 * @since   1.0
-	 */
-	protected function fetchObject($class = '\\stdClass')
-	{
-		if ($this->prepared)
-		{
-			return $this->prepared->fetchObject($class);
-		}
 	}
 
 	/**

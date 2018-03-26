@@ -590,7 +590,13 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @since   1.0
 	 */
-	abstract protected function fetchArray();
+	protected function fetchArray()
+	{
+		if ($this->prepared)
+		{
+			return $this->prepared->fetch(FetchMode::NUMERIC);
+		}
+	}
 
 	/**
 	 * Method to fetch a row from the result set cursor as an associative array.
@@ -599,7 +605,13 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @since   1.0
 	 */
-	abstract protected function fetchAssoc();
+	protected function fetchAssoc()
+	{
+		if ($this->prepared)
+		{
+			return $this->prepared->fetch(FetchMode::ASSOCIATIVE);
+		}
+	}
 
 	/**
 	 * Method to fetch a row from the result set cursor as an object.
@@ -610,7 +622,13 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @since   1.0
 	 */
-	abstract protected function fetchObject($class = 'stdClass');
+	protected function fetchObject($class = '\\stdClass')
+	{
+		if ($this->prepared)
+		{
+			return $this->prepared->fetchObject($class);
+		}
+	}
 
 	/**
 	 * Method to free up the memory used for the result set.
@@ -738,6 +756,25 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		}
 
 		return $this->name;
+	}
+
+	/**
+	 * Get the number of returned rows for the previous executed SQL statement.
+	 *
+	 * @return  integer   The number of returned rows.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getNumRows()
+	{
+		$this->connect();
+
+		if ($this->prepared)
+		{
+			return $this->prepared->rowCount();
+		}
+
+		return 0;
 	}
 
 	/**

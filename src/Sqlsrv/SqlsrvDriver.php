@@ -354,25 +354,6 @@ class SqlsrvDriver extends DatabaseDriver
 	}
 
 	/**
-	 * Get the number of returned rows for the previous executed SQL statement.
-	 *
-	 * @return  integer   The number of returned rows.
-	 *
-	 * @since   1.0
-	 */
-	public function getNumRows()
-	{
-		$this->connect();
-
-		if ($this->prepared)
-		{
-			return $this->prepared->rowCount();
-		}
-
-		return 0;
-	}
-
-	/**
 	 * Retrieves field information about the given tables.
 	 *
 	 * @param   mixed    $table     A table name
@@ -878,53 +859,6 @@ class SqlsrvDriver extends DatabaseDriver
 		$this->setQuery('BEGIN TRANSACTION ' . $this->quoteName($savepoint))->execute();
 
 		$this->transactionDepth++;
-	}
-
-	/**
-	 * Method to fetch a row from the result set cursor as an array.
-	 *
-	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
-	 *
-	 * @since   1.0
-	 */
-	protected function fetchArray()
-	{
-		if ($this->prepared)
-		{
-			return $this->prepared->fetch(FetchMode::NUMERIC);
-		}
-	}
-
-	/**
-	 * Method to fetch a row from the result set cursor as an associative array.
-	 *
-	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
-	 *
-	 * @since   1.0
-	 */
-	protected function fetchAssoc()
-	{
-		if ($this->prepared)
-		{
-			return $this->prepared->fetch(FetchMode::ASSOCIATIVE);
-		}
-	}
-
-	/**
-	 * Method to fetch a row from the result set cursor as an object.
-	 *
-	 * @param   string  $class  The class name to use for the returned row object.
-	 *
-	 * @return  mixed   Either the next row from the result set or false if there are no more rows.
-	 *
-	 * @since   1.0
-	 */
-	protected function fetchObject($class = '\\stdClass')
-	{
-		if ($this->prepared)
-		{
-			return $this->prepared->fetchObject($class);
-		}
 	}
 
 	/**
