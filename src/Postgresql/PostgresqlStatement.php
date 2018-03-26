@@ -195,7 +195,7 @@ class PostgresqlStatement implements StatementInterface
 		}
 		else
 		{
-			$this->statement = pg_query($this->connection, $sql);
+			$this->statement = pg_query($this->connection, $this->query);
 		}
 
 		if (!$this->statement)
