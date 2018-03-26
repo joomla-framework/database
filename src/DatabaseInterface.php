@@ -84,7 +84,7 @@ interface DatabaseInterface
 	/**
 	 * Execute the SQL statement.
 	 *
-	 * @return  resource|boolean  A database cursor resource on success, boolean false on failure.
+	 * @return  boolean
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \RuntimeException
