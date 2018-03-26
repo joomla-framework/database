@@ -271,6 +271,18 @@ class NosqlDriver extends DatabaseDriver
 				return $this;
 			}
 
+			public function clear($clause = null)
+			{
+				switch ($clause)
+				{
+					case null:
+						$this->bounded = array();
+						break;
+				}
+
+				return parent::clear($clause);
+			}
+
 			public function &getBounded($key = null)
 			{
 				if (empty($key))
