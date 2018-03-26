@@ -14,8 +14,11 @@ use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
+use Joomla\Database\FetchMode;
 use Joomla\Database\Query\LimitableInterface;
+use Joomla\Database\StatementInterface;
 use Joomla\Database\UTF8MB4SupportInterface;
 
 /**
@@ -43,14 +46,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	public $name = 'mysqli';
 
 	/**
-	 * The database connection cursor from the last query.
-	 *
-	 * @var    \mysqli_result|boolean
-	 * @since  1.0
-	 */
-	protected $cursor;
-
-	/**
 	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
 	 *
 	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
@@ -76,22 +71,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 * @since  1.4.0
 	 */
 	protected $utf8mb4 = false;
-
-	/**
-	 * The prepared statement.
-	 *
-	 * @var    \mysqli_stmt
-	 * @since  1.5.0
-	 */
-	protected $prepared;
-
-	/**
-	 * Contains the current query execution status
-	 *
-	 * @var    array
-	 * @since  1.5.0
-	 */
-	protected $executed = false;
 
 	/**
 	 * The minimum supported database version.
@@ -353,8 +332,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 */
 	public static function isSupported()
 	{
-		// At the moment we depend on mysqlnd extension, so we additionally test for mysqli_stmt_get_result
-		return function_exists('mysqli_connect') && function_exists('mysqli_stmt_get_result');
+		return extension_loaded('mysqli');
 	}
 
 	/**
@@ -489,7 +467,14 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 */
 	public function getNumRows($cursor = null)
 	{
-		return mysqli_num_rows($cursor ?: $this->cursor);
+		$this->connect();
+
+		if ($this->prepared)
+		{
+			return $this->prepared->rowCount();
+		}
+
+		return 0;
 	}
 
 	/**
@@ -679,65 +664,36 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			$this->monitor->startQuery($sql);
 		}
 
-		// Reset the error values.
-		$this->errorNum = 0;
-		$this->errorMsg = '';
-
 		// Execute the query.
 		$this->executed = false;
 
-		if ($this->prepared instanceof \mysqli_stmt)
+		// Bind the variables
+		$bounded =& $this->sql->getBounded();
+
+		foreach ($bounded as $key => $obj)
 		{
-			// Bind the variables
-			$bounded =& $this->sql->getBounded();
+			$this->prepared->bindParam($key, $obj->value, $obj->dataType);
+		}
 
-			if (count($bounded))
-			{
-				$params     = [];
-				$typeString = '';
-
-				foreach ($bounded as $key => $obj)
-				{
-					// Add the type to the type string
-					$typeString .= $obj->dataType;
-
-					// And add the value as an additional param
-					$params[] = $obj->value;
-				}
-
-				// Make everything references for call_user_func_array()
-				$bindParams = array();
-				$bindParams[] = &$typeString;
-
-				for ($i = 0, $iMax = count($params); $i < $iMax; $i++)
-				{
-					$bindParams[] = &$params[$i];
-				}
-
-				call_user_func_array([$this->prepared, 'bind_param'], $bindParams);
-			}
-
+		try
+		{
 			$this->executed = $this->prepared->execute();
-			$this->cursor   = $this->prepared->get_result();
 
-			// If the query was successful and we did not get a cursor, then set this to true (mimics mysql_query() return)
-			if ($this->executed && !$this->cursor)
+			// If there is a monitor registered, let it know we have finished this query
+			if ($this->monitor)
 			{
-				$this->cursor = true;
+				$this->monitor->stopQuery();
 			}
-		}
 
-		// If there is a monitor registered, let it know we have finished this query
-		if ($this->monitor)
-		{
-			$this->monitor->stopQuery();
+			return true;
 		}
-
-		// If an error occurred handle it.
-		if (!$this->executed)
+		catch (ExecutionFailureException $exception)
 		{
-			$this->errorNum = (int) $this->connection->errno;
-			$this->errorMsg = (string) $this->connection->error;
+			// If there is a monitor registered, let it know we have finished this query
+			if ($this->monitor)
+			{
+				$this->monitor->stopQuery();
+			}
 
 			// Check if the server was disconnected.
 			if (!$this->connected())
@@ -749,20 +705,18 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 					$this->connect();
 				}
 				catch (ConnectionFailureException $e)
-				// If connect fails, ignore that exception and throw the normal exception.
 				{
-					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
+					// If connect fails, ignore that exception and throw the normal exception.
+					throw $exception;
 				}
 
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
 
-			// The server was not disconnected.
-			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
+			// Throw the normal query exception.
+			throw $exception;
 		}
-
-		return $this->cursor;
 	}
 
 	/**
@@ -810,42 +764,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		}
 
 		return true;
-	}
-
-	/**
-	 * Sets the SQL statement string for later execution.
-	 *
-	 * @param   DatabaseQuery|string  $query   The SQL statement to set either as a DatabaseQuery object or a string.
-	 * @param   integer               $offset  The affected row offset to set.
-	 * @param   integer               $limit   The maximum affected rows to set.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.5.0
-	 */
-	public function setQuery($query, $offset = null, $limit = null)
-	{
-		$this->connect();
-
-		$this->freeResult();
-
-		if (is_string($query))
-		{
-			// Allows taking advantage of bound variables in a direct query:
-			$query = $this->getQuery(true)->setQuery($query);
-		}
-
-		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
-		{
-			$query->setLimit($limit, $offset);
-		}
-
-		$sql = $this->replacePrefix((string) $query);
-
-		$this->prepared = $this->connection->prepare($sql);
-
-		// Store reference to the DatabaseQuery instance
-		return parent::setQuery($query, $offset, $limit);
 	}
 
 	/**
@@ -1005,8 +923,8 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		// If an error occurred handle it.
 		if (!$cursor)
 		{
-			$this->errorNum = (int) $this->connection->errno;
-			$this->errorMsg = (string) $this->connection->error;
+			$errorNum = (int) $this->connection->errno;
+			$errorMsg = (string) $this->connection->error;
 
 			// Check if the server was disconnected.
 			if (!$this->connected())
@@ -1018,9 +936,9 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 					$this->connect();
 				}
 				catch (ConnectionFailureException $e)
-				// If connect fails, ignore that exception and throw the normal exception.
 				{
-					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
+					// If connect fails, ignore that exception and throw the normal exception.
+					throw new ExecutionFailureException($sql, $errorMsg, $errorNum);
 				}
 
 				// Since we were able to reconnect, run the query again.
@@ -1028,7 +946,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			}
 
 			// The server was not disconnected.
-			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
+			throw new ExecutionFailureException($sql, $errorMsg, $errorNum);
 		}
 
 		$this->freeResult($cursor);
@@ -1039,44 +957,48 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	/**
 	 * Method to fetch a row from the result set cursor as an array.
 	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
 	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
 	 *
 	 * @since   1.0
 	 */
-	protected function fetchArray($cursor = null)
+	protected function fetchArray()
 	{
-		return mysqli_fetch_row($cursor ?: $this->cursor);
+		if ($this->prepared)
+		{
+			return $this->prepared->fetch(FetchMode::NUMERIC);
+		}
 	}
 
 	/**
 	 * Method to fetch a row from the result set cursor as an associative array.
 	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
 	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
 	 *
 	 * @since   1.0
 	 */
-	protected function fetchAssoc($cursor = null)
+	protected function fetchAssoc()
 	{
-		return mysqli_fetch_assoc($cursor ?: $this->cursor);
+		if ($this->prepared)
+		{
+			return $this->prepared->fetch(FetchMode::ASSOCIATIVE);
+		}
 	}
 
 	/**
 	 * Method to fetch a row from the result set cursor as an object.
 	 *
-	 * @param   mixed   $cursor  The optional result set cursor from which to fetch the row.
-	 * @param   string  $class   The class name to use for the returned row object.
+	 * @param   string  $class  The class name to use for the returned row object.
 	 *
 	 * @return  mixed   Either the next row from the result set or false if there are no more rows.
 	 *
 	 * @since   1.0
 	 */
-	protected function fetchObject($cursor = null, $class = '\\stdClass')
+	protected function fetchObject($class = '\\stdClass')
 	{
-		return mysqli_fetch_object($cursor ?: $this->cursor, $class);
+		if ($this->prepared)
+		{
+			return $this->prepared->fetchObject($class);
+		}
 	}
 
 	/**
@@ -1092,16 +1014,26 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	{
 		$this->executed = false;
 
-		if ($cursor instanceof \mysqli_result)
+		if ($this->prepared)
 		{
-			$cursor->free_result();
-		}
-
-		if ($this->prepared instanceof \mysqli_stmt)
-		{
-			$this->prepared->close();
+			$this->prepared->closeCursor();
 			$this->prepared = null;
 		}
+	}
+
+	/**
+	 * Prepares a SQL statement for execution
+	 *
+	 * @param   string  $query
+	 *
+	 * @return  StatementInterface
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  PrepareStatementFailureException
+	 */
+	protected function prepareStatement(string $query): StatementInterface
+	{
+		return new MysqliStatement($this->connection, $query);
 	}
 
 	/**

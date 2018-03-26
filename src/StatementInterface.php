@@ -32,7 +32,7 @@ interface StatementInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function bindParam($parameter, &$variable, $data_type = PDO::PARAM_STR, $length = null, $driverOptions = null);
+	public function bindParam($parameter, &$variable, $dataType = \PDO::PARAM_STR, $length = null, $driverOptions = null);
 
 	/**
 	 * Closes the cursor, enabling the statement to be executed again.
