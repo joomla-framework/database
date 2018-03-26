@@ -8,7 +8,6 @@
 
 namespace Joomla\Database\Sqlsrv;
 
-use Joomla\Cache\Exception\InvalidArgumentException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\FetchMode;
@@ -308,7 +307,7 @@ class SqlsrvStatement implements StatementInterface
 			return sqlsrv_fetch_object($this->statement, $this->defaultObjectClass) ?: false;
 		}
 
-		throw new InvalidArgumentException("Unknown fetch type '{$fetchStyle}'");
+		throw new \InvalidArgumentException("Unknown fetch type '{$fetchStyle}'");
 	}
 
 	/**

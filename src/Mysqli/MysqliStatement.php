@@ -8,7 +8,6 @@
 
 namespace Joomla\Database\Mysqli;
 
-use Joomla\Cache\Exception\InvalidArgumentException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\FetchMode;
@@ -370,7 +369,7 @@ class MysqliStatement implements StatementInterface
 				return $ret;
 
 			default:
-				throw new InvalidArgumentException("Unknown fetch type '{$fetchStyle}'");
+				throw new \InvalidArgumentException("Unknown fetch type '{$fetchStyle}'");
 		}
 	}
 
