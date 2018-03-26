@@ -10,6 +10,8 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\FetchOrientation;
+use Joomla\Database\ParameterType;
+use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\StatementInterface;
 
 /**
@@ -238,7 +240,50 @@ class NosqlDriver extends DatabaseDriver
 	 */
 	public function getQuery($new = false)
 	{
-		return null;
+		return new class($this) extends DatabaseQuery
+		{
+			protected $bounded = array();
+
+			public function bind($key = null, &$value = null, $dataType = ParameterType::STRING, $length = 0, $driverOptions = [])
+			{
+				// Case 1: Empty Key (reset $bounded array)
+				if (empty($key))
+				{
+					$this->bounded = array();
+
+					return $this;
+				}
+
+				// Case 2: Key Provided, null value (unset key from $bounded array)
+				if (is_null($value))
+				{
+					if (isset($this->bounded[$key]))
+					{
+						unset($this->bounded[$key]);
+					}
+
+					return $this;
+				}
+
+				// Case 3: Simply add the Key/Value into the bounded array
+				$this->bounded[$key] = &$value;
+
+				return $this;
+			}
+
+			public function &getBounded($key = null)
+			{
+				if (empty($key))
+				{
+					return $this->bounded;
+				}
+
+				if (isset($this->bounded[$key]))
+				{
+					return $this->bounded[$key];
+				}
+			}
+		};
 	}
 
 	/**
