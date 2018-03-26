@@ -14,25 +14,29 @@ use Joomla\Http\TransportInterface;
 /**
  * HTTP client class for connecting to a GitHub instance.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Use Joomla\Http\Http instead
  */
 class Http extends BaseHttp
 {
 	/**
 	 * @const  integer  Use no authentication for HTTP connections.
 	 * @since  1.0
+	 * @deprecated  2.0
 	 */
 	const AUTHENTICATION_NONE = 0;
 
 	/**
 	 * @const  integer  Use basic authentication for HTTP connections.
 	 * @since  1.0
+	 * @deprecated  2.0
 	 */
 	const AUTHENTICATION_BASIC = 1;
 
 	/**
 	 * @const  integer  Use OAuth authentication for HTTP connections.
 	 * @since  1.0
+	 * @deprecated  2.0
 	 */
 	const AUTHENTICATION_OAUTH = 2;
 
@@ -43,6 +47,7 @@ class Http extends BaseHttp
 	 * @param   TransportInterface  $transport  The HTTP transport object.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0
 	 */
 	public function __construct($options = array(), TransportInterface $transport = null)
 	{
