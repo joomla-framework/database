@@ -459,13 +459,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	/**
 	 * Get the number of returned rows for the previous executed SQL statement.
 	 *
-	 * @param   resource  $cursor  An optional database cursor resource to extract the row count from.
-	 *
 	 * @return  integer   The number of returned rows.
 	 *
 	 * @since   1.0
 	 */
-	public function getNumRows($cursor = null)
+	public function getNumRows()
 	{
 		$this->connect();
 

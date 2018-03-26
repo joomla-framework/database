@@ -14,8 +14,10 @@ use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\LimitableInterface;
+use Joomla\Database\StatementInterface;
 
 /**
  * SQL Server Database Driver
@@ -354,17 +356,20 @@ class SqlsrvDriver extends DatabaseDriver
 	/**
 	 * Get the number of returned rows for the previous executed SQL statement.
 	 *
-	 * @param   resource  $cursor  An optional database cursor resource to extract the row count from.
-	 *
 	 * @return  integer   The number of returned rows.
 	 *
 	 * @since   1.0
 	 */
-	public function getNumRows($cursor = null)
+	public function getNumRows()
 	{
 		$this->connect();
 
-		return sqlsrv_num_rows($cursor ?: $this->cursor);
+		if ($this->prepared)
+		{
+			return $this->prepared->rowCount();
+		}
+
+		return 0;
 	}
 
 	/**
@@ -594,44 +599,37 @@ class SqlsrvDriver extends DatabaseDriver
 			$this->monitor->startQuery($sql);
 		}
 
-		// Reset the error values.
-		$this->errorNum = 0;
-		$this->errorMsg = '';
-
-		$options = [];
-
-		// SQLSrv_num_rows requires a static or keyset cursor.
-		if (strncmp(strtoupper(ltrim($sql)), 'SELECT', strlen('SELECT')) === 0)
-		{
-			$options = ['Scrollable' => SQLSRV_CURSOR_KEYSET];
-		}
-
-		$params = [];
+		// Execute the query.
+		$this->executed = false;
 
 		// Bind the variables
 		$bounded =& $this->sql->getBounded();
 
-		if (count($bounded))
+		foreach ($bounded as $key => $obj)
 		{
-			foreach ($bounded as $key => $obj)
+			$this->prepared->bindParam($key, $obj->value, $obj->dataType);
+		}
+
+		try
+		{
+			$this->executed = $this->prepared->execute();
+
+			// If there is a monitor registered, let it know we have finished this query
+			if ($this->monitor)
 			{
-				// And add the value as an additional param
-				$params[] = $obj->value;
+				$this->monitor->stopQuery();
 			}
+
+			return true;
 		}
-
-		// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
-		$this->cursor = @sqlsrv_query($this->connection, $sql, $params, $options);
-
-		// If there is a monitor registered, let it know we have finished this query
-		if ($this->monitor)
+		catch (ExecutionFailureException $exception)
 		{
-			$this->monitor->stopQuery();
-		}
+			// If there is a monitor registered, let it know we have finished this query
+			if ($this->monitor)
+			{
+				$this->monitor->stopQuery();
+			}
 
-		// If an error occurred handle it.
-		if (!$this->cursor)
-		{
 			// Check if the server was disconnected.
 			if (!$this->connected())
 			{
@@ -642,31 +640,18 @@ class SqlsrvDriver extends DatabaseDriver
 					$this->connect();
 				}
 				catch (ConnectionFailureException $e)
-				// If connect fails, ignore that exception and throw the normal exception.
 				{
-					// Get the error number and message.
-					$errors = sqlsrv_errors();
-					$this->errorNum = $errors[0]['code'];
-					$this->errorMsg = $errors[0]['message'];
-
-					// Throw the normal query exception.
-					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
+					// If connect fails, ignore that exception and throw the normal exception.
+					throw $exception;
 				}
 
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
 
-			// Get the error number and message.
-			$errors         = sqlsrv_errors();
-			$this->errorNum = $errors[0]['code'];
-			$this->errorMsg = $errors[0]['message'];
-
 			// Throw the normal query exception.
-			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
+			throw $exception;
 		}
-
-		return $this->cursor;
 	}
 
 	/**
@@ -800,38 +785,6 @@ class SqlsrvDriver extends DatabaseDriver
 	}
 
 	/**
-	 * Sets the SQL statement string for later execution.
-	 *
-	 * @param   DatabaseQuery|string  $query   The SQL statement to set either as a DatabaseQuery object or a string.
-	 * @param   integer               $offset  The affected row offset to set.
-	 * @param   integer               $limit   The maximum affected rows to set.
-	 *
-	 * @return  SqlsrvDriver  This object to support method chaining.
-	 *
-	 * @since   1.5.0
-	 */
-	public function setQuery($query, $offset = null, $limit = null)
-	{
-		$this->connect();
-
-		$this->freeResult();
-
-		if (is_string($query))
-		{
-			// Allows taking advantage of bound variables in a direct query:
-			$query = $this->getQuery(true)->setQuery($query);
-		}
-
-		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
-		{
-			$query->setLimit($limit, $offset);
-		}
-
-		// Store reference to the DatabaseQuery instance
-		return parent::setQuery($query, $offset, $limit);
-	}
-
-	/**
 	 * Set the connection to use UTF-8 character encoding.
 	 *
 	 * @return  boolean  True on success.
@@ -930,62 +883,47 @@ class SqlsrvDriver extends DatabaseDriver
 	/**
 	 * Method to fetch a row from the result set cursor as an array.
 	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
 	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
 	 *
 	 * @since   1.0
 	 */
-	protected function fetchArray($cursor = null)
+	protected function fetchArray()
 	{
-		return sqlsrv_fetch_array($cursor ?: $this->cursor, SQLSRV_FETCH_NUMERIC);
+		if ($this->prepared)
+		{
+			return $this->prepared->fetch(FetchMode::NUMERIC);
+		}
 	}
 
 	/**
 	 * Method to fetch a row from the result set cursor as an associative array.
 	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
 	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
 	 *
 	 * @since   1.0
 	 */
-	protected function fetchAssoc($cursor = null)
+	protected function fetchAssoc()
 	{
-		return sqlsrv_fetch_array($cursor ?: $this->cursor, SQLSRV_FETCH_ASSOC);
+		if ($this->prepared)
+		{
+			return $this->prepared->fetch(FetchMode::ASSOCIATIVE);
+		}
 	}
 
 	/**
 	 * Method to fetch a row from the result set cursor as an object.
 	 *
-	 * @param   mixed   $cursor  The optional result set cursor from which to fetch the row.
-	 * @param   string  $class   The class name to use for the returned row object.
+	 * @param   string  $class  The class name to use for the returned row object.
 	 *
 	 * @return  mixed   Either the next row from the result set or false if there are no more rows.
 	 *
 	 * @since   1.0
 	 */
-	protected function fetchObject($cursor = null, $class = 'stdClass')
+	protected function fetchObject($class = '\\stdClass')
 	{
-		return sqlsrv_fetch_object($cursor ?: $this->cursor, $class);
-	}
-
-	/**
-	 * Method to free up the memory used for the result set.
-	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	protected function freeResult($cursor = null)
-	{
-		$useCursor = $cursor ?: $this->cursor;
-
-		if (is_resource($useCursor))
+		if ($this->prepared)
 		{
-			sqlsrv_free_stmt($useCursor);
+			return $this->prepared->fetchObject($class);
 		}
 	}
 
@@ -1039,6 +977,21 @@ class SqlsrvDriver extends DatabaseDriver
 		$sql = 'SELECT TOP ' . $this->limit . ' * FROM (' . $sql . ') _myResults WHERE RowNumber > ' . $this->offset;
 
 		return $sql;
+	}
+
+	/**
+	 * Prepares a SQL statement for execution
+	 *
+	 * @param   string  $query
+	 *
+	 * @return  StatementInterface
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  PrepareStatementFailureException
+	 */
+	protected function prepareStatement(string $query): StatementInterface
+	{
+		return new SqlsrvStatement($this->connection, $query);
 	}
 
 	/**
