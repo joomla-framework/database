@@ -853,10 +853,10 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	{
 		$this->executed = false;
 
-		if ($this->prepared)
+		if ($this->statement)
 		{
-			$this->prepared->closeCursor();
-			$this->prepared = null;
+			$this->statement->closeCursor();
+			$this->statement = null;
 		}
 	}
 

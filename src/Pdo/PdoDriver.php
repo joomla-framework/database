@@ -388,12 +388,12 @@ abstract class PdoDriver extends DatabaseDriver
 
 		foreach ($bounded as $key => $obj)
 		{
-			$this->prepared->bindParam($key, $obj->value, $obj->dataType, $obj->length, $obj->driverOptions);
+			$this->statement->bindParam($key, $obj->value, $obj->dataType, $obj->length, $obj->driverOptions);
 		}
 
 		try
 		{
-			$this->executed = $this->prepared->execute();
+			$this->executed = $this->statement->execute();
 
 			// If there is a monitor registered, let it know we have finished this query
 			if ($this->monitor)
@@ -412,8 +412,8 @@ abstract class PdoDriver extends DatabaseDriver
 			}
 
 			// Get the error number and message before we execute any more queries.
-			$errorNum = (int) $this->prepared->errorCode();
-			$errorMsg = (string) implode(', ', $this->prepared->errorInfo());
+			$errorNum = (int) $this->statement->errorCode();
+			$errorMsg = (string) implode(', ', $this->statement->errorInfo());
 
 			// Check if the server was disconnected.
 			if (!$this->connected())
@@ -539,10 +539,10 @@ abstract class PdoDriver extends DatabaseDriver
 		}
 
 		// Backup the query state.
-		$sql      = $this->sql;
-		$limit    = $this->limit;
-		$offset   = $this->offset;
-		$prepared = $this->prepared;
+		$sql       = $this->sql;
+		$limit     = $this->limit;
+		$offset    = $this->offset;
+		$statement = $this->statement;
 
 		try
 		{
@@ -563,7 +563,7 @@ abstract class PdoDriver extends DatabaseDriver
 		$this->sql         = $sql;
 		$this->limit       = $limit;
 		$this->offset      = $offset;
-		$this->prepared    = $prepared;
+		$this->statement   = $statement;
 		$checkingConnected = false;
 
 		return $status;

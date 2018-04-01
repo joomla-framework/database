@@ -133,20 +133,20 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	protected $options;
 
 	/**
-	 * The prepared statement.
-	 *
-	 * @var    StatementInterface
-	 * @since  __DEPLOY_VERSION__
-	 */
-	protected $prepared;
-
-	/**
 	 * The current SQL statement to execute.
 	 *
 	 * @var    mixed
 	 * @since  1.0
 	 */
 	protected $sql;
+
+	/**
+	 * The prepared statement.
+	 *
+	 * @var    StatementInterface
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $statement;
 
 	/**
 	 * The common database table prefix.
@@ -617,12 +617,12 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 
 		foreach ($bounded as $key => $obj)
 		{
-			$this->prepared->bindParam($key, $obj->value, $obj->dataType);
+			$this->statement->bindParam($key, $obj->value, $obj->dataType);
 		}
 
 		try
 		{
-			$this->executed = $this->prepared->execute();
+			$this->executed = $this->statement->execute();
 
 			// If there is a monitor registered, let it know we have finished this query
 			if ($this->monitor)
@@ -673,9 +673,9 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 */
 	protected function fetchArray()
 	{
-		if ($this->prepared)
+		if ($this->statement)
 		{
-			return $this->prepared->fetch(FetchMode::NUMERIC);
+			return $this->statement->fetch(FetchMode::NUMERIC);
 		}
 	}
 
@@ -688,9 +688,9 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 */
 	protected function fetchAssoc()
 	{
-		if ($this->prepared)
+		if ($this->statement)
 		{
-			return $this->prepared->fetch(FetchMode::ASSOCIATIVE);
+			return $this->statement->fetch(FetchMode::ASSOCIATIVE);
 		}
 	}
 
@@ -705,9 +705,9 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 */
 	protected function fetchObject($class = '\\stdClass')
 	{
-		if ($this->prepared)
+		if ($this->statement)
 		{
-			return $this->prepared->fetchObject($class);
+			return $this->statement->fetchObject($class);
 		}
 	}
 
@@ -722,10 +722,10 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	{
 		$this->executed = false;
 
-		if ($this->prepared)
+		if ($this->statement)
 		{
-			$this->prepared->closeCursor();
-			$this->prepared = null;
+			$this->statement->closeCursor();
+			$this->statement = null;
 		}
 	}
 
@@ -740,9 +740,9 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	{
 		$this->connect();
 
-		if ($this->prepared)
+		if ($this->statement)
 		{
-			return $this->prepared->rowCount();
+			return $this->statement->rowCount();
 		}
 
 		return 0;
@@ -869,9 +869,9 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	{
 		$this->connect();
 
-		if ($this->prepared)
+		if ($this->statement)
 		{
-			return $this->prepared->rowCount();
+			return $this->statement->rowCount();
 		}
 
 		return 0;
@@ -1721,7 +1721,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 
 		$sql = $this->replacePrefix((string) $query);
 
-		$this->prepared = $this->prepareStatement($sql);
+		$this->statement = $this->prepareStatement($sql);
 
 		$this->sql    = $query;
 		$this->limit  = (int) max(0, $limit);

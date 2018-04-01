@@ -630,12 +630,12 @@ class PostgresqlDriver extends DatabaseDriver
 
 		foreach ($bounded as $key => $value)
 		{
-			$this->prepared->bindParam($key, $value);
+			$this->statement->bindParam($key, $value);
 		}
 
 		try
 		{
-			$this->executed = $this->prepared->execute();
+			$this->executed = $this->statement->execute();
 
 			// If there is a monitor registered, let it know we have finished this query
 			if ($this->monitor)
