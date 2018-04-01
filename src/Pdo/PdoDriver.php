@@ -666,7 +666,7 @@ abstract class PdoDriver extends DatabaseDriver
 	/**
 	 * Prepares a SQL statement for execution
 	 *
-	 * @param   string  $query
+	 * @param   string  $query  The SQL query to be prepared.
 	 *
 	 * @return  StatementInterface
 	 *

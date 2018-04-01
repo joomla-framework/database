@@ -156,7 +156,7 @@ class SqlsrvStatement implements StatementInterface
 	 * @param   mixed           $variable        Name of the PHP variable to bind to the SQL statement parameter.
 	 * @param   integer         $dataType        Constant corresponding to a SQL datatype, this should be the processed type from the QueryInterface.
 	 *
-	 * @return  boolean
+	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */

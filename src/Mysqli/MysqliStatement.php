@@ -159,7 +159,7 @@ class MysqliStatement implements StatementInterface
 	/**
 	 * Binds a array of values to bound parameters.
 	 *
-	 * @param   array  $values
+	 * @param   array  $values  The values to bind to the statement
 	 *
 	 * @return  boolean
 	 *
@@ -359,7 +359,7 @@ class MysqliStatement implements StatementInterface
 			case FetchMode::STANDARD_OBJECT:
 				$assoc = array_combine($this->columnNames, $values);
 				$class = $this->defaultObjectClass;
-				$ret   = new $class();
+				$ret   = new $class;
 
 				foreach ($assoc as $column => $value)
 				{

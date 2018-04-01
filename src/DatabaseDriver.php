@@ -1440,7 +1440,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	/**
 	 * Prepares a SQL statement for execution
 	 *
-	 * @param   string  $query
+	 * @param   string  $query  The SQL query to be prepared.
 	 *
 	 * @return  StatementInterface
 	 *
