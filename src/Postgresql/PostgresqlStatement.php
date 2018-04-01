@@ -189,14 +189,7 @@ class PostgresqlStatement implements StatementInterface
 	{
 		$prepared = $this->prepare();
 
-		if (count($this->bounded))
-		{
-			$this->statement = pg_execute($this->connection, $this->queryName . $this->queryCount, array_values($this->bounded));
-		}
-		else
-		{
-			$this->statement = pg_query($this->connection, $this->query);
-		}
+		$this->statement = pg_execute($this->connection, $this->queryName . $this->queryCount, array_values($this->bounded));
 
 		if (!$this->statement)
 		{
