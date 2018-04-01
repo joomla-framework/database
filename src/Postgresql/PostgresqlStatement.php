@@ -128,7 +128,7 @@ class PostgresqlStatement implements StatementInterface
 	 */
 	public function bindParam($parameter, &$variable, $dataType = ParameterType::STRING, $length = null, $driverOptions = null)
 	{
-		$this->bounded[$parameter] =& $variable;
+		$this->bounded[$parameter] = $variable;
 
 		return true;
 	}
