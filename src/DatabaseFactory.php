@@ -135,7 +135,6 @@ class DatabaseFactory
 	 * @return  DatabaseIterator
 	 *
 	 * @since   __DEPLOY_VERSION__
-	 * @throws  \RuntimeException
 	 */
 	public function getIterator(string $name, StatementInterface $statement, $column = null, string $class = '\\stdClass'): DatabaseIterator
 	{
@@ -145,8 +144,8 @@ class DatabaseFactory
 		// Make sure we have an iterator class for this driver.
 		if (!class_exists($iteratorClass))
 		{
-			// If it doesn't exist we are at an impasse so throw an exception.
-			throw new \RuntimeException(sprintf('Class *%s* is not defined', $iteratorClass));
+			// We can work with the base iterator class so use that
+			$iteratorClass = DatabaseIterator::class;
 		}
 
 		// Return a new iterator
