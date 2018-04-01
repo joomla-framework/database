@@ -12,6 +12,7 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Database\DatabaseEvents;
 use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
+use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\StatementInterface;
@@ -529,6 +530,85 @@ class SqlsrvDriver extends DatabaseDriver
 		$this->setQuery('SELECT @@IDENTITY');
 
 		return (int) $this->loadResult();
+	}
+
+	/**
+	 * Execute the SQL statement.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   1.0
+	 * @throws  \RuntimeException
+	 */
+	public function execute()
+	{
+		$this->connect();
+
+		// Take a local copy so that we don't modify the original query and cause issues later
+		$sql = $this->replacePrefix((string) $this->sql);
+
+		// Increment the query counter.
+		$this->count++;
+
+		// If there is a monitor registered, let it know we are starting this query
+		if ($this->monitor)
+		{
+			$this->monitor->startQuery($sql);
+		}
+
+		// Execute the query.
+		$this->executed = false;
+
+		// Bind the variables
+		$bounded =& $this->sql->getBounded();
+
+		foreach ($bounded as $key => $value)
+		{
+			$this->statement->bindParam($key, $value);
+		}
+
+		try
+		{
+			$this->executed = $this->statement->execute();
+
+			// If there is a monitor registered, let it know we have finished this query
+			if ($this->monitor)
+			{
+				$this->monitor->stopQuery();
+			}
+
+			return true;
+		}
+		catch (ExecutionFailureException $exception)
+		{
+			// If there is a monitor registered, let it know we have finished this query
+			if ($this->monitor)
+			{
+				$this->monitor->stopQuery();
+			}
+
+			// Check if the server was disconnected.
+			if (!$this->connected())
+			{
+				try
+				{
+					// Attempt to reconnect.
+					$this->connection = null;
+					$this->connect();
+				}
+				catch (ConnectionFailureException $e)
+				{
+					// If connect fails, ignore that exception and throw the normal exception.
+					throw $exception;
+				}
+
+				// Since we were able to reconnect, run the query again.
+				return $this->execute();
+			}
+
+			// Throw the normal query exception.
+			throw $exception;
+		}
 	}
 
 	/**
