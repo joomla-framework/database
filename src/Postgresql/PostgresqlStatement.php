@@ -142,7 +142,7 @@ class PostgresqlStatement implements StatementInterface
 	 */
 	public function closeCursor()
 	{
-		if ($this->statement)
+		if ($this->result && $this->statement)
 		{
 			pg_free_result($this->statement);
 		}
