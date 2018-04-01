@@ -8,6 +8,7 @@
 
 namespace Joomla\Database;
 
+use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\PrepareStatementFailureException;
@@ -512,6 +513,16 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
+	 * Destructor.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function __destruct()
+	{
+		$this->disconnect();
+	}
+
+	/**
 	 * Alter database's character set.
 	 *
 	 * @param   string  $dbName  The database name that will be altered
@@ -562,6 +573,21 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		$this->setQuery($this->getCreateDatabaseQuery($options, $utf));
 
 		return $this->execute();
+	}
+
+	/**
+	 * Disconnects the database.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function disconnect()
+	{
+		$this->freeResult();
+		$this->connection = null;
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_DISCONNECT, $this));
 	}
 
 	/**

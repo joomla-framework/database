@@ -10,13 +10,10 @@ namespace Joomla\Database\Sqlsrv;
 
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\DatabaseEvents;
-use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
-use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\StatementInterface;
 
 /**
@@ -167,9 +164,7 @@ class SqlsrvDriver extends DatabaseDriver
 			sqlsrv_close($this->connection);
 		}
 
-		$this->connection = null;
-
-		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_DISCONNECT, $this));
+		parent::disconnect();
 	}
 
 	/**

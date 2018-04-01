@@ -308,22 +308,6 @@ abstract class PdoDriver extends DatabaseDriver
 	}
 
 	/**
-	 * Disconnects the database.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function disconnect()
-	{
-		$this->freeResult();
-
-		$this->connection = null;
-
-		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_DISCONNECT, $this));
-	}
-
-	/**
 	 * Method to escape a string for usage in an SQL statement.
 	 *
 	 * Oracle escaping reference:

@@ -10,13 +10,11 @@ namespace Joomla\Database\Postgresql;
 
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\DatabaseEvents;
-use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\StatementInterface;
 
 /**
@@ -86,16 +84,6 @@ class PostgresqlDriver extends DatabaseDriver
 
 		// Finalize initialization
 		parent::__construct($options);
-	}
-
-	/**
-	 * Database object destructor
-	 *
-	 * @since   1.0
-	 */
-	public function __destruct()
-	{
-		$this->disconnect();
 	}
 
 	/**
@@ -187,9 +175,7 @@ class PostgresqlDriver extends DatabaseDriver
 			pg_close($this->connection);
 		}
 
-		$this->connection = null;
-
-		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_DISCONNECT, $this));
+		parent::disconnect();
 	}
 
 	/**

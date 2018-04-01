@@ -10,14 +10,11 @@ namespace Joomla\Database\Mysqli;
 
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\DatabaseEvents;
-use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Joomla\Database\FetchMode;
-use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\StatementInterface;
 use Joomla\Database\UTF8MB4SupportInterface;
 
@@ -115,16 +112,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 
 		// Finalize initialisation.
 		parent::__construct($options);
-	}
-
-	/**
-	 * Destructor.
-	 *
-	 * @since   1.0
-	 */
-	public function __destruct()
-	{
-		$this->disconnect();
 	}
 
 	/**
@@ -294,9 +281,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			$this->connection->close();
 		}
 
-		$this->connection = null;
-
-		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_DISCONNECT, $this));
+		parent::disconnect();
 	}
 
 	/**
