@@ -189,7 +189,8 @@ class PostgresqlStatement implements StatementInterface
 	{
 		$prepared = $this->prepare();
 
-		$this->statement = pg_execute($this->connection, $this->queryName . $this->queryCount, array_values($this->bounded));
+		// Error suppression is required otherwise the underlying API will emit non-catchable warnings
+		$this->statement = @pg_execute($this->connection, $this->queryName . $this->queryCount, array_values($this->bounded));
 
 		if (!$this->statement)
 		{
