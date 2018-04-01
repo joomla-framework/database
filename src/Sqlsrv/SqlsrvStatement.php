@@ -229,7 +229,7 @@ class SqlsrvStatement implements StatementInterface
 	/**
 	 * Executes a prepared statement
 	 *
-	 * @param   array $parameters An array of values with as many elements as there are bound parameters in the SQL statement being executed.
+	 * @param   array  $parameters  An array of values with as many elements as there are bound parameters in the SQL statement being executed.
 	 *
 	 * @return  boolean
 	 *
@@ -237,11 +237,11 @@ class SqlsrvStatement implements StatementInterface
 	 */
 	public function execute($parameters = null)
 	{
-		if ($params)
+		if ($parameters)
 		{
-			$hasZeroIndex = array_key_exists(0, $params);
+			$hasZeroIndex = array_key_exists(0, $parameters);
 
-			foreach ($params as $key => $val)
+			foreach ($parameters as $key => $val)
 			{
 				$key = ($hasZeroIndex && is_numeric($key)) ? $key + 1 : $key;
 				$this->bindValue($key, $val);

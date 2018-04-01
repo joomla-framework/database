@@ -299,7 +299,7 @@ class SqlsrvDriver extends DatabaseDriver
 		{
 			$this->setQuery(
 				'IF EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '
-					. $query->quote($tableName) . ') DROP TABLE ' . $tableName
+					. $this->quote($tableName) . ') DROP TABLE ' . $tableName
 			);
 		}
 		else

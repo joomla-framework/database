@@ -136,13 +136,13 @@ class MysqliStatement implements StatementInterface
 	/**
 	 * Binds a parameter to the specified variable name.
 	 *
-	 * @param   string|integer $parameter       Parameter identifier. For a prepared statement using named placeholders, this will be a parameter
+	 * @param   string|integer  $parameter      Parameter identifier. For a prepared statement using named placeholders, this will be a parameter
 	 *                                          name of the form `:name`. For a prepared statement using question mark placeholders, this will be
 	 *                                          the 1-indexed position of the parameter.
-	 * @param   mixed          $variable        Name of the PHP variable to bind to the SQL statement parameter.
-	 * @param   integer        $dataType        Constant corresponding to a SQL datatype, this should be the processed type from the QueryInterface.
-	 * @param   integer        $length          The length of the variable. Usually required for OUTPUT parameters.
-	 * @param   array          $driverOptions   Optional driver options to be used.
+	 * @param   mixed           $variable       Name of the PHP variable to bind to the SQL statement parameter.
+	 * @param   integer         $dataType       Constant corresponding to a SQL datatype, this should be the processed type from the QueryInterface.
+	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters.
+	 * @param   array           $driverOptions  Optional driver options to be used.
 	 *
 	 * @return  boolean
 	 *
@@ -221,7 +221,7 @@ class MysqliStatement implements StatementInterface
 	/**
 	 * Executes a prepared statement
 	 *
-	 * @param   array $parameters An array of values with as many elements as there are bound parameters in the SQL statement being executed.
+	 * @param   array  $parameters  An array of values with as many elements as there are bound parameters in the SQL statement being executed.
 	 *
 	 * @return  boolean
 	 *
