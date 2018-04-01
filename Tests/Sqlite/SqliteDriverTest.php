@@ -115,7 +115,7 @@ class SqliteDriverTest extends SqliteCase
 	{
 		self::$driver->setQuery("REPLACE INTO `dbtest` (`id`, `title`) VALUES (5, 'testTitle')");
 
-		$this->assertThat(self::$driver->execute(), $this->isInstanceOf('\\PDOStatement'), __LINE__);
+		$this->assertThat(self::$driver->execute(), $this->isTrue(), __LINE__);
 
 		$this->assertThat(self::$driver->insertid(), $this->equalTo(5), __LINE__);
 	}

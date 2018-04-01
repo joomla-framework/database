@@ -601,7 +601,7 @@ class PostgresqlDriver extends DatabaseDriver
 	/**
 	 * Execute the SQL statement.
 	 *
-	 * @return  mixed  A database cursor resource on success, boolean false on failure.
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException

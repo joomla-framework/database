@@ -127,17 +127,17 @@ class DatabaseFactory
 	/**
 	 * Get a new iterator on the current query.
 	 *
-	 * @param   string          $name    Name of the driver you want an iterator for.
-	 * @param   DatabaseDriver  $db      DatabaseDriver instance with the query to be iterated.
-	 * @param   string          $column  An optional column to use as the iterator key.
-	 * @param   string          $class   The class of object that is returned.
+	 * @param   string              $name       Name of the driver you want an iterator for.
+	 * @param   StatementInterface  $statement  Statement holding the result set to be iterated.
+	 * @param   string              $column     An optional column to use as the iterator key.
+	 * @param   string              $class      The class of object that is returned.
 	 *
 	 * @return  DatabaseIterator
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \RuntimeException
 	 */
-	public function getIterator(string $name, DatabaseDriver $db, $column = null, string $class = '\\stdClass'): DatabaseIterator
+	public function getIterator(string $name, StatementInterface $statement, $column = null, string $class = '\\stdClass'): DatabaseIterator
 	{
 		// Derive the class name from the driver.
 		$iteratorClass = __NAMESPACE__ . '\\' . ucfirst($name) . '\\' . ucfirst($name) . 'Iterator';
@@ -150,7 +150,7 @@ class DatabaseFactory
 		}
 
 		// Return a new iterator
-		return new $iteratorClass($db->execute(), $column, $class);
+		return new $iteratorClass($statement, $column, $class);
 	}
 
 	/**

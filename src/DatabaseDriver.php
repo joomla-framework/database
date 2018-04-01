@@ -588,7 +588,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	/**
 	 * Execute the SQL statement.
 	 *
-	 * @return  mixed  A database cursor resource on success, boolean false on failure.
+	 * @return  boolean
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \RuntimeException
@@ -1014,7 +1014,12 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 */
 	public function getIterator($column = null, $class = '\\stdClass')
 	{
-		return $this->factory->getIterator($this->name, $this, $column, $class);
+		if (!$this->executed)
+		{
+			$this->execute();
+		}
+
+		return $this->factory->getIterator($this->name, $this->statement, $column, $class);
 	}
 
 	/**
