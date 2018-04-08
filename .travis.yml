@@ -12,13 +12,12 @@ env:
 
 jobs:
   allow_failures:
-    - php: 7.1
-      env: PGSQL_VERSION=10.0
-    - php: 7.2
+    - env: PGSQL_VERSION=10.0
     - php: nightly
   include:
     # SQLite
     - stage: Test
+      if: NOT type = pull_request
       php: 5.3
       dist: precise
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml"
@@ -27,27 +26,31 @@ jobs:
       dist: precise
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
     - stage: Test
+      if: NOT type = pull_request
       php: 5.4
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml"
     - stage: Test
+      if: NOT type = pull_request
       php: 5.5
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml"
     - stage: Test
       php: 5.6
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml"
     - stage: Test
+      if: NOT type = pull_request
       php: 7.0
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml"
     - stage: Test
+      if: NOT type = pull_request
       php: 7.1
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml"
-    - stage: Test
-      php: 7.1
-      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
-      env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS=""
     - stage: Test
       php: 7.2
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml"
+    - stage: Test
+      php: 7.2
+      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
+      env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS=""
     - stage: Test
       php: nightly
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml"
@@ -64,37 +67,41 @@ jobs:
 
     # PDO MySQL 5.6
     - stage: Test
+      if: NOT type = pull_request
       php: 5.4
       env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
     - stage: Test
+      if: NOT type = pull_request
       php: 5.5
       env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
     - stage: Test
       php: 5.6
       env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
     - stage: Test
+      if: NOT type = pull_request
       php: 7.1
-      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
-      env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS=""
+      env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
 
     # PDO MySQL 5.7
     - stage: Test
+      if: NOT type = pull_request
       php: 7.0
       sudo: required
       env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
     - stage: Test
+      if: NOT type = pull_request
       php: 7.1
       sudo: required
       env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
-    - stage: Test
-      php: 7.1
-      sudo: required
-      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
-      env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS=""
     - stage: Test
       php: 7.2
       sudo: required
       env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
+    - stage: Test
+      php: 7.2
+      sudo: required
+      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
+      env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS=""
     - stage: Test
       php: nightly
       sudo: required
@@ -112,37 +119,41 @@ jobs:
 
     # MySQLi 5.6
     - stage: Test
+      if: NOT type = pull_request
       php: 5.4
       env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
     - stage: Test
+      if: NOT type = pull_request
       php: 5.5
       env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
     - stage: Test
+      if: NOT type = pull_request
       php: 5.6
       env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
     - stage: Test
       php: 7.1
-      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
-      env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS=""
+      env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
 
     # MySQLi 5.7
     - stage: Test
+      if: NOT type = pull_request
       php: 7.0
       sudo: required
       env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
     - stage: Test
+      if: NOT type = pull_request
       php: 7.1
       sudo: required
       env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
-    - stage: Test
-      php: 7.1
-      sudo: required
-      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
-      env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS=""
     - stage: Test
       php: 7.2
       sudo: required
       env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      php: 7.2
+      sudo: required
+      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
+      env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS=""
     - stage: Test
       php: nightly
       sudo: required
@@ -202,14 +213,6 @@ jobs:
       services:
         - postgresql
       env: DB="pgsql" PGSQL_VERSION=9.6 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
-    - stage: Test
-      php: 7.1
-      addons:
-        postgresql: "9.6"
-      services:
-        - postgresql
-      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
-      env: DB="pgsql" PGSQL_VERSION=9.6 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS=""
 
     # PDO PostgreSQL 10.0
     - stage: Test
@@ -221,15 +224,7 @@ jobs:
         - postgresql
       env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
     - stage: Test
-      php: nightly
-      sudo: required
-      addons:
-        postgresql: "9.6"
-      services:
-        - postgresql
-      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
-    - stage: Test
-      php: 7.1
+      php: 7.2
       sudo: required
       addons:
         postgresql: "9.6"
@@ -237,6 +232,14 @@ jobs:
         - postgresql
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
       env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS=""
+    - stage: Test
+      php: nightly
+      sudo: required
+      addons:
+        postgresql: "9.6"
+      services:
+        - postgresql
+      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
 
     # PostgreSQL 9.1
     - stage: Test
@@ -300,14 +303,6 @@ jobs:
       services:
         - postgresql
       env: DB="postgresql" PGSQL_VERSION=9.6 PHPUNIT_CONF=".travis/phpunit.postgresql.xml"
-    - stage: Test
-      php: 7.1
-      addons:
-        postgresql: "9.6"
-      services:
-        - postgresql
-      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
-      env: DB="postgresql" PGSQL_VERSION=9.6 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS=""
 
     # PostgreSQL 10.0
     - stage: Test
@@ -319,15 +314,7 @@ jobs:
         - postgresql
       env: DB="postgresql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml"
     - stage: Test
-      php: nightly
-      sudo: required
-      addons:
-        postgresql: "9.6"
-      services:
-        - postgresql
-      env: DB="postgresql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml"
-    - stage: Test
-      php: 7.1
+      php: 7.2
       sudo: required
       addons:
         postgresql: "9.6"
@@ -335,6 +322,14 @@ jobs:
         - postgresql
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
       env: DB="postgresql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS=""
+    - stage: Test
+      php: nightly
+      sudo: required
+      addons:
+        postgresql: "9.6"
+      services:
+        - postgresql
+      env: DB="postgresql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml"
 
     # PHPCS
     - stage: Coding standard
