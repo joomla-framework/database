@@ -413,6 +413,27 @@ class MysqliDriver extends DatabaseDriver
 	}
 
 	/**
+	 * Get the null or zero representation of a timestamp for the database driver.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getNullDate()
+	{
+		$this->connect();
+
+		$mode = $this->setQuery('SELECT @@SESSION.sql_mode;')->loadResult();
+
+		if (strpos($mode, 'NO_ZERO_DATE') !== false)
+		{
+			$this->nullDate = '1000-01-01 00:00:00';
+		}
+
+		return $this->nullDate;
+	}
+
+	/**
 	 * Get the number of returned rows for the previous executed SQL statement.
 	 *
 	 * @param   resource  $cursor  An optional database cursor resource to extract the row count from.
