@@ -7,6 +7,12 @@
 namespace Joomla\Database\Nosql;
 
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseQuery;
+use Joomla\Database\Exception\PrepareStatementFailureException;
+use Joomla\Database\FetchOrientation;
+use Joomla\Database\ParameterType;
+use Joomla\Database\Query\PreparableInterface;
+use Joomla\Database\StatementInterface;
 
 /**
  * Test class JDatabase.
@@ -59,7 +65,6 @@ class NosqlDriver extends DatabaseDriver
 	 */
 	public function connect()
 	{
-		return true;
 	}
 
 	/**
@@ -91,7 +96,7 @@ class NosqlDriver extends DatabaseDriver
 	 * @param   string   $table     The name of the database table to drop.
 	 * @param   boolean  $ifExists  Optionally specify that the table must exist before it is dropped.
 	 *
-	 * @return  JDatabase  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  RuntimeException
@@ -170,7 +175,7 @@ class NosqlDriver extends DatabaseDriver
 	 */
 	protected function freeResult($cursor = null)
 	{
-		return null;
+		return;
 	}
 
 	/**
@@ -225,18 +230,72 @@ class NosqlDriver extends DatabaseDriver
 	}
 
 	/**
-	 * Get the current query object or a new JDatabaseQuery object.
+	 * Get the current query object or a new DatabaseQuery object.
 	 *
-	 * @param   boolean  $new  False to return the current query object, True to return a new JDatabaseQuery object.
+	 * @param   boolean  $new  False to return the current query object, True to return a new DatabaseQuery object.
 	 *
-	 * @return  JDatabaseQuery  The current query object or a new object extending the JDatabaseQuery class.
+	 * @return  DatabaseQuery
 	 *
 	 * @since   1.0
-	 * @throws  RuntimeException
 	 */
 	public function getQuery($new = false)
 	{
-		return null;
+		return new class($this) extends DatabaseQuery
+		{
+			protected $bounded = array();
+
+			public function bind($key = null, &$value = null, $dataType = ParameterType::STRING, $length = 0, $driverOptions = [])
+			{
+				// Case 1: Empty Key (reset $bounded array)
+				if (empty($key))
+				{
+					$this->bounded = array();
+
+					return $this;
+				}
+
+				// Case 2: Key Provided, null value (unset key from $bounded array)
+				if (is_null($value))
+				{
+					if (isset($this->bounded[$key]))
+					{
+						unset($this->bounded[$key]);
+					}
+
+					return $this;
+				}
+
+				// Case 3: Simply add the Key/Value into the bounded array
+				$this->bounded[$key] = &$value;
+
+				return $this;
+			}
+
+			public function clear($clause = null)
+			{
+				switch ($clause)
+				{
+					case null:
+						$this->bounded = array();
+						break;
+				}
+
+				return parent::clear($clause);
+			}
+
+			public function &getBounded($key = null)
+			{
+				if (empty($key))
+				{
+					return $this->bounded;
+				}
+
+				if (isset($this->bounded[$key]))
+				{
+					return $this->bounded[$key];
+				}
+			}
+		};
 	}
 
 	/**
@@ -267,7 +326,7 @@ class NosqlDriver extends DatabaseDriver
 	 */
 	public function getTableCreate($tables)
 	{
-		return '';
+		return array();
 	}
 
 	/**
@@ -327,7 +386,7 @@ class NosqlDriver extends DatabaseDriver
 	 *
 	 * @param   string  $tableName  The name of the table to unlock.
 	 *
-	 * @return  JDatabase  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  RuntimeException
@@ -340,7 +399,7 @@ class NosqlDriver extends DatabaseDriver
 	/**
 	 * Execute the SQL statement.
 	 *
-	 * @return  mixed  A database cursor resource on success, boolean false on failure.
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  RuntimeException
@@ -358,7 +417,7 @@ class NosqlDriver extends DatabaseDriver
 	 * @param   string  $backup    Table prefix
 	 * @param   string  $prefix    For the table - used to rename constraints in non-mysql databases
 	 *
-	 * @return  JDatabase  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  RuntimeException
@@ -452,7 +511,7 @@ class NosqlDriver extends DatabaseDriver
 	/**
 	 * Unlocks tables in the database.
 	 *
-	 * @return  JDatabase  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  RuntimeException
@@ -460,5 +519,61 @@ class NosqlDriver extends DatabaseDriver
 	public function unlockTables()
 	{
 		return $this;
+	}
+
+	/**
+	 * Prepares a SQL statement for execution
+	 *
+	 * @param   string  $query
+	 *
+	 * @return  StatementInterface
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  PrepareStatementFailureException
+	 */
+	protected function prepareStatement(string $query): StatementInterface
+	{
+		return new class implements StatementInterface
+		{
+			public function bindParam($parameter, &$variable, $dataType = \PDO::PARAM_STR, $length = null, $driverOptions = null)
+			{
+				return true;
+			}
+
+			public function closeCursor()
+			{
+				return true;
+			}
+
+			public function errorCode()
+			{
+				return '';
+			}
+
+			public function errorInfo()
+			{
+				return [];
+			}
+
+			public function execute($parameters = null)
+			{
+				return true;
+			}
+
+			public function fetch($fetchStyle = null, $cursorOrientation = FetchOrientation::NEXT, $cursorOffset = 0)
+			{
+				return;
+			}
+
+			public function fetchObject($className = null, $constructorArgs = null)
+			{
+				return new $className($constructorArgs);
+			}
+
+			public function rowCount()
+			{
+				return 0;
+			}
+		};
 	}
 }

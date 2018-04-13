@@ -72,6 +72,7 @@ class Driver
 			'loadRow',
 			'loadRowList',
 			'lockTable',
+			'prepareStatement',
 			'query',
 			'quote',
 			'quoteName',
