@@ -101,7 +101,7 @@ interface UriInterface
 	/**
 	 * Returns full uri string.
 	 *
-	 * @param   mixed  $parts  An integer, a list of strings, or an array of strings specifying the parts to render.
+	 * @param   mixed  $parts  An integer, or an array of strings specifying the parts to render.
 	 *
 	 * @return  string  The rendered URI string.
 	 *

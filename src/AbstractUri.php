@@ -110,7 +110,7 @@ abstract class AbstractUri implements UriInterface
 	/**
 	 * Returns full uri string.
 	 *
-	 * @param   mixed  $parts  An integer, a list of strings, or an array of strings specifying the parts to render.
+	 * @param   mixed  $parts  An integer, or an array of strings specifying the parts to render.
 	 *
 	 * @return  string  The rendered URI string.
 	 *
@@ -118,11 +118,6 @@ abstract class AbstractUri implements UriInterface
 	 */
 	public function toString($parts = self::ALL)
 	{
-		if (is_string($parts))
-		{
-			$parts = func_get_args();
-		}
-
 		if (is_array($parts))
 		{
 			$realParts = 0;

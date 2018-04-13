@@ -92,11 +92,6 @@ class UriImmuteableTest extends TestCase
 		);
 
 		$this->assertThat(
-			$this->object->toString('scheme', 'user', 'pass', 'host', 'port', 'path', 'query', 'fragment'),
-			$this->equalTo('http://someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
-		);
-
-		$this->assertThat(
 			$this->object->toString(array('scheme', 'user', 'pass', 'host', 'port', 'path', 'query', 'fragment')),
 			$this->equalTo('http://someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
 		);
@@ -104,11 +99,6 @@ class UriImmuteableTest extends TestCase
 		// The next 3 tested functions should generate equivalent results
 		$this->assertThat(
 			$this->object->toString($classname::SCHEME),
-			$this->equalTo('http://')
-		);
-
-		$this->assertThat(
-			$this->object->toString('scheme'),
 			$this->equalTo('http://')
 		);
 
@@ -124,11 +114,6 @@ class UriImmuteableTest extends TestCase
 		);
 
 		$this->assertThat(
-			$this->object->toString('host', 'port'),
-			$this->equalTo('www.example.com:80')
-		);
-
-		$this->assertThat(
 			$this->object->toString(array('host', 'port')),
 			$this->equalTo('www.example.com:80')
 		);
@@ -140,11 +125,6 @@ class UriImmuteableTest extends TestCase
 		);
 
 		$this->assertThat(
-			$this->object->toString('path', 'query', 'fragment'),
-			$this->equalTo('/path/file.html?var=value#fragment')
-		);
-
-		$this->assertThat(
 			$this->object->toString(array('path', 'query', 'fragment')),
 			$this->equalTo('/path/file.html?var=value#fragment')
 		);
@@ -152,11 +132,6 @@ class UriImmuteableTest extends TestCase
 		// The next 3 tested functions should generate equivalent results
 		$this->assertThat(
 			$this->object->toString($classname::ALL & ~$classname::SCHEME),
-			$this->equalTo('someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
-		);
-
-		$this->assertThat(
-			$this->object->toString('user', 'pass', 'host', 'port', 'path', 'query', 'fragment'),
 			$this->equalTo('someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
 		);
 
