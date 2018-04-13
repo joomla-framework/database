@@ -382,8 +382,8 @@ before_script:
   - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == *"mariadb"* ]]; then mysql -u root joomla_ut < Tests/Stubs/mysql.sql; fi;
   - if [[ "$DB" == "pgsql" || "$DB" == "postgresql" ]]; then psql -U postgres -c 'create database joomla_ut;'; fi;
   - if [[ "$DB" == "pgsql" || "$DB" == "postgresql" ]]; then psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql; fi;
-  - if [[ "$DB" == "sqlsrv" ]]; then /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework -b -E -Q "CREATE DATABASE joomla_ut"; fi;
-  - if [[ "$DB" == "sqlsrv" ]]; then /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework -i Tests/Stubs/sqlsrv.sql; fi;
+  - if [[ "$DB" == "sqlsrv" ]]; then /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 -b -E -Q "CREATE DATABASE joomla_ut"; fi;
+  - if [[ "$DB" == "sqlsrv" ]]; then /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 -i Tests/Stubs/sqlsrv.sql; fi;
 
 install:
   - rm -f composer.lock
