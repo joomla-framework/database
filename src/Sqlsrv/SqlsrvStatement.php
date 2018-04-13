@@ -182,7 +182,7 @@ class SqlsrvStatement implements StatementInterface
 	 */
 	public function closeCursor()
 	{
-		if (!$this->result)
+		if (!$this->result || !is_resource($this->statement))
 		{
 			return true;
 		}
@@ -377,7 +377,15 @@ class SqlsrvStatement implements StatementInterface
 			}
 		}
 
-		$statement = sqlsrv_prepare($this->connection, $this->query, $params);
+		$options = [];
+
+		// sqlsrv_num_rows requires a static or keyset cursor.
+		if (strncmp(strtoupper(ltrim($this->query)), 'SELECT', strlen('SELECT')) === 0)
+		{
+			$options = ['Scrollable' => SQLSRV_CURSOR_KEYSET];
+		}
+
+		$statement = sqlsrv_prepare($this->connection, $this->query, $params, $options);
 
 		if (!$statement)
 		{
@@ -398,6 +406,11 @@ class SqlsrvStatement implements StatementInterface
 	 */
 	public function rowCount()
 	{
+		if (strncmp(strtoupper(ltrim($this->query)), 'SELECT', strlen('SELECT')) === 0)
+		{
+			return sqlsrv_num_rows($this->statement);
+		}
+
 		return sqlsrv_rows_affected($this->statement);
 	}
 }

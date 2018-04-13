@@ -562,9 +562,9 @@ class SqlsrvDriver extends DatabaseDriver
 		// Bind the variables
 		$bounded =& $this->sql->getBounded();
 
-		foreach ($bounded as $key => $value)
+		foreach ($bounded as $key => $obj)
 		{
-			$this->statement->bindParam($key, $value);
+			$this->statement->bindParam($key, $obj->value, $obj->dataType);
 		}
 
 		try
@@ -857,36 +857,6 @@ class SqlsrvDriver extends DatabaseDriver
 		$this->setQuery($sql);
 
 		return (bool) $this->loadResult();
-	}
-
-	/**
-	 * Method to wrap an SQL statement to provide a LIMIT and OFFSET behavior for scrolling through a result set.
-	 *
-	 * @param   string   $sql     The SQL statement to process.
-	 * @param   integer  $limit   The maximum affected rows to set.
-	 * @param   integer  $offset  The affected row offset to set.
-	 *
-	 * @return  string   The processed SQL statement.
-	 *
-	 * @since   1.0
-	 */
-	protected function limit($sql, $limit, $offset)
-	{
-		$orderBy = stristr($sql, 'ORDER BY');
-
-		if (is_null($orderBy) || empty($orderBy))
-		{
-			$orderBy = 'ORDER BY (select 0)';
-		}
-
-		$sql = str_ireplace($orderBy, '', $sql);
-
-		$rowNumberText = ',ROW_NUMBER() OVER (' . $orderBy . ') AS RowNumber FROM ';
-
-		$sql = preg_replace('/\\s+FROM/', '\\1 ' . $rowNumberText . ' ', $sql, 1);
-		$sql = 'SELECT TOP ' . $this->limit . ' * FROM (' . $sql . ') _myResults WHERE RowNumber > ' . $this->offset;
-
-		return $sql;
 	}
 
 	/**
