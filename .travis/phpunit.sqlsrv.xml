@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="../vendor/autoload.php" colors="false">
 	<php>
-		<const name="JTEST_DATABASE_SQLSRV_DSN" value="host=127.0.0.1;port=1433;dbname=joomla_ut;user=sa;pass=JoomlaFramework" />
+		<const name="JTEST_DATABASE_SQLSRV_DSN" value="host=127.0.0.1;port=1433;dbname=joomla_ut;user=sa;pass=JoomlaFramework123" />
 	</php>
 	<testsuites>
 		<testsuite name="Unit">

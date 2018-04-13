@@ -13,7 +13,7 @@ echo Setting up Microsoft SQL Server
 sudo docker pull microsoft/mssql-server-linux:2017-latest
 sudo docker run \
     -e 'ACCEPT_EULA=Y' \
-    -e 'SA_PASSWORD=JoomlaFramework' \
+    -e 'SA_PASSWORD=JoomlaFramework123' \
     -p 127.0.0.1:1433:1433 \
     --name db \
     -d \
@@ -21,7 +21,7 @@ sudo docker run \
 
 
 retries=10
-until (echo quit | /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework &> /dev/null)
+until (echo quit | /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 &> /dev/null)
 do
     if [[ "$retries" -le 0 ]]; then
         echo SQL Server did not start
