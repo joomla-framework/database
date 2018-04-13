@@ -12,7 +12,12 @@ env:
 
 jobs:
   allow_failures:
-    - env: PGSQL_VERSION=10.0
+    - php: 7.0
+      env: PGSQL_VERSION=10.0
+    - php: 7.1
+      env: PGSQL_VERSION=10.0
+    - php: 7.2
+      env: PGSQL_VERSION=10.0
     - php: nightly
   include:
     # SQLite
@@ -358,12 +363,6 @@ jobs:
         - docker
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
       env: DB="sqlsrv" PHPUNIT_CONF=".travis/phpunit.sqlsrv.xml" COMPOSER_FLAGS=""
-    - stage: Test
-      php: nightly
-      sudo: required
-      services:
-        - docker
-      env: DB="sqlsrv" PHPUNIT_CONF=".travis/phpunit.sqlsrv.xml"
 
     # PHPCS
     - stage: Coding standard
