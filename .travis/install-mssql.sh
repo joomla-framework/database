@@ -38,5 +38,5 @@ done
 echo SQL Server started
 
 echo "Installing extensions"
-pecl install sqlsrv-5.2.0RC1
-pecl install pdo_sqlsrv-5.2.0RC1
+pecl install sqlsrv-5.2.0
+pecl install pdo_sqlsrv-5.2.0
