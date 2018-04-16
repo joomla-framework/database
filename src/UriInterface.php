@@ -101,13 +101,13 @@ interface UriInterface
 	/**
 	 * Returns full uri string.
 	 *
-	 * @param   mixed  $parts  An integer, or an array of strings specifying the parts to render.
+	 * @param   array  $parts  An array of strings specifying the parts to render.
 	 *
 	 * @return  string  The rendered URI string.
 	 *
 	 * @since   1.0
 	 */
-	public function toString($parts = self::All);
+	public function toString(array $parts = array('scheme', 'user', 'pass', 'host', 'port', 'path', 'query', 'fragment'));
 
 	/**
 	 * Checks if variable exists.

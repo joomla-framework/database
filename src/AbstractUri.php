@@ -110,42 +110,51 @@ abstract class AbstractUri implements UriInterface
 	/**
 	 * Returns full uri string.
 	 *
-	 * @param   mixed  $parts  An integer, or an array of strings specifying the parts to render.
+	 * @param   array  $parts  An array of strings specifying the parts to render.
 	 *
 	 * @return  string  The rendered URI string.
 	 *
 	 * @since   1.0
 	 */
-	public function toString($parts = self::ALL)
+	public function toString(array $parts = array('scheme', 'user', 'pass', 'host', 'port', 'path', 'query', 'fragment'))
 	{
-		if (is_array($parts))
+		$bitmask = 0;
+
+		foreach ($parts as $part)
 		{
-			$realParts = 0;
+			$const = 'static::' . strtoupper($part);
 
-			foreach ($parts as $part)
+			if (defined($const))
 			{
-				$const = 'static::' . strtoupper($part);
-
-				if (defined($const))
-				{
-					$realParts |= constant($const);
-				}
+				$bitmask |= constant($const);
 			}
-
-			$parts = $realParts;
 		}
 
+		return $this->render($bitmask);
+	}
+
+	/**
+	 * Returns full uri string.
+	 *
+	 * @param   integer  $parts  A bitmask specifying the parts to render.
+	 *
+	 * @return  string  The rendered URI string.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function render($parts = self::ALL)
+	{
 		// Make sure the query is created
 		$query = $this->getQuery();
 
 		$uri = '';
-		$uri .= $parts & static::SCHEME   ? (!empty($this->scheme) ? $this->scheme . '://' : '') : '';
-		$uri .= $parts & static::USER     ? $this->user : '';
-		$uri .= $parts & static::PASS     ? (!empty($this->pass) ? ':' : '') . $this->pass . (!empty($this->user) ? '@' : '') : '';
-		$uri .= $parts & static::HOST     ? $this->host : '';
-		$uri .= $parts & static::PORT     ? (!empty($this->port) ? ':' : '') . $this->port : '';
-		$uri .= $parts & static::PATH     ? $this->path : '';
-		$uri .= $parts & static::QUERY    ? (!empty($query) ? '?' . $query : '') : '';
+		$uri .= $parts & static::SCHEME ? (!empty($this->scheme) ? $this->scheme . '://' : '') : '';
+		$uri .= $parts & static::USER ? $this->user : '';
+		$uri .= $parts & static::PASS ? (!empty($this->pass) ? ':' : '') . $this->pass . (!empty($this->user) ? '@' : '') : '';
+		$uri .= $parts & static::HOST ? $this->host : '';
+		$uri .= $parts & static::PORT ? (!empty($this->port) ? ':' : '') . $this->port : '';
+		$uri .= $parts & static::PATH ? $this->path : '';
+		$uri .= $parts & static::QUERY ? (!empty($query) ? '?' . $query : '') : '';
 		$uri .= $parts & static::FRAGMENT ? (!empty($this->fragment) ? '#' . $this->fragment : '') : '';
 
 		return $uri;

@@ -80,14 +80,9 @@ class UriImmuteableTest extends TestCase
 	{
 		$classname = get_class($this->object);
 
-		// The next 4 tested functions should generate equivalent results
+		// The next 2 tested functions should generate equivalent results
 		$this->assertThat(
 			$this->object->toString(),
-			$this->equalTo('http://someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
-		);
-
-		$this->assertThat(
-			$this->object->toString($classname::ALL),
 			$this->equalTo('http://someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
 		);
 
@@ -96,21 +91,9 @@ class UriImmuteableTest extends TestCase
 			$this->equalTo('http://someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
 		);
 
-		// The next 3 tested functions should generate equivalent results
-		$this->assertThat(
-			$this->object->toString($classname::SCHEME),
-			$this->equalTo('http://')
-		);
-
 		$this->assertThat(
 			$this->object->toString(array('scheme')),
 			$this->equalTo('http://')
-		);
-
-		// The next 3 tested functions should generate equivalent results
-		$this->assertThat(
-			$this->object->toString($classname::HOST | $classname::PORT),
-			$this->equalTo('www.example.com:80')
 		);
 
 		$this->assertThat(
@@ -118,25 +101,51 @@ class UriImmuteableTest extends TestCase
 			$this->equalTo('www.example.com:80')
 		);
 
-		// The next 3 tested functions should generate equivalent results
-		$this->assertThat(
-			$this->object->toString($classname::PATH | $classname::QUERY | $classname::FRAGMENT),
-			$this->equalTo('/path/file.html?var=value#fragment')
-		);
-
 		$this->assertThat(
 			$this->object->toString(array('path', 'query', 'fragment')),
 			$this->equalTo('/path/file.html?var=value#fragment')
 		);
 
-		// The next 3 tested functions should generate equivalent results
 		$this->assertThat(
-			$this->object->toString($classname::ALL & ~$classname::SCHEME),
+			$this->object->toString(array('user', 'pass', 'host', 'port', 'path', 'query', 'fragment')),
 			$this->equalTo('someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
+		);
+	}
+
+	/**
+	 * Test the render method.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @covers  Joomla\Uri\UriImmutable::render
+	 */
+	public function testRender()
+	{
+		$classname = get_class($this->object);
+
+		$this->assertThat(
+			$this->object->render($classname::ALL),
+			$this->equalTo('http://someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
 		);
 
 		$this->assertThat(
-			$this->object->toString(array('user', 'pass', 'host', 'port', 'path', 'query', 'fragment')),
+			$this->object->render($classname::SCHEME),
+			$this->equalTo('http://')
+		);
+
+		$this->assertThat(
+			$this->object->render($classname::HOST | $classname::PORT),
+			$this->equalTo('www.example.com:80')
+		);
+
+		$this->assertThat(
+			$this->object->render($classname::PATH | $classname::QUERY | $classname::FRAGMENT),
+			$this->equalTo('/path/file.html?var=value#fragment')
+		);
+
+		$this->assertThat(
+			$this->object->render($classname::ALL & ~$classname::SCHEME),
 			$this->equalTo('someuser:somepass@www.example.com:80/path/file.html?var=value#fragment')
 		);
 	}
