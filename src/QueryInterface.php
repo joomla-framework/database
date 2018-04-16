@@ -554,7 +554,7 @@ interface QueryInterface extends PreparableInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function union($query, $distinct = false, $glue = '');
+	public function union($query, $distinct = false);
 
 	/**
 	 * Add a query to UNION ALL with the current query.
@@ -573,5 +573,5 @@ interface QueryInterface extends PreparableInterface
 	 * @see     union
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function unionAll($query, $distinct = false, $glue = '');
+	public function unionAll($query);
 }

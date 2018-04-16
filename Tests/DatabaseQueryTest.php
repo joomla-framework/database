@@ -311,6 +311,88 @@ class DatabaseQueryTest extends TestCase
 	}
 
 	/**
+	 * Test for the \Joomla\Database\DatabaseQuery::__string method for a 'select' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function test__toStringSelectWithUnion()
+	{
+		$this->instance->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1');
+
+		$union = new Mock\Query($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'));
+
+		$this->instance->union($union);
+
+		$this->assertThat(
+			(string) $this->instance,
+			$this->equalTo(
+				PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'UNION (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\')'
+			),
+			'Tests for correct rendering unions.'
+		);
+	}
+
+	/**
+	 * Test for the \Joomla\Database\DatabaseQuery::__string method for a 'select' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function test__toStringSelectWithUnionAndOrderBy()
+	{
+		$this->instance->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1')
+			->order('b.name');
+
+		$union = new Mock\Query($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'));
+
+		$this->instance->union($union);
+
+		$this->assertThat(
+			(string) $this->instance,
+			$this->equalTo(
+				PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'UNION (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\')' .
+					PHP_EOL . 'ORDER BY b.name'
+			),
+			'Tests for correct rendering unions with order by.'
+		);
+	}
+
+	/**
 	 * Test for the \Joomla\Database\DatabaseQuery::__string method for a 'update' case.
 	 *
 	 * @return  void
@@ -448,7 +530,7 @@ class DatabaseQueryTest extends TestCase
 			'order',
 			'columns',
 			'values',
-			'union',
+			'merge',
 			'exec',
 			'call',
 		);
@@ -498,7 +580,7 @@ class DatabaseQueryTest extends TestCase
 			'order',
 			'columns',
 			'values',
-			'union',
+			'merge',
 			'exec',
 			'call',
 		);
@@ -553,7 +635,6 @@ class DatabaseQueryTest extends TestCase
 			'delete',
 			'update',
 			'insert',
-			'union',
 		);
 
 		$clauses = array(
@@ -563,6 +644,7 @@ class DatabaseQueryTest extends TestCase
 			'where',
 			'group',
 			'having',
+			'merge',
 			'order',
 			'columns',
 			'values',
@@ -1797,32 +1879,11 @@ class DatabaseQueryTest extends TestCase
 	 * @covers  \Joomla\Database\DatabaseQuery::union
 	 * @since   1.0
 	 */
-	public function testUnionClear()
+	public function testUnion()
 	{
-		TestHelper::setValue($this->instance, 'union', null);
-		TestHelper::setValue($this->instance, 'order', null);
-		$this->instance->order('bar');
+		TestHelper::setValue($this->instance, 'merge', null);
 		$this->instance->union('SELECT name FROM foo');
-		$this->assertThat(
-			TestHelper::getValue($this->instance, 'order'),
-			$this->equalTo(null),
-			'Tests that ORDER BY is cleared with union.'
-		);
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::union method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::union
-	 * @since   1.0
-	 */
-	public function testUnionUnion()
-	{
-		TestHelper::setValue($this->instance, 'union', null);
-		$this->instance->union('SELECT name FROM foo');
-		$teststring = (string) TestHelper::getValue($this->instance, 'union');
+		$teststring = (string) current(TestHelper::getValue($this->instance, 'merge'));
 		$this->assertThat(
 			$teststring,
 			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)'),
@@ -1838,75 +1899,35 @@ class DatabaseQueryTest extends TestCase
 	 * @covers  \Joomla\Database\DatabaseQuery::union
 	 * @since   1.0
 	 */
-	public function testUnionDistinctString()
-	{
-		TestHelper::setValue($this->instance, 'union', null);
-		$this->instance->union('SELECT name FROM foo', 'distinct');
-		$teststring = (string) TestHelper::getValue($this->instance, 'union');
-		$this->assertThat(
-			$teststring,
-			$this->equalTo(PHP_EOL . 'UNION DISTINCT (SELECT name FROM foo)'),
-			'Tests rendered query with union distinct as a string.'
-		);
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::union method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::union
-	 * @since   1.0
-	 */
-	public function testUnionDistinctTrue()
-	{
-		TestHelper::setValue($this->instance, 'union', null);
-		$this->instance->union('SELECT name FROM foo', true);
-		$teststring = (string) TestHelper::getValue($this->instance, 'union');
-		$this->assertThat(
-			$teststring,
-			$this->equalTo(PHP_EOL . 'UNION DISTINCT (SELECT name FROM foo)'),
-			'Tests rendered query with union distinct true.'
-		);
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::union method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::union
-	 * @since   1.0
-	 */
 	public function testUnionDistinctFalse()
 	{
-		TestHelper::setValue($this->instance, 'union', null);
+		TestHelper::setValue($this->instance, 'merge', null);
 		$this->instance->union('SELECT name FROM foo', false);
-		$teststring = (string) TestHelper::getValue($this->instance, 'union');
+		$teststring = (string) current(TestHelper::getValue($this->instance, 'merge'));
 		$this->assertThat(
 			$teststring,
-			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)'),
+			$this->equalTo(PHP_EOL . 'UNION ALL (SELECT name FROM foo)'),
 			'Tests rendered query with union distinct false.'
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::union method.
+	 * Tests the \Joomla\Database\DatabaseQuery::unionAll method.
 	 *
 	 * @return  void
 	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::union
+	 * @covers  \Joomla\Database\DatabaseQuery::unionAll
 	 * @since   1.0
 	 */
-	public function testUnionArray()
+	public function testUnionAll()
 	{
-		TestHelper::setValue($this->instance, 'union', null);
-		$this->instance->union(array('SELECT name FROM foo', 'SELECT name FROM bar'));
-		$teststring = (string) TestHelper::getValue($this->instance, 'union');
+		TestHelper::setValue($this->instance, 'merge', null);
+		$this->instance->unionAll('SELECT name FROM foo');
+		$teststring = (string) current(TestHelper::getValue($this->instance, 'merge'));
 		$this->assertThat(
 			$teststring,
-			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)' . PHP_EOL . 'UNION (SELECT name FROM bar)'),
-			'Tests rendered query with two unions as an array.'
+			$this->equalTo(PHP_EOL . 'UNION ALL (SELECT name FROM foo)'),
+			'Tests rendered query with union all.'
 		);
 	}
 
@@ -1920,10 +1941,10 @@ class DatabaseQueryTest extends TestCase
 	 */
 	public function testUnionTwo()
 	{
-		TestHelper::setValue($this->instance, 'union', null);
+		TestHelper::setValue($this->instance, 'merge', null);
 		$this->instance->union('SELECT name FROM foo');
 		$this->instance->union('SELECT name FROM bar');
-		$teststring = (string) TestHelper::getValue($this->instance, 'union');
+		$teststring = implode('', array_map('strval', TestHelper::getValue($this->instance, 'merge')));
 		$this->assertThat(
 			$teststring,
 			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)' . PHP_EOL . 'UNION (SELECT name FROM bar)'),
@@ -1932,42 +1953,44 @@ class DatabaseQueryTest extends TestCase
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::unionDistinct method.
+	 * Tests the \Joomla\Database\DatabaseQuery::union method.
 	 *
 	 * @return  void
 	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::unionDistinct
+	 * @covers  \Joomla\Database\DatabaseQuery::union
 	 * @since   1.0
 	 */
-	public function testUnionDistinct()
+	public function testUnionsOrdering()
 	{
-		TestHelper::setValue($this->instance, 'union', null);
-		$this->instance->unionDistinct('SELECT name FROM foo');
-		$teststring = (string) TestHelper::getValue($this->instance, 'union');
+		TestHelper::setValue($this->instance, 'merge', null);
+		$this->instance->unionAll('SELECT name FROM foo');
+		$this->instance->union('SELECT name FROM bar');
+		$teststring = implode('', array_map('strval', TestHelper::getValue($this->instance, 'merge')));
 		$this->assertThat(
-			trim($teststring),
-			$this->equalTo('UNION DISTINCT (SELECT name FROM foo)'),
-			'Tests rendered query with unionDistinct.'
+			$teststring,
+			$this->equalTo(PHP_EOL . 'UNION ALL (SELECT name FROM foo)' . PHP_EOL . 'UNION (SELECT name FROM bar)'),
+			'Tests rendered query with two different unions sequentially.'
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::unionDistinct method.
+	 * Tests the \Joomla\Database\DatabaseQuery::union method.
 	 *
 	 * @return  void
 	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::unionDistinct
+	 * @covers  \Joomla\Database\DatabaseQuery::union
 	 * @since   1.0
 	 */
-	public function testUnionDistinctArray()
+	public function testUnionsOrdering2()
 	{
-		TestHelper::setValue($this->instance, 'union', null);
-		$this->instance->unionDistinct(array('SELECT name FROM foo', 'SELECT name FROM bar'));
-		$teststring = (string) TestHelper::getValue($this->instance, 'union');
+		TestHelper::setValue($this->instance, 'merge', null);
+		$this->instance->union('SELECT name FROM foo');
+		$this->instance->unionAll('SELECT name FROM bar');
+		$teststring = implode('', array_map('strval', TestHelper::getValue($this->instance, 'merge')));
 		$this->assertThat(
 			$teststring,
-			$this->equalTo(PHP_EOL . 'UNION DISTINCT (SELECT name FROM foo)' . PHP_EOL . 'UNION DISTINCT (SELECT name FROM bar)'),
-			'Tests rendered query with two unions distinct.'
+			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)' . PHP_EOL . 'UNION ALL (SELECT name FROM bar)'),
+			'Tests rendered query with two different unions sequentially.'
 		);
 	}
 
