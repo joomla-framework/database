@@ -58,3 +58,20 @@ Database drivers now support dispatching read-only events when a connection to t
 
 `Joomla\Database\DatabaseDriver::getInstance()` has been deprecated and will be removed in 3.0. Applications which require support for singleton object
 storage should extend `Joomla\Database\DatabaseFactory::getDriver()` implementing their additional logic.
+
+### `Joomla\Database\DatabaseQuery` general changes
+
+#### Changes in methods `union()`, `unionAll()` and `unionDistinct()`
+
+- Method `unionDistinct()` has been removed. Use `union()` instead.
+- Argument `$query` stops accepting the array. Only `DatabaseQuery` object or string.
+- Argument `$distinct` has been removed from `unionAll`.
+- Argument `$glue` has been removed from both.
+
+Method `union()` by default has `$distinct = true`.
+If `$distinct` is `false` then generates `UNION ALL` sql statement.
+
+Class variables `$union` and `$unionAll` has been merged into one variable `$merge`.
+The new variable represents an ordered array of individual elements.
+
+Stop supporting `$type = 'union'` in method `__toString()`.
