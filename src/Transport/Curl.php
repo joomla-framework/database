@@ -236,7 +236,7 @@ class Curl implements TransportInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.2
 	 */
 	protected function setCAOptionAndValue($ch)
 	{
