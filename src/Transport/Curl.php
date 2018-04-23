@@ -76,6 +76,9 @@ class Curl implements TransportInterface
 		// Setup the cURL handle.
 		$ch = curl_init();
 
+		// Initialize the certificate store
+		$this->setCAOptionAndValue($ch);
+
 		$options = array();
 
 		// Set the request method.
@@ -96,9 +99,6 @@ class Curl implements TransportInterface
 
 		// Don't wait for body when $method is HEAD
 		$options[CURLOPT_NOBODY] = ($method === 'HEAD');
-
-		// Initialize the certificate store
-		$options[CURLOPT_CAINFO] = isset($this->options['curl.certpath']) ? $this->options['curl.certpath'] : CaBundle::getSystemCaRootBundlePath();
 
 		// If data exists let's encode it and make sure our Content-type header is set.
 		if (isset($data))
@@ -221,6 +221,22 @@ class Curl implements TransportInterface
 		curl_close($ch);
 
 		return $this->getResponse($content, $info);
+	}
+
+	protected function setCAOptionAndValue($ch)
+	{
+		if (isset($this->options['curl.certpath'])) {
+			// Option is passed to a .PEM file.
+			curl_setopt($ch, CURLOPT_CAINFO, $this->options['curl.certpath']);
+			return;
+		}
+
+		$caPathOrFile = CaBundle::getSystemCaRootBundlePath();
+		if (is_dir($caPathOrFile) || (is_link($caPathOrFile) && is_dir(readlink($caPathOrFile)))) {
+			curl_setopt($ch, CURLOPT_CAPATH, $caPathOrFile);
+			return;
+		}
+		curl_setopt($ch, CURLOPT_CAINFO, $caPathOrFile);
 	}
 
 	/**
