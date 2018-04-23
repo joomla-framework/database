@@ -223,19 +223,31 @@ class Curl implements TransportInterface
 		return $this->getResponse($content, $info);
 	}
 
+	/**
+	 * Configure the cURL resources with the appropriate root certificates.
+	 *
+	 * @param   resource $ch The cURL resource you want to configure the certificates on.
+	 * @return  void
+	 */
 	protected function setCAOptionAndValue($ch)
 	{
-		if (isset($this->options['curl.certpath'])) {
+		if (isset($this->options['curl.certpath']))
+		{
 			// Option is passed to a .PEM file.
 			curl_setopt($ch, CURLOPT_CAINFO, $this->options['curl.certpath']);
+
 			return;
 		}
 
 		$caPathOrFile = CaBundle::getSystemCaRootBundlePath();
-		if (is_dir($caPathOrFile) || (is_link($caPathOrFile) && is_dir(readlink($caPathOrFile)))) {
+
+		if (is_dir($caPathOrFile) || (is_link($caPathOrFile) && is_dir(readlink($caPathOrFile))))
+		{
 			curl_setopt($ch, CURLOPT_CAPATH, $caPathOrFile);
+
 			return;
 		}
+
 		curl_setopt($ch, CURLOPT_CAINFO, $caPathOrFile);
 	}
 
