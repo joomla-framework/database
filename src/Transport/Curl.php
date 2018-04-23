@@ -226,8 +226,11 @@ class Curl implements TransportInterface
 	/**
 	 * Configure the cURL resources with the appropriate root certificates.
 	 *
-	 * @param   resource $ch The cURL resource you want to configure the certificates on.
+	 * @param   resource  $ch  The cURL resource you want to configure the certificates on.
+	 *
 	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function setCAOptionAndValue($ch)
 	{
