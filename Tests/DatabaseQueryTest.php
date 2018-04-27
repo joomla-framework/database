@@ -428,11 +428,9 @@ class DatabaseQueryTest extends TestCase
 	 */
 	public function test__toStringUnion()
 	{
-		$this->markTestIncomplete('This test does not work!');
-		$this->instance->select('*')
-			->union('SELECT id FROM a');
+		$this->instance->union('SELECT id FROM a');
 
-		$this->assertEquals('UNION (SELECT id FROM a)', trim($this->instance));
+		$this->assertEquals(PHP_EOL . 'UNION (SELECT id FROM a)', $this->instance);
 	}
 
 	/**
@@ -1881,11 +1879,12 @@ class DatabaseQueryTest extends TestCase
 	 */
 	public function testUnion()
 	{
-		TestHelper::setValue($this->instance, 'merge', null);
 		$this->instance->union('SELECT name FROM foo');
-		$teststring = (string) current(TestHelper::getValue($this->instance, 'merge'));
+
+		$string = implode('', $this->instance->merge);
+
 		$this->assertThat(
-			$teststring,
+			$string,
 			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)'),
 			'Tests rendered query with union.'
 		);
@@ -1901,11 +1900,12 @@ class DatabaseQueryTest extends TestCase
 	 */
 	public function testUnionDistinctFalse()
 	{
-		TestHelper::setValue($this->instance, 'merge', null);
 		$this->instance->union('SELECT name FROM foo', false);
-		$teststring = (string) current(TestHelper::getValue($this->instance, 'merge'));
+
+		$string = implode('', $this->instance->merge);
+
 		$this->assertThat(
-			$teststring,
+			$string,
 			$this->equalTo(PHP_EOL . 'UNION ALL (SELECT name FROM foo)'),
 			'Tests rendered query with union distinct false.'
 		);
@@ -1921,11 +1921,12 @@ class DatabaseQueryTest extends TestCase
 	 */
 	public function testUnionAll()
 	{
-		TestHelper::setValue($this->instance, 'merge', null);
 		$this->instance->unionAll('SELECT name FROM foo');
-		$teststring = (string) current(TestHelper::getValue($this->instance, 'merge'));
+
+		$string = implode('', $this->instance->merge);
+
 		$this->assertThat(
-			$teststring,
+			$string,
 			$this->equalTo(PHP_EOL . 'UNION ALL (SELECT name FROM foo)'),
 			'Tests rendered query with union all.'
 		);
@@ -1941,12 +1942,13 @@ class DatabaseQueryTest extends TestCase
 	 */
 	public function testUnionTwo()
 	{
-		TestHelper::setValue($this->instance, 'merge', null);
 		$this->instance->union('SELECT name FROM foo');
 		$this->instance->union('SELECT name FROM bar');
-		$teststring = implode('', array_map('strval', TestHelper::getValue($this->instance, 'merge')));
+
+		$string = implode('', $this->instance->merge);
+
 		$this->assertThat(
-			$teststring,
+			$string,
 			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)' . PHP_EOL . 'UNION (SELECT name FROM bar)'),
 			'Tests rendered query with two unions sequentially.'
 		);
@@ -1962,12 +1964,13 @@ class DatabaseQueryTest extends TestCase
 	 */
 	public function testUnionsOrdering()
 	{
-		TestHelper::setValue($this->instance, 'merge', null);
 		$this->instance->unionAll('SELECT name FROM foo');
 		$this->instance->union('SELECT name FROM bar');
-		$teststring = implode('', array_map('strval', TestHelper::getValue($this->instance, 'merge')));
+
+		$string = implode('', $this->instance->merge);
+
 		$this->assertThat(
-			$teststring,
+			$string,
 			$this->equalTo(PHP_EOL . 'UNION ALL (SELECT name FROM foo)' . PHP_EOL . 'UNION (SELECT name FROM bar)'),
 			'Tests rendered query with two different unions sequentially.'
 		);
@@ -1983,12 +1986,13 @@ class DatabaseQueryTest extends TestCase
 	 */
 	public function testUnionsOrdering2()
 	{
-		TestHelper::setValue($this->instance, 'merge', null);
 		$this->instance->union('SELECT name FROM foo');
 		$this->instance->unionAll('SELECT name FROM bar');
-		$teststring = implode('', array_map('strval', TestHelper::getValue($this->instance, 'merge')));
+
+		$string = implode('', $this->instance->merge);
+
 		$this->assertThat(
-			$teststring,
+			$string,
 			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)' . PHP_EOL . 'UNION ALL (SELECT name FROM bar)'),
 			'Tests rendered query with two different unions sequentially.'
 		);
