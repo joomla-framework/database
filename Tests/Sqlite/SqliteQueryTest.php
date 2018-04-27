@@ -163,6 +163,194 @@ class SqliteQueryTest extends TestCase
 	}
 
 	/**
+	 * Test for the \Joomla\Database\Postgresql\SqliteQuery::__string method for a 'select' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringSelectWithUnion()
+	{
+		$thisQuery = new SqliteQuery($this->dbo);
+
+		$thisQuery->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1');
+
+		$union = new SqliteQuery($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'));
+
+		$thisQuery->union($union);
+
+		$this->assertThat(
+			(string) $thisQuery,
+			$this->equalTo(
+				PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'UNION SELECT * FROM (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\')'
+			),
+			'Tests for correct rendering unions.'
+		);
+	}
+
+	/**
+	 * Test for the \Joomla\Database\Postgresql\SqliteQuery::__string method for a 'select' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringSelectWithUnionAndOrderBy()
+	{
+		$thisQuery = new SqliteQuery($this->dbo);
+
+		$thisQuery->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1')
+			->order('b.name');
+
+		$union = new SqliteQuery($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'));
+
+		$thisQuery->union($union);
+
+		$this->assertThat(
+			(string) $thisQuery,
+			$this->equalTo(
+				PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'UNION SELECT * FROM (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\')' .
+					PHP_EOL . 'ORDER BY b.name'
+			),
+			'Tests for correct rendering unions with order by.'
+		);
+	}
+
+	/**
+	 * Test for the \Joomla\Database\Postgresql\SqliteQuery::__string method for a 'querySet' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringQuerySetWithIndividualOrderBy()
+	{
+		$query = new SqliteQuery($this->dbo);
+
+		$query->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1')
+			->order('a.id');
+
+		$union = new SqliteQuery($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'))
+			->order('a.id');
+
+		$thisQuery = new SqliteQuery($this->dbo);
+
+		$thisQuery->querySet($query)
+			->union($union)
+			->order('id');
+
+		$this->assertThat(
+			(string) $thisQuery,
+			$this->equalTo(
+				PHP_EOL . 'SELECT * FROM (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'ORDER BY a.id)' .
+				PHP_EOL . 'UNION SELECT * FROM (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\'' .
+					PHP_EOL . 'ORDER BY a.id)' .
+				PHP_EOL . 'ORDER BY id'
+			),
+			'Tests for correct rendering querySet with global order by.'
+		);
+	}
+
+	/**
+	 * Test for the \Joomla\Database\Postgresql\SqliteQuery::__string method for a 'toQuerySet' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringQuerySetWithIndividualOrderBy2()
+	{
+		$thisQuery = new SqliteQuery($this->dbo);
+
+		$thisQuery->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1')
+			->order('a.id');
+
+		$union = new SqliteQuery($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'))
+			->order('a.id');
+
+		$query = $thisQuery->toQuerySet()
+			->union($union)
+			->order('id');
+
+		$this->assertThat(
+			(string) $query,
+			$this->equalTo(
+				PHP_EOL . 'SELECT * FROM (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'ORDER BY a.id)' .
+				PHP_EOL . 'UNION SELECT * FROM (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\'' .
+					PHP_EOL . 'ORDER BY a.id)' .
+				PHP_EOL . 'ORDER BY id'
+			),
+			'Tests for correct rendering querySet with global order by.'
+		);
+	}
+
+	/**
 	 * Test for the SqliteQuery::__string method for a 'update' case.
 	 *
 	 * @return  void
@@ -1097,6 +1285,152 @@ class SqliteQueryTest extends TestCase
 			trim($q->processLimit('SELECT foo FROM bar', 5, 10)),
 			$this->equalTo('SELECT foo FROM bar LIMIT 10, 5'),
 			'Tests rendered value.'
+		);
+	}
+
+		/**
+	 * Tests the \Joomla\Database\Sqlite\SqliteQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Sqlite\SqliteQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionChain()
+	{
+		$thisQuery = new SqliteQuery($this->dbo);
+
+		$this->assertThat(
+			$thisQuery->union($thisQuery),
+			$this->identicalTo($thisQuery),
+			'Tests chaining.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Sqlite\SqliteQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Sqlite\SqliteQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnion()
+	{
+		$thisQuery = new SqliteQuery($this->dbo);
+
+		$thisQuery->union('SELECT name FROM foo');
+
+		$string = implode('', $thisQuery->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(PHP_EOL . 'UNION SELECT * FROM (SELECT name FROM foo)'),
+			'Tests rendered query with union.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Sqlite\SqliteQuery::unionAll method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Sqlite\SqliteQuery::unionAll
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionAll()
+	{
+		$thisQuery = new SqliteQuery($this->dbo);
+
+		$thisQuery->unionAll('SELECT name FROM foo');
+
+		$string = implode('', $thisQuery->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(PHP_EOL . 'UNION ALL SELECT * FROM (SELECT name FROM foo)'),
+			'Tests rendered query with union all.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Sqlite\SqliteQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Sqlite\SqliteQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionTwo()
+	{
+		$thisQuery = new SqliteQuery($this->dbo);
+
+		$thisQuery->union('SELECT name FROM foo');
+		$thisQuery->union('SELECT name FROM bar');
+
+		$string = implode('', $thisQuery->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(
+				PHP_EOL . 'UNION SELECT * FROM (SELECT name FROM foo)' .
+				PHP_EOL . 'UNION SELECT * FROM (SELECT name FROM bar)'
+			),
+			'Tests rendered query with two unions sequentially.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Sqlite\SqliteQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Sqlite\SqliteQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionsOrdering()
+	{
+		$thisQuery = new SqliteQuery($this->dbo);
+
+		$thisQuery->unionAll('SELECT name FROM foo');
+		$thisQuery->union('SELECT name FROM bar');
+
+		$string = implode('', $thisQuery->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(
+				PHP_EOL . 'UNION ALL SELECT * FROM (SELECT name FROM foo)' .
+				PHP_EOL . 'UNION SELECT * FROM (SELECT name FROM bar)'
+			),
+			'Tests rendered query with two different unions sequentially.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Sqlite\SqliteQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Sqlite\SqliteQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionsOrdering2()
+	{
+		$thisQuery = new SqliteQuery($this->dbo);
+
+		$thisQuery->union('SELECT name FROM foo');
+		$thisQuery->unionAll('SELECT name FROM bar');
+
+		$string = implode('', $thisQuery->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(
+				PHP_EOL . 'UNION SELECT * FROM (SELECT name FROM foo)' .
+				PHP_EOL . 'UNION ALL SELECT * FROM (SELECT name FROM bar)'
+			),
+			'Tests rendered query with two different unions sequentially.'
 		);
 	}
 }

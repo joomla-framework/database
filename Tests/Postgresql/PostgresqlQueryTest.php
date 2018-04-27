@@ -194,6 +194,187 @@ class PostgresqlQueryTest extends TestCase
 	}
 
 	/**
+	 * Test for the \Joomla\Database\Postgresql\PostgresqlQuery::__string method for a 'select' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringSelectWithUnion()
+	{
+		$this->instance->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1');
+
+		$union = new PostgresqlQuery($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'));
+
+		$this->instance->union($union);
+
+		$this->assertThat(
+			(string) $this->instance,
+			$this->equalTo(
+				PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'UNION (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\')'
+			),
+			'Tests for correct rendering unions.'
+		);
+	}
+
+	/**
+	 * Test for the \Joomla\Database\Postgresql\PostgresqlQuery::__string method for a 'select' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringSelectWithUnionAndOrderBy()
+	{
+		$this->instance->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1')
+			->order('b.name');
+
+		$union = new PostgresqlQuery($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'));
+
+		$this->instance->union($union);
+
+		$this->assertThat(
+			(string) $this->instance,
+			$this->equalTo(
+				PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'UNION (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\')' .
+					PHP_EOL . 'ORDER BY b.name'
+			),
+			'Tests for correct rendering unions with order by.'
+		);
+	}
+
+	/**
+	 * Test for the \Joomla\Database\Postgresql\PostgresqlQuery::__string method for a 'querySet' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringQuerySetWithIndividualOrderBy()
+	{
+		$query = new PostgresqlQuery($this->dbo);
+
+		$query->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1')
+			->order('a.id');
+
+		$union = new PostgresqlQuery($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'))
+			->order('a.id');
+
+
+		$this->instance->querySet($query)
+			->union($union)
+			->order('id');
+
+		$this->assertThat(
+			(string) $this->instance,
+			$this->equalTo(
+				'(' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'ORDER BY a.id)' .
+				PHP_EOL . 'UNION (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\'' .
+					PHP_EOL . 'ORDER BY a.id)' .
+				PHP_EOL . 'ORDER BY id'
+			),
+			'Tests for correct rendering querySet with global order by.'
+		);
+	}
+
+	/**
+	 * Test for the \Joomla\Database\Postgresql\PostgresqlQuery::__string method for a 'toQuerySet' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringQuerySetWithIndividualOrderBy2()
+	{
+		$this->instance->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1')
+			->order('a.id');
+
+		$union = new PostgresqlQuery($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'))
+			->order('a.id');
+
+		$query = $this->instance->toQuerySet()
+			->union($union)
+			->order('id');
+
+		$this->assertThat(
+			(string) $query,
+			$this->equalTo(
+				'(' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'ORDER BY a.id)' .
+				PHP_EOL . 'UNION (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\'' .
+					PHP_EOL . 'ORDER BY a.id)' .
+				PHP_EOL . 'ORDER BY id'
+			),
+			'Tests for correct rendering querySet with global order by.'
+		);
+	}
+
+	/**
 	 * Test for the PostgresqlQuery::__string method for a 'update' case.
 	 *
 	 * @return  void
@@ -432,7 +613,7 @@ class PostgresqlQueryTest extends TestCase
 
 		$this->assertThat(
 			$q,
-			$this->isInstanceOf('\Joomla\Database\DatabaseQuery')
+			$this->isInstanceOf('\Joomla\Database\Postgresql\PostgresqlQuery')
 		);
 	}
 
@@ -1298,6 +1479,131 @@ class PostgresqlQueryTest extends TestCase
 			trim($q->returning),
 			$this->equalTo('RETURNING id'),
 			'Tests rendered value.'
+		);
+	}
+
+		/**
+	 * Tests the \Joomla\Database\Postgresql\PostgresqlQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Postgresql\PostgresqlQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionChain()
+	{
+		$this->assertThat(
+			$this->instance->union($this->instance),
+			$this->identicalTo($this->instance),
+			'Tests chaining.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Postgresql\PostgresqlQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Postgresql\PostgresqlQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnion()
+	{
+		$this->instance->union('SELECT name FROM foo');
+
+		$string = implode('', $this->instance->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)'),
+			'Tests rendered query with union.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Postgresql\PostgresqlQuery::unionAll method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Postgresql\PostgresqlQuery::unionAll
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionAll()
+	{
+		$this->instance->unionAll('SELECT name FROM foo');
+
+		$string = implode('', $this->instance->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(PHP_EOL . 'UNION ALL (SELECT name FROM foo)'),
+			'Tests rendered query with union all.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Postgresql\PostgresqlQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Postgresql\PostgresqlQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionTwo()
+	{
+		$this->instance->union('SELECT name FROM foo');
+		$this->instance->union('SELECT name FROM bar');
+
+		$string = implode('', $this->instance->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)' . PHP_EOL . 'UNION (SELECT name FROM bar)'),
+			'Tests rendered query with two unions sequentially.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Postgresql\PostgresqlQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Postgresql\PostgresqlQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionsOrdering()
+	{
+		$this->instance->unionAll('SELECT name FROM foo');
+		$this->instance->union('SELECT name FROM bar');
+
+		$string = implode('', $this->instance->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(PHP_EOL . 'UNION ALL (SELECT name FROM foo)' . PHP_EOL . 'UNION (SELECT name FROM bar)'),
+			'Tests rendered query with two different unions sequentially.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Postgresql\PostgresqlQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Postgresql\PostgresqlQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionsOrdering2()
+	{
+		$this->instance->union('SELECT name FROM foo');
+		$this->instance->unionAll('SELECT name FROM bar');
+
+		$string = implode('', $this->instance->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)' . PHP_EOL . 'UNION ALL (SELECT name FROM bar)'),
+			'Tests rendered query with two different unions sequentially.'
 		);
 	}
 }

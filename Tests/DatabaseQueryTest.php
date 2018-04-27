@@ -340,7 +340,7 @@ class DatabaseQueryTest extends TestCase
 					PHP_EOL . 'FROM a' .
 					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
 					PHP_EOL . 'WHERE b.id = 1' .
-					PHP_EOL . 'UNION (' .
+				PHP_EOL . 'UNION (' .
 					PHP_EOL . 'SELECT a.id' .
 					PHP_EOL . 'FROM a' .
 					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
@@ -381,12 +381,12 @@ class DatabaseQueryTest extends TestCase
 					PHP_EOL . 'FROM a' .
 					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
 					PHP_EOL . 'WHERE b.id = 1' .
-					PHP_EOL . 'UNION (' .
+				PHP_EOL . 'UNION (' .
 					PHP_EOL . 'SELECT a.id' .
 					PHP_EOL . 'FROM a' .
 					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
 					PHP_EOL . 'WHERE b.name = \'_name_\')' .
-					PHP_EOL . 'ORDER BY b.name'
+				PHP_EOL . 'ORDER BY b.name'
 			),
 			'Tests for correct rendering unions with order by.'
 		);
@@ -1987,27 +1987,6 @@ class DatabaseQueryTest extends TestCase
 			$string,
 			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)'),
 			'Tests rendered query with union.'
-		);
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::union method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::union
-	 * @since   1.0
-	 */
-	public function testUnionDistinctFalse()
-	{
-		$this->instance->union('SELECT name FROM foo', false);
-
-		$string = implode('', $this->instance->merge);
-
-		$this->assertThat(
-			$string,
-			$this->equalTo(PHP_EOL . 'UNION ALL (SELECT name FROM foo)'),
-			'Tests rendered query with union distinct false.'
 		);
 	}
 
