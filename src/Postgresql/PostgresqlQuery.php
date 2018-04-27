@@ -147,6 +147,15 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 					$query .= (string) $this->having;
 				}
 
+				if ($this->merge)
+				{
+					// Special case for merge
+					foreach ($this->merge as $element)
+					{
+						$query .= (string) $element;
+					}
+				}
+
 				if ($this->order)
 				{
 					$query .= (string) $this->order;
@@ -289,12 +298,14 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface
 			case 'update':
 			case 'delete':
 			case 'insert':
+			case 'querySet':
 			case 'from':
 			case 'join':
 			case 'set':
 			case 'where':
 			case 'group':
 			case 'having':
+			case 'merge':
 			case 'order':
 			case 'columns':
 			case 'values':
