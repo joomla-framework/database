@@ -71,7 +71,7 @@ storage should extend `Joomla\Database\DatabaseFactory::getDriver()` implementin
 Method `union()` by default has `$distinct = true`.
 If `$distinct` is `false` then generates `UNION ALL` sql statement.
 
-Class variables `$union` and `$unionAll` has been merged into one variable `$merge`.
+Class variables `$union` and `$unionAll` have been merged into one variable `$merge`.
 The new variable represents an ordered array of individual elements.
 
 Stop supporting `$type = 'union'` in method `__toString()`.
