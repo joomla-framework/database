@@ -1704,7 +1704,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *       ->order('name')
 	 *       ->setLimit(1)
 	 *
-	 * @param   DatabaseQuery|string  $query  The DatabaseQuery object or string.
+	 * @param   DatabaseQuery  $query  The DatabaseQuery object or string.
 	 *
 	 * @return  $this
 	 *
@@ -1724,7 +1724,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * Usage:
 	 * $query->select('name')->from('#__foo')->order('id DESC')->setLimit(1)
-	 *       ->toQuerySets()
+	 *       ->toQuerySet()
 	 *       ->unionAll($query2->select('name')->from('#__foo')->order('id')->setLimit(1))
 	 *       ->order('name')
 	 *       ->setLimit(1)
