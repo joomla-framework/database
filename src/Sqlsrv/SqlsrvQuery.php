@@ -121,6 +121,15 @@ class SqlsrvQuery extends DatabaseQuery implements LimitableInterface
 					{
 						$query .= (string) $this->having;
 					}
+
+					if ($this->merge)
+					{
+						// Special case for merge
+						foreach ($this->merge as $element)
+						{
+							$query .= (string) $element;
+						}
+					}
 				}
 
 				if ($this->order)
