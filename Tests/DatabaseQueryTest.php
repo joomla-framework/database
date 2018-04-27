@@ -393,6 +393,105 @@ class DatabaseQueryTest extends TestCase
 	}
 
 	/**
+	 * Test for the \Joomla\Database\DatabaseQuery::__string method for a 'querySet' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringQuerySetWithIndividualOrderBy()
+	{
+		$query = new Mock\Query($this->dbo);
+
+		$query->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1')
+			->order('a.id');
+
+		$union = new Mock\Query($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'))
+			->order('a.id');
+
+
+		$this->instance->querySet($query)
+			->union($union)
+			->order('id');
+
+		$this->assertThat(
+			(string) $this->instance,
+			$this->equalTo(
+				'(' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'ORDER BY a.id)' .
+				PHP_EOL . 'UNION (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\'' .
+					PHP_EOL . 'ORDER BY a.id)' .
+				PHP_EOL . 'ORDER BY id'
+			),
+			'Tests for correct rendering querySet with global order by.'
+		);
+	}
+
+	/**
+	 * Test for the \Joomla\Database\DatabaseQuery::__string method for a 'toQuerySet' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringQuerySetWithIndividualOrderBy2()
+	{
+		$this->instance->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1')
+			->order('a.id');
+
+		$union = new Mock\Query($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'))
+			->order('a.id');
+
+		$query = $this->instance->toQuerySet()
+			->union($union)
+			->order('id');
+
+		$this->assertThat(
+			(string) $query,
+			$this->equalTo(
+				'(' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'ORDER BY a.id)' .
+				PHP_EOL . 'UNION (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\'' .
+					PHP_EOL . 'ORDER BY a.id)' .
+				PHP_EOL . 'ORDER BY id'
+			),
+			'Tests for correct rendering querySet with global order by.'
+		);
+	}
+
+	/**
 	 * Test for the \Joomla\Database\DatabaseQuery::__string method for a 'update' case.
 	 *
 	 * @return  void
@@ -633,6 +732,7 @@ class DatabaseQueryTest extends TestCase
 			'delete',
 			'update',
 			'insert',
+			'querySet',
 		);
 
 		$clauses = array(

@@ -567,4 +567,38 @@ interface QueryInterface extends PreparableInterface
 	 * @since   1.5.0
 	 */
 	public function unionAll($query);
+
+	/**
+	 * Set a single query to the query set.
+	 * On this type of DatabaseQuery you can use union(), unioAll(), order() and setLimit()
+	 *
+	 * Usage:
+	 * $query->querySet($query2->select('name')->from('#__foo')->order('id DESC')->setLimit(1))
+	 *       ->unionAll($query3->select('name')->from('#__foo')->order('id')->setLimit(1))
+	 *       ->order('name')
+	 *       ->setLimit(1)
+	 *
+	 * @param   DatabaseQuery|string  $query  The DatabaseQuery object or string.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function querySet($query);
+
+	/**
+	 * Create a DatabaseQuery object of type querySet from current query.
+	 *
+	 * Usage:
+	 * $query->select('name')->from('#__foo')->order('id DESC')->setLimit(1)
+	 *       ->toQuerySets()
+	 *       ->unionAll($query2->select('name')->from('#__foo')->order('id')->setLimit(1))
+	 *       ->order('name')
+	 *       ->setLimit(1)
+	 *
+	 * @return  DatabaseQuery  A new object of the DatabaseQuery.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function toQuerySet();
 }

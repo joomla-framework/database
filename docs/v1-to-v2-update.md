@@ -75,3 +75,10 @@ Class variables `$union` and `$unionAll` have been merged into one variable `$me
 The new variable represents an ordered array of individual elements.
 
 Stop supporting `$type = 'union'` in method `__toString()`.
+
+New methods:
+- `querySet($query)` changes object type to querySet and set a query in query set.
+- `toQuerySet()` from current object creates DatabaseQuery of type querySet.
+
+The DatabaseQuery object of type querySet can be used to generate a union query
+where the first SELECT statement has own ORDER BY and LIMIT.

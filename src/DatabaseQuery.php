@@ -184,6 +184,14 @@ abstract class DatabaseQuery implements QueryInterface
 	protected $merge = null;
 
 	/**
+	 * The query object.
+	 *
+	 * @var    Query\DatabaseQuery
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $querySet = null;
+
+	/**
 	 * Details of window function.
 	 *
 	 * @var    array
@@ -267,6 +275,31 @@ abstract class DatabaseQuery implements QueryInterface
 						{
 							$query .= (string) $element;
 						}
+					}
+				}
+
+				if ($this->order)
+				{
+					$query .= (string) $this->order;
+				}
+
+				break;
+
+			case 'querySet':
+				$query = $this->querySet;
+
+				if ($query->order || ($query instanceof Query\LimitableInterface && ($query->limit || $query->offset)))
+				{
+					// If ORDER BY or LIMIT statement exist then parentheses is required for the first query
+					$query = "($query)";
+				}
+
+				if ($this->merge)
+				{
+					// Special case for merge
+					foreach ($this->merge as $element)
+					{
+						$query .= (string) $element;
 					}
 				}
 
@@ -495,6 +528,11 @@ abstract class DatabaseQuery implements QueryInterface
 				$this->autoIncrementField = null;
 				break;
 
+			case 'querySet':
+				$this->querySet = null;
+				$this->type     = null;
+				break;
+
 			case 'from':
 				$this->from = null;
 				break;
@@ -561,6 +599,7 @@ abstract class DatabaseQuery implements QueryInterface
 				$this->delete             = null;
 				$this->update             = null;
 				$this->insert             = null;
+				$this->querySet           = null;
 				$this->from               = null;
 				$this->join               = null;
 				$this->set                = null;
@@ -1653,6 +1692,50 @@ abstract class DatabaseQuery implements QueryInterface
 	public function unionAll($query)
 	{
 		return $this->union($query, false);
+	}
+
+	/**
+	 * Set a single query to the query set.
+	 * On this type of DatabaseQuery you can use union(), unioAll(), order() and setLimit()
+	 *
+	 * Usage:
+	 * $query->querySet($query2->select('name')->from('#__foo')->order('id DESC')->setLimit(1))
+	 *       ->unionAll($query3->select('name')->from('#__foo')->order('id')->setLimit(1))
+	 *       ->order('name')
+	 *       ->setLimit(1)
+	 *
+	 * @param   DatabaseQuery|string  $query  The DatabaseQuery object or string.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function querySet($query)
+	{
+		$this->type = 'querySet';
+
+		$this->querySet = $query;
+
+		return $this;
+	}
+
+	/**
+	 * Create a DatabaseQuery object of type querySet from current query.
+	 *
+	 * Usage:
+	 * $query->select('name')->from('#__foo')->order('id DESC')->setLimit(1)
+	 *       ->toQuerySets()
+	 *       ->unionAll($query2->select('name')->from('#__foo')->order('id')->setLimit(1))
+	 *       ->order('name')
+	 *       ->setLimit(1)
+	 *
+	 * @return  DatabaseQuery  A new object of the DatabaseQuery.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function toQuerySet()
+	{
+		return (new static($this->db))->querySet($this);
 	}
 
 	/**
