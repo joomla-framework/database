@@ -90,7 +90,7 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * The join element.
 	 *
-	 * @var    Query\QueryElement
+	 * @var    Query\QueryElement[]
 	 * @since  1.0
 	 */
 	protected $join = null;
@@ -176,7 +176,7 @@ abstract class DatabaseQuery implements QueryInterface
 	protected $exec = null;
 
 	/**
-	 * The merge element may include UNION, UNION ALL, EXCEPT and INTERSECT.
+	 * The list of query elements, which may include UNION, UNION ALL, EXCEPT and INTERSECT.
 	 *
 	 * @var    Query\QueryElement[]
 	 * @since  __DEPLOY_VERSION__
@@ -263,9 +263,9 @@ abstract class DatabaseQuery implements QueryInterface
 					if ($this->merge)
 					{
 						// Special case for merge
-						foreach ($this->merge as $merge)
+						foreach ($this->merge as $element)
 						{
-							$query .= (string) $merge;
+							$query .= (string) $element;
 						}
 					}
 				}
@@ -519,6 +519,10 @@ abstract class DatabaseQuery implements QueryInterface
 				$this->having = null;
 				break;
 
+			case 'merge':
+				$this->merge = null;
+				break;
+
 			case 'order':
 				$this->order = null;
 				break;
@@ -550,10 +554,6 @@ abstract class DatabaseQuery implements QueryInterface
 				$this->offset = 0;
 				break;
 
-			case 'merge':
-				$this->merge = null;
-				break;
-
 			default:
 				$this->type               = null;
 				$this->select             = null;
@@ -567,13 +567,13 @@ abstract class DatabaseQuery implements QueryInterface
 				$this->where              = null;
 				$this->group              = null;
 				$this->having             = null;
+				$this->merge              = null;
 				$this->order              = null;
 				$this->columns            = null;
 				$this->values             = null;
 				$this->autoIncrementField = null;
 				$this->exec               = null;
 				$this->call               = null;
-				$this->merge              = null;
 				$this->offset             = 0;
 				$this->limit              = 0;
 				break;
@@ -1599,10 +1599,10 @@ abstract class DatabaseQuery implements QueryInterface
 
 	/**
 	 * Combine a select statement to the current query by one of the set operators.
-	 * Example operators: UNION, UNION ALL, EXCEPT or INTERSECT.
+	 * Operators: UNION, UNION ALL, EXCEPT or INTERSECT.
 	 *
-	 * @param   string                $name   The name of the operator with parentheses.
 	 * @param   DatabaseQuery|string  $query  The DatabaseQuery object or string.
+	 * @param   string                $name   The name of the set operator with parentheses.
 	 *
 	 * @return  $this
 	 *
@@ -1610,6 +1610,8 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	protected function merge($name, $query)
 	{
+		$this->type = $this->type ?: 'select';
+
 		$this->merge[] = new Query\QueryElement($name, $query);
 
 		return $this;

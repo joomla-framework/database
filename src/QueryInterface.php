@@ -539,39 +539,32 @@ interface QueryInterface extends PreparableInterface
 
 	/**
 	 * Add a query to UNION with the current query.
-	 * Multiple unions each require separate statements and create an array of unions.
 	 *
 	 * Usage:
 	 * $query->union('SELECT name FROM  #__foo')
-	 * $query->union('SELECT name FROM  #__foo','distinct')
-	 * $query->union(array('SELECT name FROM  #__foo', 'SELECT name FROM  #__bar'))
+	 * $query->union('SELECT name FROM  #__foo', true)
 	 *
-	 * @param   QueryInterface|string  $query     The QueryInterface object or string to union.
-	 * @param   boolean                $distinct  True to only return distinct rows from the union.
-	 * @param   string                 $glue      The glue by which to join the conditions.
+	 * @param   DatabaseQuery|string  $query     The DatabaseQuery object or string to union.
+	 * @param   boolean               $distinct  True to only return distinct rows from the union.
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
-	public function union($query, $distinct = false);
+	public function union($query, $distinct = true);
 
 	/**
 	 * Add a query to UNION ALL with the current query.
-	 * Multiple unions each require separate statements and create an array of unions.
 	 *
 	 * Usage:
-	 * $query->union('SELECT name FROM  #__foo')
-	 * $query->union(array('SELECT name FROM  #__foo','SELECT name FROM  #__bar'))
+	 * $query->unionAll('SELECT name FROM  #__foo')
 	 *
-	 * @param   DatabaseQuery|string  $query     The DatabaseQuery object or string to union.
-	 * @param   boolean               $distinct  Not used - ignored.
-	 * @param   string                $glue      The glue by which to join the conditions.
+	 * @param   DatabaseQuery|string  $query  The DatabaseQuery object or string to union.
 	 *
 	 * @return  $this
 	 *
 	 * @see     union
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function unionAll($query);
 }
