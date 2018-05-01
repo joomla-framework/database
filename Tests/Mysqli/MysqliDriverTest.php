@@ -766,4 +766,25 @@ class MysqliDriverTest extends MysqliCase
 	{
 		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
+
+	/**
+	 * Test getNullDate method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testgetNullDate()
+	{
+		$query    = self::$driver->getQuery(true);
+		$result   = self::$driver->setQuery('SELECT @@SESSION.sql_mode;')->loadResult();
+		$expected = '0000-00-00 00:00:00';
+		
+		if (strpos($result, 'NO_ZERO_DATE') !== false)
+		{
+			$expected = '1000-01-01 00:00:00';
+		}
+
+		$this->assertThat($expected, $this->equalTo(self::$driver->getNullDate()), __LINE__);
+	}
 }
