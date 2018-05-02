@@ -179,7 +179,7 @@ abstract class Folder
 			{
 				$test = Path::clean($test);
 
-				if (strpos($path, $test) === 0)
+				if (strpos($path, $test) === 0 || strpos($path, realpath($test)) === 0)
 				{
 					$inBaseDir = true;
 					break;
