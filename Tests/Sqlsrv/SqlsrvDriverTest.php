@@ -28,6 +28,7 @@ class SqlsrvDriverTest extends SqlsrvCase
 		return array(
 			array("'%_abc123[]", false, "''%_abc123[]"),
 			array("'%_abc123[]", true, "''[%][_]abc123[[]]"),
+			array("binary\000data", false, "binary' + CHAR(0) + N'data"),
 		);
 	}
 
