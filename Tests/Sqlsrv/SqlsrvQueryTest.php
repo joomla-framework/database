@@ -208,7 +208,11 @@ class SqlsrvQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT YEAR("col") AS "columnAlias0"' . PHP_EOL . 'FROM table')
+			$this->equalTo(
+				PHP_EOL . 'SELECT YEAR("col") AS "columnAlias0"' .
+				PHP_EOL . 'FROM table' .
+				PHP_EOL . '/*ORDER BY (SELECT 0)*/'
+			)
 		);
 	}
 
@@ -227,7 +231,11 @@ class SqlsrvQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT MONTH("col") AS "columnAlias0"' . PHP_EOL . 'FROM table')
+			$this->equalTo(
+				PHP_EOL . 'SELECT MONTH("col") AS "columnAlias0"' .
+				PHP_EOL . 'FROM table' .
+				PHP_EOL . '/*ORDER BY (SELECT 0)*/'
+			)
 		);
 	}
 
@@ -246,7 +254,11 @@ class SqlsrvQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT DAY("col") AS "columnAlias0"' . PHP_EOL . 'FROM table')
+			$this->equalTo(
+				PHP_EOL . 'SELECT DAY("col") AS "columnAlias0"' .
+				PHP_EOL . 'FROM table' .
+				PHP_EOL . '/*ORDER BY (SELECT 0)*/'
+			)
 		);
 	}
 
@@ -265,7 +277,11 @@ class SqlsrvQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT HOUR("col") AS "columnAlias0"' . PHP_EOL . 'FROM table')
+			$this->equalTo(
+				PHP_EOL . 'SELECT HOUR("col") AS "columnAlias0"' .
+				PHP_EOL . 'FROM table' .
+				PHP_EOL . '/*ORDER BY (SELECT 0)*/'
+			)
 		);
 	}
 
@@ -284,7 +300,11 @@ class SqlsrvQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT MINUTE("col") AS "columnAlias0"' . PHP_EOL . 'FROM table')
+			$this->equalTo(
+				PHP_EOL . 'SELECT MINUTE("col") AS "columnAlias0"' .
+				PHP_EOL . 'FROM table' .
+				PHP_EOL . '/*ORDER BY (SELECT 0)*/'
+			)
 		);
 	}
 
@@ -303,7 +323,11 @@ class SqlsrvQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'SELECT SECOND("col") AS "columnAlias0"' . PHP_EOL . 'FROM table')
+			$this->equalTo(
+				PHP_EOL . 'SELECT SECOND("col") AS "columnAlias0"' .
+				PHP_EOL . 'FROM table' .
+				PHP_EOL . '/*ORDER BY (SELECT 0)*/'
+			)
 		);
 	}
 
@@ -324,7 +348,14 @@ class SqlsrvQueryTest extends TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . 'INSERT INTO table' . PHP_EOL . '(col)VALUES ' . PHP_EOL . '(' . PHP_EOL . 'SELECT col2' . PHP_EOL . 'WHERE a=1)')
+			$this->equalTo(
+				PHP_EOL . 'INSERT INTO table' .
+				PHP_EOL . '(col)VALUES ' .
+				PHP_EOL . '(' .
+				PHP_EOL . 'SELECT col2' .
+				PHP_EOL . 'WHERE a=1' .
+				PHP_EOL . '/*ORDER BY (SELECT 0)*/)'
+			)
 		);
 
 		$q->clear();
@@ -1071,27 +1102,36 @@ class SqlsrvQueryTest extends TestCase
 		$this->assertEquals(
 			PHP_EOL . 'SELECT id,COUNT(*) AS count' .
 			PHP_EOL . 'FROM a' .
-			PHP_EOL . 'WHERE id = 1',
+			PHP_EOL . 'WHERE id = 1' .
+			PHP_EOL . '/*ORDER BY (SELECT 0)*/',
 			$q->processLimit((string) $q, 0)
 		);
 
 		$this->assertEquals(
 			PHP_EOL . 'SELECT TOP 30 id,COUNT(*) AS count' .
 			PHP_EOL . 'FROM a' .
-			PHP_EOL . 'WHERE id = 1',
+			PHP_EOL . 'WHERE id = 1' .
+			PHP_EOL . '/*ORDER BY (SELECT 0)*/',
 			$q->processLimit((string) $q, 30)
 		);
 
 		$this->assertEquals(
-			PHP_EOL . 'SELECT * FROM (' .
-			PHP_EOL . 'SELECT *, ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS RowNumber' .
-			PHP_EOL . 'FROM (' .
-			PHP_EOL . 'SELECT TOP 4 id,COUNT(*) AS count' .
+			PHP_EOL . 'SELECT id,COUNT(*) AS count' .
 			PHP_EOL . 'FROM a' .
-			PHP_EOL . 'WHERE id = 1) AS A' .
-			PHP_EOL . ') AS A' .
-			PHP_EOL . 'WHERE RowNumber > 3',
+			PHP_EOL . 'WHERE id = 1' .
+			PHP_EOL . 'ORDER BY (SELECT 0)' .
+			PHP_EOL . 'OFFSET 3 ROWS' .
+			PHP_EOL . 'FETCH NEXT 1 ROWS ONLY',
 			$q->processLimit((string) $q, 1, 3)
+		);
+
+		$this->assertEquals(
+			PHP_EOL . 'SELECT id,COUNT(*) AS count' .
+			PHP_EOL . 'FROM a' .
+			PHP_EOL . 'WHERE id = 1' .
+			PHP_EOL . 'ORDER BY (SELECT 0)' .
+			PHP_EOL . 'OFFSET 3 ROWS',
+			$q->processLimit((string) $q, 0, 3)
 		);
 	}
 }
