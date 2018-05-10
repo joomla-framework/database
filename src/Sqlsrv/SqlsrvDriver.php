@@ -58,7 +58,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected static $dbMinimum = '10.50.1600.1';
+	protected static $dbMinimum = '11.0.2100.60';
 
 	/**
 	 * Test to see if the SQLSRV connector is available.
