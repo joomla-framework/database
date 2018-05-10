@@ -12,6 +12,7 @@ The following are the minimum supported database versions:
 
 - MySQL: 5.5.3
 - PostgreSQL: 9.2.0
+- MS SQL: 11.0.2100.60 (SQL Server 2012)
 
 ### `Joomla\Database\DatabaseInterface` populated
 
