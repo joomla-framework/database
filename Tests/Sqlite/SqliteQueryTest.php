@@ -163,7 +163,7 @@ class SqliteQueryTest extends TestCase
 	}
 
 	/**
-	 * Test for the \Joomla\Database\Postgresql\SqliteQuery::__string method for a 'select' case.
+	 * Test for the \Joomla\Database\Sqlite\SqliteQuery::__string method for a 'select' case.
 	 *
 	 * @return  void
 	 *
@@ -205,7 +205,7 @@ class SqliteQueryTest extends TestCase
 	}
 
 	/**
-	 * Test for the \Joomla\Database\Postgresql\SqliteQuery::__string method for a 'select' case.
+	 * Test for the \Joomla\Database\Sqlite\SqliteQuery::__string method for a 'select' case.
 	 *
 	 * @return  void
 	 *
@@ -249,7 +249,7 @@ class SqliteQueryTest extends TestCase
 	}
 
 	/**
-	 * Test for the \Joomla\Database\Postgresql\SqliteQuery::__string method for a 'querySet' case.
+	 * Test for the \Joomla\Database\Sqlite\SqliteQuery::__string method for a 'querySet' case.
 	 *
 	 * @return  void
 	 *
@@ -301,7 +301,7 @@ class SqliteQueryTest extends TestCase
 	}
 
 	/**
-	 * Test for the \Joomla\Database\Postgresql\SqliteQuery::__string method for a 'toQuerySet' case.
+	 * Test for the \Joomla\Database\Sqlite\SqliteQuery::__string method for a 'toQuerySet' case.
 	 *
 	 * @return  void
 	 *
@@ -1288,7 +1288,7 @@ class SqliteQueryTest extends TestCase
 		);
 	}
 
-		/**
+	/**
 	 * Tests the \Joomla\Database\Sqlite\SqliteQuery::union method.
 	 *
 	 * @return  void
