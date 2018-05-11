@@ -787,4 +787,74 @@ class MysqliDriverTest extends MysqliCase
 
 		$this->assertThat($expected, $this->equalTo(self::$driver->getNullDate()), __LINE__);
 	}
+
+	/**
+	 * Test querySet method.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testQuerySetWithUnionAll()
+	{
+		$query  = self::$driver->getQuery(true);
+		$union1 = self::$driver->getQuery(true);
+		$union2 = self::$driver->getQuery(true);
+
+		$union1->select('id, title')->from('dbtest')->where('id = 4')->setLimit(1);
+
+		$union2->select('id, title')->from('dbtest')->where('id < 4')->order('id DESC');
+		$union2->setLimit(2, 1);
+
+		$query->querySet($union1)->unionAll($union2)->order('id');
+
+		$result = self::$driver->setQuery($query, 0, 3)->loadAssocList();
+
+		$this->assertThat(
+			$result,
+			$this->equalTo(
+				array(
+					array('id' => '1', 'title' => 'Testing'),
+					array('id' => '2', 'title' => 'Testing2'),
+					array('id' => '4', 'title' => 'Testing4'),
+				)
+			),
+			__LINE__
+		);
+	}
+
+	/**
+	 * Test toQuerySet method.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testSelectToQuerySetWithUnionAll()
+	{
+		$query = self::$driver->getQuery(true);
+		$union = self::$driver->getQuery(true);
+
+		$query->select('id, title')->from('dbtest')->where('id = 4');
+		$query = $query->setLimit(1)->toQuerySet();
+
+		$union->select('id, title')->from('dbtest')->where('id < 4')->order('id DESC');
+		$union->setLimit(2, 1);
+
+		$query->unionAll($union)->order('id');
+
+		$result = self::$driver->setQuery($query)->loadAssocList();
+
+		$this->assertThat(
+			$result,
+			$this->equalTo(
+				array(
+					array('id' => '1', 'title' => 'Testing'),
+					array('id' => '2', 'title' => 'Testing2'),
+					array('id' => '4', 'title' => 'Testing4'),
+				)
+			),
+			__LINE__
+		);
+	}
 }
