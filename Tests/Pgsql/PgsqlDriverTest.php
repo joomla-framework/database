@@ -374,12 +374,17 @@ class PgsqlDriverTest extends PgsqlCase
 		$seq->table = 'dbtest';
 		$seq->column = 'id';
 		$seq->data_type = 'bigint';
-
 		$seq->start_value = '1';
 		$seq->minimum_value = '1';
 		$seq->maximum_value = '9223372036854775807';
 		$seq->increment = '1';
 		$seq->cycle_option = 'NO';
+
+		if (version_compare(self::$driver->getVersion(), '10', 'ge'))
+		{
+			$seq->data_type = 'integer';
+			$seq->maximum_value = '2147483647';
+		}
 
 		$this->assertThat(self::$driver->getTableSequences('dbtest'), $this->equalTo(array($seq)), __LINE__);
 	}
