@@ -13,7 +13,8 @@ use Joomla\Database\Pdo\PdoIterator;
 /**
  * Oracle Database Iterator.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Oracle support will be removed.
  */
 class OracleIterator extends PdoIterator
 {

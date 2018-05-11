@@ -15,7 +15,8 @@ use Joomla\Database\Query\LimitableInterface;
 /**
  * Oracle Query Building Class.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Oracle support will be removed.
  */
 class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInterface
 {
