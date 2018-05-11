@@ -1133,5 +1133,53 @@ class SqlsrvQueryTest extends TestCase
 			PHP_EOL . 'OFFSET 3 ROWS',
 			$q->processLimit((string) $q, 0, 3)
 		);
+
+		// Test if ORDER BY is correctly recognised in query 1
+		$q->clear('where')->where('id IN (select id from b order by 1)');
+
+		$this->assertEquals(
+			PHP_EOL . 'SELECT id,COUNT(*) AS count' .
+			PHP_EOL . 'FROM a' .
+			PHP_EOL . 'WHERE id IN (select id from b order by 1)' .
+			PHP_EOL . 'ORDER BY (SELECT 0)' .
+			PHP_EOL . 'OFFSET 3 ROWS',
+			$q->processLimit((string) $q, 0, 3)
+		);
+
+		// Test if ORDER BY is correctly recognised in query 2
+		$q->order('id DESC');
+
+		$this->assertEquals(
+			PHP_EOL . 'SELECT id,COUNT(*) AS count' .
+			PHP_EOL . 'FROM a' .
+			PHP_EOL . 'WHERE id IN (select id from b order by 1)' .
+			PHP_EOL . 'ORDER BY id DESC' .
+			PHP_EOL . 'OFFSET 3 ROWS',
+			$q->processLimit((string) $q, 0, 3)
+		);
+
+		// Test if ORDER BY is correctly recognised in query 3
+		$q->clear('where')->where('id IN (SELECT id FROM b /*ORDER BY (SELECT 0)*/)');
+
+		$this->assertEquals(
+			PHP_EOL . 'SELECT id,COUNT(*) AS count' .
+			PHP_EOL . 'FROM a' .
+			PHP_EOL . 'WHERE id IN (SELECT id FROM b /*ORDER BY (SELECT 0)*/)' .
+			PHP_EOL . 'ORDER BY id DESC' .
+			PHP_EOL . 'OFFSET 3 ROWS',
+			$q->processLimit((string) $q, 0, 3)
+		);
+
+		// Test if ORDER BY is correctly recognised in query 4
+		$q->clear('order');
+
+		$this->assertEquals(
+			PHP_EOL . 'SELECT id,COUNT(*) AS count' .
+			PHP_EOL . 'FROM a' .
+			PHP_EOL . 'WHERE id IN (SELECT id FROM b /*ORDER BY (SELECT 0)*/)' .
+			PHP_EOL . 'ORDER BY (SELECT 0)' .
+			PHP_EOL . 'OFFSET 3 ROWS',
+			$q->processLimit((string) $q, 0, 3)
+		);
 	}
 }

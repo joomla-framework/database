@@ -1205,12 +1205,14 @@ class SqlsrvQuery extends DatabaseQuery implements LimitableInterface
 	{
 		if ($offset > 0)
 		{
-			$position = strrpos($query, '/*ORDER BY (SELECT 0)*/');
+			// Find a position of the last comment
+			$commentPos = strrpos($query, '/*ORDER BY (SELECT 0)*/');
 
-			if ($position !== false)
+			// If the last comment belongs to this query, not previous subquery
+			if ($commentPos !== false && $commentPos + 2 === strripos($query, 'ORDER BY', $commentPos + 2))
 			{
 				// We can not use OFFSET without ORDER BY
-				$query = substr_replace($query, 'ORDER BY (SELECT 0)', $position, 23);
+				$query = substr_replace($query, 'ORDER BY (SELECT 0)', $commentPos, 23);
 			}
 
 			$query .= PHP_EOL . 'OFFSET ' . (int) $offset . ' ROWS';
