@@ -681,7 +681,7 @@ abstract class PdoDriver extends DatabaseDriver
 		}
 		catch (\PDOException $exception)
 		{
-			throw new PrepareStatementFailureException($exception->getMessage(), $exception->getCode(), $exception);
+			throw new PrepareStatementFailureException($exception->getMessage() . $query, (int) $exception->getCode(), $exception);
 		}
 	}
 
