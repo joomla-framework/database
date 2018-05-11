@@ -373,13 +373,19 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		$seq->column = 'id';
 		$seq->data_type = 'bigint';
 
-		if (version_compare(self::$driver->getVersion(), '9.1.0') >= 0)
+		if (version_compare(self::$driver->getVersion(), '9.1.0', 'ge'))
 		{
 			$seq->start_value = '1';
 			$seq->minimum_value = '1';
 			$seq->maximum_value = '9223372036854775807';
 			$seq->increment = '1';
 			$seq->cycle_option = 'NO';
+
+			if (version_compare(self::$driver->getVersion(), '10', 'ge'))
+			{
+				$seq->data_type = 'integer';
+				$seq->maximum_value = '2147483647';
+			}
 		}
 		else
 		{
