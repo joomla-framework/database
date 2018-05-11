@@ -66,8 +66,8 @@ class SqlsrvIteratorTest extends SqlsrvCase
 				20,
 				2,
 				array(
-					(object) array('title' => 'Testing3', 'RowNumber' => '3'),
-					(object) array('title' => 'Testing4', 'RowNumber' => '4')
+					(object) array('title' => 'Testing3'),
+					(object) array('title' => 'Testing4')
 				),
 				null
 			),
