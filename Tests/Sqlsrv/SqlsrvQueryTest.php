@@ -288,19 +288,17 @@ class SqlsrvQueryTest extends TestCase
 			(string) $thisQuery,
 			$this->equalTo(
 				PHP_EOL . 'SELECT * FROM (' .
-					PHP_EOL . 'SELECT * FROM (' .
-						PHP_EOL . 'SELECT a.id' .
-						PHP_EOL . 'FROM a' .
-						PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-						PHP_EOL . 'WHERE b.id = 1' .
-						PHP_EOL . 'ORDER BY a.id) AS merge_0' .
-					PHP_EOL . 'UNION SELECT * FROM (' .
-						PHP_EOL . 'SELECT a.id' .
-						PHP_EOL . 'FROM a' .
-						PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-						PHP_EOL . 'WHERE b.name = \'_name_\'' .
-						PHP_EOL . 'ORDER BY a.id) AS merge_1' .
-					PHP_EOL . ') AS merges' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'ORDER BY a.id) AS merge_0' .
+				PHP_EOL . 'UNION SELECT * FROM (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\'' .
+					PHP_EOL . 'ORDER BY a.id) AS merge_1' .
 				PHP_EOL . 'ORDER BY id'
 			),
 			'Tests for correct rendering querySet with global order by.'
@@ -340,19 +338,17 @@ class SqlsrvQueryTest extends TestCase
 			(string) $query,
 			$this->equalTo(
 				PHP_EOL . 'SELECT * FROM (' .
-					PHP_EOL . 'SELECT * FROM (' .
-						PHP_EOL . 'SELECT a.id' .
-						PHP_EOL . 'FROM a' .
-						PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-						PHP_EOL . 'WHERE b.id = 1' .
-						PHP_EOL . 'ORDER BY a.id) AS merge_0' .
-					PHP_EOL . 'UNION SELECT * FROM (' .
-						PHP_EOL . 'SELECT a.id' .
-						PHP_EOL . 'FROM a' .
-						PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-						PHP_EOL . 'WHERE b.name = \'_name_\'' .
-						PHP_EOL . 'ORDER BY a.id) AS merge_1' .
-					PHP_EOL . ') AS merges' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'ORDER BY a.id) AS merge_0' .
+				PHP_EOL . 'UNION SELECT * FROM (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\'' .
+					PHP_EOL . 'ORDER BY a.id) AS merge_1' .
 				PHP_EOL . 'ORDER BY id'
 			),
 			'Tests for correct rendering querySet with global order by.'

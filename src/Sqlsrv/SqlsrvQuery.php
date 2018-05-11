@@ -166,12 +166,6 @@ class SqlsrvQuery extends DatabaseQuery implements LimitableInterface
 					}
 				}
 
-				if ($this->order || $this->limit || $this->offset)
-				{
-					// Merge sets has to be wrapped
-					$query = PHP_EOL . 'SELECT * FROM (' . $query . PHP_EOL . ') AS merges';
-				}
-
 				if ($this->order)
 				{
 					$query .= (string) $this->order;
