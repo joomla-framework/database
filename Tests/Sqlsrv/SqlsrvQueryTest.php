@@ -200,7 +200,9 @@ class SqlsrvQueryTest extends TestCase
 					PHP_EOL . 'SELECT a.id' .
 					PHP_EOL . 'FROM a' .
 					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-					PHP_EOL . 'WHERE b.name = \'_name_\') AS merge_1'
+					PHP_EOL . 'WHERE b.name = \'_name_\'' .
+					PHP_EOL . '/*ORDER BY (SELECT 0)*/) AS merge_1' .
+					PHP_EOL . '/*ORDER BY (SELECT 0)*/'
 			),
 			'Tests for correct rendering unions.'
 		);
@@ -243,7 +245,8 @@ class SqlsrvQueryTest extends TestCase
 					PHP_EOL . 'SELECT a.id' .
 					PHP_EOL . 'FROM a' .
 					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-					PHP_EOL . 'WHERE b.name = \'_name_\') AS merge_1' .
+					PHP_EOL . 'WHERE b.name = \'_name_\'' .
+					PHP_EOL . '/*ORDER BY (SELECT 0)*/) AS merge_1' .
 					PHP_EOL . 'ORDER BY b.name'
 			),
 			'Tests for correct rendering unions with order by.'
