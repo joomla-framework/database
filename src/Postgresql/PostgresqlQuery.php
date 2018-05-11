@@ -16,7 +16,8 @@ use Joomla\Database\Query\LimitableInterface;
 /**
  * PostgreSQL Query Building Class.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Use the PDO PostgreSQL driver instead
  */
 class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, PreparableInterface
 {

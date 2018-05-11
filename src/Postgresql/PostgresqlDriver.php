@@ -20,7 +20,8 @@ use Psr\Log;
 /**
  * PostgreSQL Database Driver
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Use the PDO PostgreSQL driver instead
  */
 class PostgresqlDriver extends DatabaseDriver
 {
