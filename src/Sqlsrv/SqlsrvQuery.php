@@ -127,6 +127,10 @@ class SqlsrvQuery extends DatabaseQuery implements LimitableInterface
 				{
 					$query .= (string) $this->order;
 				}
+				else
+				{
+					$query .= PHP_EOL . '/*ORDER BY (SELECT 0)*/';
+				}
 
 				if ($this->limit > 0 || $this->offset > 0)
 				{
@@ -1199,34 +1203,41 @@ class SqlsrvQuery extends DatabaseQuery implements LimitableInterface
 	 */
 	public function processLimit($query, $limit, $offset = 0)
 	{
-		if ($limit)
+		if ($offset > 0)
 		{
-			$total = $offset + $limit;
+			// Find a position of the last comment
+			$commentPos = strrpos($query, '/*ORDER BY (SELECT 0)*/');
 
+			// If the last comment belongs to this query, not previous subquery
+			if ($commentPos !== false && $commentPos + 2 === strripos($query, 'ORDER BY', $commentPos + 2))
+			{
+				// We can not use OFFSET without ORDER BY
+				$query = substr_replace($query, 'ORDER BY (SELECT 0)', $commentPos, 23);
+			}
+
+			$query .= PHP_EOL . 'OFFSET ' . (int) $offset . ' ROWS';
+
+			if ($limit > 0)
+			{
+				$query .= PHP_EOL . 'FETCH NEXT ' . (int) $limit . ' ROWS ONLY';
+			}
+		}
+		elseif ($limit > 0)
+		{
 			$position = stripos($query, 'SELECT');
 			$distinct = stripos($query, 'SELECT DISTINCT');
 
 			if ($position === $distinct)
 			{
-				$query = substr_replace($query, 'SELECT DISTINCT TOP ' . (int) $total, $position, 15);
+				$query = substr_replace($query, 'SELECT DISTINCT TOP ' . (int) $limit, $position, 15);
 			}
 			else
 			{
-				$query = substr_replace($query, 'SELECT TOP ' . (int) $total, $position, 6);
+				$query = substr_replace($query, 'SELECT TOP ' . (int) $limit, $position, 6);
 			}
 		}
 
-		if (!$offset)
-		{
-			return $query;
-		}
-
-		return PHP_EOL
-			. 'SELECT * FROM ('
-			. PHP_EOL . 'SELECT *, ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS RowNumber'
-			. PHP_EOL . 'FROM (' . $query . ') AS A'
-			. PHP_EOL . ') AS A'
-			. PHP_EOL . 'WHERE RowNumber > ' . (int) $offset;
+		return $query;
 	}
 
 	/**
