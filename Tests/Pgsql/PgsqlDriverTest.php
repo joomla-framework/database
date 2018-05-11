@@ -458,7 +458,7 @@ class PgsqlDriverTest extends PgsqlCase
 	public function testGetVersion()
 	{
 		$versionRow = self::$driver->setQuery('SELECT version();')->loadRow();
-		preg_match('/((\d+)\.)((\d+)\.)(\*|\d+)/', $versionRow[0], $versionArray);
+		preg_match('/\d+(?:\.\d+)+/', $versionRow[0], $versionArray);
 
 		$this->assertGreaterThanOrEqual($versionArray[0], self::$driver->getVersion(), __LINE__);
 	}
