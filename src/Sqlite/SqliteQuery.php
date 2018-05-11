@@ -73,7 +73,7 @@ class SqliteQuery extends PdoQuery
 			case 'querySet':
 				$query = $this->querySet;
 
-				if ($query->order || ($query instanceof Query\LimitableInterface && ($query->limit || $query->offset)))
+				if ($query->order || $query->limit || $query->offset)
 				{
 					// If ORDER BY or LIMIT statement exist then parentheses is required for the first query
 					$query = PHP_EOL . "SELECT * FROM ($query)";

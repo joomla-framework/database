@@ -141,10 +141,7 @@ class SqlsrvQuery extends DatabaseQuery implements LimitableInterface
 					$query .= PHP_EOL . '/*ORDER BY (SELECT 0)*/';
 				}
 
-				if ($this->limit > 0 || $this->offset > 0)
-				{
-					$query = $this->processLimit($query, $this->limit, $this->offset);
-				}
+				$query = $this->processLimit($query, $this->limit, $this->offset);
 
 				break;
 
