@@ -165,6 +165,197 @@ class SqlsrvQueryTest extends TestCase
 	}
 
 	/**
+	 * Test for the \Joomla\Database\Sqlsrv\SqlsrvQuery::__string method for a 'select' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringSelectWithUnion()
+	{
+		$thisQuery = new SqlsrvQuery($this->dbo);
+
+		$thisQuery->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1');
+
+		$union = new SqlsrvQuery($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'));
+
+		$thisQuery->union($union);
+
+		$this->assertThat(
+			(string) $thisQuery,
+			$this->equalTo(
+				PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'UNION SELECT * FROM (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\'' .
+					PHP_EOL . '/*ORDER BY (SELECT 0)*/) AS merge_1' .
+					PHP_EOL . '/*ORDER BY (SELECT 0)*/'
+			),
+			'Tests for correct rendering unions.'
+		);
+	}
+
+	/**
+	 * Test for the \Joomla\Database\Sqlsrv\SqlsrvQuery::__string method for a 'select' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringSelectWithUnionAndOrderBy()
+	{
+		$thisQuery = new SqlsrvQuery($this->dbo);
+
+		$thisQuery->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1')
+			->order('b.name');
+
+		$union = new SqlsrvQuery($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'));
+
+		$thisQuery->union($union);
+
+		$this->assertThat(
+			(string) $thisQuery,
+			$this->equalTo(
+				PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'UNION SELECT * FROM (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\'' .
+					PHP_EOL . '/*ORDER BY (SELECT 0)*/) AS merge_1' .
+					PHP_EOL . 'ORDER BY b.name'
+			),
+			'Tests for correct rendering unions with order by.'
+		);
+	}
+
+	/**
+	 * Test for the \Joomla\Database\Sqlsrv\SqlsrvQuery::__string method for a 'querySet' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringQuerySetWithIndividualOrderBy()
+	{
+		$query = new SqlsrvQuery($this->dbo);
+
+		$query->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1')
+			->order('a.id');
+
+		$union = new SqlsrvQuery($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'))
+			->order('a.id');
+
+		$thisQuery = new SqlsrvQuery($this->dbo);
+
+		$thisQuery->querySet($query)
+			->union($union)
+			->order('id');
+
+		$this->assertThat(
+			(string) $thisQuery,
+			$this->equalTo(
+				PHP_EOL . 'SELECT * FROM (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'ORDER BY a.id) AS merge_0' .
+				PHP_EOL . 'UNION SELECT * FROM (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\'' .
+					PHP_EOL . 'ORDER BY a.id) AS merge_1' .
+				PHP_EOL . 'ORDER BY id'
+			),
+			'Tests for correct rendering querySet with global order by.'
+		);
+	}
+
+	/**
+	 * Test for the \Joomla\Database\Sqlsrv\SqlsrvQuery::__string method for a 'toQuerySet' case.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringQuerySetWithIndividualOrderBy2()
+	{
+		$thisQuery = new SqlsrvQuery($this->dbo);
+
+		$thisQuery->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.id = 1')
+			->order('a.id');
+
+		$union = new SqlsrvQuery($this->dbo);
+
+		$union->select('a.id')
+			->from('a')
+			->innerJoin('b ON b.id = a.id')
+			->where('b.name = ' . $union->quote('name'))
+			->order('a.id');
+
+		$query = $thisQuery->toQuerySet()
+			->union($union)
+			->order('id');
+
+		$this->assertThat(
+			(string) $query,
+			$this->equalTo(
+				PHP_EOL . 'SELECT * FROM (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.id = 1' .
+					PHP_EOL . 'ORDER BY a.id) AS merge_0' .
+				PHP_EOL . 'UNION SELECT * FROM (' .
+					PHP_EOL . 'SELECT a.id' .
+					PHP_EOL . 'FROM a' .
+					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+					PHP_EOL . 'WHERE b.name = \'_name_\'' .
+					PHP_EOL . 'ORDER BY a.id) AS merge_1' .
+				PHP_EOL . 'ORDER BY id'
+			),
+			'Tests for correct rendering querySet with global order by.'
+		);
+	}
+
+	/**
 	 * Test for the SqlsrvQuery::__string method for a 'update' case.
 	 *
 	 * @return  void
@@ -1180,6 +1371,152 @@ class SqlsrvQueryTest extends TestCase
 			PHP_EOL . 'ORDER BY (SELECT 0)' .
 			PHP_EOL . 'OFFSET 3 ROWS',
 			$q->processLimit((string) $q, 0, 3)
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Sqlsrv\SqlsrvQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Sqlsrv\SqlsrvQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionChain()
+	{
+		$thisQuery = new SqlsrvQuery($this->dbo);
+
+		$this->assertThat(
+			$thisQuery->union($thisQuery),
+			$this->identicalTo($thisQuery),
+			'Tests chaining.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Sqlsrv\SqlsrvQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Sqlsrv\SqlsrvQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnion()
+	{
+		$thisQuery = new SqlsrvQuery($this->dbo);
+
+		$thisQuery->union('SELECT name FROM foo');
+
+		$string = implode('', $thisQuery->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(PHP_EOL . 'UNION SELECT * FROM (SELECT name FROM foo)'),
+			'Tests rendered query with union.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Sqlsrv\SqlsrvQuery::unionAll method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Sqlsrv\SqlsrvQuery::unionAll
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionAll()
+	{
+		$thisQuery = new SqlsrvQuery($this->dbo);
+
+		$thisQuery->unionAll('SELECT name FROM foo');
+
+		$string = implode('', $thisQuery->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(PHP_EOL . 'UNION ALL SELECT * FROM (SELECT name FROM foo)'),
+			'Tests rendered query with union all.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Sqlsrv\SqlsrvQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Sqlsrv\SqlsrvQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionTwo()
+	{
+		$thisQuery = new SqlsrvQuery($this->dbo);
+
+		$thisQuery->union('SELECT name FROM foo');
+		$thisQuery->union('SELECT name FROM bar');
+
+		$string = implode('', $thisQuery->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(
+				PHP_EOL . 'UNION SELECT * FROM (SELECT name FROM foo)' .
+				PHP_EOL . 'UNION SELECT * FROM (SELECT name FROM bar)'
+			),
+			'Tests rendered query with two unions sequentially.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Sqlsrv\SqlsrvQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Sqlsrv\SqlsrvQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionsOrdering()
+	{
+		$thisQuery = new SqlsrvQuery($this->dbo);
+
+		$thisQuery->unionAll('SELECT name FROM foo');
+		$thisQuery->union('SELECT name FROM bar');
+
+		$string = implode('', $thisQuery->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(
+				PHP_EOL . 'UNION ALL SELECT * FROM (SELECT name FROM foo)' .
+				PHP_EOL . 'UNION SELECT * FROM (SELECT name FROM bar)'
+			),
+			'Tests rendered query with two different unions sequentially.'
+		);
+	}
+
+	/**
+	 * Tests the \Joomla\Database\Sqlsrv\SqlsrvQuery::union method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\Sqlsrv\SqlsrvQuery::union
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testUnionsOrdering2()
+	{
+		$thisQuery = new SqlsrvQuery($this->dbo);
+
+		$thisQuery->union('SELECT name FROM foo');
+		$thisQuery->unionAll('SELECT name FROM bar');
+
+		$string = implode('', $thisQuery->merge);
+
+		$this->assertThat(
+			$string,
+			$this->equalTo(
+				PHP_EOL . 'UNION SELECT * FROM (SELECT name FROM foo)' .
+				PHP_EOL . 'UNION ALL SELECT * FROM (SELECT name FROM bar)'
+			),
+			'Tests rendered query with two different unions sequentially.'
 		);
 	}
 }

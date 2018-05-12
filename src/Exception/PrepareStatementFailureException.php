@@ -15,4 +15,18 @@ namespace Joomla\Database\Exception;
  */
 class PrepareStatementFailureException extends \RuntimeException
 {
+	/**
+	 * Construct the exception
+	 *
+	 * @param   string     $message   The Exception message to throw. [optional]
+	 * @param   integer    $code      The Exception code. [optional]
+	 * @param   Exception  $previous  The previous exception used for the exception chaining. [optional]
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function __construct($message = '', $code = 0, \Exception $previous = null)
+	{
+		// PDOException redefines $code as a string and now we have to cast it again to an integer.
+		parent::__construct($message, (int) $code, $previous);
+	}
 }

@@ -121,6 +121,15 @@ class SqlsrvQuery extends DatabaseQuery implements LimitableInterface
 					{
 						$query .= (string) $this->having;
 					}
+
+					if ($this->merge)
+					{
+						// Special case for merge
+						foreach ($this->merge as $idx => $element)
+						{
+							$query .= (string) $element . ' AS merge_' . (int) ($idx + 1);
+						}
+					}
 				}
 
 				if ($this->order)
@@ -132,10 +141,34 @@ class SqlsrvQuery extends DatabaseQuery implements LimitableInterface
 					$query .= PHP_EOL . '/*ORDER BY (SELECT 0)*/';
 				}
 
-				if ($this->limit > 0 || $this->offset > 0)
+				$query = $this->processLimit($query, $this->limit, $this->offset);
+
+				break;
+
+			case 'querySet':
+				$query = $this->querySet;
+
+				if ($query->order || $query->limit || $query->offset)
 				{
-					$query = $this->processLimit($query, $this->limit, $this->offset);
+					// If ORDER BY or LIMIT statement exist then parentheses is required for the first query
+					$query = PHP_EOL . "SELECT * FROM ($query) AS merge_0";
 				}
+
+				if ($this->merge)
+				{
+					// Special case for merge
+					foreach ($this->merge as $idx => $element)
+					{
+						$query .= (string) $element . ' AS merge_' . (int) ($idx + 1);
+					}
+				}
+
+				if ($this->order)
+				{
+					$query .= (string) $this->order;
+				}
+
+				$query = $this->processLimit($query, $this->limit, $this->offset);
 
 				break;
 
@@ -1260,5 +1293,25 @@ class SqlsrvQuery extends DatabaseQuery implements LimitableInterface
 		$this->offset = (int) $offset;
 
 		return $this;
+	}
+
+	/**
+	 * Add a query to UNION with the current query.
+	 *
+	 * Usage:
+	 * $query->union('SELECT name FROM  #__foo')
+	 * $query->union('SELECT name FROM  #__foo', true)
+	 *
+	 * @param   DatabaseQuery|string  $query     The DatabaseQuery object or string to union.
+	 * @param   boolean               $distinct  True to only return distinct rows from the union.
+	 *
+	 * @return  $this
+	 *
+	 * @since   1.0
+	 */
+	public function union($query, $distinct = true)
+	{
+		// Set up the name with parentheses, the DISTINCT flag is redundant
+		return $this->merge($distinct ? 'UNION SELECT * FROM ()' : 'UNION ALL SELECT * FROM ()', $query);
 	}
 }
