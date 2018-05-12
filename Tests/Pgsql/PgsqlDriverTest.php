@@ -527,7 +527,7 @@ class PgsqlDriverTest extends PgsqlCase
 	 */
 	public function testIsSupported()
 	{
-		$this->assertThat(\Joomla\Database\Postgresql\PostgresqlDriver::isSupported(), $this->isTrue(), __LINE__);
+		$this->assertThat(\Joomla\Database\Pgsql\PgsqlDriver::isSupported(), $this->isTrue(), __LINE__);
 	}
 
 	/**
