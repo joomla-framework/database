@@ -14,6 +14,10 @@ The following are the minimum supported database versions:
 - PostgreSQL: 9.2.0
 - MS SQL: 11.0.2100.60 (SQL Server 2012)
 
+### Removed Driver Support
+
+Support for PDO Oracle and native PostgreSQL has been removed.  PDO PostgreSQL is available for PostgreSQL users.
+
 ### `Joomla\Database\DatabaseInterface` populated
 
 `Joomla\Database\DatabaseInterface` has been filled with most of the public methods of `Joomla\Database\DatabaseDatabase`.
