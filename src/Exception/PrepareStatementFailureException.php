@@ -26,7 +26,9 @@ class PrepareStatementFailureException extends \RuntimeException
 	 */
 	public function __construct($message = '', $code = 0, \Exception $previous = null)
 	{
-		// PDOException redefines $code as a string and now we have to cast it again to an integer.
-		parent::__construct($message, (int) $code, $previous);
+		// PDO uses strings for exception codes, PHP forces numeric codes, so "force" the string code to be used
+		parent::__construct($message, 0, $exception);
+
+		$this->code = $code;
 	}
 }
