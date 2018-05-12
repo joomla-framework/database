@@ -13,7 +13,8 @@ use Joomla\Database\DatabaseExporter;
 /**
  * PostgreSQL Database Exporter.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Use the PDO PostgreSQL driver instead
  */
 class PostgresqlExporter extends DatabaseExporter
 {
