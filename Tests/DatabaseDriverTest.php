@@ -354,7 +354,7 @@ SQL
 	 */
 	public function testQuoteFloat()
 	{
-		// This also call `escape()` method from nosqldriver which is locate aware
+		// This call `escape()` method from nosqldriver, which is locale aware
 		$this->assertSame(
 			// Below line may generate "'-3.14-'" or "'-3,14-'"
 			"'-" . 3.14 . "-'",
