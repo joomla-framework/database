@@ -221,6 +221,17 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public function escape($text, $extra = false)
 	{
+		if (is_int($text))
+		{
+			return $text;
+		}
+
+		if (is_float($text))
+		{
+			// Format %F is for non-locale aware
+			return rtrim(rtrim(sprintf('%F', $text), '0'), '.');
+		}
+
 		$result = str_replace("'", "''", $text);
 
 		// SQL Server does not accept NULL byte in query string

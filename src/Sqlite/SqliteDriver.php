@@ -132,9 +132,15 @@ class SqliteDriver extends PdoDriver
 	 */
 	public function escape($text, $extra = false)
 	{
-		if (is_int($text) || is_float($text))
+		if (is_int($text))
 		{
 			return $text;
+		}
+
+		if (is_float($text))
+		{
+			// Format %F is for non-locale aware
+			return rtrim(rtrim(sprintf('%F', $text), '0'), '.');
 		}
 
 		return \SQLite3::escapeString($text);
