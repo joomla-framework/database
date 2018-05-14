@@ -1228,7 +1228,7 @@ abstract class DatabaseQuery implements QueryInterface
 		if ($this->nullDatetimeList)
 		{
 			return "($column IN ("
-			. implode(',', $this->db->quote($this->nullDatetimeList))
+			. implode(', ', $this->db->quote($this->nullDatetimeList))
 			. ") OR $column IS NULL)";
 		}
 

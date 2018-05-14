@@ -41,6 +41,28 @@ class PgsqlQueryTest extends TestCase
 	}
 
 	/**
+	 * Tests the isNullDatetime method.
+	 *
+	 * @return  void
+	 *
+	 * @covers     \Joomla\Database\PgsqlQuery\PgsqlQuery::isNullDatetime
+	 * @since      __DEPLOY_VERSION__
+	 */
+	public function testIsNullDatetime()
+	{
+		$query = new PgsqlQuery($this->dbo);
+
+		$this->assertThat(
+			$query->isNullDatetime('publish_up'),
+			$this->equalTo(
+				'("publish_up" IN (\'_1970-01-01 00:00:00_\')' .
+				' OR "publish_up" IS NULL)'
+			),
+			'Test isNullDatetime failed.'
+		);
+	}
+
+	/**
 	 * Data for the testNullDate test.
 	 *
 	 * @return  array
