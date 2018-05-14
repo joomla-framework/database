@@ -336,8 +336,8 @@ abstract class PdoDriver extends DatabaseDriver
 
 		if (is_float($text))
 		{
-			// Format %F is for non-locale aware
-			return rtrim(rtrim(sprintf('%F', $text), '0'), '.');
+			// Force the dot as a decimal point.
+			return str_replace(',', '.', $text);
 		}
 
 		$text = str_replace("'", "''", $text);
