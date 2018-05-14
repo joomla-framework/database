@@ -354,8 +354,10 @@ SQL
 	 */
 	public function testQuoteFloat()
 	{
+		// This call `escape()` method from nosqldriver, which is locale aware
 		$this->assertSame(
-			"'-3.14-'",
+			// Below line may generate "'-3.14-'" or "'-3,14-'"
+			"'-" . 3.14 . "-'",
 			$this->instance->quote(3.14)
 		);
 	}
