@@ -5,6 +5,15 @@ clone_folder: C:\projects\database
 branches:
   except:
     - gh-pages
+clone_depth: 2
+
+cache:
+  - C:\ProgramData\chocolatey\bin -> .appveyor.yml
+  - C:\ProgramData\chocolatey\lib -> .appveyor.yml
+  - C:\tools\php -> .appveyor.yml
+  #- C:\tools\composer -> .appveyor.yml
+  - '%LOCALAPPDATA%\Composer\files -> composer.json'
+
 ## Build matrix for lowest and highest possible targets
 environment:
   matrix:
@@ -47,7 +56,7 @@ install:
             copy SQLSRV\php_pdo_sqlsrv_56_nts.dll ext\php_pdo_sqlsrv_nts.dll
             Remove-Item c:\tools\php\* -include .zip
             } Else {
-            $DLLVersion = "4.3.0"
+            $DLLVersion = "5.2.0"
             cd c:\tools\php\ext
             $source = "http://windows.php.net/downloads/pecl/releases/sqlsrv/$($DLLVersion)/php_sqlsrv-$($DLLVersion)-$($env:php_ver_target)-nts-vc14-x64.zip"
             $destination = "c:\tools\php\ext\php_sqlsrv-$($DLLVersion)-$($env:php_ver_target)-nts-vc14-x64.zip"
