@@ -635,13 +635,13 @@ class MysqliDriverTest extends MysqliCase
 	}
 
 	/**
-	 * Test the execute method with a prepared statement
+	 * Test the execute method with an unnamed prepared statement
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0
 	 */
-	public function testExecutePreparedStatement()
+	public function testExecuteUnnamedPreparedStatement()
 	{
 		$id          = 5;
 		$title       = 'testTitle';
@@ -663,6 +663,38 @@ class MysqliDriverTest extends MysqliCase
 		$this->assertThat(self::$driver->execute(), $this->isTrue(), __LINE__);
 
 		$this->assertThat(self::$driver->insertid(), $this->equalTo(5), __LINE__);
+	}
+
+
+	/**
+	 * Test the execute method with a named prepared statement
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testExecuteNamedPreparedStatement()
+	{
+		$id          = 6;
+		$title       = 'testTitleNamed';
+		$startDate   = '1980-04-19 00:00:00';
+		$description = 'NamedTesting';
+
+		/** @var \Joomla\Database\Mysqli\MysqliQuery $query */
+		$query = self::$driver->getQuery(true);
+		$query->setQuery(
+			'REPLACE INTO `dbtest` SET `id` = :id, `title` = :title, `start_date` = :start_date, `description` = :description123'
+		);
+		$query->bind(":description123", $description);
+		$query->bind(":id", $id, ParameterType::INTEGER);
+		$query->bind(":title", $title);
+		$query->bind(":start_date", $startDate);
+
+		self::$driver->setQuery($query);
+
+		$this->assertThat(self::$driver->execute(), $this->isTrue(), __LINE__);
+
+		$this->assertThat(self::$driver->insertid(), $this->equalTo(6), __LINE__);
 	}
 
 	/**
