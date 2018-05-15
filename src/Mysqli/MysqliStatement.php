@@ -307,6 +307,8 @@ class MysqliStatement implements StatementInterface
 			{
 				$params[$this->parameterKeyMapping[$key]] =& $value;
 			}
+
+			ksort($params);
 		}
 		else
 		{
@@ -392,6 +394,9 @@ class MysqliStatement implements StatementInterface
 					$types[$key] = $this->typesKeyMapping[$key];
 				}
 			}
+
+			ksort($params);
+			ksort($types);
 
 			array_unshift($params, implode('', $types));
 
