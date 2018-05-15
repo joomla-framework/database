@@ -125,7 +125,6 @@ class MysqliStatement implements StatementInterface
 	{
 		$this->connection   = $connection;
 		$this->query        = $query;
-		$this->bindedValues = null;
 
 		$query = $this->prepareParameterKeyMapping($query);
 
@@ -196,7 +195,8 @@ class MysqliStatement implements StatementInterface
 
 			if (preg_match_all($pattern, $substring, $matches, PREG_PATTERN_ORDER))
 			{
-				foreach($matches[0] as $match) {
+				foreach ($matches[0] as $match)
+				{
 					$mapping[$match] = count($mapping);
 					$replace[] = $match;
 				}
