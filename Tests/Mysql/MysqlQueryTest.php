@@ -55,8 +55,8 @@ class MysqlQueryTest extends TestCase
 		$this->assertThat(
 			$query->isNullDatetime('publish_up'),
 			$this->equalTo(
-				'("publish_up" IN (\'_0000-00-00 00:00:00_\', \'_1000-01-01 00:00:00_\')' .
-				' OR "publish_up" IS NULL)'
+				'(publish_up IN (\'_0000-00-00 00:00:00_\', \'_1000-01-01 00:00:00_\')' .
+				' OR publish_up IS NULL)'
 			),
 			'Test isNullDatetime failed.'
 		);

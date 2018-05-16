@@ -1223,8 +1223,6 @@ abstract class DatabaseQuery implements QueryInterface
 			throw new \RuntimeException(sprintf('A %s instance is not set to the query object.', DatabaseInterface::class));
 		}
 
-		$column = $this->db->quoteName($column);
-
 		if ($this->nullDatetimeList)
 		{
 			return "($column IN ("

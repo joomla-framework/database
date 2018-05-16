@@ -1308,7 +1308,7 @@ class DatabaseQueryTest extends TestCase
 	{
 		$this->assertThat(
 			$this->instance->isNullDatetime('publish_up'),
-			$this->equalTo('`publish_up` IS NULL'),
+			$this->equalTo('publish_up IS NULL'),
 			'Test isNullDatetime failed.'
 		);
 	}
