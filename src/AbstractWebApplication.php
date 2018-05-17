@@ -788,10 +788,15 @@ abstract class AbstractWebApplication extends AbstractApplication
 	public function isSslConnection()
 	{
 		$serverSSLVar = $this->input->server->getString('HTTPS', '');
+
+		if (!empty($serverSSLVar) && strtolower($serverSSLVar) !== 'off')
+		{
+			return true;
+		}
+
 		$serverForwarderProtoVar = $this->input->server->getString('HTTP_X_FORWARDED_PROTO', '');
 
-		return (!empty($serverSSLVar) && strtolower($serverSSLVar) != 'off') ||
-		(!empty($serverForwarderProtoVar) && strtolower($serverForwarderProtoVar) == 'https');;
+		return !empty($serverForwarderProtoVar) && strtolower($serverForwarderProtoVar) === 'https';
 	}
 
 	/**
