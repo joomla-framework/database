@@ -789,7 +789,14 @@ abstract class AbstractWebApplication extends AbstractApplication
 	{
 		$serverSSLVar = $this->input->server->getString('HTTPS', '');
 
-		return (!empty($serverSSLVar) && strtolower($serverSSLVar) != 'off');
+		if (!empty($serverSSLVar) && strtolower($serverSSLVar) !== 'off')
+		{
+			return true;
+		}
+
+		$serverForwarderProtoVar = $this->input->server->getString('HTTP_X_FORWARDED_PROTO', '');
+
+		return !empty($serverForwarderProtoVar) && strtolower($serverForwarderProtoVar) === 'https';
 	}
 
 	/**
