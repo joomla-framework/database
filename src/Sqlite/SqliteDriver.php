@@ -141,7 +141,6 @@ class SqliteDriver extends PdoDriver
 		{
 			// Force the dot as a decimal point.
 			return str_replace(',', '.', $text);
-
 		}
 
 		return \SQLite3::escapeString($text);
