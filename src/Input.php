@@ -99,7 +99,7 @@ class Input implements \Serializable, \Countable
 			$this->filter = new Filter\InputFilter;
 		}
 
-		if (is_null($source))
+		if (is_null($source) || empty($source))
 		{
 			$this->data = &$_REQUEST;
 		}
