@@ -857,11 +857,14 @@ class InputFilter
 			$attrSubSet[0] = preg_replace('/^[\pZ\pC]+|[\pZ\pC]+$/u', '', $attrSubSet[0]);
 			$attrSubSet[0] = preg_replace('/\s+/u', '', $attrSubSet[0]);
 
-			// Replace special blacklisted chars here
+			// Remove blacklisted chars from the attribute name
 			foreach ($this->blacklistedChars as $blacklistedChar)
 			{
-				$attrSubSet[0] = str_replace($blacklistedChar, '', $attrSubSet[0]);
+				$attrSubSet[0] = str_ireplace($blacklistedChar, '', $attrSubSet[0]);
 			}
+
+			// Remove all symbols
+			$attrSubSet[0] = preg_replace('/[^\p{L}\p{N}\s]/u', '', $attrSubSet[0]);
 
 			// Remove all "non-regular" attribute names
 			// AND blacklisted attributes
@@ -876,6 +879,12 @@ class InputFilter
 			if (!isset($attrSubSet[1]))
 			{
 				continue;
+			}
+
+			// Remove blacklisted chars from the attribute value
+			foreach ($this->blacklistedChars as $blacklistedChar)
+			{
+				$attrSubSet[1] = str_ireplace($blacklistedChar, '', $attrSubSet[1]);
 			}
 
 			// Trim leading and trailing spaces

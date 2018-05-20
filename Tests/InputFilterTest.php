@@ -1432,6 +1432,18 @@ class InputFilterTest extends TestCase
 				"<p>equals quote =' inside valid tag</p>",
 				'Test single quote equals inside valid tag'
 			),
+			'forward_slash' => array(
+				'',
+				'<textarea autofocus /onfocus=alert(1)>',
+				'<textarea />',
+				'Test for detection of leading forward slashes in attributes'
+			),
+			'tracker25558f' => array(
+				'string',
+				'<a href="javas&Tab;cript:alert(&tab;document.domain&TaB;)">Click Me</a>',
+				'<a>Click Me</a>',
+				'Test mal-formed element from 25558f'
+			),
 		);
 		$tests = array_merge($this->casesGeneric(), $casesSpecific);
 
