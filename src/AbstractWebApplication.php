@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Application Package
  *
- * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -40,7 +40,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 * HTTP protocol version.
 	 *
 	 * @var    string
-	 * @since  1.0
+	 * @since  1.9.0
 	 */
 	public $httpVersion = '1.1';
 
