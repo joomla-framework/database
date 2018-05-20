@@ -647,9 +647,11 @@ class Session implements \IteratorAggregate
 		 * must also be unset. If a cookie is used to propagate the session id (default behavior),
 		 * then the session cookie must be deleted.
 		 */
-		if (isset($_COOKIE[session_name()]))
+		if ($this->input->cookie->exists($this->getName()))
 		{
-			$this->input->cookie->set(session_name(), '', 1);
+			$cookie = session_get_cookie_params();
+
+			$this->input->cookie->set($this->getName(), '', 1, $cookie['path'], $cookie['domain'], $cookie['secure'], true);
 		}
 
 		session_unset();
