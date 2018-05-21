@@ -53,9 +53,11 @@ use Joomla\Console\Application;
 use Joomla\Console\Loader\ContainerLoader;
 use Joomla\DI\Container;
 
-// Note that this can be any PSR-11 container
+// Note that this can be any PSR-11 container that is able to handle callables
 $container = new Container;
-$container->set('foo.command', new FooCommand);
+$container->set('foo.command', function () {
+	return new FooCommand;
+});
 
 // The mapping array is an associative array where the keys are the command names and the values are the container service IDs
 $mapping = ['foo' => 'foo.command'];
