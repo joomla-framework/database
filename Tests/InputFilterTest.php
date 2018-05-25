@@ -654,6 +654,12 @@ class InputFilterTest extends TestCase
 				'img height="123 /&gt;"',
 				'From generic cases'
 			),
+			'Attribute with dash' => array(
+				'string',
+				'<img data-value="1" />',
+				'<img data-value="1" />',
+				'From generic cases'
+			),
 		);
 	}
 
