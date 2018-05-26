@@ -143,4 +143,16 @@ class JsonTest extends TestCase
 
 		$this->assertEquals($input, $output, 'Input and output data must be equal.');
 	}
+
+	/**
+	 * @testdox  Validate an Exception is not thrown when a string is decoded to null and no error is reported
+	 *
+	 * @covers   Joomla\Registry\Format\Json::stringToObject
+	 */
+	public function testExceptionNotThrownWhenDecodedToNullWithoutError()
+	{
+		$class = new Json;
+
+		$this->assertInstanceOf('stdClass', $class->stringToObject('{}'));
+	}
 }

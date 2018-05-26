@@ -67,7 +67,7 @@ class Json extends AbstractRegistryFormat
 		$decoded = json_decode($data);
 
 		// Check for an error decoding the data
-		if ($decoded === null)
+		if ($decoded === null && json_last_error() !== JSON_ERROR_NONE)
 		{
 			throw new \RuntimeException(sprintf('Error decoding JSON data: %s', json_last_error_msg()));
 		}
