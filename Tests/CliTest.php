@@ -49,7 +49,7 @@ class CliTest extends TestCase
 		);
 
 		// Given source & filter
-		$instance = new Cli(array(), array('filter' => new FilterInputMock));
+		$instance = new Cli(null, array('filter' => new FilterInputMock));
 
 		$this->assertInstanceOf(
 			'Joomla\Input\Tests\FilterInputMock',
@@ -69,7 +69,7 @@ class CliTest extends TestCase
 	public function testGet()
 	{
 		$_SERVER['argv'] = array('/dev/null', '--foo=bar', '-ab', 'blah', '-g', 'flower sakura');
-		$instance = new Cli(array(), array('filter' => new FilterInputMock));
+		$instance = new Cli(null, array('filter' => new FilterInputMock));
 
 		$this->assertThat(
 			$instance->get('foo'),
@@ -115,7 +115,7 @@ class CliTest extends TestCase
 	public function testParseLongArguments()
 	{
 		$_SERVER['argv'] = array('/dev/null', '--ab', 'cd', '--ef', '--gh=bam');
-		$instance = new Cli(array(), array('filter' => new FilterInputMock));
+		$instance = new Cli(null, array('filter' => new FilterInputMock));
 
 		$this->assertThat(
 			$instance->get('ab'),
@@ -153,7 +153,7 @@ class CliTest extends TestCase
 	public function testParseShortArguments()
 	{
 		$_SERVER['argv'] = array('/dev/null', '-ab', '-c', '-e', 'f', 'foobar', 'ghijk');
-		$instance = new Cli(array(), array('filter' => new FilterInputMock));
+		$instance = new Cli(null, array('filter' => new FilterInputMock));
 
 		$this->assertThat(
 			$instance->get('a'),
@@ -194,7 +194,7 @@ class CliTest extends TestCase
 	public function testParseArguments($inputArgv, $expectedData, $expectedArgs)
 	{
 		$_SERVER['argv'] = $inputArgv;
-		$instance = new Cli(array(), array('filter' => new FilterInputMock));
+		$instance = new Cli(null, array('filter' => new FilterInputMock));
 
 		$this->assertThat(
 			TestHelper::getValue($instance, 'data'),
@@ -318,7 +318,7 @@ class CliTest extends TestCase
 	 */
 	public function testGetFromServer()
 	{
-		$instance = new Cli(array(), array('filter' => new FilterInputMock));
+		$instance = new Cli(null, array('filter' => new FilterInputMock));
 
 		// Check the object type.
 		$this->assertInstanceOf(
@@ -346,7 +346,7 @@ class CliTest extends TestCase
 	public function testSerialize()
 	{
 		$_SERVER['argv'] = array('/dev/null', '--foo=bar');
-		$instance = new Cli(array(), array('filter' => new FilterInputMock));
+		$instance = new Cli(null, array('filter' => new FilterInputMock));
 
 		$this->assertGreaterThan(
 			0,
@@ -366,7 +366,7 @@ class CliTest extends TestCase
 	{
 		$serialized = 'a:5:{i:0;s:9:"/dev/null";i:1;a:1:{s:3:"foo";s:3:"bar";}i:2;a:1:{s:6:"filter";s:3:"raw";}i:3;s:4:"data";i:4;a:1:{s:7:"request";s:4:"keep";}}';
 
-		$instance = new Cli(array(), array('filter' => new FilterInputMock));
+		$instance = new Cli(null, array('filter' => new FilterInputMock));
 
 		$instance->unserialize($serialized);
 

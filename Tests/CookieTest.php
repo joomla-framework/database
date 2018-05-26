@@ -47,7 +47,8 @@ class CookieTest extends TestCase
 		);
 
 		// Given Source & filter
-		$instance = new Cookie(array('foo' => 'bar'), array('filter' => new FilterInputMock));
+		$src = array('foo' => 'bar');
+		$instance = new Cookie($src, array('filter' => new FilterInputMock));
 
 		$this->assertArrayHasKey(
 			'filter',

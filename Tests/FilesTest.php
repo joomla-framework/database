@@ -47,7 +47,8 @@ class FilesTest extends TestCase
 		);
 
 		// Given Source & filter
-		$instance = new Files(array('foo' => 'bar'), array('filter' => new FilterInputMock));
+		$src = array('foo' => 'bar');
+		$instance = new Files($src, array('filter' => new FilterInputMock));
 
 		$this->assertArrayHasKey(
 			'filter',
