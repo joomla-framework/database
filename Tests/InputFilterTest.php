@@ -654,12 +654,6 @@ class InputFilterTest extends TestCase
 				'img height="123 /&gt;"',
 				'From generic cases'
 			),
-			'Attribute with dash' => array(
-				'string',
-				'<img data-value="1" />',
-				'<img data-value="1" />',
-				'From generic cases'
-			),
 		);
 	}
 
@@ -807,6 +801,12 @@ class InputFilterTest extends TestCase
 				'string',
 				'<scrip &nbsp; t>alert(\'test\');</scrip t>',
 				'alert(\'test\');',
+				'From generic cases'
+			),
+			'Attribute with dash' => array(
+				'string',
+				'<img data-value="1" />',
+				'',
 				'From generic cases'
 			),
 		);
@@ -967,6 +967,12 @@ class InputFilterTest extends TestCase
 				'<img />',
 				'From specific cases'
 			),
+			'Attribute with dash' => array(
+				'string',
+				'<img data-value="1" />',
+				'<img />',
+				'From generic cases'
+			),
 		);
 		$tests = array_merge($this->casesGeneric(), $casesSpecific);
 
@@ -1090,7 +1096,13 @@ class InputFilterTest extends TestCase
 				'<img class="one two" />',
 				'',
 				'From specific cases'
-			)
+			),
+			'Attribute with dash' => array(
+				'string',
+				'<img data-value="1" />',
+				'',
+				'From generic cases'
+			),
 		);
 		$tests = array_merge($this->casesGeneric(), $casesSpecific);
 
@@ -1221,6 +1233,12 @@ class InputFilterTest extends TestCase
 				'<img class />',
 				'<img />',
 				'From specific cases'
+			),
+			'Attribute with dash' => array(
+				'string',
+				'<img data-value="1" />',
+				'<img />',
+				'From generic cases'
 			),
 		);
 		$tests = array_merge($this->casesGeneric(), $casesSpecific);
@@ -1449,6 +1467,12 @@ class InputFilterTest extends TestCase
 				'<a href="javas&Tab;cript:alert(&tab;document.domain&TaB;)">Click Me</a>',
 				'<a>Click Me</a>',
 				'Test mal-formed element from 25558f'
+			),
+			'Attribute with dash' => array(
+				'string',
+				'<img data-value="1" />',
+				'<img data-value="1" />',
+				'From generic cases'
 			),
 		);
 		$tests = array_merge($this->casesGeneric(), $casesSpecific);
@@ -1765,6 +1789,12 @@ class InputFilterTest extends TestCase
 				'string',
 				'<p style="text-align: justify;"><a href="http://www.example.com" target="_blank" rel="noopener noreferrer">Auta.</a> </p>',
 				'<p style="text-align: justify;"><a href="http://www.example.com" target="_blank" rel="noopener noreferrer">Auta.</a> </p>',
+				'From generic cases'
+			),
+			'Attribute with dash' => array(
+				'string',
+				'<img data-value="1" />',
+				'<img data-value="1" />',
 				'From generic cases'
 			),
 		);
