@@ -119,7 +119,8 @@ class WebClientTest extends TestCase
 				'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en; rv:1.9.2.14pre) Gecko/20101212 Camino/2.1a1pre (like Firefox/3.6.14pre)'),
 			array(WebClient::LINUX, false, WebClient::KHTML, '', '',
 				'Mozilla/5.0 (compatible; Konqueror/4.4; Linux 2.6.32-22-generic; X11; en_US) KHTML/4.4.3 (like Gecko) Kubuntu'),
-			array('', false, WebClient::AMAYA, '', '', 'amaya/11.3.1 libwww/5.4.1')
+			array('', false, WebClient::AMAYA, '', '', 'amaya/11.3.1 libwww/5.4.1'),
+			array(WebClient::WINDOWS, false, WebClient::PRESTO, WebClient::OPERA, '8.50', 'Mozilla/5.0 (Windows NT 5.1; U; de) Opera 8.50'),
 		);
 	}
 
