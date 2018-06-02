@@ -114,9 +114,9 @@ before_test:
 # Selectively start the services
   - ps: >-
       if ($env:db -eq "mssql") {
-        $env:instance_name = $env:db_version.ToUpper()
-        $env:sql_instance = "(local)\$($env:instance_name)"
-        net start "MSSQL`$($env:instance_name)"
+        $instanceName = $env:db_version.ToUpper()
+        $env:sql_instance = "(local)\$$instanceName)"
+        net start "MSSQL`$$instanceName"
         sqlcmd -b -E -S "$($env:sql_instance)" -Q "CREATE DATABASE joomla_ut"
         sqlcmd -S "$($env:sql_instance)" -U "sa" -P "Password12!" -i $($env:APPVEYOR_BUILD_FOLDER)\Tests\Stubs\sqlsrv.sql
       }
