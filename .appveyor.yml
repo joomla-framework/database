@@ -37,17 +37,6 @@ init:
   - SET COMPOSER_NO_INTERACTION=1
   - SET ANSICON=121x90 (121x90)
 
-init:
-  - SET PATH=C:\Program Files\OpenSSL;c:\tools\php;%PATH%
-  - SET COMPOSER_NO_INTERACTION=1
-  - SET PHP=1 # this var relates to caching the php  install
-  - SET ANSICON=121x90 (121x90)
-services:
-  - mssql2014
-  - mysql
-  - postgresql94
-  - iis
-
 ## Install PHP and composer, and run the appropriate composer command
 install:
     - ps: |
