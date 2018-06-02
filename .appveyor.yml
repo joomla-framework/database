@@ -114,9 +114,11 @@ install:
 before_test:
   - ps: $instanceName = $env:db_version.ToUpper()
   - ps: $sqlInstance = "(local)\$instanceName"
+  - ps: net start "MSSQL`$instanceName"
   - ps: sqlcmd -b -E -S "$sqlInstance" -Q "CREATE DATABASE joomla_ut"
   - ps: sqlcmd -S "$sqlInstance" -U "sa" -P "Password12!" -i $env:APPVEYOR_BUILD_FOLDER\Tests\Stubs\sqlsrv.sql
+  - ps: $phpunitConfig = "phpunit.appveyor_$($env:db_version).xml"
 
 test_script:
   - cd C:\projects\database
-  - vendor/bin/phpunit -c phpunit.appveyor.xml
+  - ps: vendor/bin/phpunit -c $phpunitConfig
