@@ -380,7 +380,7 @@ class MysqliStatement implements StatementInterface
 
 			if (!empty($this->parameterKeyMapping))
 			{
-				foreach ($this->	bindedValues as $key => &$value)
+				foreach ($this->bindedValues as $key => &$value)
 				{
 					$params[$this->parameterKeyMapping[$key]] =& $value;
 					$types[$this->parameterKeyMapping[$key]]  = $this->typesKeyMapping[$key];
