@@ -110,7 +110,7 @@ abstract class AbstractUri implements UriInterface
 	/**
 	 * Returns full uri string.
 	 *
-	 * @param   array  $parts  An array specifying the parts to render.
+	 * @param   array  $parts  An array of strings specifying the parts to render.
 	 *
 	 * @return  string  The rendered URI string.
 	 *
@@ -118,18 +118,44 @@ abstract class AbstractUri implements UriInterface
 	 */
 	public function toString(array $parts = array('scheme', 'user', 'pass', 'host', 'port', 'path', 'query', 'fragment'))
 	{
+		$bitmask = 0;
+
+		foreach ($parts as $part)
+		{
+			$const = 'static::' . strtoupper($part);
+
+			if (defined($const))
+			{
+				$bitmask |= constant($const);
+			}
+		}
+
+		return $this->render($bitmask);
+	}
+
+	/**
+	 * Returns full uri string.
+	 *
+	 * @param   integer  $parts  A bitmask specifying the parts to render.
+	 *
+	 * @return  string  The rendered URI string.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function render($parts = self::ALL)
+	{
 		// Make sure the query is created
 		$query = $this->getQuery();
 
 		$uri = '';
-		$uri .= in_array('scheme', $parts) ? (!empty($this->scheme) ? $this->scheme . '://' : '') : '';
-		$uri .= in_array('user', $parts) ? $this->user : '';
-		$uri .= in_array('pass', $parts) ? (!empty($this->pass) ? ':' : '') . $this->pass . (!empty($this->user) ? '@' : '') : '';
-		$uri .= in_array('host', $parts) ? $this->host : '';
-		$uri .= in_array('port', $parts) ? (!empty($this->port) ? ':' : '') . $this->port : '';
-		$uri .= in_array('path', $parts) ? $this->path : '';
-		$uri .= in_array('query', $parts) ? (!empty($query) ? '?' . $query : '') : '';
-		$uri .= in_array('fragment', $parts) ? (!empty($this->fragment) ? '#' . $this->fragment : '') : '';
+		$uri .= $parts & static::SCHEME ? (!empty($this->scheme) ? $this->scheme . '://' : '') : '';
+		$uri .= $parts & static::USER ? $this->user : '';
+		$uri .= $parts & static::PASS ? (!empty($this->pass) ? ':' : '') . $this->pass . (!empty($this->user) ? '@' : '') : '';
+		$uri .= $parts & static::HOST ? $this->host : '';
+		$uri .= $parts & static::PORT ? (!empty($this->port) ? ':' : '') . $this->port : '';
+		$uri .= $parts & static::PATH ? $this->path : '';
+		$uri .= $parts & static::QUERY ? (!empty($query) ? '?' . $query : '') : '';
+		$uri .= $parts & static::FRAGMENT ? (!empty($this->fragment) ? '#' . $this->fragment : '') : '';
 
 		return $uri;
 	}

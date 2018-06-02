@@ -18,6 +18,78 @@ namespace Joomla\Uri;
 interface UriInterface
 {
 	/**
+	 * Include the scheme (http, https, etc.)
+	 *
+	 * @var    integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	const SCHEME = 1;
+
+	/**
+	 * Include the user
+	 *
+	 * @var    integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	const USER = 2;
+
+	/**
+	 * Include the password
+	 *
+	 * @var    integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	const PASS = 4;
+
+	/**
+	 * Include the host
+	 *
+	 * @var    integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	const HOST = 8;
+
+	/**
+	 * Include the port
+	 *
+	 * @var    integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	const PORT = 16;
+
+	/**
+	 * Include the path
+	 *
+	 * @var    integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	const PATH = 32;
+
+	/**
+	 * Include the query string
+	 *
+	 * @var    integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	const QUERY = 64;
+
+	/**
+	 * Include the fragment
+	 *
+	 * @var    integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	const FRAGMENT = 128;
+
+	/**
+	 * Include all available url parts (scheme, user, pass, host, port, path, query, fragment)
+	 *
+	 * @var    integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	const ALL = 255;
+
+	/**
 	 * Magic method to get the string representation of the URI object.
 	 *
 	 * @return  string
@@ -29,7 +101,7 @@ interface UriInterface
 	/**
 	 * Returns full uri string.
 	 *
-	 * @param   array  $parts  An array specifying the parts to render.
+	 * @param   array  $parts  An array of strings specifying the parts to render.
 	 *
 	 * @return  string  The rendered URI string.
 	 *
