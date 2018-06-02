@@ -21,11 +21,9 @@ environment:
     driver: sqlsrv
     db_version: sql2012sp1
     php: 7.0
-    coverage: yes
   - db: mssql
     driver: sqlsrv
     db_version: sql2014
-    coverage: no
     php: 7.1
   - db: mssql
     driver: sqlsrv
