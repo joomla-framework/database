@@ -111,15 +111,10 @@ install:
     - appveyor-retry composer install --no-progress --prefer-dist
 
 before_test:
-# Selectively start the services
-  - ps: >-
-      if ($env:db -eq "mssql") {
-        $instanceName = $env:db_version.ToUpper()
-        $env:sql_instance = "(local)\$$instanceName)"
-        net start "MSSQL`$$instanceName"
-        sqlcmd -b -E -S "$($env:sql_instance)" -Q "CREATE DATABASE joomla_ut"
-        sqlcmd -S "$($env:sql_instance)" -U "sa" -P "Password12!" -i $($env:APPVEYOR_BUILD_FOLDER)\Tests\Stubs\sqlsrv.sql
-      }
+  - ps: $instanceName = $env:db_version.ToUpper()
+  - ps: $sqlInstance = "(local)\$instanceName"
+  - ps: sqlcmd -b -E -S "$sqlInstance" -Q "CREATE DATABASE joomla_ut"
+  - ps: sqlcmd -S "$sqlInstance" -U "sa" -P "Password12!" -i $env:APPVEYOR_BUILD_FOLDER\Tests\Stubs\sqlsrv.sql
 
 test_script:
   - cd C:\projects\database
