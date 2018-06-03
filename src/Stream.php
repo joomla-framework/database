@@ -289,17 +289,17 @@ class Stream
 				// One supplied at open; overrides everything
 				if ($context)
 				{
-					$this->fh = @fopen($filename, $mode, $use_include_path, $context);
+					$this->fh = @fopen($filename, $mode, $useIncludePath, $context);
 				}
 				elseif ($this->context)
 				// One provided at initialisation
 				{
-					$this->fh = @fopen($filename, $mode, $use_include_path, $this->context);
+					$this->fh = @fopen($filename, $mode, $useIncludePath, $this->context);
 				}
 				else
 				// No context; all defaults
 				{
-					$this->fh = @fopen($filename, $mode, $use_include_path);
+					$this->fh = @fopen($filename, $mode, $useIncludePath);
 				}
 				break;
 		}

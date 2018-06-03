@@ -5,9 +5,8 @@
  */
 
 use Joomla\Filesystem\Stream;
-
-use Joomla\Test\TestHelper;
 use Joomla\Filesystem\Support\StringController;
+use Joomla\Test\TestHelper;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 

@@ -205,15 +205,15 @@ class Path
 			throw new \UnexpectedValueException('JPath::clean $path is not a string.');
 		}
 
-        $stream = explode("://", $path, 2);
-        $scheme = '';
-        $path = $stream[0];
+		$stream = explode("://", $path, 2);
+		$scheme = '';
+		$path = $stream[0];
 
-        if (count($stream) >= 2)
-        {
-            $scheme = $stream[0] . '://';
-            $path = $stream[1];
-        }
+		if (count($stream) >= 2)
+		{
+			$scheme = $stream[0] . '://';
+			$path = $stream[1];
+		}
 
 		$path = trim($path);
 
