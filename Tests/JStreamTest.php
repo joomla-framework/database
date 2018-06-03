@@ -985,6 +985,7 @@ class StreamTest extends TestCase
 	 *
 	 * @return  void
 	 *
+	 * @requires PHP 5.4
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testMove()
