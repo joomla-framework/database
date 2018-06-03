@@ -418,11 +418,6 @@ class FileTest extends FilesystemTestCase
 			'The file was not written.'
 		);
 
-		$this->assertDirectoryExists(
-			$this->testPath . '/' . $name,
-			'The nested directory was not created.'
-		);
-
 		$this->assertStringEqualsFile(
 			$this->testPath . '/' . $name . '/' . $name,
 			$data,
