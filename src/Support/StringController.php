@@ -15,6 +15,12 @@ namespace Joomla\Filesystem\Support;
  */
 class StringController
 {
+	/**
+	 * Internal string references
+	 *
+	 * @var     array
+	 * @ssince  __DEPLOY_VERSION__
+	 */
 	private static $strings = array();
 
 	/**
@@ -72,9 +78,7 @@ class StringController
 		{
 			return self::$strings[$reference];
 		}
-		else
-		{
-			return false;
-		}
+
+		return false;
 	}
 }
