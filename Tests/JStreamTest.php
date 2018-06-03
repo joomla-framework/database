@@ -892,8 +892,6 @@ class StreamTest extends TestCase
 	 */
 	public function testPrependFilter()
 	{
-		$this->markTestSkipped('This method is perpetually broken right now.');
-
 		$this->assertFalse($this->object->prependFilter("string.rot13"));
 
 		$name = 'tempFile';

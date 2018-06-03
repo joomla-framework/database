@@ -1113,8 +1113,8 @@ class Stream
 				throw new FilesystemException($php_errormsg);
 			}
 
-			array_unshift($res, '');
-			$res[0] = &$this->filters;
+			array_unshift($this->filters, '');
+			$this->filters[0] = &$res;
 		}
 
 		return $res;
