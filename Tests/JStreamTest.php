@@ -311,7 +311,7 @@ class StreamTest extends TestCase
 
 		$this->object->close();
 
-		$this->object->open('http://www.joomla.org');
+		$this->object->open('https://www.joomla.org');
 
 		$this->assertTrue(
 			is_numeric($this->object->filesize())
