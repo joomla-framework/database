@@ -467,7 +467,7 @@ abstract class Folder
 				&& (empty($excludeFilterString) || !preg_match($excludeFilterString, $file)))
 			{
 				// Compute the fullpath
-				$fullpath = $path . '/' . $file;
+				$fullpath = Path::clean($path . '/' . $file);
 
 				// Compute the isDir flag
 				$isDir = is_dir($fullpath);
