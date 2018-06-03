@@ -4,6 +4,8 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+namespace Joomla\Filesystem\Tests;
+
 use Joomla\Filesystem\Path;
 use PHPUnit\Framework\TestCase;
 
@@ -265,12 +267,12 @@ class PathTest extends TestCase
 	{
 		$this->assertNotEquals(
 			__FILE__,
-			Path::find(dirname(__DIR__), 'JPathTest.php')
+			Path::find(dirname(__DIR__), 'PathTest.php')
 		);
 
 		$this->assertEquals(
 			__FILE__,
-			Path::find(__DIR__, 'JPathTest.php')
+			Path::find(__DIR__, 'PathTest.php')
 		);
 	}
 }

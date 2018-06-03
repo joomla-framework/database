@@ -4,20 +4,22 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-use Joomla\Filesystem\Stream\StringWrapper as StreamString;
+namespace Joomla\Filesystem\Tests\Stream;
+
+use Joomla\Filesystem\Stream\StringWrapper;
 use Joomla\Filesystem\Support\StringController;
 use Joomla\Test\TestHelper;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for StreamString.
+ * Test class for Joomla\Filesystem\Stream\StringWrapper.
  *
  * @since  1.0
  */
-class StreamStringTest extends TestCase
+class StringWrapperTest extends TestCase
 {
 	/**
-	 * @var    StreamString
+	 * @var    StringWrapper
 	 * @since   __DEPLOY_VERSION__
 	 */
 	protected $object;
@@ -38,7 +40,7 @@ class StreamStringTest extends TestCase
 		$string = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit';
 
 		StringController::createRef($ref, $string);
-		$this->object = new StreamString;
+		$this->object = new StringWrapper;
 	}
 
 	/**

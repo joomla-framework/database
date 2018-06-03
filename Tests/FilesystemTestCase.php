@@ -33,6 +33,21 @@ class FilesystemTestCase extends TestCase
 	private $umask;
 
 	/**
+	 * This method is called before the first test of this test class is run.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public static function setUpBeforeClass()
+	{
+		if (!defined('JPATH_ROOT'))
+		{
+			self::markTestSkipped('Constant `JPATH_ROOT` is not defined.');
+		}
+	}
+
+	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *

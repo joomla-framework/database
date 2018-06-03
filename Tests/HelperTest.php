@@ -4,6 +4,8 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+namespace Joomla\Filesystem\Tests;
+
 use Joomla\Filesystem\Helper;
 use PHPUnit\Framework\TestCase;
 
@@ -12,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @since  1.0
  */
-class FilesystemHelperTest extends TestCase
+class HelperTest extends TestCase
 {
 	/**
 	 * Test remotefsize method.

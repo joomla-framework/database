@@ -4,6 +4,8 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+namespace Joomla\Filesystem\Tests;
+
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
 use org\bovigo\vfs\vfsStream;
@@ -14,7 +16,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @since  1.0
  */
-class JFileTest extends TestCase
+class FileTest extends TestCase
 {
 	/**
 	 * @var    File

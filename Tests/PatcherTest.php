@@ -4,12 +4,11 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+namespace Joomla\Filesystem\Tests;
+
 use Joomla\Filesystem\Patcher;
 use Joomla\Filesystem\Path;
 use PHPUnit\Framework\TestCase;
-
-// We MUST define JPATH_ROOT for Patcher to work. :(
-defined('JPATH_ROOT') or define('JPATH_ROOT', __DIR__);
 
 /**
  * A unit test class for Patcher
@@ -18,6 +17,21 @@ defined('JPATH_ROOT') or define('JPATH_ROOT', __DIR__);
  */
 class PatcherTest extends TestCase
 {
+	/**
+	 * This method is called before the first test of this test class is run.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public static function setUpBeforeClass()
+	{
+		if (!defined('JPATH_ROOT'))
+		{
+			self::markTestSkipped('Constant `JPATH_ROOT` is not defined.');
+		}
+	}
+
 	/**
 	 * Sets up the fixture.
 	 * This method is called before a test is executed.
@@ -183,7 +197,7 @@ class PatcherTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @dataProvider PatcherTest::addData
+	 * @dataProvider addData
 	 * @since   1.0
 	 */
 	public function testAdd($udiff, $root, $strip, $expected)
@@ -915,7 +929,7 @@ But after they are produced,
 	 *
 	 * @return  void
 	 *
-	 * @dataProvider PatcherTest::applyData
+	 * @dataProvider applyData
 	 * @since   1.0
 	 */
 	public function testApply($udiff, $root, $strip, $sources, $destinations, $result, $throw)

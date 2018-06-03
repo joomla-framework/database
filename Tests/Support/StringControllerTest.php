@@ -4,6 +4,8 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+namespace Joomla\Filesystem\Tests\Support;
+
 use Joomla\Filesystem\Support\StringController;
 use Joomla\Test\TestHelper;
 use PHPUnit\Framework\TestCase;
