@@ -17,9 +17,9 @@ class PathTest extends TestCase
 	/**
 	 * Test canChmod method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testCanChmod()
 	{
@@ -44,9 +44,9 @@ class PathTest extends TestCase
 	/**
 	 * Test setPermissions method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testSetPermissions()
 	{
@@ -73,9 +73,9 @@ class PathTest extends TestCase
 	/**
 	 * Test getPermissions method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetPermissions()
 	{
@@ -106,9 +106,9 @@ class PathTest extends TestCase
 	/**
 	 * Test data for check method.
 	 *
-	 * @return array
+	 * @return  array
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function dataCheckValidPaths()
 	{
@@ -129,10 +129,10 @@ class PathTest extends TestCase
 	 *
 	 * @param   string  $data  Path to check for valid
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @dataProvider dataCheckValidPaths
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testCheckValidPaths($data)
 	{
@@ -145,9 +145,9 @@ class PathTest extends TestCase
 	/**
 	 * Test data for check method exception.
 	 *
-	 * @return array
+	 * @return  array
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function dataCheckExceptionPaths()
 	{
@@ -164,11 +164,11 @@ class PathTest extends TestCase
 	 *
 	 * @param   string  $data  Paths to check.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @dataProvider dataCheckExceptionPaths
 	 * @expectedException Exception
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testCheckExceptionPaths($data)
 	{
@@ -224,7 +224,7 @@ class PathTest extends TestCase
 	 * @return  void
 	 *
 	 * @expectedException  UnexpectedValueException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testCleanArrayPath()
 	{
@@ -234,9 +234,9 @@ class PathTest extends TestCase
 	/**
 	 * Test isOwner method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testIsOwner()
 	{
@@ -257,9 +257,9 @@ class PathTest extends TestCase
 	/**
 	 * Test find method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testFind()
 	{

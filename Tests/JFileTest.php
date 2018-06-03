@@ -17,9 +17,8 @@ use PHPUnit\Framework\TestCase;
 class JFileTest extends TestCase
 {
 	/**
-	 * @var Joomla\Filesystem\File
-	 *
-	 * @since __VERSION_NO__
+	 * @var    File
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $object;
 
@@ -27,9 +26,9 @@ class JFileTest extends TestCase
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function setUp()
 	{
@@ -234,7 +233,7 @@ class JFileTest extends TestCase
 	 *
 	 * @covers             Joomla\Filesystem\File::copy
 	 * @expectedException  \UnexpectedValueException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testCopyException()
 	{
@@ -279,10 +278,10 @@ class JFileTest extends TestCase
 	/**
 	 * Test move method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @covers        Joomla\Filesystem\File::move
-	 * @since         1.0
+	 * @covers  Joomla\Filesystem\File::move
+	 * @since   1.0
 	 */
 	public function testMove()
 	{
@@ -346,10 +345,10 @@ class JFileTest extends TestCase
 	/**
 	 * Test write method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @covers        Joomla\Filesystem\File::write
-	 * @since         1.0
+	 * @covers  Joomla\Filesystem\File::write
+	 * @since   1.0
 	 */
 	public function testWrite()
 	{
@@ -408,7 +407,7 @@ class JFileTest extends TestCase
 	 *
 	 * @return void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testUpload()
 	{
@@ -448,7 +447,7 @@ class JFileTest extends TestCase
 	 * @return void
 	 *
 	 * @expectedException \Joomla\Filesystem\Exception\FilesystemException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testUploadDestInaccessibleException()
 	{

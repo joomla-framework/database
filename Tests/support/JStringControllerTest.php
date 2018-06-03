@@ -18,9 +18,9 @@ class StringControllerTest extends TestCase
 	/**
 	 * Test _getArray method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function test_getArray()
 	{
@@ -40,9 +40,9 @@ class StringControllerTest extends TestCase
 	/**
 	 * Test createRef method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testCreateRef()
 	{
@@ -64,9 +64,9 @@ class StringControllerTest extends TestCase
 	/**
 	 * Test getRef method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetRef()
 	{

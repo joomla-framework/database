@@ -21,7 +21,7 @@ class StreamTest extends TestCase
 	/**
 	 * @var Stream
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected $object;
 
@@ -33,9 +33,9 @@ class StreamTest extends TestCase
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function setUp()
 	{
@@ -48,9 +48,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test counstructor method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function test__construct()
 	{
@@ -82,7 +82,7 @@ class StreamTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetStream()
 	{
@@ -126,10 +126,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test open method with no filename.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testOpenNoFilenameException()
 	{
@@ -139,10 +139,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test open method with invalid filename.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testOpenInvlaidFilenameException()
 	{
@@ -152,10 +152,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test open method with invalid string name.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testOpenInvlaidStringnameException()
 	{
@@ -165,9 +165,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test open method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testOpen()
 	{
@@ -223,10 +223,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test closing of a stream before opening it.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testCloseBeforeOpeningException()
 	{
@@ -238,10 +238,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test eof not found exception.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testEofNotOpenException()
 	{
@@ -251,9 +251,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test eof method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testEof()
 	{
@@ -279,10 +279,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test file size method exception - File not open.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testFilesizeNotOpen()
 	{
@@ -292,9 +292,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test filesize method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testFilesize()
 	{
@@ -323,10 +323,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test gets method's stream not open exception.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetsNotOpen()
 	{
@@ -336,9 +336,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test gets method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGets()
 	{
@@ -364,10 +364,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test gets invalid length exception.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetsInvalidLength()
 	{
@@ -385,10 +385,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test read method's stream not open exception.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testReadNotOpen()
 	{
@@ -398,9 +398,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test read method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testRead()
 	{
@@ -426,10 +426,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test seek method stream not open exception.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testSeekNotOpen()
 	{
@@ -441,7 +441,7 @@ class StreamTest extends TestCase
 	 *
 	 * @return array
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function dataSeek()
 	{
@@ -466,10 +466,10 @@ class StreamTest extends TestCase
 	 * @param   int  $whence   Seek type
 	 * @param   int  $expPos   Expected pointer position
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @dataProvider dataSeek
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testSeek($initial, $offset, $whence, $expPos)
 	{
@@ -495,10 +495,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test tell method stream not open exception.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testTellNotOpen()
 	{
@@ -508,10 +508,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test write method stream not open exception.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testWriteNotOpen()
 	{
@@ -522,10 +522,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test write method with readonly mode excepton.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testWriteReadonly()
 	{
@@ -553,10 +553,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test write method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @requires PHP 5.4
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testWrite()
 	{
@@ -583,10 +583,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test chmod with no filename exception.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testChmodNoFilename()
 	{
@@ -596,7 +596,7 @@ class StreamTest extends TestCase
 	/**
 	 * Test chmod method.
 	 *
-	 * @return void
+	 * @return  void
 	 */
 	public function testChmod()
 	{
@@ -634,10 +634,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test get_meta_data stream not open exception.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGet_meta_dataNotOpen()
 	{
@@ -647,7 +647,7 @@ class StreamTest extends TestCase
 	/**
 	 * Test get_meta_data method.
 	 *
-	 * @return void
+	 * @return  void
 	 */
 	public function testGet_meta_data()
 	{
@@ -677,9 +677,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test buildContext method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function test_buildContext()
 	{
@@ -713,9 +713,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test setContextOptions method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testSetContextOptions()
 	{
@@ -738,9 +738,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test addContextEntry method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testAddContextEntry()
 	{
@@ -756,9 +756,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test deleteContextEntry method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testDeleteContextEntry()
 	{
@@ -801,9 +801,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test applyContextToStream method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testApplyContextToStream()
 	{
@@ -826,10 +826,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test appendFilter method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testAppendFilter()
 	{
@@ -866,10 +866,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test prependFilter method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testPrependFilter()
 	{
@@ -910,9 +910,9 @@ class StreamTest extends TestCase
 	 *
 	 * @todo Implement testRemoveFilter().
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testRemoveFilter()
 	{
@@ -925,10 +925,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test copy method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @requires PHP 5.4
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testCopy()
 	{
@@ -956,9 +956,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test move mthod.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testMove()
 	{
@@ -983,9 +983,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test delete method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testDelete()
 	{
@@ -1012,9 +1012,9 @@ class StreamTest extends TestCase
 	 *
 	 * @todo Implement testUpload().
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testUpload()
 	{
@@ -1027,10 +1027,10 @@ class StreamTest extends TestCase
 	/**
 	 * Test writeFile method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @requires PHP 5.4
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testWriteFile()
 	{
@@ -1054,9 +1054,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test data for _getFilename test
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function data_getFilename()
 	{
@@ -1085,10 +1085,10 @@ class StreamTest extends TestCase
 	 * @param   boolean  $relative    filename is relative or not
 	 * @param   string   $expected    Expected path
 	 *
-	 * @return void
+	 * @return  void
 	 *
 	 * @dataProvider data_getFilename
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function test_getFilename($wPrefix, $rPrefix, $filename, $mode, $use_prefix, $relative, $expected)
 	{
@@ -1104,9 +1104,9 @@ class StreamTest extends TestCase
 	/**
 	 * Test...
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetFileHandle()
 	{

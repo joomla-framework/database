@@ -254,7 +254,7 @@ class PatcherTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testReset()
 	{

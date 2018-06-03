@@ -17,9 +17,8 @@ use PHPUnit\Framework\TestCase;
 class StreamStringTest extends TestCase
 {
 	/**
-	 * @var StreamString
-	 *
-	 * @since __VERSION_NO__
+	 * @var    StreamString
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected $object;
 
@@ -29,7 +28,7 @@ class StreamStringTest extends TestCase
 	 *
 	 * @return void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function setUp()
 	{
@@ -45,9 +44,9 @@ class StreamStringTest extends TestCase
 	/**
 	 * Test stream_open method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testStream_open()
 	{
@@ -75,9 +74,9 @@ class StreamStringTest extends TestCase
 	/**
 	 * Test stream_stat method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testStream_stat()
 	{
@@ -109,9 +108,9 @@ class StreamStringTest extends TestCase
 	/**
 	 * Test url_stat method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testUrl_stat()
 	{
@@ -165,9 +164,9 @@ class StreamStringTest extends TestCase
 	/**
 	 * Test stream_read method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testStream_read()
 	{
@@ -192,9 +191,9 @@ class StreamStringTest extends TestCase
 	/**
 	 * Test stream_write method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testStream_write()
 	{
@@ -206,9 +205,9 @@ class StreamStringTest extends TestCase
 	/**
 	 * Test stream_tell method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testStream_tell()
 	{
@@ -223,9 +222,9 @@ class StreamStringTest extends TestCase
 	/**
 	 * Test stream_eof method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testStream_eof()
 	{
@@ -254,9 +253,9 @@ class StreamStringTest extends TestCase
 	/**
 	 * Test data for test of stream_seek method.
 	 *
-	 * @return array
+	 * @return  array
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function dataStream_seek()
 	{
@@ -283,17 +282,17 @@ class StreamStringTest extends TestCase
 	/**
 	 * Test stream_seek method.
 	 *
-	 * @param   int  $currPos    Current Position
-	 * @param   int  $currLen    Current Length
-	 * @param   int  $offset     Offset to seek
-	 * @param   int  $whence     Seek type
-	 * @param   int  $expPos     Expected pointer position
-	 * @param   int  $expReturn  Expected return value
+	 * @param   integer  $currPos    Current Position
+	 * @param   integer  $currLen    Current Length
+	 * @param   integer  $offset     Offset to seek
+	 * @param   integer  $whence     Seek type
+	 * @param   integer  $expPos     Expected pointer position
+	 * @param   integer  $expReturn  Expected return value
 	 *
-	 * @return void
+	 * @return  void
 	 *
+	 * @since   __DEPLOY_VERSION__
 	 * @dataProvider dataStream_seek
-	 * @since __VERSION_NO__
 	 */
 	public function testStream_seek($currPos, $currLen, $offset, $whence, $expPos, $expReturn)
 	{
@@ -314,9 +313,9 @@ class StreamStringTest extends TestCase
 	/**
 	 * Test stream_flush method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testStream_flush()
 	{

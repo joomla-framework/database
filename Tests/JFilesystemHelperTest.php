@@ -17,9 +17,9 @@ class FilesystemHelperTest extends TestCase
 	/**
 	 * Test remotefsize method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testRemotefsize()
 	{
@@ -47,9 +47,9 @@ class FilesystemHelperTest extends TestCase
 	/**
 	 * Test ftpChmod method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testFtpChmod()
 	{
@@ -82,9 +82,9 @@ class FilesystemHelperTest extends TestCase
 	/**
 	 * Test getSupported method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetSupported()
 	{
@@ -105,9 +105,9 @@ class FilesystemHelperTest extends TestCase
 	/**
 	 * Test getTransports method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetTransports()
 	{
@@ -123,9 +123,9 @@ class FilesystemHelperTest extends TestCase
 	/**
 	 * Test getFilters method.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetFilters()
 	{
@@ -141,9 +141,9 @@ class FilesystemHelperTest extends TestCase
 	/**
 	 * Test getJStreams mthod.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testGetJStreams()
 	{
@@ -155,10 +155,10 @@ class FilesystemHelperTest extends TestCase
 	/**
 	 * Test
 	 *
-	 * @return void
+	 * @return  void
 	 *
+	 * @since   __DEPLOY_VERSION__
 	 * @covers  Joomla\Filesystem\Helper::isJoomlaStream
-	 * @since __VERSION_NO__
 	 */
 	public function testIsJoomlaStream()
 	{

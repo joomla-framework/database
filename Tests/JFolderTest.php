@@ -18,9 +18,8 @@ use PHPUnit\Framework\TestCase;
 class FolderTest extends TestCase
 {
 	/**
-	 * @var Joomla\Filesystem\Folder
-	 *
-	 * @since __VERSION_NO__
+	 * @var    Folder
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $object;
 
@@ -28,9 +27,9 @@ class FolderTest extends TestCase
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
-	 * @return void
+	 * @return  void
 	 *
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function setUp()
 	{
@@ -272,7 +271,7 @@ class FolderTest extends TestCase
 	 * @return  void
 	 *
 	 * @expectedException  UnexpectedValueException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testDeleteArrayPath()
 	{
@@ -419,7 +418,7 @@ class FolderTest extends TestCase
 	 *
 	 * @covers             Joomla\Filesystem\Folder::files
 	 * @expectedException  \UnexpectedValueException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testFilesException()
 	{
@@ -551,7 +550,7 @@ class FolderTest extends TestCase
 	 *
 	 * @covers             Joomla\Filesystem\Folder::folders
 	 * @expectedException  \UnexpectedValueException
-	 * @since __VERSION_NO__
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testFoldersException()
 	{
