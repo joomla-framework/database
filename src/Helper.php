@@ -31,12 +31,12 @@ class Helper
 	{
 		$sch = parse_url($url, PHP_URL_SCHEME);
 
-		if (($sch != 'http') && ($sch != 'https') && ($sch != 'ftp') && ($sch != 'ftps'))
+		if (!in_array($sch, array('http', 'https', 'ftp', 'ftps'), true))
 		{
 			return false;
 		}
 
-		if (($sch == 'http') || ($sch == 'https'))
+		if (in_array($sch, array('http', 'https'), true))
 		{
 			$headers = @ get_headers($url, 1);
 
@@ -48,7 +48,7 @@ class Helper
 			return $headers['Content-Length'];
 		}
 
-		if (($sch == 'ftp') || ($sch == 'ftps'))
+		if (in_array($sch, array('ftp', 'ftps'), true))
 		{
 			$server = parse_url($url, PHP_URL_HOST);
 			$port = parse_url($url, PHP_URL_PORT);

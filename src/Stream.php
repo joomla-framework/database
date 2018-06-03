@@ -230,12 +230,18 @@ class Stream
 
 		if (isset($url['scheme']))
 		{
-			$url['scheme'] = ucfirst($url['scheme']);
+			$scheme = ucfirst($url['scheme']);
 
 			// If we're dealing with a Joomla! stream, load it
-			if (Helper::isJoomlaStream($url['scheme']))
+			if (Helper::isJoomlaStream($scheme))
 			{
-				require_once __DIR__ . '/Stream/' . $url['scheme'] . '.php';
+				// Map to StringWrapper if required
+				if ($scheme === 'String')
+				{
+					$scheme = 'StringWrapper';
+				}
+
+				require_once __DIR__ . '/Stream/' . $scheme . '.php';
 			}
 
 			// We have a scheme! force the method to be f
@@ -1160,7 +1166,6 @@ class Stream
 	public function copy($src, $dest, $context = null, $usePrefix = true, $relative = false)
 	{
 		// Capture PHP errors
-		$php_errormsg = '';
 		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 
@@ -1171,21 +1176,27 @@ class Stream
 		$src = $this->_getFilename($src, 'w', $usePrefix, $relative);
 		$dest = $this->_getFilename($dest, 'w', $usePrefix, $relative);
 
+		// One supplied at copy; overrides everything
 		if ($context)
 		{
 			// Use the provided context
 			$res = @copy($src, $dest, $context);
 		}
 		elseif ($this->context)
+		// One provided at initialisation
 		{
 			// Use the objects context
 			$res = @copy($src, $dest, $this->context);
 		}
 		else
+		// No context; all defaults
 		{
 			// Don't use any context
 			$res = @copy($src, $dest);
 		}
+
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
 
 		if (!$res && $php_errormsg)
 		{
@@ -1193,9 +1204,6 @@ class Stream
 		}
 
 		$this->chmod($chmodDest);
-
-		// Restore error tracking to what it was before
-		ini_set('track_errors', $trackErrors);
 
 		return $res;
 	}
