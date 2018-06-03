@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -8,13 +8,14 @@ use Joomla\Filesystem\Folder;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Path;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for JFolder.
  *
  * @since  1.0
  */
-class FolderTest extends PHPUnit_Framework_TestCase
+class FolderTest extends TestCase
 {
 	/**
 	 * @var Joomla\Filesystem\Folder

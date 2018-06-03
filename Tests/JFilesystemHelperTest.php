@@ -1,17 +1,18 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 use Joomla\Filesystem\Helper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Helper.
  *
  * @since  1.0
  */
-class FilesystemHelperTest extends PHPUnit_Framework_TestCase
+class FilesystemHelperTest extends TestCase
 {
 	/**
 	 * Test remotefsize method.
@@ -148,10 +149,7 @@ class FilesystemHelperTest extends PHPUnit_Framework_TestCase
 	{
 		$streams = Helper::getJStreams();
 
-		$this->assertTrue(
-			in_array('String', $streams),
-			'Line:' . __LINE__ . ' Joomla Streams must contain String.'
-		);
+		$this->assertTrue(in_array('StringWrapper', Helper::getJStreams()));
 	}
 
 	/**

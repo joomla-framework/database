@@ -2,11 +2,13 @@
 /**
  * Part of the Joomla Framework Filesystem Package
  *
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Filesystem;
+
+use Joomla\Filesystem\Exception\FilesystemException;
 
 /**
  * Joomla! Stream Interface
@@ -17,11 +19,11 @@ namespace Joomla\Filesystem;
  *
  * This class adheres to the stream wrapper operations:
  *
- * @see    http://php.net/manual/en/function.stream-get-wrappers.php
- * @see    http://php.net/manual/en/intro.stream.php PHP Stream Manual
- * @see    http://php.net/manual/en/wrappers.php Stream Wrappers
- * @see    http://php.net/manual/en/filters.php Stream Filters
- * @see    http://php.net/manual/en/transports.php Socket Transports (used by some options, particularly HTTP proxy)
+ * @link   https://secure.php.net/manual/en/function.stream-get-wrappers.php
+ * @link   https://secure.php.net/manual/en/intro.stream.php PHP Stream Manual
+ * @link   https://secure.php.net/manual/en/wrappers.php Stream Wrappers
+ * @link   https://secure.php.net/manual/en/filters.php Stream Filters
+ * @link   https://secure.php.net/manual/en/transports.php Socket Transports (used by some options, particularly HTTP proxy)
  * @since  1.0
  */
 class Stream
@@ -95,7 +97,7 @@ class Stream
 	/**
 	 * File Handle
 	 *
-	 * @var    array
+	 * @var    resource
 	 * @since  1.0
 	 */
 	protected $fh;
@@ -111,7 +113,7 @@ class Stream
 	/**
 	 * Context to use when opening the connection
 	 *
-	 * @var
+	 * @var string
 	 * @since  1.0
 	 */
 	protected $context = null;
@@ -119,7 +121,7 @@ class Stream
 	/**
 	 * Context options; used to rebuild the context
 	 *
-	 * @var
+	 * @var array
 	 * @since  1.0
 	 */
 	protected $contextOptions;
@@ -127,7 +129,7 @@ class Stream
 	/**
 	 * The mode under which the file was opened
 	 *
-	 * @var
+	 * @var string
 	 * @since  1.0
 	 */
 	protected $openmode;
@@ -166,16 +168,16 @@ class Stream
 	/**
 	 * Creates a new stream object with appropriate prefix
 	 *
-	 * @param   boolean  $use_prefix  Prefix the connections for writing
-	 * @param   string   $ua          UA User agent to use
-	 * @param   boolean  $uamask      User agent masking (prefix Mozilla)
+	 * @param   boolean  $usePrefix  Prefix the connections for writing
+	 * @param   string   $ua         UA User agent to use
+	 * @param   boolean  $uamask     User agent masking (prefix Mozilla)
 	 *
 	 * @return  Stream
 	 *
 	 * @see     Stream
 	 * @since   1.0
 	 */
-	public static function getStream($use_prefix = true, $ua = null, $uamask = false)
+	public static function getStream($usePrefix = true, $ua = null, $uamask = false)
 	{
 		// Setup the context; Joomla! UA and overwrite
 		$context = array();
@@ -183,7 +185,7 @@ class Stream
 		// Set the UA for HTTP
 		$context['http']['user_agent'] = $ua ?: 'Joomla! Framework Stream';
 
-		if ($use_prefix)
+		if ($usePrefix)
 		{
 			return new Stream(JPATH_ROOT . '/', JPATH_ROOT, $context);
 		}
@@ -198,9 +200,9 @@ class Stream
 	 *
 	 * @param   string    $filename              Filename
 	 * @param   string    $mode                  Mode string to use
-	 * @param   boolean   $use_include_path      Use the PHP include path
+	 * @param   boolean   $useIncludePath        Use the PHP include path
 	 * @param   resource  $context               Context to use when opening
-	 * @param   boolean   $use_prefix            Use a prefix to open the file
+	 * @param   boolean   $usePrefix             Use a prefix to open the file
 	 * @param   boolean   $relative              Filename is a relative path (if false, strips JPATH_ROOT to make it relative)
 	 * @param   boolean   $detectprocessingmode  Detect the processing method for the file and use the appropriate function
 	 *                                           to handle output automatically
@@ -208,16 +210,17 @@ class Stream
 	 * @return  boolean
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
-	public function open($filename, $mode = 'r', $use_include_path = false, $context = null,
-		$use_prefix = false, $relative = false, $detectprocessingmode = false)
+	public function open($filename, $mode = 'r', $useIncludePath = false, $context = null, $usePrefix = false, $relative = false,
+		$detectprocessingmode = false
+	)
 	{
-		$filename = $this->_getFilename($filename, $mode, $use_prefix, $relative);
+		$filename = $this->_getFilename($filename, $mode, $usePrefix, $relative);
 
 		if (!$filename)
 		{
-			throw new \RuntimeException('Filename not set');
+			throw new FilesystemException('Filename not set');
 		}
 
 		$this->filename = $filename;
@@ -264,7 +267,7 @@ class Stream
 
 		// Capture PHP errors
 		$php_errormsg = 'Error Unknown whilst opening a file';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		// Decide which context to use:
@@ -272,7 +275,7 @@ class Stream
 		{
 			// Gzip doesn't support contexts or streams
 			case 'gz':
-				$this->fh = gzopen($filename, $mode, $use_include_path);
+				$this->fh = gzopen($filename, $mode, $useIncludePath);
 				break;
 
 			// Bzip2 is much like gzip except it doesn't use the include path
@@ -303,11 +306,11 @@ class Stream
 
 		if (!$this->fh)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return true;
@@ -322,18 +325,18 @@ class Stream
 	 * @return  boolean
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function close()
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		// Capture PHP errors
 		$php_errormsg = 'Error Unknown';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		switch ($this->processingmethod)
@@ -354,13 +357,11 @@ class Stream
 
 		if (!$res)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
-		else
-		{
-			// Reset this
-			$this->fh = null;
-		}
+
+		// Reset this
+		$this->fh = null;
 
 		// If we wrote, chmod the file after it's closed
 		if ($this->openmode[0] == 'w')
@@ -369,7 +370,7 @@ class Stream
 		}
 
 		// Restore error tracking to what it was before
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return true;
@@ -381,18 +382,18 @@ class Stream
 	 * @return  boolean
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function eof()
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		switch ($this->processingmethod)
@@ -410,11 +411,11 @@ class Stream
 
 		if ($php_errormsg)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return $res;
@@ -426,46 +427,44 @@ class Stream
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function filesize()
 	{
 		if (!$this->filename)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 		$res = @filesize($this->filename);
 
 		if (!$res)
 		{
-			$tmp_error = '';
+			$tmpError = '';
 
 			if ($php_errormsg)
 			{
 				// Something went wrong.
 				// Store the error in case we need it.
-				$tmp_error = $php_errormsg;
+				$tmpError = $php_errormsg;
 			}
 
 			$res = Helper::remotefsize($this->filename);
 
 			if (!$res)
 			{
-				if ($tmp_error)
+				if ($tmpError)
 				{
 					// Use the php_errormsg from before
-					throw new \RuntimeException($tmp_error);
+					throw new FilesystemException($tmpError);
 				}
-				else
-				{
-					// Error but nothing from php? How strange! Create our own
-					throw new \RuntimeException('Failed to get file size. This may not work for all streams.');
-				}
+
+				// Error but nothing from php? How strange! Create our own
+				throw new FilesystemException('Failed to get file size. This may not work for all streams.');
 			}
 			else
 			{
@@ -480,7 +479,7 @@ class Stream
 		}
 
 		// Restore error tracking to what it was before.
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return $retval;
@@ -494,18 +493,18 @@ class Stream
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function gets($length = 0)
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		// Capture PHP errors
 		$php_errormsg = 'Error Unknown';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		switch ($this->processingmethod)
@@ -523,11 +522,11 @@ class Stream
 
 		if (!$res)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return $res;
@@ -542,15 +541,15 @@ class Stream
 	 *
 	 * @return  mixed
 	 *
-	 * @see     http://php.net/manual/en/function.fread.php
+	 * @link    https://secure.php.net/manual/en/function.fread.php
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function read($length = 0)
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		if (!$this->filesize && !$length)
@@ -573,7 +572,7 @@ class Stream
 
 		// Capture PHP errors
 		$php_errormsg = 'Error Unknown';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 		$remaining = $length;
 
@@ -598,35 +597,33 @@ class Stream
 
 			if (!$res)
 			{
-				throw new \RuntimeException($php_errormsg);
+				throw new FilesystemException($php_errormsg);
+			}
+
+			if (!$retval)
+			{
+				$retval = '';
+			}
+
+			$retval .= $res;
+
+			if (!$this->eof())
+			{
+				$len = strlen($res);
+				$remaining -= $len;
 			}
 			else
 			{
-				if (!$retval)
-				{
-					$retval = '';
-				}
-
-				$retval .= $res;
-
-				if (!$this->eof())
-				{
-					$len = strlen($res);
-					$remaining -= $len;
-				}
-				else
-				{
-					// If it's the end of the file then we've nothing left to read; reset remaining and len
-					$remaining = 0;
-					$length = strlen($retval);
-				}
+				// If it's the end of the file then we've nothing left to read; reset remaining and len
+				$remaining = 0;
+				$length = strlen($retval);
 			}
 		}
 
 		while ($remaining || !$length);
 
 		// Restore error tracking to what it was before
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return $retval;
@@ -642,20 +639,20 @@ class Stream
 	 *
 	 * @return  boolean  True on success, false on failure
 	 *
-	 * @see     http://php.net/manual/en/function.fseek.php
+	 * @link    https://secure.php.net/manual/en/function.fseek.php
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function seek($offset, $whence = SEEK_SET)
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		switch ($this->processingmethod)
@@ -674,11 +671,11 @@ class Stream
 		// Seek, interestingly, returns 0 on success or -1 on failure.
 		if ($res == -1)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return true;
@@ -690,18 +687,18 @@ class Stream
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function tell()
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		switch ($this->processingmethod)
@@ -720,11 +717,11 @@ class Stream
 		// May return 0 so check if it's really false
 		if ($res === false)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return $res;
@@ -741,21 +738,21 @@ class Stream
 	 * Stream::set('chunksize', newsize);)
 	 * Note: This doesn't support gzip/bzip2 writing like reading does
 	 *
-	 * @param   string   &$string  Reference to the string to write.
-	 * @param   integer  $length   Length of the string to write.
-	 * @param   integer  $chunk    Size of chunks to write in.
+	 * @param   string   $string  Reference to the string to write.
+	 * @param   integer  $length  Length of the string to write.
+	 * @param   integer  $chunk   Size of chunks to write in.
 	 *
 	 * @return  boolean
 	 *
-	 * @see     http://php.net/manual/en/function.fwrite.php
+	 * @link    https://secure.php.net/manual/en/function.fwrite.php
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function write(&$string, $length = 0, $chunk = 0)
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		if ($this->openmode == 'r')
@@ -779,7 +776,7 @@ class Stream
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 		$remaining = $length;
 		$start = 0;
@@ -794,12 +791,12 @@ class Stream
 			if ($res === false)
 			{
 				// Returned error
-				throw new \RuntimeException($php_errormsg);
+				throw new FilesystemException($php_errormsg);
 			}
 			elseif ($res === 0)
 			{
 				// Wrote nothing?
-				throw new \RuntimeException('Warning: No data written');
+				throw new FilesystemException('Warning: No data written');
 			}
 			else
 			{
@@ -812,7 +809,7 @@ class Stream
 		while ($remaining);
 
 		// Restore error tracking to what it was before.
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return $retval;
@@ -827,7 +824,7 @@ class Stream
 	 * @return  boolean
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function chmod($filename = '', $mode = 0)
 	{
@@ -835,7 +832,7 @@ class Stream
 		{
 			if (!isset($this->filename) || !$this->filename)
 			{
-				throw new \RuntimeException('Filename not set');
+				throw new FilesystemException('Filename not set');
 			}
 
 			$filename = $this->filename;
@@ -849,7 +846,7 @@ class Stream
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 		$sch = parse_url($filename, PHP_URL_SCHEME);
 
@@ -869,11 +866,11 @@ class Stream
 		// Seek, interestingly, returns 0 on success or -1 on failure
 		if (!$res)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before.
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return true;
@@ -884,15 +881,15 @@ class Stream
 	 *
 	 * @return  array  header/metadata
 	 *
-	 * @see     http://php.net/manual/en/function.stream-get-meta-data.php
+	 * @link    https://secure.php.net/manual/en/function.stream-get-meta-data.php
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function get_meta_data()
 	{
 		if (!$this->fh)
 		{
-			throw new \RuntimeException('File not open');
+			throw new FilesystemException('File not open');
 		}
 
 		return stream_get_meta_data($this->fh);
@@ -928,7 +925,7 @@ class Stream
 	 *
 	 * @return  void
 	 *
-	 * @see     http://php.net/stream_context_create
+	 * @link    https://secure.php.net/stream_context_create
 	 * @since   1.0
 	 */
 	public function setContextOptions($context)
@@ -946,8 +943,8 @@ class Stream
 	 *
 	 * @return  void
 	 *
-	 * @see     http://php.net/stream_context_create Stream Context Creation
-	 * @see     http://php.net/manual/en/context.php Context Options for various streams
+	 * @link    https://secure.php.net/stream_context_create Stream Context Creation
+	 * @link    https://secure.php.net/manual/en/context.php Context Options for various streams
 	 * @since   1.0
 	 */
 	public function addContextEntry($wrapper, $name, $value)
@@ -964,7 +961,7 @@ class Stream
 	 *
 	 * @return  void
 	 *
-	 * @see     http://php.net/stream_context_create
+	 * @link    https://secure.php.net/stream_context_create
 	 * @since   1.0
 	 */
 	public function deleteContextEntry($wrapper, $name)
@@ -999,7 +996,7 @@ class Stream
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function applyContextToStream()
 	{
@@ -1009,17 +1006,17 @@ class Stream
 		{
 			// Capture PHP errors
 			$php_errormsg = 'Unknown error setting context option';
-			$track_errors = ini_get('track_errors');
+			$trackErrors = ini_get('track_errors');
 			ini_set('track_errors', true);
 			$retval = @stream_context_set_option($this->fh, $this->contextOptions);
 
 			if (!$retval)
 			{
-				throw new \RuntimeException($php_errormsg);
+				throw new FilesystemException($php_errormsg);
 			}
 
 			// Restore error tracking to what it was before
-			ini_set('track_errors', $track_errors);
+			ini_set('track_errors', $trackErrors);
 		}
 
 		return $retval;
@@ -1030,16 +1027,16 @@ class Stream
 	 * Append a filter to the chain
 	 *
 	 * @param   string   $filtername  The key name of the filter.
-	 * @param   integer  $read_write  Optional. Defaults to STREAM_FILTER_READ.
+	 * @param   integer  $readWrite   Optional. Defaults to STREAM_FILTER_READ.
 	 * @param   array    $params      An array of params for the stream_filter_append call.
 	 *
 	 * @return  mixed
 	 *
-	 * @see     http://php.net/manual/en/function.stream-filter-append.php
+	 * @link    https://secure.php.net/manual/en/function.stream-filter-append.php
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
-	public function appendFilter($filtername, $read_write = STREAM_FILTER_READ, $params = array())
+	public function appendFilter($filtername, $readWrite = STREAM_FILTER_READ, $params = array())
 	{
 		$res = false;
 
@@ -1047,22 +1044,20 @@ class Stream
 		{
 			// Capture PHP errors
 			$php_errormsg = '';
-			$track_errors = ini_get('track_errors');
+			$trackErrors = ini_get('track_errors');
 			ini_set('track_errors', true);
 
-			$res = @stream_filter_append($this->fh, $filtername, $read_write, $params);
+			$res = @stream_filter_append($this->fh, $filtername, $readWrite, $params);
 
 			if (!$res && $php_errormsg)
 			{
-				throw new \RuntimeException($php_errormsg);
-			}
-			else
-			{
-				$this->filters[] = &$res;
+				throw new FilesystemException($php_errormsg);
 			}
 
+			$this->filters[] = &$res;
+
 			// Restore error tracking to what it was before.
-			ini_set('track_errors', $track_errors);
+			ini_set('track_errors', $trackErrors);
 		}
 
 		return $res;
@@ -1072,16 +1067,16 @@ class Stream
 	 * Prepend a filter to the chain
 	 *
 	 * @param   string   $filtername  The key name of the filter.
-	 * @param   integer  $read_write  Optional. Defaults to STREAM_FILTER_READ.
+	 * @param   integer  $readWrite   Optional. Defaults to STREAM_FILTER_READ.
 	 * @param   array    $params      An array of params for the stream_filter_prepend call.
 	 *
 	 * @return  mixed
 	 *
-	 * @see     http://php.net/manual/en/function.stream-filter-prepend.php
+	 * @link    https://secure.php.net/manual/en/function.stream-filter-prepend.php
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
-	public function prependFilter($filtername, $read_write = STREAM_FILTER_READ, $params = array())
+	public function prependFilter($filtername, $readWrite = STREAM_FILTER_READ, $params = array())
 	{
 		$res = false;
 
@@ -1089,23 +1084,21 @@ class Stream
 		{
 			// Capture PHP errors
 			$php_errormsg = '';
-			$track_errors = ini_get('track_errors');
+			$trackErrors = ini_get('track_errors');
 			ini_set('track_errors', true);
-			$res = @stream_filter_prepend($this->fh, $filtername, $read_write, $params);
+			$res = @stream_filter_prepend($this->fh, $filtername, $readWrite, $params);
 
 			if (!$res && $php_errormsg)
 			{
 				// Set the error msg
-				throw new \RuntimeException($php_errormsg);
-			}
-			else
-			{
-				array_unshift($this->filters, '');
-				$this->filters[0] = &$res;
+				throw new FilesystemException($php_errormsg);
 			}
 
+			array_unshift($res, '');
+			$res[0] = &$this->filters;
+
 			// Restore error tracking to what it was before.
-			ini_set('track_errors', $track_errors);
+			ini_set('track_errors', $trackErrors);
 		}
 
 		return $res;
@@ -1115,19 +1108,19 @@ class Stream
 	 * Remove a filter, either by resource (handed out from the append or prepend function)
 	 * or via getting the filter list)
 	 *
-	 * @param   resource  &$resource  The resource.
-	 * @param   boolean   $byindex    The index of the filter.
+	 * @param   resource  $resource  The resource.
+	 * @param   boolean   $byindex   The index of the filter.
 	 *
 	 * @return  boolean   Result of operation
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
 	public function removeFilter(&$resource, $byindex = false)
 	{
 		// Capture PHP errors
 		$php_errormsg = '';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		if ($byindex)
@@ -1141,11 +1134,11 @@ class Stream
 
 		if ($res && $php_errormsg)
 		{
-			throw new \RuntimeException($php_errormsg);
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before.
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		return $res;
 	}
@@ -1153,30 +1146,30 @@ class Stream
 	/**
 	 * Copy a file from src to dest
 	 *
-	 * @param   string    $src         The file path to copy from.
-	 * @param   string    $dest        The file path to copy to.
-	 * @param   resource  $context     A valid context resource (optional) created with stream_context_create.
-	 * @param   boolean   $use_prefix  Controls the use of a prefix (optional).
-	 * @param   boolean   $relative    Determines if the filename given is relative. Relative paths do not have JPATH_ROOT stripped.
+	 * @param   string    $src        The file path to copy from.
+	 * @param   string    $dest       The file path to copy to.
+	 * @param   resource  $context    A valid context resource (optional) created with stream_context_create.
+	 * @param   boolean   $usePrefix  Controls the use of a prefix (optional).
+	 * @param   boolean   $relative   Determines if the filename given is relative. Relative paths do not have JPATH_ROOT stripped.
 	 *
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
-	public function copy($src, $dest, $context = null, $use_prefix = true, $relative = false)
+	public function copy($src, $dest, $context = null, $usePrefix = true, $relative = false)
 	{
 		// Capture PHP errors
 		$php_errormsg = '';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 
-		$chmodDest = $this->_getFilename($dest, 'w', $use_prefix, $relative);
+		$chmodDest = $this->_getFilename($dest, 'w', $usePrefix, $relative);
 
 		// Since we're going to open the file directly we need to get the filename.
 		// We need to use the same prefix so force everything to write.
-		$src = $this->_getFilename($src, 'w', $use_prefix, $relative);
-		$dest = $this->_getFilename($dest, 'w', $use_prefix, $relative);
+		$src = $this->_getFilename($src, 'w', $usePrefix, $relative);
+		$dest = $this->_getFilename($dest, 'w', $usePrefix, $relative);
 
 		if ($context)
 		{
@@ -1196,15 +1189,13 @@ class Stream
 
 		if (!$res && $php_errormsg)
 		{
-			throw new \RuntimeException($php_errormsg);
-		}
-		else
-		{
-			$this->chmod($chmodDest);
+			throw new FilesystemException($php_errormsg);
 		}
 
+		$this->chmod($chmodDest);
+
 		// Restore error tracking to what it was before
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		return $res;
 	}
@@ -1212,26 +1203,26 @@ class Stream
 	/**
 	 * Moves a file
 	 *
-	 * @param   string    $src         The file path to move from.
-	 * @param   string    $dest        The file path to move to.
-	 * @param   resource  $context     A valid context resource (optional) created with stream_context_create.
-	 * @param   boolean   $use_prefix  Controls the use of a prefix (optional).
-	 * @param   boolean   $relative    Determines if the filename given is relative. Relative paths do not have JPATH_ROOT stripped.
+	 * @param   string    $src        The file path to move from.
+	 * @param   string    $dest       The file path to move to.
+	 * @param   resource  $context    A valid context resource (optional) created with stream_context_create.
+	 * @param   boolean   $usePrefix  Controls the use of a prefix (optional).
+	 * @param   boolean   $relative   Determines if the filename given is relative. Relative paths do not have JPATH_ROOT stripped.
 	 *
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
-	public function move($src, $dest, $context = null, $use_prefix = true, $relative = false)
+	public function move($src, $dest, $context = null, $usePrefix = true, $relative = false)
 	{
 		// Capture PHP errors
 		$php_errormsg = '';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 
-		$src = $this->_getFilename($src, 'w', $use_prefix, $relative);
-		$dest = $this->_getFilename($dest, 'w', $use_prefix, $relative);
+		$src = $this->_getFilename($src, 'w', $usePrefix, $relative);
+		$dest = $this->_getFilename($dest, 'w', $usePrefix, $relative);
 
 		if ($context)
 		{
@@ -1251,13 +1242,13 @@ class Stream
 
 		if (!$res && $php_errormsg)
 		{
-			throw new \RuntimeException($php_errormsg());
+			throw new FilesystemException($php_errormsg);
 		}
 
 		$this->chmod($dest);
 
 		// Restore error tracking to what it was before
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		return $res;
 	}
@@ -1265,24 +1256,24 @@ class Stream
 	/**
 	 * Delete a file
 	 *
-	 * @param   string    $filename    The file path to delete.
-	 * @param   resource  $context     A valid context resource (optional) created with stream_context_create.
-	 * @param   boolean   $use_prefix  Controls the use of a prefix (optional).
-	 * @param   boolean   $relative    Determines if the filename given is relative. Relative paths do not have JPATH_ROOT stripped.
+	 * @param   string    $filename   The file path to delete.
+	 * @param   resource  $context    A valid context resource (optional) created with stream_context_create.
+	 * @param   boolean   $usePrefix  Controls the use of a prefix (optional).
+	 * @param   boolean   $relative   Determines if the filename given is relative. Relative paths do not have JPATH_ROOT stripped.
 	 *
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
-	public function delete($filename, $context = null, $use_prefix = true, $relative = false)
+	public function delete($filename, $context = null, $usePrefix = true, $relative = false)
 	{
 		// Capture PHP errors
 		$php_errormsg = '';
-		$track_errors = ini_get('track_errors');
+		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 
-		$filename = $this->_getFilename($filename, 'w', $use_prefix, $relative);
+		$filename = $this->_getFilename($filename, 'w', $usePrefix, $relative);
 
 		if ($context)
 		{
@@ -1302,11 +1293,11 @@ class Stream
 
 		if (!$res && $php_errormsg)
 		{
-			throw new \RuntimeException($php_errormsg());
+			throw new FilesystemException($php_errormsg);
 		}
 
 		// Restore error tracking to what it was before.
-		ini_set('track_errors', $track_errors);
+		ini_set('track_errors', $trackErrors);
 
 		return $res;
 	}
@@ -1314,35 +1305,33 @@ class Stream
 	/**
 	 * Upload a file
 	 *
-	 * @param   string    $src         The file path to copy from (usually a temp folder).
-	 * @param   string    $dest        The file path to copy to.
-	 * @param   resource  $context     A valid context resource (optional) created with stream_context_create.
-	 * @param   boolean   $use_prefix  Controls the use of a prefix (optional).
-	 * @param   boolean   $relative    Determines if the filename given is relative. Relative paths do not have JPATH_ROOT stripped.
+	 * @param   string    $src        The file path to copy from (usually a temp folder).
+	 * @param   string    $dest       The file path to copy to.
+	 * @param   resource  $context    A valid context resource (optional) created with stream_context_create.
+	 * @param   boolean   $usePrefix  Controls the use of a prefix (optional).
+	 * @param   boolean   $relative   Determines if the filename given is relative. Relative paths do not have JPATH_ROOT stripped.
 	 *
 	 * @return  mixed
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  FilesystemException
 	 */
-	public function upload($src, $dest, $context = null, $use_prefix = true, $relative = false)
+	public function upload($src, $dest, $context = null, $usePrefix = true, $relative = false)
 	{
 		if (is_uploaded_file($src))
 		{
 			// Make sure it's an uploaded file
-			return $this->copy($src, $dest, $context, $use_prefix, $relative);
+			return $this->copy($src, $dest, $context, $usePrefix, $relative);
 		}
-		else
-		{
-			throw new \RuntimeException('Not an uploaded file.');
-		}
+
+		throw new FilesystemException('Not an uploaded file.');
 	}
 
 	/**
 	 * Writes a chunk of data to a file.
 	 *
 	 * @param   string  $filename  The file name.
-	 * @param   string  &$buffer   The data to write to the file.
+	 * @param   string  $buffer    The data to write to the file.
 	 *
 	 * @return  boolean
 	 *
@@ -1365,18 +1354,18 @@ class Stream
 	/**
 	 * Determine the appropriate 'filename' of a file
 	 *
-	 * @param   string   $filename    Original filename of the file
-	 * @param   string   $mode        Mode string to retrieve the filename
-	 * @param   boolean  $use_prefix  Controls the use of a prefix
-	 * @param   boolean  $relative    Determines if the filename given is relative. Relative paths do not have JPATH_ROOT stripped.
+	 * @param   string   $filename   Original filename of the file
+	 * @param   string   $mode       Mode string to retrieve the filename
+	 * @param   boolean  $usePrefix  Controls the use of a prefix
+	 * @param   boolean  $relative   Determines if the filename given is relative. Relative paths do not have JPATH_ROOT stripped.
 	 *
 	 * @return  string
 	 *
 	 * @since   1.0
 	 */
-	public function _getFilename($filename, $mode, $use_prefix, $relative)
+	public function _getFilename($filename, $mode, $usePrefix, $relative)
 	{
-		if ($use_prefix)
+		if ($usePrefix)
 		{
 			// Get rid of binary or t, should be at the end of the string
 			$tmode = trim($mode, 'btf123456789');
@@ -1392,27 +1381,27 @@ class Stream
 			}
 
 			// Check if it's a write mode then add the appropriate prefix
-			// Get rid of JPATH_ROOT (legacy compat) along the way
 			if (in_array($tmode, Helper::getWriteModes()))
 			{
-				if (!$relative && $this->writeprefix)
-				{
-					$filename = str_replace(JPATH_ROOT, '', $filename);
-				}
-
-				$filename = $this->writeprefix . $filename;
+				$prefixToUse = $this->writeprefix;
 			}
 			else
 			{
-				if (!$relative && $this->readprefix)
-				{
-					$filename = str_replace(JPATH_ROOT, '', $filename);
-				}
-
-				$filename = $this->readprefix . $filename;
+				$prefixToUse = $this->readprefix;
 			}
 
-			$filename = $scheme . $filename;
+			// Get rid of JPATH_ROOT (legacy compat)
+			if (!$relative && $prefixToUse)
+			{
+				$pos = strpos($filename, JPATH_ROOT);
+
+				if ($pos !== false)
+				{
+					$filename = substr_replace($filename, '', $pos, strlen(JPATH_ROOT));
+				}
+			}
+
+			$filename = ($prefixToUse ? $prefixToUse : '') . $filename;
 		}
 
 		return $filename;

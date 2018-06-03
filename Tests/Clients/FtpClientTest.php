@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -8,13 +8,14 @@ namespace Joomla\Filesystem\Clients\Tests;
 
 use Joomla\Filesystem\Clients\FtpClient;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for FtpClient.
  *
  * @since  1.0
  */
-class FtpClientTest extends \PHPUnit_Framework_TestCase
+class FtpClientTest extends TestCase
 {
 	/**
 	 * @var    FtpClient

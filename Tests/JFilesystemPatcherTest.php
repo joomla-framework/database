@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 use Joomla\Filesystem\Patcher;
 use Joomla\Filesystem\Path;
+use PHPUnit\Framework\TestCase;
 
 // We MUST define JPATH_ROOT for Patcher to work. :(
 defined('JPATH_ROOT') or define('JPATH_ROOT', __DIR__);
@@ -15,7 +16,7 @@ defined('JPATH_ROOT') or define('JPATH_ROOT', __DIR__);
  *
  * @since  1.0
  */
-class PatcherTest extends PHPUnit_Framework_TestCase
+class PatcherTest extends TestCase
 {
 	/**
 	 * Sets up the fixture.
@@ -921,7 +922,15 @@ But after they are produced,
 	{
 		if ($throw)
 		{
-			$this->setExpectedException($throw);
+			// expectException was added in PHPUnit 5.2 and setExpectedException removed in 6.0
+			if (method_exists($this, 'expectException'))
+			{
+				$this->expectException($throw);
+			}
+			else
+			{
+				$this->setExpectedException($throw);
+			}
 		}
 
 		foreach ($sources as $path => $content)

@@ -1,19 +1,20 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-use Joomla\Filesystem\Stream\String as StreamString;
+use Joomla\Filesystem\Stream\StringWrapper as StreamString;
 use Joomla\Filesystem\Support\StringController;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for StreamString.
  *
  * @since  1.0
  */
-class StreamStringTest extends PHPUnit_Framework_TestCase
+class StreamStringTest extends TestCase
 {
 	/**
 	 * @var StreamString

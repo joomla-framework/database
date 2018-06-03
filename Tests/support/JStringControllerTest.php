@@ -1,18 +1,19 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 use Joomla\Filesystem\Support\StringController;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for StringController.
  *
  * @since  1.0
  */
-class StringControllerTest extends PHPUnit_Framework_TestCase
+class StringControllerTest extends TestCase
 {
 	/**
 	 * Test _getArray method.

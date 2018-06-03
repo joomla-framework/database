@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Filesystem Package
  *
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -23,8 +23,21 @@ class StringController
 	 * @return  array
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use `getArray` instead.
 	 */
 	public static function _getArray()
+	{
+		return self::getArray();
+	}
+
+	/**
+	 * Defines a variable as an array
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public static function getArray()
 	{
 		return self::$strings;
 	}
@@ -33,7 +46,7 @@ class StringController
 	 * Create a reference
 	 *
 	 * @param   string  $reference  The key
-	 * @param   string  &$string    The value
+	 * @param   string  $string     The value
 	 *
 	 * @return  void
 	 *
@@ -49,7 +62,7 @@ class StringController
 	 *
 	 * @param   string  $reference  The key for the reference.
 	 *
-	 * @return  mixed  False if not set, reference if it it exists
+	 * @return  mixed  False if not set, reference if it exists
 	 *
 	 * @since   1.0
 	 */

@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Filesystem Package
  *
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -31,6 +31,11 @@ class Path
 	 */
 	public static function canChmod($path)
 	{
+		if (!file_exists($path))
+		{
+			return false;
+		}
+
 		$perms = @fileperms($path);
 
 		if ($perms !== false)
@@ -138,21 +143,21 @@ class Path
 			return '---------';
 		}
 
-		$parsed_mode = '';
+		$parsedMode = '';
 
 		for ($i = 0; $i < 3; $i++)
 		{
 			// Read
-			$parsed_mode .= ($mode{$i} & 04) ? "r" : "-";
+			$parsedMode .= ($mode{$i} & 04) ? "r" : "-";
 
 			// Write
-			$parsed_mode .= ($mode{$i} & 02) ? "w" : "-";
+			$parsedMode .= ($mode{$i} & 02) ? "w" : "-";
 
 			// Execute
-			$parsed_mode .= ($mode{$i} & 01) ? "x" : "-";
+			$parsedMode .= ($mode{$i} & 01) ? "x" : "-";
 		}
 
-		return $parsed_mode;
+		return $parsedMode;
 	}
 
 	/**
@@ -241,14 +246,14 @@ class Path
 	 */
 	public static function isOwner($path)
 	{
-		$tmp = md5(mt_rand());
+		$tmp = md5(random_bytes(16));
 		$ssp = ini_get('session.save_path');
 		$jtp = JPATH_ROOT;
 
 		// Try to find a writable directory
 		$dir = is_writable('/tmp') ? '/tmp' : false;
-		$dir = (!$dir && is_writable($ssp)) ? $ssp : false;
-		$dir = (!$dir && is_writable($jtp)) ? $jtp : false;
+		$dir = (!$dir && is_writable($ssp)) ? $ssp : $dir;
+		$dir = (!$dir && is_writable($jtp)) ? $jtp : $dir;
 
 		if ($dir)
 		{

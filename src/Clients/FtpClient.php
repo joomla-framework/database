@@ -1,8 +1,8 @@
 <?php
 /**
- * Part of the Joomla Framework Client Package
+ * Part of the Joomla Framework Filesystem Package
  *
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -79,6 +79,18 @@ class FtpClient
 	private $response = null;
 
 	/**
+	 * @var    integer  Response Code
+	 * @since  1.0
+	 */
+	private $responseCode = null;
+
+	/**
+	 * @var    string  Response Message
+	 * @since  1.0
+	 */
+	private $responseMsg = null;
+
+	/**
 	 * @var    integer  Timeout limit
 	 * @since  1.0
 	 */
@@ -126,7 +138,7 @@ class FtpClient
 	private $lineEndings = array('UNIX' => "\n", 'WIN' => "\r\n");
 
 	/**
-	 * @var    array  FtpClient instances container.
+	 * @var    FtpClient[]  FtpClient instances container.
 	 * @since  1.0
 	 */
 	protected static $instances = array();
@@ -353,7 +365,7 @@ class FtpClient
 		}
 
 		// If we are already logged in, continue :)
-		if ($this->_responseCode == 503)
+		if ($this->responseCode == 503)
 		{
 			return true;
 		}
@@ -821,8 +833,8 @@ class FtpClient
 	/**
 	 * Method to read a file from the FTP server's contents into a buffer
 	 *
-	 * @param   string  $remote   Path to remote file to read on the FTP server
-	 * @param   string  &$buffer  Buffer variable to read file contents into
+	 * @param   string  $remote  Path to remote file to read on the FTP server
+	 * @param   string  $buffer  Buffer variable to read file contents into
 	 *
 	 * @return  boolean  True if successful
 	 *
@@ -1268,8 +1280,6 @@ class FtpClient
 			throw new FilesystemException(
 				sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 150 or 125].  Path sent: %3$s', __METHOD__, $this->response, $path)
 			);
-
-			return false;
 		}
 
 		// Read in the file listing.
@@ -1315,7 +1325,7 @@ class FtpClient
 	 */
 	public function listDetails($path = null, $type = 'all')
 	{
-		$dir_list = array();
+		$dirList = array();
 		$data = null;
 		$regs = null;
 
@@ -1364,8 +1374,6 @@ class FtpClient
 						__METHOD__, $this->response, $path
 					)
 				);
-
-				return false;
 			}
 
 			// Read in the file listing.
@@ -1396,7 +1404,7 @@ class FtpClient
 		// If we received the listing of an empty directory, we are done as well
 		if (empty($contents[0]))
 		{
-			return $dir_list;
+			return $dirList;
 		}
 
 		// If the server returned the number of results in the first response, let's dump it
@@ -1406,7 +1414,7 @@ class FtpClient
 
 			if (!isset($contents[0]) || empty($contents[0]))
 			{
-				return $dir_list;
+				return $dirList;
 			}
 		}
 
@@ -1444,40 +1452,40 @@ class FtpClient
 		{
 			foreach ($contents as $file)
 			{
-				$tmp_array = null;
+				$tmpArray = null;
 
 				if (@preg_match($regexp, $file, $regs))
 				{
 					$fType = (int) strpos("-dl", $regs[1]{0});
 
-					// $tmp_array['line'] = $regs[0];
-					$tmp_array['type'] = $fType;
-					$tmp_array['rights'] = $regs[1];
+					// $tmpArray['line'] = $regs[0];
+					$tmpArray['type'] = $fType;
+					$tmpArray['rights'] = $regs[1];
 
-					// $tmp_array['number'] = $regs[2];
-					$tmp_array['user'] = $regs[3];
-					$tmp_array['group'] = $regs[4];
-					$tmp_array['size'] = $regs[5];
-					$tmp_array['date'] = @date("m-d", strtotime($regs[6]));
-					$tmp_array['time'] = $regs[7];
-					$tmp_array['name'] = $regs[9];
+					// $tmpArray['number'] = $regs[2];
+					$tmpArray['user'] = $regs[3];
+					$tmpArray['group'] = $regs[4];
+					$tmpArray['size'] = $regs[5];
+					$tmpArray['date'] = @date("m-d", strtotime($regs[6]));
+					$tmpArray['time'] = $regs[7];
+					$tmpArray['name'] = $regs[9];
 				}
 
 				// If we just want files, do not add a folder
-				if ($type == 'files' && $tmp_array['type'] == 1)
+				if ($type == 'files' && $tmpArray['type'] == 1)
 				{
 					continue;
 				}
 
 				// If we just want folders, do not add a file
-				if ($type == 'folders' && $tmp_array['type'] == 0)
+				if ($type == 'folders' && $tmpArray['type'] == 0)
 				{
 					continue;
 				}
 
-				if (is_array($tmp_array) && $tmp_array['name'] != '.' && $tmp_array['name'] != '..')
+				if (is_array($tmpArray) && $tmpArray['name'] != '.' && $tmpArray['name'] != '..')
 				{
-					$dir_list[] = $tmp_array;
+					$dirList[] = $tmpArray;
 				}
 			}
 		}
@@ -1485,46 +1493,46 @@ class FtpClient
 		{
 			foreach ($contents as $file)
 			{
-				$tmp_array = null;
+				$tmpArray = null;
 
 				if (@preg_match($regexp, $file, $regs))
 				{
 					$fType = (int) ($regs[7] == '<DIR>');
 					$timestamp = strtotime("$regs[3]-$regs[1]-$regs[2] $regs[4]:$regs[5]$regs[6]");
 
-					// $tmp_array['line'] = $regs[0];
-					$tmp_array['type'] = $fType;
-					$tmp_array['rights'] = '';
+					// $tmpArray['line'] = $regs[0];
+					$tmpArray['type'] = $fType;
+					$tmpArray['rights'] = '';
 
-					// $tmp_array['number'] = 0;
-					$tmp_array['user'] = '';
-					$tmp_array['group'] = '';
-					$tmp_array['size'] = (int) $regs[7];
-					$tmp_array['date'] = date('m-d', $timestamp);
-					$tmp_array['time'] = date('H:i', $timestamp);
-					$tmp_array['name'] = $regs[8];
+					// $tmpArray['number'] = 0;
+					$tmpArray['user'] = '';
+					$tmpArray['group'] = '';
+					$tmpArray['size'] = (int) $regs[7];
+					$tmpArray['date'] = date('m-d', $timestamp);
+					$tmpArray['time'] = date('H:i', $timestamp);
+					$tmpArray['name'] = $regs[8];
 				}
 
 				// If we just want files, do not add a folder
-				if ($type == 'files' && $tmp_array['type'] == 1)
+				if ($type == 'files' && $tmpArray['type'] == 1)
 				{
 					continue;
 				}
 
 				// If we just want folders, do not add a file
-				if ($type == 'folders' && $tmp_array['type'] == 0)
+				if ($type == 'folders' && $tmpArray['type'] == 0)
 				{
 					continue;
 				}
 
-				if (is_array($tmp_array) && $tmp_array['name'] != '.' && $tmp_array['name'] != '..')
+				if (is_array($tmpArray) && $tmpArray['name'] != '.' && $tmpArray['name'] != '..')
 				{
-					$dir_list[] = $tmp_array;
+					$dirList[] = $tmpArray;
 				}
 			}
 		}
 
-		return $dir_list;
+		return $dirList;
 	}
 
 	/**
@@ -1592,13 +1600,13 @@ class FtpClient
 		}
 
 		// Separate the code from the message
-		$this->_responseCode = $parts[1];
-		$this->_responseMsg = $parts[0];
+		$this->responseCode = $parts[1];
+		$this->responseMsg  = $parts[0];
 
 		// Did the server respond with the code we wanted?
 		if (is_array($expected))
 		{
-			if (in_array($this->_responseCode, $expected))
+			if (in_array($this->responseCode, $expected))
 			{
 				$retval = true;
 			}
@@ -1609,7 +1617,7 @@ class FtpClient
 		}
 		else
 		{
-			if ($this->_responseCode == $expected)
+			if ($this->responseCode == $expected)
 			{
 				$retval = true;
 			}
@@ -1669,22 +1677,22 @@ class FtpClient
 		}
 
 		// Separate the code from the message
-		$this->_responseCode = $parts[1];
-		$this->_responseMsg = $parts[0];
+		$this->responseCode = $parts[1];
+		$this->responseMsg  = $parts[0];
 
 		// If it's not 227, we weren't given an IP and port, which means it failed.
-		if ($this->_responseCode != '227')
+		if ($this->responseCode != 227)
 		{
 			throw new FilesystemException(
-				sprintf('%1$s: Unable to obtain IP and port for data transfer. Server response: %2$s', __METHOD__, $this->_responseMsg)
+				sprintf('%1$s: Unable to obtain IP and port for data transfer. Server response: %2$s', __METHOD__, $this->responseMsg)
 			);
 		}
 
 		// Snatch the IP and port information, or die horribly trying...
-		if (preg_match('~\((\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))\)~', $this->_responseMsg, $match) == 0)
+		if (preg_match('~\((\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))\)~', $this->responseMsg, $match) == 0)
 		{
 			throw new FilesystemException(
-				sprintf('%1$s: IP and port for data transfer not valid. Server response: %2$s', __METHOD__, $this->_responseMsg)
+				sprintf('%1$s: IP and port for data transfer not valid. Server response: %2$s', __METHOD__, $this->responseMsg)
 			);
 		}
 

@@ -1,20 +1,22 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 use Joomla\Filesystem\Stream;
+
 use Joomla\Test\TestHelper;
 use Joomla\Filesystem\Support\StringController;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Stream.
  *
  * @since  1.0
  */
-class StreamTest extends PHPUnit_Framework_TestCase
+class StreamTest extends TestCase
 {
 	/**
 	 * @var Stream
@@ -22,6 +24,10 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 * @since __VERSION_NO__
 	 */
 	protected $object;
+
+	private $fileName = "FILE_NAME";
+	private $writePrefix = "WRITE_PREFIX";
+	private $readPrefix = "READ_PREFIX";
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -35,7 +41,7 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	{
 		parent::setUp();
 
-		$this->object = new Stream;
+		$this->object = new Stream($this->writePrefix, $this->readPrefix);
 		vfsStream::setup('root');
 	}
 
@@ -1084,8 +1090,7 @@ class StreamTest extends PHPUnit_Framework_TestCase
 	 * @dataProvider data_getFilename
 	 * @since __VERSION_NO__
 	 */
-	public function test_getFilename($wPrefix, $rPrefix, $filename, $mode, $use_prefix,
-		$relative, $expected)
+	public function test_getFilename($wPrefix, $rPrefix, $filename, $mode, $use_prefix, $relative, $expected)
 	{
 		TestHelper::setValue($this->object, 'writeprefix', $wPrefix);
 		TestHelper::setValue($this->object, 'readprefix', $rPrefix);

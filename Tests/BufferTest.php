@@ -1,19 +1,20 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Filesystem\Tests;
 
 use Joomla\Filesystem\Buffer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for JBuffer.
  *
  * @since  1.0
  */
-class BufferTest extends \PHPUnit_Framework_TestCase
+class BufferTest extends TestCase
 {
 	/**
 	 * @var JBuffer
@@ -198,7 +199,7 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @since __VERSION_NO__
 	 */
-	public function casesEOF()
+	public function casesEof()
 	{
 		return array(
 			'~EOF' => array(
@@ -226,10 +227,10 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 	 *
 	 * @return void
 	 *
-	 * @dataProvider casesEOF
+	 * @dataProvider casesEof
 	 * @since __VERSION_NO__
 	 */
-	public function testStreamEOF($buffer, $name, $position, $expected)
+	public function testStreamEof($buffer, $name, $position, $expected)
 	{
 		$this->object->name = $name;
 		$this->object->position = $position;

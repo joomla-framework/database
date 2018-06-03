@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Filesystem Package
  *
- * @copyright  Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -56,10 +56,10 @@ class File
 	/**
 	 * Copies a file
 	 *
-	 * @param   string   $src          The path to the source file
-	 * @param   string   $dest         The path to the destination file
-	 * @param   string   $path         An optional base path to prefix to the file names
-	 * @param   boolean  $use_streams  True to use streams
+	 * @param   string   $src         The path to the source file
+	 * @param   string   $dest        The path to the destination file
+	 * @param   string   $path        An optional base path to prefix to the file names
+	 * @param   boolean  $useStreams  True to use streams
 	 *
 	 * @return  boolean  True on success
 	 *
@@ -67,7 +67,7 @@ class File
 	 * @throws  FilesystemException
 	 * @throws  \UnexpectedValueException
 	 */
-	public static function copy($src, $dest, $path = null, $use_streams = false)
+	public static function copy($src, $dest, $path = null, $useStreams = false)
 	{
 		// Prepend a base path if it exists
 		if ($path)
@@ -82,7 +82,7 @@ class File
 			throw new \UnexpectedValueException(__METHOD__ . ': Cannot find or read file: ' . $src);
 		}
 
-		if ($use_streams)
+		if ($useStreams)
 		{
 			$stream = Stream::getStream();
 
@@ -93,15 +93,13 @@ class File
 
 			return true;
 		}
-		else
-		{
-			if (!@ copy($src, $dest))
-			{
-				throw new FilesystemException(__METHOD__ . ': Copy failed.');
-			}
 
-			return true;
+		if (!@ copy($src, $dest))
+		{
+			throw new FilesystemException(__METHOD__ . ': Copy failed.');
 		}
+
+		return true;
 	}
 
 	/**
@@ -146,17 +144,17 @@ class File
 	/**
 	 * Moves a file
 	 *
-	 * @param   string   $src          The path to the source file
-	 * @param   string   $dest         The path to the destination file
-	 * @param   string   $path         An optional base path to prefix to the file names
-	 * @param   boolean  $use_streams  True to use streams
+	 * @param   string   $src         The path to the source file
+	 * @param   string   $dest        The path to the destination file
+	 * @param   string   $path        An optional base path to prefix to the file names
+	 * @param   boolean  $useStreams  True to use streams
 	 *
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
 	 * @throws  FilesystemException
 	 */
-	public static function move($src, $dest, $path = '', $use_streams = false)
+	public static function move($src, $dest, $path = '', $useStreams = false)
 	{
 		if ($path)
 		{
@@ -170,7 +168,7 @@ class File
 			return 'Cannot find source file.';
 		}
 
-		if ($use_streams)
+		if ($useStreams)
 		{
 			$stream = Stream::getStream();
 
@@ -181,30 +179,27 @@ class File
 
 			return true;
 		}
-		else
-		{
-			if (!@ rename($src, $dest))
-			{
-				throw new FilesystemException(__METHOD__ . ': Rename failed.');
-			}
 
-			return true;
+		if (!@ rename($src, $dest))
+		{
+			throw new FilesystemException(__METHOD__ . ': Rename failed.');
 		}
+
+		return true;
 	}
 
 	/**
 	 * Write contents to a file
 	 *
-	 * @param   string   $file         The full file path
-	 * @param   string   &$buffer      The buffer to write
-	 * @param   boolean  $use_streams  Use streams
+	 * @param   string   $file        The full file path
+	 * @param   string   $buffer      The buffer to write
+	 * @param   boolean  $useStreams  Use streams
 	 *
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
-	 * @throws  FilesystemException
 	 */
-	public static function write($file, &$buffer, $use_streams = false)
+	public static function write($file, &$buffer, $useStreams = false)
 	{
 		@set_time_limit(ini_get('max_execution_time'));
 
@@ -214,42 +209,36 @@ class File
 			Folder::create(dirname($file));
 		}
 
-		if ($use_streams)
+		if ($useStreams)
 		{
 			$stream = Stream::getStream();
 
 			// Beef up the chunk size to a meg
 			$stream->set('chunksize', (1024 * 1024));
 
-			if (!$stream->writeFile($file, $buffer))
-			{
-				throw new FilesystemException(sprintf('%1$s(%2$s): %3$s', __METHOD__, $file, $stream->getError()));
-			}
+			$stream->writeFile($file, $buffer);
 
 			return true;
 		}
-		else
-		{
-			$file = Path::clean($file);
-			$ret = is_int(file_put_contents($file, $buffer)) ? true : false;
 
-			return $ret;
-		}
+		$file = Path::clean($file);
+
+		return is_int(file_put_contents($file, $buffer));
 	}
 
 	/**
 	 * Moves an uploaded file to a destination folder
 	 *
-	 * @param   string   $src          The name of the php (temporary) uploaded file
-	 * @param   string   $dest         The path (including filename) to move the uploaded file to
-	 * @param   boolean  $use_streams  True to use streams
+	 * @param   string   $src         The name of the php (temporary) uploaded file
+	 * @param   string   $dest        The path (including filename) to move the uploaded file to
+	 * @param   boolean  $useStreams  True to use streams
 	 *
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
 	 * @throws  FilesystemException
 	 */
-	public static function upload($src, $dest, $use_streams = false)
+	public static function upload($src, $dest, $useStreams = false)
 	{
 		// Ensure that the path is valid and clean
 		$dest = Path::clean($dest);
@@ -262,7 +251,7 @@ class File
 			Folder::create($baseDir);
 		}
 
-		if ($use_streams)
+		if ($useStreams)
 		{
 			$stream = Stream::getStream();
 
@@ -273,26 +262,18 @@ class File
 
 			return true;
 		}
-		else
+
+		if (is_writeable($baseDir) && move_uploaded_file($src, $dest))
 		{
-			if (is_writeable($baseDir) && move_uploaded_file($src, $dest))
+			// Short circuit to prevent file permission errors
+			if (Path::setPermissions($dest))
 			{
-				// Short circuit to prevent file permission errors
-				if (Path::setPermissions($dest))
-				{
-					return true;
-				}
-				else
-				{
-					throw new FilesystemException(__METHOD__ . ': Failed to change file permissions.');
-				}
-			}
-			else
-			{
-				throw new FilesystemException(__METHOD__ . ': Failed to move file.');
+				return true;
 			}
 
-			return false;
+			throw new FilesystemException(__METHOD__ . ': Failed to change file permissions.');
 		}
+
+		throw new FilesystemException(__METHOD__ . ': Failed to move file.');
 	}
 }
