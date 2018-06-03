@@ -233,7 +233,7 @@ jobs:
         - postgresql
       env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
 
-    # SQLite
+    # SQL Server
     - stage: Test
       php: 7.0
       sudo: required
