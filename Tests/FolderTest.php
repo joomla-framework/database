@@ -270,6 +270,7 @@ class FolderTest extends FilesystemTestCase
 			'The test directory was not moved.'
 		);
 	}
+
 	/**
 	 * Tests the Folder::move method.
 	 *
@@ -294,7 +295,6 @@ class FolderTest extends FilesystemTestCase
 			'The test directory was not moved.'
 		);
 	}
-
 
 	/**
 	 * Test the Folder::move method where source folder doesn't exist.

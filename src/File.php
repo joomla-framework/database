@@ -246,7 +246,7 @@ class File
 		// Create the destination directory if it does not exist
 		$baseDir = dirname($dest);
 
-		if (!file_exists($baseDir))
+		if (!is_dir($baseDir))
 		{
 			Folder::create($baseDir);
 		}
