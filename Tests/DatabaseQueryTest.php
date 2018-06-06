@@ -1297,6 +1297,23 @@ class DatabaseQueryTest extends TestCase
 	}
 
 	/**
+	 * Tests the isNullDatetime method.
+	 *
+	 * @return  void
+	 *
+	 * @covers     \Joomla\Database\DatabaseQuery::isNullDatetime
+	 * @since      __DEPLOY_VERSION__
+	 */
+	public function testIsNullDatetime()
+	{
+		$this->assertThat(
+			$this->instance->isNullDatetime('publish_up'),
+			$this->equalTo('publish_up IS NULL'),
+			'Test isNullDatetime failed.'
+		);
+	}
+
+	/**
 	 * Tests the \Joomla\Database\DatabaseQuery::nullDate method for an expected exception.
 	 *
 	 * @return  void

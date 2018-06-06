@@ -40,6 +40,29 @@ class SqliteQueryTest extends TestCase
 		);
 	}
 
+
+	/**
+	 * Tests the isNullDatetime method.
+	 *
+	 * @return  void
+	 *
+	 * @covers     \Joomla\Database\Sqlite\SqliteQuery::isNullDatetime
+	 * @since      __DEPLOY_VERSION__
+	 */
+	public function testIsNullDatetime()
+	{
+		$query = new SqliteQuery($this->dbo);
+
+		$this->assertThat(
+			$query->isNullDatetime('publish_up'),
+			$this->equalTo(
+				'(publish_up IN (\'_0000-00-00 00:00:00_\')' .
+				' OR publish_up IS NULL)'
+			),
+			'Test isNullDatetime failed.'
+		);
+	}
+
 	/**
 	 * Data for the testNullDate test.
 	 *

@@ -200,6 +200,14 @@ abstract class DatabaseQuery implements QueryInterface
 	protected $selectRowNumber = null;
 
 	/**
+	 * The list of zero or null representation of a datetime.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $nullDatetimeList = [];
+
+	/**
 	 * Class constructor.
 	 *
 	 * @param   DatabaseInterface  $db  The database driver.
@@ -1194,6 +1202,35 @@ abstract class DatabaseQuery implements QueryInterface
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Generate a SQL statement to check if column represents a zero or null datetime.
+	 *
+	 * Usage:
+	 * $query->where($query->isNullDatetime('modified_date'));
+	 *
+	 * @param   string  $column  A column name.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function isNullDatetime($column)
+	{
+		if (!$this->db instanceof DatabaseInterface)
+		{
+			throw new \RuntimeException(sprintf('A %s instance is not set to the query object.', DatabaseInterface::class));
+		}
+
+		if ($this->nullDatetimeList)
+		{
+			return "($column IN ("
+			. implode(', ', $this->db->quote($this->nullDatetimeList))
+			. ") OR $column IS NULL)";
+		}
+
+		return "$column IS NULL";
 	}
 
 	/**

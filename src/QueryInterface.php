@@ -378,6 +378,20 @@ interface QueryInterface extends PreparableInterface
 	public function nullDate($quoted = true);
 
 	/**
+	 * Generate a SQL statement to check if column represents a zero or null datetime.
+	 *
+	 * Usage:
+	 * $query->where($query->isNullDatetime('modified_date'));
+	 *
+	 * @param   string  $column  A column name.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function isNullDatetime($column);
+
+	/**
 	 * Add an ordering column to the ORDER clause of the query.
 	 *
 	 * Usage:
