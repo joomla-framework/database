@@ -199,14 +199,10 @@ class PathTest extends FilesystemTestCase
 	public function dataCheckValidPaths()
 	{
 		return array(
+			array('/var/foo'),
 			array('/var/foo/bar'),
 			array('/var/fo.o/bar'),
 			array('/var/./bar'),
-			array('/var/foo..bar'),
-			array('/var/foo/..bar'),
-			array('/var/foo../bar'),
-			array('/var/foo/bar..'),
-			array('/var/..foo./bar'),
 		);
 	}
 
@@ -222,6 +218,11 @@ class PathTest extends FilesystemTestCase
 	 */
 	public function testCheckValidPaths($data)
 	{
+		if (DIRECTORY_SEPARATOR === '\\')
+		{
+			$this->markTestSkipped('Checking paths is not supported on Windows');
+		}
+
 		$this->assertEquals(
 			Path::clean(__DIR__ . $data),
 			Path::check(__DIR__ . $data)
@@ -240,8 +241,12 @@ class PathTest extends FilesystemTestCase
 		return array(
 			array('../var/foo/bar'),
 			array('/var/../foo/bar'),
+			array('/var/foo../bar'),
 			array('/var/foo/..'),
-			array('/var/foo'),
+			array('/var/foo..bar'),
+			array('/var/foo/..bar'),
+			array('/var/foo/bar..'),
+			array('/var/..foo./bar'),
 		);
 	}
 
@@ -253,12 +258,12 @@ class PathTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @dataProvider dataCheckExceptionPaths
-	 * @expectedException Exception
+	 * @expectedException Joomla\Filesystem\Exception\FilesystemException
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testCheckExceptionPaths($data)
 	{
-		Path::check($data);
+		Path::check(__DIR__ . $data);
 	}
 
 	/**

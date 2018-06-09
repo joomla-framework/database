@@ -8,6 +8,8 @@
 
 namespace Joomla\Filesystem;
 
+use Joomla\Filesystem\Exception\FilesystemException;
+
 if (!defined('JPATH_ROOT'))
 {
 	throw new \LogicException('The "JPATH_ROOT" constant must be defined for your application.');
@@ -168,20 +170,33 @@ class Path
 	 * @return  string  A cleaned version of the path or exit on error.
 	 *
 	 * @since   1.0
-	 * @throws  \Exception
+	 * @throws  FilesystemException
 	 */
 	public static function check($path)
 	{
-		if (strpos($path, '/') !== 0 || strpos($path, '/../') !== false || strpos($path, '/..') + 3 == strlen($path))
+		if (strpos($path, '..') !== false)
 		{
-			throw new \Exception('JPath::check Use of relative paths not permitted', 20);
+			throw new FilesystemException(
+				sprintf(
+					'%s() - Use of relative paths not permitted',
+					__METHOD__
+				),
+				20
+			);
 		}
 
 		$path = static::clean($path);
 
 		if ((JPATH_ROOT != '') && strpos($path, static::clean(JPATH_ROOT)) !== 0)
 		{
-			throw new \Exception('JPath::check Snooping out of bounds @ ' . $path, 20);
+			throw new FilesystemException(
+				sprintf(
+					'%1$s() - Snooping out of bounds @ %2$s',
+					__METHOD__,
+					$path
+				),
+				20
+			);
 		}
 
 		return $path;
