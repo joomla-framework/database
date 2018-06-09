@@ -6,18 +6,19 @@
 
 namespace Joomla\Filesystem\Tests;
 
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Path;
 use Joomla\Filesystem\Stream;
 use Joomla\Filesystem\Support\StringController;
 use Joomla\Test\TestHelper;
 use org\bovigo\vfs\vfsStream;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Stream.
  *
  * @since  1.0
  */
-class StreamTest extends TestCase
+class StreamTest extends FilesystemTestCase
 {
 	const WRITE_PREFIX = 'WRITE_PREFIX/';
 	const READ_PREFIX = 'READ_PREFIX/';
@@ -599,6 +600,8 @@ class StreamTest extends TestCase
 	 */
 	public function testChmodNoFilename()
 	{
+		$this->skipIfUnableToChmod();
+
 		$this->object->chmod();
 	}
 
@@ -609,38 +612,42 @@ class StreamTest extends TestCase
 	 */
 	public function testChmod()
 	{
-		$name = 'tempFile';
-		$path = __DIR__ . '/tmp/';
-		$data = 'Lorem ipsum dolor sit amet';
-		$filename = $path . $name;
+		$this->skipIfUnableToChmod();
 
-		// Create a temp file to test copy operation
-		if (!@file_put_contents($filename, $data))
+		$name = 'tempFile';
+		$data = 'Lorem ipsum dolor sit amet';
+
+		if (!File::write($this->testPath . '/' . $name, $data))
 		{
-			$this->markTestSkipped('Temp file could not be written');
+			$this->markTestSkipped('The test file could not be created.');
 		}
 
-		$this->assertTrue($this->object->chmod($filename, 0777));
+		// The parent test case sets umask(0) therefore we are creating files with 0666 permissions
+		$this->assertTrue(
+			$this->object->chmod($this->testPath . '/' . $name, 0644)
+		);
 
-		$this->assertEquals(
-			'0777',
-			substr(sprintf('%o', fileperms($filename)), -4)
+		// PHP caches permissions lookups, clear it before continuing
+		clearstatcache();
+
+		$this->assertSame(
+			'rw-r--r--',
+			Path::getPermissions($this->testPath . '/' . $name)
 		);
 
 		$this->object = Stream::getStream();
-		$this->object->open($filename, 'w');
+		$this->object->open($this->testPath . '/' . $name, 'w');
 
-		$this->assertTrue($this->object->chmod('', 0644));
-
-		$this->object->close();
+		$this->assertTrue($this->object->chmod('', 0666));
 
 		clearstatcache();
-		$this->assertEquals(
-			'0644',
-			substr(sprintf('%o', fileperms($filename)), -4)
+
+		$this->assertSame(
+			'rw-rw-rw-',
+			Path::getPermissions($this->testPath . '/' . $name)
 		);
 
-		unlink($filename);
+		$this->object->close();
 	}
 
 	/**
@@ -1103,8 +1110,8 @@ class StreamTest extends TestCase
 			array('one', 'two', 'foobar', 'w', true, false, 'onefoobar'),
 			array('one', 'two', 'foobar', 'r', true, true, 'twofoobar'),
 			array('one', 'two', 'foobar', 'w', true, true, 'onefoobar'),
-			array('one', 'two', __DIR__ . '/foobar', 'r', true, false, 'two/Tests/foobar'),
-			array('one', 'two', __DIR__ . '/foobar', 'w', true, false, 'one/Tests/foobar'),
+			array('one', 'two', __DIR__ . '/foobar', 'r', true, false, 'two' . DIRECTORY_SEPARATOR . 'Tests/foobar'),
+			array('one', 'two', __DIR__ . '/foobar', 'w', true, false, 'one' . DIRECTORY_SEPARATOR . 'Tests/foobar'),
 		);
 	}
 
