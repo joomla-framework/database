@@ -49,6 +49,11 @@ install:
           Add-Content php.ini "`n extension=php_openssl.dll"
           Add-Content php.ini "`n extension=php_fileinfo.dll"
 
+          # Enable FTP extension on PHP 7
+          If ($env:php -ne "5.6") {
+            Add-Content php.ini "`n extension=php_ftp.dll"
+          }
+
           Remove-Item c:\tools\php\* -include .zip
           cd c:\tools\php
 
