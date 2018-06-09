@@ -331,18 +331,17 @@ class PathTest extends FilesystemTestCase
 	 */
 	public function testIsOwner()
 	{
-		$path = __DIR__ . '/tmp/setPermission';
-		file_put_contents($path, "Joomla");
+		$name = 'tempFile';
+		$data = 'Lorem ipsum dolor sit amet';
 
-		$this->assertFalse(
-			Path::isOwner('/')
-		);
+		if (!File::write($this->testPath . '/' . $name, $data))
+		{
+			$this->markTestSkipped('The test file could not be created.');
+		}
 
 		$this->assertTrue(
-			Path::isOwner($path)
+			Path::isOwner($this->testPath . '/' . $name)
 		);
-
-		unlink($path);
 	}
 
 	/**
@@ -354,8 +353,7 @@ class PathTest extends FilesystemTestCase
 	 */
 	public function testFind()
 	{
-		$this->assertNotEquals(
-			__FILE__,
+		$this->assertFalse(
 			Path::find(dirname(__DIR__), 'PathTest.php')
 		);
 
