@@ -25,6 +25,8 @@ class PathTest extends FilesystemTestCase
 	 */
 	public function testCanChmodFile()
 	{
+		$this->skipIfUnableToChmod();
+
 		$name = 'tempFile';
 		$data = 'Lorem ipsum dolor sit amet';
 
@@ -47,6 +49,8 @@ class PathTest extends FilesystemTestCase
 	 */
 	public function testCanChmodFolder()
 	{
+		$this->skipIfUnableToChmod();
+
 		$this->assertTrue(
 			Path::canChmod($this->testPath)
 		);
@@ -61,6 +65,8 @@ class PathTest extends FilesystemTestCase
 	 */
 	public function testCanChmodNonExistingFile()
 	{
+		$this->skipIfUnableToChmod();
+
 		$this->assertFalse(
 			Path::canChmod($this->testPath . '/tempFile')
 		);
@@ -75,6 +81,8 @@ class PathTest extends FilesystemTestCase
 	 */
 	public function testSetAndGetPermissionsFile()
 	{
+		$this->skipIfUnableToChmod();
+
 		$name = 'tempFile';
 		$data = 'Lorem ipsum dolor sit amet';
 
@@ -111,6 +119,8 @@ class PathTest extends FilesystemTestCase
 	 */
 	public function testSetAndGetPermissionsFolder()
 	{
+		$this->skipIfUnableToChmod();
+
 		// The parent test case sets umask(0) therefore we are creating folders with 0777 permissions
 		$this->assertSame(
 			'rwxrwxrwx',
@@ -139,6 +149,8 @@ class PathTest extends FilesystemTestCase
 	 */
 	public function testSetAndGetPermissionsFolderWithFiles()
 	{
+		$this->skipIfUnableToChmod();
+
 		$name = 'tempFile';
 		$data = 'Lorem ipsum dolor sit amet';
 

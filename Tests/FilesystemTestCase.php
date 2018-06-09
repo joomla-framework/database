@@ -79,4 +79,17 @@ class FilesystemTestCase extends TestCase
 
 		umask($this->umask);
 	}
+
+	/**
+	 * Skip a test if unable to perform chmod
+	 *
+	 * @return void
+	 */
+	protected function skipIfUnableToChmod()
+	{
+		if (DIRECTORY_SEPARATOR === '\\')
+		{
+			$this->markTestSkipped('chmod is not supported on Windows');
+		}
+	}
 }
