@@ -17,7 +17,8 @@ use PHPUnit\Framework\TestCase;
 class BufferTest extends TestCase
 {
 	/**
-	 * @var JBuffer
+	 * @var    Buffer
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected $object;
 
@@ -25,7 +26,9 @@ class BufferTest extends TestCase
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function setUp()
 	{
@@ -35,19 +38,11 @@ class BufferTest extends TestCase
 	}
 
 	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 *
-	 * @return void
-	 */
-	protected function tearDown()
-	{
-	}
-
-	/**
 	 * Test cases for the stream_open test
 	 *
-	 * @return array
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function casesOpen()
 	{
@@ -63,7 +58,7 @@ class BufferTest extends TestCase
 	}
 
 	/**
-	 * testing stream_open().
+	 * Test stream_open method.
 	 *
 	 * @param   string  $path         The path to buffer
 	 * @param   string  $mode         The mode of the buffer
@@ -71,8 +66,10 @@ class BufferTest extends TestCase
 	 * @param   string  $opened_path  The path
 	 * @param   string  $expected     The expected test return
 	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 * @dataProvider casesOpen
-	 * @return void
 	 */
 	public function testStreamOpen($path, $mode, $options, $opened_path, $expected)
 	{
@@ -86,7 +83,9 @@ class BufferTest extends TestCase
 	/**
 	 * Test cases for the stream_read test
 	 *
-	 * @return array
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function casesRead()
 	{
@@ -102,16 +101,18 @@ class BufferTest extends TestCase
 	}
 
 	/**
-	 * testing stream_read().
+	 * Test stream_read method.
 	 *
-	 * @param   string  $buffer    The buffer to perform the operation upon
-	 * @param   string  $name      The name of the buffer
-	 * @param   int     $position  The position in the buffer of the current pointer
-	 * @param   int     $count     The movement of the pointer
-	 * @param   bool    $expected  The expected test return
+	 * @param   string   $buffer    The buffer to perform the operation upon
+	 * @param   string   $name      The name of the buffer
+	 * @param   integer  $position  The position in the buffer of the current pointer
+	 * @param   integer  $count     The movement of the pointer
+	 * @param   boolean  $expected  The expected test return
 	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 * @dataProvider casesRead
-	 * @return void
 	 */
 	public function testStreamRead($buffer, $name, $position, $count, $expected)
 	{
@@ -128,7 +129,9 @@ class BufferTest extends TestCase
 	/**
 	 * Test cases for the stream_write test
 	 *
-	 * @return array
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function casesWrite()
 	{
@@ -144,16 +147,18 @@ class BufferTest extends TestCase
 	}
 
 	/**
-	 * testing stream_write().
+	 * Test stream_write method.
 	 *
-	 * @param   string  $buffer    The buffer to perform the operation upon
-	 * @param   string  $name      The name of the buffer
-	 * @param   int     $position  The position in the buffer of the current pointer
-	 * @param   string  $write     The data to write
-	 * @param   bool    $expected  The expected test return
+	 * @param   string   $buffer    The buffer to perform the operation upon
+	 * @param   string   $name      The name of the buffer
+	 * @param   integer  $position  The position in the buffer of the current pointer
+	 * @param   string   $write     The data to write
+	 * @param   boolean  $expected  The expected test return
 	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 * @dataProvider casesWrite
-	 * @return void
 	 */
 	public function testStreamWrite($buffer, $name, $position, $write, $expected)
 	{
@@ -169,9 +174,11 @@ class BufferTest extends TestCase
 	}
 
 	/**
-	 * Testing stream_tell.
+	 * Test stream_tell method.
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function testStreamTell()
 	{
@@ -187,7 +194,9 @@ class BufferTest extends TestCase
 	/**
 	 * Test cases for the stream_eof test
 	 *
-	 * @return array
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function casesEof()
 	{
@@ -208,15 +217,17 @@ class BufferTest extends TestCase
 	}
 
 	/**
-	 * Testing stream_eof.
+	 * Test stream_eof method.
 	 *
-	 * @param   string  $buffer    The buffer to perform the operation upon
-	 * @param   string  $name      The name of the buffer
-	 * @param   int     $position  The position in the buffer of the current pointer
-	 * @param   bool    $expected  The expected test return
+	 * @param   string   $buffer    The buffer to perform the operation upon
+	 * @param   string   $name      The name of the buffer
+	 * @param   integer  $position  The position in the buffer of the current pointer
+	 * @param   boolean  $expected  The expected test return
 	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 * @dataProvider casesEof
-	 * @return void
 	 */
 	public function testStreamEof($buffer, $name, $position, $expected)
 	{
@@ -233,7 +244,9 @@ class BufferTest extends TestCase
 	/**
 	 * Test cases for the stream_seek test
 	 *
-	 * @return array
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function casesSeek()
 	{
@@ -314,18 +327,20 @@ class BufferTest extends TestCase
 	}
 
 	/**
-	 * Testing stream_seek.
+	 * Test stream_seek method.
 	 *
-	 * @param   string  $buffer       The buffer to perform the operation upon
-	 * @param   string  $name         The name of the buffer
-	 * @param   int     $position     The position in the buffer of the current pointer
-	 * @param   int     $offset       The movement of the pointer
-	 * @param   int     $whence       The buffer seek op code
-	 * @param   bool    $expected     The expected test return
-	 * @param   int     $expectedPos  The new buffer position pointer
+	 * @param   string   $buffer       The buffer to perform the operation upon
+	 * @param   string   $name         The name of the buffer
+	 * @param   integer  $position     The position in the buffer of the current pointer
+	 * @param   integer  $offset       The movement of the pointer
+	 * @param   integer  $whence       The buffer seek op code
+	 * @param   boolean  $expected     The expected test return
+	 * @param   integer  $expectedPos  The new buffer position pointer
 	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
 	 * @dataProvider casesSeek
-	 * @return void
 	 */
 	public function testStreamSeek($buffer, $name, $position, $offset, $whence, $expected, $expectedPos)
 	{

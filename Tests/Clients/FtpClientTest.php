@@ -7,6 +7,7 @@
 namespace Joomla\Filesystem\Clients\Tests;
 
 use Joomla\Filesystem\Clients\FtpClient;
+use Joomla\Test\TestHelper;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,11 +38,9 @@ class FtpClientTest extends TestCase
 	/**
 	 * Test...
 	 *
-	 * @todo Implement test__destruct().
-	 *
 	 * @return void
 	 */
-	public function test__destruct()
+	public function test__construct()
 	{
 		// Remove the following lines when you implement this test.
 		$this->markTestIncomplete('This test has not been implemented yet.');

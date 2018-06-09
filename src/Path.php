@@ -8,6 +8,8 @@
 
 namespace Joomla\Filesystem;
 
+use Joomla\Filesystem\Exception\FilesystemException;
+
 if (!defined('JPATH_ROOT'))
 {
 	throw new \LogicException('The "JPATH_ROOT" constant must be defined for your application.');
@@ -36,7 +38,7 @@ class Path
 			return false;
 		}
 
-		$perms = fileperms($path);
+		$perms = @fileperms($path);
 
 		if ($perms !== false)
 		{
@@ -69,39 +71,42 @@ class Path
 
 		if (is_dir($path))
 		{
-			$dh = opendir($path);
+			$dh = @opendir($path);
 
-			while ($file = readdir($dh))
+			if ($dh)
 			{
-				if ($file != '.' && $file != '..')
+				while ($file = readdir($dh))
 				{
-					$fullpath = $path . '/' . $file;
+					if ($file != '.' && $file != '..')
+					{
+						$fullpath = $path . '/' . $file;
 
-					if (is_dir($fullpath))
-					{
-						if (!self::setPermissions($fullpath, $filemode, $foldermode))
+						if (is_dir($fullpath))
 						{
-							$ret = false;
-						}
-					}
-					else
-					{
-						if (isset($filemode))
-						{
-							if (!@ chmod($fullpath, octdec($filemode)))
+							if (!static::setPermissions($fullpath, $filemode, $foldermode))
 							{
 								$ret = false;
 							}
 						}
+						else
+						{
+							if (isset($filemode))
+							{
+								if (!static::canChmod($fullpath) || !@ chmod($fullpath, octdec($filemode)))
+								{
+									$ret = false;
+								}
+							}
+						}
 					}
 				}
-			}
 
-			closedir($dh);
+				closedir($dh);
+			}
 
 			if (isset($foldermode))
 			{
-				if (!@ chmod($path, octdec($foldermode)))
+				if (!static::canChmod($path) || !@ chmod($path, octdec($foldermode)))
 				{
 					$ret = false;
 				}
@@ -111,7 +116,10 @@ class Path
 		{
 			if (isset($filemode))
 			{
-				$ret = @ chmod($path, octdec($filemode));
+				if (!static::canChmod($path) || !@ chmod($path, octdec($filemode)))
+				{
+					$ret = false;
+				}
 			}
 		}
 
@@ -162,20 +170,33 @@ class Path
 	 * @return  string  A cleaned version of the path or exit on error.
 	 *
 	 * @since   1.0
-	 * @throws  \Exception
+	 * @throws  FilesystemException
 	 */
 	public static function check($path)
 	{
 		if (strpos($path, '..') !== false)
 		{
-			throw new \Exception('JPath::check Use of relative paths not permitted', 20);
+			throw new FilesystemException(
+				sprintf(
+					'%s() - Use of relative paths not permitted',
+					__METHOD__
+				),
+				20
+			);
 		}
 
-		$path = self::clean($path);
+		$path = static::clean($path);
 
-		if ((JPATH_ROOT != '') && strpos($path, self::clean(JPATH_ROOT)) !== 0)
+		if ((JPATH_ROOT != '') && strpos($path, static::clean(JPATH_ROOT)) !== 0)
 		{
-			throw new \Exception('JPath::check Snooping out of bounds @ ' . $path, 20);
+			throw new FilesystemException(
+				sprintf(
+					'%1$s() - Snooping out of bounds @ %2$s',
+					__METHOD__,
+					$path
+				),
+				20
+			);
 		}
 
 		return $path;
@@ -199,6 +220,16 @@ class Path
 			throw new \UnexpectedValueException('JPath::clean $path is not a string.');
 		}
 
+		$stream = explode("://", $path, 2);
+		$scheme = '';
+		$path = $stream[0];
+
+		if (count($stream) >= 2)
+		{
+			$scheme = $stream[0] . '://';
+			$path = $stream[1];
+		}
+
 		$path = trim($path);
 
 		if (empty($path))
@@ -216,7 +247,7 @@ class Path
 			$path = preg_replace('#[/\\\\]+#', $ds, $path);
 		}
 
-		return $path;
+		return $scheme . $path;
 	}
 
 	/**
@@ -232,7 +263,7 @@ class Path
 	{
 		$tmp = md5(random_bytes(16));
 		$ssp = ini_get('session.save_path');
-		$jtp = JPATH_ROOT . '/tmp';
+		$jtp = JPATH_ROOT;
 
 		// Try to find a writable directory
 		$dir = is_writable('/tmp') ? '/tmp' : false;

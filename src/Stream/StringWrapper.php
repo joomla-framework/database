@@ -99,7 +99,9 @@ class StringWrapper
 	 */
 	public function stream_open($path, $mode, $options, &$openedPath)
 	{
-		$this->currentString = &StringController::getRef(str_replace('string://', '', $path));
+		$refPath = StringController::getRef(str_replace('string://', '', $path));
+
+		$this->currentString = &$refPath;
 
 		if ($this->currentString)
 		{
@@ -140,7 +142,8 @@ class StringWrapper
 	public function url_stat($path, $flags = 0)
 	{
 		$now = time();
-		$string = &StringController::getRef(str_replace('string://', '', $path));
+		$refPath = StringController::getRef(str_replace('string://', '', $path));
+		$string = &$refPath;
 		$stat = array(
 			'dev' => 0,
 			'ino' => 0,
@@ -216,7 +219,7 @@ class StringWrapper
 	 */
 	public function stream_eof()
 	{
-		if ($this->pos > $this->len)
+		if ($this->pos >= $this->len)
 		{
 			return true;
 		}
@@ -250,7 +253,7 @@ class StringWrapper
 				break;
 
 			case SEEK_CUR:
-				if (($this->pos + $offset) >= $this->len)
+				if (($this->pos + $offset) > $this->len)
 				{
 					return false;
 				}

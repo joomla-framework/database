@@ -84,7 +84,12 @@ class File
 
 		if ($useStreams)
 		{
-			Stream::getStream()->copy($src, $dest);
+			$stream = Stream::getStream();
+
+			if (!$stream->copy($src, $dest, null, false))
+			{
+				throw new FilesystemException(sprintf('%1$s(%2$s, %3$s): %4$s', __METHOD__, $src, $dest, $stream->getError()));
+			}
 
 			return true;
 		}
@@ -114,6 +119,12 @@ class File
 		foreach ($files as $file)
 		{
 			$file = Path::clean($file);
+			$filename = basename($file);
+
+			if (!Path::canChmod($file))
+			{
+				throw new FilesystemException(__METHOD__ . ': Failed deleting inaccessible file ' . $filename);
+			}
 
 			// Try making the file writable first. If it's read-only, it can't be deleted
 			// on Windows, even if the parent folder is writable
@@ -123,8 +134,6 @@ class File
 			// as long as the owner is either the webserver or the ftp
 			if (!@ unlink($file))
 			{
-				$filename = basename($file);
-
 				throw new FilesystemException(__METHOD__ . ': Failed deleting ' . $filename);
 			}
 		}
@@ -161,7 +170,12 @@ class File
 
 		if ($useStreams)
 		{
-			Stream::getStream()->move($src, $dest);
+			$stream = Stream::getStream();
+
+			if (!$stream->move($src, $dest, null, false))
+			{
+				throw new FilesystemException(__METHOD__ . ': ' . $stream->getError());
+			}
 
 			return true;
 		}
@@ -232,14 +246,19 @@ class File
 		// Create the destination directory if it does not exist
 		$baseDir = dirname($dest);
 
-		if (!file_exists($baseDir))
+		if (!is_dir($baseDir))
 		{
 			Folder::create($baseDir);
 		}
 
 		if ($useStreams)
 		{
-			Stream::getStream()->upload($src, $dest);
+			$stream = Stream::getStream();
+
+			if (!$stream->upload($src, $dest, null, false))
+			{
+				throw new FilesystemException(sprintf('%1$s(%2$s, %3$s): %4$s', __METHOD__, $src, $dest, $stream->getError()));
+			}
 
 			return true;
 		}

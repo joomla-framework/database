@@ -230,10 +230,18 @@ class Stream
 
 		if (isset($url['scheme']))
 		{
+			$scheme = ucfirst($url['scheme']);
+
 			// If we're dealing with a Joomla! stream, load it
-			if (Helper::isJoomlaStream($url['scheme']))
+			if (Helper::isJoomlaStream($scheme))
 			{
-				require_once __DIR__ . '/streams/' . $url['scheme'] . '.php';
+				// Map to StringWrapper if required
+				if ($scheme === 'String')
+				{
+					$scheme = 'StringWrapper';
+				}
+
+				require_once __DIR__ . '/Stream/' . $scheme . '.php';
 			}
 
 			// We have a scheme! force the method to be f
@@ -287,28 +295,28 @@ class Stream
 				// One supplied at open; overrides everything
 				if ($context)
 				{
-					$this->fh = fopen($filename, $mode, $useIncludePath, $context);
+					$this->fh = @fopen($filename, $mode, $useIncludePath, $context);
 				}
 				elseif ($this->context)
 				// One provided at initialisation
 				{
-					$this->fh = fopen($filename, $mode, $useIncludePath, $this->context);
+					$this->fh = @fopen($filename, $mode, $useIncludePath, $this->context);
 				}
 				else
 				// No context; all defaults
 				{
-					$this->fh = fopen($filename, $mode, $useIncludePath);
+					$this->fh = @fopen($filename, $mode, $useIncludePath);
 				}
 				break;
 		}
+
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
 
 		if (!$this->fh)
 		{
 			throw new FilesystemException($php_errormsg);
 		}
-
-		// Restore error tracking to what it was before
-		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return true;
@@ -353,6 +361,9 @@ class Stream
 				break;
 		}
 
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
+
 		if (!$res)
 		{
 			throw new FilesystemException($php_errormsg);
@@ -366,9 +377,6 @@ class Stream
 		{
 			$this->chmod();
 		}
-
-		// Restore error tracking to what it was before
-		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return true;
@@ -407,13 +415,13 @@ class Stream
 				break;
 		}
 
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
+
 		if ($php_errormsg)
 		{
 			throw new FilesystemException($php_errormsg);
 		}
-
-		// Restore error tracking to what it was before
-		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return $res;
@@ -455,6 +463,9 @@ class Stream
 
 			if (!$res)
 			{
+				// Restore error tracking to what it was before.
+				ini_set('track_errors', $trackErrors);
+
 				if ($tmpError)
 				{
 					// Use the php_errormsg from before
@@ -464,11 +475,9 @@ class Stream
 				// Error but nothing from php? How strange! Create our own
 				throw new FilesystemException('Failed to get file size. This may not work for all streams.');
 			}
-			else
-			{
-				$this->filesize = $res;
-				$retval = $res;
-			}
+
+			$this->filesize = $res;
+			$retval = $res;
 		}
 		else
 		{
@@ -518,13 +527,13 @@ class Stream
 				break;
 		}
 
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
+
 		if (!$res)
 		{
 			throw new FilesystemException($php_errormsg);
 		}
-
-		// Restore error tracking to what it was before
-		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return $res;
@@ -545,6 +554,11 @@ class Stream
 	 */
 	public function read($length = 0)
 	{
+		if (!$this->fh)
+		{
+			throw new FilesystemException('File not open');
+		}
+
 		if (!$this->filesize && !$length)
 		{
 			// Get the filesize
@@ -559,11 +573,6 @@ class Stream
 			{
 				$length = $this->filesize;
 			}
-		}
-
-		if (!$this->fh)
-		{
-			throw new FilesystemException('File not open');
 		}
 
 		$retval = false;
@@ -595,6 +604,9 @@ class Stream
 
 			if (!$res)
 			{
+				// Restore error tracking to what it was before
+				ini_set('track_errors', $trackErrors);
+
 				throw new FilesystemException($php_errormsg);
 			}
 
@@ -666,14 +678,14 @@ class Stream
 				break;
 		}
 
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
+
 		// Seek, interestingly, returns 0 on success or -1 on failure.
 		if ($res == -1)
 		{
 			throw new FilesystemException($php_errormsg);
 		}
-
-		// Restore error tracking to what it was before
-		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return true;
@@ -712,14 +724,14 @@ class Stream
 				break;
 		}
 
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
+
 		// May return 0 so check if it's really false
 		if ($res === false)
 		{
 			throw new FilesystemException($php_errormsg);
 		}
-
-		// Restore error tracking to what it was before
-		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return $res;
@@ -753,6 +765,11 @@ class Stream
 			throw new FilesystemException('File not open');
 		}
 
+		if ($this->openmode == 'r')
+		{
+			throw new \RuntimeException('File is in readonly mode');
+		}
+
 		// If the length isn't set, set it to the length of the string.
 		if (!$length)
 		{
@@ -783,11 +800,17 @@ class Stream
 			// Returns false on error or the number of bytes written
 			if ($res === false)
 			{
+				// Restore error tracking to what it was before
+				ini_set('track_errors', $trackErrors);
+
 				// Returned error
 				throw new FilesystemException($php_errormsg);
 			}
 			elseif ($res === 0)
 			{
+				// Restore error tracking to what it was before
+				ini_set('track_errors', $trackErrors);
+
 				// Wrote nothing?
 				throw new FilesystemException('Warning: No data written');
 			}
@@ -856,14 +879,14 @@ class Stream
 				break;
 		}
 
+		// Restore error tracking to what it was before.
+		ini_set('track_errors', $trackErrors);
+
 		// Seek, interestingly, returns 0 on success or -1 on failure
-		if (!$res)
+		if ($res === false)
 		{
 			throw new FilesystemException($php_errormsg);
 		}
-
-		// Restore error tracking to what it was before.
-		ini_set('track_errors', $trackErrors);
 
 		// Return the result
 		return true;
@@ -1003,13 +1026,13 @@ class Stream
 			ini_set('track_errors', true);
 			$retval = @stream_context_set_option($this->fh, $this->contextOptions);
 
+			// Restore error tracking to what it was before
+			ini_set('track_errors', $trackErrors);
+
 			if (!$retval)
 			{
 				throw new FilesystemException($php_errormsg);
 			}
-
-			// Restore error tracking to what it was before
-			ini_set('track_errors', $trackErrors);
 		}
 
 		return $retval;
@@ -1042,15 +1065,15 @@ class Stream
 
 			$res = @stream_filter_append($this->fh, $filtername, $readWrite, $params);
 
+			// Restore error tracking to what it was before.
+			ini_set('track_errors', $trackErrors);
+
 			if (!$res && $php_errormsg)
 			{
 				throw new FilesystemException($php_errormsg);
 			}
 
 			$this->filters[] = &$res;
-
-			// Restore error tracking to what it was before.
-			ini_set('track_errors', $trackErrors);
 		}
 
 		return $res;
@@ -1081,17 +1104,17 @@ class Stream
 			ini_set('track_errors', true);
 			$res = @stream_filter_prepend($this->fh, $filtername, $readWrite, $params);
 
+			// Restore error tracking to what it was before.
+			ini_set('track_errors', $trackErrors);
+
 			if (!$res && $php_errormsg)
 			{
 				// Set the error msg
 				throw new FilesystemException($php_errormsg);
 			}
 
-			array_unshift($res, '');
-			$res[0] = &$this->filters;
-
-			// Restore error tracking to what it was before.
-			ini_set('track_errors', $trackErrors);
+			array_unshift($this->filters, '');
+			$this->filters[0] = &$res;
 		}
 
 		return $res;
@@ -1125,13 +1148,13 @@ class Stream
 			$res = stream_filter_remove($resource);
 		}
 
-		if ($res && $php_errormsg)
+		// Restore error tracking to what it was before.
+		ini_set('track_errors', $trackErrors);
+
+		if (!$res)
 		{
 			throw new FilesystemException($php_errormsg);
 		}
-
-		// Restore error tracking to what it was before.
-		ini_set('track_errors', $trackErrors);
 
 		return $res;
 	}
@@ -1153,7 +1176,6 @@ class Stream
 	public function copy($src, $dest, $context = null, $usePrefix = true, $relative = false)
 	{
 		// Capture PHP errors
-		$php_errormsg = '';
 		$trackErrors = ini_get('track_errors');
 		ini_set('track_errors', true);
 
@@ -1164,21 +1186,27 @@ class Stream
 		$src = $this->_getFilename($src, 'w', $usePrefix, $relative);
 		$dest = $this->_getFilename($dest, 'w', $usePrefix, $relative);
 
+		// One supplied at copy; overrides everything
 		if ($context)
 		{
 			// Use the provided context
 			$res = @copy($src, $dest, $context);
 		}
 		elseif ($this->context)
+		// One provided at initialisation
 		{
 			// Use the objects context
 			$res = @copy($src, $dest, $this->context);
 		}
 		else
+		// No context; all defaults
 		{
 			// Don't use any context
 			$res = @copy($src, $dest);
 		}
+
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
 
 		if (!$res && $php_errormsg)
 		{
@@ -1186,9 +1214,6 @@ class Stream
 		}
 
 		$this->chmod($chmodDest);
-
-		// Restore error tracking to what it was before
-		ini_set('track_errors', $trackErrors);
 
 		return $res;
 	}
@@ -1233,15 +1258,15 @@ class Stream
 			$res = @rename($src, $dest);
 		}
 
-		if (!$res && $php_errormsg)
+		// Restore error tracking to what it was before
+		ini_set('track_errors', $trackErrors);
+
+		if (!$res)
 		{
 			throw new FilesystemException($php_errormsg);
 		}
 
 		$this->chmod($dest);
-
-		// Restore error tracking to what it was before
-		ini_set('track_errors', $trackErrors);
 
 		return $res;
 	}
@@ -1284,13 +1309,13 @@ class Stream
 			$res = @unlink($filename);
 		}
 
-		if (!$res && $php_errormsg)
+		// Restore error tracking to what it was before.
+		ini_set('track_errors', $trackErrors);
+
+		if (!$res)
 		{
 			throw new FilesystemException($php_errormsg);
 		}
-
-		// Restore error tracking to what it was before.
-		ini_set('track_errors', $trackErrors);
 
 		return $res;
 	}
@@ -1362,6 +1387,16 @@ class Stream
 		{
 			// Get rid of binary or t, should be at the end of the string
 			$tmode = trim($mode, 'btf123456789');
+
+			$stream = explode("://", $filename, 2);
+			$scheme = '';
+			$filename = $stream[0];
+
+			if (count($stream) >= 2)
+			{
+				$scheme = $stream[0] . '://';
+				$filename = $stream[1];
+			}
 
 			// Check if it's a write mode then add the appropriate prefix
 			if (in_array($tmode, Helper::getWriteModes()))
