@@ -6,15 +6,15 @@
 
 namespace Joomla\Filesystem\Tests;
 
+use Joomla\Filesystem\File;
 use Joomla\Filesystem\Path;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for the Path class.
  *
  * @since  1.0
  */
-class PathTest extends TestCase
+class PathTest extends FilesystemTestCase
 {
 	/**
 	 * Test canChmod method.
@@ -23,24 +23,47 @@ class PathTest extends TestCase
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function testCanChmod()
+	public function testCanChmodFile()
 	{
-		$path = __DIR__ . '/tmp/canChangePermission';
-		file_put_contents($path, "Joomla");
+		$name = 'tempFile';
+		$data = 'Lorem ipsum dolor sit amet';
 
-		$this->assertFalse(
-			Path::canChmod('/')
-		);
-
-		$this->assertFalse(
-			Path::canChmod('/foobar')
-		);
+		if (!File::write($this->testPath . '/' . $name, $data))
+		{
+			$this->markTestSkipped('The test file could not be created.');
+		}
 
 		$this->assertTrue(
-			Path::canChmod($path)
+			Path::canChmod($this->testPath . '/' . $name)
 		);
+	}
 
-		unlink($path);
+	/**
+	 * Test canChmod method.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testCanChmodFolder()
+	{
+		$this->assertTrue(
+			Path::canChmod($this->testPath)
+		);
+	}
+
+	/**
+	 * Test canChmod method.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testCanChmodNonExistingFile()
+	{
+		$this->assertFalse(
+			Path::canChmod($this->testPath . '/tempFile')
+		);
 	}
 
 	/**
@@ -50,59 +73,108 @@ class PathTest extends TestCase
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function testSetPermissions()
+	public function testSetAndGetPermissionsFile()
 	{
-		$path = __DIR__ . '/tmp/setPermission';
-		file_put_contents($path, "Joomla");
-		chmod($path, 0644);
+		$name = 'tempFile';
+		$data = 'Lorem ipsum dolor sit amet';
 
-		$this->assertFalse(
-			Path::setPermissions('/var/www')
+		if (!File::write($this->testPath . '/' . $name, $data))
+		{
+			$this->markTestSkipped('The test file could not be created.');
+		}
+
+		// The parent test case sets umask(0) therefore we are creating files with 0666 permissions
+		$this->assertSame(
+			'rw-rw-rw-',
+			Path::getPermissions($this->testPath . '/' . $name)
 		);
 
-		$this->assertFalse(
-			Path::setPermissions('/foobar')
+		$this->assertTrue(
+			Path::setPermissions($this->testPath . '/' . $name, '0644')
 		);
 
-		$this->assertEquals(
-			0777,
-			Path::setPermissions($path, 0777)
-		);
+		// PHP caches permissions lookups, clear it before continuing
+		clearstatcache();
 
-		unlink($path);
+		$this->assertSame(
+			'rw-r--r--',
+			Path::getPermissions($this->testPath . '/' . $name)
+		);
 	}
 
 	/**
-	 * Test getPermissions method.
+	 * Test setPermissions method.
 	 *
 	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function testGetPermissions()
+	public function testSetAndGetPermissionsFolder()
 	{
-		$this->assertEquals(
-			'---------',
-			Path::getPermissions('/foobar')
-		);
-
-		$path = __DIR__ . '/tmp/setPermission';
-
-		file_put_contents($path, "Joomla");
-		chmod($path, 0777);
-		$this->assertEquals(
+		// The parent test case sets umask(0) therefore we are creating folders with 0777 permissions
+		$this->assertSame(
 			'rwxrwxrwx',
-			Path::getPermissions($path)
+			Path::getPermissions($this->testPath)
 		);
-		unlink($path);
 
-		file_put_contents($path, "Joomla");
-		chmod($path, 0644);
-		$this->assertEquals(
-			'rw-r--r--',
-			Path::getPermissions($path)
+		$this->assertTrue(
+			Path::setPermissions($this->testPath, null, '0755')
 		);
-		unlink($path);
+
+		// PHP caches permissions lookups, clear it before continuing
+		clearstatcache();
+
+		$this->assertSame(
+			'rwxr-xr-x',
+			Path::getPermissions($this->testPath)
+		);
+	}
+
+	/**
+	 * Test setPermissions method.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testSetAndGetPermissionsFolderWithFiles()
+	{
+		$name = 'tempFile';
+		$data = 'Lorem ipsum dolor sit amet';
+
+		if (!File::write($this->testPath . '/' . $name, $data))
+		{
+			$this->markTestSkipped('The test file could not be created.');
+		}
+
+		// The parent test case sets umask(0) therefore we are creating files with 0666 permissions
+		$this->assertSame(
+			'rw-rw-rw-',
+			Path::getPermissions($this->testPath . '/' . $name)
+		);
+
+		// The parent test case sets umask(0) therefore we are creating folders with 0777 permissions
+		$this->assertSame(
+			'rwxrwxrwx',
+			Path::getPermissions($this->testPath)
+		);
+
+		$this->assertTrue(
+			Path::setPermissions($this->testPath, '0644', '0755')
+		);
+
+		// PHP caches permissions lookups, clear it before continuing
+		clearstatcache();
+
+		$this->assertSame(
+			'rw-r--r--',
+			Path::getPermissions($this->testPath . '/' . $name)
+		);
+
+		$this->assertSame(
+			'rwxr-xr-x',
+			Path::getPermissions($this->testPath)
+		);
 	}
 
 	/**
@@ -139,7 +211,7 @@ class PathTest extends TestCase
 	public function testCheckValidPaths($data)
 	{
 		$this->assertEquals(
-			__DIR__ . $data,
+			Path::clean(__DIR__ . $data),
 			Path::check(__DIR__ . $data)
 		);
 	}

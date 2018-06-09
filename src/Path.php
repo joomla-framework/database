@@ -81,7 +81,7 @@ class Path
 
 						if (is_dir($fullpath))
 						{
-							if (!self::setPermissions($fullpath, $filemode, $foldermode))
+							if (!static::setPermissions($fullpath, $filemode, $foldermode))
 							{
 								$ret = false;
 							}
@@ -90,7 +90,7 @@ class Path
 						{
 							if (isset($filemode))
 							{
-								if (!self::canChmod($fullpath) || !@ chmod($fullpath, octdec($filemode)))
+								if (!static::canChmod($fullpath) || !@ chmod($fullpath, octdec($filemode)))
 								{
 									$ret = false;
 								}
@@ -104,7 +104,7 @@ class Path
 
 			if (isset($foldermode))
 			{
-				if (!self::canChmod($path) || !@ chmod($path, octdec($foldermode)))
+				if (!static::canChmod($path) || !@ chmod($path, octdec($foldermode)))
 				{
 					$ret = false;
 				}
@@ -114,7 +114,7 @@ class Path
 		{
 			if (isset($filemode))
 			{
-				if (!self::canChmod($path) || !@ chmod($path, octdec($filemode)))
+				if (!static::canChmod($path) || !@ chmod($path, octdec($filemode)))
 				{
 					$ret = false;
 				}
@@ -177,9 +177,9 @@ class Path
 			throw new \Exception('JPath::check Use of relative paths not permitted', 20);
 		}
 
-		$path = self::clean($path);
+		$path = static::clean($path);
 
-		if ((JPATH_ROOT != '') && strpos($path, self::clean(JPATH_ROOT)) !== 0)
+		if ((JPATH_ROOT != '') && strpos($path, static::clean(JPATH_ROOT)) !== 0)
 		{
 			throw new \Exception('JPath::check Snooping out of bounds @ ' . $path, 20);
 		}
