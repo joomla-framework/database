@@ -1586,6 +1586,26 @@ abstract class DatabaseQuery implements QueryInterface
 	}
 
 	/**
+	 * Add a WHERE IN statement to the query
+	 *
+	 * Usage
+	 * $query->whereIn('id', [1, 2, 3]);
+	 *
+	 * @param   string $keyName   key name for the where clause
+	 * @param   array  $keyValues array of values to be matched
+	 *
+	 * @return  $this
+	 *
+	 * @since __DEPLOY_VERSION__
+	 */
+	public function whereIn($keyName, $keyValues)
+	{
+		return $this->where(
+			$keyName . ' IN (' . implode(', ', $keyValues) . ')'
+		);
+	}
+
+	/**
 	 * Extend the WHERE clause with a single condition or an array of conditions, with a potentially
 	 * different logical operator from the one in the current WHERE clause.
 	 *

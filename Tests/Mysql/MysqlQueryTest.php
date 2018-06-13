@@ -1058,6 +1058,23 @@ class MysqlQueryTest extends TestCase
 	}
 
 	/**
+	 * Tests WHERE IN clause.
+	 *
+	 * @return  void
+	 */
+	public function testWhereIn()
+	{
+		$q = new MysqlQuery($this->dbo);
+		$q->whereIn('id', [1, 2, 3]);
+
+		$this->assertThat(
+			trim($q->where),
+			$this->equalTo('WHERE id IN (1, 2, 3)'),
+			'Tests rendered value.'
+		);
+	}
+
+	/**
 	 * Tests the MysqlQuery::escape method.
 	 *
 	 * @return  void
