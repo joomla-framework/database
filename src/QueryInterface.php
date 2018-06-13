@@ -534,6 +534,19 @@ interface QueryInterface extends PreparableInterface
 	public function where($conditions, $glue = 'AND');
 
 	/**
+	 * Add a WHERE IN statement to the query
+	 *
+	 * Usage:
+	 * $query->whereIn('id', [1, 2, 3]);
+	 *
+	 * @param   string $keyName   A string representing the key name for the where clause
+	 * @param   array  $keyValues The array of values to be matched
+	 *
+	 * @return  $this
+	 */
+	public function whereIn($keyName, $keyValues);
+
+	/**
 	 * Extend the WHERE clause with a single condition or an array of conditions, with a potentially different logical operator from the one in the
 	 * current WHERE clause.
 	 *

@@ -1764,6 +1764,23 @@ class DatabaseQueryTest extends TestCase
 	}
 
 	/**
+	 * Tests the \Joomla\Database\DatabaseQuery::whereIn method.
+	 *
+	 * @return  void
+	 *
+	 * @covers  \Joomla\Database\DatabaseQuery::whereIn
+	 */
+	public function testWhereIn()
+	{
+		$this->instance->whereIn('id', [1, 2, 3]);
+		$this->assertThat(
+			trim(TestHelper::getValue($this->instance, 'where')),
+			$this->equalTo('WHERE id IN (1, 2, 3)'),
+			'Tests rendered value.'
+		);
+	}
+
+	/**
 	 * Tests the \Joomla\Database\DatabaseQuery::extendWhere method.
 	 *
 	 * @return  void
