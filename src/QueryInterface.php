@@ -543,6 +543,8 @@ interface QueryInterface extends PreparableInterface
 	 * @param   array  $keyValues The array of values to be matched
 	 *
 	 * @return  $this
+	 *
+	 * @since __DEPLOY_VERSION__
 	 */
 	public function whereIn($keyName, $keyValues);
 

@@ -1595,6 +1595,8 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @param   array  $keyValues array of values to be matched
 	 *
 	 * @return  $this
+	 *
+	 * @since __DEPLOY_VERSION__
 	 */
 	public function whereIn($keyName, $keyValues)
 	{
