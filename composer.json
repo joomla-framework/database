@@ -23,7 +23,7 @@
         "illuminate/view": "Install ~5.1 if you are using Laravel's Blade template engine.",
         "league/plates": "Install ~3.0 if you are using the Plates template engine.",
         "mustache/mustache": "Install ~2.3 if you are using the Mustache template engine.",
-        "symfony/templating": "Install ~2.7|~3.0 if you are using Symfony's PHP template component.",
+        "symfony/templating": "Install ~2.7|~3.0|~4.0 if you are using Symfony's PHP template component.",
         "twig/twig": "Install ~1.14|~2.0 if you are using the Twig template engine."
     },
     "autoload": {
@@ -36,6 +36,7 @@
             "Joomla\\Renderer\\Tests\\": "tests/"
         }
     },
+    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
             "dev-master": "2.x-dev"
