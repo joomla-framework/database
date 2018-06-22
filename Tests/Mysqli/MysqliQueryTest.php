@@ -185,6 +185,33 @@ class MysqliQueryTest extends TestCase
 	}
 
 	/**
+	 * Test for the SqliteQuery::__string method for a 'select' case with a limit.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.1
+	 */
+	public function test__toStringSelectWithLimit()
+	{
+		$q = new MysqliQuery($this->dbo);
+
+		$q->select('a.id')
+			->from('a')
+			->order('a.id')
+			->setLimit(1);
+
+		$this->assertThat(
+			(string) $q,
+			$this->equalTo(
+				PHP_EOL . 'SELECT a.id' .
+				PHP_EOL . 'FROM a' .
+				PHP_EOL . 'ORDER BY a.id LIMIT 1'
+			),
+			'Tests for correct rendering.'
+		);
+	}
+
+	/**
 	 * Test for the MysqliQuery::__string method for a 'update' case.
 	 *
 	 * @return  void
