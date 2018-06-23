@@ -846,7 +846,7 @@ class MysqliDriverTest extends MysqliCase
 		$query    = self::$driver->getQuery(true);
 		$result   = self::$driver->setQuery('SELECT @@SESSION.sql_mode;')->loadResult();
 		$expected = '0000-00-00 00:00:00';
-		
+
 		if (strpos($result, 'NO_ZERO_DATE') !== false)
 		{
 			$expected = '1000-01-01 00:00:00';
@@ -922,6 +922,51 @@ class MysqliDriverTest extends MysqliCase
 				)
 			),
 			__LINE__
+		);
+	}
+
+	/**
+	 * Test a query with a limit set via the query builder returns the expected number of rows.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testSelectQueryWithLimitOnQueryBuilder()
+	{
+		$query = self::$driver->getQuery(true);
+		$query->select('*');
+		$query->from('dbtest');
+		$query->setLimit(1);
+		self::$driver->setQuery($query);
+
+		$res = self::$driver->execute();
+
+		$this->assertSame(
+			1,
+			self::$driver->getNumRows()
+		);
+	}
+
+	/**
+	 * Test a query with a limit set via the database driver returns the expected number of rows.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testSelectQueryWithLimitOnDatabaseDriver()
+	{
+		$query = self::$driver->getQuery(true);
+		$query->select('*');
+		$query->from('dbtest');
+		self::$driver->setQuery($query, 0, 1);
+
+		$res = self::$driver->execute();
+
+		$this->assertSame(
+			1,
+			self::$driver->getNumRows()
 		);
 	}
 }

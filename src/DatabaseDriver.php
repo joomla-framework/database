@@ -1757,8 +1757,19 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 			);
 		}
 
-		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
+		if ($query instanceof LimitableInterface)
 		{
+			// Check for values set on the query object and use those if there is a zero value passed here
+			if ($limit === 0 && $query->limit > 0)
+			{
+				$limit = $query->limit;
+			}
+
+			if ($offset === 0 && $query->offset > 0)
+			{
+				$offset = $query->offset;
+			}
+
 			$query->setLimit($limit, $offset);
 		}
 
