@@ -1715,8 +1715,8 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * Sets the SQL statement string for later execution.
 	 *
 	 * @param   string|QueryInterface  $query   The SQL statement to set either as a Query object or a string.
-	 * @param   integer                $offset  The affected row offset to set.
-	 * @param   integer                $limit   The maximum affected rows to set.
+	 * @param   integer                $offset  The affected row offset to set. {@deprecated 3.0 Use LimitableInterface::setLimit() instead}
+	 * @param   integer                $limit   The maximum affected rows to set. {@deprecated 3.0 Use LimitableInterface::setLimit() instead}
 	 *
 	 * @return  $this
 	 *
@@ -1742,6 +1742,18 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 					QueryInterface::class,
 					gettype($query) === 'object' ? (get_class($query) . ' instance') : gettype($query)
 				)
+			);
+		}
+
+		if ($offset > 0 || $limit > 0)
+		{
+			@trigger_error(
+				sprintf(
+					'The "$offset" and "$limit" arguments of %1$s() are deprecated and will be removed in 3.0, use %2$s::setLimit() instead.',
+					__METHOD__,
+					get_class($query)
+				),
+				E_USER_DEPRECATED
 			);
 		}
 
