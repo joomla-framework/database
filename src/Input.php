@@ -44,7 +44,7 @@ class Input implements \Serializable, \Countable
 	 * Container with allowed superglobals
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.0
 	 * @note   Once PHP 7.1 is the minimum supported version this should become a private constant
 	 */
 	private static $allowedGlobals = array('REQUEST', 'GET', 'POST', 'FILES', 'SERVER', 'ENV');
@@ -253,7 +253,7 @@ class Input implements \Serializable, \Countable
 	 *
 	 * @return  Input
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public function getInputForRequestMethod()
 	{
