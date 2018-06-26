@@ -579,6 +579,21 @@ class InputTest extends TestCase
 	}
 
 	/**
+	 * Test the JInput::get method disallows access to non-whitelisted globals.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testGetDoesNotSupportNonWhitelistedGlobals()
+	{
+		$this->assertNull(
+			$this->getInputObject(array())->_phpunit_configuration_file,
+			'Access to library defined globals is restricted'
+		);
+	}
+
+	/**
 	 * Get Input object populated with passed in data
 	 *
 	 * @param   array  $data  Optional source data. If omitted, a copy of the server variable '_REQUEST' is used.
