@@ -239,6 +239,29 @@ class Input implements \Serializable, \Countable
 	}
 
 	/**
+	 * Get the Input instance holding the data for the current request method
+	 *
+	 * @return  Input
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getInputForRequestMethod()
+	{
+		switch (strtoupper($this->getMethod()))
+		{
+			case 'GET':
+				return $this->get;
+
+			case 'POST':
+				return $this->post;
+
+			default:
+				// PUT, PATCH, etc. don't have superglobals
+				return $this;
+		}
+	}
+
+	/**
 	 * Sets a value
 	 *
 	 * @param   string  $name   Name of the value to set.
