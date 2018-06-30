@@ -43,10 +43,10 @@ class Cipher_Simple implements CipherInterface
 
 		// Convert the HEX input into an array of integers and get the number of characters.
 		$chars = $this->hexToIntArray($data);
-		$charCount = count($chars);
+		$charCount = \count($chars);
 
 		// Repeat the key as many times as necessary to ensure that the key is at least as long as the input.
-		for ($i = 0; $i < $charCount; $i = strlen($tmp))
+		for ($i = 0; $i < $charCount; $i = \strlen($tmp))
 		{
 			$tmp .= $tmp;
 		}
@@ -54,7 +54,7 @@ class Cipher_Simple implements CipherInterface
 		// Get the XOR values between the ASCII values of the input and key characters for all input offsets.
 		for ($i = 0; $i < $charCount; $i++)
 		{
-			$decrypted .= chr($chars[$i] ^ ord($tmp[$i]));
+			$decrypted .= \chr($chars[$i] ^ \ord($tmp[$i]));
 		}
 
 		return $decrypted;
@@ -85,10 +85,10 @@ class Cipher_Simple implements CipherInterface
 
 		// Split up the input into a character array and get the number of characters.
 		$chars = preg_split('//', $data, -1, PREG_SPLIT_NO_EMPTY);
-		$charCount = count($chars);
+		$charCount = \count($chars);
 
 		// Repeat the key as many times as necessary to ensure that the key is at least as long as the input.
-		for ($i = 0; $i < $charCount; $i = strlen($tmp))
+		for ($i = 0; $i < $charCount; $i = \strlen($tmp))
 		{
 			$tmp .= $tmp;
 		}
@@ -96,7 +96,7 @@ class Cipher_Simple implements CipherInterface
 		// Get the XOR values between the ASCII values of the input and key characters for all input offsets.
 		for ($i = 0; $i < $charCount; $i++)
 		{
-			$encrypted .= $this->intToHex(ord($tmp[$i]) ^ ord($chars[$i]));
+			$encrypted .= $this->intToHex(\ord($tmp[$i]) ^ \ord($chars[$i]));
 		}
 
 		return $encrypted;
@@ -138,7 +138,7 @@ class Cipher_Simple implements CipherInterface
 	{
 		$key = '';
 		$salt = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-		$saltLength = strlen($salt);
+		$saltLength = \strlen($salt);
 
 		// Build the random key.
 		for ($i = 0; $i < $length; $i++)
@@ -245,7 +245,7 @@ class Cipher_Simple implements CipherInterface
 	{
 		$array = array();
 
-		$j = (int) strlen($hex) / 2;
+		$j = (int) \strlen($hex) / 2;
 
 		for ($i = 0; $i < $j; $i++)
 		{

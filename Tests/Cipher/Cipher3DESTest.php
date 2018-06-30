@@ -148,7 +148,7 @@ class Cipher3DESTest extends TestCase
 		$this->assertInstanceOf('Joomla\\Crypt\\Key', $key);
 
 		// Assert that the private key is 24 bytes long.
-		$this->assertEquals(24, strlen($key->private));
+		$this->assertEquals(24, \strlen($key->private));
 
 		// Assert the key is of the correct type.
 		$this->assertAttributeEquals('3des', 'type', $key);

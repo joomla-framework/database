@@ -124,12 +124,12 @@ class CryptTest extends TestCase
 		// We obviously can't test the result since it's random.
 
 		$randomBytes16 = Crypt::genRandomBytes();
-		$this->assertEquals(strlen($randomBytes16), 16);
+		$this->assertEquals(\strlen($randomBytes16), 16);
 
 		$randomBytes8 = Crypt::genRandomBytes(8);
-		$this->assertEquals(strlen($randomBytes8), 8);
+		$this->assertEquals(\strlen($randomBytes8), 8);
 
 		$randomBytes17 = Crypt::genRandomBytes(17);
-		$this->assertEquals(strlen($randomBytes17), 17);
+		$this->assertEquals(\strlen($randomBytes17), 17);
 	}
 }

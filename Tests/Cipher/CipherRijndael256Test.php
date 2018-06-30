@@ -148,7 +148,7 @@ class CipherRijndael256Test extends TestCase
 		$this->assertInstanceOf('Joomla\\Crypt\\Key', $key);
 
 		// Assert that the private key is 32 bytes long.
-		$this->assertEquals(32, strlen($key->private));
+		$this->assertEquals(32, \strlen($key->private));
 
 		// Assert the key is of the correct type.
 		$this->assertAttributeEquals('rijndael256', 'type', $key);

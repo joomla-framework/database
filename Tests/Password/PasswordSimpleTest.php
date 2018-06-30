@@ -84,7 +84,7 @@ class PasswordSimpleTest extends TestCase
 
 		$hasher->expects($this->any())
 			->method('getSalt')
-			->with(strlen($salt))
+			->with(\strlen($salt))
 			->will($this->returnValue($salt));
 
 		$this->assertEquals(
@@ -118,7 +118,7 @@ class PasswordSimpleTest extends TestCase
 
 		$hasher->expects($this->any())
 			->method('getSalt')
-			->with(strlen($salt))
+			->with(\strlen($salt))
 			->will($this->returnValue($salt));
 
 		$this->assertEquals(

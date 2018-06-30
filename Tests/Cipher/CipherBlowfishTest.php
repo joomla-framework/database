@@ -148,7 +148,7 @@ class CipherBlowfishTest extends TestCase
 		$this->assertInstanceOf('Joomla\\Crypt\\Key', $key);
 
 		// Assert that the private key is 56 bytes long.
-		$this->assertEquals(56, strlen($key->private));
+		$this->assertEquals(56, \strlen($key->private));
 
 		// Assert the key is of the correct type.
 		$this->assertAttributeEquals('blowfish', 'type', $key);
