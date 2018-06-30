@@ -131,7 +131,7 @@ class ClientTest extends TestCase
 	public function testAuthenticate($token, $fail, $version)
 	{
 		// Already got some credentials stored?
-		if (!is_null($token))
+		if (!\is_null($token))
 		{
 			$this->object->setToken($token);
 			$result = $this->object->authenticate();

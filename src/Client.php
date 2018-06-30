@@ -201,7 +201,7 @@ abstract class Client
 
 		if ($this->getOption('scope'))
 		{
-			$scope = is_array($this->getOption('scope')) ? implode(' ', $this->getOption('scope')) : $this->getOption('scope');
+			$scope = \is_array($this->getOption('scope')) ? implode(' ', $this->getOption('scope')) : $this->getOption('scope');
 			$url .= '&scope=' . urlencode($scope);
 		}
 
@@ -267,7 +267,7 @@ abstract class Client
 		$parameters = array_merge($parameters, $defaults);
 
 		// Do not encode multipart parameters. Do not include $data in the signature if $data is not array.
-		if (isset($headers['Content-Type']) && strpos($headers['Content-Type'], 'multipart/form-data') !== false || !is_array($data))
+		if (isset($headers['Content-Type']) && strpos($headers['Content-Type'], 'multipart/form-data') !== false || !\is_array($data))
 		{
 			$oauthHeaders = $parameters;
 		}
@@ -281,7 +281,7 @@ abstract class Client
 		$oauthHeaders = $this->signRequest($url, $method, $oauthHeaders);
 
 		// Get parameters for the Authorisation header.
-		if (is_array($data))
+		if (\is_array($data))
 		{
 			$oauthHeaders = array_diff_key($oauthHeaders, $data);
 		}
@@ -368,7 +368,7 @@ abstract class Client
 	{
 		foreach ($parameters as $key => $value)
 		{
-			if (is_array($value))
+			if (\is_array($value))
 			{
 				foreach ($value as $k => $v)
 				{
@@ -449,7 +449,7 @@ abstract class Client
 		{
 			$key = $this->safeEncode($key);
 
-			if (is_array($value))
+			if (\is_array($value))
 			{
 				foreach ($value as $k => $v)
 				{
@@ -490,7 +490,7 @@ abstract class Client
 	 */
 	public function safeEncode($data)
 	{
-		if (is_array($data))
+		if (\is_array($data))
 		{
 			return array_map(array($this, 'safeEncode'), $data);
 		}
