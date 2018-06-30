@@ -191,7 +191,7 @@ abstract class AbstractCommand implements CommandInterface
 			return $this->app;
 		}
 
-		throw new \UnexpectedValueException('Application not set in ' . get_class($this));
+		throw new \UnexpectedValueException('Application not set in ' . \get_class($this));
 	}
 
 	/**

@@ -168,7 +168,7 @@ class Application extends AbstractApplication
 	public function __construct(Cli $input = null, Registry $config = null)
 	{
 		// Close the application if we are not executed from the command line.
-		if (!defined('STDOUT') || !defined('STDIN') || !isset($_SERVER['argv']))
+		if (!\defined('STDOUT') || !\defined('STDIN') || !isset($_SERVER['argv']))
 		{
 			$this->close();
 		}
@@ -199,7 +199,7 @@ class Application extends AbstractApplication
 
 		if (!$command->getName())
 		{
-			throw new LogicException(sprintf('The command class %s does not have a name.', get_class($command)));
+			throw new LogicException(sprintf('The command class %s does not have a name.', \get_class($command)));
 		}
 
 		$this->commands[$command->getName()] = $command;
@@ -495,9 +495,9 @@ class Application extends AbstractApplication
 			throw new CommandNotFoundException($message);
 		}
 
-		$exact = in_array($namespace, $namespaces, true);
+		$exact = \in_array($namespace, $namespaces, true);
 
-		if (count($namespaces) > 1 && !$exact)
+		if (\count($namespaces) > 1 && !$exact)
 		{
 			throw new CommandNotFoundException(sprintf('The namespace "%s" is ambiguous.', $namespace));
 		}
@@ -1002,7 +1002,7 @@ class Application extends AbstractApplication
 
 		foreach ($parts as $part)
 		{
-			if (count($namespaces))
+			if (\count($namespaces))
 			{
 				$namespaces[] = end($namespaces) . ':' . $part;
 			}
@@ -1030,7 +1030,7 @@ class Application extends AbstractApplication
 		$parts = explode(':', $name);
 		array_pop($parts);
 
-		return implode(':', $limit === null ? $parts : array_slice($parts, 0, $limit));
+		return implode(':', $limit === null ? $parts : \array_slice($parts, 0, $limit));
 	}
 
 	/**
@@ -1057,7 +1057,7 @@ class Application extends AbstractApplication
 		{
 			$title = sprintf(
 				'  [%s%s]  ',
-				get_class($exception),
+				\get_class($exception),
 				$output->isVerbose() && $exception->getCode() !== 0 ? ' (' . $exception->getCode() . ')' : ''
 			);
 
@@ -1116,7 +1116,7 @@ class Application extends AbstractApplication
 					]
 				);
 
-				for ($i = 0, $count = count($trace); $i < $count; ++$i)
+				for ($i = 0, $count = \count($trace); $i < $count; ++$i)
 				{
 					$class    = $trace[$i]['class'] ?? '';
 					$type     = $trace[$i]['type'] ?? '';

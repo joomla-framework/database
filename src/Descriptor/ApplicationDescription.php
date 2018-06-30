@@ -154,7 +154,7 @@ final class ApplicationDescription
 		$parts = explode(':', $name);
 		array_pop($parts);
 
-		return implode(':', $limit === null ? $parts : array_slice($parts, 0, $limit));
+		return implode(':', $limit === null ? $parts : \array_slice($parts, 0, $limit));
 	}
 
 	/**

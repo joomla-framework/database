@@ -166,7 +166,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 		}
 
 		$width = $this->getColumnWidth(
-			call_user_func_array(
+			\call_user_func_array(
 				'array_merge',
 				array_map(
 					function ($namespace) use ($commands)
