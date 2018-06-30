@@ -95,24 +95,24 @@ class TextTest extends TestCase
 
 		$this->assertEquals($string, $output);
 
-		$nStrings = count(TestHelper::getValue($this->object, 'strings'));
+		$nStrings = \count(TestHelper::getValue($this->object, 'strings'));
 		$options = array('jsSafe' => true);
 		$output = Text::_($string, $options);
 
 		$this->assertEquals("fooobar\\'s", $output);
 		$this->assertEquals(
 			$nStrings,
-			count(TestHelper::getValue($this->object, 'strings'))
+			\count(TestHelper::getValue($this->object, 'strings'))
 		);
 
-		$nStrings = count(TestHelper::getValue($this->object, 'strings'));
+		$nStrings = \count(TestHelper::getValue($this->object, 'strings'));
 		$options = array('script' => true);
 		$output = Text::_($string, $options);
 
 		$this->assertEquals("fooobar's", $output);
 		$this->assertEquals(
 			$nStrings + 1,
-			count(TestHelper::getValue($this->object, 'strings'))
+			\count(TestHelper::getValue($this->object, 'strings'))
 		);
 
 		$string = 'foo\\\\bar';
@@ -156,7 +156,7 @@ class TextTest extends TestCase
 
 		$this->assertEquals($string, $output);
 
-		$nStrings = count(TestHelper::getValue($this->object, 'strings'));
+		$nStrings = \count(TestHelper::getValue($this->object, 'strings'));
 		$options = array('jsSafe' => true);
 		$output = Text::plural($string, 0, $options);
 
@@ -183,7 +183,7 @@ class TextTest extends TestCase
 
 		$this->assertEquals($string, $output);
 
-		$nStrings = count(TestHelper::getValue($this->object, 'strings'));
+		$nStrings = \count(TestHelper::getValue($this->object, 'strings'));
 		$options = array('jsSafe' => true);
 		$output = Text::sprintf($string, $options);
 
@@ -193,7 +193,7 @@ class TextTest extends TestCase
 			TestHelper::getValue($this->object, 'strings')
 		);
 
-		$nStrings = count(TestHelper::getValue($this->object, 'strings'));
+		$nStrings = \count(TestHelper::getValue($this->object, 'strings'));
 		$options = array('script' => true);
 		$output = Text::sprintf($string, $options);
 
@@ -222,7 +222,7 @@ class TextTest extends TestCase
 		ob_end_clean();
 
 		$this->assertEquals($string, $output);
-		$this->assertEquals(strlen($string), $len);
+		$this->assertEquals(\strlen($string), $len);
 
 		$options = array('jsSafe' => false);
 		ob_start();
@@ -231,7 +231,7 @@ class TextTest extends TestCase
 		ob_end_clean();
 
 		$this->assertEquals($string, $output);
-		$this->assertEquals(strlen($string), $len);
+		$this->assertEquals(\strlen($string), $len);
 	}
 
 	/**

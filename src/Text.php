@@ -39,7 +39,7 @@ class Text
 	 */
 	public static function getLanguage()
 	{
-		if (is_null(static::$lang))
+		if (\is_null(static::$lang))
 		{
 			static::$lang = Language::getInstance();
 		}
@@ -81,7 +81,7 @@ class Text
 	{
 		$lang = static::getLanguage();
 
-		if (is_array($jsSafe))
+		if (\is_array($jsSafe))
 		{
 			if (array_key_exists('interpretBackSlashes', $jsSafe))
 			{
@@ -176,8 +176,8 @@ class Text
 	public static function plural($string, $n)
 	{
 		$lang = static::getLanguage();
-		$args = func_get_args();
-		$count = count($args);
+		$args = \func_get_args();
+		$count = \count($args);
 
 		if ($count > 1)
 		{
@@ -203,7 +203,7 @@ class Text
 				$key = $string;
 			}
 
-			if (is_array($args[$count - 1]))
+			if (\is_array($args[$count - 1]))
 			{
 				$args[0] = $lang->_(
 					$key, array_key_exists('jsSafe', $args[$count - 1]) ? $args[$count - 1]['jsSafe'] : false,
@@ -212,7 +212,7 @@ class Text
 
 				if (array_key_exists('script', $args[$count - 1]) && $args[$count - 1]['script'])
 				{
-					self::$strings[$key] = call_user_func_array('sprintf', $args);
+					self::$strings[$key] = \call_user_func_array('sprintf', $args);
 
 					return $key;
 				}
@@ -222,14 +222,14 @@ class Text
 				$args[0] = $lang->_($key);
 			}
 
-			return call_user_func_array('sprintf', $args);
+			return \call_user_func_array('sprintf', $args);
 		}
 		elseif ($count > 0)
 		{
 			// Default to the normal sprintf handling.
 			$args[0] = $lang->_($string);
 
-			return call_user_func_array('sprintf', $args);
+			return \call_user_func_array('sprintf', $args);
 		}
 
 		return '';
@@ -259,12 +259,12 @@ class Text
 	public static function sprintf($string)
 	{
 		$lang = static::getLanguage();
-		$args = func_get_args();
-		$count = count($args);
+		$args = \func_get_args();
+		$count = \count($args);
 
 		if ($count > 0)
 		{
-			if (is_array($args[$count - 1]))
+			if (\is_array($args[$count - 1]))
 			{
 				$args[0] = $lang->_(
 					$string, array_key_exists('jsSafe', $args[$count - 1]) ? $args[$count - 1]['jsSafe'] : false,
@@ -273,7 +273,7 @@ class Text
 
 				if (array_key_exists('script', $args[$count - 1]) && $args[$count - 1]['script'])
 				{
-					self::$strings[$string] = call_user_func_array('sprintf', $args);
+					self::$strings[$string] = \call_user_func_array('sprintf', $args);
 
 					return $string;
 				}
@@ -283,7 +283,7 @@ class Text
 				$args[0] = $lang->_($string);
 			}
 
-			return call_user_func_array('sprintf', $args);
+			return \call_user_func_array('sprintf', $args);
 		}
 	}
 
@@ -301,12 +301,12 @@ class Text
 	public static function printf($string)
 	{
 		$lang = static::getLanguage();
-		$args = func_get_args();
-		$count = count($args);
+		$args = \func_get_args();
+		$count = \count($args);
 
 		if ($count > 0)
 		{
-			if (is_array($args[$count - 1]))
+			if (\is_array($args[$count - 1]))
 			{
 				$args[0] = $lang->_(
 					$string, array_key_exists('jsSafe', $args[$count - 1]) ? $args[$count - 1]['jsSafe'] : false,
@@ -318,7 +318,7 @@ class Text
 				$args[0] = $lang->_($string);
 			}
 
-			return call_user_func_array('printf', $args);
+			return \call_user_func_array('printf', $args);
 		}
 	}
 
@@ -339,7 +339,7 @@ class Text
 		// Add the string to the array if not null.
 		if ($string !== null)
 		{
-			if (is_array($jsSafe))
+			if (\is_array($jsSafe))
 			{
 				if (array_key_exists('interpretBackSlashes', $jsSafe))
 				{
