@@ -129,11 +129,11 @@ class Inflector
 	 */
 	private function addRule($data, $ruleType)
 	{
-		if (is_string($data))
+		if (\is_string($data))
 		{
 			$data = array($data);
 		}
-		elseif (!is_array($data))
+		elseif (!\is_array($data))
 		{
 			// Do not translate.
 			throw new InvalidArgumentException('Invalid inflector rule data.');
@@ -321,7 +321,7 @@ class Inflector
 		{
 			return new static;
 		}
-		elseif (!is_object(self::$instance))
+		elseif (!\is_object(self::$instance))
 		{
 			self::$instance = new static;
 		}
@@ -340,7 +340,7 @@ class Inflector
 	 */
 	public function isCountable($word)
 	{
-		return (boolean) in_array($word, $this->rules['countable']);
+		return \in_array($word, $this->rules['countable']);
 	}
 
 	/**

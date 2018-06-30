@@ -77,7 +77,7 @@ abstract class StringHelper
 		$styleSpec = isset(static::$incrementStyles[$style]) ? static::$incrementStyles[$style] : static::$incrementStyles['default'];
 
 		// Regular expression search and replace patterns.
-		if (is_array($styleSpec[0]))
+		if (\is_array($styleSpec[0]))
 		{
 			$rxSearch = $styleSpec[0][0];
 			$rxReplace = $styleSpec[0][1];
@@ -88,7 +88,7 @@ abstract class StringHelper
 		}
 
 		// New and old (existing) sprintf formats.
-		if (is_array($styleSpec[1]))
+		if (\is_array($styleSpec[1]))
 		{
 			$newFormat = $styleSpec[1][0];
 			$oldFormat = $styleSpec[1][1];
@@ -730,7 +730,7 @@ abstract class StringHelper
 	 */
 	public static function transcode($source, $fromEncoding, $toEncoding)
 	{
-		if (is_string($source))
+		if (\is_string($source))
 		{
 			switch (ICONV_IMPL)
 			{

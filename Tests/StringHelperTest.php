@@ -707,7 +707,7 @@ class StringHelperTest extends TestCase
 	public function testStrcasecmp($string1, $string2, $locale, $expect)
 	{
 		// Convert the $locale param to a string if it is an array
-		if (is_array($locale))
+		if (\is_array($locale))
 		{
 			$locale = "'" . implode("', '", $locale) . "'";
 		}
@@ -750,7 +750,7 @@ class StringHelperTest extends TestCase
 	public function testStrcmp($string1, $string2, $locale, $expect)
 	{
 		// Convert the $locale param to a string if it is an array
-		if (is_array($locale))
+		if (\is_array($locale))
 		{
 			$locale = "'" . implode("', '", $locale) . "'";
 		}
