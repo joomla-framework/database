@@ -57,7 +57,7 @@ class MysqliImporter extends DatabaseImporter
 		$existingTables = $this->db->getTableList();
 		$tableName = (string) $table['name'];
 
-		if (in_array($tableName, $existingTables, true))
+		if (\in_array($tableName, $existingTables, true))
 		{
 			throw new \RuntimeException('The table you are trying to create already exists');
 		}
@@ -165,8 +165,8 @@ class MysqliImporter extends DatabaseImporter
 			if (isset($oldLookup[$name]))
 			{
 				$same = true;
-				$newCount = count($newLookup[$name]);
-				$oldCount = count($oldLookup[$name]);
+				$newCount = \count($newLookup[$name]);
+				$oldCount = \count($oldLookup[$name]);
 
 				// There is a key on this field in the old and new tables. Are they the same?
 				if ($newCount === $oldCount)
@@ -289,7 +289,7 @@ class MysqliImporter extends DatabaseImporter
 
 		if ($fNull === 'NO')
 		{
-			if ($fDefault === null || in_array($fType, $blobs, true))
+			if ($fDefault === null || \in_array($fType, $blobs, true))
 			{
 				$sql .= ' NOT NULL';
 			}
@@ -415,7 +415,7 @@ class MysqliImporter extends DatabaseImporter
 			$prefix = 'UNIQUE ';
 		}
 
-		$nColumns = count($columns);
+		$nColumns = \count($columns);
 		$kColumns = array();
 
 		if ($nColumns === 1)

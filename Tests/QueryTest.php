@@ -1749,7 +1749,7 @@ class QueryTest extends TestCase
 		);
 
 		$this->assertFalse($baseElement === $cloneElement);
-		$this->assertTrue(count($cloneElement->testArray) === 0);
+		$this->assertTrue(\count($cloneElement->testArray) === 0);
 	}
 
 	/**

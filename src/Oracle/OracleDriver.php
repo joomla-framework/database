@@ -538,7 +538,7 @@ class OracleDriver extends PdoDriver
 	 */
 	public static function isSupported()
 	{
-		return class_exists('\\PDO') && in_array('oci', \PDO::getAvailableDrivers(), true);
+		return class_exists('\\PDO') && \in_array('oci', \PDO::getAvailableDrivers(), true);
 	}
 
 	/**
@@ -560,7 +560,7 @@ class OracleDriver extends PdoDriver
 		$literal = '';
 
 		$sql = trim($sql);
-		$n = strlen($sql);
+		$n = \strlen($sql);
 
 		while ($startPos < $n)
 		{

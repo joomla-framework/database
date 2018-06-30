@@ -426,7 +426,7 @@ abstract class DatabaseQuery
 	{
 		$this->type = 'call';
 
-		if (is_null($this->call))
+		if (\is_null($this->call))
 		{
 			$this->call = new Query\QueryElement('CALL', $columns);
 		}
@@ -611,7 +611,7 @@ abstract class DatabaseQuery
 	 */
 	public function columns($columns)
 	{
-		if (is_null($this->columns))
+		if (\is_null($this->columns))
 		{
 			$this->columns = new Query\QueryElement('()', $columns);
 		}
@@ -795,7 +795,7 @@ abstract class DatabaseQuery
 	{
 		$this->type = 'exec';
 
-		if (is_null($this->exec))
+		if (\is_null($this->exec))
 		{
 			$this->exec = new Query\QueryElement('EXEC', $columns);
 		}
@@ -846,11 +846,11 @@ abstract class DatabaseQuery
 	 */
 	public function from($tables, $subQueryAlias = null)
 	{
-		if (is_null($this->from))
+		if (\is_null($this->from))
 		{
 			if ($tables instanceof $this)
 			{
-				if (is_null($subQueryAlias))
+				if (\is_null($subQueryAlias))
 				{
 					throw new \RuntimeException('JLIB_DATABASE_ERROR_NULL_SUBQUERY_ALIAS');
 				}
@@ -984,7 +984,7 @@ abstract class DatabaseQuery
 	 */
 	public function group($columns)
 	{
-		if (is_null($this->group))
+		if (\is_null($this->group))
 		{
 			$this->group = new Query\QueryElement('GROUP BY', $columns);
 		}
@@ -1011,7 +1011,7 @@ abstract class DatabaseQuery
 	 */
 	public function having($conditions, $glue = 'AND')
 	{
-		if (is_null($this->having))
+		if (\is_null($this->having))
 		{
 			$glue = strtoupper($glue);
 			$this->having = new Query\QueryElement('HAVING', $conditions, " $glue ");
@@ -1084,7 +1084,7 @@ abstract class DatabaseQuery
 	 */
 	public function join($type, $conditions)
 	{
-		if (is_null($this->join))
+		if (\is_null($this->join))
 		{
 			$this->join = array();
 		}
@@ -1180,7 +1180,7 @@ abstract class DatabaseQuery
 	 */
 	public function order($columns)
 	{
-		if (is_null($this->order))
+		if (\is_null($this->order))
 		{
 			$this->order = new Query\QueryElement('ORDER BY', $columns);
 		}
@@ -1346,7 +1346,7 @@ abstract class DatabaseQuery
 	{
 		$this->type = 'select';
 
-		if (is_null($this->select))
+		if (\is_null($this->select))
 		{
 			$this->select = new Query\QueryElement('SELECT', $columns);
 		}
@@ -1375,7 +1375,7 @@ abstract class DatabaseQuery
 	 */
 	public function set($conditions, $glue = ',')
 	{
-		if (is_null($this->set))
+		if (\is_null($this->set))
 		{
 			$glue = strtoupper($glue);
 			$this->set = new Query\QueryElement('SET', $conditions, PHP_EOL . "\t$glue ");
@@ -1445,7 +1445,7 @@ abstract class DatabaseQuery
 	 */
 	public function values($values)
 	{
-		if (is_null($this->values))
+		if (\is_null($this->values))
 		{
 			$this->values = new Query\QueryElement('()', $values, '),(');
 		}
@@ -1474,7 +1474,7 @@ abstract class DatabaseQuery
 	 */
 	public function where($conditions, $glue = 'AND')
 	{
-		if (is_null($this->where))
+		if (\is_null($this->where))
 		{
 			$glue = strtoupper($glue);
 			$this->where = new Query\QueryElement('WHERE', $conditions, " $glue ");
@@ -1568,7 +1568,7 @@ abstract class DatabaseQuery
 				continue;
 			}
 
-			if (is_object($v) || is_array($v))
+			if (\is_object($v) || \is_array($v))
 			{
 				$this->{$k} = unserialize(serialize($v));
 			}
@@ -1596,7 +1596,7 @@ abstract class DatabaseQuery
 	{
 		// Clear any ORDER BY clause in UNION query
 		// See https://dev.mysql.com/doc/en/union.html
-		if (!is_null($this->order))
+		if (!\is_null($this->order))
 		{
 			$this->clear('order');
 		}
@@ -1614,7 +1614,7 @@ abstract class DatabaseQuery
 		}
 
 		// Get the Query\QueryElement if it does not exist
-		if (is_null($this->union))
+		if (\is_null($this->union))
 		{
 			$this->union = new Query\QueryElement($name, $query, "$glue");
 		}
@@ -1650,7 +1650,7 @@ abstract class DatabaseQuery
 		$name = 'UNION ALL ()';
 
 		// Get the QueryElement if it does not exist
-		if (is_null($this->unionAll))
+		if (\is_null($this->unionAll))
 		{
 			$this->unionAll = new Query\QueryElement($name, $query, "$glue");
 		}
@@ -1735,7 +1735,7 @@ abstract class DatabaseQuery
 	public function format($format)
 	{
 		$query = $this;
-		$args = array_slice(func_get_args(), 1);
+		$args = \array_slice(\func_get_args(), 1);
 		array_unshift($args, null);
 
 		$i = 1;

@@ -246,7 +246,7 @@ class DatabaseQueryElementTest extends TestCase
 		$baseElement->testArray[] = 'a';
 
 		$this->assertFalse($baseElement === $cloneElement);
-		$this->assertEquals(count($cloneElement->testArray), 0);
+		$this->assertEquals(\count($cloneElement->testArray), 0);
 	}
 
 	/**

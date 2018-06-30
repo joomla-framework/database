@@ -131,7 +131,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function __destruct()
 	{
-		if (is_resource($this->connection))
+		if (\is_resource($this->connection))
 		{
 			$this->connection->close();
 		}
@@ -265,7 +265,7 @@ class MysqliDriver extends DatabaseDriver
 		$beginningOfQuery = substr($query, 0, 12);
 		$beginningOfQuery = strtoupper($beginningOfQuery);
 
-		if (!in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE'), true))
+		if (!\in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE'), true))
 		{
 			return $query;
 		}
@@ -338,7 +338,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function connected()
 	{
-		if (is_object($this->connection))
+		if (\is_object($this->connection))
 		{
 			return $this->connection->ping();
 		}
@@ -626,7 +626,7 @@ class MysqliDriver extends DatabaseDriver
 			{
 				$bounded =& $this->sql->getBounded();
 
-				if (count($bounded))
+				if (\count($bounded))
 				{
 					$params     = array();
 					$typeString = '';
@@ -644,12 +644,12 @@ class MysqliDriver extends DatabaseDriver
 					$bindParams = array();
 					$bindParams[] = &$typeString;
 
-					for ($i = 0, $iMax = count($params); $i < $iMax; $i++)
+					for ($i = 0, $iMax = \count($params); $i < $iMax; $i++)
 					{
 						$bindParams[] = &$params[$i];
 					}
 
-					call_user_func_array(array($this->prepared, 'bind_param'), $bindParams);
+					\call_user_func_array(array($this->prepared, 'bind_param'), $bindParams);
 				}
 			}
 
@@ -773,13 +773,13 @@ class MysqliDriver extends DatabaseDriver
 
 		$this->freeResult();
 
-		if (is_string($query))
+		if (\is_string($query))
 		{
 			// Allows taking advantage of bound variables in a direct query:
 			$query = $this->getQuery(true)->setQuery($query);
 		}
 
-		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
+		if ($query instanceof LimitableInterface && !\is_null($offset) && !\is_null($limit))
 		{
 			$query->setLimit($limit, $offset);
 		}

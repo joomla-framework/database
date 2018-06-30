@@ -168,11 +168,11 @@ abstract class DatabaseExporter
 	 */
 	public function from($from)
 	{
-		if (is_string($from))
+		if (\is_string($from))
 		{
 			$this->from = array($from);
 		}
-		elseif (is_array($from))
+		elseif (\is_array($from))
 		{
 			$this->from = $from;
 		}

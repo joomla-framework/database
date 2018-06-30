@@ -71,7 +71,7 @@ class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		}
 
 		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if (is_null($value))
+		if (\is_null($value))
 		{
 			if (isset($this->bounded[$key]))
 			{

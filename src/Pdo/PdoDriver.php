@@ -359,7 +359,7 @@ abstract class PdoDriver extends DatabaseDriver
 	 */
 	public function escape($text, $extra = false)
 	{
-		if (is_int($text) || is_float($text))
+		if (\is_int($text) || \is_float($text))
 		{
 			return $text;
 		}
@@ -555,7 +555,7 @@ abstract class PdoDriver extends DatabaseDriver
 	 */
 	public static function isSupported()
 	{
-		return defined('\\PDO::ATTR_DRIVER_NAME');
+		return \defined('\\PDO::ATTR_DRIVER_NAME');
 	}
 
 	/**
@@ -704,13 +704,13 @@ abstract class PdoDriver extends DatabaseDriver
 
 		$this->freeResult();
 
-		if (is_string($query))
+		if (\is_string($query))
 		{
 			// Allows taking advantage of bound variables in a direct query:
 			$query = $this->getQuery(true)->setQuery($query);
 		}
 
-		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
+		if ($query instanceof LimitableInterface && !\is_null($offset) && !\is_null($limit))
 		{
 			$query->setLimit($limit, $offset);
 		}

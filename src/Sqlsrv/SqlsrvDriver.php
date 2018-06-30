@@ -100,7 +100,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public function __destruct()
 	{
-		if (is_resource($this->connection))
+		if (\is_resource($this->connection))
 		{
 			sqlsrv_close($this->connection);
 		}
@@ -164,7 +164,7 @@ class SqlsrvDriver extends DatabaseDriver
 	public function disconnect()
 	{
 		// Close the connection.
-		if (is_resource($this->connection))
+		if (\is_resource($this->connection))
 		{
 			sqlsrv_close($this->connection);
 		}
@@ -263,7 +263,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public function quote($text, $escape = true)
 	{
-		if (is_array($text))
+		if (\is_array($text))
 		{
 			return parent::quote($text, $escape);
 		}
@@ -519,7 +519,7 @@ class SqlsrvDriver extends DatabaseDriver
 			}
 
 			// Only process non-null scalars.
-			if (is_array($v) || is_object($v) || $v === null)
+			if (\is_array($v) || \is_object($v) || $v === null)
 			{
 				continue;
 			}
@@ -621,7 +621,7 @@ class SqlsrvDriver extends DatabaseDriver
 		$options = array();
 
 		// SQLSrv_num_rows requires a static or keyset cursor.
-		if (strncmp(strtoupper(ltrim($sql)), 'SELECT', strlen('SELECT')) === 0)
+		if (strncmp(strtoupper(ltrim($sql)), 'SELECT', \strlen('SELECT')) === 0)
 		{
 			$options = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
 		}
@@ -633,7 +633,7 @@ class SqlsrvDriver extends DatabaseDriver
 		{
 			$bounded =& $this->sql->getBounded();
 
-			if (count($bounded))
+			if (\count($bounded))
 			{
 				foreach ($bounded as $key => $obj)
 				{
@@ -720,7 +720,7 @@ class SqlsrvDriver extends DatabaseDriver
 		$literal = '';
 
 		$sql = trim($sql);
-		$n = strlen($sql);
+		$n = \strlen($sql);
 
 		while ($startPos < $n)
 		{
@@ -849,13 +849,13 @@ class SqlsrvDriver extends DatabaseDriver
 
 		$this->freeResult();
 
-		if (is_string($query))
+		if (\is_string($query))
 		{
 			// Allows taking advantage of bound variables in a direct query:
 			$query = $this->getQuery(true)->setQuery($query);
 		}
 
-		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
+		if ($query instanceof LimitableInterface && !\is_null($offset) && !\is_null($limit))
 		{
 			$query->setLimit($limit, $offset);
 		}
@@ -1025,7 +1025,7 @@ class SqlsrvDriver extends DatabaseDriver
 	{
 		$useCursor = $cursor ?: $this->cursor;
 
-		if (is_resource($useCursor))
+		if (\is_resource($useCursor))
 		{
 			sqlsrv_free_stmt($useCursor);
 		}
@@ -1075,7 +1075,7 @@ class SqlsrvDriver extends DatabaseDriver
 	{
 		$orderBy = stristr($sql, 'ORDER BY');
 
-		if (is_null($orderBy) || empty($orderBy))
+		if (\is_null($orderBy) || empty($orderBy))
 		{
 			$orderBy = 'ORDER BY (select 0)';
 		}
@@ -1107,7 +1107,7 @@ class SqlsrvDriver extends DatabaseDriver
 	{
 		$constraints = array();
 
-		if (!is_null($prefix) && !is_null($backup))
+		if (!\is_null($prefix) && !\is_null($backup))
 		{
 			$constraints = $this->getTableConstraints($oldTable);
 		}

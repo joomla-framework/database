@@ -187,8 +187,8 @@ class PostgresqlImporter extends DatabaseImporter
 			if (isset($oldLookup[$name]))
 			{
 				$same = true;
-				$newCount = count($newLookup[$name]);
-				$oldCount = count($oldLookup[$name]);
+				$newCount = \count($newLookup[$name]);
+				$oldCount = \count($oldLookup[$name]);
 
 				// There is a key on this field in the old and new tables. Are they the same?
 				if ($newCount === $oldCount)
@@ -359,7 +359,7 @@ class PostgresqlImporter extends DatabaseImporter
 
 		if ($fNull === 'NO')
 		{
-			if ($fDefault === null || in_array($fType, $blobs, true))
+			if ($fDefault === null || \in_array($fType, $blobs, true))
 			{
 				$sql .= ",\nALTER COLUMN " . $this->db->quoteName($fName) . ' SET NOT NULL'
 					. ",\nALTER COLUMN " . $this->db->quoteName($fName) . ' DROP DEFAULT';
@@ -422,7 +422,7 @@ class PostgresqlImporter extends DatabaseImporter
 
 			if ($fNull === 'NO')
 			{
-				if ($fDefault === null || in_array($fType, $blobs, true))
+				if ($fDefault === null || \in_array($fType, $blobs, true))
 				{
 					$sql .= ' NOT NULL';
 				}

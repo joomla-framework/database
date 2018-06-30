@@ -305,7 +305,7 @@ class DriverSqliteTest extends TestDatabase
 	public function testGetVersion()
 	{
 		$this->assertThat(
-			strlen(self::$driver->getVersion()),
+			\strlen(self::$driver->getVersion()),
 			$this->greaterThan(0),
 			'Line:' . __LINE__ . ' The getVersion method should return something without error.'
 		);
@@ -583,7 +583,7 @@ class DriverSqliteTest extends TestDatabase
 
 		// Check name change
 		$tableList = self::$driver->getTableList();
-		$this->assertThat(in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
+		$this->assertThat(\in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
 
 		// Restore initial state
 		self::$driver->renameTable($newTableName, 'jos_dbtest');
@@ -668,7 +668,7 @@ class DriverSqliteTest extends TestDatabase
 		self::$driver->setQuery($queryIns)->execute();
 
 		/* create savepoint only if is passed by data provider */
-		if (!is_null($toSavepoint))
+		if (!\is_null($toSavepoint))
 		{
 			self::$driver->transactionStart((boolean) $toSavepoint);
 		}
@@ -683,7 +683,7 @@ class DriverSqliteTest extends TestDatabase
 		self::$driver->transactionRollback((boolean) $toSavepoint);
 
 		/* release savepoint and commit only if a savepoint exists */
-		if (!is_null($toSavepoint))
+		if (!\is_null($toSavepoint))
 		{
 			self::$driver->transactionCommit();
 		}
@@ -699,7 +699,7 @@ class DriverSqliteTest extends TestDatabase
 		self::$driver->setQuery($queryCheck);
 		$result = self::$driver->loadRowList();
 
-		$this->assertThat(count($result), $this->equalTo($tupleCount), __LINE__);
+		$this->assertThat(\count($result), $this->equalTo($tupleCount), __LINE__);
 	}
 
 	/**

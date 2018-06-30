@@ -99,7 +99,7 @@ class SqliteDriver extends PdoDriver
 	 */
 	public function escape($text, $extra = false)
 	{
-		if (is_int($text) || is_float($text))
+		if (\is_int($text) || \is_float($text))
 		{
 			return $text;
 		}
@@ -405,7 +405,7 @@ class SqliteDriver extends PdoDriver
 	 */
 	public static function isSupported()
 	{
-		return class_exists('\\PDO') && class_exists('\\SQLite3') && in_array('sqlite', \PDO::getAvailableDrivers(), true);
+		return class_exists('\\PDO') && class_exists('\\SQLite3') && \in_array('sqlite', \PDO::getAvailableDrivers(), true);
 	}
 
 	/**

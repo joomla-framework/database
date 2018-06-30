@@ -148,21 +148,21 @@ class IteratorPostgresqlTest extends DatabasePostgresqlCase
 	{
 		self::$driver->setQuery(self::$driver->getQuery(true)->select('title')->from('#__dbtest'));
 		$this->assertThat(
-			count(self::$driver->getIterator()),
+			\count(self::$driver->getIterator()),
 			$this->equalTo(4),
 			__LINE__
 		);
 
 		self::$driver->setQuery(self::$driver->getQuery(true)->select('title')->from('#__dbtest')->setLimit(2));
 		$this->assertThat(
-			count(self::$driver->getIterator()),
+			\count(self::$driver->getIterator()),
 			$this->equalTo(2),
 			__LINE__
 		);
 
 		self::$driver->setQuery(self::$driver->getQuery(true)->select('title')->from('#__dbtest')->setLimit(2, 3));
 		$this->assertThat(
-			count(self::$driver->getIterator()),
+			\count(self::$driver->getIterator()),
 			$this->equalTo(1),
 			__LINE__
 		);

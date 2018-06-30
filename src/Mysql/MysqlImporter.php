@@ -102,8 +102,8 @@ class MysqlImporter extends DatabaseImporter
 			if (isset($oldLookup[$name]))
 			{
 				$same = true;
-				$newCount = count($newLookup[$name]);
-				$oldCount = count($oldLookup[$name]);
+				$newCount = \count($newLookup[$name]);
+				$oldCount = \count($oldLookup[$name]);
 
 				// There is a key on this field in the old and new tables. Are they the same?
 				if ($newCount === $oldCount)
@@ -227,7 +227,7 @@ class MysqlImporter extends DatabaseImporter
 
 		if ($fNull === 'NO')
 		{
-			if ($fDefault === null || in_array($fType, $blobs, true))
+			if ($fDefault === null || \in_array($fType, $blobs, true))
 			{
 				$sql .= ' NOT NULL';
 			}
@@ -354,7 +354,7 @@ class MysqlImporter extends DatabaseImporter
 			$prefix = 'UNIQUE ';
 		}
 
-		$nColumns = count($columns);
+		$nColumns = \count($columns);
 		$kColumns = array();
 
 		if ($nColumns === 1)

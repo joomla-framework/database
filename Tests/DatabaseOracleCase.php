@@ -35,9 +35,9 @@ abstract class DatabaseOracleCase extends TestDatabase
 	public static function setUpBeforeClass()
 	{
 		// First let's look to see if we have a DSN defined or in the environment variables.
-		if (defined('JTEST_DATABASE_ORACLE_DSN') || getenv('JTEST_DATABASE_ORACLE_DSN'))
+		if (\defined('JTEST_DATABASE_ORACLE_DSN') || getenv('JTEST_DATABASE_ORACLE_DSN'))
 		{
-			$dsn = defined('JTEST_DATABASE_ORACLE_DSN') ? JTEST_DATABASE_ORACLE_DSN : getenv('JTEST_DATABASE_ORACLE_DSN');
+			$dsn = \defined('JTEST_DATABASE_ORACLE_DSN') ? JTEST_DATABASE_ORACLE_DSN : getenv('JTEST_DATABASE_ORACLE_DSN');
 		}
 		else
 		{

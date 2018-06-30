@@ -430,12 +430,12 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		$result = self::$driver->getTableList();
 
 		// Assert array size
-		$this->assertThat(count($result), $this->equalTo(count($expected)), __LINE__);
+		$this->assertThat(\count($result), $this->equalTo(count($expected)), __LINE__);
 
 		// Clear found element to check if all elements are present in any order
 		foreach ($result as $k => $v)
 		{
-			if (in_array($v, $expected))
+			if (\in_array($v, $expected))
 			{
 				// Ok case, value found so set value to zero
 				$result[$k] = '0';
@@ -448,7 +448,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		}
 
 		// If there's a one it will return true and test fails
-		$this->assertThat(in_array('1', $result), $this->equalTo(false), __LINE__);
+		$this->assertThat(\in_array('1', $result), $this->equalTo(false), __LINE__);
 	}
 
 	/**
@@ -975,7 +975,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		self::$driver->setQuery($queryIns)->execute();
 
 		/* create savepoint only if is passed by data provider */
-		if (!is_null($toSavepoint))
+		if (!\is_null($toSavepoint))
 		{
 			self::$driver->transactionStart((boolean) $toSavepoint);
 		}
@@ -990,7 +990,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		self::$driver->transactionRollback((boolean) $toSavepoint);
 
 		/* release savepoint and commit only if a savepoint exists */
-		if (!is_null($toSavepoint))
+		if (!\is_null($toSavepoint))
 		{
 			self::$driver->transactionCommit();
 		}
@@ -1006,7 +1006,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		self::$driver->setQuery($queryCheck);
 		$result = self::$driver->loadRowList();
 
-		$this->assertThat(count($result), $this->equalTo($tupleCount), __LINE__);
+		$this->assertThat(\count($result), $this->equalTo($tupleCount), __LINE__);
 	}
 
 	/**
@@ -1035,7 +1035,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		self::$driver->setQuery($queryCheck);
 		$result = self::$driver->loadAssocList();
 
-		$this->assertThat(count($result), $this->equalTo(1), __LINE__);
+		$this->assertThat(\count($result), $this->equalTo(1), __LINE__);
 	}
 
 	/**
@@ -1080,7 +1080,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 
 		/* check name change */
 		$tableList = self::$driver->getTableList();
-		$this->assertThat(in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
+		$this->assertThat(\in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
 
 		/* check index change */
 		self::$driver->setQuery(

@@ -526,7 +526,7 @@ class DriverSqlsrvTest extends DatabaseSqlsrvCase
 
 		// Check name change
 		$tableList = self::$driver->getTableList();
-		$this->assertThat(in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
+		$this->assertThat(\in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
 
 		// Restore initial state
 		self::$driver->renameTable($newTableName, 'jos_dbtest');

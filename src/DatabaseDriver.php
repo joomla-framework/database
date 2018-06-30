@@ -322,7 +322,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		$open      = false;
 		$comment   = false;
 		$endString = '';
-		$end       = strlen($sql);
+		$end       = \strlen($sql);
 		$queries   = array();
 		$query     = '';
 
@@ -331,7 +331,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			$current      = substr($sql, $i, 1);
 			$current2     = substr($sql, $i, 2);
 			$current3     = substr($sql, $i, 3);
-			$lenEndString = strlen($endString);
+			$lenEndString = \strlen($endString);
 			$testEnd      = substr($sql, $i, $lenEndString);
 
 			if ($current === '"' || $current === "'" || $current2 === '--'
@@ -1032,7 +1032,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			}
 
 			// Only process non-null scalars.
-			if (is_array($v) || is_object($v) || $v === null)
+			if (\is_array($v) || \is_object($v) || $v === null)
 			{
 				continue;
 			}
@@ -1065,7 +1065,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		// Update the primary key if it exists.
 		$id = $this->insertid();
 
-		if ($key && $id && is_string($key))
+		if ($key && $id && \is_string($key))
 		{
 			$object->$key = $id;
 		}
@@ -1446,7 +1446,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function quote($text, $escape = true)
 	{
-		if (is_array($text))
+		if (\is_array($text))
 		{
 			foreach ($text as $k => $v)
 			{
@@ -1474,13 +1474,13 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function quoteName($name, $as = null)
 	{
-		if (is_string($name))
+		if (\is_string($name))
 		{
 			$quotedName = $this->quoteNameStr(explode('.', $name));
 
 			$quotedAs = '';
 
-			if (!is_null($as))
+			if (!\is_null($as))
 			{
 				$as       = (array) $as;
 				$quotedAs .= ' AS ' . $this->quoteNameStr($as);
@@ -1492,16 +1492,16 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		{
 			$fin = array();
 
-			if (is_null($as))
+			if (\is_null($as))
 			{
 				foreach ($name as $str)
 				{
 					$fin[] = $this->quoteName($str);
 				}
 			}
-			elseif (is_array($name) && (count($name) === count($as)))
+			elseif (\is_array($name) && (\count($name) === \count($as)))
 			{
-				$count = count($name);
+				$count = \count($name);
 
 				for ($i = 0; $i < $count; $i++)
 				{
@@ -1529,12 +1529,12 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 		foreach ($strArr as $part)
 		{
-			if (is_null($part))
+			if (\is_null($part))
 			{
 				continue;
 			}
 
-			if (strlen($q) === 1)
+			if (\strlen($q) === 1)
 			{
 				$parts[] = $q . $part . $q;
 			}
@@ -1566,7 +1566,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		$literal = '';
 
 		$sql = trim($sql);
-		$n = strlen($sql);
+		$n = \strlen($sql);
 
 		while ($startPos < $n)
 		{
@@ -1809,12 +1809,12 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		$where = array();
 		$tableColumns = $this->getTableColumns($table);
 
-		if (is_string($key))
+		if (\is_string($key))
 		{
 			$key = array($key);
 		}
 
-		if (is_object($key))
+		if (\is_object($key))
 		{
 			$key = (array) $key;
 		}
@@ -1832,13 +1832,13 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			}
 
 			// Only process scalars that are not internal fields.
-			if (is_array($v) || is_object($v) || $k[0] === '_')
+			if (\is_array($v) || \is_object($v) || $k[0] === '_')
 			{
 				continue;
 			}
 
 			// Set the primary key to the WHERE clause instead of a field to update.
-			if (in_array($k, $key, true))
+			if (\in_array($k, $key, true))
 			{
 				$where[] = $this->quoteName($k) . ($v === null ? ' IS NULL' : ' = ' . $this->quote($v));
 				continue;

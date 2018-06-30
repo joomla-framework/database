@@ -171,7 +171,7 @@ class Driver
 	 */
 	public static function mockQuote($value, $escape = true)
 	{
-		if (is_array($value))
+		if (\is_array($value))
 		{
 			foreach ($value as $k => $v)
 			{

@@ -77,7 +77,7 @@ abstract class DatabaseIterator implements \Countable, \Iterator
 	{
 		if (!class_exists($class))
 		{
-			throw new \InvalidArgumentException(sprintf('new %s(*%s*, cursor)', get_class($this), gettype($class)));
+			throw new \InvalidArgumentException(sprintf('new %s(*%s*, cursor)', \get_class($this), \gettype($class)));
 		}
 
 		$this->cursor = $cursor;

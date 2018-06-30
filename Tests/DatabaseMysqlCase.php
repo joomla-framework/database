@@ -35,9 +35,9 @@ abstract class DatabaseMysqlCase extends TestDatabase
 	public static function setUpBeforeClass()
 	{
 		// First let's look to see if we have a DSN defined or in the environment variables.
-		if (defined('JTEST_DATABASE_MYSQL_DSN') || getenv('JTEST_DATABASE_MYSQL_DSN'))
+		if (\defined('JTEST_DATABASE_MYSQL_DSN') || getenv('JTEST_DATABASE_MYSQL_DSN'))
 		{
-			$dsn = defined('JTEST_DATABASE_MYSQL_DSN') ? JTEST_DATABASE_MYSQL_DSN : getenv('JTEST_DATABASE_MYSQL_DSN');
+			$dsn = \defined('JTEST_DATABASE_MYSQL_DSN') ? JTEST_DATABASE_MYSQL_DSN : getenv('JTEST_DATABASE_MYSQL_DSN');
 		}
 		else
 		{

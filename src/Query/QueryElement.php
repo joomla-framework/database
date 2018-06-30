@@ -85,7 +85,7 @@ class QueryElement
 	 */
 	public function append($elements)
 	{
-		if (is_array($elements))
+		if (\is_array($elements))
 		{
 			$this->elements = array_merge($this->elements, $elements);
 		}
@@ -135,7 +135,7 @@ class QueryElement
 	{
 		foreach ($this as $k => $v)
 		{
-			if (is_object($v) || is_array($v))
+			if (\is_object($v) || \is_array($v))
 			{
 				$this->{$k} = unserialize(serialize($v));
 			}

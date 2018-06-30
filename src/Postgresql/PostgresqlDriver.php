@@ -171,7 +171,7 @@ class PostgresqlDriver extends DatabaseDriver
 				}
 
 				// Extract the host name
-				$this->options['host'] = substr($this->options['host'], 0, strlen($this->options['host']) - (strlen($tmp) + 1));
+				$this->options['host'] = substr($this->options['host'], 0, \strlen($this->options['host']) - (\strlen($tmp) + 1));
 
 				// This will take care of the following notation: ":5432"
 				if ($this->options['host'] === '')
@@ -214,7 +214,7 @@ class PostgresqlDriver extends DatabaseDriver
 	public function disconnect()
 	{
 		// Close the connection.
-		if (is_resource($this->connection))
+		if (\is_resource($this->connection))
 		{
 			pg_close($this->connection);
 		}
@@ -270,7 +270,7 @@ class PostgresqlDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		if (is_resource($this->connection))
+		if (\is_resource($this->connection))
 		{
 			return pg_ping($this->connection);
 		}
@@ -529,7 +529,7 @@ class PostgresqlDriver extends DatabaseDriver
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
-		if (in_array($table, $tableList, true))
+		if (\in_array($table, $tableList, true))
 		{
 			// Get the details columns information.
 			$this->setQuery('
@@ -594,7 +594,7 @@ class PostgresqlDriver extends DatabaseDriver
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
-		if (in_array($table, $tableList, true))
+		if (\in_array($table, $tableList, true))
 		{
 			$name = array('s.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
 							'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option');
@@ -757,7 +757,7 @@ class PostgresqlDriver extends DatabaseDriver
 		{
 			$bounded =& $this->sql->getBounded();
 
-			if (count($bounded))
+			if (\count($bounded))
 			{
 				// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
 				$this->cursor = @pg_execute($this->connection, $this->queryName . $count, array_values($bounded));
@@ -853,7 +853,7 @@ class PostgresqlDriver extends DatabaseDriver
 		$tableList = $this->getTableList();
 
 		// Origin Table does not exist
-		if (!in_array($oldTable, $tableList, true))
+		if (!\in_array($oldTable, $tableList, true))
 		{
 			// Origin Table not found
 			throw new \RuntimeException('Table not found in Postgresql database.');
@@ -942,13 +942,13 @@ class PostgresqlDriver extends DatabaseDriver
 
 		$this->freeResult();
 
-		if (is_string($query))
+		if (\is_string($query))
 		{
 			// Allows taking advantage of bound variables in a direct query:
 			$query = $this->getQuery(true)->setQuery($query);
 		}
 
-		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
+		if ($query instanceof LimitableInterface && !\is_null($offset) && !\is_null($limit))
 		{
 			$query->setLimit($limit, $offset);
 		}
@@ -1173,7 +1173,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	protected function fetchObject($cursor = null, $class = 'stdClass')
 	{
-		return pg_fetch_object(is_null($cursor) ? $this->cursor : $cursor, null, $class);
+		return pg_fetch_object(\is_null($cursor) ? $this->cursor : $cursor, null, $class);
 	}
 
 	/**
@@ -1189,7 +1189,7 @@ class PostgresqlDriver extends DatabaseDriver
 	{
 		$useCursor = $cursor ?: $this->cursor;
 
-		if (is_resource($useCursor))
+		if (\is_resource($useCursor))
 		{
 			pg_free_result($useCursor);
 		}
@@ -1224,7 +1224,7 @@ class PostgresqlDriver extends DatabaseDriver
 			}
 
 			// Only process non-null scalars.
-			if (is_array($v) || is_object($v) || $v === null)
+			if (\is_array($v) || \is_object($v) || $v === null)
 			{
 				continue;
 			}
@@ -1414,7 +1414,7 @@ class PostgresqlDriver extends DatabaseDriver
 			{
 				$sql = explode('currval', $sql);
 
-				for ($nIndex = 1, $nIndexMax = count($sql); $nIndex < $nIndexMax; $nIndex += 2)
+				for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -1427,7 +1427,7 @@ class PostgresqlDriver extends DatabaseDriver
 			{
 				$sql = explode('nextval', $sql);
 
-				for ($nIndex = 1, $nIndexMax = count($sql); $nIndex < $nIndexMax; $nIndex += 2)
+				for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -1440,7 +1440,7 @@ class PostgresqlDriver extends DatabaseDriver
 			{
 				$sql = explode('setval', $sql);
 
-				for ($nIndex = 1, $nIndexMax = count($sql); $nIndex < $nIndexMax; $nIndex += 2)
+				for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -1450,7 +1450,7 @@ class PostgresqlDriver extends DatabaseDriver
 
 			$explodedQuery = explode('\'', $sql);
 
-			for ($nIndex = 0, $nIndexMax = count($explodedQuery); $nIndex < $nIndexMax; $nIndex += 2)
+			for ($nIndex = 0, $nIndexMax = \count($explodedQuery); $nIndex < $nIndexMax; $nIndex += 2)
 			{
 				if (strpos($explodedQuery[$nIndex], $prefix))
 				{
@@ -1535,12 +1535,12 @@ class PostgresqlDriver extends DatabaseDriver
 		$fields  = array();
 		$where   = array();
 
-		if (is_string($key))
+		if (\is_string($key))
 		{
 			$key = array($key);
 		}
 
-		if (is_object($key))
+		if (\is_object($key))
 		{
 			$key = (array) $key;
 		}
@@ -1558,13 +1558,13 @@ class PostgresqlDriver extends DatabaseDriver
 			}
 
 			// Only process scalars that are not internal fields.
-			if (is_array($v) || is_object($v) || $k[0] === '_')
+			if (\is_array($v) || \is_object($v) || $k[0] === '_')
 			{
 				continue;
 			}
 
 			// Set the primary key to the WHERE clause instead of a field to update.
-			if (in_array($k, $key, true))
+			if (\in_array($k, $key, true))
 			{
 				$key_val = $this->sqlValue($columns, $k, $v);
 				$where[] = $this->quoteName($k) . '=' . $key_val;
