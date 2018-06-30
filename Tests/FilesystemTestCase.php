@@ -41,7 +41,7 @@ class FilesystemTestCase extends TestCase
 	 */
 	public static function setUpBeforeClass()
 	{
-		if (!defined('JPATH_ROOT'))
+		if (!\defined('JPATH_ROOT'))
 		{
 			self::markTestSkipped('Constant `JPATH_ROOT` is not defined.');
 		}

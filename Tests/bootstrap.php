@@ -18,7 +18,7 @@ ini_set('display_errors', 1);
  * Ensure that required path constants are defined.  These can be overridden within the phpunit.xml file
  * if you chose to create a custom version of that file.
  */
-if (!defined('JPATH_ROOT'))
+if (!\defined('JPATH_ROOT'))
 {
 	define('JPATH_ROOT', realpath(dirname(__DIR__)));
 }

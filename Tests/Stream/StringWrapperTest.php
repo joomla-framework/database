@@ -92,12 +92,12 @@ class StringWrapperTest extends TestCase
 			'uid' => 0,
 			'gid' => 0,
 			'rdev' => 0,
-			'size' => strlen($string),
+			'size' => \strlen($string),
 			'atime' => $now,
 			'mtime' => $now,
 			'ctime' => $now,
 			'blksize' => '512',
-			'blocks' => ceil(strlen($string) / 512));
+			'blocks' => ceil(\strlen($string) / 512));
 
 		TestHelper::setValue($this->object, 'stat', $stat);
 
@@ -127,9 +127,9 @@ class StringWrapperTest extends TestCase
 			'uid' => 0,
 			'gid' => 0,
 			'rdev' => 0,
-			'size' => strlen($string),
+			'size' => \strlen($string),
 			'blksize' => '512',
-			'blocks' => ceil(strlen($string) / 512));
+			'blocks' => ceil(\strlen($string) / 512));
 
 		foreach ($stat as $key => $value)
 		{
@@ -150,9 +150,9 @@ class StringWrapperTest extends TestCase
 			'uid' => 0,
 			'gid' => 0,
 			'rdev' => 0,
-			'size' => strlen($string),
+			'size' => \strlen($string),
 			'blksize' => '512',
-			'blocks' => ceil(strlen($string) / 512));
+			'blocks' => ceil(\strlen($string) / 512));
 
 		foreach ($stat as $key => $value)
 		{

@@ -619,14 +619,14 @@ class Stream
 
 			if (!$this->eof())
 			{
-				$len = strlen($res);
+				$len = \strlen($res);
 				$remaining -= $len;
 			}
 			else
 			{
 				// If it's the end of the file then we've nothing left to read; reset remaining and len
 				$remaining = 0;
-				$length = strlen($retval);
+				$length = \strlen($retval);
 			}
 		}
 
@@ -773,7 +773,7 @@ class Stream
 		// If the length isn't set, set it to the length of the string.
 		if (!$length)
 		{
-			$length = strlen($string);
+			$length = \strlen($string);
 		}
 
 		// If the chunk isn't set, set it to the default.
@@ -922,7 +922,7 @@ class Stream
 	public function _buildContext()
 	{
 		// According to the manual this always works!
-		if (count($this->contextOptions))
+		if (\count($this->contextOptions))
 		{
 			$this->context = @stream_context_create($this->contextOptions);
 		}
@@ -992,7 +992,7 @@ class Stream
 				unset($this->contextOptions[$wrapper][$name]);
 
 				// Check that there are still items there
-				if (!count($this->contextOptions[$wrapper]))
+				if (!\count($this->contextOptions[$wrapper]))
 				{
 					// Clean up an empty wrapper context option
 					unset($this->contextOptions[$wrapper]);
@@ -1392,14 +1392,14 @@ class Stream
 			$scheme = '';
 			$filename = $stream[0];
 
-			if (count($stream) >= 2)
+			if (\count($stream) >= 2)
 			{
 				$scheme = $stream[0] . '://';
 				$filename = $stream[1];
 			}
 
 			// Check if it's a write mode then add the appropriate prefix
-			if (in_array($tmode, Helper::getWriteModes()))
+			if (\in_array($tmode, Helper::getWriteModes()))
 			{
 				$prefixToUse = $this->writeprefix;
 			}
@@ -1415,7 +1415,7 @@ class Stream
 
 				if ($pos !== false)
 				{
-					$filename = substr_replace($filename, '', $pos, strlen(JPATH_ROOT));
+					$filename = substr_replace($filename, '', $pos, \strlen(JPATH_ROOT));
 				}
 			}
 

@@ -22,27 +22,27 @@ use Joomla\Filesystem\Exception\FilesystemException;
  * - 38 : Local filesystem error
  */
 
-if (!defined('CRLF'))
+if (!\defined('CRLF'))
 {
 	define('CRLF', "\r\n");
 }
 
-if (!defined("FTP_AUTOASCII"))
+if (!\defined("FTP_AUTOASCII"))
 {
 	define("FTP_AUTOASCII", -1);
 }
 
-if (!defined("FTP_BINARY"))
+if (!\defined("FTP_BINARY"))
 {
 	define("FTP_BINARY", 1);
 }
 
-if (!defined("FTP_ASCII"))
+if (!\defined("FTP_ASCII"))
 {
 	define("FTP_ASCII", 0);
 }
 
-if (!defined('FTP_NATIVE'))
+if (!\defined('FTP_NATIVE'))
 {
 	define('FTP_NATIVE', (function_exists('ftp_connect')) ? 1 : 0);
 }
@@ -176,7 +176,7 @@ class FtpClient
 	 */
 	public function __destruct()
 	{
-		if (is_resource($this->conn))
+		if (\is_resource($this->conn))
 		{
 			$this->quit();
 		}
@@ -206,7 +206,7 @@ class FtpClient
 		$signature = $user . ':' . $pass . '@' . $host . ":" . $port;
 
 		// Create a new instance, or set the options of an existing one
-		if (!isset(self::$instances[$signature]) || !is_object(self::$instances[$signature]))
+		if (!isset(self::$instances[$signature]) || !\is_object(self::$instances[$signature]))
 		{
 			self::$instances[$signature] = new static($options);
 		}
@@ -270,7 +270,7 @@ class FtpClient
 		$err = null;
 
 		// If already connected, return
-		if (is_resource($this->conn))
+		if (\is_resource($this->conn))
 		{
 			return true;
 		}
@@ -329,7 +329,7 @@ class FtpClient
 	 */
 	public function isConnected()
 	{
-		return is_resource($this->conn);
+		return \is_resource($this->conn);
 	}
 
 	/**
@@ -615,7 +615,7 @@ class FtpClient
 		}
 
 		// Convert the mode to a string
-		if (is_int($mode))
+		if (\is_int($mode))
 		{
 			$mode = decoct($mode);
 		}
@@ -625,7 +625,7 @@ class FtpClient
 		{
 			if (@ftp_site($this->conn, 'CHMOD ' . $mode . ' ' . $path) === false)
 			{
-				if (!defined('PHP_WINDOWS_VERSION_MAJOR'))
+				if (!\defined('PHP_WINDOWS_VERSION_MAJOR'))
 				{
 					throw new FilesystemException(__METHOD__ . 'Bad response.');
 				}
@@ -639,7 +639,7 @@ class FtpClient
 		// Send change mode command and verify success [must convert mode from octal]
 		if (!$this->_putCmd('SITE CHMOD ' . $mode . ' ' . $path, array(200, 250)))
 		{
-			if (!defined('PHP_WINDOWS_VERSION_MAJOR'))
+			if (!\defined('PHP_WINDOWS_VERSION_MAJOR'))
 			{
 				throw new FilesystemException(
 					sprintf(
@@ -911,7 +911,7 @@ class FtpClient
 		{
 			$os = 'UNIX';
 
-			if (defined('PHP_WINDOWS_VERSION_MAJOR'))
+			if (\defined('PHP_WINDOWS_VERSION_MAJOR'))
 			{
 				$os = 'WIN';
 			}
@@ -1483,7 +1483,7 @@ class FtpClient
 					continue;
 				}
 
-				if (is_array($tmpArray) && $tmpArray['name'] != '.' && $tmpArray['name'] != '..')
+				if (\is_array($tmpArray) && $tmpArray['name'] != '.' && $tmpArray['name'] != '..')
 				{
 					$dirList[] = $tmpArray;
 				}
@@ -1525,7 +1525,7 @@ class FtpClient
 					continue;
 				}
 
-				if (is_array($tmpArray) && $tmpArray['name'] != '.' && $tmpArray['name'] != '..')
+				if (\is_array($tmpArray) && $tmpArray['name'] != '.' && $tmpArray['name'] != '..')
 				{
 					$dirList[] = $tmpArray;
 				}
@@ -1549,7 +1549,7 @@ class FtpClient
 	protected function _putCmd($cmd, $expectedResponse)
 	{
 		// Make sure we have a connection to the server
-		if (!is_resource($this->conn))
+		if (!\is_resource($this->conn))
 		{
 			throw new FilesystemException(__METHOD__ . ': Not connected to the control port.');
 		}
@@ -1604,9 +1604,9 @@ class FtpClient
 		$this->responseMsg  = $parts[0];
 
 		// Did the server respond with the code we wanted?
-		if (is_array($expected))
+		if (\is_array($expected))
 		{
-			if (in_array($this->responseCode, $expected))
+			if (\in_array($this->responseCode, $expected))
 			{
 				$retval = true;
 			}
@@ -1646,7 +1646,7 @@ class FtpClient
 		$err = null;
 
 		// Make sure we have a connection to the server
-		if (!is_resource($this->conn))
+		if (!\is_resource($this->conn))
 		{
 			throw new FilesystemException(__METHOD__ . ': Not connected to the control port.');
 		}
@@ -1738,7 +1738,7 @@ class FtpClient
 			$dot = strrpos($fileName, '.') + 1;
 			$ext = substr($fileName, $dot);
 
-			if (in_array($ext, $this->autoAscii))
+			if (\in_array($ext, $this->autoAscii))
 			{
 				$mode = FTP_ASCII;
 			}

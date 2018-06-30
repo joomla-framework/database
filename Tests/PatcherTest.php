@@ -26,7 +26,7 @@ class PatcherTest extends TestCase
 	 */
 	public static function setUpBeforeClass()
 	{
-		if (!defined('JPATH_ROOT'))
+		if (!\defined('JPATH_ROOT'))
 		{
 			self::markTestSkipped('Constant `JPATH_ROOT` is not defined.');
 		}
@@ -962,7 +962,7 @@ But after they are produced,
 
 		foreach ($destinations as $path => $content)
 		{
-			if (is_null($content))
+			if (\is_null($content))
 			{
 				$this->assertFalse(
 					is_file($path),

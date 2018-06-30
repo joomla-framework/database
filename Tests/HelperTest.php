@@ -95,14 +95,14 @@ class HelperTest extends TestCase
 	public function testGetSupported()
 	{
 		$this->assertTrue(
-			in_array('String', Helper::getSupported()),
+			\in_array('String', Helper::getSupported()),
 			'Line:' . __LINE__ . ' Joomla Streams must contain String.'
 		);
 
 		$registeredStreams = stream_get_wrappers();
 
 		$this->assertEquals(
-			count(array_diff($registeredStreams, Helper::getSupported())),
+			\count(array_diff($registeredStreams, Helper::getSupported())),
 			0,
 			'Line:' . __LINE__ . ' getSupported should contains default streams.'
 		);
@@ -120,7 +120,7 @@ class HelperTest extends TestCase
 		$registeredTransports = stream_get_transports();
 
 		$this->assertEquals(
-			count(array_diff($registeredTransports, Helper::getTransports())),
+			\count(array_diff($registeredTransports, Helper::getTransports())),
 			0,
 			'Line:' . __LINE__ . ' getTransports should contains default transports.'
 		);
@@ -138,7 +138,7 @@ class HelperTest extends TestCase
 		$registeredFilters = stream_get_filters();
 
 		$this->assertEquals(
-			count(array_diff($registeredFilters, Helper::getFilters())),
+			\count(array_diff($registeredFilters, Helper::getFilters())),
 			0,
 			'Line:' . __LINE__ . ' getFilters should contains default filters.'
 		);
@@ -155,7 +155,7 @@ class HelperTest extends TestCase
 	{
 		$streams = Helper::getJStreams();
 
-		$this->assertTrue(in_array('StringWrapper', Helper::getJStreams()));
+		$this->assertTrue(\in_array('StringWrapper', Helper::getJStreams()));
 	}
 
 	/**

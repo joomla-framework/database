@@ -10,7 +10,7 @@ namespace Joomla\Filesystem;
 
 use Joomla\Filesystem\Exception\FilesystemException;
 
-if (!defined('JPATH_ROOT'))
+if (!\defined('JPATH_ROOT'))
 {
 	throw new \LogicException('The "JPATH_ROOT" constant must be defined for your application.');
 }
@@ -140,7 +140,7 @@ class Path
 		$path = self::clean($path);
 		$mode = @ decoct(@ fileperms($path) & 0777);
 
-		if (strlen($mode) < 3)
+		if (\strlen($mode) < 3)
 		{
 			return '---------';
 		}
@@ -215,7 +215,7 @@ class Path
 	 */
 	public static function clean($path, $ds = DIRECTORY_SEPARATOR)
 	{
-		if (!is_string($path))
+		if (!\is_string($path))
 		{
 			throw new \UnexpectedValueException('JPath::clean $path is not a string.');
 		}
@@ -224,7 +224,7 @@ class Path
 		$scheme = '';
 		$path = $stream[0];
 
-		if (count($stream) >= 2)
+		if (\count($stream) >= 2)
 		{
 			$scheme = $stream[0] . '://';
 			$path = $stream[1];
@@ -303,7 +303,7 @@ class Path
 	public static function find($paths, $file)
 	{
 		// Force to array
-		if (!is_array($paths) && !($paths instanceof \Iterator))
+		if (!\is_array($paths) && !($paths instanceof \Iterator))
 		{
 			settype($paths, 'array');
 		}
@@ -331,7 +331,7 @@ class Path
 			 * non-registered directories are not accessible via directory
 			 * traversal attempts.
 			 */
-			if (file_exists($fullname) && substr($fullname, 0, strlen($path)) == $path)
+			if (file_exists($fullname) && substr($fullname, 0, \strlen($path)) == $path)
 			{
 				return $fullname;
 			}

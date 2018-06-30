@@ -461,7 +461,7 @@ class Patcher
 					if ($srcSize > 0)
 					{
 						$dstLines = & $this->getDestination($dst, $src);
-						$srcBottom = $srcLine + count($source);
+						$srcBottom = $srcLine + \count($source);
 
 						for ($l = $srcLine; $l < $srcBottom; $l++)
 						{
@@ -471,7 +471,7 @@ class Patcher
 							}
 						}
 
-						array_splice($dstLines, $dstLine, count($source), $destin);
+						array_splice($dstLines, $dstLine, \count($source), $destin);
 					}
 					else
 					{

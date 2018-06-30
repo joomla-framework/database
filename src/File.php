@@ -223,7 +223,7 @@ class File
 
 		$file = Path::clean($file);
 
-		return is_int(file_put_contents($file, $buffer));
+		return \is_int(file_put_contents($file, $buffer));
 	}
 
 	/**

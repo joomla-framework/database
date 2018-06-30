@@ -31,12 +31,12 @@ class Helper
 	{
 		$sch = parse_url($url, PHP_URL_SCHEME);
 
-		if (!in_array($sch, array('http', 'https', 'ftp', 'ftps'), true))
+		if (!\in_array($sch, array('http', 'https', 'ftp', 'ftps'), true))
 		{
 			return false;
 		}
 
-		if (in_array($sch, array('http', 'https'), true))
+		if (\in_array($sch, array('http', 'https'), true))
 		{
 			$headers = @ get_headers($url, 1);
 
@@ -48,7 +48,7 @@ class Helper
 			return $headers['Content-Length'];
 		}
 
-		if (in_array($sch, array('ftp', 'ftps'), true))
+		if (\in_array($sch, array('ftp', 'ftps'), true))
 		{
 			$server = parse_url($url, PHP_URL_HOST);
 			$port = parse_url($url, PHP_URL_PORT);
@@ -294,6 +294,6 @@ class Helper
 	 */
 	public static function isJoomlaStream($streamname)
 	{
-		return in_array($streamname, self::getJStreams());
+		return \in_array($streamname, self::getJStreams());
 	}
 }

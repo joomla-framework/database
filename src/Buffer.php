@@ -80,7 +80,7 @@ class Buffer
 	public function stream_read($count)
 	{
 		$ret = substr($this->buffers[$this->name], $this->position, $count);
-		$this->position += strlen($ret);
+		$this->position += \strlen($ret);
 
 		return $ret;
 	}
@@ -98,11 +98,11 @@ class Buffer
 	public function stream_write($data)
 	{
 		$left = substr($this->buffers[$this->name], 0, $this->position);
-		$right = substr($this->buffers[$this->name], $this->position + strlen($data));
+		$right = substr($this->buffers[$this->name], $this->position + \strlen($data));
 		$this->buffers[$this->name] = $left . $data . $right;
-		$this->position += strlen($data);
+		$this->position += \strlen($data);
 
-		return strlen($data);
+		return \strlen($data);
 	}
 
 	/**
@@ -128,7 +128,7 @@ class Buffer
 	 */
 	public function stream_eof()
 	{
-		return $this->position >= strlen($this->buffers[$this->name]);
+		return $this->position >= \strlen($this->buffers[$this->name]);
 	}
 
 	/**
@@ -148,7 +148,7 @@ class Buffer
 		switch ($whence)
 		{
 			case SEEK_SET:
-				if ($offset < strlen($this->buffers[$this->name]) && $offset >= 0)
+				if ($offset < \strlen($this->buffers[$this->name]) && $offset >= 0)
 				{
 					$this->position = $offset;
 
@@ -174,9 +174,9 @@ class Buffer
 				break;
 
 			case SEEK_END:
-				if (strlen($this->buffers[$this->name]) + $offset >= 0)
+				if (\strlen($this->buffers[$this->name]) + $offset >= 0)
 				{
-					$this->position = strlen($this->buffers[$this->name]) + $offset;
+					$this->position = \strlen($this->buffers[$this->name]) + $offset;
 
 					return true;
 				}

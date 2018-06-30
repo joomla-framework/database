@@ -68,7 +68,7 @@ class StreamTest extends FilesystemTestCase
 
 		$this->assertEquals(
 			0,
-			count(TestHelper::getValue($object, 'contextOptions'))
+			\count(TestHelper::getValue($object, 'contextOptions'))
 		);
 
 		$this->assertEquals(
@@ -202,7 +202,7 @@ class StreamTest extends FilesystemTestCase
 
 		$this->assertEquals(
 			'resource',
-			gettype(TestHelper::getValue($this->object, 'fh'))
+			\gettype(TestHelper::getValue($this->object, 'fh'))
 		);
 
 		$this->object->close();
@@ -270,7 +270,7 @@ class StreamTest extends FilesystemTestCase
 			$this->object->eof()
 		);
 
-		$this->object->read(strlen($string));
+		$this->object->read(\strlen($string));
 
 		$this->assertTrue(
 			$this->object->eof()
@@ -308,7 +308,7 @@ class StreamTest extends FilesystemTestCase
 		$this->object->open($filename);
 
 		$this->assertEquals(
-			strlen($string),
+			\strlen($string),
 			$this->object->filesize()
 		);
 
@@ -685,7 +685,7 @@ class StreamTest extends FilesystemTestCase
 		$metaData = $this->object->get_meta_data();
 
 		$this->assertTrue(
-			is_array($metaData)
+			\is_array($metaData)
 		);
 
 		$this->assertEquals(
@@ -728,7 +728,7 @@ class StreamTest extends FilesystemTestCase
 
 		$this->assertEquals(
 			'resource',
-			gettype(TestHelper::getValue($this->object, 'context'))
+			\gettype(TestHelper::getValue($this->object, 'context'))
 		);
 	}
 
@@ -877,12 +877,12 @@ class StreamTest extends FilesystemTestCase
 
 		$this->assertEquals(
 			'resource',
-			gettype($this->object->appendFilter("string.rot13"))
+			\gettype($this->object->appendFilter("string.rot13"))
 		);
 
 		$this->assertEquals(
-			count($filters) + 1,
-			count(TestHelper::getValue($this->object, 'filters'))
+			\count($filters) + 1,
+			\count(TestHelper::getValue($this->object, 'filters'))
 		);
 
 		unlink($filename);
@@ -920,12 +920,12 @@ class StreamTest extends FilesystemTestCase
 
 		$this->assertEquals(
 			'resource',
-			gettype($this->object->prependFilter("string.rot13"))
+			\gettype($this->object->prependFilter("string.rot13"))
 		);
 
 		$this->assertEquals(
-			count($filters) + 1,
-			count(TestHelper::getValue($this->object, 'filters'))
+			\count($filters) + 1,
+			\count(TestHelper::getValue($this->object, 'filters'))
 		);
 
 		// Tests for invalid filters
