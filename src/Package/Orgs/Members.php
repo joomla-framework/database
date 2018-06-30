@@ -270,7 +270,7 @@ class Members extends AbstractPackage
 	{
 		$allowedRoles = array('member', 'admin');
 
-		if (!in_array($role, $allowedRoles))
+		if (!\in_array($role, $allowedRoles))
 		{
 			throw new \InvalidArgumentException(sprintf("The user's role must be: %s", implode(', ', $allowedRoles)));
 		}

@@ -30,7 +30,7 @@ abstract class AbstractPackage extends AbstractGithubObject
 	{
 		parent::__construct($options, $client);
 
-		$this->package = get_class($this);
+		$this->package = \get_class($this);
 		$this->package = substr($this->package, strrpos($this->package, '\\') + 1);
 	}
 

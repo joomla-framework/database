@@ -106,7 +106,7 @@ class Contents extends AbstractPackage
 	 */
 	public function getArchiveLink($owner, $repo, $archiveFormat = 'zipball', $ref = '')
 	{
-		if (false == in_array($archiveFormat, array('tarball', 'zipball')))
+		if (false == \in_array($archiveFormat, array('tarball', 'zipball')))
 		{
 			throw new \UnexpectedValueException('Archive format must be either "tarball" or "zipball".');
 		}

@@ -59,7 +59,7 @@ class Starring extends AbstractPackage
 		$allowedSort = array('created', 'updated');
 		$allowedDir  = array('asc', 'desc');
 
-		if (!in_array($sort, $allowedSort))
+		if (!\in_array($sort, $allowedSort))
 		{
 			throw new \InvalidArgumentException(
 				sprintf(
@@ -69,7 +69,7 @@ class Starring extends AbstractPackage
 			);
 		}
 
-		if (!in_array($direction, $allowedDir))
+		if (!\in_array($direction, $allowedDir))
 		{
 			throw new \InvalidArgumentException(
 				sprintf(

@@ -94,7 +94,7 @@ class Teams extends AbstractPackage
 
 		if ($permission)
 		{
-			if (false == in_array($permission, array('pull', 'push', 'admin')))
+			if (false == \in_array($permission, array('pull', 'push', 'admin')))
 			{
 				throw new \UnexpectedValueException('Permissions must be either "pull", "push", or "admin".');
 			}
@@ -136,7 +136,7 @@ class Teams extends AbstractPackage
 
 		if ($permission)
 		{
-			if (false == in_array($permission, array('pull', 'push', 'admin')))
+			if (false == \in_array($permission, array('pull', 'push', 'admin')))
 			{
 				throw new \UnexpectedValueException('Permissions must be either "pull", "push", or "admin".');
 			}
@@ -340,7 +340,7 @@ class Teams extends AbstractPackage
 		// Build the request path.
 		$path = "/teams/$id/memberships/$user";
 
-		if (false == in_array($role, array('member', 'maintainer')))
+		if (false == \in_array($role, array('member', 'maintainer')))
 		{
 			throw new \UnexpectedValueException('Roles must be either "member" or "maintainer".');
 		}

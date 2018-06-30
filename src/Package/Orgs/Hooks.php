@@ -85,7 +85,7 @@ class Hooks extends AbstractPackage
 		// Build the request path.
 		$path = "/orgs/$org/hooks";
 
-		if (false == in_array($contentType, array('form', 'json')))
+		if (false == \in_array($contentType, array('form', 'json')))
 		{
 			throw new \UnexpectedValueException('Content type must be either "form" or "json".');
 		}
@@ -112,7 +112,7 @@ class Hooks extends AbstractPackage
 			// Check to ensure all events are in the allowed list
 			foreach ($events as $event)
 			{
-				if (!in_array($event, $this->hookEvents))
+				if (!\in_array($event, $this->hookEvents))
 				{
 					throw new \RuntimeException('Your events array contains an unauthorized event.');
 				}
@@ -157,7 +157,7 @@ class Hooks extends AbstractPackage
 
 		if ($contentType)
 		{
-			if (false == in_array($contentType, array('form', 'json')))
+			if (false == \in_array($contentType, array('form', 'json')))
 			{
 				throw new \UnexpectedValueException('Content type must be either "form" or "json".');
 			}
@@ -189,7 +189,7 @@ class Hooks extends AbstractPackage
 			// Check to ensure all events are in the allowed list
 			foreach ($events as $event)
 			{
-				if (!in_array($event, $this->hookEvents))
+				if (!\in_array($event, $this->hookEvents))
 				{
 					throw new \RuntimeException('Your events array contains an unauthorized event.');
 				}

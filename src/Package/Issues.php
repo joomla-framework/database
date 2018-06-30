@@ -64,7 +64,7 @@ class Issues extends AbstractPackage
 			'body'      => $body
 		);
 
-		if (is_string($assignee) && !empty($assignees))
+		if (\is_string($assignee) && !empty($assignees))
 		{
 			throw new \UnexpectedValueException('You cannot pass both assignee and assignees. Only one may be provided.');
 		}
@@ -73,7 +73,7 @@ class Issues extends AbstractPackage
 		{
 			$data['assignees'] = array_values($assignees);
 		}
-		elseif (is_string($assignee))
+		elseif (\is_string($assignee))
 		{
 			$data['assignee'] = $assignee;
 		}

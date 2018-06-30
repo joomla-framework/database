@@ -39,7 +39,7 @@ class Markdown extends AbstractPackage
 		$validModes = array('gfm', 'markdown');
 
 		// Make sure the scope is valid
-		if (!in_array($mode, $validModes))
+		if (!\in_array($mode, $validModes))
 		{
 			throw new \InvalidArgumentException(sprintf('The %s mode is not valid. Valid modes are "gfm" or "markdown".', $mode));
 		}

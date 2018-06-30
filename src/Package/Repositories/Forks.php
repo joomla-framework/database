@@ -36,7 +36,7 @@ class Forks extends AbstractPackage
 		// Build the request path.
 		$path = '/repos/' . $owner . '/' . $repo . '/forks';
 
-		if (strlen($org) > 0)
+		if (\strlen($org) > 0)
 		{
 			$data = json_encode(
 				array('org' => $org)

@@ -52,12 +52,12 @@ class Repositories extends AbstractPackage
 	 */
 	public function getListOwn($type = 'all', $sort = 'full_name', $direction = '')
 	{
-		if (false == in_array($type, array('all', 'owner', 'public', 'private', 'member')))
+		if (false == \in_array($type, array('all', 'owner', 'public', 'private', 'member')))
 		{
 			throw new \RuntimeException('Invalid type');
 		}
 
-		if (false == in_array($sort, array('created', 'updated', 'pushed', 'full_name')))
+		if (false == \in_array($sort, array('created', 'updated', 'pushed', 'full_name')))
 		{
 			throw new \RuntimeException('Invalid sort field');
 		}
@@ -65,7 +65,7 @@ class Repositories extends AbstractPackage
 		// Sort direction default: when using full_name: asc, otherwise desc.
 		$direction = ($direction) ? : (('full_name' == $sort) ? 'asc' : 'desc');
 
-		if (false == in_array($direction, array('asc', 'desc')))
+		if (false == \in_array($direction, array('asc', 'desc')))
 		{
 			throw new \RuntimeException('Invalid sort order');
 		}
@@ -97,12 +97,12 @@ class Repositories extends AbstractPackage
 	 */
 	public function getListUser($user, $type = 'all', $sort = 'full_name', $direction = '')
 	{
-		if (false == in_array($type, array('all', 'owner', 'member')))
+		if (false == \in_array($type, array('all', 'owner', 'member')))
 		{
 			throw new \RuntimeException('Invalid type');
 		}
 
-		if (false == in_array($sort, array('created', 'updated', 'pushed', 'full_name')))
+		if (false == \in_array($sort, array('created', 'updated', 'pushed', 'full_name')))
 		{
 			throw new \RuntimeException('Invalid sort field');
 		}
@@ -110,7 +110,7 @@ class Repositories extends AbstractPackage
 		// Sort direction default: when using full_name: asc, otherwise desc.
 		$direction = ($direction) ? : (('full_name' == $sort) ? 'asc' : 'desc');
 
-		if (false == in_array($direction, array('asc', 'desc')))
+		if (false == \in_array($direction, array('asc', 'desc')))
 		{
 			throw new \RuntimeException('Invalid sort order');
 		}
@@ -140,7 +140,7 @@ class Repositories extends AbstractPackage
 	 */
 	public function getListOrg($org, $type = 'all')
 	{
-		if (false == in_array($type, array('all', 'public', 'private', 'forks', 'sources', 'member')))
+		if (false == \in_array($type, array('all', 'public', 'private', 'forks', 'sources', 'member')))
 		{
 			throw new \RuntimeException('Invalid type');
 		}

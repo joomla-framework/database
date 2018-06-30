@@ -36,7 +36,7 @@ class Search extends AbstractPackage
 	 */
 	public function issues($owner, $repo, $state, $keyword)
 	{
-		if (false == in_array($state, array('open', 'close')))
+		if (false == \in_array($state, array('open', 'close')))
 		{
 			throw new \UnexpectedValueException('State must be either "open" or "closed"');
 		}

@@ -90,7 +90,7 @@ class Orgs extends AbstractPackage
 
 		$data = array();
 
-		$fArgs = func_get_args();
+		$fArgs = \func_get_args();
 
 		foreach ($args as $i => $arg)
 		{

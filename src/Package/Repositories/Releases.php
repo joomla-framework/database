@@ -231,7 +231,7 @@ class Releases extends AbstractPackage
 
 		$releases = array();
 
-		if (is_array($response))
+		if (\is_array($response))
 		{
 			foreach ($response as $release)
 			{
