@@ -311,7 +311,7 @@ class WebClient
 			if (preg_match_all($pattern, $userAgent, $matches))
 			{
 				// Do we have both a Version and browser match?
-				if (count($matches['browser']) == 2)
+				if (\count($matches['browser']) == 2)
 				{
 					// See whether Version or browser came first, and use the number accordingly.
 					if (strripos($userAgent, 'Version') < strripos($userAgent, $patternBrowser))
@@ -323,7 +323,7 @@ class WebClient
 						$this->browserVersion = $matches['version'][1];
 					}
 				}
-				elseif (count($matches['browser']) > 2)
+				elseif (\count($matches['browser']) > 2)
 				{
 					$key = array_search('Version', $matches['browser']);
 
@@ -424,14 +424,14 @@ class WebClient
 
 			if (preg_match('/Opera[\/| ]?([0-9.]+)/u', $userAgent, $match))
 			{
-				$version = floatval($match[1]);
+				$version = \floatval($match[1]);
 			}
 
 			if (preg_match('/Version\/([0-9.]+)/u', $userAgent, $match))
 			{
-				if (floatval($match[1]) >= 10)
+				if (\floatval($match[1]) >= 10)
 				{
-					$version = floatval($match[1]);
+					$version = \floatval($match[1]);
 				}
 			}
 

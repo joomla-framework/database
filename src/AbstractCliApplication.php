@@ -57,7 +57,7 @@ abstract class AbstractCliApplication extends AbstractApplication
 	{
 		// Close the application if we are not executed from the command line.
 		// @codeCoverageIgnoreStart
-		if (!defined('STDOUT') || !defined('STDIN') || !isset($_SERVER['argv']))
+		if (!\defined('STDOUT') || !\defined('STDIN') || !isset($_SERVER['argv']))
 		{
 			$this->close();
 		}

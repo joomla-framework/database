@@ -112,7 +112,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 	{
 		// Verify that the process control extension for PHP is available.
 		// @codeCoverageIgnoreStart
-		if (!defined('SIGHUP'))
+		if (!\defined('SIGHUP'))
 		{
 			$this->getLogger()->error('The PCNTL extension for PHP is not available.');
 
@@ -285,7 +285,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		// The application author name.  This string is used in generating startup scripts and has
 		// a maximum of 50 characters.
 		$tmp = (string) $this->get('author_name', 'Joomla Framework');
-		$this->set('author_name', (strlen($tmp) > 50) ? substr($tmp, 0, 50) : $tmp);
+		$this->set('author_name', (\strlen($tmp) > 50) ? substr($tmp, 0, 50) : $tmp);
 
 		// The application author email.  This string is used in generating startup scripts.
 		$tmp = (string) $this->get('author_email', 'admin@joomla.org');
@@ -705,7 +705,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		foreach (self::$signals as $signal)
 		{
 			// Ignore signals that are not defined.
-			if (!defined($signal) || !is_int(constant($signal)) || (constant($signal) === 0))
+			if (!\defined($signal) || !\is_int(constant($signal)) || (constant($signal) === 0))
 			{
 				// Define the signal to avoid notices.
 				$this->getLogger()->debug('Signal "' . $signal . '" not defined. Defining it as null.');

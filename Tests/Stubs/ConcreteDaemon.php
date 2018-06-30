@@ -300,7 +300,7 @@ class ConcreteDaemon extends AbstractDaemonApplication
 		// Instantiate variables.
 		$config = array();
 
-		if (empty($file) && defined('JPATH_ROOT'))
+		if (empty($file) && \defined('JPATH_ROOT'))
 		{
 			$file = JPATH_ROOT . '/configuration.php';
 

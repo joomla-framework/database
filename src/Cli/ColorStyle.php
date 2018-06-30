@@ -180,7 +180,7 @@ final class ColorStyle
 		{
 			$subParts = explode('=', $part);
 
-			if (count($subParts) < 2)
+			if (\count($subParts) < 2)
 			{
 				continue;
 			}

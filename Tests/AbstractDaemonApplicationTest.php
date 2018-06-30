@@ -131,7 +131,7 @@ class AbstractDaemonApplicationTest extends TestCase
 		$return = $this->inspector->setupSignalHandlers();
 
 		$this->assertThat(
-			count($this->inspector->setupSignalHandlers),
+			\count($this->inspector->setupSignalHandlers),
 			$this->equalTo(2),
 			'Check that only the two valid signals are setup.'
 		);
@@ -156,7 +156,7 @@ class AbstractDaemonApplicationTest extends TestCase
 		$return = $this->inspector->setupSignalHandlers();
 
 		$this->assertThat(
-			count($this->inspector->setupSignalHandlers),
+			\count($this->inspector->setupSignalHandlers),
 			$this->equalTo(0),
 			'Check that no signals are setup.'
 		);
