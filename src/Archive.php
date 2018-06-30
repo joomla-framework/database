@@ -44,7 +44,7 @@ class Archive
 	 */
 	public function __construct($options = array())
 	{
-		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		if (!\is_array($options) && !($options instanceof \ArrayAccess))
 		{
 			throw new \InvalidArgumentException(
 				'The options param must be an array or implement the ArrayAccess interface.'
@@ -169,7 +169,7 @@ class Archive
 	{
 		if ($override || !isset($this->adapters[$type]))
 		{
-			$error = !is_object($class) && !class_exists($class)
+			$error = !\is_object($class) && !class_exists($class)
 					? 'Archive adapter "%s" (class "%s") not found.'
 					: '';
 

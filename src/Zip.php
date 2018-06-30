@@ -111,7 +111,7 @@ class Zip implements ExtractableInterface
 	 */
 	public function __construct($options = array())
 	{
-		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		if (!\is_array($options) && !($options instanceof \ArrayAccess))
 		{
 			throw new \InvalidArgumentException(
 				'The options param must be an array or implement the ArrayAccess interface.'
@@ -237,7 +237,7 @@ class Zip implements ExtractableInterface
 			throw new \RuntimeException('Get ZIP Information failed');
 		}
 
-		for ($i = 0, $n = count($this->metadata); $i < $n; $i++)
+		for ($i = 0, $n = \count($this->metadata); $i < $n; $i++)
 		{
 			$lastPathCharacter = substr($this->metadata[$i]['name'], -1, 1);
 
@@ -277,7 +277,7 @@ class Zip implements ExtractableInterface
 	{
 		$zip = zip_open($archive);
 
-		if (!is_resource($zip))
+		if (!\is_resource($zip))
 		{
 			throw new \RuntimeException('Unable to open archive');
 		}
@@ -296,7 +296,7 @@ class Zip implements ExtractableInterface
 				throw new \RuntimeException('Unable to read ZIP entry');
 			}
 
-			if (substr(zip_entry_name($file), strlen(zip_entry_name($file)) - 1) != '/')
+			if (substr(zip_entry_name($file), \strlen(zip_entry_name($file)) - 1) != '/')
 			{
 				$buffer = zip_entry_read($file, zip_entry_filesize($file));
 
@@ -365,7 +365,7 @@ class Zip implements ExtractableInterface
 
 		// Get details from central directory structure.
 		$fhStart = strpos($data, $this->ctrlDirHeader, $offset);
-		$dataLength = strlen($data);
+		$dataLength = \strlen($data);
 
 		do
 		{
@@ -523,8 +523,8 @@ class Zip implements ExtractableInterface
 
 		// Get the hex time.
 		$dtime = dechex($this->unix2DosTime($ftime));
-		$hexdtime = chr(hexdec($dtime[6] . $dtime[7])) . chr(hexdec($dtime[4] . $dtime[5])) . chr(hexdec($dtime[2] . $dtime[3]))
-			. chr(hexdec($dtime[0] . $dtime[1]));
+		$hexdtime = \chr(hexdec($dtime[6] . $dtime[7])) . \chr(hexdec($dtime[4] . $dtime[5])) . \chr(hexdec($dtime[2] . $dtime[3]))
+			. \chr(hexdec($dtime[0] . $dtime[1]));
 
 		// Begin creating the ZIP data.
 		$fr = $this->fileHeader;
@@ -542,11 +542,11 @@ class Zip implements ExtractableInterface
 		$fr .= $hexdtime;
 
 		// "Local file header" segment.
-		$uncLen = strlen($data);
+		$uncLen = \strlen($data);
 		$crc    = crc32($data);
 		$zdata  = gzcompress($data);
-		$zdata  = substr(substr($zdata, 0, strlen($zdata) - 4), 2);
-		$cLen   = strlen($zdata);
+		$zdata  = substr(substr($zdata, 0, \strlen($zdata) - 4), 2);
+		$cLen   = \strlen($zdata);
 
 		// CRC 32 information.
 		$fr .= pack('V', $crc);
@@ -558,7 +558,7 @@ class Zip implements ExtractableInterface
 		$fr .= pack('V', $uncLen);
 
 		// Length of filename.
-		$fr .= pack('v', strlen($name));
+		$fr .= pack('v', \strlen($name));
 
 		// Extra field length.
 		$fr .= pack('v', 0);
@@ -570,7 +570,7 @@ class Zip implements ExtractableInterface
 		$fr .= $zdata;
 
 		// Add this entry to array.
-		$oldOffset = strlen(implode('', $contents));
+		$oldOffset = \strlen(implode('', $contents));
 		$contents[] = &$fr;
 
 		// Add to central directory record.
@@ -601,7 +601,7 @@ class Zip implements ExtractableInterface
 		$cdrec .= pack('V', $uncLen);
 
 		// Length of filename.
-		$cdrec .= pack('v', strlen($name));
+		$cdrec .= pack('v', \strlen($name));
 
 		// Extra field length.
 		$cdrec .= pack('v', 0);
@@ -656,10 +656,10 @@ class Zip implements ExtractableInterface
 		 * ZIP file comment length.
 		 */
 		$buffer = $data . $dir . $this->ctrlDirEnd .
-		pack('v', count($ctrlDir)) .
-		pack('v', count($ctrlDir)) .
-		pack('V', strlen($dir)) .
-		pack('V', strlen($data)) .
+		pack('v', \count($ctrlDir)) .
+		pack('v', \count($ctrlDir)) .
+		pack('V', \strlen($dir)) .
+		pack('V', \strlen($data)) .
 		"\x00\x00";
 
 		return File::write($path, $buffer);

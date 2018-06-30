@@ -58,7 +58,7 @@ class Gzip implements ExtractableInterface
 	 */
 	public function __construct($options = array())
 	{
-		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		if (!\is_array($options) && !($options instanceof \ArrayAccess))
 		{
 			throw new \InvalidArgumentException(
 				'The options param must be an array or implement the ArrayAccess interface.'
@@ -93,7 +93,7 @@ class Gzip implements ExtractableInterface
 			}
 
 			$position = $this->getFilePosition();
-			$buffer = gzinflate(substr($this->data, $position, strlen($this->data) - $position));
+			$buffer = gzinflate(substr($this->data, $position, \strlen($this->data) - $position));
 
 			if (empty($buffer))
 			{
