@@ -127,9 +127,9 @@ class DataObject implements DumpableInterface, \IteratorAggregate, \JsonSerializ
 	public function bind($properties, $updateNulls = true)
 	{
 		// Check the properties data type.
-		if (!is_array($properties) && !is_object($properties))
+		if (!\is_array($properties) && !\is_object($properties))
 		{
-			throw new \InvalidArgumentException(sprintf('%s(%s)', __METHOD__, gettype($properties)));
+			throw new \InvalidArgumentException(sprintf('%s(%s)', __METHOD__, \gettype($properties)));
 		}
 
 		// Check if the object is traversable.
@@ -138,7 +138,7 @@ class DataObject implements DumpableInterface, \IteratorAggregate, \JsonSerializ
 			// Convert iterator to array.
 			$properties = iterator_to_array($properties);
 		}
-		elseif (is_object($properties))
+		elseif (\is_object($properties))
 		// Check if the object needs to be converted to an array.
 		{
 			// Convert properties to an array.
@@ -326,6 +326,6 @@ class DataObject implements DumpableInterface, \IteratorAggregate, \JsonSerializ
 	 */
 	public function count()
 	{
-		return count($this->properties);
+		return \count($this->properties);
 	}
 }

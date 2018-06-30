@@ -271,7 +271,7 @@ class DataObjectTest extends TestCase
 
 		$this->assertEquals(
 			'object',
-			gettype($dump),
+			\gettype($dump),
 			'Dump should return an object.'
 		);
 
