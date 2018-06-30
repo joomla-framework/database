@@ -73,7 +73,7 @@ class Uri extends AbstractUri
 	 */
 	public function setQuery($query)
 	{
-		if (is_array($query))
+		if (\is_array($query))
 		{
 			$this->vars = $query;
 		}

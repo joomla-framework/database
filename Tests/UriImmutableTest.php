@@ -78,7 +78,7 @@ class UriImmuteableTest extends TestCase
 	 */
 	public function testToString()
 	{
-		$classname = get_class($this->object);
+		$classname = \get_class($this->object);
 
 		// The next 2 tested functions should generate equivalent results
 		$this->assertThat(
@@ -122,7 +122,7 @@ class UriImmuteableTest extends TestCase
 	 */
 	public function testRender()
 	{
-		$classname = get_class($this->object);
+		$classname = \get_class($this->object);
 
 		$this->assertThat(
 			$this->object->render($classname::ALL),
