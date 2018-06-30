@@ -184,7 +184,7 @@ class Client
 
 		if ($this->getOption('scope'))
 		{
-			$scope = is_array($this->getOption('scope')) ? implode(' ', $this->getOption('scope')) : $this->getOption('scope');
+			$scope = \is_array($this->getOption('scope')) ? implode(' ', $this->getOption('scope')) : $this->getOption('scope');
 			$url .= '&scope=' . urlencode($scope);
 		}
 
@@ -193,7 +193,7 @@ class Client
 			$url .= '&state=' . urlencode($this->getOption('state'));
 		}
 
-		if (is_array($this->getOption('requestparams')))
+		if (\is_array($this->getOption('requestparams')))
 		{
 			foreach ($this->getOption('requestparams') as $key => $value)
 			{
@@ -334,7 +334,7 @@ class Client
 	 */
 	public function setToken($value)
 	{
-		if (is_array($value) && !array_key_exists('expires_in', $value) && array_key_exists('expires', $value))
+		if (\is_array($value) && !array_key_exists('expires_in', $value) && array_key_exists('expires', $value))
 		{
 			$value['expires_in'] = $value['expires'];
 			unset($value['expires']);
