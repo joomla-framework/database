@@ -45,7 +45,7 @@ class Json extends Input
 			$this->filter = new Filter\InputFilter;
 		}
 
-		if (is_null($source))
+		if (\is_null($source))
 		{
 			$this->raw = file_get_contents('php://input');
 
@@ -58,7 +58,7 @@ class Json extends Input
 
 			$this->data = json_decode($this->raw, true);
 
-			if (!is_array($this->data))
+			if (!\is_array($this->data))
 			{
 				$this->data = array();
 			}

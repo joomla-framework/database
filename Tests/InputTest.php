@@ -575,7 +575,7 @@ class InputTest extends TestCase
 		TestHelper::invoke($instance, 'loadAllInputs');
 
 		$inputs = TestHelper::getValue($instance, 'inputs');
-		$this->assertGreaterThan(0, count($inputs));
+		$this->assertGreaterThan(0, \count($inputs));
 	}
 
 	/**

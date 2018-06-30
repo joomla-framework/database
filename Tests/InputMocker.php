@@ -66,7 +66,7 @@ class InputMocker
 		);
 
 		// Add custom methods if required for derived application classes.
-		if (isset($options['methods']) && is_array($options['methods']))
+		if (isset($options['methods']) && \is_array($options['methods']))
 		{
 			$methods = array_merge($methods, $options['methods']);
 		}
