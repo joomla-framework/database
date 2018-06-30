@@ -144,7 +144,7 @@ abstract class AbstractController implements ControllerInterface
 
 		if (!($input instanceof Input))
 		{
-			throw new \UnexpectedValueException(sprintf('%s would not accept a `%s`.', __METHOD__, gettype($this->input)));
+			throw new \UnexpectedValueException(sprintf('%s would not accept a `%s`.', __METHOD__, \gettype($this->input)));
 		}
 
 		$this->setInput($input);
