@@ -46,7 +46,7 @@ class Curl implements TransportInterface
 			throw new \RuntimeException('Cannot use a cURL transport when curl_init() is not available.');
 		}
 
-		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		if (!\is_array($options) && !($options instanceof \ArrayAccess))
 		{
 			throw new \InvalidArgumentException(
 				'The options param must be an array or implement the ArrayAccess interface.'
@@ -122,7 +122,7 @@ class Curl implements TransportInterface
 			// Add the relevant headers.
 			if (is_scalar($options[CURLOPT_POSTFIELDS]))
 			{
-				$headers['Content-Length'] = strlen($options[CURLOPT_POSTFIELDS]);
+				$headers['Content-Length'] = \strlen($options[CURLOPT_POSTFIELDS]);
 			}
 		}
 
@@ -207,7 +207,7 @@ class Curl implements TransportInterface
 		$content = curl_exec($ch);
 
 		// Check if the content is a string. If it is not, it must be an error.
-		if (!is_string($content))
+		if (!\is_string($content))
 		{
 			$message = curl_error($ch);
 
@@ -312,7 +312,7 @@ class Curl implements TransportInterface
 		// Get the response code from the first offset of the response headers.
 		preg_match('/[0-9]{3}/', array_shift($headers), $matches);
 
-		$code = count($matches) ? $matches[0] : null;
+		$code = \count($matches) ? $matches[0] : null;
 
 		if (is_numeric($code))
 		{
@@ -368,7 +368,7 @@ class Curl implements TransportInterface
 
 			case '2.0':
 			case '2':
-				if (defined('CURL_HTTP_VERSION_2'))
+				if (\defined('CURL_HTTP_VERSION_2'))
 				{
 					return CURL_HTTP_VERSION_2;
 				}

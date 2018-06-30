@@ -46,7 +46,7 @@ class Http
 	 */
 	public function __construct($options = array(), TransportInterface $transport = null)
 	{
-		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		if (!\is_array($options) && !($options instanceof \ArrayAccess))
 		{
 			throw new \InvalidArgumentException(
 				'The options param must be an array or implement the ArrayAccess interface.'
@@ -271,13 +271,13 @@ class Http
 		$userAgent = isset($this->options['userAgent']) ? $this->options['userAgent'] : null;
 
 		// Convert to a Uri object if we were given a string
-		if (is_string($url))
+		if (\is_string($url))
 		{
 			$url = new Uri($url);
 		}
 		elseif (!($url instanceof UriInterface))
 		{
-			throw new \InvalidArgumentException(sprintf('A string or UriInterface object must be provided, a "%s" was provided.', gettype($url)));
+			throw new \InvalidArgumentException(sprintf('A string or UriInterface object must be provided, a "%s" was provided.', \gettype($url)));
 		}
 
 		return $this->transport->request($method, $url, $data, $headers, $timeout, $userAgent);

@@ -52,7 +52,7 @@ class Socket implements TransportInterface
 			throw new \RuntimeException('Cannot use a socket transport when fsockopen() is not available.');
 		}
 
-		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		if (!\is_array($options) && !($options instanceof \ArrayAccess))
 		{
 			throw new \InvalidArgumentException(
 				'The options param must be an array or implement the ArrayAccess interface.'
@@ -82,7 +82,7 @@ class Socket implements TransportInterface
 		$connection = $this->connect($uri, $timeout);
 
 		// Make sure the connection is alive and valid.
-		if (is_resource($connection))
+		if (\is_resource($connection))
 		{
 			// Make sure the connection has not timed out.
 			$meta = stream_get_meta_data($connection);
@@ -115,7 +115,7 @@ class Socket implements TransportInterface
 			}
 
 			// Add the relevant headers.
-			$headers['Content-Length'] = strlen($data);
+			$headers['Content-Length'] = \strlen($data);
 		}
 
 		// Configure protocol version, use transport's default if not set otherwise.
@@ -140,7 +140,7 @@ class Socket implements TransportInterface
 		}
 
 		// If there are custom headers to send add them to the request payload.
-		if (is_array($headers))
+		if (\is_array($headers))
 		{
 			foreach ($headers as $k => $v)
 			{
@@ -281,7 +281,7 @@ class Socket implements TransportInterface
 		$key = md5($host . $port);
 
 		// If the connection already exists, use it.
-		if (!empty($this->connections[$key]) && is_resource($this->connections[$key]))
+		if (!empty($this->connections[$key]) && \is_resource($this->connections[$key]))
 		{
 			// Connection reached EOF, cannot be used anymore
 			$meta = stream_get_meta_data($this->connections[$key]);

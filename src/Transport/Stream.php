@@ -52,7 +52,7 @@ class Stream implements TransportInterface
 			throw new \RuntimeException('Cannot use a stream transport when "allow_url_fopen" is disabled.');
 		}
 
-		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		if (!\is_array($options) && !($options instanceof \ArrayAccess))
 		{
 			throw new \InvalidArgumentException(
 				'The options param must be an array or implement the ArrayAccess interface.'
@@ -102,7 +102,7 @@ class Stream implements TransportInterface
 			}
 
 			// Add the relevant headers.
-			$headers['Content-Length'] = strlen($options['content']);
+			$headers['Content-Length'] = \strlen($options['content']);
 		}
 
 		// If an explicit timeout is given user it.

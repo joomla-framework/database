@@ -29,7 +29,7 @@ class HttpFactory
 	 */
 	public static function getHttp($options = array(), $adapters = null)
 	{
-		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		if (!\is_array($options) && !($options instanceof \ArrayAccess))
 		{
 			throw new \InvalidArgumentException(
 				'The options param must be an array or implement the ArrayAccess interface.'
@@ -57,14 +57,14 @@ class HttpFactory
 	 */
 	public static function getAvailableDriver($options = array(), $default = null)
 	{
-		if (!is_array($options) && !($options instanceof \ArrayAccess))
+		if (!\is_array($options) && !($options instanceof \ArrayAccess))
 		{
 			throw new \InvalidArgumentException(
 				'The options param must be an array or implement the ArrayAccess interface.'
 			);
 		}
 
-		if (is_null($default))
+		if (\is_null($default))
 		{
 			$availableAdapters = self::getHttpTransports();
 		}
@@ -75,7 +75,7 @@ class HttpFactory
 		}
 
 		// Check if there is at least one available http transport adapter
-		if (!count($availableAdapters))
+		if (!\count($availableAdapters))
 		{
 			return false;
 		}
