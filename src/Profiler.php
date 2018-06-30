@@ -149,7 +149,7 @@ class Profiler implements ProfilerInterface, \IteratorAggregate, \Countable
 			$this->points[] = $point;
 
 			// Add it in the lookup table.
-			$this->lookup[$point->getName()] = count($this->points) - 1;
+			$this->lookup[$point->getName()] = \count($this->points) - 1;
 		}
 	}
 
@@ -214,7 +214,7 @@ class Profiler implements ProfilerInterface, \IteratorAggregate, \Countable
 		$this->points[] = $point;
 
 		// Store the point name and its key in $points, in the lookup array.
-		$this->lookup[$name] = count($this->points) - 1;
+		$this->lookup[$name] = \count($this->points) - 1;
 
 		return $this;
 	}
@@ -440,7 +440,7 @@ class Profiler implements ProfilerInterface, \IteratorAggregate, \Countable
 	 */
 	public function count()
 	{
-		return count($this->points);
+		return \count($this->points);
 	}
 
 	/**
@@ -473,7 +473,7 @@ class Profiler implements ProfilerInterface, \IteratorAggregate, \Countable
 		$this->points[] = $point;
 
 		// Add it in the lookup table.
-		$this->lookup[$point->getName()] = count($this->points) - 1;
+		$this->lookup[$point->getName()] = \count($this->points) - 1;
 
 		return $this;
 	}
