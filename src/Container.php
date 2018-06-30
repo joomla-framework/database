@@ -185,7 +185,7 @@ class Container implements ContainerInterface
 
 		$resolvedKey = $this->resolveAlias($key);
 
-		if (in_array($resolvedKey, $buildStack, true))
+		if (\in_array($resolvedKey, $buildStack, true))
 		{
 			$buildStack = array();
 
@@ -460,7 +460,7 @@ class Container implements ContainerInterface
 			return $this->instances[$key];
 		}
 
-		return call_user_func($raw['callback'], $this);
+		return \call_user_func($raw['callback'], $this);
 	}
 
 	/**
