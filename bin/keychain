@@ -60,7 +60,7 @@ class KeychainManager extends \Joomla\Application\AbstractCliApplication
 	 */
 	protected function doExecute()
 	{
-		if (!count($this->input->args))
+		if (!\count($this->input->args))
 		{
 			// Check if they passed --help in otherwise display short usage summary
 			if ($this->input->get('help', false) === false)
@@ -76,7 +76,7 @@ class KeychainManager extends \Joomla\Application\AbstractCliApplication
 		}
 
 		// For all tasks but help and init we use the keychain
-		if (!in_array($this->input->args[0], array('help', 'init')))
+		if (!\in_array($this->input->args[0], array('help', 'init')))
 		{
 			$this->loadKeychain();
 		}
@@ -182,7 +182,7 @@ class KeychainManager extends \Joomla\Application\AbstractCliApplication
 		$passphraseFile = $this->input->get('passphrase', '', 'raw');
 		$privateKeyFile = $this->input->get('private-key', '', 'raw');
 
-		if (!strlen($passphraseFile))
+		if (!\strlen($passphraseFile))
 		{
 			$this->out('A passphrase file must be specified with --passphrase');
 			$this->close(1);
@@ -212,7 +212,7 @@ class KeychainManager extends \Joomla\Application\AbstractCliApplication
 	 */
 	protected function create()
 	{
-		if (count($this->input->args) != 3)
+		if (\count($this->input->args) != 3)
 		{
 			$this->out("usage: {$this->input->executable} [options] create entry_name entry_value");
 			$this->close(1);
@@ -235,7 +235,7 @@ class KeychainManager extends \Joomla\Application\AbstractCliApplication
 	 */
 	protected function change()
 	{
-		if (count($this->input->args) != 3)
+		if (\count($this->input->args) != 3)
 		{
 			$this->out("usage: {$this->input->executable} [options] change entry_name entry_value");
 			$this->close(1);
@@ -253,7 +253,7 @@ class KeychainManager extends \Joomla\Application\AbstractCliApplication
 	 */
 	protected function read()
 	{
-		if (count($this->input->args) != 2)
+		if (\count($this->input->args) != 2)
 		{
 			$this->out("usage: {$this->input->executable} [options] read entry_name");
 			$this->close(1);
@@ -291,7 +291,7 @@ class KeychainManager extends \Joomla\Application\AbstractCliApplication
 	 */
 	protected function delete()
 	{
-		if (count($this->input->args) != 2)
+		if (\count($this->input->args) != 2)
 		{
 			$this->out("usage: {$this->input->executable} [options] delete entry_name");
 			$this->close(1);
