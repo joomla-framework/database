@@ -50,7 +50,7 @@ class StorageTest extends StorageCase
 	{
 		$className = static::$className;
 		$instance = $className::getInstance();
-		$instanceClass = get_class($instance);
+		$instanceClass = \get_class($instance);
 
 		// Can't be us because we are abstract
 		$this->assertNotEquals($className, $instanceClass,  __LINE__);

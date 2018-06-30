@@ -85,7 +85,7 @@ abstract class StorageCase extends \PHPUnit_Framework_TestCase
 		static::$value = $value;
 		static::$sessionName = 'SessionName';
 		static::$sessionPath = 'SessionPath';
-		static::$className = get_class(static::$object);
+		static::$className = \get_class(static::$object);
 
 		parent::setUp();
 	}

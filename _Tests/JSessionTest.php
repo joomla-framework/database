@@ -164,7 +164,7 @@ class JSessionTest extends \PHPUnit_Framework_TestCase
 
 		$this->object->set('session.token', null);
 		$token = $this->object->getToken();
-		$this->assertEquals(32, strlen($token), 'Line: ' . __LINE__ . ' Token should be length 32');
+		$this->assertEquals(32, \strlen($token), 'Line: ' . __LINE__ . ' Token should be length 32');
 
 		$token2 = $this->object->getToken(true);
 		$this->assertNotEquals($token, $token2, 'Line: ' . __LINE__ . ' New token should be different');
@@ -225,7 +225,7 @@ class JSessionTest extends \PHPUnit_Framework_TestCase
 		$return = JSession::getStores();
 
 		$this->assertTrue(
-			is_array($return),
+			\is_array($return),
 			'Line: ' . __LINE__ . ' JSession::getStores must return an array.'
 		);
 		$this->assertContains(

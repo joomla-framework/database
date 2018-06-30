@@ -191,7 +191,7 @@ class Session implements \IteratorAggregate
 	 */
 	public static function getInstance($handler, array $options = array ())
 	{
-		if (!is_object(self::$instance))
+		if (!\is_object(self::$instance))
 		{
 			self::$instance = new self($handler, $options);
 		}
@@ -594,7 +594,7 @@ class Session implements \IteratorAggregate
 			// Get the Joomla\Input\Cookie object
 			$cookie = $this->input->cookie;
 
-			if (is_null($cookie->get($session_name)))
+			if (\is_null($cookie->get($session_name)))
 			{
 				$session_clean = $this->input->get($session_name, false, 'string');
 
@@ -1045,7 +1045,7 @@ class Session implements \IteratorAggregate
 		$remoteAddr = $this->input->server->getString('REMOTE_ADDR', '');
 
 		// Check for client address
-		if (in_array('fix_adress', $this->security) && !empty($remoteAddr) && filter_var($remoteAddr, FILTER_VALIDATE_IP) !== false)
+		if (\in_array('fix_adress', $this->security) && !empty($remoteAddr) && filter_var($remoteAddr, FILTER_VALIDATE_IP) !== false)
 		{
 			$ip = $this->get('session.client.address');
 
