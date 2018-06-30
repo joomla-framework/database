@@ -57,7 +57,7 @@ class TwigRendererTest extends TestCase
 		$path     = __DIR__ . '/stubs/twig';
 
 		$this->assertSame($renderer, $renderer->addFolder($path), 'Validates $this is returned');
-		$this->assertTrue(in_array($path, $renderer->getRenderer()->getLoader()->getPaths()));
+		$this->assertTrue(\in_array($path, $renderer->getRenderer()->getLoader()->getPaths()));
 	}
 
 	/**

@@ -58,7 +58,7 @@ class BladeRendererTest extends TestCase
 		$renderer = new BladeRenderer($factory);
 
 		$this->assertSame($renderer, $renderer->addFolder($path, 'test'), 'Validates $this is returned');
-		$this->assertTrue(in_array($path, $renderer->getRenderer()->getFinder()->getPaths()));
+		$this->assertTrue(\in_array($path, $renderer->getRenderer()->getFinder()->getPaths()));
 	}
 
 	/**
