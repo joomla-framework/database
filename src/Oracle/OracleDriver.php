@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -182,7 +182,7 @@ class OracleDriver extends PdoDriver
 	 *
 	 * @return  mixed  The collation in use by the database connection (string) or boolean false if not supported.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 * @throws  \RuntimeException
 	 */
 	public function getConnectionCollation()
