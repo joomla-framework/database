@@ -201,7 +201,7 @@ class Dispatcher implements DispatcherInterface
 	 */
 	public function countEvents()
 	{
-		return count($this->events);
+		return \count($this->events);
 	}
 
 	/**
@@ -221,7 +221,7 @@ class Dispatcher implements DispatcherInterface
 	 */
 	public function addListener($listener, array $events = array())
 	{
-		if (!is_object($listener))
+		if (!\is_object($listener))
 		{
 			throw new InvalidArgumentException('The given listener is not an object.');
 		}
@@ -452,7 +452,7 @@ class Dispatcher implements DispatcherInterface
 			$event = $event->getName();
 		}
 
-		return isset($this->listeners[$event]) ? count($this->listeners[$event]) : 0;
+		return isset($this->listeners[$event]) ? \count($this->listeners[$event]) : 0;
 	}
 
 	/**
@@ -490,12 +490,12 @@ class Dispatcher implements DispatcherInterface
 
 				if ($listener instanceof Closure)
 				{
-					call_user_func($listener, $event);
+					\call_user_func($listener, $event);
 				}
 
 				else
 				{
-					call_user_func(array($listener, $event->getName()), $event);
+					\call_user_func(array($listener, $event->getName()), $event);
 				}
 			}
 		}

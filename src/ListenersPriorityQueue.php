@@ -201,6 +201,6 @@ class ListenersPriorityQueue implements IteratorAggregate, Countable
 	 */
 	public function count()
 	{
-		return count($this->queue);
+		return \count($this->queue);
 	}
 }
