@@ -117,7 +117,7 @@ class Mediawiki
 			'users'
 		);
 
-		if (class_exists($class) && in_array($name, $accessible))
+		if (class_exists($class) && \in_array($name, $accessible))
 		{
 			if (!isset($this->$name))
 			{
