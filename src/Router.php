@@ -132,7 +132,7 @@ class Router
 		}
 
 		$this->maps[] = array(
-			'regex' => chr(1) . '^' . implode('/', $regex) . '$' . chr(1),
+			'regex' => \chr(1) . '^' . implode('/', $regex) . '$' . \chr(1),
 			'vars' => $vars,
 			'controller' => (string) $controller
 		);

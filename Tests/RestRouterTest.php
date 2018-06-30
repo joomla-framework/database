@@ -232,7 +232,7 @@ class RestRouterTest extends TestCase
 			);
 
 		// If we should expect an exception set that up.
-		if (is_null($c))
+		if (\is_null($c))
 		{
 			// expectException was added in PHPUnit 5.2 and setExpectedException removed in 6.0
 			if (method_exists($this, 'expectException'))

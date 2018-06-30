@@ -160,7 +160,7 @@ class RouterTest extends TestCase
 
 		$this->assertContains(
 			array(
-				'regex' => chr(1) . $regex . chr(1),
+				'regex' => \chr(1) . $regex . \chr(1),
 				'vars' => $vars,
 				'controller' => $called
 			),
@@ -187,22 +187,22 @@ class RouterTest extends TestCase
 
 		$rules = array(
 			array(
-				'regex' => chr(1) . '^login$' . chr(1),
+				'regex' => \chr(1) . '^login$' . \chr(1),
 				'vars' => array(),
 				'controller' => 'login'
 			),
 			array(
-				'regex' => chr(1) . '^logout$' . chr(1),
+				'regex' => \chr(1) . '^logout$' . \chr(1),
 				'vars' => array(),
 				'controller' => 'logout'
 			),
 			array(
-				'regex' => chr(1) . '^requests$' . chr(1),
+				'regex' => \chr(1) . '^requests$' . \chr(1),
 				'vars' => array(),
 				'controller' => 'requests'
 			),
 			array(
-				'regex' => chr(1) . '^requests/([^/]*)$' . chr(1),
+				'regex' => \chr(1) . '^requests/([^/]*)$' . \chr(1),
 				'vars' => array('request_id'),
 				'controller' => 'request'
 			)
