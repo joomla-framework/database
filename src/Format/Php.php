@@ -42,7 +42,7 @@ class Php extends AbstractRegistryFormat
 			{
 				$vars .= "\tpublic $" . $k . " = '" . addcslashes($v, '\\\'') . "';\n";
 			}
-			elseif (is_array($v) || is_object($v))
+			elseif (\is_array($v) || \is_object($v))
 			{
 				$vars .= "\tpublic $" . $k . ' = ' . $this->getArrayString((array) $v) . ";\n";
 			}
@@ -103,7 +103,7 @@ class Php extends AbstractRegistryFormat
 			$s .= $i ? ', ' : '';
 			$s .= '"' . $k . '" => ';
 
-			if (is_array($v) || is_object($v))
+			if (\is_array($v) || \is_object($v))
 			{
 				$s .= $this->getArrayString((array) $v);
 			}

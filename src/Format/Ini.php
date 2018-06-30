@@ -62,7 +62,7 @@ class Ini extends AbstractRegistryFormat
 
 		$variables = get_object_vars($object);
 
-		$last = count($variables);
+		$last = \count($variables);
 
 		// Assume that the first element is in section
 		$inSection = true;
@@ -71,7 +71,7 @@ class Ini extends AbstractRegistryFormat
 		foreach ($variables as $key => $value)
 		{
 			// If the value is an object then we need to put it in a local section.
-			if (is_object($value))
+			if (\is_object($value))
 			{
 				// Add an empty line if previous string wasn't in a section
 				if (!$inSection)
@@ -85,7 +85,7 @@ class Ini extends AbstractRegistryFormat
 				// Add the properties for this section.
 				foreach (get_object_vars($value) as $k => $v)
 				{
-					if (is_array($v) && $supportArrayValues)
+					if (\is_array($v) && $supportArrayValues)
 					{
 						$assoc = ArrayHelper::isAssociative($v);
 
@@ -107,7 +107,7 @@ class Ini extends AbstractRegistryFormat
 					$local[] = '';
 				}
 			}
-			elseif (is_array($value) && $supportArrayValues)
+			elseif (\is_array($value) && $supportArrayValues)
 			{
 				$assoc = ArrayHelper::isAssociative($value);
 
@@ -175,7 +175,7 @@ class Ini extends AbstractRegistryFormat
 
 			if ($options['processSections'])
 			{
-				$length = strlen($line);
+				$length = \strlen($line);
 
 				// If we are processing sections and the line is a section add the object and continue.
 				if ($line[0] === '[' && ($line[$length - 1] === ']'))
@@ -231,7 +231,7 @@ class Ini extends AbstractRegistryFormat
 			}
 
 			// If the value is quoted then we assume it is a string.
-			$length = strlen($value);
+			$length = \strlen($value);
 
 			if ($length && ($value[0] === '"') && ($value[$length - 1] === '"'))
 			{
@@ -253,7 +253,7 @@ class Ini extends AbstractRegistryFormat
 				{
 					$value = true;
 				}
-				elseif ($options['parseBooleanWords'] && in_array(strtolower($value), array('yes', 'no'), true))
+				elseif ($options['parseBooleanWords'] && \in_array(strtolower($value), array('yes', 'no'), true))
 					// If the value is 'yes' or 'no' and option is enabled assume appropriate boolean
 				{
 					$value = (strtolower($value) === 'yes');
@@ -343,7 +343,7 @@ class Ini extends AbstractRegistryFormat
 	{
 		$string = '';
 
-		switch (gettype($value))
+		switch (\gettype($value))
 		{
 			case 'integer':
 			case 'double':

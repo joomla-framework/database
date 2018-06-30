@@ -149,13 +149,13 @@ class Xml extends AbstractRegistryFormat
 			{
 				$n = $node->addChild($nodeName, $v);
 				$n->addAttribute('name', $k);
-				$n->addAttribute('type', gettype($v));
+				$n->addAttribute('type', \gettype($v));
 			}
 			else
 			{
 				$n = $node->addChild($nodeName);
 				$n->addAttribute('name', $k);
-				$n->addAttribute('type', gettype($v));
+				$n->addAttribute('type', \gettype($v));
 
 				$this->getXmlChildren($n, $v, $nodeName);
 			}

@@ -674,7 +674,7 @@ class RegistryTest extends TestCase
 		$a->set('unassoc.3', 'baz4');
 		$this->assertSame('baz4', $a->get('unassoc.3'));
 
-		$this->assertTrue(is_array($a->get('unassoc')), 'Un-associative array should remain after write');
+		$this->assertTrue(\is_array($a->get('unassoc')), 'Un-associative array should remain after write');
 	}
 
 	/**
