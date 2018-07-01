@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -43,7 +43,7 @@ class UriImmuteableTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 * @covers  Joomla\Uri\UriImmutable::__set
 	 * @expectedException \BadMethodCallException
 	 */
@@ -117,7 +117,7 @@ class UriImmuteableTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.2.0
 	 * @covers  Joomla\Uri\UriImmutable::render
 	 */
 	public function testRender()

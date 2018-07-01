@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Uri Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -21,7 +21,7 @@ interface UriInterface
 	 * Include the scheme (http, https, etc.)
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.2.0
 	 */
 	const SCHEME = 1;
 
@@ -29,7 +29,7 @@ interface UriInterface
 	 * Include the user
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.2.0
 	 */
 	const USER = 2;
 
@@ -37,7 +37,7 @@ interface UriInterface
 	 * Include the password
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.2.0
 	 */
 	const PASS = 4;
 
@@ -45,7 +45,7 @@ interface UriInterface
 	 * Include the host
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.2.0
 	 */
 	const HOST = 8;
 
@@ -53,7 +53,7 @@ interface UriInterface
 	 * Include the port
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.2.0
 	 */
 	const PORT = 16;
 
@@ -61,7 +61,7 @@ interface UriInterface
 	 * Include the path
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.2.0
 	 */
 	const PATH = 32;
 
@@ -69,7 +69,7 @@ interface UriInterface
 	 * Include the query string
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.2.0
 	 */
 	const QUERY = 64;
 
@@ -77,7 +77,7 @@ interface UriInterface
 	 * Include the fragment
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.2.0
 	 */
 	const FRAGMENT = 128;
 
@@ -85,7 +85,7 @@ interface UriInterface
 	 * Include all available url parts (scheme, user, pass, host, port, path, query, fragment)
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.2.0
 	 */
 	const ALL = 255;
 
