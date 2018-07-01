@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Base test case for filesystem interacting tests
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.4.0
  */
 class FilesystemTestCase extends TestCase
 {
@@ -20,7 +20,7 @@ class FilesystemTestCase extends TestCase
 	 * Path to the test space
 	 *
 	 * @var    null|string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	protected $testPath = null;
 
@@ -28,7 +28,7 @@ class FilesystemTestCase extends TestCase
 	 * Storage for the system's umask
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $umask;
 
@@ -37,7 +37,7 @@ class FilesystemTestCase extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public static function setUpBeforeClass()
 	{
@@ -53,7 +53,7 @@ class FilesystemTestCase extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	protected function setUp()
 	{
@@ -71,7 +71,7 @@ class FilesystemTestCase extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	protected function tearDown()
 	{

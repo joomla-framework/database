@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -21,7 +21,7 @@ class PathTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testCanChmodFile()
 	{
@@ -45,7 +45,7 @@ class PathTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testCanChmodFolder()
 	{
@@ -61,7 +61,7 @@ class PathTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testCanChmodNonExistingFile()
 	{
@@ -77,7 +77,7 @@ class PathTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testSetAndGetPermissionsFile()
 	{
@@ -115,7 +115,7 @@ class PathTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testSetAndGetPermissionsFolder()
 	{
@@ -145,7 +145,7 @@ class PathTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testSetAndGetPermissionsFolderWithFiles()
 	{
@@ -194,7 +194,7 @@ class PathTest extends FilesystemTestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function dataCheckValidPaths()
 	{
@@ -214,7 +214,7 @@ class PathTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @dataProvider dataCheckValidPaths
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testCheckValidPaths($data)
 	{
@@ -234,7 +234,7 @@ class PathTest extends FilesystemTestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function dataCheckExceptionPaths()
 	{
@@ -259,7 +259,7 @@ class PathTest extends FilesystemTestCase
 	 *
 	 * @dataProvider dataCheckExceptionPaths
 	 * @expectedException Joomla\Filesystem\Exception\FilesystemException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testCheckExceptionPaths($data)
 	{
@@ -315,7 +315,7 @@ class PathTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException  UnexpectedValueException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testCleanArrayPath()
 	{
@@ -327,7 +327,7 @@ class PathTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testIsOwner()
 	{
@@ -349,7 +349,7 @@ class PathTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testFind()
 	{

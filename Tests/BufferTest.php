@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -18,7 +18,7 @@ class BufferTest extends TestCase
 {
 	/**
 	 * @var    Buffer
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	protected $object;
 
@@ -28,7 +28,7 @@ class BufferTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	protected function setUp()
 	{
@@ -42,7 +42,7 @@ class BufferTest extends TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function casesOpen()
 	{
@@ -68,7 +68,7 @@ class BufferTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @dataProvider casesOpen
 	 */
 	public function testStreamOpen($path, $mode, $options, $opened_path, $expected)
@@ -85,7 +85,7 @@ class BufferTest extends TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function casesRead()
 	{
@@ -111,7 +111,7 @@ class BufferTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @dataProvider casesRead
 	 */
 	public function testStreamRead($buffer, $name, $position, $count, $expected)
@@ -131,7 +131,7 @@ class BufferTest extends TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function casesWrite()
 	{
@@ -157,7 +157,7 @@ class BufferTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @dataProvider casesWrite
 	 */
 	public function testStreamWrite($buffer, $name, $position, $write, $expected)
@@ -178,7 +178,7 @@ class BufferTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testStreamTell()
 	{
@@ -196,7 +196,7 @@ class BufferTest extends TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function casesEof()
 	{
@@ -226,7 +226,7 @@ class BufferTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @dataProvider casesEof
 	 */
 	public function testStreamEof($buffer, $name, $position, $expected)
@@ -246,7 +246,7 @@ class BufferTest extends TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function casesSeek()
 	{
@@ -339,7 +339,7 @@ class BufferTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @dataProvider casesSeek
 	 */
 	public function testStreamSeek($buffer, $name, $position, $offset, $whence, $expected, $expectedPos)

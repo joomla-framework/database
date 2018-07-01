@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -20,7 +20,7 @@ class StringWrapperTest extends TestCase
 {
 	/**
 	 * @var    StringWrapper
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	protected $object;
 
@@ -30,7 +30,7 @@ class StringWrapperTest extends TestCase
 	 *
 	 * @return void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	protected function setUp()
 	{
@@ -48,7 +48,7 @@ class StringWrapperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testStream_open()
 	{
@@ -78,7 +78,7 @@ class StringWrapperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testStream_stat()
 	{
@@ -112,7 +112,7 @@ class StringWrapperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testUrl_stat()
 	{
@@ -168,7 +168,7 @@ class StringWrapperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testStream_read()
 	{
@@ -195,7 +195,7 @@ class StringWrapperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testStream_write()
 	{
@@ -209,7 +209,7 @@ class StringWrapperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testStream_tell()
 	{
@@ -226,7 +226,7 @@ class StringWrapperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testStream_eof()
 	{
@@ -257,7 +257,7 @@ class StringWrapperTest extends TestCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function dataStream_seek()
 	{
@@ -293,7 +293,7 @@ class StringWrapperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 * @dataProvider dataStream_seek
 	 */
 	public function testStream_seek($currPos, $currLen, $offset, $whence, $expPos, $expReturn)
@@ -317,7 +317,7 @@ class StringWrapperTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testStream_flush()
 	{

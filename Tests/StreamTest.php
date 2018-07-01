@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -25,7 +25,7 @@ class StreamTest extends FilesystemTestCase
 
 	/**
 	 * @var    Stream
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	protected $object;
 
@@ -35,7 +35,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	protected function setUp()
 	{
@@ -50,7 +50,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function test__construct()
 	{
@@ -82,7 +82,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testGetStream()
 	{
@@ -129,7 +129,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testOpenNoFilenameException()
 	{
@@ -142,7 +142,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testOpenInvlaidFilenameException()
 	{
@@ -155,7 +155,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testOpenInvlaidStringnameException()
 	{
@@ -167,7 +167,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testOpen()
 	{
@@ -229,7 +229,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testCloseBeforeOpeningException()
 	{
@@ -244,7 +244,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testEofNotOpenException()
 	{
@@ -256,7 +256,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testEof()
 	{
@@ -285,7 +285,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testFilesizeNotOpen()
 	{
@@ -297,7 +297,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testFilesize()
 	{
@@ -333,7 +333,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testGetsNotOpen()
 	{
@@ -345,7 +345,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testGets()
 	{
@@ -374,7 +374,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testGetsInvalidLength()
 	{
@@ -395,7 +395,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testReadNotOpen()
 	{
@@ -407,7 +407,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testRead()
 	{
@@ -436,7 +436,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testSeekNotOpen()
 	{
@@ -448,7 +448,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function dataSeek()
 	{
@@ -476,7 +476,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @dataProvider dataSeek
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testSeek($initial, $offset, $whence, $expPos)
 	{
@@ -505,7 +505,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testTellNotOpen()
 	{
@@ -518,7 +518,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testWriteNotOpen()
 	{
@@ -532,7 +532,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testWriteReadonly()
 	{
@@ -566,7 +566,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @requires PHP 5.4
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testWrite()
 	{
@@ -596,7 +596,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testChmodNoFilename()
 	{
@@ -656,7 +656,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testGet_meta_dataNotOpen()
 	{
@@ -701,7 +701,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function test_buildContext()
 	{
@@ -737,7 +737,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testSetContextOptions()
 	{
@@ -762,7 +762,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testAddContextEntry()
 	{
@@ -780,7 +780,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testDeleteContextEntry()
 	{
@@ -825,7 +825,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testApplyContextToStream()
 	{
@@ -854,7 +854,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testAppendFilter()
 	{
@@ -897,7 +897,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @expectedException RuntimeException
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testPrependFilter()
 	{
@@ -943,7 +943,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testRemoveFilter()
 	{
@@ -959,7 +959,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @requires PHP 5.4
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testCopy()
 	{
@@ -993,7 +993,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @requires PHP 5.4
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testMove()
 	{
@@ -1023,7 +1023,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testDelete()
 	{
@@ -1055,7 +1055,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testUpload()
 	{
@@ -1071,7 +1071,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @requires PHP 5.4
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testWriteFile()
 	{
@@ -1097,7 +1097,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function data_getFilename()
 	{
@@ -1129,7 +1129,7 @@ class StreamTest extends FilesystemTestCase
 	 * @return  void
 	 *
 	 * @dataProvider data_getFilename
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function test_getFilename($wPrefix, $rPrefix, $filename, $mode, $use_prefix, $relative, $expected)
 	{
@@ -1147,7 +1147,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function testGetFileHandle()
 	{
