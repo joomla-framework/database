@@ -87,12 +87,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	public function __construct(array $options)
 	{
 		/**
-		 * sql_mode to MySql 5.7.8+ default strict mode.
+		 * sql_mode to MySql 5.7.8+ default strict mode minus ONLY_FULL_GROUP_BY because it's inconvenient for some.
 		 *
 		 * @link https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-8.html#mysqld-5-7-8-sql-mode
 		 */
 		$sqlModes = [
-			'ONLY_FULL_GROUP_BY',
 			'STRICT_TRANS_TABLES',
 			'ERROR_FOR_DIVISION_BY_ZERO',
 			'NO_AUTO_CREATE_USER',
