@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -186,7 +186,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		$beginningOfQuery = substr($query, 0, 12);
 		$beginningOfQuery = strtoupper($beginningOfQuery);
 
-		if (!in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE'), true))
+		if (!\in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE'), true))
 		{
 			return $query;
 		}
@@ -204,7 +204,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 */
 	public static function isSupported()
 	{
-		return class_exists('\\PDO') && in_array('mysql', \PDO::getAvailableDrivers(), true);
+		return class_exists('\\PDO') && \in_array('mysql', \PDO::getAvailableDrivers(), true);
 	}
 
 	/**
@@ -284,7 +284,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  mixed  The collation in use by the database connection (string) or boolean false if not supported.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 * @throws  \RuntimeException
 	 */
 	public function getConnectionCollation()
@@ -495,12 +495,12 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 */
 	public function escape($text, $extra = false)
 	{
-		if (is_int($text))
+		if (\is_int($text))
 		{
 			return $text;
 		}
 
-		if (is_float($text))
+		if (\is_float($text))
 		{
 			// Force the dot as a decimal point.
 			return str_replace(',', '.', $text);

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -339,7 +339,7 @@ class SqliteDriverTest extends SqliteCase
 	public function testGetVersion()
 	{
 		$this->assertThat(
-			strlen(self::$driver->getVersion()),
+			\strlen(self::$driver->getVersion()),
 			$this->greaterThan(0),
 			'Line:' . __LINE__ . ' The getVersion method should return something without error.'
 		);
@@ -617,7 +617,7 @@ class SqliteDriverTest extends SqliteCase
 
 		// Check name change
 		$tableList = self::$driver->getTableList();
-		$this->assertThat(in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
+		$this->assertThat(\in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
 
 		// Restore initial state
 		self::$driver->renameTable($newTableName, 'dbtest');
@@ -702,7 +702,7 @@ class SqliteDriverTest extends SqliteCase
 		self::$driver->setQuery($queryIns)->execute();
 
 		/* create savepoint only if is passed by data provider */
-		if (!is_null($toSavepoint))
+		if (!\is_null($toSavepoint))
 		{
 			self::$driver->transactionStart((boolean) $toSavepoint);
 		}
@@ -717,7 +717,7 @@ class SqliteDriverTest extends SqliteCase
 		self::$driver->transactionRollback((boolean) $toSavepoint);
 
 		/* release savepoint and commit only if a savepoint exists */
-		if (!is_null($toSavepoint))
+		if (!\is_null($toSavepoint))
 		{
 			self::$driver->transactionCommit();
 		}
@@ -733,7 +733,7 @@ class SqliteDriverTest extends SqliteCase
 		self::$driver->setQuery($queryCheck);
 		$result = self::$driver->loadRowList();
 
-		$this->assertThat(count($result), $this->equalTo($tupleCount), __LINE__);
+		$this->assertThat(\count($result), $this->equalTo($tupleCount), __LINE__);
 	}
 
 	/**

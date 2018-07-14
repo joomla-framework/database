@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -447,7 +447,7 @@ abstract class DatabaseQuery implements QueryInterface
 	{
 		$this->type = 'call';
 
-		if (is_null($this->call))
+		if (\is_null($this->call))
 		{
 			$this->call = new Query\QueryElement('CALL', $columns);
 		}
@@ -640,7 +640,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function columns($columns)
 	{
-		if (is_null($this->columns))
+		if (\is_null($this->columns))
 		{
 			$this->columns = new Query\QueryElement('()', $columns);
 		}
@@ -838,7 +838,7 @@ abstract class DatabaseQuery implements QueryInterface
 	{
 		$this->type = 'exec';
 
-		if (is_null($this->exec))
+		if (\is_null($this->exec))
 		{
 			$this->exec = new Query\QueryElement('EXEC', $columns);
 		}
@@ -889,11 +889,11 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function from($tables, $subQueryAlias = null)
 	{
-		if (is_null($this->from))
+		if (\is_null($this->from))
 		{
 			if ($tables instanceof $this)
 			{
-				if (is_null($subQueryAlias))
+				if (\is_null($subQueryAlias))
 				{
 					throw new \RuntimeException('JLIB_DATABASE_ERROR_NULL_SUBQUERY_ALIAS');
 				}
@@ -1027,7 +1027,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function group($columns)
 	{
-		if (is_null($this->group))
+		if (\is_null($this->group))
 		{
 			$this->group = new Query\QueryElement('GROUP BY', $columns);
 		}
@@ -1054,7 +1054,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function having($conditions, $glue = 'AND')
 	{
-		if (is_null($this->having))
+		if (\is_null($this->having))
 		{
 			$glue = strtoupper($glue);
 			$this->having = new Query\QueryElement('HAVING', $conditions, " $glue ");
@@ -1125,7 +1125,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function join($type, $conditions)
 	{
-		if (is_null($this->join))
+		if (\is_null($this->join))
 		{
 			$this->join = [];
 		}
@@ -1248,7 +1248,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function order($columns)
 	{
-		if (is_null($this->order))
+		if (\is_null($this->order))
 		{
 			$this->order = new Query\QueryElement('ORDER BY', $columns);
 		}
@@ -1444,7 +1444,7 @@ abstract class DatabaseQuery implements QueryInterface
 	{
 		$this->type = 'select';
 
-		if (is_null($this->select))
+		if (\is_null($this->select))
 		{
 			$this->select = new Query\QueryElement('SELECT', $columns);
 		}
@@ -1473,7 +1473,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function set($conditions, $glue = ',')
 	{
-		if (is_null($this->set))
+		if (\is_null($this->set))
 		{
 			$glue = strtoupper($glue);
 			$this->set = new Query\QueryElement('SET', $conditions, PHP_EOL . "\t$glue ");
@@ -1543,7 +1543,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function values($values)
 	{
-		if (is_null($this->values))
+		if (\is_null($this->values))
 		{
 			$this->values = new Query\QueryElement('()', $values, '),(');
 		}
@@ -1572,7 +1572,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function where($conditions, $glue = 'AND')
 	{
-		if (is_null($this->where))
+		if (\is_null($this->where))
 		{
 			$glue = strtoupper($glue);
 			$this->where = new Query\QueryElement('WHERE', $conditions, " $glue ");
@@ -1686,7 +1686,7 @@ abstract class DatabaseQuery implements QueryInterface
 				continue;
 			}
 
-			if (is_object($v) || is_array($v))
+			if (\is_object($v) || \is_array($v))
 			{
 				$this->{$k} = unserialize(serialize($v));
 			}
@@ -1845,7 +1845,7 @@ abstract class DatabaseQuery implements QueryInterface
 	public function format($format)
 	{
 		$query = $this;
-		$args = array_slice(func_get_args(), 1);
+		$args = \array_slice(\func_get_args(), 1);
 		array_unshift($args, null);
 
 		$i = 1;

@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -248,7 +248,7 @@ abstract class DatabaseImporter
 			// Convert the magic prefix into the real table name.
 			$tableName = $this->getRealTableName((string) $table['name']);
 
-			if (in_array($tableName, $tables, true))
+			if (\in_array($tableName, $tables, true))
 			{
 				// The table already exists. Now check if there is any difference.
 				if ($queries = $this->getAlterTableql($xml->database->table_structure))

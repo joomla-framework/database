@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -358,7 +358,7 @@ class MysqlDriverTest extends MysqlCase
 	{
 		$this->assertGreaterThan(
 			0,
-			strlen(self::$driver->getVersion())
+			\strlen(self::$driver->getVersion())
 		);
 	}
 
@@ -606,7 +606,7 @@ class MysqlDriverTest extends MysqlCase
 
 		// Check name change
 		$tableList = self::$driver->getTableList();
-		$this->assertTrue(in_array($newTableName, $tableList, true));
+		$this->assertTrue(\in_array($newTableName, $tableList, true));
 
 		// Restore initial state
 		self::$driver->renameTable($newTableName, 'dbtest');
@@ -691,7 +691,7 @@ class MysqlDriverTest extends MysqlCase
 		self::$driver->setQuery($queryIns)->execute();
 
 		/* create savepoint only if is passed by data provider */
-		if (!is_null($toSavepoint))
+		if (!\is_null($toSavepoint))
 		{
 			self::$driver->transactionStart((boolean) $toSavepoint);
 		}
@@ -706,7 +706,7 @@ class MysqlDriverTest extends MysqlCase
 		self::$driver->transactionRollback((boolean) $toSavepoint);
 
 		/* release savepoint and commit only if a savepoint exists */
-		if (!is_null($toSavepoint))
+		if (!\is_null($toSavepoint))
 		{
 			self::$driver->transactionCommit();
 		}

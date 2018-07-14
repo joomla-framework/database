@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -140,7 +140,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  mixed  The collation in use by the database connection (string) or boolean false if not supported.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 * @throws  \RuntimeException
 	 */
 	public function getConnectionCollation()
@@ -282,7 +282,7 @@ class PgsqlDriver extends PdoDriver
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
-		if (in_array($table, $tableList, true))
+		if (\in_array($table, $tableList, true))
 		{
 			// Get the details columns information.
 			$this->setQuery('
@@ -341,7 +341,7 @@ class PgsqlDriver extends PdoDriver
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
-		if (in_array($table, $tableList, true))
+		if (\in_array($table, $tableList, true))
 		{
 			$name = [
 				's.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
@@ -409,7 +409,7 @@ class PgsqlDriver extends PdoDriver
 		$tableList = $this->getTableList();
 
 		// Origin Table does not exist
-		if (!in_array($oldTable, $tableList, true))
+		if (!\in_array($oldTable, $tableList, true))
 		{
 			// Origin Table not found
 			throw new \RuntimeException('Table not found in Postgresql database.');
@@ -641,7 +641,7 @@ class PgsqlDriver extends PdoDriver
 			}
 
 			// Only process non-null scalars.
-			if (is_array($v) || is_object($v) || $v === null)
+			if (\is_array($v) || \is_object($v) || $v === null)
 			{
 				continue;
 			}
@@ -689,7 +689,7 @@ class PgsqlDriver extends PdoDriver
 	 */
 	public static function isSupported()
 	{
-		return class_exists('\\PDO') && in_array('pgsql', \PDO::getAvailableDrivers(), true);
+		return class_exists('\\PDO') && \in_array('pgsql', \PDO::getAvailableDrivers(), true);
 	}
 
 	/**
@@ -802,7 +802,7 @@ class PgsqlDriver extends PdoDriver
 			{
 				$sql = explode('currval', $sql);
 
-				for ($nIndex = 1, $nIndexMax = count($sql); $nIndex < $nIndexMax; $nIndex += 2)
+				for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -815,7 +815,7 @@ class PgsqlDriver extends PdoDriver
 			{
 				$sql = explode('nextval', $sql);
 
-				for ($nIndex = 1, $nIndexMax = count($sql); $nIndex < $nIndexMax; $nIndex += 2)
+				for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -828,7 +828,7 @@ class PgsqlDriver extends PdoDriver
 			{
 				$sql = explode('setval', $sql);
 
-				for ($nIndex = 1, $nIndexMax = count($sql); $nIndex < $nIndexMax; $nIndex += 2)
+				for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -838,7 +838,7 @@ class PgsqlDriver extends PdoDriver
 
 			$explodedQuery = explode('\'', $sql);
 
-			for ($nIndex = 0, $nIndexMax = count($explodedQuery); $nIndex < $nIndexMax; $nIndex += 2)
+			for ($nIndex = 0, $nIndexMax = \count($explodedQuery); $nIndex < $nIndexMax; $nIndex += 2)
 			{
 				if (strpos($explodedQuery[$nIndex], $prefix))
 				{
@@ -890,12 +890,12 @@ class PgsqlDriver extends PdoDriver
 		$fields  = [];
 		$where   = [];
 
-		if (is_string($key))
+		if (\is_string($key))
 		{
 			$key = [$key];
 		}
 
-		if (is_object($key))
+		if (\is_object($key))
 		{
 			$key = (array) $key;
 		}
@@ -913,13 +913,13 @@ class PgsqlDriver extends PdoDriver
 			}
 
 			// Only process scalars that are not internal fields.
-			if (is_array($v) || is_object($v) || $k[0] === '_')
+			if (\is_array($v) || \is_object($v) || $k[0] === '_')
 			{
 				continue;
 			}
 
 			// Set the primary key to the WHERE clause instead of a field to update.
-			if (in_array($k, $key, true))
+			if (\in_array($k, $key, true))
 			{
 				$key_val = $this->sqlValue($columns, $k, $v);
 				$where[] = $this->quoteName($k) . '=' . $key_val;

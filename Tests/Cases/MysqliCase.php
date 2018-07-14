@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -32,7 +32,7 @@ abstract class MysqliCase extends AbstractDatabaseTestCase
 	public static function setUpBeforeClass()
 	{
 		// First let's look to see if we have a DSN defined or in the environment variables.
-		if (!defined('JTEST_DATABASE_MYSQLI_DSN') && !getenv('JTEST_DATABASE_MYSQLI_DSN'))
+		if (!\defined('JTEST_DATABASE_MYSQLI_DSN') && !getenv('JTEST_DATABASE_MYSQLI_DSN'))
 		{
 			return;
 		}
@@ -43,7 +43,7 @@ abstract class MysqliCase extends AbstractDatabaseTestCase
 			static::markTestSkipped('The PDO MySQL or MySQLi driver is not supported on this platform.');
 		}
 
-		$dsn = defined('JTEST_DATABASE_MYSQLI_DSN') ? JTEST_DATABASE_MYSQLI_DSN : getenv('JTEST_DATABASE_MYSQLI_DSN');
+		$dsn = \defined('JTEST_DATABASE_MYSQLI_DSN') ? JTEST_DATABASE_MYSQLI_DSN : getenv('JTEST_DATABASE_MYSQLI_DSN');
 
 		// First let's trim the mysql: part off the front of the DSN if it exists.
 		if (strpos($dsn, 'mysql:') === 0)

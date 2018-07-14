@@ -130,6 +130,108 @@ jobs:
       sudo: required
       env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
 
+    # MariaDB 10.0 (MySQLi)
+    - stage: Test
+      php: 7.0
+      sudo: required
+      addons:
+        mariadb: 10.0
+      env: DB="mariadb" MARIADB_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      if: NOT type = pull_request
+      php: 7.1
+      sudo: required
+      addons:
+        mariadb: 10.0
+      env: DB="mariadb" MARIADB_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      php: 7.2
+      sudo: required
+      addons:
+        mariadb: 10.0
+      env: DB="mariadb" MARIADB_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      php: 7.2
+      sudo: required
+      addons:
+        mariadb: 10.0
+      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
+      env: DB="mariadb" MARIADB_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS=""
+    - stage: Test
+      php: nightly
+      sudo: required
+      addons:
+        mariadb: 10.0
+      env: DB="mariadb" MARIADB_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+
+    # MariaDB 10.1 (MySQLi)
+    - stage: Test
+      php: 7.0
+      sudo: required
+      addons:
+        mariadb: 10.1
+      env: DB="mariadb" MARIADB_VERSION=10.1 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      if: NOT type = pull_request
+      php: 7.1
+      sudo: required
+      addons:
+        mariadb: 10.1
+      env: DB="mariadb" MARIADB_VERSION=10.1 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      php: 7.2
+      sudo: required
+      addons:
+        mariadb: 10.1
+      env: DB="mariadb" MARIADB_VERSION=10.1 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      php: 7.2
+      sudo: required
+      addons:
+        mariadb: 10.1
+      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
+      env: DB="mariadb" MARIADB_VERSION=10.1 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS=""
+    - stage: Test
+      php: nightly
+      sudo: required
+      addons:
+        mariadb: 10.1
+      env: DB="mariadb" MARIADB_VERSION=10.1 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+
+    # MariaDB 10.2 (PDO MySQL)
+    - stage: Test
+      php: 7.0
+      sudo: required
+      addons:
+        mariadb: 10.2
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      if: NOT type = pull_request
+      php: 7.1
+      sudo: required
+      addons:
+        mariadb: 10.2
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      php: 7.2
+      sudo: required
+      addons:
+        mariadb: 10.2
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      php: 7.2
+      sudo: required
+      addons:
+        mariadb: 10.2
+      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS=""
+    - stage: Test
+      php: nightly
+      sudo: required
+      addons:
+        mariadb: 10.2
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+
     # PDO PostgreSQL 9.2
     - stage: Test
       php: 7.0
@@ -274,8 +376,8 @@ before_script:
   - if [[ "$MYSQL_VERSION" == "5.7" ]]; then bash ./.travis/install-mysql-5.7.sh; fi;
   - if [[ "$PGSQL_VERSION" == "10.0" ]]; then bash ./.travis/install-postgres-10.sh; fi;
   - if [[ "$DB" == "sqlsrv" ]]; then bash ./.travis/install-mssql.sh; fi;
-  - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == *"mariadb"* ]]; then mysql -u root -e 'create database joomla_ut;'; fi;
-  - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == *"mariadb"* ]]; then mysql -u root joomla_ut < Tests/Stubs/mysql.sql; fi;
+  - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == "mariadb" ]]; then mysql -u root -e 'create database joomla_ut;'; fi;
+  - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == "mariadb" ]]; then mysql -u root joomla_ut < Tests/Stubs/mysql.sql; fi;
   - if [[ "$DB" == "pgsql" ]]; then psql -U postgres -c 'create database joomla_ut;'; fi;
   - if [[ "$DB" == "pgsql" ]]; then psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql; fi;
   - if [[ "$DB" == "sqlsrv" ]]; then /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 -b -Q "CREATE DATABASE joomla_ut"; fi;

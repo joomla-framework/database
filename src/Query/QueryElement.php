@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -88,7 +88,7 @@ class QueryElement
 	 */
 	public function append($elements)
 	{
-		if (is_array($elements))
+		if (\is_array($elements))
 		{
 			$this->elements = array_merge($this->elements, $elements);
 		}
@@ -137,7 +137,7 @@ class QueryElement
 	{
 		foreach ($this as $k => $v)
 		{
-			if (is_object($v) || is_array($v))
+			if (\is_object($v) || \is_array($v))
 			{
 				$this->{$k} = unserialize(serialize($v));
 			}

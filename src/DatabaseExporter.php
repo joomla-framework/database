@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -166,11 +166,11 @@ abstract class DatabaseExporter
 	 */
 	public function from($from)
 	{
-		if (is_string($from))
+		if (\is_string($from))
 		{
 			$this->from = [$from];
 		}
-		elseif (is_array($from))
+		elseif (\is_array($from))
 		{
 			$this->from = $from;
 		}

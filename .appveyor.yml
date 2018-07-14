@@ -5,6 +5,7 @@ clone_folder: C:\projects\database
 branches:
   except:
     - gh-pages
+clone_depth: 2
 
 cache:
   - C:\ProgramData\chocolatey\bin -> .appveyor.yml

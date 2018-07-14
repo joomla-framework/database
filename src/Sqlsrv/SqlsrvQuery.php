@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -322,7 +322,7 @@ class SqlsrvQuery extends DatabaseQuery implements LimitableInterface
 		}
 
 		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if (is_null($value))
+		if (\is_null($value))
 		{
 			if (isset($this->bounded[$key]))
 			{
@@ -484,7 +484,7 @@ class SqlsrvQuery extends DatabaseQuery implements LimitableInterface
 		}
 
 		// Transform $columns into an array for filtering purposes
-		is_string($columns) && $columns = explode(',', str_replace(' ', '', $columns));
+		\is_string($columns) && $columns = explode(',', str_replace(' ', '', $columns));
 
 		// Get the _formatted_ FROM string and remove everything except `table AS alias`
 		$fromStr = str_replace(array('[', ']'), '', str_replace('#__', $this->db->getPrefix(), str_replace('FROM ', '', (string) $this->from)));

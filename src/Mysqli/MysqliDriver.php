@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -259,7 +259,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		$beginningOfQuery = substr($query, 0, 12);
 		$beginningOfQuery = strtoupper($beginningOfQuery);
 
-		if (!in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE'), true))
+		if (!\in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE'), true))
 		{
 			return $query;
 		}
@@ -342,7 +342,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 */
 	public function connected()
 	{
-		if (is_object($this->connection))
+		if (\is_object($this->connection))
 		{
 			return $this->connection->ping();
 		}
@@ -407,7 +407,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  mixed  The collation in use by the database connection (string) or boolean false if not supported.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 * @throws  \RuntimeException
 	 */
 	public function getConnectionCollation()
