@@ -159,6 +159,64 @@ jobs:
       sudo: required
       env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
 
+    # MariaDB 10.0 (MySQLi)
+    - stage: Test
+      php: 5.3
+      dist: precise
+      addons:
+        mariadb: 10.0
+      env: DB="mariadb" MARIADB_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+
+    # MariaDB 10.1 (MySQLi)
+    - stage: Test
+      php: 5.4
+      addons:
+        mariadb: 10.1
+      env: DB="mariadb" MARIADB_VERSION=10.1 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+
+    # MariaDB 10.2 (MySQLi)
+    - stage: Test
+      php: 5.5
+      addons:
+        mariadb: 10.2
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      php: nightly
+      addons:
+        mariadb: 10.2
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+
+    # MariaDB 10.0 (PDO MySQL)
+    - stage: Test
+      php: 5.6
+      addons:
+        mariadb: 10.0
+      env: DB="mariadb" MARIADB_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
+
+    # MariaDB 10.1 (PDO MySQL)
+    - stage: Test
+      php: 7.0
+      addons:
+        mariadb: 10.1
+      env: DB="mariadb" MARIADB_VERSION=10.1 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
+
+    # MariaDB 10.2 (PDO MySQL)
+    - stage: Test
+      php: 7.1
+      addons:
+        mariadb: 10.2
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
+    - stage: Test
+      php: 7.2
+      addons:
+        mariadb: 10.2
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
+    - stage: Test
+      php: nightly
+      addons:
+        mariadb: 10.2
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
+
     # PDO PostgreSQL 9.1
     - stage: Test
       php: 5.3
@@ -343,8 +401,8 @@ before_install:
 before_script:
   - if [[ "$MYSQL_VERSION" == "5.7" ]]; then bash ./.travis/install-mysql-5.7.sh; fi;
   - if [[ "$PGSQL_VERSION" == "10.0" ]]; then bash ./.travis/install-postgres-10.sh; fi;
-  - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == *"mariadb"* ]]; then mysql -u root -e 'create database joomla_ut;'; fi;
-  - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == *"mariadb"* ]]; then mysql -u root joomla_ut < Tests/Stubs/mysql.sql; fi;
+  - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == "mariadb" ]]; then mysql -u root -e 'create database joomla_ut;'; fi;
+  - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == "mariadb" ]]; then mysql -u root joomla_ut < Tests/Stubs/mysql.sql; fi;
   - if [[ "$DB" == "pgsql" || "$DB" == "postgresql" ]]; then psql -U postgres -c 'create database joomla_ut;'; fi;
   - if [[ "$DB" == "pgsql" || "$DB" == "postgresql" ]]; then psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql; fi;
 
