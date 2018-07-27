@@ -19,7 +19,7 @@ use Psr\Log\NullLogger;
  *
  * @since  1.0
  */
-abstract class AbstractApplication implements LoggerAwareInterface
+abstract class AbstractApplication implements ConfigurationAwareApplicationInterface, LoggerAwareInterface
 {
 	/**
 	 * The application configuration object.
