@@ -13,7 +13,8 @@ use Joomla\Filter;
 /**
  * Joomla! Input CLI Class
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Use a Symfony\Component\Console\Input\InputInterface implementation when using the `joomla/console` package
  */
 class Cli extends Input
 {
