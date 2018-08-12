@@ -37,12 +37,12 @@ class TestHelper
 			if (is_callable($method))
 			{
 				$methodName = $index;
-				$callback = $method;
+				$callback   = $method;
 			}
 			else
 			{
 				$methodName = $method;
-				$callback = array(get_called_class(), 'mock' . $method);
+				$callback   = array(get_called_class(), 'mock' . $method);
 			}
 
 			$mockObject->expects($test->any())

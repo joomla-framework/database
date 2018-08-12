@@ -132,8 +132,6 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 		{
 			return $this->createDefaultDBConnection(static::$driver->getConnection(), ':memory:');
 		}
-
-		return null;
 	}
 
 	/**
@@ -161,7 +159,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 		return new \PHPUnit_Extensions_Database_Operation_Composite(
 			array(
 				\PHPUnit_Extensions_Database_Operation_Factory::DELETE_ALL(),
-				\PHPUnit_Extensions_Database_Operation_Factory::INSERT()
+				\PHPUnit_Extensions_Database_Operation_Factory::INSERT(),
 			)
 		);
 	}
