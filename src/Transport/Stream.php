@@ -10,8 +10,8 @@ namespace Joomla\Http\Transport;
 
 use Composer\CaBundle\CaBundle;
 use Joomla\Http\Exception\InvalidResponseCodeException;
-use Joomla\Http\TransportInterface;
 use Joomla\Http\Response;
+use Joomla\Http\TransportInterface;
 use Joomla\Uri\Uri;
 use Joomla\Uri\UriInterface;
 
@@ -184,10 +184,10 @@ class Stream implements TransportInterface
 		// Create the stream context for the request.
 		$streamOptions = array(
 			'http' => $options,
-			'ssl' => array(
+			'ssl'  => array(
 				'verify_peer'  => true,
 				'verify_depth' => 5,
-			)
+			),
 		);
 
 		// Ensure the ssl peer name is verified where possible
@@ -212,7 +212,7 @@ class Stream implements TransportInterface
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		// Open the stream for reading.
@@ -297,7 +297,7 @@ class Stream implements TransportInterface
 		// Add the response headers to the response object.
 		foreach ($headers as $header)
 		{
-			$pos = strpos($header, ':');
+			$pos                                             = strpos($header, ':');
 			$return->headers[trim(substr($header, 0, $pos))] = trim(substr($header, ($pos + 1)));
 		}
 

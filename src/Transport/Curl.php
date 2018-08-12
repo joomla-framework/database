@@ -10,8 +10,8 @@ namespace Joomla\Http\Transport;
 
 use Composer\CaBundle\CaBundle;
 use Joomla\Http\Exception\InvalidResponseCodeException;
-use Joomla\Http\TransportInterface;
 use Joomla\Http\Response;
+use Joomla\Http\TransportInterface;
 use Joomla\Uri\UriInterface;
 
 /**
@@ -149,7 +149,7 @@ class Curl implements TransportInterface
 		// If an explicit timeout is given user it.
 		if (isset($timeout))
 		{
-			$options[CURLOPT_TIMEOUT] = (int) $timeout;
+			$options[CURLOPT_TIMEOUT]        = (int) $timeout;
 			$options[CURLOPT_CONNECTTIMEOUT] = (int) $timeout;
 		}
 
@@ -328,7 +328,7 @@ class Curl implements TransportInterface
 		// Add the response headers to the response object.
 		foreach ($headers as $header)
 		{
-			$pos = strpos($header, ':');
+			$pos                                             = strpos($header, ':');
 			$return->headers[trim(substr($header, 0, $pos))] = trim(substr($header, ($pos + 1)));
 		}
 

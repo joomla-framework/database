@@ -9,10 +9,10 @@
 namespace Joomla\Http\Transport;
 
 use Joomla\Http\Exception\InvalidResponseCodeException;
-use Joomla\Http\TransportInterface;
 use Joomla\Http\Response;
-use Joomla\Uri\UriInterface;
+use Joomla\Http\TransportInterface;
 use Joomla\Uri\Uri;
+use Joomla\Uri\UriInterface;
 
 /**
  * HTTP transport class for using sockets directly.
@@ -122,7 +122,7 @@ class Socket implements TransportInterface
 		$protocolVersion = isset($this->options['protocolVersion']) ? $this->options['protocolVersion'] : '1.0';
 
 		// Build the request payload.
-		$request = array();
+		$request   = array();
 		$request[] = strtoupper($method) . ' ' . ((empty($path)) ? '/' : $path) . ' HTTP/' . $protocolVersion;
 		$request[] = 'Host: ' . $uri->getHost();
 
@@ -135,7 +135,7 @@ class Socket implements TransportInterface
 		// If we have a username then we include basic authentication credentials.
 		if ($uri->getUser())
 		{
-			$authString = $uri->getUser() . ':' . $uri->getPass();
+			$authString               = $uri->getUser() . ':' . $uri->getPass();
 			$headers['Authorization'] = 'Basic ' . base64_encode($authString);
 		}
 
@@ -239,7 +239,7 @@ class Socket implements TransportInterface
 		// Add the response headers to the response object.
 		foreach ($headers as $header)
 		{
-			$pos = strpos($header, ':');
+			$pos                                             = strpos($header, ':');
 			$return->headers[trim(substr($header, 0, $pos))] = trim(substr($header, ($pos + 1)));
 		}
 
@@ -260,7 +260,7 @@ class Socket implements TransportInterface
 	protected function connect(UriInterface $uri, $timeout = null)
 	{
 		$errno = null;
-		$err = null;
+		$err   = null;
 
 		// Get the host from the uri.
 		$host = ($uri->isSsl()) ? 'ssl://' . $uri->getHost() : $uri->getHost();
@@ -308,7 +308,7 @@ class Socket implements TransportInterface
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		// PHP sends a warning if the uri does not exists; we silence it and throw an exception instead.
