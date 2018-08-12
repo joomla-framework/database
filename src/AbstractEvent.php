@@ -8,9 +8,9 @@
 
 namespace Joomla\Event;
 
-use Serializable;
 use ArrayAccess;
 use Countable;
+use Serializable;
 
 /**
  * Implementation of EventInterface.
@@ -56,7 +56,7 @@ abstract class AbstractEvent implements EventInterface, ArrayAccess, Serializabl
 	 */
 	public function __construct($name, array $arguments = array())
 	{
-		$this->name = $name;
+		$this->name      = $name;
 		$this->arguments = $arguments;
 	}
 

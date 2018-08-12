@@ -86,7 +86,7 @@ class Event extends AbstractEvent
 	 */
 	public function clearArguments()
 	{
-		$arguments = $this->arguments;
+		$arguments       = $this->arguments;
 		$this->arguments = array();
 
 		return $arguments;

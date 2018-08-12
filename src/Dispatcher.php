@@ -8,8 +8,8 @@
 
 namespace Joomla\Event;
 
-use InvalidArgumentException;
 use Closure;
+use InvalidArgumentException;
 
 /**
  * Implementation of a DispatcherInterface supporting
@@ -186,7 +186,7 @@ class Dispatcher implements DispatcherInterface
 	 */
 	public function clearEvents()
 	{
-		$events = $this->events;
+		$events       = $this->events;
 		$this->events = array();
 
 		return $events;
@@ -299,8 +299,6 @@ class Dispatcher implements DispatcherInterface
 		{
 			return $this->listeners[$event]->getPriority($listener);
 		}
-
-		return null;
 	}
 
 	/**

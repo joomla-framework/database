@@ -8,10 +8,10 @@
 
 namespace Joomla\Event;
 
-use SplPriorityQueue;
-use SplObjectStorage;
-use IteratorAggregate;
 use Countable;
+use IteratorAggregate;
+use SplObjectStorage;
+use SplPriorityQueue;
 
 /**
  * A class containing an inner listeners priority queue that can be iterated multiple times.
@@ -60,7 +60,7 @@ class ListenersPriorityQueue implements IteratorAggregate, Countable
 	 */
 	public function __construct()
 	{
-		$this->queue = new SplPriorityQueue;
+		$this->queue   = new SplPriorityQueue;
 		$this->storage = new SplObjectStorage;
 	}
 
