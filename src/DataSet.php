@@ -375,7 +375,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 
 		// Add this object to the serialized stack.
 		$serialized[] = spl_object_hash($this);
-		$return = array();
+		$return       = array();
 
 		// Iterate through the objects.
 		foreach ($this->objects as $object)
@@ -551,7 +551,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 		if ($offset == $this->current)
 		{
 			// Get the current position.
-			$keys = $this->keys();
+			$keys     = $this->keys();
 			$position = array_search($this->current, $keys);
 
 			// Check if there is an object before the current object.
@@ -586,7 +586,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 		}
 		else
 		{
-			$keys = $this->keys();
+			$keys          = $this->keys();
 			$this->current = array_shift($keys);
 		}
 	}

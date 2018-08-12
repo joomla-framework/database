@@ -308,7 +308,7 @@ class DataObject implements DumpableInterface, \IteratorAggregate, \JsonSerializ
 		 */
 		if (strpos($property, "\0") === 0)
 		{
-			return null;
+			return;
 		}
 
 		// Set the value.
