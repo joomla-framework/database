@@ -8,8 +8,8 @@
 
 namespace Joomla\Session\Storage;
 
-use Joomla\Session\Storage;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Session\Storage;
 
 /**
  * Database session storage handler for PHP

@@ -53,7 +53,7 @@ abstract class Storage
 	public static function getInstance($name = 'none', $options = array())
 	{
 		$filter = new InputFilter;
-		$name = strtolower($filter->clean($name, 'word'));
+		$name   = strtolower($filter->clean($name, 'word'));
 
 		if (empty(self::$instances[$name]))
 		{

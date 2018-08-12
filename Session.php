@@ -189,7 +189,7 @@ class Session implements \IteratorAggregate
 	 * @since   1.0
 	 * @deprecated  2.0  A singleton object store will no longer be supported
 	 */
-	public static function getInstance($handler, array $options = array ())
+	public static function getInstance($handler, array $options = array())
 	{
 		if (!\is_object(self::$instance))
 		{
@@ -304,7 +304,7 @@ class Session implements \IteratorAggregate
 		if ($this->getState() === 'destroyed')
 		{
 			// @TODO : raise error
-			return null;
+			return;
 		}
 
 		return session_name();
@@ -321,7 +321,7 @@ class Session implements \IteratorAggregate
 	{
 		if ($this->getState() === 'destroyed')
 		{
-			return null;
+			return;
 		}
 
 		return session_id();
@@ -466,7 +466,7 @@ class Session implements \IteratorAggregate
 		if ($this->getState() !== 'active')
 		{
 			// @TODO :: generated error here
-			return null;
+			return;
 		}
 
 		$old = isset($_SESSION[$namespace][$name]) ? $_SESSION[$namespace][$name] : null;
@@ -501,7 +501,7 @@ class Session implements \IteratorAggregate
 		if ($this->getState() !== 'active')
 		{
 			// @TODO :: generated error here
-			return null;
+			return;
 		}
 
 		return isset($_SESSION[$namespace][$name]);
@@ -525,7 +525,7 @@ class Session implements \IteratorAggregate
 		if ($this->getState() !== 'active')
 		{
 			// @TODO :: generated error here
-			return null;
+			return;
 		}
 
 		$value = null;
