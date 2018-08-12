@@ -198,7 +198,7 @@ class Ini extends AbstractRegistryFormat
 			}
 
 			// Get the key and value for the line.
-			list ($key, $value) = explode('=', $line, 2);
+			list($key, $value) = explode('=', $line, 2);
 
 			// If we have an array item
 			if (substr($key, -1) === ']' && ($openBrace = strpos($key, '[', 1)) !== false)

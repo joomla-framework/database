@@ -420,7 +420,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 
 		if ($data === null)
 		{
-			return null;
+			return;
 		}
 
 		return new Registry($data);
@@ -510,7 +510,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 
 		if (!$nodes)
 		{
-			return null;
+			return;
 		}
 
 		// Initialize the current node to be the registry root.
@@ -547,11 +547,11 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 		// Get the old value if exists so we can return it
 		switch (true)
 		{
-			case (\is_object($node)):
+			case \is_object($node):
 				$result = $node->{$nodes[$i]} = $value;
 				break;
 
-			case (\is_array($node)):
+			case \is_array($node):
 				$result = $node[$nodes[$i]] = $value;
 				break;
 
@@ -658,7 +658,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 
 		if (!$nodes)
 		{
-			return null;
+			return;
 		}
 
 		// Initialize the current node to be the registry root.
@@ -698,12 +698,12 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 		// Get the old value if exists so we can return it
 		switch (true)
 		{
-			case (\is_object($node)):
+			case \is_object($node):
 				$result = isset($node->{$nodes[$i]}) ? $node->{$nodes[$i]} : null;
 				unset($parent->{$nodes[$i]});
 				break;
 
-			case (\is_array($node)):
+			case \is_array($node):
 				$result = isset($node[$nodes[$i]]) ? $node[$nodes[$i]] : null;
 				unset($parent[$nodes[$i]]);
 				break;

@@ -9,8 +9,8 @@
 namespace Joomla\Registry\Format;
 
 use Joomla\Registry\AbstractRegistryFormat;
-use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 use Symfony\Component\Yaml\Dumper as SymfonyYamlDumper;
+use Symfony\Component\Yaml\Parser as SymfonyYamlParser;
 
 /**
  * YAML format handler for Registry.
