@@ -35,35 +35,35 @@ class Inflector
 	 */
 	private $rules = array(
 		'singular' => array(
-			'/(matr)ices$/i' => '\1ix',
-			'/(vert|ind)ices$/i' => '\1ex',
+			'/(matr)ices$/i'                                                          => '\1ix',
+			'/(vert|ind)ices$/i'                                                      => '\1ex',
 			'/(alumn|bacill|cact|foc|fung|nucle|radi|stimul|syllab|termin|viri?)i$/i' => '\1us',
-			'/([ftw]ax)es/i' => '\1',
-			'/(cris|ax|test)es$/i' => '\1is',
-			'/(shoe|slave)s$/i' => '\1',
-			'/(o)es$/i' => '\1',
-			'/([^aeiouy]|qu)ies$/i' => '\1y',
-			'/$1ses$/i' => '\s',
-			'/ses$/i' => '\s',
-			'/eaus$/' => 'eau',
-			'/^(.*us)$/' => '\\1',
-			'/s$/i' => '',
+			'/([ftw]ax)es/i'                                                          => '\1',
+			'/(cris|ax|test)es$/i'                                                    => '\1is',
+			'/(shoe|slave)s$/i'                                                       => '\1',
+			'/(o)es$/i'                                                               => '\1',
+			'/([^aeiouy]|qu)ies$/i'                                                   => '\1y',
+			'/$1ses$/i'                                                               => '\s',
+			'/ses$/i'                                                                 => '\s',
+			'/eaus$/'                                                                 => 'eau',
+			'/^(.*us)$/'                                                              => '\\1',
+			'/s$/i'                                                                   => '',
 		),
 		'plural' => array(
-			'/([m|l])ouse$/i' => '\1ice',
-			'/(matr|vert|ind)(ix|ex)$/i'  => '\1ices',
-			'/(x|ch|ss|sh)$/i' => '\1es',
-			'/([^aeiouy]|qu)y$/i' => '\1ies',
-			'/([^aeiouy]|qu)ies$/i' => '\1y',
-			'/(?:([^f])fe|([lr])f)$/i' => '\1\2ves',
-			'/sis$/i' => 'ses',
-			'/([ti])um$/i' => '\1a',
-			'/(buffal|tomat)o$/i' => '\1\2oes',
+			'/([m|l])ouse$/i'                                                        => '\1ice',
+			'/(matr|vert|ind)(ix|ex)$/i'                                             => '\1ices',
+			'/(x|ch|ss|sh)$/i'                                                       => '\1es',
+			'/([^aeiouy]|qu)y$/i'                                                    => '\1ies',
+			'/([^aeiouy]|qu)ies$/i'                                                  => '\1y',
+			'/(?:([^f])fe|([lr])f)$/i'                                               => '\1\2ves',
+			'/sis$/i'                                                                => 'ses',
+			'/([ti])um$/i'                                                           => '\1a',
+			'/(buffal|tomat)o$/i'                                                    => '\1\2oes',
 			'/(alumn|bacill|cact|foc|fung|nucle|radi|stimul|syllab|termin|vir)us$/i' => '\1i',
-			'/us$/i' => 'uses',
-			'/(ax|cris|test)is$/i' => '\1es',
-			'/s$/i' => 's',
-			'/$/' => 's',
+			'/us$/i'                                                                 => 'uses',
+			'/(ax|cris|test)is$/i'                                                   => '\1es',
+			'/s$/i'                                                                  => 's',
+			'/$/'                                                                    => 's',
 		),
 		'countable' => array(
 			'id',
@@ -202,7 +202,7 @@ class Inflector
 		// Cycle through the regex rules.
 		foreach ($this->rules[$ruleType] as $regex => $replacement)
 		{
-			$matches = 0;
+			$matches     = 0;
 			$matchedWord = preg_replace($regex, $replacement, $word, -1, $matches);
 
 			if ($matches > 0)
