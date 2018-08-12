@@ -8,9 +8,9 @@
 
 namespace Joomla\Oauth1;
 
+use Joomla\Application\AbstractWebApplication;
 use Joomla\Http\Http;
 use Joomla\Input\Input;
-use Joomla\Application\AbstractWebApplication;
 
 /**
  * Joomla Framework class for interacting with an OAuth 1.0 and 1.0a server.
@@ -68,11 +68,11 @@ abstract class Client
 	 */
 	public function __construct($options = array(), Http $client, Input $input, AbstractWebApplication $application, $version = '1.0a')
 	{
-		$this->options = $options;
-		$this->client = $client;
-		$this->input = $input;
+		$this->options     = $options;
+		$this->client      = $client;
+		$this->input       = $input;
 		$this->application = $application;
-		$this->version = $version;
+		$this->version     = $version;
 	}
 
 	/**
@@ -161,7 +161,7 @@ abstract class Client
 		if ($this->getOption('callback'))
 		{
 			$parameters = array(
-				'oauth_callback' => $this->getOption('callback')
+				'oauth_callback' => $this->getOption('callback'),
 			);
 		}
 		else
@@ -222,7 +222,7 @@ abstract class Client
 	{
 		// Set the parameters.
 		$parameters = array(
-			'oauth_token' => $this->token['key']
+			'oauth_token' => $this->token['key'],
 		);
 
 		if (strcmp($this->version, '1.0a') === 0)
@@ -257,11 +257,11 @@ abstract class Client
 	{
 		// Set the parameters.
 		$defaults = array(
-			'oauth_consumer_key' => $this->getOption('consumer_key'),
+			'oauth_consumer_key'     => $this->getOption('consumer_key'),
 			'oauth_signature_method' => 'HMAC-SHA1',
-			'oauth_version' => '1.0',
-			'oauth_nonce' => $this->generateNonce(),
-			'oauth_timestamp' => time()
+			'oauth_version'          => '1.0',
+			'oauth_nonce'            => $this->generateNonce(),
+			'oauth_timestamp'        => time(),
 		);
 
 		$parameters = array_merge($parameters, $defaults);
@@ -290,19 +290,19 @@ abstract class Client
 		switch ($method)
 		{
 			case 'GET':
-				$url = $this->toUrl($url, $data);
+				$url      = $this->toUrl($url, $data);
 				$response = $this->client->get($url, array('Authorization' => $this->createHeader($oauthHeaders)));
 				break;
 			case 'POST':
-				$headers = array_merge($headers, array('Authorization' => $this->createHeader($oauthHeaders)));
+				$headers  = array_merge($headers, array('Authorization' => $this->createHeader($oauthHeaders)));
 				$response = $this->client->post($url, $data, $headers);
 				break;
 			case 'PUT':
-				$headers = array_merge($headers, array('Authorization' => $this->createHeader($oauthHeaders)));
+				$headers  = array_merge($headers, array('Authorization' => $this->createHeader($oauthHeaders)));
 				$response = $this->client->put($url, $data, $headers);
 				break;
 			case 'DELETE':
-				$headers = array_merge($headers, array('Authorization' => $this->createHeader($oauthHeaders)));
+				$headers  = array_merge($headers, array('Authorization' => $this->createHeader($oauthHeaders)));
 				$response = $this->client->delete($url, $headers);
 				break;
 		}
@@ -453,14 +453,14 @@ abstract class Client
 			{
 				foreach ($value as $k => $v)
 				{
-					$v = $this->safeEncode($v);
+					$v    = $this->safeEncode($v);
 					$kv[] = "{$key}={$v}";
 				}
 			}
 			else
 			{
 				$value = $this->safeEncode($value);
-				$kv[] = "{$key}={$value}";
+				$kv[]  = "{$key}={$value}";
 			}
 		}
 
@@ -471,7 +471,7 @@ abstract class Client
 		$base = array(
 			$method,
 			$url,
-			$params
+			$params,
 			);
 
 		// Return the base string.
@@ -516,7 +516,7 @@ abstract class Client
 	 */
 	public static function generateNonce()
 	{
-		$mt = microtime();
+		$mt   = microtime();
 		$rand = random_bytes(16);
 
 		// The md5s look nicer than numbers.
