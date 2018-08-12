@@ -8,9 +8,9 @@
 
 namespace Joomla\Mediawiki;
 
+use Joomla\Http\Response;
 use Joomla\Registry\Registry;
 use Joomla\Uri\Uri;
-use Joomla\Http\Response;
 
 /**
  * Mediawiki API object class for the Joomla Framework.
@@ -42,7 +42,7 @@ abstract class AbstractMediawikiObject
 	public function __construct(Registry $options = null, Http $client = null)
 	{
 		$this->options = isset($options) ? $options : new Registry;
-		$this->client = isset($client) ? $client : new Http($this->options);
+		$this->client  = isset($client) ? $client : new Http($this->options);
 	}
 
 	/**

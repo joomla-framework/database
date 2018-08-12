@@ -10,8 +10,6 @@ namespace Joomla\Mediawiki;
 
 use Joomla\Http\Http as BaseHttp;
 use Joomla\Http\TransportInterface;
-use Joomla\Http\HttpFactory;
-use Joomla\Registry;
 
 /**
  * HTTP client class for connecting to a MediaWiki instance.

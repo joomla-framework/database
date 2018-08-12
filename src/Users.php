@@ -48,18 +48,18 @@ class Users extends AbstractMediawikiObject
 		}
 
 		// Set the session cookies returned.
-		$headers = (array) $this->options->get('headers');
+		$headers           = (array) $this->options->get('headers');
 		$headers['Cookie'] = !empty($headers['Cookie']) ? empty($headers['Cookie']) : '';
 		$headers['Cookie'] = $headers['Cookie'] . $response->headers['Set-Cookie'];
 		$this->options->set('headers', $headers);
 
 		// Send the request again with the token.
-		$response = $this->client->post($this->fetchUrl($path), null);
+		$response     = $this->client->post($this->fetchUrl($path), null);
 		$responseBody = $this->validateResponse($response);
 
-		$headers = (array) $this->options->get('headers');
+		$headers      = (array) $this->options->get('headers');
 		$cookiePrefix = $responseBody->login['cookieprefix'];
-		$cookie = $cookiePrefix . 'UserID=' . $responseBody->login['lguserid'] . '; ' . $cookiePrefix
+		$cookie       = $cookiePrefix . 'UserID=' . $responseBody->login['lguserid'] . '; ' . $cookiePrefix
 			. 'UserName=' . $responseBody->login['lgusername'];
 		$headers['Cookie'] = $headers['Cookie'] . '; ' . $response->headers['Set-Cookie'] . '; ' . $cookie;
 		$this->options->set('headers', $headers);
@@ -265,18 +265,18 @@ class Users extends AbstractMediawikiObject
 
 		// Build the request data.
 		$data = array(
-			'user' => $user,
-			'token' => $token,
-			'expiry' => $expiry,
-			'reason' => $reason,
-			'anononly' => $anononly,
-			'nocreate' => $nocreate,
-			'autoblock' => $autoblock,
-			'noemail' => $noemail,
-			'hidename' => $hidename,
+			'user'         => $user,
+			'token'        => $token,
+			'expiry'       => $expiry,
+			'reason'       => $reason,
+			'anononly'     => $anononly,
+			'nocreate'     => $nocreate,
+			'autoblock'    => $autoblock,
+			'noemail'      => $noemail,
+			'hidename'     => $hidename,
 			'allowusetalk' => $allowusertalk,
-			'reblock' => $reblock,
-			'watchuser' => $watchuser
+			'reblock'      => $reblock,
+			'watchuser'    => $watchuser,
 		);
 
 		// Send the request.
@@ -305,8 +305,8 @@ class Users extends AbstractMediawikiObject
 
 		// Build the request data.
 		$data = array(
-				'user' => $user,
-				'token' => $token,
+				'user'   => $user,
+				'token'  => $token,
 				'reason' => $reason,
 		);
 
@@ -337,8 +337,8 @@ class Users extends AbstractMediawikiObject
 		// Build the request data.
 		// TODO: $data doesn't seem to be used!
 		$data = array(
-			'id' => $id,
-			'token' => $token,
+			'id'     => $id,
+			'token'  => $token,
 			'reason' => $reason,
 		);
 
@@ -371,10 +371,10 @@ class Users extends AbstractMediawikiObject
 		// Build the request data.
 		$data = array(
 			'username' => $username,
-			'token' => $token,
-			'add' => $add,
-			'remove' => $remove,
-			'reason' => $reason
+			'token'    => $token,
+			'add'      => $add,
+			'remove'   => $remove,
+			'reason'   => $reason,
 		);
 
 		// Send the request.
@@ -405,11 +405,11 @@ class Users extends AbstractMediawikiObject
 
 		// Build the request data.
 		$data = array(
-			'target' => $target,
-			'token' => $token,
+			'target'  => $target,
+			'token'   => $token,
 			'subject' => $subject,
-			'text' => $text,
-			'ccme' => $ccme
+			'text'    => $text,
+			'ccme'    => $ccme,
 		);
 
 		// Send the request.

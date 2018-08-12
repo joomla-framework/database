@@ -38,12 +38,12 @@ class Pages extends AbstractMediawikiObject
 
 		// Build the request data.
 		$data = array(
-			'title' => $title,
-			'token' => $token,
-			'section' => $section,
+			'title'        => $title,
+			'token'        => $token,
+			'section'      => $section,
 			'sectiontitle' => $section,
-			'text' => $text,
-			'summary' => $summary
+			'text'         => $text,
+			'summary'      => $summary,
 		);
 
 		// Send the request.
@@ -74,11 +74,11 @@ class Pages extends AbstractMediawikiObject
 
 		// Build the request data.
 		$data = array(
-			'title' => $title,
-			'token' => $token,
-			'reason' => $reason,
+			'title'     => $title,
+			'token'     => $token,
+			'reason'    => $reason,
 			'watchlist' => $watchlist,
-			'oldimage' => $oldimage
+			'oldimage'  => $oldimage,
 		);
 
 		// Send the request.
@@ -99,7 +99,7 @@ class Pages extends AbstractMediawikiObject
 	 *
 	 * @since   1.0
 	 */
-	public function deletePageByID($pageid,  $reason = null, $watchlist = null, $oldimage = null)
+	public function deletePageByID($pageid, $reason = null, $watchlist = null, $oldimage = null)
 	{
 		// Get the token.
 		$token = $this->getToken($pageid, 'delete');
@@ -109,11 +109,11 @@ class Pages extends AbstractMediawikiObject
 
 		// Build the request data.
 		$data = array(
-			'pageid' => $pageid,
-			'token' => $token,
-			'reason' => $reason,
+			'pageid'    => $pageid,
+			'token'     => $token,
+			'reason'    => $reason,
 			'watchlist' => $watchlist,
-			'oldimage' => $oldimage
+			'oldimage'  => $oldimage,
 		);
 
 		// Send the request.
@@ -144,9 +144,9 @@ class Pages extends AbstractMediawikiObject
 
 		// Build the request data.
 		$data = array(
-			'title' => $title,
-			'token' => $token,
-			'reason' => $reason,
+			'title'     => $title,
+			'token'     => $token,
+			'reason'    => $reason,
 			'timestamp' => $timestamp,
 			'watchlist' => $watchlist,
 		);
@@ -174,7 +174,7 @@ class Pages extends AbstractMediawikiObject
 	 * @since   1.0
 	 */
 	public function movePageByName($from, $to, $reason = null, $movetalk = null, $movesubpages = null, $noredirect = null,
-		$watchlist =null, $ignorewarnings = null
+		$watchlist = null, $ignorewarnings = null
 	)
 	{
 		// Get the token.
@@ -185,15 +185,15 @@ class Pages extends AbstractMediawikiObject
 
 		// Build the request data.
 		$data = array(
-			'from' => $from,
-			'to' => $reason,
-			'token' => $token,
-			'reason' => $reason,
-			'movetalk' => $movetalk,
-			'movesubpages' => $movesubpages,
-			'noredirect' => $noredirect,
-			'watchlist' => $watchlist,
-			'ignorewarnings' => $ignorewarnings
+			'from'           => $from,
+			'to'             => $reason,
+			'token'          => $token,
+			'reason'         => $reason,
+			'movetalk'       => $movetalk,
+			'movesubpages'   => $movesubpages,
+			'noredirect'     => $noredirect,
+			'watchlist'      => $watchlist,
+			'ignorewarnings' => $ignorewarnings,
 		);
 
 		// Send the request.
@@ -219,7 +219,7 @@ class Pages extends AbstractMediawikiObject
 	 * @since   1.0
 	 */
 	public function movePageByID($fromid, $to, $reason = null, $movetalk = null, $movesubpages = null, $noredirect = null,
-		$watchlist =null, $ignorewarnings = null
+		$watchlist = null, $ignorewarnings = null
 	)
 	{
 		// Get the token.
@@ -230,15 +230,15 @@ class Pages extends AbstractMediawikiObject
 
 		// Build the request data.
 		$data = array(
-			'fromid' => $fromid,
-			'to' => $reason,
-			'token' => $token,
-			'reason' => $reason,
-			'movetalk' => $movetalk,
-			'movesubpages' => $movesubpages,
-			'noredirect' => $noredirect,
-			'watchlist' => $watchlist,
-			'ignorewarnings' => $ignorewarnings
+			'fromid'         => $fromid,
+			'to'             => $reason,
+			'token'          => $token,
+			'reason'         => $reason,
+			'movetalk'       => $movetalk,
+			'movesubpages'   => $movesubpages,
+			'noredirect'     => $noredirect,
+			'watchlist'      => $watchlist,
+			'ignorewarnings' => $ignorewarnings,
 		);
 
 		// Send the request.
@@ -270,12 +270,12 @@ class Pages extends AbstractMediawikiObject
 
 		// Build the request data.
 		$data = array(
-			'title' => $title,
-			'token' => $token,
-			'user' => $user,
-			'expiry' => $summary,
-			'markbot' => $markbot,
-			'watchlist' => $watchlist
+			'title'     => $title,
+			'token'     => $token,
+			'user'      => $user,
+			'expiry'    => $summary,
+			'markbot'   => $markbot,
+			'watchlist' => $watchlist,
 		);
 
 		// Send the request.
@@ -308,13 +308,13 @@ class Pages extends AbstractMediawikiObject
 
 		// Build the request data.
 		$data = array(
-			'title' => $title,
-			'token' => $token,
+			'title'       => $title,
+			'token'       => $token,
 			'protections' => $protections,
-			'expiry' => $expiry,
-			'reason' => $reason,
-			'cascade' => $cascade,
-			'watchlist' => $watchlist
+			'expiry'      => $expiry,
+			'reason'      => $reason,
+			'cascade'     => $cascade,
+			'watchlist'   => $watchlist,
 		);
 
 		// Send the request.

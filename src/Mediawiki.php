@@ -90,7 +90,7 @@ class Mediawiki
 	public function __construct(Registry $options = null, Http $client = null)
 	{
 		$this->options = isset($options) ? $options : new Registry;
-		$this->client = isset($client) ? $client : new Http($this->options);
+		$this->client  = isset($client) ? $client : new Http($this->options);
 	}
 
 	/**
@@ -105,8 +105,8 @@ class Mediawiki
 	 */
 	public function __get($name)
 	{
-		$name = strtolower($name);
-		$class = 'Joomla\\Mediawiki\\' . ucfirst($name);
+		$name       = strtolower($name);
+		$class      = 'Joomla\\Mediawiki\\' . ucfirst($name);
 		$accessible = array(
 			'categories',
 			'images',
@@ -114,7 +114,7 @@ class Mediawiki
 			'pages',
 			'search',
 			'sites',
-			'users'
+			'users',
 		);
 
 		if (class_exists($class) && \in_array($name, $accessible))
