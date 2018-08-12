@@ -8,11 +8,11 @@
 
 namespace Joomla\OAuth2;
 
+use InvalidArgumentException;
 use Joomla\Application\AbstractWebApplication;
 use Joomla\Http\Exception\UnexpectedResponseException;
-use Joomla\Input\Input;
 use Joomla\Http\Http;
-use InvalidArgumentException;
+use Joomla\Input\Input;
 use RuntimeException;
 
 /**
@@ -58,9 +58,9 @@ class Client
 	 */
 	public function __construct($options = array(), Http $http, Input $input, AbstractWebApplication $application = null)
 	{
-		$this->options = $options;
-		$this->http = $http;
-		$this->input = $input;
+		$this->options     = $options;
+		$this->http        = $http;
+		$this->input       = $input;
 		$this->application = $application;
 	}
 
