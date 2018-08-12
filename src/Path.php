@@ -222,12 +222,12 @@ class Path
 
 		$stream = explode("://", $path, 2);
 		$scheme = '';
-		$path = $stream[0];
+		$path   = $stream[0];
 
 		if (\count($stream) >= 2)
 		{
 			$scheme = $stream[0] . '://';
-			$path = $stream[1];
+			$path   = $stream[1];
 		}
 
 		$path = trim($path);
@@ -236,7 +236,7 @@ class Path
 		{
 			$path = JPATH_ROOT;
 		}
-		elseif (($ds == '\\') && ($path[0] == '\\' ) && ( $path[1] == '\\' ))
+		elseif (($ds == '\\') && ($path[0] == '\\') && ($path[1] == '\\'))
 		// Remove double slashes and backslashes and convert all slashes and backslashes to DIRECTORY_SEPARATOR
 		// If dealing with a UNC path don't forget to prepend the path with a backslash.
 		{
@@ -321,7 +321,7 @@ class Path
 				// traversal attempts on the local file system.
 
 				// Needed for substr() later
-				$path = realpath($path);
+				$path     = realpath($path);
 				$fullname = realpath($fullname);
 			}
 

@@ -51,10 +51,10 @@ class Helper
 		if (\in_array($sch, array('ftp', 'ftps'), true))
 		{
 			$server = parse_url($url, PHP_URL_HOST);
-			$port = parse_url($url, PHP_URL_PORT);
-			$path = parse_url($url, PHP_URL_PATH);
-			$user = parse_url($url, PHP_URL_USER);
-			$pass = parse_url($url, PHP_URL_PASS);
+			$port   = parse_url($url, PHP_URL_PORT);
+			$path   = parse_url($url, PHP_URL_PATH);
+			$user   = parse_url($url, PHP_URL_USER);
+			$pass   = parse_url($url, PHP_URL_PASS);
 
 			if ((!$server) || (!$path))
 			{
@@ -134,10 +134,10 @@ class Helper
 		}
 
 		$server = parse_url($url, PHP_URL_HOST);
-		$port = parse_url($url, PHP_URL_PORT);
-		$path = parse_url($url, PHP_URL_PATH);
-		$user = parse_url($url, PHP_URL_USER);
-		$pass = parse_url($url, PHP_URL_PASS);
+		$port   = parse_url($url, PHP_URL_PORT);
+		$path   = parse_url($url, PHP_URL_PATH);
+		$user   = parse_url($url, PHP_URL_USER);
+		$pass   = parse_url($url, PHP_URL_PASS);
 
 		if ((!$server) || (!$path))
 		{

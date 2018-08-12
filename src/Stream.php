@@ -145,8 +145,8 @@ class Stream
 	 */
 	public function __construct($writeprefix = '', $readprefix = '', $context = array())
 	{
-		$this->writeprefix = $writeprefix;
-		$this->readprefix = $readprefix;
+		$this->writeprefix    = $writeprefix;
+		$this->readprefix     = $readprefix;
 		$this->contextOptions = $context;
 		$this->_buildContext();
 	}
@@ -273,7 +273,7 @@ class Stream
 
 		// Capture PHP errors
 		$php_errormsg = 'Error Unknown whilst opening a file';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		// Decide which context to use:
@@ -342,7 +342,7 @@ class Stream
 
 		// Capture PHP errors
 		$php_errormsg = 'Error Unknown';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		switch ($this->processingmethod)
@@ -399,7 +399,7 @@ class Stream
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		switch ($this->processingmethod)
@@ -444,7 +444,7 @@ class Stream
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 		$res = @filesize($this->filename);
 
@@ -477,12 +477,12 @@ class Stream
 			}
 
 			$this->filesize = $res;
-			$retval = $res;
+			$retval         = $res;
 		}
 		else
 		{
 			$this->filesize = $res;
-			$retval = $res;
+			$retval         = $res;
 		}
 
 		// Restore error tracking to what it was before.
@@ -511,7 +511,7 @@ class Stream
 
 		// Capture PHP errors
 		$php_errormsg = 'Error Unknown';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		switch ($this->processingmethod)
@@ -579,7 +579,7 @@ class Stream
 
 		// Capture PHP errors
 		$php_errormsg = 'Error Unknown';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 		$remaining = $length;
 
@@ -626,7 +626,7 @@ class Stream
 			{
 				// If it's the end of the file then we've nothing left to read; reset remaining and len
 				$remaining = 0;
-				$length = \strlen($retval);
+				$length    = \strlen($retval);
 			}
 		}
 
@@ -662,7 +662,7 @@ class Stream
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		switch ($this->processingmethod)
@@ -708,7 +708,7 @@ class Stream
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		switch ($this->processingmethod)
@@ -786,16 +786,16 @@ class Stream
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 		$remaining = $length;
-		$start = 0;
+		$start     = 0;
 
 		do
 		{
 			// If the amount remaining is greater than the chunk size, then use the chunk
 			$amount = ($remaining > $chunk) ? $chunk : $remaining;
-			$res = fwrite($this->fh, substr($string, $start), $amount);
+			$res    = fwrite($this->fh, substr($string, $start), $amount);
 
 			// Returns false on error or the number of bytes written
 			if ($res === false)
@@ -862,7 +862,7 @@ class Stream
 
 		// Capture PHP errors
 		$php_errormsg = '';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 		$sch = parse_url($filename, PHP_URL_SCHEME);
 
@@ -1022,7 +1022,7 @@ class Stream
 		{
 			// Capture PHP errors
 			$php_errormsg = 'Unknown error setting context option';
-			$trackErrors = ini_get('track_errors');
+			$trackErrors  = ini_get('track_errors');
 			ini_set('track_errors', true);
 			$retval = @stream_context_set_option($this->fh, $this->contextOptions);
 
@@ -1060,7 +1060,7 @@ class Stream
 		{
 			// Capture PHP errors
 			$php_errormsg = '';
-			$trackErrors = ini_get('track_errors');
+			$trackErrors  = ini_get('track_errors');
 			ini_set('track_errors', true);
 
 			$res = @stream_filter_append($this->fh, $filtername, $readWrite, $params);
@@ -1100,7 +1100,7 @@ class Stream
 		{
 			// Capture PHP errors
 			$php_errormsg = '';
-			$trackErrors = ini_get('track_errors');
+			$trackErrors  = ini_get('track_errors');
 			ini_set('track_errors', true);
 			$res = @stream_filter_prepend($this->fh, $filtername, $readWrite, $params);
 
@@ -1136,7 +1136,7 @@ class Stream
 	{
 		// Capture PHP errors
 		$php_errormsg = '';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		if ($byindex)
@@ -1183,7 +1183,7 @@ class Stream
 
 		// Since we're going to open the file directly we need to get the filename.
 		// We need to use the same prefix so force everything to write.
-		$src = $this->_getFilename($src, 'w', $usePrefix, $relative);
+		$src  = $this->_getFilename($src, 'w', $usePrefix, $relative);
 		$dest = $this->_getFilename($dest, 'w', $usePrefix, $relative);
 
 		// One supplied at copy; overrides everything
@@ -1236,10 +1236,10 @@ class Stream
 	{
 		// Capture PHP errors
 		$php_errormsg = '';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 
-		$src = $this->_getFilename($src, 'w', $usePrefix, $relative);
+		$src  = $this->_getFilename($src, 'w', $usePrefix, $relative);
 		$dest = $this->_getFilename($dest, 'w', $usePrefix, $relative);
 
 		if ($context)
@@ -1288,7 +1288,7 @@ class Stream
 	{
 		// Capture PHP errors
 		$php_errormsg = '';
-		$trackErrors = ini_get('track_errors');
+		$trackErrors  = ini_get('track_errors');
 		ini_set('track_errors', true);
 
 		$filename = $this->_getFilename($filename, 'w', $usePrefix, $relative);
@@ -1388,13 +1388,13 @@ class Stream
 			// Get rid of binary or t, should be at the end of the string
 			$tmode = trim($mode, 'btf123456789');
 
-			$stream = explode("://", $filename, 2);
-			$scheme = '';
+			$stream   = explode("://", $filename, 2);
+			$scheme   = '';
 			$filename = $stream[0];
 
 			if (\count($stream) >= 2)
 			{
-				$scheme = $stream[0] . '://';
+				$scheme   = $stream[0] . '://';
 				$filename = $stream[1];
 			}
 
@@ -1449,7 +1449,7 @@ class Stream
 	 */
 	public function set($property, $value = null)
 	{
-		$previous = isset($this->$property) ? $this->$property : null;
+		$previous        = isset($this->$property) ? $this->$property : null;
 		$this->$property = $value;
 
 		return $previous;

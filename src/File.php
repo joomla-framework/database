@@ -72,7 +72,7 @@ class File
 		// Prepend a base path if it exists
 		if ($path)
 		{
-			$src = Path::clean($path . '/' . $src);
+			$src  = Path::clean($path . '/' . $src);
 			$dest = Path::clean($path . '/' . $dest);
 		}
 
@@ -118,7 +118,7 @@ class File
 
 		foreach ($files as $file)
 		{
-			$file = Path::clean($file);
+			$file     = Path::clean($file);
 			$filename = basename($file);
 
 			if (!Path::canChmod($file))
@@ -158,7 +158,7 @@ class File
 	{
 		if ($path)
 		{
-			$src = Path::clean($path . '/' . $src);
+			$src  = Path::clean($path . '/' . $src);
 			$dest = Path::clean($path . '/' . $dest);
 		}
 
@@ -263,7 +263,7 @@ class File
 			return true;
 		}
 
-		if (is_writeable($baseDir) && move_uploaded_file($src, $dest))
+		if (is_writable($baseDir) && move_uploaded_file($src, $dest))
 		{
 			// Short circuit to prevent file permission errors
 			if (Path::setPermissions($dest))

@@ -37,12 +37,12 @@ abstract class Folder
 
 		if ($path)
 		{
-			$src = Path::clean($path . '/' . $src);
+			$src  = Path::clean($path . '/' . $src);
 			$dest = Path::clean($path . '/' . $dest);
 		}
 
 		// Eliminate trailing directory separators, if any
-		$src = rtrim($src, DIRECTORY_SEPARATOR);
+		$src  = rtrim($src, DIRECTORY_SEPARATOR);
 		$dest = rtrim($dest, DIRECTORY_SEPARATOR);
 
 		if (!is_dir(Path::clean($src)))
@@ -180,7 +180,7 @@ abstract class Folder
 			}
 
 			// Create the array of open_basedir paths
-			$obdArray = explode($obdSeparator, $obd);
+			$obdArray  = explode($obdSeparator, $obd);
 			$inBaseDir = false;
 
 			// Iterate through open_basedir paths looking for a match
@@ -311,7 +311,7 @@ abstract class Folder
 	{
 		if ($path)
 		{
-			$src = Path::clean($path . '/' . $src);
+			$src  = Path::clean($path . '/' . $src);
 			$dest = Path::clean($path . '/' . $dest);
 		}
 
@@ -537,12 +537,17 @@ abstract class Folder
 			// First path, index foldernames
 			foreach ($folders as $name)
 			{
-				$id = ++$GLOBALS['_JFolder_folder_tree_index'];
+				$id       = ++$GLOBALS['_JFolder_folder_tree_index'];
 				$fullName = Path::clean($path . '/' . $name);
-				$dirs[] = array('id' => $id, 'parent' => $parent, 'name' => $name, 'fullname' => $fullName,
-					'relname' => str_replace(JPATH_ROOT, '', $fullName));
+				$dirs[]   = array(
+					'id'       => $id,
+					'parent'   => $parent,
+					'name'     => $name,
+					'fullname' => $fullName,
+					'relname'  => str_replace(JPATH_ROOT, '', $fullName),
+				);
 				$dirs2 = self::listFolderTree($fullName, $filter, $maxLevel, $level + 1, $id);
-				$dirs = array_merge($dirs, $dirs2);
+				$dirs  = array_merge($dirs, $dirs2);
 			}
 		}
 

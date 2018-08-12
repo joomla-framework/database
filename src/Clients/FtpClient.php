@@ -127,7 +127,8 @@ class FtpClient
 		"sql",
 		"txt",
 		"xhtml",
-		"xml");
+		"xml",
+	);
 
 	/**
 	 * Array to hold native line ending characters
@@ -267,7 +268,7 @@ class FtpClient
 	public function connect($host = '127.0.0.1', $port = 21)
 	{
 		$errno = null;
-		$err = null;
+		$err   = null;
 
 		// If already connected, return
 		if (\is_resource($this->conn))
@@ -1326,8 +1327,8 @@ class FtpClient
 	public function listDetails($path = null, $type = 'all')
 	{
 		$dirList = array();
-		$data = null;
-		$regs = null;
+		$data    = null;
+		$regs    = null;
 
 		// TODO: Deal with recurse -- nightmare
 		// For now we will just set it to false
@@ -1424,7 +1425,7 @@ class FtpClient
 				. ' ([a-zA-Z]+[0-9: ]*[0-9])[ ]+(([0-9]{1,2}:[0-9]{2})|[0-9]{4}) (.+)#',
 			'MAC' => '#([-dl][rwxstST-]+).* ?([0-9 ]*)?([a-zA-Z0-9]+).* ([a-zA-Z0-9]+).* ([0-9]*)'
 				. ' ([a-zA-Z]+[0-9: ]*[0-9])[ ]+(([0-9]{2}:[0-9]{2})|[0-9]{4}) (.+)#',
-			'WIN' => '#([0-9]{2})-([0-9]{2})-([0-9]{2}) +([0-9]{2}):([0-9]{2})(AM|PM) +([0-9]+|<DIR>) +(.+)#'
+			'WIN' => '#([0-9]{2})-([0-9]{2})-([0-9]{2}) +([0-9]{2}):([0-9]{2})(AM|PM) +([0-9]+|<DIR>) +(.+)#',
 		);
 
 		// Find out the format of the directory listing by matching one of the regexps
@@ -1459,16 +1460,16 @@ class FtpClient
 					$fType = (int) strpos("-dl", $regs[1]{0});
 
 					// $tmpArray['line'] = $regs[0];
-					$tmpArray['type'] = $fType;
+					$tmpArray['type']   = $fType;
 					$tmpArray['rights'] = $regs[1];
 
 					// $tmpArray['number'] = $regs[2];
-					$tmpArray['user'] = $regs[3];
+					$tmpArray['user']  = $regs[3];
 					$tmpArray['group'] = $regs[4];
-					$tmpArray['size'] = $regs[5];
-					$tmpArray['date'] = @date("m-d", strtotime($regs[6]));
-					$tmpArray['time'] = $regs[7];
-					$tmpArray['name'] = $regs[9];
+					$tmpArray['size']  = $regs[5];
+					$tmpArray['date']  = @date("m-d", strtotime($regs[6]));
+					$tmpArray['time']  = $regs[7];
+					$tmpArray['name']  = $regs[9];
 				}
 
 				// If we just want files, do not add a folder
@@ -1497,20 +1498,20 @@ class FtpClient
 
 				if (@preg_match($regexp, $file, $regs))
 				{
-					$fType = (int) ($regs[7] == '<DIR>');
+					$fType     = (int) ($regs[7] == '<DIR>');
 					$timestamp = strtotime("$regs[3]-$regs[1]-$regs[2] $regs[4]:$regs[5]$regs[6]");
 
 					// $tmpArray['line'] = $regs[0];
-					$tmpArray['type'] = $fType;
+					$tmpArray['type']   = $fType;
 					$tmpArray['rights'] = '';
 
 					// $tmpArray['number'] = 0;
-					$tmpArray['user'] = '';
+					$tmpArray['user']  = '';
 					$tmpArray['group'] = '';
-					$tmpArray['size'] = (int) $regs[7];
-					$tmpArray['date'] = date('m-d', $timestamp);
-					$tmpArray['time'] = date('H:i', $timestamp);
-					$tmpArray['name'] = $regs[8];
+					$tmpArray['size']  = (int) $regs[7];
+					$tmpArray['date']  = date('m-d', $timestamp);
+					$tmpArray['time']  = date('H:i', $timestamp);
+					$tmpArray['name']  = $regs[8];
 				}
 
 				// If we just want files, do not add a folder
@@ -1578,7 +1579,7 @@ class FtpClient
 		$parts = null;
 
 		// Wait for a response from the server, but timeout after the set time limit
-		$endTime = time() + $this->timeout;
+		$endTime        = time() + $this->timeout;
 		$this->response = '';
 
 		do
@@ -1643,7 +1644,7 @@ class FtpClient
 		$match = array();
 		$parts = array();
 		$errno = null;
-		$err = null;
+		$err   = null;
 
 		// Make sure we have a connection to the server
 		if (!\is_resource($this->conn))
@@ -1655,7 +1656,7 @@ class FtpClient
 		@ fwrite($this->conn, "PASV\r\n");
 
 		// Wait for a response from the server, but timeout after the set time limit
-		$endTime = time() + $this->timeout;
+		$endTime        = time() + $this->timeout;
 		$this->response = '';
 
 		do
