@@ -93,7 +93,7 @@ class Gzip implements ExtractableInterface
 			}
 
 			$position = $this->getFilePosition();
-			$buffer = gzinflate(substr($this->data, $position, \strlen($this->data) - $position));
+			$buffer   = gzinflate(substr($this->data, $position, \strlen($this->data) - $position));
 
 			if (empty($buffer))
 			{
@@ -175,7 +175,7 @@ class Gzip implements ExtractableInterface
 	{
 		// Gzipped file... unpack it first
 		$position = 0;
-		$info = @ unpack('CCM/CFLG/VTime/CXFL/COS', substr($this->data, $position + 2));
+		$info     = @ unpack('CCM/CFLG/VTime/CXFL/COS', substr($this->data, $position + 2));
 
 		if (!$info)
 		{
@@ -194,13 +194,13 @@ class Gzip implements ExtractableInterface
 		if ($info['FLG'] & $this->flags['FNAME'])
 		{
 			$filenamePos = strpos($this->data, "\x0", $position);
-			$position = $filenamePos + 1;
+			$position    = $filenamePos + 1;
 		}
 
 		if ($info['FLG'] & $this->flags['FCOMMENT'])
 		{
 			$commentPos = strpos($this->data, "\x0", $position);
-			$position = $commentPos + 1;
+			$position   = $commentPos + 1;
 		}
 
 		if ($info['FLG'] & $this->flags['FHCRC'])

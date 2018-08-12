@@ -8,9 +8,9 @@
 
 namespace Joomla\Archive;
 
-use Joomla\Filesystem\Path;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
+use Joomla\Filesystem\Path;
 
 /**
  * Tar format adapter for the Archive package
@@ -40,7 +40,7 @@ class Tar implements ExtractableInterface
 		0x34 => 'Block special file',
 		0x35 => 'Directory',
 		0x36 => 'FIFO special file',
-		0x37 => 'Contiguous file'
+		0x37 => 'Contiguous file',
 	);
 
 	/**
@@ -100,7 +100,7 @@ class Tar implements ExtractableInterface
 	 */
 	public function extract($archive, $destination)
 	{
-		$this->data = null;
+		$this->data     = null;
 		$this->metadata = null;
 
 		$this->data = file_get_contents($archive);
@@ -119,7 +119,7 @@ class Tar implements ExtractableInterface
 			if ($type == 'file' || $type == 'unix file')
 			{
 				$buffer = $this->metadata[$i]['data'];
-				$path = Path::clean($destination . '/' . $this->metadata[$i]['name']);
+				$path   = Path::clean($destination . '/' . $this->metadata[$i]['name']);
 
 				// Make sure the destination folder exists
 				if (!Folder::create(dirname($path)))
@@ -217,14 +217,15 @@ class Tar implements ExtractableInterface
 					'date' => octdec($info['mtime']),
 					'name' => trim($info['filename']),
 					'size' => octdec($info['size']),
-					'type' => isset($this->types[$info['typeflag']]) ? $this->types[$info['typeflag']] : null);
+					'type' => isset($this->types[$info['typeflag']]) ? $this->types[$info['typeflag']] : null,
+				);
 
 				if (($info['typeflag'] == 0) || ($info['typeflag'] == 0x30) || ($info['typeflag'] == 0x35))
 				{
 					// File or folder.
 					$file['data'] = $contents;
 
-					$mode = hexdec(substr($info['mode'], 4, 3));
+					$mode         = hexdec(substr($info['mode'], 4, 3));
 					$file['attr'] = (($info['typeflag'] == 0x35) ? 'd' : '-')
 						. (($mode & 0x400) ? 'r' : '-')
 						. (($mode & 0x200) ? 'w' : '-')

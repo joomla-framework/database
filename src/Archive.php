@@ -70,8 +70,8 @@ class Archive
 	 */
 	public function extract($archivename, $extractdir)
 	{
-		$ext = pathinfo($archivename, PATHINFO_EXTENSION);
-		$path = pathinfo($archivename, PATHINFO_DIRNAME);
+		$ext      = pathinfo($archivename, PATHINFO_EXTENSION);
+		$path     = pathinfo($archivename, PATHINFO_DIRNAME);
 		$filename = pathinfo($archivename, PATHINFO_FILENAME);
 
 		switch ($ext)
