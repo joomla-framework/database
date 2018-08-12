@@ -8,8 +8,8 @@
 
 namespace Joomla\Database\Sqlite;
 
-use SQLite3;
 use Joomla\Database\Pdo\PdoDriver;
+use SQLite3;
 
 /**
  * SQLite database driver supporting PDO based connections
@@ -170,7 +170,7 @@ class SqliteDriver extends PdoDriver
 		$this->connect();
 
 		$columns = array();
-		$query = $this->getQuery(true);
+		$query   = $this->getQuery(true);
 
 		$fieldCasing = $this->getOption(\PDO::ATTR_CASE);
 
@@ -225,7 +225,7 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$keys = array();
+		$keys  = array();
 		$query = $this->getQuery(true);
 
 		$fieldCasing = $this->getOption(\PDO::ATTR_CASE);

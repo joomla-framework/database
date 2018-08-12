@@ -495,22 +495,22 @@ abstract class DatabaseQuery
 		{
 			case 'select':
 				$this->select = null;
-				$this->type = null;
+				$this->type   = null;
 				break;
 
 			case 'delete':
 				$this->delete = null;
-				$this->type = null;
+				$this->type   = null;
 				break;
 
 			case 'update':
 				$this->update = null;
-				$this->type = null;
+				$this->type   = null;
 				break;
 
 			case 'insert':
-				$this->insert = null;
-				$this->type = null;
+				$this->insert             = null;
+				$this->type               = null;
 				$this->autoIncrementField = null;
 				break;
 
@@ -562,7 +562,7 @@ abstract class DatabaseQuery
 
 			case 'limit':
 				$this->offset = 0;
-				$this->limit = 0;
+				$this->limit  = 0;
 				break;
 
 			case 'offset':
@@ -574,26 +574,26 @@ abstract class DatabaseQuery
 				break;
 
 			default:
-				$this->type = null;
-				$this->select = null;
-				$this->delete = null;
-				$this->update = null;
-				$this->insert = null;
-				$this->from = null;
-				$this->join = null;
-				$this->set = null;
-				$this->where = null;
-				$this->group = null;
-				$this->having = null;
-				$this->order = null;
-				$this->columns = null;
-				$this->values = null;
+				$this->type               = null;
+				$this->select             = null;
+				$this->delete             = null;
+				$this->update             = null;
+				$this->insert             = null;
+				$this->from               = null;
+				$this->join               = null;
+				$this->set                = null;
+				$this->where              = null;
+				$this->group              = null;
+				$this->having             = null;
+				$this->order              = null;
+				$this->columns            = null;
+				$this->values             = null;
 				$this->autoIncrementField = null;
-				$this->exec = null;
-				$this->call = null;
-				$this->union = null;
-				$this->offset = 0;
-				$this->limit = 0;
+				$this->exec               = null;
+				$this->call               = null;
+				$this->union              = null;
+				$this->offset             = 0;
+				$this->limit              = 0;
 				break;
 		}
 
@@ -738,7 +738,7 @@ abstract class DatabaseQuery
 	 */
 	public function delete($table = null)
 	{
-		$this->type = 'delete';
+		$this->type   = 'delete';
 		$this->delete = new Query\QueryElement('DELETE', null);
 
 		if (!empty($table))
@@ -1013,7 +1013,7 @@ abstract class DatabaseQuery
 	{
 		if (\is_null($this->having))
 		{
-			$glue = strtoupper($glue);
+			$glue         = strtoupper($glue);
 			$this->having = new Query\QueryElement('HAVING', $conditions, " $glue ");
 		}
 		else
@@ -1062,8 +1062,8 @@ abstract class DatabaseQuery
 	 */
 	public function insert($table, $incrementField=false)
 	{
-		$this->type = 'insert';
-		$this->insert = new Query\QueryElement('INSERT INTO', $table);
+		$this->type               = 'insert';
+		$this->insert             = new Query\QueryElement('INSERT INTO', $table);
 		$this->autoIncrementField = $incrementField;
 
 		return $this;
@@ -1377,7 +1377,7 @@ abstract class DatabaseQuery
 	{
 		if (\is_null($this->set))
 		{
-			$glue = strtoupper($glue);
+			$glue      = strtoupper($glue);
 			$this->set = new Query\QueryElement('SET', $conditions, PHP_EOL . "\t$glue ");
 		}
 		else
@@ -1424,7 +1424,7 @@ abstract class DatabaseQuery
 	 */
 	public function update($table)
 	{
-		$this->type = 'update';
+		$this->type   = 'update';
 		$this->update = new Query\QueryElement('UPDATE', $table);
 
 		return $this;
@@ -1476,7 +1476,7 @@ abstract class DatabaseQuery
 	{
 		if (\is_null($this->where))
 		{
-			$glue = strtoupper($glue);
+			$glue        = strtoupper($glue);
 			$this->where = new Query\QueryElement('WHERE', $conditions, " $glue ");
 		}
 		else
@@ -1735,10 +1735,10 @@ abstract class DatabaseQuery
 	public function format($format)
 	{
 		$query = $this;
-		$args = \array_slice(\func_get_args(), 1);
+		$args  = \array_slice(\func_get_args(), 1);
 		array_unshift($args, null);
 
-		$i = 1;
+		$i    = 1;
 		$func = function ($match) use ($query, $args, &$i)
 		{
 			if (isset($match[6]) && $match[6] === '%')

@@ -10,7 +10,6 @@ namespace Joomla\Database\Mysql;
 
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Pdo\PdoDriver;
-use Psr\Log;
 
 /**
  * MySQL database driver supporting PDO based connections
@@ -74,7 +73,7 @@ class MysqlDriver extends PdoDriver
 	public function __construct($options)
 	{
 		// Get some basic values from the options.
-		$options['driver']	= 'mysql';
+		$options['driver']  = 'mysql';
 		$options['charset'] = isset($options['charset']) ? $options['charset'] : 'utf8';
 
 		$this->charset = $options['charset'];
@@ -122,7 +121,7 @@ class MysqlDriver extends PdoDriver
 			 * Otherwise, try connecting again without using utf8mb4 and see if maybe that was the problem. If the connection succeeds, then we
 			 * will have learned that the client end of the connection does not support utf8mb4.
   			 */
-			$this->utf8mb4 = false;
+			$this->utf8mb4            = false;
 			$this->options['charset'] = 'utf8';
 
 			parent::connect();

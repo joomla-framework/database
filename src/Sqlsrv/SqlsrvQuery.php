@@ -77,7 +77,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 						$query .= (string) $this->columns;
 					}
 
-					$elements = $this->insert->getElements();
+					$elements  = $this->insert->getElements();
 					$tableName = array_shift($elements);
 
 					$query .= 'VALUES ';
@@ -303,7 +303,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 		list($table, $alias) = preg_split("/\sAS\s/i", $fromStr);
 
 		$tmpCols = $this->db->getTableColumns(trim($table));
-		$cols = array();
+		$cols    = array();
 
 		foreach ($tmpCols as $name => $type)
 		{
@@ -364,7 +364,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 
 				// Get the table name
 				$tableColumns = preg_grep("/{$aliasStar}\.+/", $cols);
-				$columns = array_merge($columns, $tableColumns);
+				$columns      = array_merge($columns, $tableColumns);
 			}
 		}
 

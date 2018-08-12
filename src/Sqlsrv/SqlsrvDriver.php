@@ -8,6 +8,7 @@
 
 namespace Joomla\Database\Sqlsrv;
 
+use Joomla\Database\DatabaseDriver;
 use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
@@ -15,7 +16,6 @@ use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
 use Psr\Log;
-use Joomla\Database\DatabaseDriver;
 
 /**
  * SQL Server Database Driver
@@ -127,7 +127,7 @@ class SqlsrvDriver extends DatabaseDriver
 			'uid'                  => $this->options['user'],
 			'pwd'                  => $this->options['password'],
 			'CharacterSet'         => 'UTF-8',
-			'ReturnDatesAsStrings' => true
+			'ReturnDatesAsStrings' => true,
 		);
 
 		// Make sure the SQLSRV extension for PHP is installed and enabled.
@@ -412,7 +412,7 @@ class SqlsrvDriver extends DatabaseDriver
 		{
 			foreach ($fields as $field)
 			{
-				$field->Default = preg_replace("/(^(\(\(|\('|\(N'|\()|(('\)|(?<!\()\)\)|\))$))/i", '', $field->Default);
+				$field->Default        = preg_replace("/(^(\(\(|\('|\(N'|\()|(('\)|(?<!\()\)\)|\))$))/i", '', $field->Default);
 				$result[$field->Field] = $field;
 			}
 		}
@@ -505,10 +505,10 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public function insertObject($table, &$object, $key = null)
 	{
-		$fields = array();
-		$values = array();
+		$fields       = array();
+		$values       = array();
 		$tableColumns = $this->getTableColumns($table);
-		$statement = 'INSERT INTO ' . $this->quoteName($table) . ' (%s) VALUES (%s)';
+		$statement    = 'INSERT INTO ' . $this->quoteName($table) . ' (%s) VALUES (%s)';
 
 		foreach (get_object_vars($object) as $k => $v)
 		{
@@ -662,7 +662,7 @@ class SqlsrvDriver extends DatabaseDriver
 				// If connect fails, ignore that exception and throw the normal exception.
 				{
 					// Get the error number and message.
-					$errors = sqlsrv_errors();
+					$errors         = sqlsrv_errors();
 					$this->errorNum = $errors[0]['code'];
 					$this->errorMsg = $errors[0]['message'];
 
@@ -683,7 +683,7 @@ class SqlsrvDriver extends DatabaseDriver
 			// The server was not disconnected.
 			{
 				// Get the error number and message.
-				$errors = sqlsrv_errors();
+				$errors         = sqlsrv_errors();
 				$this->errorNum = $errors[0]['code'];
 				$this->errorMsg = $errors[0]['message'];
 
@@ -714,13 +714,13 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public function replacePrefix($sql, $prefix = '#__')
 	{
-		$escaped = false;
-		$startPos = 0;
+		$escaped   = false;
+		$startPos  = 0;
 		$quoteChar = '';
-		$literal = '';
+		$literal   = '';
 
 		$sql = trim($sql);
-		$n = \strlen($sql);
+		$n   = \strlen($sql);
 
 		while ($startPos < $n)
 		{
@@ -737,7 +737,7 @@ class SqlsrvDriver extends DatabaseDriver
 			if (($k !== false) && (($k < $j) || ($j === false)))
 			{
 				$quoteChar = '"';
-				$j = $k;
+				$j         = $k;
 			}
 			else
 			{
@@ -762,7 +762,7 @@ class SqlsrvDriver extends DatabaseDriver
 			// Quote comes first, find end of quote
 			while (true)
 			{
-				$k = strpos($sql, $quoteChar, $j);
+				$k       = strpos($sql, $quoteChar, $j);
 				$escaped = false;
 
 				if ($k === false)
@@ -1046,7 +1046,7 @@ class SqlsrvDriver extends DatabaseDriver
 		$this->connect();
 
 		$table = $this->replacePrefix((string) $table);
-		$sql = 'SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS' . " WHERE TABLE_NAME = '$table' AND COLUMN_NAME = '$field'" .
+		$sql   = 'SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS' . " WHERE TABLE_NAME = '$table' AND COLUMN_NAME = '$field'" .
 			' ORDER BY ORDINAL_POSITION';
 		$this->setQuery($sql);
 

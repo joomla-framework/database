@@ -46,14 +46,14 @@ class MysqlImporter extends DatabaseImporter
 	protected function getAlterTableSql(\SimpleXMLElement $structure)
 	{
 		// Initialise variables.
-		$table = $this->getRealTableName($structure['name']);
+		$table     = $this->getRealTableName($structure['name']);
 		$oldFields = $this->db->getTableColumns($table);
-		$oldKeys = $this->db->getTableKeys($table);
-		$alters = array();
+		$oldKeys   = $this->db->getTableKeys($table);
+		$alters    = array();
 
 		// Get the fields and keys from the XML that we are aiming for.
 		$newFields = $structure->xpath('field');
-		$newKeys = $structure->xpath('key');
+		$newKeys   = $structure->xpath('key');
 
 		// Loop through each field in the new structure.
 		foreach ($newFields as $field)
@@ -101,7 +101,7 @@ class MysqlImporter extends DatabaseImporter
 			// Check if there are keys on this field in the existing table.
 			if (isset($oldLookup[$name]))
 			{
-				$same = true;
+				$same     = true;
 				$newCount = \count($newLookup[$name]);
 				$oldCount = \count($oldLookup[$name]);
 
@@ -217,11 +217,11 @@ class MysqlImporter extends DatabaseImporter
 		// TODO Incorporate into parent class and use $this.
 		$blobs = array('text', 'smalltext', 'mediumtext', 'largetext');
 
-		$fName = (string) $field['Field'];
-		$fType = (string) $field['Type'];
-		$fNull = (string) $field['Null'];
+		$fName    = (string) $field['Field'];
+		$fType    = (string) $field['Type'];
+		$fNull    = (string) $field['Null'];
 		$fDefault = isset($field['Default']) ? (string) $field['Default'] : null;
-		$fExtra = (string) $field['Extra'];
+		$fExtra   = (string) $field['Extra'];
 
 		$sql = $this->db->quoteName($fName) . ' ' . $fType;
 
@@ -340,8 +340,8 @@ class MysqlImporter extends DatabaseImporter
 		// TODO Error checking on array and element types.
 
 		$kNonUnique = (string) $columns[0]['Non_unique'];
-		$kName = (string) $columns[0]['Key_name'];
-		$kColumn = (string) $columns[0]['Column_name'];
+		$kName      = (string) $columns[0]['Key_name'];
+		$kColumn    = (string) $columns[0]['Column_name'];
 
 		$prefix = '';
 

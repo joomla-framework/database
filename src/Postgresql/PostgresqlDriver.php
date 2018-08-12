@@ -108,7 +108,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 *
 	 * @since	1.0
 	 */
-	public function __construct( $options )
+	public function __construct($options)
 	{
 		$options['host']     = isset($options['host']) ? $options['host'] : 'localhost';
 		$options['user']     = isset($options['user']) ? $options['user'] : '';
@@ -597,9 +597,9 @@ class PostgresqlDriver extends DatabaseDriver
 		if (\in_array($table, $tableList, true))
 		{
 			$name = array('s.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
-							'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option');
+							'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option', );
 			$as = array('sequence', 'schema', 'table', 'column', 'data_type',
-							'minimum_value', 'maximum_value', 'increment', 'cycle_option');
+							'minimum_value', 'maximum_value', 'increment', 'cycle_option', );
 
 			if (version_compare($this->getVersion(), '9.1.0') >= 0)
 			{
@@ -1261,7 +1261,7 @@ class PostgresqlDriver extends DatabaseDriver
 			if ($id)
 			{
 				$object->$key = $id;
-				$retVal = true;
+				$retVal       = true;
 			}
 		}
 		else

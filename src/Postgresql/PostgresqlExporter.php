@@ -60,8 +60,8 @@ class PostgresqlExporter extends DatabaseExporter
 			$table = $this->getGenericTableName($table);
 
 			// Get the details columns information.
-			$fields = $this->db->getTableColumns($table, false);
-			$keys = $this->db->getTableKeys($table);
+			$fields    = $this->db->getTableColumns($table, false);
+			$keys      = $this->db->getTableKeys($table);
 			$sequences = $this->db->getTableSequences($table);
 
 			$buffer[] = '  <table_structure name="' . $table . '">';

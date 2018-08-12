@@ -9,7 +9,6 @@
 namespace Joomla\Database\Pgsql;
 
 use Joomla\Database\Pdo\PdoDriver;
-use Psr\Log;
 
 /**
  * PostgreSQL PDO Database Driver
@@ -241,13 +240,13 @@ class PgsqlDriver extends PdoDriver
 				// @todo: Come up with and implement a standard across databases.
 				$result[$field->column_name] = (object) array(
 					'column_name' => $field->column_name,
-					'type' => $field->type,
-					'null' => $field->null,
-					'Default' => $field->Default,
-					'comments' => '',
-					'Field' => $field->column_name,
-					'Type' => $field->type,
-					'Null' => $field->null,
+					'type'        => $field->type,
+					'null'        => $field->null,
+					'Default'     => $field->Default,
+					'comments'    => '',
+					'Field'       => $field->column_name,
+					'Type'        => $field->type,
+					'Null'        => $field->null,
 					// @todo: Improve query above to return primary key info as well
 					// 'Key' => ($field->PK == '1' ? 'PRI' : '')
 				);
@@ -346,7 +345,7 @@ class PgsqlDriver extends PdoDriver
 		{
 			$name = array(
 				's.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
-				'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option'
+				'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option',
 			);
 
 			$as = array('sequence', 'schema', 'table', 'column', 'data_type', 'minimum_value', 'maximum_value', 'increment', 'cycle_option');
@@ -683,7 +682,7 @@ class PgsqlDriver extends PdoDriver
 			if ($id)
 			{
 				$object->$key = $id;
-				$retVal = true;
+				$retVal       = true;
 			}
 		}
 		else

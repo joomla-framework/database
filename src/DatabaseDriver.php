@@ -219,7 +219,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			self::$connectors = array();
 
 			// Get an iterator and loop trough the driver classes.
-			$dir = __DIR__;
+			$dir      = __DIR__;
 			$iterator = new \DirectoryIterator($dir);
 
 			/** @var $file \DirectoryIterator */
@@ -505,8 +505,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		$this->database = isset($options['database']) ? $options['database'] : '';
 
 		$this->tablePrefix = isset($options['prefix']) ? $options['prefix'] : 'jos_';
-		$this->count = 0;
-		$this->errorNum = 0;
+		$this->count       = 0;
+		$this->errorNum    = 0;
 
 		// Set class options.
 		$this->options = $options;
@@ -1018,8 +1018,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function insertObject($table, &$object, $key = null)
 	{
-		$fields = array();
-		$values = array();
+		$fields       = array();
+		$values       = array();
 		$tableColumns = $this->getTableColumns($table);
 
 		// Iterate over the object variables to build the query fields and values.
@@ -1102,7 +1102,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		// Execute the query and get the result set cursor.
 		if (!($cursor = $this->execute()))
 		{
-			return null;
+			return;
 		}
 
 		// Get the first row from the result set as an associative array.
@@ -1145,7 +1145,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		// Execute the query and get the result set cursor.
 		if (!($cursor = $this->execute()))
 		{
-			return null;
+			return;
 		}
 
 		// Get all of the rows from the result set.
@@ -1189,7 +1189,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		// Execute the query and get the result set cursor.
 		if (!($cursor = $this->execute()))
 		{
-			return null;
+			return;
 		}
 
 		// Get all of the rows from the result set as arrays.
@@ -1223,7 +1223,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		// Execute the query and get the result set cursor.
 		if (!($cursor = $this->execute()))
 		{
-			return null;
+			return;
 		}
 
 		// Get the first row from the result set as an object of type $class.
@@ -1264,7 +1264,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		// Execute the query and get the result set cursor.
 		if (!($cursor = $this->execute()))
 		{
-			return null;
+			return;
 		}
 
 		// Get all of the rows from the result set as objects of type $class.
@@ -1303,7 +1303,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		// Execute the query and get the result set cursor.
 		if (!($cursor = $this->execute()))
 		{
-			return null;
+			return;
 		}
 
 		// Get the first row from the result set as an array.
@@ -1338,7 +1338,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		// Execute the query and get the result set cursor.
 		if (!($cursor = $this->execute()))
 		{
-			return null;
+			return;
 		}
 
 		// Get the first row from the result set as an array.
@@ -1378,7 +1378,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		// Execute the query and get the result set cursor.
 		if (!($cursor = $this->execute()))
 		{
-			return null;
+			return;
 		}
 
 		// Get all of the rows from the result set as arrays.
@@ -1525,7 +1525,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	protected function quoteNameStr($strArr)
 	{
 		$parts = array();
-		$q = $this->nameQuote;
+		$q     = $this->nameQuote;
 
 		foreach ($strArr as $part)
 		{
@@ -1560,13 +1560,13 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function replacePrefix($sql, $prefix = '#__')
 	{
-		$escaped = false;
-		$startPos = 0;
+		$escaped   = false;
+		$startPos  = 0;
 		$quoteChar = '';
-		$literal = '';
+		$literal   = '';
 
 		$sql = trim($sql);
-		$n = \strlen($sql);
+		$n   = \strlen($sql);
 
 		while ($startPos < $n)
 		{
@@ -1583,7 +1583,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			if (($k !== false) && (($k < $j) || ($j === false)))
 			{
 				$quoteChar = '"';
-				$j = $k;
+				$j         = $k;
 			}
 			else
 			{
@@ -1608,7 +1608,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			// Quote comes first, find end of quote
 			while (true)
 			{
-				$k = strpos($sql, $quoteChar, $j);
+				$k       = strpos($sql, $quoteChar, $j);
 				$escaped = false;
 
 				if ($k === false)
@@ -1689,7 +1689,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function setDebug($level)
 	{
-		$previous = $this->debug;
+		$previous    = $this->debug;
 		$this->debug = (bool) $level;
 
 		return $previous;
@@ -1708,8 +1708,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function setQuery($query, $offset = 0, $limit = 0)
 	{
-		$this->sql = $query;
-		$this->limit = (int) max(0, $limit);
+		$this->sql    = $query;
+		$this->limit  = (int) max(0, $limit);
 		$this->offset = (int) max(0, $offset);
 
 		return $this;
@@ -1805,8 +1805,8 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	 */
 	public function updateObject($table, &$object, $key, $nulls = false)
 	{
-		$fields = array();
-		$where = array();
+		$fields       = array();
+		$where        = array();
 		$tableColumns = $this->getTableColumns($table);
 
 		if (\is_string($key))

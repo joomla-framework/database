@@ -9,9 +9,9 @@
 namespace Joomla\Database\Postgresql;
 
 use Joomla\Database\DatabaseQuery;
+use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\Query\QueryElement;
-use Joomla\Database\Query\LimitableInterface;
 
 /**
  * PostgreSQL Query Building Class.
@@ -344,13 +344,13 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 				break;
 
 			default:
-				$this->bounded = array();
-				$this->type = null;
-				$this->limit = null;
-				$this->offset = null;
+				$this->bounded   = array();
+				$this->type      = null;
+				$this->limit     = null;
+				$this->offset    = null;
 				$this->forUpdate = null;
-				$this->forShare = null;
-				$this->noWait = null;
+				$this->forShare  = null;
+				$this->noWait    = null;
 				$this->returning = null;
 				parent::clear($clause);
 				break;
@@ -431,7 +431,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 
 		if (\is_null($this->forUpdate))
 		{
-			$glue = strtoupper($glue);
+			$glue            = strtoupper($glue);
 			$this->forUpdate = new QueryElement('FOR UPDATE', 'OF ' . $table_name, "$glue ");
 		}
 		else
@@ -458,7 +458,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 
 		if (\is_null($this->forShare))
 		{
-			$glue = strtoupper($glue);
+			$glue           = strtoupper($glue);
 			$this->forShare = new QueryElement('FOR SHARE', 'OF ' . $table_name, "$glue ");
 		}
 		else

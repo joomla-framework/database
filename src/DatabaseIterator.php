@@ -80,9 +80,9 @@ abstract class DatabaseIterator implements \Countable, \Iterator
 			throw new \InvalidArgumentException(sprintf('new %s(*%s*, cursor)', \get_class($this), \gettype($class)));
 		}
 
-		$this->cursor = $cursor;
-		$this->class = $class;
-		$this->column = $column;
+		$this->cursor  = $cursor;
+		$this->class   = $class;
+		$this->column  = $column;
 		$this->fetched = 0;
 		$this->next();
 	}

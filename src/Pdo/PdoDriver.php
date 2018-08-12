@@ -8,13 +8,13 @@
 
 namespace Joomla\Database\Pdo;
 
+use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Psr\Log;
-use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
+use Psr\Log;
 
 /**
  * Joomla Framework PDO Database Driver Class
@@ -204,7 +204,7 @@ abstract class PdoDriver extends DatabaseDriver
 						$this->options['port'],
 						$this->options['database'],
 						$this->options['server'],
-						$this->options['protocol']
+						$this->options['protocol'],
 					);
 				}
 

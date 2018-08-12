@@ -67,7 +67,7 @@ class OracleDriver extends PdoDriver
 		$options['charset']    = isset($options['charset']) ? $options['charset'] : 'AL32UTF8';
 		$options['dateformat'] = isset($options['dateformat']) ? $options['dateformat'] : 'RRRR-MM-DD HH24:MI:SS';
 
-		$this->charset = $options['charset'];
+		$this->charset    = $options['charset'];
 		$this->dateformat = $options['dateformat'];
 
 		// Finalize initialisation
@@ -241,7 +241,8 @@ class OracleDriver extends PdoDriver
 		{
 			$query->bind(':tableName', $table);
 			$this->setQuery($query);
-			$statement = (string) $this->loadResult();
+
+			$statement      = (string) $this->loadResult();
 			$result[$table] = $statement;
 		}
 
@@ -294,7 +295,7 @@ class OracleDriver extends PdoDriver
 		{
 			foreach ($fields as $field)
 			{
-				$columns[$field->COLUMN_NAME] = $field;
+				$columns[$field->COLUMN_NAME]          = $field;
 				$columns[$field->COLUMN_NAME]->Default = null;
 			}
 		}
@@ -554,13 +555,13 @@ class OracleDriver extends PdoDriver
 	 */
 	public function replacePrefix($sql, $prefix = '#__')
 	{
-		$escaped = false;
-		$startPos = 0;
+		$escaped   = false;
+		$startPos  = 0;
 		$quoteChar = "'";
-		$literal = '';
+		$literal   = '';
 
 		$sql = trim($sql);
-		$n = \strlen($sql);
+		$n   = \strlen($sql);
 
 		while ($startPos < $n)
 		{
@@ -591,7 +592,7 @@ class OracleDriver extends PdoDriver
 			// Quote comes first, find end of quote
 			while (true)
 			{
-				$k = strpos($sql, $quoteChar, $j);
+				$k       = strpos($sql, $quoteChar, $j);
 				$escaped = false;
 
 				if ($k === false)

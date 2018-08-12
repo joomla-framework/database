@@ -60,7 +60,7 @@ class MysqliExporter extends DatabaseExporter
 
 			// Get the details columns information.
 			$fields = $this->db->getTableColumns($table, false);
-			$keys = $this->db->getTableKeys($table);
+			$keys   = $this->db->getTableKeys($table);
 
 			$buffer[] = '  <table_structure name="' . $table . '">';
 

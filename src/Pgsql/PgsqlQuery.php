@@ -65,9 +65,9 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 
 		$obj = new \stdClass;
 
-		$obj->value = &$value;
-		$obj->dataType = $dataType;
-		$obj->length = $length;
+		$obj->value         = &$value;
+		$obj->dataType      = $dataType;
+		$obj->length        = $length;
 		$obj->driverOptions = $driverOptions;
 
 		// Case 3: Simply add the Key/Value into the bounded array

@@ -13,8 +13,8 @@ use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\Query\LimitableInterface;
+use Joomla\Database\Query\PreparableInterface;
 use Psr\Log;
 
 /**
@@ -196,7 +196,7 @@ class MysqliDriver extends DatabaseDriver
 		{
 			// Empty host, just port, e.g. ':3306'
 			$this->options['host'] = 'localhost';
-			$port = $matches['port'];
+			$port                  = $matches['port'];
 		}
 
 		// ... else we assume normal (naked) IPv6 address, so host and port stay as they are or default
@@ -641,7 +641,7 @@ class MysqliDriver extends DatabaseDriver
 					}
 
 					// Make everything references for call_user_func_array()
-					$bindParams = array();
+					$bindParams   = array();
 					$bindParams[] = &$typeString;
 
 					for ($i = 0, $iMax = \count($params); $i < $iMax; $i++)
