@@ -39,10 +39,10 @@ class Cipher_Simple implements CipherInterface
 		}
 
 		$decrypted = '';
-		$tmp = $key->public;
+		$tmp       = $key->public;
 
 		// Convert the HEX input into an array of integers and get the number of characters.
-		$chars = $this->hexToIntArray($data);
+		$chars     = $this->hexToIntArray($data);
 		$charCount = \count($chars);
 
 		// Repeat the key as many times as necessary to ensure that the key is at least as long as the input.
@@ -81,10 +81,10 @@ class Cipher_Simple implements CipherInterface
 		}
 
 		$encrypted = '';
-		$tmp = $key->private;
+		$tmp       = $key->private;
 
 		// Split up the input into a character array and get the number of characters.
-		$chars = preg_split('//', $data, -1, PREG_SPLIT_NO_EMPTY);
+		$chars     = preg_split('//', $data, -1, PREG_SPLIT_NO_EMPTY);
 		$charCount = \count($chars);
 
 		// Repeat the key as many times as necessary to ensure that the key is at least as long as the input.
@@ -136,8 +136,8 @@ class Cipher_Simple implements CipherInterface
 	 */
 	private function getRandomKey($length = 256)
 	{
-		$key = '';
-		$salt = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+		$key        = '';
+		$salt       = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 		$saltLength = \strlen($salt);
 
 		// Build the random key.
@@ -162,8 +162,8 @@ class Cipher_Simple implements CipherInterface
 	 */
 	private function hexToInt($s, $i)
 	{
-		$j = (int) $i * 2;
-		$k = 0;
+		$j  = (int) $i * 2;
+		$k  = 0;
 		$s1 = (string) $s;
 
 		// Get the character at position $j.

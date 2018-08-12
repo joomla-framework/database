@@ -127,7 +127,7 @@ abstract class Cipher_Mcrypt implements CipherInterface
 		$key->public = mcrypt_create_iv(mcrypt_get_iv_size($this->type, $this->mode), MCRYPT_DEV_URANDOM);
 
 		// Get the salt and password setup.
-		$salt = isset($options['salt']) ? $options['salt'] : substr(pack('h*', md5(mt_rand())), 0, 16);
+		$salt     = isset($options['salt']) ? $options['salt'] : substr(pack('h*', md5(mt_rand())), 0, 16);
 		$password = isset($options['password']) ? $options['password'] : 'J00ml4R0ck$!';
 
 		// Generate the derived key.
