@@ -100,7 +100,7 @@ class Router
 			elseif ($segment[0] == '*')
 			{
 				// Match a splat and capture the data to a named variable.
-				$vars[] = substr($segment, 1);
+				$vars[]  = substr($segment, 1);
 				$regex[] = '(.*)';
 			}
 			elseif ($segment[0] == '\\' && $segment[1] == '*')
@@ -116,7 +116,7 @@ class Router
 			elseif ($segment[0] == ':')
 			{
 				// Match a named variable and capture the data.
-				$vars[] = substr($segment, 1);
+				$vars[]  = substr($segment, 1);
 				$regex[] = '([^/]*)';
 			}
 			elseif ($segment[0] == '\\' && $segment[1] == ':')
@@ -132,9 +132,9 @@ class Router
 		}
 
 		$this->maps[] = array(
-			'regex' => \chr(1) . '^' . implode('/', $regex) . '$' . \chr(1),
-			'vars' => $vars,
-			'controller' => (string) $controller
+			'regex'      => \chr(1) . '^' . implode('/', $regex) . '$' . \chr(1),
+			'vars'       => $vars,
+			'controller' => (string) $controller,
 		);
 
 		return $this;

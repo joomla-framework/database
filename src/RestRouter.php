@@ -33,13 +33,13 @@ class RestRouter extends Router
 	 * @deprecated  2.0  Use the base Router class instead
 	 */
 	protected $suffixMap = array(
-		'GET' => 'Get',
-		'POST' => 'Create',
-		'PUT' => 'Update',
-		'PATCH' => 'Update',
-		'DELETE' => 'Delete',
-		'HEAD' => 'Head',
-		'OPTIONS' => 'Options'
+		'GET'     => 'Get',
+		'POST'    => 'Create',
+		'PUT'     => 'Update',
+		'PATCH'   => 'Update',
+		'DELETE'  => 'Delete',
+		'HEAD'    => 'Head',
+		'OPTIONS' => 'Options',
 	);
 
 	/**
