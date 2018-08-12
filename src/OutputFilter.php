@@ -98,7 +98,7 @@ class OutputFilter
 
 		// Transliterate on the language requested (fallback to current language if not specified)
 		$lang = empty($language) ? Language::getInstance() : Language::getInstance($language);
-		$str = $lang->transliterate($str);
+		$str  = $lang->transliterate($str);
 
 		// Trim white spaces at beginning and end of alias and make lowercase
 		$str = trim(StringHelper::strtolower($str));
