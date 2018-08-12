@@ -30,7 +30,7 @@ final class ColorStyle
 		'blue'    => 4,
 		'magenta' => 5,
 		'cyan'    => 6,
-		'white'   => 7
+		'white'   => 7,
 	);
 
 	/**
@@ -170,8 +170,8 @@ final class ColorStyle
 	 */
 	public static function fromString($string)
 	{
-		$fg = '';
-		$bg = '';
+		$fg      = '';
+		$bg      = '';
 		$options = array();
 
 		$parts = explode(';', $string);

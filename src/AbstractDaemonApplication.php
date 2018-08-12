@@ -63,7 +63,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		'SIGBABY',
 		'SIG_BLOCK',
 		'SIG_UNBLOCK',
-		'SIG_SETMASK'
+		'SIG_SETMASK',
 	);
 
 	/**
@@ -241,7 +241,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		}
 
 		// Read the contents of the process id file as an integer.
-		$fp = fopen($pidFile, 'r');
+		$fp  = fopen($pidFile, 'r');
 		$pid = fread($fp, filesize($pidFile));
 		$pid = (int) $pid;
 		fclose($fp);
@@ -314,7 +314,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 
 		// The pid file location.  This defaults to a path inside the /tmp directory.
 		$name = $this->get('application_name');
-		$tmp = (string) $this->get('application_pid_file', strtolower('/tmp/' . $name . '/' . $name . '.pid'));
+		$tmp  = (string) $this->get('application_pid_file', strtolower('/tmp/' . $name . '/' . $name . '.pid'));
 		$this->set('application_pid_file', $tmp);
 
 		/*
@@ -324,12 +324,12 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		 */
 
 		// The user id under which to run the daemon.
-		$tmp = (int) $this->get('application_uid', 0);
+		$tmp     = (int) $this->get('application_uid', 0);
 		$options = array('options' => array('min_range' => 0, 'max_range' => 65000));
 		$this->set('application_uid', filter_var($tmp, FILTER_VALIDATE_INT, $options));
 
 		// The group id under which to run the daemon.
-		$tmp = (int) $this->get('application_gid', 0);
+		$tmp     = (int) $this->get('application_gid', 0);
 		$options = array('options' => array('min_range' => 0, 'max_range' => 65000));
 		$this->set('application_gid', filter_var($tmp, FILTER_VALIDATE_INT, $options));
 
@@ -494,7 +494,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		}
 
 		// Get the user and group information based on uid and gid.
-		$user = posix_getpwuid($uid);
+		$user  = posix_getpwuid($uid);
 		$group = posix_getgrgid($gid);
 
 		$this->getLogger()->info('Changed daemon identity to ' . $user['name'] . ':' . $group['name']);
@@ -521,9 +521,9 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		}
 
 		// Reset Process Information
-		$this->safeMode = !!@ ini_get('safe_mode');
+		$this->safeMode  = !!@ ini_get('safe_mode');
 		$this->processId = 0;
-		$this->running = false;
+		$this->running   = false;
 
 		// Detach process!
 		try
@@ -542,7 +542,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 
 				// Set the process id.
 				$this->processId = (int) posix_getpid();
-				$this->parentId = $this->processId;
+				$this->parentId  = $this->processId;
 			}
 		}
 		catch (\RuntimeException $e)
@@ -762,7 +762,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		if ($this->parentId == $this->processId)
 		{
 			// Read the contents of the process id file as an integer.
-			$fp = fopen($this->get('application_pid_file'), 'r');
+			$fp  = fopen($this->get('application_pid_file'), 'r');
 			$pid = fread($fp, filesize($this->get('application_pid_file')));
 			$pid = (int) $pid;
 			fclose($fp);
@@ -900,7 +900,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 	 * @see     pcntl_signal()
 	 * @since   1.0
 	 */
-	protected function pcntlSignal($signal , $handler, $restart = true)
+	protected function pcntlSignal($signal, $handler, $restart = true)
 	{
 		return pcntl_signal($signal, $handler, $restart);
 	}

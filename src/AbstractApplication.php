@@ -58,7 +58,7 @@ abstract class AbstractApplication implements LoggerAwareInterface
 	 */
 	public function __construct(Input $input = null, Registry $config = null)
 	{
-		$this->input = $input instanceof Input ? $input : new Input;
+		$this->input  = $input instanceof Input ? $input : new Input;
 		$this->config = $config instanceof Registry ? $config : new Registry;
 
 		// Set the execution datetime and timestamp;
