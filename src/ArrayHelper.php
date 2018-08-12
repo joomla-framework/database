@@ -558,7 +558,7 @@ final class ArrayHelper
 			if (empty($counter[$resultKey]))
 			{
 				// The first time around we just assign the value to the key.
-				$result[$resultKey] = $resultValue;
+				$result[$resultKey]  = $resultValue;
 				$counter[$resultKey] = 1;
 			}
 			elseif ($counter[$resultKey] == 1)
