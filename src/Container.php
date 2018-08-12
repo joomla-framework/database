@@ -321,7 +321,7 @@ class Container implements ContainerInterface
 
 		foreach ($method->getParameters() as $param)
 		{
-			$dependency = $param->getClass();
+			$dependency        = $param->getClass();
 			$dependencyVarName = $param->getName();
 
 			// If we have a dependency, that means it has been type-hinted.
@@ -389,9 +389,9 @@ class Container implements ContainerInterface
 		}
 
 		$this->dataStore[$key] = array(
-			'callback' => $value,
-			'shared' => $shared,
-			'protected' => $protected
+			'callback'  => $value,
+			'shared'    => $shared,
+			'protected' => $protected,
 		);
 
 		return $this;
@@ -546,8 +546,6 @@ class Container implements ContainerInterface
 				'protected' => true,
 			);
 		}
-
-		return null;
 	}
 
 	/**
