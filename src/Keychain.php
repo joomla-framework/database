@@ -126,7 +126,7 @@ class Keychain extends Registry
 	public function saveKeychain($keychainFile, $passphraseFile, $publicKeyFile)
 	{
 		$passphrase = $this->getPassphraseFromFile($passphraseFile, $publicKeyFile);
-		$data = $this->toString('JSON');
+		$data       = $this->toString('JSON');
 
 		$encrypted = @openssl_encrypt($data, $this->method, $passphrase, true, $this->iv);
 
