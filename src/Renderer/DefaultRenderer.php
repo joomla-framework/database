@@ -8,8 +8,8 @@
 
 namespace Joomla\Profiler\Renderer;
 
-use Joomla\Profiler\ProfilerRendererInterface;
 use Joomla\Profiler\ProfilerInterface;
+use Joomla\Profiler\ProfilerRendererInterface;
 
 /**
  * Default profiler renderer.
@@ -39,7 +39,7 @@ class DefaultRenderer implements ProfilerRendererInterface
 		foreach ($points as $point)
 		{
 			$previousTime = $lastPoint ? $lastPoint->getTime() : 0.0;
-			$previousMem = $lastPoint ? $lastPoint->getMemoryMegaBytes() : 0;
+			$previousMem  = $lastPoint ? $lastPoint->getMemoryMegaBytes() : 0;
 
 			$render .= sprintf(
 				'<code>%s %.3f seconds (+%.3f); %0.2f MB (%s%0.3f) - %s</code>',

@@ -50,8 +50,8 @@ class ProfilePoint implements ProfilePointInterface
 	 */
 	public function __construct($name, $time = 0.0, $memoryBytes = 0)
 	{
-		$this->name = $name;
-		$this->time = (float) $time;
+		$this->name        = $name;
+		$this->time        = (float) $time;
 		$this->memoryBytes = (int) $memoryBytes;
 	}
 
