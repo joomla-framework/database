@@ -353,7 +353,7 @@ class Language
 		{
 			if ($this->debug)
 			{
-				$caller = $this->getCallerInfo();
+				$caller           = $this->getCallerInfo();
 				$caller['string'] = $string;
 
 				if (!array_key_exists($key, $this->orphans))
@@ -404,7 +404,7 @@ class Language
 			return \call_user_func($this->transliterator, $string);
 		}
 
-		$string = Transliterate::utf8_latin_to_ascii($string);
+		$string          = Transliterate::utf8_latin_to_ascii($string);
 		$lowercaseString = StringHelper::strtolower($string);
 
 		// String can return false if there isn't a fully valid UTF-8 string entered
@@ -441,7 +441,7 @@ class Language
 	 */
 	public function setTransliterator($function)
 	{
-		$previous = $this->transliterator;
+		$previous             = $this->transliterator;
 		$this->transliterator = $function;
 
 		return $previous;
@@ -493,7 +493,7 @@ class Language
 	 */
 	public function setPluralSuffixesCallback($function)
 	{
-		$previous = $this->pluralSuffixesCallback;
+		$previous                     = $this->pluralSuffixesCallback;
 		$this->pluralSuffixesCallback = $function;
 
 		return $previous;
@@ -544,7 +544,7 @@ class Language
 	 */
 	public function setIgnoredSearchWordsCallback($function)
 	{
-		$previous = $this->ignoredSearchWordsCallback;
+		$previous                         = $this->ignoredSearchWordsCallback;
 		$this->ignoredSearchWordsCallback = $function;
 
 		return $previous;
@@ -595,7 +595,7 @@ class Language
 	 */
 	public function setLowerLimitSearchWordCallback($function)
 	{
-		$previous = $this->lowerLimitSearchWordCallback;
+		$previous                           = $this->lowerLimitSearchWordCallback;
 		$this->lowerLimitSearchWordCallback = $function;
 
 		return $previous;
@@ -646,7 +646,7 @@ class Language
 	 */
 	public function setUpperLimitSearchWordCallback($function)
 	{
-		$previous = $this->upperLimitSearchWordCallback;
+		$previous                           = $this->upperLimitSearchWordCallback;
 		$this->upperLimitSearchWordCallback = $function;
 
 		return $previous;
@@ -697,7 +697,7 @@ class Language
 	 */
 	public function setSearchDisplayedCharactersNumberCallback($function)
 	{
-		$previous = $this->searchDisplayedCharactersNumberCallback;
+		$previous                                      = $this->searchDisplayedCharactersNumberCallback;
 		$this->searchDisplayedCharactersNumberCallback = $function;
 
 		return $previous;
@@ -782,7 +782,7 @@ class Language
 				$oldFilename = $filename;
 
 				// Check the standard file name
-				$path = self::getLanguagePath($basePath, $this->default);
+				$path     = self::getLanguagePath($basePath, $this->default);
 				$filename = $internal ? $this->default : $this->default . '.' . $extension;
 				$filename = "$path/$filename.ini";
 
@@ -814,7 +814,7 @@ class Language
 	{
 		$this->counter++;
 
-		$result = false;
+		$result  = false;
 		$strings = false;
 
 		if (file_exists($filename))
@@ -827,7 +827,7 @@ class Language
 			if (\is_array($strings) && \count($strings))
 			{
 				$this->strings = array_replace($this->strings, $strings, $this->override);
-				$result = true;
+				$result        = true;
 			}
 		}
 
@@ -871,9 +871,9 @@ class Language
 			ini_set('track_errors', $trackErrors);
 
 			// Initialise variables for manually parsing the file for common errors.
-			$blacklist = array('YES', 'NO', 'NULL', 'FALSE', 'ON', 'OFF', 'NONE', 'TRUE');
+			$blacklist   = array('YES', 'NO', 'NULL', 'FALSE', 'ON', 'OFF', 'NONE', 'TRUE');
 			$this->debug = false;
-			$errors = array();
+			$errors      = array();
 
 			// Open the file as a stream.
 			$file = new \SplFileObject($filename);
@@ -901,7 +901,7 @@ class Language
 				}
 
 				// Remove the "_QQ_" from the equation
-				$line = str_replace('"_QQ_"', '', $line);
+				$line       = str_replace('"_QQ_"', '', $line);
 				$realNumber = $lineNumber + 1;
 
 				// Check for any incorrect uses of _QQ_.
@@ -983,26 +983,26 @@ class Language
 		// Try to determine the source if none was provided
 		if (!function_exists('debug_backtrace'))
 		{
-			return null;
+			return;
 		}
 
 		$backtrace = debug_backtrace();
-		$info = array();
+		$info      = array();
 
 		// Search through the backtrace to our caller
 		$continue = true;
 
 		while ($continue && next($backtrace))
 		{
-			$step = current($backtrace);
+			$step  = current($backtrace);
 			$class = @ $step['class'];
 
 			// We're looking for something outside of language.php
 			if ($class != '\\Joomla\\Language\\Language' && $class != '\\Joomla\\Language\\Text')
 			{
 				$info['function'] = @ $step['function'];
-				$info['class'] = $class;
-				$info['step'] = prev($backtrace);
+				$info['class']    = $class;
+				$info['step']     = prev($backtrace);
 
 				// Determine the file and name of the file
 				$info['file'] = @ $step['file'];
@@ -1045,7 +1045,7 @@ class Language
 				return $this->paths[$extension];
 			}
 
-			return null;
+			return;
 		}
 		else
 		{
@@ -1100,7 +1100,7 @@ class Language
 	 */
 	public function setDebug($debug)
 	{
-		$previous = $this->debug;
+		$previous    = $this->debug;
 		$this->debug = (boolean) $debug;
 
 		return $previous;
@@ -1141,7 +1141,7 @@ class Language
 	 */
 	public function setDefault($lang)
 	{
-		$previous = $this->default;
+		$previous      = $this->default;
 		$this->default = $lang;
 
 		return $previous;
@@ -1212,7 +1212,7 @@ class Language
 
 		if (empty($result))
 		{
-			return null;
+			return;
 		}
 
 		return $result;
@@ -1229,7 +1229,7 @@ class Language
 	 */
 	public static function getKnownLanguages($basePath = JPATH_ROOT)
 	{
-		$dir = self::getLanguagePath($basePath);
+		$dir            = self::getLanguagePath($basePath);
 		$knownLanguages = self::parseLanguageFiles($dir);
 
 		return $knownLanguages;
@@ -1283,8 +1283,8 @@ class Language
 	 */
 	public function setLanguage($lang)
 	{
-		$previous = $this->lang;
-		$this->lang = $lang;
+		$previous       = $this->lang;
+		$this->lang     = $lang;
 		$this->metadata = $this->getMetadata($this->lang);
 
 		return $previous;
@@ -1394,13 +1394,13 @@ class Language
 
 		if (!$xml)
 		{
-			return null;
+			return;
 		}
 
 		// Check that it's a metadata file
 		if ((string) $xml->getName() != 'metafile')
 		{
-			return null;
+			return;
 		}
 
 		$metadata = array();

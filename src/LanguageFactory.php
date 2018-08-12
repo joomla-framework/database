@@ -32,7 +32,7 @@ class LanguageFactory
 	 */
 	private static $loadedClasses = array(
 		'language' => array(),
-		'stemmer'  => array()
+		'stemmer'  => array(),
 	);
 
 	/**

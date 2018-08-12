@@ -175,14 +175,14 @@ class Text
 	 */
 	public static function plural($string, $n)
 	{
-		$lang = static::getLanguage();
-		$args = \func_get_args();
+		$lang  = static::getLanguage();
+		$args  = \func_get_args();
 		$count = \count($args);
 
 		if ($count > 1)
 		{
 			// Try the key from the language plural potential suffixes
-			$found = false;
+			$found    = false;
 			$suffixes = $lang->getPluralSuffixes((int) $n);
 			array_unshift($suffixes, (int) $n);
 
@@ -258,8 +258,8 @@ class Text
 	 */
 	public static function sprintf($string)
 	{
-		$lang = static::getLanguage();
-		$args = \func_get_args();
+		$lang  = static::getLanguage();
+		$args  = \func_get_args();
 		$count = \count($args);
 
 		if ($count > 0)
@@ -300,8 +300,8 @@ class Text
 	 */
 	public static function printf($string)
 	{
-		$lang = static::getLanguage();
-		$args = \func_get_args();
+		$lang  = static::getLanguage();
+		$args  = \func_get_args();
 		$count = \count($args);
 
 		if ($count > 0)
