@@ -90,7 +90,7 @@ class Refs extends AbstractPackage
 		$data = json_encode(
 			array(
 				'ref' => $ref,
-				'sha' => $sha
+				'sha' => $sha,
 			)
 		);
 

@@ -42,10 +42,10 @@ class Comments extends AbstractPackage
 		// Build the request data.
 		$data = json_encode(
 			array(
-				'body' => $body,
+				'body'      => $body,
 				'commit_id' => $commitId,
-				'path' => $filePath,
-				'position' => $position
+				'path'      => $filePath,
+				'position'  => $position,
 			)
 		);
 
@@ -77,8 +77,8 @@ class Comments extends AbstractPackage
 		// Build the request data.
 		$data = json_encode(
 			array(
-				'body' => $body,
-				'in_reply_to' => (int) $inReplyTo
+				'body'        => $body,
+				'in_reply_to' => (int) $inReplyTo,
 			)
 		);
 
@@ -132,7 +132,7 @@ class Comments extends AbstractPackage
 		// Build the request data.
 		$data = json_encode(
 			array(
-				'body' => $body
+				'body' => $body,
 			)
 		);
 

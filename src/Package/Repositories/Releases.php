@@ -44,12 +44,12 @@ class Releases extends AbstractPackage
 		// Build the request data.
 		$data = json_encode(
 			array(
-				'tag_name' => $tagName,
+				'tag_name'         => $tagName,
 				'target_commitish' => $targetCommitish,
-				'name' => $name,
-				'body' => $body,
-				'draft' => (boolean) $draft,
-				'prerelease' => (boolean) $preRelease,
+				'name'             => $name,
+				'body'             => $body,
+				'draft'            => (boolean) $draft,
+				'prerelease'       => (boolean) $preRelease,
 			)
 		);
 
@@ -109,7 +109,7 @@ class Releases extends AbstractPackage
 		$path = '/repos/' . $user . '/' . $repo . '/releases/' . (int) $releaseId;
 
 		// Create the data object.
-		$data = new \stdClass;
+		$data           = new \stdClass;
 		$data->tag_name = $tagName;
 
 		// Check if input values are set and add them to the data object.

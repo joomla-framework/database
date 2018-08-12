@@ -49,9 +49,9 @@ class Pulls extends AbstractPackage
 		$data = json_encode(
 			array(
 				'title' => $title,
-				'base' => $base,
-				'head' => $head,
-				'body' => $body
+				'base'  => $base,
+				'head'  => $head,
+				'body'  => $body,
 			)
 		);
 
@@ -85,8 +85,8 @@ class Pulls extends AbstractPackage
 		$data = json_encode(
 			array(
 				'issue' => (int) $issueId,
-				'base' => $base,
-				'head' => $head
+				'base'  => $base,
+				'head'  => $head,
 			)
 		);
 
@@ -277,7 +277,7 @@ class Pulls extends AbstractPackage
 		}
 
 		// Decode the error response and throw an exception.
-		$error = json_decode($response->body);
+		$error   = json_decode($response->body);
 		$message = isset($error->message) ? $error->message : 'Invalid response received from GitHub.';
 		throw new UnexpectedResponseException($response, $message, $response->code);
 	}
@@ -303,7 +303,7 @@ class Pulls extends AbstractPackage
 		// Build the request data.
 		$data = json_encode(
 			array(
-				'commit_message' => $message
+				'commit_message' => $message,
 			)
 		);
 

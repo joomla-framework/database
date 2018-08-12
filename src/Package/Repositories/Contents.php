@@ -113,7 +113,7 @@ class Contents extends AbstractPackage
 
 		// Build the request path.
 		$path = '/repos/' . $owner . '/' . $repo . '/' . $archiveFormat;
-		$uri = new Uri($this->fetchUrl($path));
+		$uri  = new Uri($this->fetchUrl($path));
 
 		if ($ref)
 		{
@@ -162,7 +162,7 @@ class Contents extends AbstractPackage
 		$data = array(
 			'message' => $message,
 			'content' => $content,
-			'branch'  => $branch
+			'branch'  => $branch,
 		);
 
 		if ($authorName)
@@ -174,7 +174,7 @@ class Contents extends AbstractPackage
 
 			$data['author'] = array(
 				'name'  => $authorName,
-				'email' => $authorEmail
+				'email' => $authorEmail,
 			);
 		}
 
@@ -187,7 +187,7 @@ class Contents extends AbstractPackage
 
 			$data['committer'] = array(
 				'name'  => $committerName,
-				'email' => $committerEmail
+				'email' => $committerEmail,
 			);
 		}
 
@@ -234,7 +234,7 @@ class Contents extends AbstractPackage
 			'message' => $message,
 			'content' => $content,
 			'sha'     => $sha,
-			'branch'  => $branch
+			'branch'  => $branch,
 		);
 
 		if ($authorName)
@@ -246,7 +246,7 @@ class Contents extends AbstractPackage
 
 			$data['author'] = array(
 				'name'  => $authorName,
-				'email' => $authorEmail
+				'email' => $authorEmail,
 			);
 		}
 
@@ -259,7 +259,7 @@ class Contents extends AbstractPackage
 
 			$data['committer'] = array(
 				'name'  => $committerName,
-				'email' => $committerEmail
+				'email' => $committerEmail,
 			);
 		}
 
@@ -297,7 +297,7 @@ class Contents extends AbstractPackage
 		$data = array(
 			'message' => $message,
 			'sha'     => $sha,
-			'branch'  => $branch
+			'branch'  => $branch,
 		);
 
 		if ($authorName)
@@ -309,7 +309,7 @@ class Contents extends AbstractPackage
 
 			$data['author'] = array(
 				'name'  => $authorName,
-				'email' => $authorEmail
+				'email' => $authorEmail,
 			);
 		}
 
@@ -322,7 +322,7 @@ class Contents extends AbstractPackage
 
 			$data['committer'] = array(
 				'name'  => $committerName,
-				'email' => $committerEmail
+				'email' => $committerEmail,
 			);
 		}
 

@@ -107,7 +107,7 @@ class Comments extends AbstractPackage
 
 		$data = json_encode(
 			array(
-				'body' => $comment
+				'body' => $comment,
 			)
 		);
 
@@ -162,10 +162,10 @@ class Comments extends AbstractPackage
 
 		$data = json_encode(
 			array(
-				'body' => $comment,
-				'path' => $filepath,
+				'body'     => $comment,
+				'path'     => $filepath,
 				'position' => (int) $position,
-				'line' => (int) $line
+				'line'     => (int) $line,
 			)
 		);
 

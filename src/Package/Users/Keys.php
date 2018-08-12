@@ -97,7 +97,7 @@ class Keys extends AbstractPackage
 
 		$data = array(
 			'title' => $title,
-			'key'   => $key
+			'key'   => $key,
 		);
 
 		return $this->processResponse(
@@ -124,7 +124,7 @@ class Keys extends AbstractPackage
 
 		$data = array(
 			'title' => $title,
-			'key'   => $key
+			'key'   => $key,
 		);
 
 		return $this->processResponse(

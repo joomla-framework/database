@@ -101,7 +101,7 @@ class Watching extends AbstractPackage
 
 		$data = array(
 			'subscribed' => $subscribed,
-			'ignored'    => $ignored
+			'ignored'    => $ignored,
 		);
 
 		return $this->processResponse(

@@ -37,7 +37,6 @@ class Statuses extends AbstractPackage
 	 * @return object
 	 *
 	 * @since   1.0
-	 *
 	 */
 	public function create($user, $repo, $sha, $state, $targetUrl = null, $description = null, $context = null)
 	{
@@ -51,7 +50,7 @@ class Statuses extends AbstractPackage
 
 		// Build the request data.
 		$data = array(
-			'state' => $state
+			'state' => $state,
 		);
 
 		if (!\is_null($targetUrl))

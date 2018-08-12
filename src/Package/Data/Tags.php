@@ -77,8 +77,8 @@ class Tags extends AbstractPackage
 			'tagger'  => array(
 				'name'  => $taggerName,
 				'email' => $taggerEmail,
-				'date'  => $taggerDate
-			)
+				'date'  => $taggerDate,
+			),
 		);
 
 		return $this->processResponse(

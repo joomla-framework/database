@@ -61,7 +61,7 @@ class Issues extends AbstractPackage
 			'title'     => $title,
 			'milestone' => $milestone,
 			'labels'    => $labels,
-			'body'      => $body
+			'body'      => $body,
 		);
 
 		if (\is_string($assignee) && !empty($assignees))

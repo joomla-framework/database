@@ -63,7 +63,7 @@ class Blobs extends AbstractPackage
 
 		$data = array(
 			'content'  => $content,
-			'encoding' => $encoding
+			'encoding' => $encoding,
 		);
 
 		return $this->processResponse(

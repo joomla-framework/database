@@ -145,7 +145,7 @@ class Authorization extends AbstractPackage
 			array(
 				$scope     => $scopeData,
 				'note'     => $note,
-				'note_url' => $url
+				'note_url' => $url,
 			)
 		);
 
@@ -318,7 +318,7 @@ class Authorization extends AbstractPackage
 		$data = array(
 			'client_id'     => $clientId,
 			'client_secret' => $clientSecret,
-			'code'          => $code
+			'code'          => $code,
 		);
 
 		if ($redirectUri)

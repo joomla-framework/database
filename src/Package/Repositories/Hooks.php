@@ -140,7 +140,8 @@ class Hooks extends AbstractPackage
 				'events'        => $events,
 				'add_events'    => $addEvents,
 				'remove_events' => $removeEvents,
-				'active'        => $active)
+				'active'        => $active,
+			)
 		);
 
 		return $this->processResponse(

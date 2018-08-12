@@ -84,7 +84,7 @@ class Teams extends AbstractPackage
 		$path = '/orgs/' . $org . '/teams';
 
 		$data = array(
-			'name' => $name
+			'name' => $name,
 		);
 
 		if ($repoNames)
@@ -131,7 +131,7 @@ class Teams extends AbstractPackage
 		$path = '/teams/' . (int) $id;
 
 		$data = array(
-			'name' => $name
+			'name' => $name,
 		);
 
 		if ($permission)

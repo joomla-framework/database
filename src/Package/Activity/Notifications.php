@@ -131,7 +131,7 @@ class Notifications extends AbstractPackage
 
 		$data = array(
 			'unread' => $unread,
-			'read'   => $read
+			'read'   => $read,
 		);
 
 		if ($lastReadAt)
@@ -168,7 +168,7 @@ class Notifications extends AbstractPackage
 
 		$data = array(
 			'unread' => $unread,
-			'read'   => $read
+			'read'   => $read,
 		);
 
 		if ($lastReadAt)
@@ -219,7 +219,7 @@ class Notifications extends AbstractPackage
 
 		$data = array(
 			'unread' => $unread,
-			'read'   => $read
+			'read'   => $read,
 		);
 
 		return $this->processResponse(
@@ -272,7 +272,7 @@ class Notifications extends AbstractPackage
 
 		$data = array(
 			'subscribed' => $subscribed,
-			'ignored'    => $ignored
+			'ignored'    => $ignored,
 		);
 
 		return $this->processResponse(

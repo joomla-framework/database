@@ -224,7 +224,7 @@ class Repositories extends AbstractPackage
 			'has_downloads'      => $hasDownloads,
 			'team_id'            => $teamId,
 			'auto_init'          => $autoInit,
-			'gitignore_template' => $gitignoreTemplate
+			'gitignore_template' => $gitignoreTemplate,
 		);
 
 		// Send the request.
@@ -288,7 +288,7 @@ class Repositories extends AbstractPackage
 			'has_issues'     => $hasIssues,
 			'has_wiki'       => $hasWiki,
 			'has_downloads'  => $hasDownloads,
-			'default_branch' => $defaultBranch
+			'default_branch' => $defaultBranch,
 		);
 
 		// Send the request.
