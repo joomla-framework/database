@@ -292,18 +292,25 @@ abstract class Client
 			case 'GET':
 				$url      = $this->toUrl($url, $data);
 				$response = $this->client->get($url, array('Authorization' => $this->createHeader($oauthHeaders)));
+
 				break;
+
 			case 'POST':
 				$headers  = array_merge($headers, array('Authorization' => $this->createHeader($oauthHeaders)));
 				$response = $this->client->post($url, $data, $headers);
+
 				break;
+
 			case 'PUT':
 				$headers  = array_merge($headers, array('Authorization' => $this->createHeader($oauthHeaders)));
 				$response = $this->client->put($url, $data, $headers);
+
 				break;
+
 			case 'DELETE':
 				$headers  = array_merge($headers, array('Authorization' => $this->createHeader($oauthHeaders)));
 				$response = $this->client->delete($url, $headers);
+
 				break;
 		}
 
@@ -472,7 +479,7 @@ abstract class Client
 			$method,
 			$url,
 			$params,
-			);
+		);
 
 		// Return the base string.
 		return implode('&', $this->safeEncode($base));
