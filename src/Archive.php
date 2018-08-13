@@ -78,10 +78,12 @@ class Archive
 		{
 			case 'zip':
 				$result = $this->getAdapter('zip')->extract($archivename, $extractdir);
+
 				break;
 
 			case 'tar':
 				$result = $this->getAdapter('tar')->extract($archivename, $extractdir);
+
 				break;
 
 			case 'tgz':
