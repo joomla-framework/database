@@ -141,7 +141,6 @@ class Gzip implements ExtractableInterface
 					}
 				}
 			}
-
 			while ($this->data);
 
 			$output->close();

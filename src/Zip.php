@@ -347,7 +347,6 @@ class Zip implements ExtractableInterface
 		{
 			$last = $fhLast;
 		}
-
 		while (($fhLast = strpos($data, $this->ctrlDirEnd, $fhLast + 1)) !== false);
 
 		// Find the central directory offset
@@ -426,7 +425,6 @@ class Zip implements ExtractableInterface
 			// Bump the max execution time because not using the built in php zip libs makes this process slow.
 			@set_time_limit(ini_get('max_execution_time'));
 		}
-
 		while (($fhStart = strpos($data, $this->ctrlDirHeader, $fhStart + 46)) !== false);
 
 		$this->metadata = array_values($entries);
