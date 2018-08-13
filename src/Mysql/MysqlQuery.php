@@ -188,10 +188,8 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 
 			return $concat_string . ')';
 		}
-		else
-		{
-			return 'CONCAT(' . implode(',', $values) . ')';
-		}
+
+		return 'CONCAT(' . implode(',', $values) . ')';
 	}
 
 	/**

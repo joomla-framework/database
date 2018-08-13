@@ -27,7 +27,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $forUpdate = null;
+	protected $forUpdate;
 
 	/**
 	 * The FOR SHARE element used in "FOR SHARE" lock
@@ -35,7 +35,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $forShare = null;
+	protected $forShare;
 
 	/**
 	 * The NOWAIT element used in "FOR SHARE" and "FOR UPDATE" lock
@@ -43,7 +43,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $noWait = null;
+	protected $noWait;
 
 	/**
 	 * The LIMIT element
@@ -51,7 +51,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $limit = null;
+	protected $limit;
 
 	/**
 	 * The OFFSET element
@@ -59,7 +59,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $offset = null;
+	protected $offset;
 
 	/**
 	 * The RETURNING element of INSERT INTO
@@ -67,7 +67,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $returning = null;
+	protected $returning;
 
 	/**
 	 * Holds key / value pair of bound objects.
@@ -406,10 +406,8 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 		{
 			return implode(' || ' . $this->quote($separator) . ' || ', $values);
 		}
-		else
-		{
-			return implode(' || ', $values);
-		}
+
+		return implode(' || ', $values);
 	}
 
 	/**
@@ -729,10 +727,8 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 		{
 			return "timestamp '" . $date . "' + interval '" . $interval . ' ' . $datePart . "'";
 		}
-		else
-		{
-			return "timestamp '" . $date . "' - interval '" . ltrim($interval, '-') . ' ' . $datePart . "'";
-		}
+
+		return "timestamp '" . $date . "' - interval '" . ltrim($interval, '-') . ' ' . $datePart . "'";
 	}
 
 	/**

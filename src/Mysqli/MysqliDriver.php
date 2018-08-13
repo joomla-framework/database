@@ -284,7 +284,7 @@ class MysqliDriver extends DatabaseDriver
 	public function disconnect()
 	{
 		// Close the connection.
-		if (is_callable($this->connection, 'close'))
+		if (\is_callable($this->connection, 'close'))
 		{
 			$this->connection->close();
 		}
@@ -326,7 +326,7 @@ class MysqliDriver extends DatabaseDriver
 	public static function isSupported()
 	{
 		// At the moment we depend on mysqlnd extension, so we additionally test for mysqli_stmt_get_result
-		return function_exists('mysqli_connect') && function_exists('mysqli_stmt_get_result');
+		return \function_exists('mysqli_connect') && \function_exists('mysqli_stmt_get_result');
 	}
 
 	/**
@@ -693,17 +693,15 @@ class MysqliDriver extends DatabaseDriver
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
-			else
-			{
-				// The server was not disconnected.
-				$this->log(
-					Log\LogLevel::ERROR,
-					'Database query failed (error #{code}): {message}; Failed query: {sql}',
-					array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
-				);
 
-				throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
-			}
+			// The server was not disconnected.
+			$this->log(
+				Log\LogLevel::ERROR,
+				'Database query failed (error #{code}): {message}; Failed query: {sql}',
+				array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
+			);
+
+			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
 		return $this->cursor;

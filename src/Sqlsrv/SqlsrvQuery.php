@@ -244,10 +244,8 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 		{
 			return '(' . implode('+' . $this->quote($separator) . '+', $values) . ')';
 		}
-		else
-		{
-			return '(' . implode('+', $values) . ')';
-		}
+
+		return '(' . implode('+', $values) . ')';
 	}
 
 	/**

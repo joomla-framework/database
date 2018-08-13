@@ -25,7 +25,7 @@ abstract class DatabaseQuery
 	 * @var    DatabaseDriver
 	 * @since  1.0
 	 */
-	protected $db = null;
+	protected $db;
 
 	/**
 	 * The SQL query (if a direct query string was provided).
@@ -33,7 +33,7 @@ abstract class DatabaseQuery
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected $sql = null;
+	protected $sql;
 
 	/**
 	 * The query type.
@@ -49,7 +49,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $element = null;
+	protected $element;
 
 	/**
 	 * The select element.
@@ -57,7 +57,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $select = null;
+	protected $select;
 
 	/**
 	 * The delete element.
@@ -65,7 +65,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $delete = null;
+	protected $delete;
 
 	/**
 	 * The update element.
@@ -73,7 +73,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $update = null;
+	protected $update;
 
 	/**
 	 * The insert element.
@@ -81,7 +81,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $insert = null;
+	protected $insert;
 
 	/**
 	 * The from element.
@@ -89,7 +89,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $from = null;
+	protected $from;
 
 	/**
 	 * The join element.
@@ -97,7 +97,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $join = null;
+	protected $join;
 
 	/**
 	 * The set element.
@@ -105,7 +105,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $set = null;
+	protected $set;
 
 	/**
 	 * The where element.
@@ -113,7 +113,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $where = null;
+	protected $where;
 
 	/**
 	 * The group by element.
@@ -121,7 +121,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $group = null;
+	protected $group;
 
 	/**
 	 * The having element.
@@ -129,7 +129,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $having = null;
+	protected $having;
 
 	/**
 	 * The column list for an INSERT statement.
@@ -137,7 +137,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $columns = null;
+	protected $columns;
 
 	/**
 	 * The values list for an INSERT statement.
@@ -145,7 +145,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $values = null;
+	protected $values;
 
 	/**
 	 * The order element.
@@ -153,7 +153,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $order = null;
+	protected $order;
 
 	/**
 	 * The auto increment insert field element.
@@ -161,7 +161,7 @@ abstract class DatabaseQuery
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $autoIncrementField = null;
+	protected $autoIncrementField;
 
 	/**
 	 * The call element.
@@ -169,7 +169,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $call = null;
+	protected $call;
 
 	/**
 	 * The exec element.
@@ -177,7 +177,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $exec = null;
+	protected $exec;
 
 	/**
 	 * The union element.
@@ -185,7 +185,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $union = null;
+	protected $union;
 
 	/**
 	 * The unionAll element.
@@ -193,7 +193,7 @@ abstract class DatabaseQuery
 	 * @var    Query\QueryElement
 	 * @since  1.5.0
 	 */
-	protected $unionAll = null;
+	protected $unionAll;
 
 	/**
 	 * Magic method to provide method alias support for quote() and quoteName().
@@ -662,10 +662,8 @@ abstract class DatabaseQuery
 		{
 			return 'CONCATENATE(' . implode(' || ' . $this->quote($separator) . ' || ', $values) . ')';
 		}
-		else
-		{
-			return 'CONCATENATE(' . implode(' || ', $values) . ')';
-		}
+
+		return 'CONCATENATE(' . implode(' || ', $values) . ')';
 	}
 
 	/**

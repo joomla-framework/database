@@ -99,7 +99,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 * @var    PostgresqlQuery
 	 * @since  1.0
 	 */
-	protected $queryObject = null;
+	protected $queryObject;
 
 	/**
 	 * Database object constructor
@@ -385,17 +385,13 @@ class PostgresqlDriver extends DatabaseDriver
 
 			return $this->queryObject;
 		}
-		else
+
+		if ($asObj)
 		{
-			if ($asObj)
-			{
-				return $this->queryObject;
-			}
-			else
-			{
-				return $this->sql;
-			}
+			return $this->queryObject;
 		}
+
+		return $this->sql;
 	}
 
 	/**
@@ -812,21 +808,19 @@ class PostgresqlDriver extends DatabaseDriver
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
-			else
-			{
-				// The server was not disconnected.
-				$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
-				$this->errorMsg = pg_last_error($this->connection);
 
-				// Throw the normal query exception.
-				$this->log(
+			// The server was not disconnected.
+			$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
+			$this->errorMsg = pg_last_error($this->connection);
+
+			// Throw the normal query exception.
+			$this->log(
 					Log\LogLevel::ERROR,
 					'Database query failed (error #{code}): {message}; Failed query: {sql}',
 					array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
 				);
 
-				throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
-			}
+			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
 		return $this->cursor;
@@ -858,10 +852,9 @@ class PostgresqlDriver extends DatabaseDriver
 			// Origin Table not found
 			throw new \RuntimeException('Table not found in Postgresql database.');
 		}
-		else
-		{
-			// Rename indexes
-			$this->setQuery(
+
+		// Rename indexes
+		$this->setQuery(
 				'SELECT relname
 					FROM pg_class
 					WHERE oid IN (
@@ -871,17 +864,17 @@ class PostgresqlDriver extends DatabaseDriver
 						AND pg_class.oid=pg_index.indrelid );'
 			);
 
-			$oldIndexes = $this->loadColumn();
+		$oldIndexes = $this->loadColumn();
 
-			foreach ($oldIndexes as $oldIndex)
-			{
-				$changedIdxName = str_replace($oldTable, $newTable, $oldIndex);
-				$this->setQuery('ALTER INDEX ' . $this->escape($oldIndex) . ' RENAME TO ' . $this->escape($changedIdxName));
-				$this->execute();
-			}
+		foreach ($oldIndexes as $oldIndex)
+		{
+			$changedIdxName = str_replace($oldTable, $newTable, $oldIndex);
+			$this->setQuery('ALTER INDEX ' . $this->escape($oldIndex) . ' RENAME TO ' . $this->escape($changedIdxName));
+			$this->execute();
+		}
 
-			// Rename sequence
-			$this->setQuery(
+		// Rename sequence
+		$this->setQuery(
 				'SELECT relname
 					FROM pg_class
 					WHERE relkind = \'S\'
@@ -894,19 +887,18 @@ class PostgresqlDriver extends DatabaseDriver
 					AND relname LIKE \'%' . $oldTable . '%\' ;'
 			);
 
-			$oldSequences = $this->loadColumn();
+		$oldSequences = $this->loadColumn();
 
-			foreach ($oldSequences as $oldSequence)
-			{
-				$changedSequenceName = str_replace($oldTable, $newTable, $oldSequence);
-				$this->setQuery('ALTER SEQUENCE ' . $this->escape($oldSequence) . ' RENAME TO ' . $this->escape($changedSequenceName));
-				$this->execute();
-			}
-
-			// Rename table
-			$this->setQuery('ALTER TABLE ' . $this->escape($oldTable) . ' RENAME TO ' . $this->escape($newTable));
+		foreach ($oldSequences as $oldSequence)
+		{
+			$changedSequenceName = str_replace($oldTable, $newTable, $oldSequence);
+			$this->setQuery('ALTER SEQUENCE ' . $this->escape($oldSequence) . ' RENAME TO ' . $this->escape($changedSequenceName));
 			$this->execute();
 		}
+
+		// Rename table
+		$this->setQuery('ALTER TABLE ' . $this->escape($oldTable) . ' RENAME TO ' . $this->escape($newTable));
+		$this->execute();
 
 		return true;
 	}
@@ -972,7 +964,7 @@ class PostgresqlDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		if (!function_exists('pg_set_client_encoding'))
+		if (!\function_exists('pg_set_client_encoding'))
 		{
 			return -1;
 		}
@@ -1290,7 +1282,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	public static function isSupported()
 	{
-		return function_exists('pg_connect');
+		return \function_exists('pg_connect');
 	}
 
 	/**

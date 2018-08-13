@@ -31,7 +31,7 @@ abstract class DatabaseImporter
 	 * @var    DatabaseDriver
 	 * @since  1.0
 	 */
-	protected $db = null;
+	protected $db;
 
 	/**
 	 * The input source.
@@ -55,7 +55,7 @@ abstract class DatabaseImporter
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $options = null;
+	protected $options;
 
 	/**
 	 * Constructor.

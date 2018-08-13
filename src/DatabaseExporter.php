@@ -37,7 +37,7 @@ abstract class DatabaseExporter
 	 * @var    DatabaseDriver
 	 * @since  1.0
 	 */
-	protected $db = null;
+	protected $db;
 
 	/**
 	 * An array input sources (table names).
@@ -53,7 +53,7 @@ abstract class DatabaseExporter
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $options = null;
+	protected $options;
 
 	/**
 	 * Constructor.

@@ -70,7 +70,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public static function isSupported()
 	{
-		return function_exists('sqlsrv_connect');
+		return \function_exists('sqlsrv_connect');
 	}
 
 	/**
@@ -678,22 +678,20 @@ class SqlsrvDriver extends DatabaseDriver
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
-			else
-			{
-				// The server was not disconnected.
-				$errors         = sqlsrv_errors();
-				$this->errorNum = $errors[0]['code'];
-				$this->errorMsg = $errors[0]['message'];
 
-				// Throw the normal query exception.
-				$this->log(
+			// The server was not disconnected.
+			$errors         = sqlsrv_errors();
+			$this->errorNum = $errors[0]['code'];
+			$this->errorMsg = $errors[0]['message'];
+
+			// Throw the normal query exception.
+			$this->log(
 					Log\LogLevel::ERROR,
 					'Database query failed (error #{code}): {message}; Failed query: {sql}',
 					array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
 				);
 
-				throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
-			}
+			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
 		return $this->cursor;
@@ -1053,10 +1051,8 @@ class SqlsrvDriver extends DatabaseDriver
 		{
 			return true;
 		}
-		else
-		{
-			return false;
-		}
+
+		return false;
 	}
 
 	/**

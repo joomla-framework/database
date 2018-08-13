@@ -109,12 +109,10 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		{
 			return $this->bounded;
 		}
-		else
+
+		if (isset($this->bounded[$key]))
 		{
-			if (isset($this->bounded[$key]))
-			{
-				return $this->bounded[$key];
-			}
+			return $this->bounded[$key];
 		}
 	}
 
@@ -180,10 +178,8 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		{
 			return implode(' || ' . $this->quote($separator) . ' || ', $values);
 		}
-		else
-		{
-			return implode(' || ', $values);
-		}
+
+		return implode(' || ', $values);
 	}
 
 	/**

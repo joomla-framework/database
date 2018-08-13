@@ -110,12 +110,10 @@ class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		{
 			return $this->bounded;
 		}
-		else
+
+		if (isset($this->bounded[$key]))
 		{
-			if (isset($this->bounded[$key]))
-			{
-				return $this->bounded[$key];
-			}
+			return $this->bounded[$key];
 		}
 	}
 

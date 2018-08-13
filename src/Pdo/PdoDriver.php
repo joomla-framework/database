@@ -456,21 +456,19 @@ abstract class PdoDriver extends DatabaseDriver
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
-			else
-			{
-				// Get the error number and message from before we tried to reconnect.
-				$this->errorNum = $errorNum;
-				$this->errorMsg = $errorMsg;
 
-				// Throw the normal query exception.
-				$this->log(
-					Log\LogLevel::ERROR,
-					'Database query failed (error #{code}): {message}; Failed query: {sql}',
-					array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
-				);
+			// Get the error number and message from before we tried to reconnect.
+			$this->errorNum = $errorNum;
+			$this->errorMsg = $errorMsg;
 
-				throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
-			}
+			// Throw the normal query exception.
+			$this->log(
+				Log\LogLevel::ERROR,
+				'Database query failed (error #{code}): {message}; Failed query: {sql}',
+				array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
+			);
+
+			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
 		return $this->prepared;

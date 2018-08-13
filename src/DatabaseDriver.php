@@ -1486,29 +1486,27 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 			return $quotedName . $quotedAs;
 		}
-		else
+
+		$fin = array();
+
+		if ($as === null)
 		{
-			$fin = array();
-
-			if ($as === null)
+			foreach ($name as $str)
 			{
-				foreach ($name as $str)
-				{
-					$fin[] = $this->quoteName($str);
-				}
+				$fin[] = $this->quoteName($str);
 			}
-			elseif (\is_array($name) && (\count($name) === \count($as)))
-			{
-				$count = \count($name);
-
-				for ($i = 0; $i < $count; $i++)
-				{
-					$fin[] = $this->quoteName($name[$i], $as[$i]);
-				}
-			}
-
-			return $fin;
 		}
+		elseif (\is_array($name) && (\count($name) === \count($as)))
+		{
+			$count = \count($name);
+
+			for ($i = 0; $i < $count; $i++)
+			{
+				$fin[] = $this->quoteName($name[$i], $as[$i]);
+			}
+		}
+
+		return $fin;
 	}
 
 	/**

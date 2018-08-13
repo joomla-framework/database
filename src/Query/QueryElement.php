@@ -23,19 +23,19 @@ class QueryElement
 	 * @var    string  The name of the element.
 	 * @since  1.0
 	 */
-	protected $name = null;
+	protected $name;
 
 	/**
 	 * @var    array  An array of elements.
 	 * @since  1.0
 	 */
-	protected $elements = null;
+	protected $elements;
 
 	/**
 	 * @var    string  Glue piece.
 	 * @since  1.0
 	 */
-	protected $glue = null;
+	protected $glue;
 
 	/**
 	 * Constructor.
@@ -68,10 +68,8 @@ class QueryElement
 		{
 			return PHP_EOL . substr($this->name, 0, -2) . '(' . implode($this->glue, $this->elements) . ')';
 		}
-		else
-		{
-			return PHP_EOL . $this->name . ' ' . implode($this->glue, $this->elements);
-		}
+
+		return PHP_EOL . $this->name . ' ' . implode($this->glue, $this->elements);
 	}
 
 	/**
