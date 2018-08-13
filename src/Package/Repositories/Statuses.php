@@ -53,17 +53,17 @@ class Statuses extends AbstractPackage
 			'state' => $state,
 		);
 
-		if (!\is_null($targetUrl))
+		if ($targetUrl !== null)
 		{
 			$data['target_url'] = $targetUrl;
 		}
 
-		if (!\is_null($description))
+		if ($description !== null)
 		{
 			$data['description'] = $description;
 		}
 
-		if (!\is_null($context))
+		if ($context !== null)
 		{
 			$data['context'] = $context;
 		}

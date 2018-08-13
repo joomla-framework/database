@@ -97,17 +97,17 @@ class Milestones extends AbstractPackage
 			'title' => $title,
 		);
 
-		if (!\is_null($state))
+		if ($state !== null)
 		{
 			$data['state'] = $state;
 		}
 
-		if (!\is_null($description))
+		if ($description !== null)
 		{
 			$data['description'] = $description;
 		}
 
-		if (!\is_null($dueOn))
+		if ($dueOn !== null)
 		{
 			$data['due_on'] = $dueOn;
 		}
@@ -143,22 +143,22 @@ class Milestones extends AbstractPackage
 		// Build the request data.
 		$data = array();
 
-		if (!\is_null($title))
+		if ($title !== null)
 		{
 			$data['title'] = $title;
 		}
 
-		if (!\is_null($state))
+		if ($state !== null)
 		{
 			$data['state'] = $state;
 		}
 
-		if (!\is_null($description))
+		if ($description !== null)
 		{
 			$data['description'] = $description;
 		}
 
-		if (!\is_null($dueOn))
+		if ($dueOn !== null)
 		{
 			$data['due_on'] = $dueOn;
 		}
