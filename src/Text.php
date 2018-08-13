@@ -39,7 +39,7 @@ class Text
 	 */
 	public static function getLanguage()
 	{
-		if (\is_null(static::$lang))
+		if (static::$lang === null)
 		{
 			static::$lang = Language::getInstance();
 		}

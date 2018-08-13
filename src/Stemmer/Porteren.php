@@ -418,7 +418,7 @@ class Porteren extends Stemmer
 		{
 			$substr = substr($str, 0, $len);
 
-			if (\is_null($m) || self::m($substr) > $m)
+			if ($m === null || self::m($substr) > $m)
 			{
 				$str = $substr . $repl;
 			}
