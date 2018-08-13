@@ -31,7 +31,7 @@ class Keychain extends Registry
 	 * @var    string
 	 * @since  1.0
 	 */
-	public $iv = "1234567890123456";
+	public $iv = '1234567890123456';
 
 	/**
 	 * Create a passphrase file
@@ -52,14 +52,14 @@ class Keychain extends Registry
 
 		if (!$privateKey)
 		{
-			throw new \RuntimeException("Failed to load private key.");
+			throw new \RuntimeException('Failed to load private key.');
 		}
 
 		$crypted = '';
 
 		if (!openssl_private_encrypt($passphrase, $crypted, $privateKey))
 		{
-			throw new \RuntimeException("Failed to encrypt data using private key.");
+			throw new \RuntimeException('Failed to encrypt data using private key.');
 		}
 
 		return file_put_contents($passphraseFile, $crypted);
@@ -105,7 +105,7 @@ class Keychain extends Registry
 
 		if ($cleartext === false)
 		{
-			throw new \RuntimeException("Failed to decrypt keychain file");
+			throw new \RuntimeException('Failed to decrypt keychain file');
 		}
 
 		return $this->loadObject(json_decode($cleartext));
@@ -160,7 +160,7 @@ class Keychain extends Registry
 
 		if (!$publicKey)
 		{
-			throw new \RuntimeException("Failed to load public key.");
+			throw new \RuntimeException('Failed to load public key.');
 		}
 
 		if (!file_exists($passphraseFile))
