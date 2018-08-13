@@ -328,7 +328,7 @@ final class ArrayHelper
 				$value = isset($valueCol) ? $subject[$valueCol] : $item;
 
 				// Array keys can only be integer or string. Casting will occur as per the PHP Manual.
-				if (isset($keyCol) && isset($subject[$keyCol]) && is_scalar($subject[$keyCol]))
+				if (isset($keyCol, $subject[$keyCol]) && is_scalar($subject[$keyCol]))
 				{
 					$key          = $subject[$keyCol];
 					$result[$key] = $value;
@@ -380,7 +380,7 @@ final class ArrayHelper
 		}
 
 		// Handle the default case
-		if (\is_null($result))
+		if ($result === null)
 		{
 			$result = $default;
 		}
