@@ -86,14 +86,17 @@ class Curl implements TransportInterface
 		{
 			case 'GET':
 				$options[CURLOPT_HTTPGET] = true;
+
 				break;
 
 			case 'POST':
 				$options[CURLOPT_POST] = true;
+
 				break;
 
 			default:
 				$options[CURLOPT_CUSTOMREQUEST] = strtoupper($method);
+
 				break;
 		}
 
