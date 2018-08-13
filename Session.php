@@ -47,7 +47,7 @@ class Session implements \IteratorAggregate
 	 * @var    Storage
 	 * @since  1.0
 	 */
-	protected $store = null;
+	protected $store;
 
 	/**
 	 * Security policy.
@@ -113,7 +113,7 @@ class Session implements \IteratorAggregate
 	 * @var    Input
 	 * @since  1.0
 	 */
-	private $input = null;
+	private $input;
 
 	/**
 	 * Holds the Dispatcher object
@@ -121,7 +121,7 @@ class Session implements \IteratorAggregate
 	 * @var    DispatcherInterface
 	 * @since  1.0
 	 */
-	private $dispatcher = null;
+	private $dispatcher;
 
 	/**
 	 * Constructor
@@ -471,7 +471,7 @@ class Session implements \IteratorAggregate
 
 		$old = isset($_SESSION[$namespace][$name]) ? $_SESSION[$namespace][$name] : null;
 
-		if (null === $value)
+		if ($value === null)
 		{
 			unset($_SESSION[$namespace][$name]);
 		}

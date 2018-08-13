@@ -79,6 +79,6 @@ class Memcache extends Storage
 	 */
 	public static function isSupported()
 	{
-		return extension_loaded('memcache') && class_exists('Memcache');
+		return \extension_loaded('memcache') && class_exists('Memcache');
 	}
 }

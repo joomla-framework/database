@@ -75,7 +75,7 @@ class Xcache extends Storage
 	{
 		$sess_id = 'sess_' . $id;
 
-		return xcache_set($sess_id, $session_data, ini_get("session.gc_maxlifetime"));
+		return xcache_set($sess_id, $session_data, ini_get('session.gc_maxlifetime'));
 	}
 
 	/**
@@ -110,6 +110,6 @@ class Xcache extends Storage
 	 */
 	public static function isSupported()
 	{
-		return extension_loaded('xcache');
+		return \extension_loaded('xcache');
 	}
 }

@@ -71,7 +71,7 @@ class Apc extends Storage
 	{
 		$sess_id = 'sess_' . $id;
 
-		return apc_store($sess_id, $session_data, ini_get("session.gc_maxlifetime"));
+		return apc_store($sess_id, $session_data, ini_get('session.gc_maxlifetime'));
 	}
 
 	/**
@@ -101,6 +101,6 @@ class Apc extends Storage
 	 */
 	public static function isSupported()
 	{
-		return extension_loaded('apc');
+		return \extension_loaded('apc');
 	}
 }
