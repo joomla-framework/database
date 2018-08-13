@@ -752,8 +752,8 @@ class InputFilter
 					}
 				}
 				else
-				// No more equal signs so add any extra text in the tag into the attribute array [eg. checked]
 				{
+					// No more equal signs so add any extra text in the tag into the attribute array [eg. checked]
 					if ($fromSpace !== '/')
 					{
 						$attr = StringHelper::substr($fromSpace, 0, $nextSpace);
@@ -803,8 +803,8 @@ class InputFilter
 					}
 				}
 				else
-				// Closing tag
 				{
+					// Closing tag
 					$preTag .= '</' . $tagName . '>';
 				}
 			}
