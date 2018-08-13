@@ -305,9 +305,9 @@ class Users extends AbstractMediawikiObject
 
 		// Build the request data.
 		$data = array(
-				'user'   => $user,
-				'token'  => $token,
-				'reason' => $reason,
+			'user'   => $user,
+			'token'  => $token,
+			'reason' => $reason,
 		);
 
 		// Send the request.
