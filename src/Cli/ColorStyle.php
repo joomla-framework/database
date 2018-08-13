@@ -189,18 +189,22 @@ final class ColorStyle
 			{
 				case 'fg':
 					$fg = $subParts[1];
+
 					break;
 
 				case 'bg':
 					$bg = $subParts[1];
+
 					break;
 
 				case 'options':
 					$options = explode(',', $subParts[1]);
+
 					break;
 
 				default:
 					throw new \RuntimeException('Invalid option');
+
 					break;
 			}
 		}

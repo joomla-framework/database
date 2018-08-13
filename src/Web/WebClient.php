@@ -193,6 +193,7 @@ class WebClient
 				{
 					$this->detectPlatform($this->userAgent);
 				}
+
 				break;
 
 			case 'engine':
@@ -200,6 +201,7 @@ class WebClient
 				{
 					$this->detectEngine($this->userAgent);
 				}
+
 				break;
 
 			case 'browser':
@@ -208,6 +210,7 @@ class WebClient
 				{
 					$this->detectBrowser($this->userAgent);
 				}
+
 				break;
 
 			case 'languages':
@@ -215,6 +218,7 @@ class WebClient
 				{
 					$this->detectLanguage($this->acceptLanguage);
 				}
+
 				break;
 
 			case 'encodings':
@@ -222,6 +226,7 @@ class WebClient
 				{
 					$this->detectEncoding($this->acceptEncoding);
 				}
+
 				break;
 
 			case 'robot':
@@ -229,12 +234,15 @@ class WebClient
 				{
 					$this->detectRobot($this->userAgent);
 				}
+
 				break;
+
 			case 'headers':
 				if (empty($this->detection['headers']))
 				{
 					$this->detectHeaders();
 				}
+
 				break;
 		}
 
