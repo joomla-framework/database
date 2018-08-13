@@ -102,7 +102,7 @@ class Ini extends AbstractRegistryFormat
 				}
 
 				// Add empty line after section if it is not the last one
-				if (0 !== --$last)
+				if (--$last !== 0)
 				{
 					$local[] = '';
 				}
