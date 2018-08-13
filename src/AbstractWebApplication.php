@@ -248,7 +248,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 			{
 				// Verify that the server supports gzip compression before we attempt to gzip encode the data.
 				// @codeCoverageIgnoreStart
-				if (!extension_loaded('zlib') || ini_get('zlib.output_compression'))
+				if (!\extension_loaded('zlib') || ini_get('zlib.output_compression'))
 				{
 					continue;
 				}
@@ -384,7 +384,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 		// If the headers have already been sent we need to send the redirect statement via JavaScript.
 		if ($this->checkHeadersSent())
 		{
-			echo "<script>document.location.href=" . json_encode($url) . ";</script>\n";
+			echo '<script>document.location.href=' . json_encode($url) . ";</script>\n";
 		}
 		else
 		{
@@ -525,7 +525,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 		{
 			foreach ($this->response->headers as $header)
 			{
-				if ('status' == strtolower($header['name']))
+				if (strtolower($header['name']) == 'status')
 				{
 					// 'status' headers indicate an HTTP status, and need to be handled slightly differently
 					$status = $this->getHttpStatusValue($header['value']);
@@ -859,12 +859,12 @@ abstract class AbstractWebApplication extends AbstractApplication
 			if (strpos(PHP_SAPI, 'cgi') !== false && !ini_get('cgi.fix_pathinfo') && !empty($requestUri))
 			{
 				// We aren't expecting PATH_INFO within PHP_SELF so this should work.
-				$path = dirname($this->input->server->getString('PHP_SELF', ''));
+				$path = \dirname($this->input->server->getString('PHP_SELF', ''));
 			}
 			else
 			{
 				// Pretty much everything else should be handled with SCRIPT_NAME.
-				$path = dirname($this->input->server->getString('SCRIPT_NAME', ''));
+				$path = \dirname($this->input->server->getString('SCRIPT_NAME', ''));
 			}
 		}
 

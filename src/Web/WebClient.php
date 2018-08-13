@@ -609,7 +609,7 @@ class WebClient
 	 */
 	protected function detectHeaders()
 	{
-		if (function_exists('getallheaders'))
+		if (\function_exists('getallheaders'))
 		{
 			// If php is working under Apache, there is a special function
 			$this->headers = getallheaders();

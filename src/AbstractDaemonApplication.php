@@ -120,7 +120,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		}
 
 		// Verify that POSIX support for PHP is available.
-		if (!function_exists('posix_getpid'))
+		if (!\function_exists('posix_getpid'))
 		{
 			$this->getLogger()->error('The POSIX extension for PHP is not available.');
 
@@ -309,7 +309,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		$this->set('application_executable', $tmp);
 
 		// The home directory of the daemon.
-		$tmp = (string) $this->get('application_directory', dirname($this->input->executable));
+		$tmp = (string) $this->get('application_directory', \dirname($this->input->executable));
 		$this->set('application_directory', $tmp);
 
 		// The pid file location.  This defaults to a path inside the /tmp directory.
@@ -581,10 +581,8 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 
 				return false;
 			}
-			else
-			{
-				$this->getLogger()->warning('Unable to change process owner.');
-			}
+
+			$this->getLogger()->warning('Unable to change process owner.');
 		}
 
 		// Setup the signal handlers for the daemon.
@@ -653,7 +651,8 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		{
 			throw new \RuntimeException('The process could not be forked.');
 		}
-		elseif ($pid === 0)
+
+		if ($pid === 0)
 		{
 			// Update the process id for the child.
 			$this->processId = (int) posix_getpid();
@@ -704,19 +703,19 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		foreach (self::$signals as $signal)
 		{
 			// Ignore signals that are not defined.
-			if (!\defined($signal) || !\is_int(constant($signal)) || (constant($signal) === 0))
+			if (!\defined($signal) || !\is_int(\constant($signal)) || (\constant($signal) === 0))
 			{
 				// Define the signal to avoid notices.
 				$this->getLogger()->debug('Signal "' . $signal . '" not defined. Defining it as null.');
 
-				define($signal, null);
+				\define($signal, null);
 
 				// Don't listen for signal.
 				continue;
 			}
 
 			// Attach the signal handler for the signal.
-			if (!$this->pcntlSignal(constant($signal), array($this, 'signal')))
+			if (!$this->pcntlSignal(\constant($signal), array($this, 'signal')))
 			{
 				$this->getLogger()->emergency(sprintf('Unable to reroute signal handler: %s', $signal));
 
@@ -743,11 +742,9 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		{
 			return;
 		}
-		else
-		{
-			// If not, now we are.
-			$this->exiting = true;
-		}
+
+		// If not, now we are.
+		$this->exiting = true;
 
 		// If we aren't already daemonized then just kill the application.
 		if (!$this->running && !$this->isActive())
@@ -811,7 +808,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		}
 
 		// Make sure that the folder where we are writing the process id file exists.
-		$folder = dirname($file);
+		$folder = \dirname($file);
 
 		if (!is_dir($folder) && !@ mkdir($folder, $this->get('folder_permission', 0755)))
 		{
