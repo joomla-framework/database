@@ -429,6 +429,7 @@ class InputFilter
 
 			case 'ARRAY':
 				$result = (array) $source;
+
 				break;
 
 			case 'PATH':
@@ -497,6 +498,7 @@ class InputFilter
 
 			case 'RAW':
 				$result = $source;
+
 				break;
 
 			default:
@@ -618,6 +620,7 @@ class InputFilter
 				// At this point we have a mal-formed tag -- remove the offending open
 				$postTag      = StringHelper::substr($postTag, 0, $tagOpenStart) . StringHelper::substr($postTag, $tagOpenStart + 1);
 				$tagOpenStart = StringHelper::strpos($postTag, '<');
+
 				continue;
 			}
 
@@ -626,6 +629,7 @@ class InputFilter
 			{
 				$postTag      = StringHelper::substr($postTag, $tagOpenStart + 1);
 				$tagOpenStart = StringHelper::strpos($postTag, '<');
+
 				continue;
 			}
 
@@ -637,6 +641,7 @@ class InputFilter
 				$preTag .= StringHelper::substr($postTag, 0, ($tagOpenNested + 1));
 				$postTag      = StringHelper::substr($postTag, ($tagOpenNested + 1));
 				$tagOpenStart = StringHelper::strpos($postTag, '<');
+
 				continue;
 			}
 
