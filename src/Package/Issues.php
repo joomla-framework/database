@@ -200,8 +200,8 @@ class Issues extends AbstractPackage
 	 * @since   1.0
 	 * @throws  \DomainException
 	 */
-	public function getList($filter = null, $state = null, $labels = null, $sort = null,
-		$direction = null, \DateTime $since = null, $page = 0, $limit = 0
+	public function getList($filter = null, $state = null, $labels = null, $sort = null, $direction = null, \DateTime $since = null, $page = 0,
+		$limit = 0
 	)
 	{
 		// Build the request path.

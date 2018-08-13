@@ -48,7 +48,7 @@ abstract class AbstractPackage extends AbstractGithubObject
 	{
 		$class = '\\Joomla\\Github\\Package\\' . $this->package . '\\' . ucfirst($name);
 
-		if (false == class_exists($class))
+		if (class_exists($class) == false)
 		{
 			throw new \InvalidArgumentException(
 				sprintf(
@@ -58,7 +58,7 @@ abstract class AbstractPackage extends AbstractGithubObject
 			);
 		}
 
-		if (false == isset($this->$name))
+		if (isset($this->$name) == false)
 		{
 			$this->$name = new $class($this->options, $this->client);
 		}

@@ -85,7 +85,7 @@ class Hooks extends AbstractPackage
 		// Build the request path.
 		$path = "/orgs/$org/hooks";
 
-		if (false == \in_array($contentType, array('form', 'json')))
+		if (\in_array($contentType, array('form', 'json')) == false)
 		{
 			throw new \UnexpectedValueException('Content type must be either "form" or "json".');
 		}
@@ -157,7 +157,7 @@ class Hooks extends AbstractPackage
 
 		if ($contentType)
 		{
-			if (false == \in_array($contentType, array('form', 'json')))
+			if (\in_array($contentType, array('form', 'json')) == false)
 			{
 				throw new \UnexpectedValueException('Content type must be either "form" or "json".');
 			}

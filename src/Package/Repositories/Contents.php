@@ -32,9 +32,10 @@ class Contents extends AbstractPackage
 	 * @param   string  $repo   The name of the GitHub repository.
 	 * @param   string  $ref    The String name of the Commit/Branch/Tag. Defaults to master.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
+	 * @throws  \UnexpectedValueException
 	 */
 	public function getReadme($owner, $repo, $ref = '')
 	{
@@ -62,9 +63,9 @@ class Contents extends AbstractPackage
 	 * @param   string  $path   The content path.
 	 * @param   string  $ref    The String name of the Commit/Branch/Tag. Defaults to master.
 	 *
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
 	 */
 	public function get($owner, $repo, $path, $ref = '')
 	{
@@ -99,14 +100,14 @@ class Contents extends AbstractPackage
 	 * @param   string  $archiveFormat  Either tarball or zipball.
 	 * @param   string  $ref            The String name of the Commit/Branch/Tag. Defaults to master.
 	 *
-	 * @throws \UnexpectedValueException
-	 * @since  1.0
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
+	 * @throws  \UnexpectedValueException
 	 */
 	public function getArchiveLink($owner, $repo, $archiveFormat = 'zipball', $ref = '')
 	{
-		if (false == \in_array($archiveFormat, array('tarball', 'zipball')))
+		if (\in_array($archiveFormat, array('tarball', 'zipball')) == false)
 		{
 			throw new \UnexpectedValueException('Archive format must be either "tarball" or "zipball".');
 		}
@@ -141,19 +142,19 @@ class Contents extends AbstractPackage
 	 * @param   string  $path            The content path.
 	 * @param   string  $message         The commit message.
 	 * @param   string  $content         The new file content, Base64 encoded.
-	 * @param   string  $branch          The branch name. If not provided, uses the repository’s
-	 *                                   default branch (usually master).
+	 * @param   string  $branch          The branch name. If not provided, uses the repository’s default branch (usually master).
 	 * @param   string  $authorName      The name of the author of the commit
 	 * @param   string  $authorEmail     The email of the author of the commit
 	 * @param   string  $committerName   The name of the committer of the commit
 	 * @param   string  $committerEmail  The email of the committer of the commit
 	 *
-	 * @throws \UnexpectedValueException
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
+	 * @throws  \UnexpectedValueException
 	 */
-	public function create($owner, $repo, $path, $message, $content, $branch = 'master',
-		$authorName = '', $authorEmail = '', $committerName = '', $committerEmail = ''
+	public function create($owner, $repo, $path, $message, $content, $branch = 'master', $authorName = '', $authorEmail = '', $committerName = '',
+		$committerEmail = ''
 	)
 	{
 		// Build the request path.
@@ -212,19 +213,19 @@ class Contents extends AbstractPackage
 	 * @param   string  $message         The commit message.
 	 * @param   string  $content         The new file content, Base64 encoded.
 	 * @param   string  $sha             The blob SHA of the file being replaced.
-	 * @param   string  $branch          The branch name. If not provided, uses the repository’s
-	 *                                   default branch (usually master).
+	 * @param   string  $branch          The branch name. If not provided, uses the repository’s default branch (usually master).
 	 * @param   string  $authorName      The name of the author of the commit
 	 * @param   string  $authorEmail     The email of the author of the commit
 	 * @param   string  $committerName   The name of the committer of the commit
 	 * @param   string  $committerEmail  The email of the committer of the commit
 	 *
-	 * @throws \UnexpectedValueException
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
+	 * @throws  \UnexpectedValueException
 	 */
-	public function update($owner, $repo, $path, $message, $content, $sha, $branch = 'master',
-		$authorName = '', $authorEmail = '', $committerName = '', $committerEmail = ''
+	public function update($owner, $repo, $path, $message, $content, $sha, $branch = 'master', $authorName = '', $authorEmail = '',
+		$committerName = '', $committerEmail = ''
 	)
 	{
 		// Build the request path.
@@ -276,19 +277,19 @@ class Contents extends AbstractPackage
 	 * @param   string  $path            The content path.
 	 * @param   string  $message         The commit message.
 	 * @param   string  $sha             The blob SHA of the file being replaced.
-	 * @param   string  $branch          The branch name. If not provided, uses the repository’s
-	 *                                   default branch (usually master).
+	 * @param   string  $branch          The branch name. If not provided, uses the repository’s default branch (usually master).
 	 * @param   string  $authorName      The name of the author of the commit
 	 * @param   string  $authorEmail     The email of the author of the commit
 	 * @param   string  $committerName   The name of the committer of the commit
 	 * @param   string  $committerEmail  The email of the committer of the commit
 	 *
-	 * @throws \UnexpectedValueException
+	 * @return  object
 	 *
-	 * @return object
+	 * @since   1.0
+	 * @throws  \UnexpectedValueException
 	 */
-	public function delete($owner, $repo, $path, $message, $sha, $branch = 'master',
-		$authorName = '', $authorEmail = '', $committerName = '', $committerEmail = ''
+	public function delete($owner, $repo, $path, $message, $sha, $branch = 'master', $authorName = '', $authorEmail = '', $committerName = '',
+		$committerEmail = ''
 	)
 	{
 		// Build the request path.

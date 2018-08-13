@@ -52,20 +52,20 @@ class Repositories extends AbstractPackage
 	 */
 	public function getListOwn($type = 'all', $sort = 'full_name', $direction = '')
 	{
-		if (false == \in_array($type, array('all', 'owner', 'public', 'private', 'member')))
+		if (\in_array($type, array('all', 'owner', 'public', 'private', 'member')) == false)
 		{
 			throw new \RuntimeException('Invalid type');
 		}
 
-		if (false == \in_array($sort, array('created', 'updated', 'pushed', 'full_name')))
+		if (\in_array($sort, array('created', 'updated', 'pushed', 'full_name')) == false)
 		{
 			throw new \RuntimeException('Invalid sort field');
 		}
 
 		// Sort direction default: when using full_name: asc, otherwise desc.
-		$direction = ($direction) ? : (('full_name' == $sort) ? 'asc' : 'desc');
+		$direction = ($direction) ? : (($sort == 'full_name') ? 'asc' : 'desc');
 
-		if (false == \in_array($direction, array('asc', 'desc')))
+		if (\in_array($direction, array('asc', 'desc')) == false)
 		{
 			throw new \RuntimeException('Invalid sort order');
 		}
@@ -97,20 +97,20 @@ class Repositories extends AbstractPackage
 	 */
 	public function getListUser($user, $type = 'all', $sort = 'full_name', $direction = '')
 	{
-		if (false == \in_array($type, array('all', 'owner', 'member')))
+		if (\in_array($type, array('all', 'owner', 'member')) == false)
 		{
 			throw new \RuntimeException('Invalid type');
 		}
 
-		if (false == \in_array($sort, array('created', 'updated', 'pushed', 'full_name')))
+		if (\in_array($sort, array('created', 'updated', 'pushed', 'full_name')) == false)
 		{
 			throw new \RuntimeException('Invalid sort field');
 		}
 
 		// Sort direction default: when using full_name: asc, otherwise desc.
-		$direction = ($direction) ? : (('full_name' == $sort) ? 'asc' : 'desc');
+		$direction = $direction ?: ($sort == 'full_name' ? 'asc' : 'desc');
 
-		if (false == \in_array($direction, array('asc', 'desc')))
+		if (\in_array($direction, array('asc', 'desc')) == false)
 		{
 			throw new \RuntimeException('Invalid sort order');
 		}
@@ -140,7 +140,7 @@ class Repositories extends AbstractPackage
 	 */
 	public function getListOrg($org, $type = 'all')
 	{
-		if (false == \in_array($type, array('all', 'public', 'private', 'forks', 'sources', 'member')))
+		if (\in_array($type, array('all', 'public', 'private', 'forks', 'sources', 'member')) == false)
 		{
 			throw new \RuntimeException('Invalid type');
 		}
@@ -188,24 +188,23 @@ class Repositories extends AbstractPackage
 	 * @param   string   $org                The organization name (if needed).
 	 * @param   string   $description        The repository description.
 	 * @param   string   $homepage           The repository homepage.
-	 * @param   boolean  $private            Set true to create a private repository, false to create a public one.
-	 *                                       Creating private repositories requires a paid GitHub account.
+	 * @param   boolean  $private            Set true to create a private repository, false to create a public one. Creating private repositories
+	 *                                       requires a paid GitHub account.
 	 * @param   boolean  $hasIssues          Set true to enable issues for this repository, false to disable them.
 	 * @param   boolean  $hasWiki            Set true to enable the wiki for this repository, false to disable it.
 	 * @param   boolean  $hasDownloads       Set true to enable downloads for this repository, false to disable them.
-	 * @param   integer  $teamId             The id of the team that will be granted access to this repository.
-	 *                                       This is only valid when creating a repo in an organization.
+	 * @param   integer  $teamId             The id of the team that will be granted access to this repository. This is only valid when creating a
+	 *                                       repo in an organization.
 	 * @param   boolean  $autoInit           true to create an initial commit with empty README.
-	 * @param   string   $gitignoreTemplate  Desired language or platform .gitignore template to apply.
-	 *                                       Use the name of the template without the extension.
-	 *                                       For example, “Haskell” Ignored if auto_init parameter is not provided.
+	 * @param   string   $gitignoreTemplate  Desired language or platform .gitignore template to apply. Use the name of the template without the
+	 *                                       extension. For example, “Haskell” Ignored if auto_init parameter is not provided.
 	 *
 	 * @return  object
 	 *
 	 * @since   1.0
 	 */
-	public function create($name, $org = '', $description = '', $homepage = '', $private = false, $hasIssues = false,
-		$hasWiki = false, $hasDownloads = false, $teamId = 0, $autoInit = false, $gitignoreTemplate = ''
+	public function create($name, $org = '', $description = '', $homepage = '', $private = false, $hasIssues = false, $hasWiki = false,
+		$hasDownloads = false, $teamId = 0, $autoInit = false, $gitignoreTemplate = ''
 	)
 	{
 		$path = ($org)
@@ -263,8 +262,8 @@ class Repositories extends AbstractPackage
 	 * @param   string   $name           The repository name.
 	 * @param   string   $description    The repository description.
 	 * @param   string   $homepage       The repository homepage.
-	 * @param   boolean  $private        Set true to create a private repository, false to create a public one.
-	 *                                   Creating private repositories requires a paid GitHub account.
+	 * @param   boolean  $private        Set true to create a private repository, false to create a public one. Creating private repositories
+	 *                                   requires a paid GitHub account.
 	 * @param   boolean  $hasIssues      Set true to enable issues for this repository, false to disable them.
 	 * @param   boolean  $hasWiki        Set true to enable the wiki for this repository, false to disable it.
 	 * @param   boolean  $hasDownloads   Set true to enable downloads for this repository, false to disable them.
@@ -274,8 +273,8 @@ class Repositories extends AbstractPackage
 	 *
 	 * @since   1.0
 	 */
-	public function edit($owner, $repo, $name, $description = '', $homepage = '', $private = false, $hasIssues = false,
-		$hasWiki = false, $hasDownloads = false, $defaultBranch = ''
+	public function edit($owner, $repo, $name, $description = '', $homepage = '', $private = false, $hasIssues = false, $hasWiki = false,
+		$hasDownloads = false, $defaultBranch = ''
 	)
 	{
 		$path = '/repos/' . $owner . '/' . $repo;
