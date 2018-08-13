@@ -250,18 +250,18 @@ class Ini extends AbstractRegistryFormat
 					$value = false;
 				}
 				elseif ($value === 'true')
-					// If the value is 'true' assume boolean true.
 				{
+					// If the value is 'true' assume boolean true.
 					$value = true;
 				}
 				elseif ($options['parseBooleanWords'] && \in_array(strtolower($value), array('yes', 'no'), true))
-					// If the value is 'yes' or 'no' and option is enabled assume appropriate boolean
 				{
+					// If the value is 'yes' or 'no' and option is enabled assume appropriate boolean
 					$value = (strtolower($value) === 'yes');
 				}
 				elseif (is_numeric($value))
-					// If the value is numeric than it is either a float or int.
 				{
+					// If the value is numeric than it is either a float or int.
 					// If there is a period then we assume a float.
 					if (strpos($value, '.') !== false)
 					{

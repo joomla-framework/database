@@ -620,8 +620,8 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 			}
 
 			if (!\is_array($node))
-				// Convert the node to array to make append possible
 			{
+				// Convert the node to array to make append possible
 				$node = get_object_vars($node);
 			}
 
