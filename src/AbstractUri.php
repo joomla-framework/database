@@ -23,55 +23,55 @@ abstract class AbstractUri implements UriInterface
 	 * @var    string  Original URI
 	 * @since  1.0
 	 */
-	protected $uri = null;
+	protected $uri;
 
 	/**
 	 * @var    string  Protocol
 	 * @since  1.0
 	 */
-	protected $scheme = null;
+	protected $scheme;
 
 	/**
 	 * @var    string  Host
 	 * @since  1.0
 	 */
-	protected $host = null;
+	protected $host;
 
 	/**
 	 * @var    integer  Port
 	 * @since  1.0
 	 */
-	protected $port = null;
+	protected $port;
 
 	/**
 	 * @var    string  Username
 	 * @since  1.0
 	 */
-	protected $user = null;
+	protected $user;
 
 	/**
 	 * @var    string  Password
 	 * @since  1.0
 	 */
-	protected $pass = null;
+	protected $pass;
 
 	/**
 	 * @var    string  Path
 	 * @since  1.0
 	 */
-	protected $path = null;
+	protected $path;
 
 	/**
 	 * @var    string  Query
 	 * @since  1.0
 	 */
-	protected $query = null;
+	protected $query;
 
 	/**
 	 * @var    string  Anchor
 	 * @since  1.0
 	 */
-	protected $fragment = null;
+	protected $fragment;
 
 	/**
 	 * @var    array  Query variable hash
@@ -126,7 +126,7 @@ abstract class AbstractUri implements UriInterface
 
 			if (\defined($const))
 			{
-				$bitmask |= constant($const);
+				$bitmask |= \constant($const);
 			}
 		}
 
