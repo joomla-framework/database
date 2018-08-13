@@ -47,7 +47,8 @@ class OutputFilter
 				{
 					continue;
 				}
-				elseif (\is_array($excludeKeys) && \in_array($k, $excludeKeys))
+
+				if (\is_array($excludeKeys) && \in_array($k, $excludeKeys))
 				{
 					continue;
 				}

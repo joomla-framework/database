@@ -673,7 +673,7 @@ class InputFilter
 			 * OR no tagname
 			 * OR remove if xssauto is on and tag is blacklisted
 			 */
-			if ((!preg_match("/^[a-z][a-z0-9]*$/i", $tagName))
+			if ((!preg_match('/^[a-z][a-z0-9]*$/i', $tagName))
 				|| (!$tagName)
 				|| ((\in_array(strtolower($tagName), $this->tagBlacklist)) && ($this->xssAuto)))
 			{
@@ -905,9 +905,9 @@ class InputFilter
 			$attrSubSet[1] = str_replace('"', '', $attrSubSet[1]);
 
 			// Convert single quotes from either side to doubles (Single quotes shouldn't be used to pad attr values)
-			if ((substr($attrSubSet[1], 0, 1) == "'") && (substr($attrSubSet[1], (strlen($attrSubSet[1]) - 1), 1) == "'"))
+			if ((substr($attrSubSet[1], 0, 1) == "'") && (substr($attrSubSet[1], (\strlen($attrSubSet[1]) - 1), 1) == "'"))
 			{
-				$attrSubSet[1] = substr($attrSubSet[1], 1, (strlen($attrSubSet[1]) - 2));
+				$attrSubSet[1] = substr($attrSubSet[1], 1, (\strlen($attrSubSet[1]) - 2));
 			}
 
 			// Strip slashes
@@ -930,7 +930,7 @@ class InputFilter
 				{
 					$newSet[] = $attrSubSet[0] . '="' . $attrSubSet[1] . '"';
 				}
-				elseif ($attrSubSet[1] === "0")
+				elseif ($attrSubSet[1] === '0')
 				{
 					// Special Case
 					// Is the value 0?
