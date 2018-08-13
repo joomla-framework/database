@@ -813,6 +813,7 @@ class FtpClient
 		if (!$this->_putCmd('STOR ' . $path, array(150, 125)))
 		{
 			@ fclose($this->dataconn);
+
 			throw new FilesystemException(
 				sprintf('%1$s: Bad response.  Server response: %2$s [Expected: 150 or 125].  Path sent: %3$s', __METHOD__, $this->response, $path)
 			);
@@ -1437,6 +1438,7 @@ class FtpClient
 			{
 				$osType = $k;
 				$regexp = $v;
+
 				break;
 			}
 		}

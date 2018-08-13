@@ -82,10 +82,12 @@ class Helper
 			{
 				case 'ftp':
 					$ftpid = @ftp_connect($server, $port);
+
 					break;
 
 				case 'ftps':
 					$ftpid = @ftp_ssl_connect($server, $port);
+
 					break;
 			}
 
@@ -165,10 +167,12 @@ class Helper
 		{
 			case 'ftp':
 				$ftpid = @ftp_connect($server, $port);
+
 				break;
 
 			case 'ftps':
 				$ftpid = @ftp_ssl_connect($server, $port);
+
 				break;
 		}
 

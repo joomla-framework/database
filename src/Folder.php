@@ -84,6 +84,7 @@ abstract class Folder
 							return $ret;
 						}
 					}
+
 					break;
 
 				case 'file':
@@ -98,6 +99,7 @@ abstract class Folder
 							throw new FilesystemException('Copy file failed', -1);
 						}
 					}
+
 					break;
 			}
 		}
@@ -191,6 +193,7 @@ abstract class Folder
 				if (strpos($path, $test) === 0 || strpos($path, realpath($test)) === 0)
 				{
 					$inBaseDir = true;
+
 					break;
 				}
 			}

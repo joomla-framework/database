@@ -257,16 +257,19 @@ class Stream
 				case 'gz':
 				case 'gzip':
 					$this->processingmethod = 'gz';
+
 					break;
 
 				case 'tbz2':
 				case 'bz2':
 				case 'bzip2':
 					$this->processingmethod = 'bz';
+
 					break;
 
 				default:
 					$this->processingmethod = 'f';
+
 					break;
 			}
 		}
@@ -282,11 +285,13 @@ class Stream
 			// Gzip doesn't support contexts or streams
 			case 'gz':
 				$this->fh = gzopen($filename, $mode, $useIncludePath);
+
 				break;
 
 			// Bzip2 is much like gzip except it doesn't use the include path
 			case 'bz':
 				$this->fh = bzopen($filename, $mode);
+
 				break;
 
 			// Fopen can handle streams
@@ -307,6 +312,7 @@ class Stream
 				{
 					$this->fh = @fopen($filename, $mode, $useIncludePath);
 				}
+
 				break;
 		}
 
@@ -349,15 +355,18 @@ class Stream
 		{
 			case 'gz':
 				$res = gzclose($this->fh);
+
 				break;
 
 			case 'bz':
 				$res = bzclose($this->fh);
+
 				break;
 
 			case 'f':
 			default:
 				$res = fclose($this->fh);
+
 				break;
 		}
 
@@ -406,12 +415,14 @@ class Stream
 		{
 			case 'gz':
 				$res = gzeof($this->fh);
+
 				break;
 
 			case 'bz':
 			case 'f':
 			default:
 				$res = feof($this->fh);
+
 				break;
 		}
 
@@ -518,12 +529,14 @@ class Stream
 		{
 			case 'gz':
 				$res = $length ? gzgets($this->fh, $length) : gzgets($this->fh);
+
 				break;
 
 			case 'bz':
 			case 'f':
 			default:
 				$res = $length ? fgets($this->fh, $length) : fgets($this->fh);
+
 				break;
 		}
 
@@ -590,15 +603,18 @@ class Stream
 			{
 				case 'bz':
 					$res = ($remaining > 0) ? bzread($this->fh, $remaining) : bzread($this->fh, $this->chunksize);
+
 					break;
 
 				case 'gz':
 					$res = ($remaining > 0) ? gzread($this->fh, $remaining) : gzread($this->fh, $this->chunksize);
+
 					break;
 
 				case 'f':
 				default:
 					$res = ($remaining > 0) ? fread($this->fh, $remaining) : fread($this->fh, $this->chunksize);
+
 					break;
 			}
 
@@ -669,12 +685,14 @@ class Stream
 		{
 			case 'gz':
 				$res = gzseek($this->fh, $offset, $whence);
+
 				break;
 
 			case 'bz':
 			case 'f':
 			default:
 				$res = fseek($this->fh, $offset, $whence);
+
 				break;
 		}
 
@@ -715,12 +733,14 @@ class Stream
 		{
 			case 'gz':
 				$res = gztell($this->fh);
+
 				break;
 
 			case 'bz':
 			case 'f':
 			default:
 				$res = ftell($this->fh);
+
 				break;
 		}
 
@@ -872,10 +892,12 @@ class Stream
 			case 'ftp':
 			case 'ftps':
 				$res = Helper::ftpChmod($filename, $mode);
+
 				break;
 
 			default:
 				$res = chmod($filename, $mode);
+
 				break;
 		}
 

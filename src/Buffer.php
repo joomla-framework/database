@@ -158,7 +158,6 @@ class Buffer
 				{
 					return false;
 				}
-				break;
 
 			case SEEK_CUR:
 				if ($offset >= 0)
@@ -171,7 +170,6 @@ class Buffer
 				{
 					return false;
 				}
-				break;
 
 			case SEEK_END:
 				if (\strlen($this->buffers[$this->name]) + $offset >= 0)
@@ -184,7 +182,6 @@ class Buffer
 				{
 					return false;
 				}
-				break;
 
 			default:
 				return false;

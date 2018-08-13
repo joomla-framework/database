@@ -251,6 +251,7 @@ class StringWrapper
 		{
 			case SEEK_SET:
 				$this->pos = $offset;
+
 				break;
 
 			case SEEK_CUR:
@@ -260,10 +261,12 @@ class StringWrapper
 				}
 
 				$this->pos += $offset;
+
 				break;
 
 			case SEEK_END:
 				$this->pos = $this->len - $offset;
+
 				break;
 		}
 
