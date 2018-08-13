@@ -908,6 +908,7 @@ class Language
 				if (strpos($line, '_QQ_') !== false)
 				{
 					$errors[] = $realNumber;
+
 					continue;
 				}
 
@@ -915,6 +916,7 @@ class Language
 				if (substr_count($line, '"') % 2 != 0)
 				{
 					$errors[] = $realNumber;
+
 					continue;
 				}
 
@@ -922,6 +924,7 @@ class Language
 				if (!preg_match('#^[A-Z][A-Z0-9_\*\-\.]*\s*=\s*".*"(\s*;.*)?$#', $line))
 				{
 					$errors[] = $realNumber;
+
 					continue;
 				}
 
