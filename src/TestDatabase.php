@@ -128,7 +128,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 */
 	protected function getConnection()
 	{
-		if (!is_null(static::$driver))
+		if (static::$driver !== null)
 		{
 			return $this->createDefaultDBConnection(static::$driver->getConnection(), ':memory:');
 		}
