@@ -1103,7 +1103,6 @@ class FtpClient
 
 				$line = substr($line, $result);
 			}
-
 			while ($line != "");
 		}
 
@@ -1190,7 +1189,6 @@ class FtpClient
 
 			$buffer = substr($buffer, $result);
 		}
-
 		while ($buffer != "");
 
 		// Close the data connection port [Data transfer complete]
@@ -1588,7 +1586,6 @@ class FtpClient
 		{
 			$this->response .= fgets($this->conn, 4096);
 		}
-
 		while (!preg_match("/^([0-9]{3})(-(.*" . CRLF . ")+\\1)? [^" . CRLF . "]+" . CRLF . "$/", $this->response, $parts) && time() < $endTime);
 
 		// Catch a timeout or bad response
@@ -1665,7 +1662,6 @@ class FtpClient
 		{
 			$this->response .= fgets($this->conn, 4096);
 		}
-
 		while (!preg_match("/^([0-9]{3})(-(.*" . CRLF . ")+\\1)? [^" . CRLF . "]+" . CRLF . "$/", $this->response, $parts) && time() < $endTime);
 
 		// Catch a timeout or bad response

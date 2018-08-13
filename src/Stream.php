@@ -303,13 +303,13 @@ class Stream
 					$this->fh = @fopen($filename, $mode, $useIncludePath, $context);
 				}
 				elseif ($this->context)
-				// One provided at initialisation
 				{
+					// One provided at initialisation
 					$this->fh = @fopen($filename, $mode, $useIncludePath, $this->context);
 				}
 				else
-				// No context; all defaults
 				{
+					// No context; all defaults
 					$this->fh = @fopen($filename, $mode, $useIncludePath);
 				}
 
@@ -645,7 +645,6 @@ class Stream
 				$length    = \strlen($retval);
 			}
 		}
-
 		while ($remaining || !$length);
 
 		// Restore error tracking to what it was before
@@ -841,7 +840,6 @@ class Stream
 				$remaining -= $res;
 			}
 		}
-
 		while ($remaining);
 
 		// Restore error tracking to what it was before.
@@ -1215,15 +1213,13 @@ class Stream
 			$res = @copy($src, $dest, $context);
 		}
 		elseif ($this->context)
-		// One provided at initialisation
 		{
-			// Use the objects context
+			// One provided at initialisation
 			$res = @copy($src, $dest, $this->context);
 		}
 		else
-		// No context; all defaults
 		{
-			// Don't use any context
+			// No context; all defaults
 			$res = @copy($src, $dest);
 		}
 

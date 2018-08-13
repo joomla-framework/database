@@ -490,7 +490,6 @@ class Patcher
 
 			$line = next($lines);
 		}
-
 		while ($line !== false);
 
 		throw new \RuntimeException('Unexpected EOF');
