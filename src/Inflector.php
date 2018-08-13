@@ -321,7 +321,8 @@ class Inflector
 		{
 			return new static;
 		}
-		elseif (!\is_object(self::$instance))
+
+		if (!\is_object(self::$instance))
 		{
 			self::$instance = new static;
 		}
