@@ -259,12 +259,14 @@ class Client
 			case 'delete':
 			case 'trace':
 				$response = $this->http->$method($url, $headers, $timeout);
+
 				break;
 
 			case 'post':
 			case 'put':
 			case 'patch':
 				$response = $this->http->$method($url, $data, $headers, $timeout);
+
 				break;
 
 			default:
