@@ -75,8 +75,7 @@ class Cli extends Input
 
 		// Remove $_ENV and $_SERVER from the inputs.
 		$inputs = $this->inputs;
-		unset($inputs['env']);
-		unset($inputs['server']);
+		unset($inputs['env'], $inputs['server']);
 
 		// Serialize the executable, args, options, data, and inputs.
 		return serialize(array($this->executable, $this->args, $this->options, $this->data, $inputs));
