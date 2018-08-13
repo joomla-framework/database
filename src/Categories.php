@@ -271,8 +271,8 @@ class Categories extends AbstractMediawikiObject
 	 *
 	 * @since   1.0
 	 */
-	public function enumerateCategories($acfrom = null, $acto = null, $acprefix = null, $acdir = null, $acmin = null,
-		$acmax = null, $aclimit = null, array $acprop = null
+	public function enumerateCategories($acfrom = null, $acto = null, $acprefix = null, $acdir = null, $acmin = null, $acmax = null, $aclimit = null,
+		array $acprop = null
 	)
 	{
 		// Build the request.

@@ -102,8 +102,8 @@ class Images extends AbstractMediawikiObject
 	 *
 	 * @since   1.0
 	 */
-	public function getImageInfo(array $liprop = null, $lilimit = null, $listart = null, $liend = null, $liurlwidth = null,
-		$liurlheight = null, $limetadataversion = null, $liurlparam = null, $licontinue = null
+	public function getImageInfo(array $liprop = null, $lilimit = null, $listart = null, $liend = null, $liurlwidth = null, $liurlheight = null,
+		$limetadataversion = null, $liurlparam = null, $licontinue = null
 	)
 	{
 		// Build the request.
