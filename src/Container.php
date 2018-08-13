@@ -386,7 +386,7 @@ class Container implements ContainerInterface
 		}
 
 		// If the provided $value is not a closure, make it one now for easy resolution.
-		if (!is_callable($value))
+		if (!\is_callable($value))
 		{
 			$value = function () use ($value)
 			{
@@ -539,7 +539,7 @@ class Container implements ContainerInterface
 		{
 			$callback = $this->parent->get($key);
 
-			if (!is_callable($callback))
+			if (!\is_callable($callback))
 			{
 				$callback = function () use ($callback)
 				{
