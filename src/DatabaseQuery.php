@@ -355,8 +355,8 @@ abstract class DatabaseQuery
 					$query .= (string) $this->set;
 				}
 				elseif ($this->values)
-				// Columns-Values method
 				{
+					// Columns-Values method
 					if ($this->columns)
 					{
 						$query .= (string) $this->columns;
@@ -427,7 +427,7 @@ abstract class DatabaseQuery
 	{
 		$this->type = 'call';
 
-		if (\is_null($this->call))
+		if ($this->call === null)
 		{
 			$this->call = new Query\QueryElement('CALL', $columns);
 		}
@@ -476,7 +476,7 @@ abstract class DatabaseQuery
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'CHAR_LENGTH(' . $field . ')' . (isset($operator) && isset($condition) ? ' ' . $operator . ' ' . $condition : '');
+		return 'CHAR_LENGTH(' . $field . ')' . (isset($operator, $condition)   ? ' ' . $operator . ' ' . $condition : '');
 	}
 
 	/**
@@ -631,7 +631,7 @@ abstract class DatabaseQuery
 	 */
 	public function columns($columns)
 	{
-		if (\is_null($this->columns))
+		if ($this->columns === null)
 		{
 			$this->columns = new Query\QueryElement('()', $columns);
 		}
@@ -815,7 +815,7 @@ abstract class DatabaseQuery
 	{
 		$this->type = 'exec';
 
-		if (\is_null($this->exec))
+		if ($this->exec === null)
 		{
 			$this->exec = new Query\QueryElement('EXEC', $columns);
 		}
@@ -866,11 +866,11 @@ abstract class DatabaseQuery
 	 */
 	public function from($tables, $subQueryAlias = null)
 	{
-		if (\is_null($this->from))
+		if ($this->from === null)
 		{
 			if ($tables instanceof $this)
 			{
-				if (\is_null($subQueryAlias))
+				if ($subQueryAlias === null)
 				{
 					throw new \RuntimeException('JLIB_DATABASE_ERROR_NULL_SUBQUERY_ALIAS');
 				}
@@ -1004,7 +1004,7 @@ abstract class DatabaseQuery
 	 */
 	public function group($columns)
 	{
-		if (\is_null($this->group))
+		if ($this->group === null)
 		{
 			$this->group = new Query\QueryElement('GROUP BY', $columns);
 		}
@@ -1031,7 +1031,7 @@ abstract class DatabaseQuery
 	 */
 	public function having($conditions, $glue = 'AND')
 	{
-		if (\is_null($this->having))
+		if ($this->having === null)
 		{
 			$glue         = strtoupper($glue);
 			$this->having = new Query\QueryElement('HAVING', $conditions, " $glue ");
@@ -1104,7 +1104,7 @@ abstract class DatabaseQuery
 	 */
 	public function join($type, $conditions)
 	{
-		if (\is_null($this->join))
+		if ($this->join === null)
 		{
 			$this->join = array();
 		}
@@ -1200,7 +1200,7 @@ abstract class DatabaseQuery
 	 */
 	public function order($columns)
 	{
-		if (\is_null($this->order))
+		if ($this->order === null)
 		{
 			$this->order = new Query\QueryElement('ORDER BY', $columns);
 		}
@@ -1366,7 +1366,7 @@ abstract class DatabaseQuery
 	{
 		$this->type = 'select';
 
-		if (\is_null($this->select))
+		if ($this->select === null)
 		{
 			$this->select = new Query\QueryElement('SELECT', $columns);
 		}
@@ -1395,7 +1395,7 @@ abstract class DatabaseQuery
 	 */
 	public function set($conditions, $glue = ',')
 	{
-		if (\is_null($this->set))
+		if ($this->set === null)
 		{
 			$glue      = strtoupper($glue);
 			$this->set = new Query\QueryElement('SET', $conditions, PHP_EOL . "\t$glue ");
@@ -1465,7 +1465,7 @@ abstract class DatabaseQuery
 	 */
 	public function values($values)
 	{
-		if (\is_null($this->values))
+		if ($this->values === null)
 		{
 			$this->values = new Query\QueryElement('()', $values, '),(');
 		}
@@ -1494,7 +1494,7 @@ abstract class DatabaseQuery
 	 */
 	public function where($conditions, $glue = 'AND')
 	{
-		if (\is_null($this->where))
+		if ($this->where === null)
 		{
 			$glue        = strtoupper($glue);
 			$this->where = new Query\QueryElement('WHERE', $conditions, " $glue ");
@@ -1616,7 +1616,7 @@ abstract class DatabaseQuery
 	{
 		// Clear any ORDER BY clause in UNION query
 		// See https://dev.mysql.com/doc/en/union.html
-		if (!\is_null($this->order))
+		if ($this->order !== null)
 		{
 			$this->clear('order');
 		}
@@ -1634,13 +1634,13 @@ abstract class DatabaseQuery
 		}
 
 		// Get the Query\QueryElement if it does not exist
-		if (\is_null($this->union))
+		if ($this->union === null)
 		{
 			$this->union = new Query\QueryElement($name, $query, "$glue");
 		}
 		else
-		// Otherwise append the second UNION.
 		{
+			// Otherwise append the second UNION.
 			$this->union->append($query);
 		}
 
@@ -1670,7 +1670,7 @@ abstract class DatabaseQuery
 		$name = 'UNION ALL ()';
 
 		// Get the QueryElement if it does not exist
-		if (\is_null($this->unionAll))
+		if ($this->unionAll === null)
 		{
 			$this->unionAll = new Query\QueryElement($name, $query, "$glue");
 		}

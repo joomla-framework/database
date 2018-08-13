@@ -439,9 +439,8 @@ abstract class PdoDriver extends DatabaseDriver
 					$this->connect();
 				}
 				catch (ConnectionFailureException $e)
-				// If connect fails, ignore that exception and throw the normal exception.
 				{
-					// Get the error number and message.
+					// If connect fails, ignore that exception and throw the normal exception.
 					$this->errorNum = (int) $this->connection->errorCode();
 					$this->errorMsg = (string) 'SQL: ' . implode(', ', $this->connection->errorInfo());
 
@@ -458,7 +457,6 @@ abstract class PdoDriver extends DatabaseDriver
 				return $this->execute();
 			}
 			else
-			// The server was not disconnected.
 			{
 				// Get the error number and message from before we tried to reconnect.
 				$this->errorNum = $errorNum;
@@ -593,8 +591,8 @@ abstract class PdoDriver extends DatabaseDriver
 			$status = (bool) $this->loadResult();
 		}
 		catch (\Exception $e)
-			// If we catch an exception here, we must not be connected.
 		{
+			// If we catch an exception here, we must not be connected.
 			$status = false;
 		}
 
@@ -710,7 +708,7 @@ abstract class PdoDriver extends DatabaseDriver
 			$query = $this->getQuery(true)->setQuery($query);
 		}
 
-		if ($query instanceof LimitableInterface && !\is_null($offset) && !\is_null($limit))
+		if ($query instanceof LimitableInterface && $offset !== null && $limit !== null)
 		{
 			$query->setLimit($limit, $offset);
 		}

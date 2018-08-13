@@ -961,8 +961,8 @@ class PgsqlDriver extends PdoDriver
 				$val = 'NULL';
 			}
 			else
-			// The field is not null so we prep it for update.
 			{
+				// The field is not null so we prep it for update.
 				$val = $this->sqlValue($columns, $k, $v);
 			}
 

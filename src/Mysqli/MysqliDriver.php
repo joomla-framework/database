@@ -488,8 +488,8 @@ class MysqliDriver extends DatabaseDriver
 			}
 		}
 		else
-		// If we want the whole field data object add that to the list.
 		{
+			// If we want the whole field data object add that to the list.
 			foreach ($fields as $field)
 			{
 				$result[$field->Field] = $field;
@@ -679,8 +679,8 @@ class MysqliDriver extends DatabaseDriver
 					$this->connect();
 				}
 				catch (ConnectionFailureException $e)
-				// If connect fails, ignore that exception and throw the normal exception.
 				{
+					// If connect fails, ignore that exception and throw the normal exception.
 					$this->log(
 						Log\LogLevel::ERROR,
 						'Database query failed (error #{code}): {message}; Failed query: {sql}',
@@ -694,8 +694,8 @@ class MysqliDriver extends DatabaseDriver
 				return $this->execute();
 			}
 			else
-			// The server was not disconnected.
 			{
+				// The server was not disconnected.
 				$this->log(
 					Log\LogLevel::ERROR,
 					'Database query failed (error #{code}): {message}; Failed query: {sql}',
@@ -779,7 +779,7 @@ class MysqliDriver extends DatabaseDriver
 			$query = $this->getQuery(true)->setQuery($query);
 		}
 
-		if ($query instanceof LimitableInterface && !\is_null($offset) && !\is_null($limit))
+		if ($query instanceof LimitableInterface && $offset !== null && $limit !== null)
 		{
 			$query->setLimit($limit, $offset);
 		}
@@ -952,8 +952,8 @@ class MysqliDriver extends DatabaseDriver
 					$this->connect();
 				}
 				catch (ConnectionFailureException $e)
-				// If connect fails, ignore that exception and throw the normal exception.
 				{
+					// If connect fails, ignore that exception and throw the normal exception.
 					$this->log(
 						Log\LogLevel::ERROR,
 						'Database query failed (error #{code}): {message}; Failed query: {sql}',

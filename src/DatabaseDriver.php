@@ -1478,7 +1478,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 			$quotedAs = '';
 
-			if (!\is_null($as))
+			if ($as !== null)
 			{
 				$as       = (array) $as;
 				$quotedAs .= ' AS ' . $this->quoteNameStr($as);
@@ -1490,7 +1490,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		{
 			$fin = array();
 
-			if (\is_null($as))
+			if ($as === null)
 			{
 				foreach ($name as $str)
 				{
@@ -1527,7 +1527,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 
 		foreach ($strArr as $part)
 		{
-			if (\is_null($part))
+			if ($part === null)
 			{
 				continue;
 			}
@@ -1853,14 +1853,14 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 					$val = 'NULL';
 				}
 				else
-				// If the value is null and we do not want to update nulls then ignore this field.
 				{
+					// If the value is null and we do not want to update nulls then ignore this field.
 					continue;
 				}
 			}
 			else
-			// The field is not null so we prep it for update.
 			{
+				// The field is not null so we prep it for update.
 				$val = $this->quote($v);
 			}
 

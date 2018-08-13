@@ -70,7 +70,7 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		}
 
 		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if (\is_null($value))
+		if ($value === null)
 		{
 			if (isset($this->bounded[$key]))
 			{
@@ -136,7 +136,7 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'length(' . $field . ')' . (isset($operator) && isset($condition) ? ' ' . $operator . ' ' . $condition : '');
+		return 'length(' . $field . ')' . (isset($operator, $condition)   ? ' ' . $operator . ' ' . $condition : '');
 	}
 
 	/**

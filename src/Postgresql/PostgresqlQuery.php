@@ -104,7 +104,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 		}
 
 		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if (\is_null($value))
+		if ($value === null)
 		{
 			if (isset($this->bounded[$key]))
 			{
@@ -438,7 +438,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	{
 		$this->type = 'forUpdate';
 
-		if (\is_null($this->forUpdate))
+		if ($this->forUpdate === null)
 		{
 			$glue            = strtoupper($glue);
 			$this->forUpdate = new QueryElement('FOR UPDATE', 'OF ' . $table_name, "$glue ");
@@ -465,7 +465,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	{
 		$this->type = 'forShare';
 
-		if (\is_null($this->forShare))
+		if ($this->forShare === null)
 		{
 			$glue           = strtoupper($glue);
 			$this->forShare = new QueryElement('FOR SHARE', 'OF ' . $table_name, "$glue ");
@@ -591,7 +591,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	{
 		$this->type = 'noWait';
 
-		if (\is_null($this->noWait))
+		if ($this->noWait === null)
 		{
 			$this->noWait = new QueryElement('NOWAIT', null);
 		}
@@ -610,7 +610,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 */
 	public function limit($limit = 0)
 	{
-		if (\is_null($this->limit))
+		if ($this->limit === null)
 		{
 			$this->limit = new QueryElement('LIMIT', (int) $limit);
 		}
@@ -629,7 +629,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 */
 	public function offset($offset = 0)
 	{
-		if (\is_null($this->offset))
+		if ($this->offset === null)
 		{
 			$this->offset = new QueryElement('OFFSET', (int) $offset);
 		}
@@ -648,7 +648,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 */
 	public function returning($pkCol)
 	{
-		if (\is_null($this->returning))
+		if ($this->returning === null)
 		{
 			$this->returning = new QueryElement('RETURNING', $pkCol);
 		}

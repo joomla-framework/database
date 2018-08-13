@@ -53,7 +53,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 		}
 
 		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if (\is_null($value))
+		if ($value === null)
 		{
 			if (isset($this->bounded[$key]))
 			{

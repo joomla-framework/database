@@ -789,9 +789,8 @@ class PostgresqlDriver extends DatabaseDriver
 					$this->connect();
 				}
 				catch (ConnectionFailureException $e)
-				// If connect fails, ignore that exception and throw the normal exception.
 				{
-					// Get the error number and message.
+					// If connect fails, ignore that exception and throw the normal exception.
 					$this->errorMsg = pg_last_error($this->connection);
 
 					// Only get an error number if we have a non-boolean false cursor, otherwise use default 0
@@ -814,9 +813,8 @@ class PostgresqlDriver extends DatabaseDriver
 				return $this->execute();
 			}
 			else
-			// The server was not disconnected.
 			{
-				// Get the error number and message.
+				// The server was not disconnected.
 				$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
 				$this->errorMsg = pg_last_error($this->connection);
 
@@ -950,7 +948,7 @@ class PostgresqlDriver extends DatabaseDriver
 			$query = $this->getQuery(true)->setQuery($query);
 		}
 
-		if ($query instanceof LimitableInterface && !\is_null($offset) && !\is_null($limit))
+		if ($query instanceof LimitableInterface && $offset !== null && $limit !== null)
 		{
 			$query->setLimit($limit, $offset);
 		}
@@ -1178,7 +1176,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	protected function fetchObject($cursor = null, $class = 'stdClass')
 	{
-		return pg_fetch_object(\is_null($cursor) ? $this->cursor : $cursor, null, $class);
+		return pg_fetch_object($cursor === null ? $this->cursor : $cursor, null, $class);
 	}
 
 	/**
@@ -1586,14 +1584,14 @@ class PostgresqlDriver extends DatabaseDriver
 					$val = 'NULL';
 				}
 				else
-				// If the value is null and we do not want to update nulls then ignore this field.
 				{
+					// If the value is null and we do not want to update nulls then ignore this field.
 					continue;
 				}
 			}
 			else
-			// The field is not null so we prep it for update.
 			{
+				// The field is not null so we prep it for update.
 				$val = $this->sqlValue($columns, $k, $v);
 			}
 

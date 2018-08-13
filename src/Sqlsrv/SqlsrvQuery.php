@@ -70,8 +70,8 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 					$query .= (string) $this->set;
 				}
 				elseif ($this->values)
-				// Columns-Values method
 				{
+					// Columns-Values method
 					if ($this->columns)
 					{
 						$query .= (string) $this->columns;
@@ -132,7 +132,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 		}
 
 		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if (\is_null($value))
+		if ($value === null)
 		{
 			if (isset($this->bounded[$key]))
 			{
@@ -225,7 +225,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'DATALENGTH(' . $field . ')' . (isset($operator) && isset($condition) ? ' ' . $operator . ' ' . $condition : '');
+		return 'DATALENGTH(' . $field . ')' . (isset($operator, $condition)   ? ' ' . $operator . ' ' . $condition : '');
 	}
 
 	/**

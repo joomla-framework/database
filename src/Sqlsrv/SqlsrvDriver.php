@@ -408,8 +408,8 @@ class SqlsrvDriver extends DatabaseDriver
 			}
 		}
 		else
-		// If we want the whole field data object add that to the list.
 		{
+			// If we want the whole field data object add that to the list.
 			foreach ($fields as $field)
 			{
 				$field->Default        = preg_replace("/(^(\(\(|\('|\(N'|\()|(('\)|(?<!\()\)\)|\))$))/i", '', $field->Default);
@@ -659,9 +659,8 @@ class SqlsrvDriver extends DatabaseDriver
 					$this->connect();
 				}
 				catch (ConnectionFailureException $e)
-				// If connect fails, ignore that exception and throw the normal exception.
 				{
-					// Get the error number and message.
+					// If connect fails, ignore that exception and throw the normal exception.
 					$errors         = sqlsrv_errors();
 					$this->errorNum = $errors[0]['code'];
 					$this->errorMsg = $errors[0]['message'];
@@ -680,9 +679,8 @@ class SqlsrvDriver extends DatabaseDriver
 				return $this->execute();
 			}
 			else
-			// The server was not disconnected.
 			{
-				// Get the error number and message.
+				// The server was not disconnected.
 				$errors         = sqlsrv_errors();
 				$this->errorNum = $errors[0]['code'];
 				$this->errorMsg = $errors[0]['message'];
@@ -856,7 +854,7 @@ class SqlsrvDriver extends DatabaseDriver
 			$query = $this->getQuery(true)->setQuery($query);
 		}
 
-		if ($query instanceof LimitableInterface && !\is_null($offset) && !\is_null($limit))
+		if ($query instanceof LimitableInterface && $offset !== null && $limit !== null)
 		{
 			$query->setLimit($limit, $offset);
 		}
@@ -1047,9 +1045,9 @@ class SqlsrvDriver extends DatabaseDriver
 		$this->connect();
 
 		$table = $this->replacePrefix((string) $table);
-		$sql   = 'SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS' . " WHERE TABLE_NAME = '$table' AND COLUMN_NAME = '$field'" .
-			' ORDER BY ORDINAL_POSITION';
-		$this->setQuery($sql);
+		$this->setQuery(
+			"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table' AND COLUMN_NAME = '$field' ORDER BY ORDINAL_POSITION"
+		);
 
 		if ($this->loadResult())
 		{
@@ -1076,7 +1074,7 @@ class SqlsrvDriver extends DatabaseDriver
 	{
 		$orderBy = stristr($sql, 'ORDER BY');
 
-		if (\is_null($orderBy) || empty($orderBy))
+		if ($orderBy === null || empty($orderBy))
 		{
 			$orderBy = 'ORDER BY (select 0)';
 		}
@@ -1108,7 +1106,7 @@ class SqlsrvDriver extends DatabaseDriver
 	{
 		$constraints = array();
 
-		if (!\is_null($prefix) && !\is_null($backup))
+		if ($prefix !== null && $backup !== null)
 		{
 			$constraints = $this->getTableConstraints($oldTable);
 		}
