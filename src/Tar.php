@@ -49,7 +49,7 @@ class Tar implements ExtractableInterface
 	 * @var    string
 	 * @since  1.0
 	 */
-	private $data = null;
+	private $data;
 
 	/**
 	 * Tar file metadata array
@@ -57,7 +57,7 @@ class Tar implements ExtractableInterface
 	 * @var    array
 	 * @since  1.0
 	 */
-	private $metadata = null;
+	private $metadata;
 
 	/**
 	 * Holds the options array.
@@ -122,9 +122,9 @@ class Tar implements ExtractableInterface
 				$path   = Path::clean($destination . '/' . $this->metadata[$i]['name']);
 
 				// Make sure the destination folder exists
-				if (!Folder::create(dirname($path)))
+				if (!Folder::create(\dirname($path)))
 				{
-					throw new \RuntimeException('Unable to create destination folder ' . dirname($path));
+					throw new \RuntimeException('Unable to create destination folder ' . \dirname($path));
 				}
 
 				if (!File::write($path, $buffer))
@@ -244,10 +244,6 @@ class Tar implements ExtractableInterface
 
 					// And the file contents are in the next block so we'll need to skip this
 					continue;
-				}
-				else
-				{
-					// Some other type.
 				}
 
 				$returnArray[] = $file;

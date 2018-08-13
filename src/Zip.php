@@ -83,7 +83,7 @@ class Zip implements ExtractableInterface
 	 * @var    string
 	 * @since  1.0
 	 */
-	private $data = null;
+	private $data;
 
 	/**
 	 * ZIP file metadata array
@@ -91,7 +91,7 @@ class Zip implements ExtractableInterface
 	 * @var    array
 	 * @since  1.0
 	 */
-	private $metadata = null;
+	private $metadata;
 
 	/**
 	 * Holds the options array.
@@ -180,7 +180,7 @@ class Zip implements ExtractableInterface
 	 */
 	public static function isSupported()
 	{
-		return self::hasNativeSupport() || extension_loaded('zlib');
+		return self::hasNativeSupport() || \extension_loaded('zlib');
 	}
 
 	/**
@@ -192,7 +192,7 @@ class Zip implements ExtractableInterface
 	 */
 	public static function hasNativeSupport()
 	{
-		return extension_loaded('zip');
+		return \extension_loaded('zip');
 	}
 
 	/**
@@ -247,9 +247,9 @@ class Zip implements ExtractableInterface
 				$path   = Path::clean($destination . '/' . $this->metadata[$i]['name']);
 
 				// Make sure the destination folder exists
-				if (!Folder::create(dirname($path)))
+				if (!Folder::create(\dirname($path)))
 				{
-					throw new \RuntimeException('Unable to create destination folder ' . dirname($path));
+					throw new \RuntimeException('Unable to create destination folder ' . \dirname($path));
 				}
 
 				if (!File::write($path, $buffer))
@@ -285,7 +285,7 @@ class Zip implements ExtractableInterface
 		// Make sure the destination folder exists
 		if (!Folder::create($destination))
 		{
-			throw new \RuntimeException('Unable to create destination folder ' . dirname($path));
+			throw new \RuntimeException('Unable to create destination folder ' . \dirname($path));
 		}
 
 		// Read files in the archive
@@ -447,16 +447,17 @@ class Zip implements ExtractableInterface
 		{
 			return gzinflate(substr($this->data, $this->metadata[$key]['_dataStart'], $this->metadata[$key]['csize']));
 		}
-		elseif ($this->metadata[$key]['_method'] == 0x0)
+
+		if ($this->metadata[$key]['_method'] == 0x0)
 		{
 			// Files that aren't compressed.
-
 			return substr($this->data, $this->metadata[$key]['_dataStart'], $this->metadata[$key]['csize']);
 		}
-		elseif ($this->metadata[$key]['_method'] == 0x12)
+
+		if ($this->metadata[$key]['_method'] == 0x12)
 		{
 			// If bz2 extension is loaded use it
-			if (extension_loaded('bz2'))
+			if (\extension_loaded('bz2'))
 			{
 				return bzdecompress(substr($this->data, $this->metadata[$key]['_dataStart'], $this->metadata[$key]['csize']));
 			}

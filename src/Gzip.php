@@ -38,7 +38,7 @@ class Gzip implements ExtractableInterface
 	 * @var    string
 	 * @since  1.0
 	 */
-	private $data = null;
+	private $data;
 
 	/**
 	 * Holds the options array.
@@ -159,7 +159,7 @@ class Gzip implements ExtractableInterface
 	 */
 	public static function isSupported()
 	{
-		return extension_loaded('zlib');
+		return \extension_loaded('zlib');
 	}
 
 	/**

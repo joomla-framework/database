@@ -24,7 +24,7 @@ class Bzip2 implements ExtractableInterface
 	 * @var    string
 	 * @since  1.0
 	 */
-	private $data = null;
+	private $data;
 
 	/**
 	 * Holds the options array.
@@ -146,6 +146,6 @@ class Bzip2 implements ExtractableInterface
 	 */
 	public static function isSupported()
 	{
-		return extension_loaded('bz2');
+		return \extension_loaded('bz2');
 	}
 }
