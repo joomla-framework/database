@@ -83,16 +83,13 @@ class Followers extends AbstractPackage
 			case '204' :
 				// You are following this user
 				return true;
-				break;
 
 			case '404' :
 				// You are not following this user
 				return false;
-				break;
 
 			default :
 				throw new \UnexpectedValueException('Unexpected response code: ' . $response->code);
-				break;
 		}
 	}
 
@@ -119,16 +116,13 @@ class Followers extends AbstractPackage
 			case '204' :
 				// User is following the target
 				return true;
-				break;
 
 			case '404' :
 				// User is not following the target
 				return false;
-				break;
 
 			default :
 				throw new \UnexpectedValueException('Unexpected response code: ' . $response->code);
-				break;
 		}
 	}
 

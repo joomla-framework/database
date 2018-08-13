@@ -48,15 +48,12 @@ class Members extends AbstractPackage
 			case 302 :
 				// Requester is not an organization member.
 				return false;
-				break;
 
 			case 200 :
 				return json_decode($response->body);
-				break;
 
 			default :
 				throw new \UnexpectedValueException('Unexpected response code: ' . $response->code);
-				break;
 		}
 	}
 
@@ -85,22 +82,18 @@ class Members extends AbstractPackage
 			case 204 :
 				// Requester is an organization member and user is a member.
 				return true;
-				break;
 
 			case 404 :
 				// Requester is an organization member and user is not a member.
 				// Requester is not an organization member and is inquiring about themselves.
 				return false;
-				break;
 
 			case 302 :
 				// Requester is not an organization member.
 				return false;
-				break;
 
 			default :
 				throw new \UnexpectedValueException('Unexpected response code: ' . $response->code);
-				break;
 		}
 	}
 
@@ -178,16 +171,13 @@ class Members extends AbstractPackage
 			case 204 :
 				// Response if user is a public member.
 				return true;
-				break;
 
 			case 404 :
 				// Response if user is not a public member.
 				return false;
-				break;
 
 			default :
 				throw new \UnexpectedValueException('Unexpected response code: ' . $response->code);
-				break;
 		}
 	}
 

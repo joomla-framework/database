@@ -218,16 +218,13 @@ class Teams extends AbstractPackage
 			case 204 :
 				// Response if user is a member
 				return true;
-				break;
 
 			case 404 :
 				// Response if user is not a member
 				return false;
-				break;
 
 			default :
 				throw new \UnexpectedValueException('Unexpected response code: ' . $response->code);
-				break;
 		}
 	}
 
@@ -418,16 +415,13 @@ class Teams extends AbstractPackage
 			case 204 :
 				// Response if repo is managed by this team.
 				return true;
-				break;
 
 			case 404 :
 				// Response if repo is not managed by this team.
 				return false;
-				break;
 
 			default :
 				throw new \UnexpectedValueException('Unexpected response code: ' . $response->code);
-				break;
 		}
 	}
 

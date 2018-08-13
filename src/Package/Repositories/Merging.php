@@ -57,12 +57,10 @@ class Merging extends AbstractPackage
 			case '201':
 				// Success
 				return json_decode($response->body);
-				break;
 
 			case '204':
 				// No-op response (base already contains the head, nothing to merge)
 				throw new \UnexpectedValueException('Nothing to merge');
-				break;
 
 			case '404':
 				// Missing base or Missing head response
@@ -71,7 +69,6 @@ class Merging extends AbstractPackage
 				$message = (isset($error->message)) ? $error->message : 'Missing base or head: ' . $response->code;
 
 				throw new \UnexpectedValueException($message);
-				break;
 
 			case '409':
 				// Merge conflict response
@@ -80,11 +77,9 @@ class Merging extends AbstractPackage
 				$message = (isset($error->message)) ? $error->message : 'Merge conflict ' . $response->code;
 
 				throw new \UnexpectedValueException($message);
-				break;
 
 			default :
 				throw new \UnexpectedValueException('Unexpected response code: ' . $response->code);
-				break;
 		}
 	}
 }

@@ -117,12 +117,10 @@ class Starring extends AbstractPackage
 			case '204' :
 				// This repository is watched by you.
 				return true;
-				break;
 
 			case '404' :
 				// This repository is not watched by you.
 				return false;
-				break;
 		}
 
 		throw new \UnexpectedValueException('Unexpected response code: ' . $response->code);
