@@ -128,6 +128,7 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 		{
 			case null:
 				$this->bounded = array();
+
 				break;
 		}
 

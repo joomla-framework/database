@@ -597,9 +597,11 @@ class PostgresqlDriver extends DatabaseDriver
 		if (\in_array($table, $tableList, true))
 		{
 			$name = array('s.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
-							'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option', );
+				'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option',
+			);
 			$as = array('sequence', 'schema', 'table', 'column', 'data_type',
-							'minimum_value', 'maximum_value', 'increment', 'cycle_option', );
+				'minimum_value', 'maximum_value', 'increment', 'cycle_option',
+			);
 
 			if (version_compare($this->getVersion(), '9.1.0') >= 0)
 			{
@@ -1006,6 +1008,7 @@ class PostgresqlDriver extends DatabaseDriver
 				{
 					$val = 'FALSE';
 				}
+
 				break;
 
 			case 'bigint':
@@ -1018,6 +1021,7 @@ class PostgresqlDriver extends DatabaseDriver
 			case 'serial':
 			case 'numeric,':
 				$val = $field_value === '' ? 'NULL' : $field_value;
+
 				break;
 
 			case 'date':
@@ -1033,6 +1037,7 @@ class PostgresqlDriver extends DatabaseDriver
 
 			default:
 				$val = $this->quote($field_value);
+
 				break;
 		}
 
@@ -1568,6 +1573,7 @@ class PostgresqlDriver extends DatabaseDriver
 			{
 				$key_val = $this->sqlValue($columns, $k, $v);
 				$where[] = $this->quoteName($k) . '=' . $key_val;
+
 				continue;
 			}
 

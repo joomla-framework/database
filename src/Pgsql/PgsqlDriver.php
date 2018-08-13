@@ -510,6 +510,7 @@ class PgsqlDriver extends PdoDriver
 			case 'serial':
 			case 'numeric,':
 				$val = $field_value === '' ? 'NULL' : $field_value;
+
 				break;
 
 			case 'date':
@@ -525,6 +526,7 @@ class PgsqlDriver extends PdoDriver
 
 			default:
 				$val = $this->quote($field_value);
+
 				break;
 		}
 
@@ -942,6 +944,7 @@ class PgsqlDriver extends PdoDriver
 			{
 				$key_val = $this->sqlValue($columns, $k, $v);
 				$where[] = $this->quoteName($k) . '=' . $key_val;
+
 				continue;
 			}
 

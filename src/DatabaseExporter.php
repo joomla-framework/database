@@ -101,6 +101,7 @@ abstract class DatabaseExporter
 				case 'xml':
 				default:
 					$buffer = $this->buildXml();
+
 					break;
 			}
 		}

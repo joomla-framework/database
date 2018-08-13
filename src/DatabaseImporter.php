@@ -275,6 +275,7 @@ abstract class DatabaseImporter
 						catch (\RuntimeException $e)
 						{
 							$this->db->log(LogLevel::DEBUG, 'Fail: ' . $this->db->getQuery());
+
 							throw $e;
 						}
 
@@ -296,6 +297,7 @@ abstract class DatabaseImporter
 				catch (\RuntimeException $e)
 				{
 					$this->db->log(LogLevel::DEBUG, 'Fail: ' . $this->db->getQuery());
+
 					throw $e;
 				}
 

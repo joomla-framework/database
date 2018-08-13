@@ -611,6 +611,7 @@ class OracleDriver extends PdoDriver
 				if ($escaped)
 				{
 					$j = $k + 1;
+
 					continue;
 				}
 

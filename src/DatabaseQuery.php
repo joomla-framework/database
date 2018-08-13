@@ -216,15 +216,12 @@ abstract class DatabaseQuery
 		{
 			case 'q':
 				return $this->quote($args[0], isset($args[1]) ? $args[1] : true);
-				break;
 
 			case 'qn':
 				return $this->quoteName($args[0], isset($args[1]) ? $args[1] : null);
-				break;
 
 			case 'e':
 				return $this->escape($args[0], isset($args[1]) ? $args[1] : false);
-				break;
 		}
 	}
 
@@ -265,6 +262,7 @@ abstract class DatabaseQuery
 		{
 			case 'element':
 				$query .= (string) $this->element;
+
 				break;
 
 			case 'select':
@@ -304,6 +302,7 @@ abstract class DatabaseQuery
 
 			case 'union':
 				$query .= (string) $this->union;
+
 				break;
 
 			case 'delete':
@@ -377,10 +376,12 @@ abstract class DatabaseQuery
 
 			case 'call':
 				$query .= (string) $this->call;
+
 				break;
 
 			case 'exec':
 				$query .= (string) $this->exec;
+
 				break;
 		}
 
@@ -496,81 +497,99 @@ abstract class DatabaseQuery
 			case 'select':
 				$this->select = null;
 				$this->type   = null;
+
 				break;
 
 			case 'delete':
 				$this->delete = null;
 				$this->type   = null;
+
 				break;
 
 			case 'update':
 				$this->update = null;
 				$this->type   = null;
+
 				break;
 
 			case 'insert':
 				$this->insert             = null;
 				$this->type               = null;
 				$this->autoIncrementField = null;
+
 				break;
 
 			case 'from':
 				$this->from = null;
+
 				break;
 
 			case 'join':
 				$this->join = null;
+
 				break;
 
 			case 'set':
 				$this->set = null;
+
 				break;
 
 			case 'where':
 				$this->where = null;
+
 				break;
 
 			case 'group':
 				$this->group = null;
+
 				break;
 
 			case 'having':
 				$this->having = null;
+
 				break;
 
 			case 'order':
 				$this->order = null;
+
 				break;
 
 			case 'columns':
 				$this->columns = null;
+
 				break;
 
 			case 'values':
 				$this->values = null;
+
 				break;
 
 			case 'exec':
 				$this->exec = null;
 				$this->type = null;
+
 				break;
 
 			case 'call':
 				$this->call = null;
 				$this->type = null;
+
 				break;
 
 			case 'limit':
 				$this->offset = 0;
 				$this->limit  = 0;
+
 				break;
 
 			case 'offset':
 				$this->offset = 0;
+
 				break;
 
 			case 'union':
 				$this->union = null;
+
 				break;
 
 			default:
@@ -594,6 +613,7 @@ abstract class DatabaseQuery
 				$this->union              = null;
 				$this->offset             = 0;
 				$this->limit              = 0;
+
 				break;
 		}
 
@@ -1751,15 +1771,12 @@ abstract class DatabaseQuery
 			{
 				case 't':
 					return $query->currentTimestamp();
-					break;
 
 				case 'z':
 					return $query->nullDate(false);
-					break;
 
 				case 'Z':
 					return $query->nullDate(true);
-					break;
 			}
 
 			// Increment the argument index only if argument specifier not provided.
@@ -1779,80 +1796,61 @@ abstract class DatabaseQuery
 			{
 				case 'a':
 					return 0 + $replacement;
-					break;
 
 				case 'e':
 					return $query->escape($replacement);
-					break;
 
 				case 'E':
 					return $query->escape($replacement, true);
-					break;
 
 				case 'n':
 					return $query->quoteName($replacement);
-					break;
 
 				case 'q':
 					return $query->quote($replacement);
-					break;
 
 				case 'Q':
 					return $query->quote($replacement, false);
-					break;
 
 				case 'r':
 					return $replacement;
-					break;
 
 				// Dates
 				case 'y':
 					return $query->year($query->quote($replacement));
-					break;
 
 				case 'Y':
 					return $query->year($query->quoteName($replacement));
-					break;
 
 				case 'm':
 					return $query->month($query->quote($replacement));
-					break;
 
 				case 'M':
 					return $query->month($query->quoteName($replacement));
-					break;
 
 				case 'd':
 					return $query->day($query->quote($replacement));
-					break;
 
 				case 'D':
 					return $query->day($query->quoteName($replacement));
-					break;
 
 				case 'h':
 					return $query->hour($query->quote($replacement));
-					break;
 
 				case 'H':
 					return $query->hour($query->quoteName($replacement));
-					break;
 
 				case 'i':
 					return $query->minute($query->quote($replacement));
-					break;
 
 				case 'I':
 					return $query->minute($query->quoteName($replacement));
-					break;
 
 				case 's':
 					return $query->second($query->quote($replacement));
-					break;
 
 				case 'S':
 					return $query->second($query->quoteName($replacement));
-					break;
 			}
 
 			return '';

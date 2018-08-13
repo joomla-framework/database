@@ -458,11 +458,9 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 		{
 			case 'q':
 				return $this->quote($args[0], isset($args[1]) ? $args[1] : true);
-				break;
 
 			case 'qn':
 				return $this->quoteName($args[0], isset($args[1]) ? $args[1] : null);
-				break;
 		}
 	}
 
@@ -1627,6 +1625,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 				if ($escaped)
 				{
 					$j = $k + 1;
+
 					continue;
 				}
 
@@ -1841,6 +1840,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 			if (\in_array($k, $key, true))
 			{
 				$where[] = $this->quoteName($k) . ($v === null ? ' IS NULL' : ' = ' . $this->quote($v));
+
 				continue;
 			}
 

@@ -114,6 +114,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 		{
 			case null:
 				$this->bounded = array();
+
 				break;
 		}
 

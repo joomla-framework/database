@@ -279,6 +279,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 
 			default:
 				$query = parent::__toString();
+
 				break;
 		}
 
@@ -305,26 +306,32 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 		{
 			case 'limit':
 				$this->limit = null;
+
 				break;
 
 			case 'offset':
 				$this->offset = null;
+
 				break;
 
 			case 'forUpdate':
 				$this->forUpdate = null;
+
 				break;
 
 			case 'forShare':
 				$this->forShare = null;
+
 				break;
 
 			case 'noWait':
 				$this->noWait = null;
+
 				break;
 
 			case 'returning':
 				$this->returning = null;
+
 				break;
 
 			case 'select':
@@ -341,6 +348,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 			case 'columns':
 			case 'values':
 				parent::clear($clause);
+
 				break;
 
 			default:
@@ -353,6 +361,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 				$this->noWait    = null;
 				$this->returning = null;
 				parent::clear($clause);
+
 				break;
 		}
 

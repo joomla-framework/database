@@ -781,6 +781,7 @@ class SqlsrvDriver extends DatabaseDriver
 				if ($escaped)
 				{
 					$j = $k + 1;
+
 					continue;
 				}
 

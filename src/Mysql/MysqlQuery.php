@@ -131,6 +131,7 @@ class MysqlQuery extends DatabaseQuery implements LimitableInterface, Preparable
 		{
 			case null:
 				$this->bounded = array();
+
 				break;
 		}
 

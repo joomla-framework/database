@@ -154,6 +154,7 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		{
 			case null:
 				$this->bounded = array();
+
 				break;
 		}
 

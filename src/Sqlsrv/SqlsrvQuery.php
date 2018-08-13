@@ -98,6 +98,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 
 			default:
 				$query = parent::__toString();
+
 				break;
 		}
 
@@ -188,6 +189,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 		{
 			case null:
 				$this->bounded = array();
+
 				break;
 		}
 
