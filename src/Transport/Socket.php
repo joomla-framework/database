@@ -149,7 +149,7 @@ class Socket implements TransportInterface
 		}
 
 		// Authentication, if needed
-		if (isset($this->options['userauth']) && isset($this->options['passwordauth']))
+		if (isset($this->options['userauth'], $this->options['passwordauth']))
 		{
 			$request[] = 'Authorization: Basic ' . base64_encode($this->options['userauth'] . ':' . $this->options['passwordauth']);
 		}
@@ -231,8 +231,8 @@ class Socket implements TransportInterface
 			$return->code = (int) $code;
 		}
 		else
-		// No valid response code was detected.
 		{
+			// No valid response code was detected.
 			throw new InvalidResponseCodeException('No HTTP response code found.');
 		}
 

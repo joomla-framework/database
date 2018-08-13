@@ -112,8 +112,8 @@ class Curl implements TransportInterface
 				$options[CURLOPT_POSTFIELDS] = $data;
 			}
 			else
-			// Otherwise we need to encode the value first.
 			{
+				// Otherwise we need to encode the value first.
 				$options[CURLOPT_POSTFIELDS] = http_build_query($data);
 			}
 
@@ -182,7 +182,7 @@ class Curl implements TransportInterface
 		}
 
 		// Authentication, if needed
-		if (isset($this->options['userauth']) && isset($this->options['passwordauth']))
+		if (isset($this->options['userauth'], $this->options['passwordauth']))
 		{
 			$options[CURLOPT_USERPWD]  = $this->options['userauth'] . ':' . $this->options['passwordauth'];
 			$options[CURLOPT_HTTPAUTH] = CURLAUTH_BASIC;

@@ -91,8 +91,8 @@ class Stream implements TransportInterface
 				$options['content'] = $data;
 			}
 			else
-			// Otherwise we need to encode the value first.
 			{
+				// Otherwise we need to encode the value first.
 				$options['content'] = http_build_query($data);
 			}
 
@@ -133,13 +133,13 @@ class Stream implements TransportInterface
 		{
 			$options['request_fulluri'] = true;
 
-			if (isset($this->options['proxy.host']) && isset($this->options['proxy.port']))
+			if (isset($this->options['proxy.host'], $this->options['proxy.port']))
 			{
 				$options['proxy'] = $this->options['proxy.host'] . ':' . (int) $this->options['proxy.port'];
 			}
 
 			// If authentication details are provided, add those as well
-			if (isset($this->options['proxy.user']) && isset($this->options['proxy.password']))
+			if (isset($this->options['proxy.user'], $this->options['proxy.password']))
 			{
 				$headers['Proxy-Authorization'] = 'Basic ' . base64_encode($this->options['proxy.user'] . ':' . $this->options['proxy.password']);
 			}
@@ -160,7 +160,7 @@ class Stream implements TransportInterface
 		}
 
 		// Authentication, if needed
-		if ($uri instanceof Uri && isset($this->options['userauth']) && isset($this->options['passwordauth']))
+		if ($uri instanceof Uri && isset($this->options['userauth'], $this->options['passwordauth']))
 		{
 			$uri->setUser($this->options['userauth']);
 			$uri->setPass($this->options['passwordauth']);
