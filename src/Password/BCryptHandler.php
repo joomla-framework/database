@@ -40,7 +40,7 @@ class BCryptHandler implements HandlerInterface
 	public static function isSupported()
 	{
 		// Check the password_verify() function exists, either as part of PHP core or through a polyfill
-		return function_exists('password_verify');
+		return \function_exists('password_verify');
 	}
 
 	/**

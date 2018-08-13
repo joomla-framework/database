@@ -35,7 +35,7 @@ class Argon2iHandler implements HandlerInterface
 		}
 
 		// Use the sodium extension (PHP 7.2 native or PECL 2.x) if able
-		if (function_exists('sodium_crypto_pwhash_str_verify'))
+		if (\function_exists('sodium_crypto_pwhash_str_verify'))
 		{
 			$hash = sodium_crypto_pwhash_str(
 				$plaintext,
@@ -48,7 +48,7 @@ class Argon2iHandler implements HandlerInterface
 		}
 
 		// Use the libsodium extension (PECL 1.x) if able
-		if (extension_loaded('libsodium'))
+		if (\extension_loaded('libsodium'))
 		{
 			$hash = \Sodium\crypto_pwhash_str(
 				$plaintext,
@@ -85,7 +85,7 @@ class Argon2iHandler implements HandlerInterface
 		}
 
 		// Check for support from the (lib)sodium extension
-		return function_exists('sodium_crypto_pwhash_str') || extension_loaded('libsodium');
+		return \function_exists('sodium_crypto_pwhash_str') || \extension_loaded('libsodium');
 	}
 
 	/**
@@ -108,7 +108,7 @@ class Argon2iHandler implements HandlerInterface
 		}
 
 		// Use the sodium extension (PHP 7.2 native or PECL 2.x) if able
-		if (function_exists('sodium_crypto_pwhash_str_verify'))
+		if (\function_exists('sodium_crypto_pwhash_str_verify'))
 		{
 			$valid = sodium_crypto_pwhash_str_verify($hashed, $plaintext);
 			sodium_memzero($plaintext);
@@ -117,7 +117,7 @@ class Argon2iHandler implements HandlerInterface
 		}
 
 		// Use the libsodium extension (PECL 1.x) if able
-		if (extension_loaded('libsodium'))
+		if (\extension_loaded('libsodium'))
 		{
 			$valid = \Sodium\crypto_pwhash_str_verify($hashed, $plaintext);
 			\Sodium\memzero($plaintext);
