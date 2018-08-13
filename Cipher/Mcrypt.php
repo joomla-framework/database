@@ -50,7 +50,7 @@ abstract class Cipher_Mcrypt implements CipherInterface
 	 */
 	public function __construct()
 	{
-		if (!is_callable('mcrypt_encrypt'))
+		if (!\is_callable('mcrypt_encrypt'))
 		{
 			throw new \RuntimeException('The mcrypt extension is not available.');
 		}
