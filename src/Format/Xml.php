@@ -87,23 +87,19 @@ class Xml extends AbstractRegistryFormat
 				$value = (string) $node;
 
 				return (int) $value;
-				break;
 
 			case 'string':
 				return (string) $node;
-				break;
 
 			case 'boolean':
 				$value = (string) $node;
 
 				return (bool) $value;
-				break;
 
 			case 'double':
 				$value = (string) $node;
 
 				return (float) $value;
-				break;
 
 			case 'array':
 				$value = array();

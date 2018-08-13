@@ -182,6 +182,7 @@ class Ini extends AbstractRegistryFormat
 				{
 					$section       = substr($line, 1, $length - 2);
 					$obj->$section = new stdClass;
+
 					continue;
 				}
 			}
@@ -348,15 +349,18 @@ class Ini extends AbstractRegistryFormat
 			case 'integer':
 			case 'double':
 				$string = $value;
+
 				break;
 
 			case 'boolean':
 				$string = $value ? 'true' : 'false';
+
 				break;
 
 			case 'string':
 				// Sanitize any CRLF characters..
 				$string = '"' . str_replace(array("\r\n", "\n"), '\\n', $value) . '"';
+
 				break;
 		}
 
