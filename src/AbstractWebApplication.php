@@ -372,8 +372,8 @@ abstract class AbstractWebApplication extends AbstractApplication
 				$url = $prefix . $url;
 			}
 			else
-			// It's relative to where we are now, so lets add that.
 			{
+				// It's relative to where we are now, so lets add that.
 				$parts = explode('/', $uri->toString(array('path')));
 				array_pop($parts);
 				$path = implode('/', $parts) . '/';
@@ -725,8 +725,8 @@ abstract class AbstractWebApplication extends AbstractApplication
 			$uri = $scheme . $this->input->server->getString('HTTP_HOST') . $requestUri;
 		}
 		else
-		// If not in "Apache Mode" we will assume that we are in an IIS environment and proceed.
 		{
+			// If not in "Apache Mode" we will assume that we are in an IIS environment and proceed.
 			// IIS uses the SCRIPT_NAME variable instead of a REQUEST_URI variable... thanks, MS
 			$uri       = $scheme . $this->input->server->getString('HTTP_HOST') . $this->input->server->getString('SCRIPT_NAME');
 			$queryHost = $this->input->server->getString('QUERY_STRING', '');
@@ -849,9 +849,8 @@ abstract class AbstractWebApplication extends AbstractApplication
 			$path = $uri->toString(array('path'));
 		}
 		else
-		// No explicit base URI was set so we need to detect it.
 		{
-			// Start with the requested URI.
+			// No explicit base URI was set so we need to detect it. Start with the requested URI.
 			$uri = new Uri($this->get('uri.request'));
 
 			$requestUri = $this->input->server->getString('REQUEST_URI', '');
@@ -863,8 +862,8 @@ abstract class AbstractWebApplication extends AbstractApplication
 				$path = dirname($this->input->server->getString('PHP_SELF', ''));
 			}
 			else
-			// Pretty much everything else should be handled with SCRIPT_NAME.
 			{
+				// Pretty much everything else should be handled with SCRIPT_NAME.
 				$path = dirname($this->input->server->getString('SCRIPT_NAME', ''));
 			}
 		}
@@ -912,8 +911,8 @@ abstract class AbstractWebApplication extends AbstractApplication
 			}
 		}
 		else
-		// No explicit media URI was set, build it dynamically from the base uri.
 		{
+			// No explicit media URI was set, build it dynamically from the base uri.
 			$this->set('uri.media.full', $this->get('uri.base.full') . 'media/');
 			$this->set('uri.media.path', $this->get('uri.base.path') . 'media/');
 		}

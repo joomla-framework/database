@@ -384,7 +384,7 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 		{
 			// Declare ticks to start signal monitoring. When you declare ticks, PCNTL will monitor
 			// incoming signals after each tick and call the relevant signal handler automatically.
-			declare (ticks = 1);
+			declare(ticks = 1);
 
 			// Start the main execution loop.
 			while (true)
@@ -400,8 +400,8 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 			}
 		}
 		else
-		// We were not able to daemonize the application so log the failure and die gracefully.
 		{
+			// We were not able to daemonize the application so log the failure and die gracefully.
 			$this->getLogger()->info('Starting ' . $this->name . ' failed');
 		}
 
@@ -624,8 +624,8 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 			$this->close();
 		}
 		else
-		// We are in the forked child process.
 		{
+			// We are in the forked child process.
 			// Setup some protected values.
 			$this->exiting = false;
 			$this->running = true;
@@ -654,14 +654,13 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 			throw new \RuntimeException('The process could not be forked.');
 		}
 		elseif ($pid === 0)
-		// Update the process id for the child.
 		{
+			// Update the process id for the child.
 			$this->processId = (int) posix_getpid();
 		}
 		else
-		// Log the fork in the parent.
 		{
-			// Log the fork.
+			// Log the fork in the parent.
 			$this->getLogger()->debug('Process forked ' . $pid);
 		}
 
@@ -745,8 +744,8 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 			return;
 		}
 		else
-		// If not, now we are.
 		{
+			// If not, now we are.
 			$this->exiting = true;
 		}
 
@@ -776,8 +775,8 @@ abstract class AbstractDaemonApplication extends AbstractCliApplication implemen
 				$this->close(exec(implode(' ', $GLOBALS['argv']) . ' > /dev/null &'));
 			}
 			else
-			// If we are not supposed to restart the daemon let's just kill -9.
 			{
+				// If we are not supposed to restart the daemon let's just kill -9.
 				passthru('kill -9 ' . $pid);
 				$this->close();
 			}

@@ -340,8 +340,8 @@ class WebClient
 					}
 				}
 				else
-				// We only have a Version or a browser so use what we have.
 				{
+					// We only have a Version or a browser so use what we have.
 					$this->browserVersion = $matches['version'][0];
 				}
 			}
@@ -610,13 +610,13 @@ class WebClient
 	protected function detectHeaders()
 	{
 		if (function_exists('getallheaders'))
-		// If php is working under Apache, there is a special function
 		{
+			// If php is working under Apache, there is a special function
 			$this->headers = getallheaders();
 		}
 		else
-		// Else we fill headers from $_SERVER variable
 		{
+			// Else we fill headers from $_SERVER variable
 			$this->headers = array();
 
 			foreach ($_SERVER as $name => $value)
