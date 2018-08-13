@@ -353,6 +353,6 @@ class Socket implements TransportInterface
 	 */
 	public static function isSupported()
 	{
-		return function_exists('fsockopen') && is_callable('fsockopen');
+		return \function_exists('fsockopen') && \is_callable('fsockopen');
 	}
 }

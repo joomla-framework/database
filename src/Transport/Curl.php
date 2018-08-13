@@ -41,7 +41,7 @@ class Curl implements TransportInterface
 	 */
 	public function __construct($options = array())
 	{
-		if (!function_exists('curl_init') || !is_callable('curl_init'))
+		if (!\function_exists('curl_init') || !\is_callable('curl_init'))
 		{
 			throw new \RuntimeException('Cannot use a cURL transport when curl_init() is not available.');
 		}
@@ -347,7 +347,7 @@ class Curl implements TransportInterface
 	 */
 	public static function isSupported()
 	{
-		return function_exists('curl_version') && curl_version();
+		return \function_exists('curl_version') && curl_version();
 	}
 
 	/**

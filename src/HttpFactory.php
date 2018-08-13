@@ -64,7 +64,7 @@ class HttpFactory
 			);
 		}
 
-		if (null === $default)
+		if ($default === null)
 		{
 			$availableAdapters = self::getHttpTransports();
 		}
