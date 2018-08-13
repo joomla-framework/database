@@ -109,10 +109,8 @@ class Text
 
 			return $string;
 		}
-		else
-		{
-			return $lang->_($string, $jsSafe, $interpretBackSlashes);
-		}
+
+		return $lang->_($string, $jsSafe, $interpretBackSlashes);
 	}
 
 	/**
@@ -140,10 +138,8 @@ class Text
 		{
 			return self::_($string . '_' . $alt, $jsSafe, $interpretBackSlashes, $script);
 		}
-		else
-		{
-			return self::_($string, $jsSafe, $interpretBackSlashes, $script);
-		}
+
+		return self::_($string, $jsSafe, $interpretBackSlashes, $script);
 	}
 
 	/**
@@ -225,7 +221,8 @@ class Text
 
 			return \call_user_func_array('sprintf', $args);
 		}
-		elseif ($count > 0)
+
+		if ($count > 0)
 		{
 			// Default to the normal sprintf handling.
 			$args[0] = $lang->_($string);

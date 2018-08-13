@@ -15,7 +15,7 @@ use Joomla\String\StringHelper;
  *
  * @deprecated  2.0
  */
-define('_QQ_', '"');
+\define('_QQ_', '"');
 
 /**
  * Languages/translation handler class
@@ -72,7 +72,7 @@ class Language
 	 * @var    array
 	 * @since  1.0
 	 */
-	protected $metadata = null;
+	protected $metadata;
 
 	/**
 	 * Array holding the language locale or boolean null if none.
@@ -80,7 +80,7 @@ class Language
 	 * @var    array|boolean
 	 * @since  1.0
 	 */
-	protected $locale = null;
+	protected $locale;
 
 	/**
 	 * The language to load.
@@ -88,7 +88,7 @@ class Language
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected $lang = null;
+	protected $lang;
 
 	/**
 	 * A nested array of language files that have been loaded
@@ -113,7 +113,7 @@ class Language
 	 * @since  1.0
 	 * @deprecated  2.0
 	 */
-	protected $strings = null;
+	protected $strings;
 
 	/**
 	 * An array of used text, used during debugging.
@@ -145,7 +145,7 @@ class Language
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected $transliterator = null;
+	protected $transliterator;
 
 	/**
 	 * Name of the pluralSuffixesCallback function for this language.
@@ -153,7 +153,7 @@ class Language
 	 * @var    callable
 	 * @since  1.0
 	 */
-	protected $pluralSuffixesCallback = null;
+	protected $pluralSuffixesCallback;
 
 	/**
 	 * Name of the ignoredSearchWordsCallback function for this language.
@@ -161,7 +161,7 @@ class Language
 	 * @var    callable
 	 * @since  1.0
 	 */
-	protected $ignoredSearchWordsCallback = null;
+	protected $ignoredSearchWordsCallback;
 
 	/**
 	 * Name of the lowerLimitSearchWordCallback function for this language.
@@ -169,7 +169,7 @@ class Language
 	 * @var    callable
 	 * @since  1.0
 	 */
-	protected $lowerLimitSearchWordCallback = null;
+	protected $lowerLimitSearchWordCallback;
 
 	/**
 	 * Name of the uppperLimitSearchWordCallback function for this language
@@ -177,7 +177,7 @@ class Language
 	 * @var    callable
 	 * @since  1.0
 	 */
-	protected $upperLimitSearchWordCallback = null;
+	protected $upperLimitSearchWordCallback;
 
 	/**
 	 * Name of the searchDisplayedCharactersNumberCallback function for this language.
@@ -185,7 +185,7 @@ class Language
 	 * @var    callable
 	 * @since  1.0
 	 */
-	protected $searchDisplayedCharactersNumberCallback = null;
+	protected $searchDisplayedCharactersNumberCallback;
 
 	/**
 	 * Constructor activating the default information of the language.
@@ -377,7 +377,7 @@ class Language
 			if (strpos($string, '\\') !== false)
 			{
 				// Interpret \n and \t characters
-				$string = str_replace(array('\\\\', '\t', '\n'), array("\\", "\t", "\n"), $string);
+				$string = str_replace(array('\\\\', '\t', '\n'), array('\\', "\t", "\n"), $string);
 			}
 		}
 
@@ -462,10 +462,8 @@ class Language
 		{
 			return \call_user_func($this->pluralSuffixesCallback, $count);
 		}
-		else
-		{
-			return array((string) $count);
-		}
+
+		return array((string) $count);
 	}
 
 	/**
@@ -513,10 +511,8 @@ class Language
 		{
 			return \call_user_func($this->ignoredSearchWordsCallback);
 		}
-		else
-		{
-			return array();
-		}
+
+		return array();
 	}
 
 	/**
@@ -564,10 +560,8 @@ class Language
 		{
 			return \call_user_func($this->lowerLimitSearchWordCallback);
 		}
-		else
-		{
-			return 3;
-		}
+
+		return 3;
 	}
 
 	/**
@@ -615,10 +609,8 @@ class Language
 		{
 			return \call_user_func($this->upperLimitSearchWordCallback);
 		}
-		else
-		{
-			return 20;
-		}
+
+		return 20;
 	}
 
 	/**
@@ -666,10 +658,8 @@ class Language
 		{
 			return \call_user_func($this->searchDisplayedCharactersNumberCallback);
 		}
-		else
-		{
-			return 200;
-		}
+
+		return 200;
 	}
 
 	/**
@@ -984,7 +974,7 @@ class Language
 	protected function getCallerInfo()
 	{
 		// Try to determine the source if none was provided
-		if (!function_exists('debug_backtrace'))
+		if (!\function_exists('debug_backtrace'))
 		{
 			return;
 		}
@@ -1050,10 +1040,8 @@ class Language
 
 			return;
 		}
-		else
-		{
-			return $this->paths;
-		}
+
+		return $this->paths;
 	}
 
 	/**
