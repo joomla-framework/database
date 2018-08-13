@@ -128,7 +128,7 @@ abstract class AbstractEvent implements EventInterface, ArrayAccess, Serializabl
 	 */
 	public function isStopped()
 	{
-		return true === $this->stopped;
+		return $this->stopped === true;
 	}
 
 	/**
