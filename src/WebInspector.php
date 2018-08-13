@@ -89,7 +89,6 @@ class WebInspector extends AbstractWebApplication
 	 */
 	public function doExecute()
 	{
-		return;
 	}
 
 	/**

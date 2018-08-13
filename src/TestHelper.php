@@ -34,7 +34,7 @@ class TestHelper
 	{
 		foreach ($array as $index => $method)
 		{
-			if (is_callable($method))
+			if (\is_callable($method))
 			{
 				$methodName = $index;
 				$callback   = $method;
@@ -42,7 +42,7 @@ class TestHelper
 			else
 			{
 				$methodName = $method;
-				$callback   = array(get_called_class(), 'mock' . $method);
+				$callback   = array(\get_called_class(), 'mock' . $method);
 			}
 
 			$mockObject->expects($test->any())
@@ -106,7 +106,7 @@ class TestHelper
 			return $property->getValue($object);
 		}
 
-		throw new \InvalidArgumentException(sprintf('Invalid property [%s] for class [%s]', $propertyName, get_class($object)));
+		throw new \InvalidArgumentException(sprintf('Invalid property [%s] for class [%s]', $propertyName, \get_class($object)));
 	}
 
 	/**
@@ -127,7 +127,7 @@ class TestHelper
 	public static function invoke($object, $methodName)
 	{
 		// Get the full argument list for the method.
-		$args = func_get_args();
+		$args = \func_get_args();
 
 		// Remove the method name from the argument list.
 		array_shift($args);
@@ -136,7 +136,7 @@ class TestHelper
 		$method = new \ReflectionMethod($object, $methodName);
 		$method->setAccessible(true);
 
-		$result = $method->invokeArgs(is_object($object) ? $object : null, $args);
+		$result = $method->invokeArgs(\is_object($object) ? $object : null, $args);
 
 		return $result;
 	}
