@@ -74,7 +74,6 @@ class Simple implements PasswordInterface
 
 			default:
 				throw new \InvalidArgumentException(sprintf('Hash type %s is not supported', $type));
-				break;
 		}
 	}
 

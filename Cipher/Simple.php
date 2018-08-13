@@ -176,27 +176,42 @@ class Cipher_Simple implements CipherInterface
 		{
 			case 'A':
 				$k += 160;
+
 				break;
+
 			case 'B':
 				$k += 176;
+
 				break;
+
 			case 'C':
 				$k += 192;
+
 				break;
+
 			case 'D':
 				$k += 208;
+
 				break;
+
 			case 'E':
 				$k += 224;
+
 				break;
+
 			case 'F':
 				$k += 240;
+
 				break;
+
 			case ' ':
 				$k += 0;
+
 				break;
+
 			default:
 				$k += 16 * (int) $c;
+
 				break;
 		}
 
@@ -204,27 +219,42 @@ class Cipher_Simple implements CipherInterface
 		{
 			case 'A':
 				$k += 10;
+
 				break;
+
 			case 'B':
 				$k += 11;
+
 				break;
+
 			case 'C':
 				$k += 12;
+
 				break;
+
 			case 'D':
 				$k += 13;
+
 				break;
+
 			case 'E':
 				$k += 14;
+
 				break;
+
 			case 'F':
 				$k += 15;
+
 				break;
+
 			case ' ':
 				$k += 0;
+
 				break;
+
 			default:
 				$k += (int) $c1;
+
 				break;
 		}
 
