@@ -224,7 +224,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 				$objectVars = json_decode(json_encode($object), true);
 			}
 
-			$keys = (\is_null($keys)) ? $objectVars : $function($keys, $objectVars);
+			$keys = ($keys === null) ? $objectVars : $function($keys, $objectVars);
 		}
 
 		return array_keys($keys);
@@ -623,7 +623,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	{
 		foreach ($input as $key => $object)
 		{
-			if (!\is_null($object))
+			if ($object !== null)
 			{
 				$this->offsetSet($key, $object);
 			}
