@@ -389,7 +389,6 @@ class Dispatcher implements DispatcherInterface
 				$this->listeners[$event]->remove($listener);
 			}
 		}
-
 		else
 		{
 			foreach ($this->listeners as $queue)
@@ -425,7 +424,6 @@ class Dispatcher implements DispatcherInterface
 				unset($this->listeners[$event]);
 			}
 		}
-
 		else
 		{
 			$this->listeners = array();
@@ -470,7 +468,6 @@ class Dispatcher implements DispatcherInterface
 			{
 				$event = $this->events[$event];
 			}
-
 			else
 			{
 				$event = new Event($event);
@@ -490,7 +487,6 @@ class Dispatcher implements DispatcherInterface
 				{
 					\call_user_func($listener, $event);
 				}
-
 				else
 				{
 					\call_user_func(array($listener, $event->getName()), $event);
