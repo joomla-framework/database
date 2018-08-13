@@ -342,6 +342,7 @@ class Container implements ContainerInterface
 				if ($depObject instanceof $dependencyClassName)
 				{
 					$methodArgs[] = $depObject;
+
 					continue;
 				}
 			}
@@ -350,6 +351,7 @@ class Container implements ContainerInterface
 			if ($param->isOptional())
 			{
 				$methodArgs[] = $param->getDefaultValue();
+
 				continue;
 			}
 
