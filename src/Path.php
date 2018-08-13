@@ -150,13 +150,13 @@ class Path
 		for ($i = 0; $i < 3; $i++)
 		{
 			// Read
-			$parsedMode .= ($mode{$i} & 04) ? "r" : "-";
+			$parsedMode .= ($mode{$i} & 04) ? 'r' : '-';
 
 			// Write
-			$parsedMode .= ($mode{$i} & 02) ? "w" : "-";
+			$parsedMode .= ($mode{$i} & 02) ? 'w' : '-';
 
 			// Execute
-			$parsedMode .= ($mode{$i} & 01) ? "x" : "-";
+			$parsedMode .= ($mode{$i} & 01) ? 'x' : '-';
 		}
 
 		return $parsedMode;
@@ -220,7 +220,7 @@ class Path
 			throw new \UnexpectedValueException('JPath::clean $path is not a string.');
 		}
 
-		$stream = explode("://", $path, 2);
+		$stream = explode('://', $path, 2);
 		$scheme = '';
 		$path   = $stream[0];
 
@@ -240,7 +240,7 @@ class Path
 		{
 			// Remove double slashes and backslashes and convert all slashes and backslashes to DIRECTORY_SEPARATOR
 			// If dealing with a UNC path don't forget to prepend the path with a backslash.
-			$path = "\\" . preg_replace('#[/\\\\]+#', $ds, $path);
+			$path = '\\' . preg_replace('#[/\\\\]+#', $ds, $path);
 		}
 		else
 		{

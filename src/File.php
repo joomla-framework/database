@@ -204,9 +204,9 @@ class File
 		@set_time_limit(ini_get('max_execution_time'));
 
 		// If the destination directory doesn't exist we need to create it
-		if (!file_exists(dirname($file)))
+		if (!file_exists(\dirname($file)))
 		{
-			Folder::create(dirname($file));
+			Folder::create(\dirname($file));
 		}
 
 		if ($useStreams)
@@ -244,7 +244,7 @@ class File
 		$dest = Path::clean($dest);
 
 		// Create the destination directory if it does not exist
-		$baseDir = dirname($dest);
+		$baseDir = \dirname($dest);
 
 		if (!is_dir($baseDir))
 		{

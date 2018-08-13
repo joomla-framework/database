@@ -286,36 +286,34 @@ class Patcher
 			// No header found, return false
 			return false;
 		}
-		else
+
+		// Set the source file
+		$src = $m[1];
+
+		// Advance to the next line
+		$line = next($lines);
+
+		if ($line === false)
 		{
-			// Set the source file
-			$src = $m[1];
-
-			// Advance to the next line
-			$line = next($lines);
-
-			if ($line === false)
-			{
-				throw new \RuntimeException('Unexpected EOF');
-			}
-
-			// Search the destination file
-			if (!preg_match(self::DST_FILE, $line, $m))
-			{
-				throw new \RuntimeException('Invalid Diff file');
-			}
-
-			// Set the destination file
-			$dst = $m[1];
-
-			// Advance to the next line
-			if (next($lines) === false)
-			{
-				throw new \RuntimeException('Unexpected EOF');
-			}
-
-			return true;
+			throw new \RuntimeException('Unexpected EOF');
 		}
+
+		// Search the destination file
+		if (!preg_match(self::DST_FILE, $line, $m))
+		{
+			throw new \RuntimeException('Invalid Diff file');
+		}
+
+		// Set the destination file
+		$dst = $m[1];
+
+		// Advance to the next line
+		if (next($lines) === false)
+		{
+			throw new \RuntimeException('Unexpected EOF');
+		}
+
+		return true;
 	}
 
 	/**
@@ -369,10 +367,8 @@ class Patcher
 
 			return true;
 		}
-		else
-		{
-			return false;
-		}
+
+		return false;
 	}
 
 	/**

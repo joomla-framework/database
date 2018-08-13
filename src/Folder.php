@@ -126,7 +126,7 @@ abstract class Folder
 		$path = Path::clean($path);
 
 		// Check if parent dir exists
-		$parent = dirname($path);
+		$parent = \dirname($path);
 
 		if (!is_dir(Path::clean($parent)))
 		{
@@ -174,11 +174,11 @@ abstract class Folder
 		{
 			if (\defined('PHP_WINDOWS_VERSION_MAJOR'))
 			{
-				$obdSeparator = ";";
+				$obdSeparator = ';';
 			}
 			else
 			{
-				$obdSeparator = ":";
+				$obdSeparator = ':';
 			}
 
 			// Create the array of open_basedir paths
@@ -286,16 +286,13 @@ abstract class Folder
 			}
 		}
 
-		// In case of restricted permissions we zap it one way or the other
-		// as long as the owner is either the webserver or the ftp.
+		// In case of restricted permissions we zap it one way or the other as long as the owner is either the webserver or the ftp.
 		if (@rmdir($path))
 		{
 			return true;
 		}
-		else
-		{
-			throw new FilesystemException(sprintf('%1$s: Could not delete folder. Path: %2$s', __METHOD__, $path));
-		}
+
+		throw new FilesystemException(sprintf('%1$s: Could not delete folder. Path: %2$s', __METHOD__, $path));
 	}
 
 	/**

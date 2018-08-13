@@ -32,7 +32,7 @@ class Buffer
 	 * @var    string
 	 * @since  1.0
 	 */
-	public $name = null;
+	public $name;
 
 	/**
 	 * Buffer hash
@@ -154,10 +154,8 @@ class Buffer
 
 					return true;
 				}
-				else
-				{
-					return false;
-				}
+
+				return false;
 
 			case SEEK_CUR:
 				if ($offset >= 0)
@@ -166,10 +164,8 @@ class Buffer
 
 					return true;
 				}
-				else
-				{
-					return false;
-				}
+
+				return false;
 
 			case SEEK_END:
 				if (\strlen($this->buffers[$this->name]) + $offset >= 0)
@@ -178,10 +174,8 @@ class Buffer
 
 					return true;
 				}
-				else
-				{
-					return false;
-				}
+
+				return false;
 
 			default:
 				return false;

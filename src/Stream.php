@@ -39,7 +39,7 @@ class Stream
 	/**
 	 * Directory Mode
 	 *
-	 * @var   integer
+	 * @var    integer
 	 * @since  1.0
 	 */
 	protected $dirmode = 0755;
@@ -113,15 +113,15 @@ class Stream
 	/**
 	 * Context to use when opening the connection
 	 *
-	 * @var string
+	 * @var    string
 	 * @since  1.0
 	 */
-	protected $context = null;
+	protected $context;
 
 	/**
 	 * Context options; used to rebuild the context
 	 *
-	 * @var array
+	 * @var    array
 	 * @since  1.0
 	 */
 	protected $contextOptions;
@@ -129,7 +129,7 @@ class Stream
 	/**
 	 * The mode under which the file was opened
 	 *
-	 * @var string
+	 * @var    string
 	 * @since  1.0
 	 */
 	protected $openmode;
@@ -825,7 +825,8 @@ class Stream
 				// Returned error
 				throw new FilesystemException($php_errormsg);
 			}
-			elseif ($res === 0)
+
+			if ($res === 0)
 			{
 				// Restore error tracking to what it was before
 				ini_set('track_errors', $trackErrors);
@@ -833,12 +834,10 @@ class Stream
 				// Wrote nothing?
 				throw new FilesystemException('Warning: No data written');
 			}
-			else
-			{
-				// Wrote something
-				$start += $amount;
-				$remaining -= $res;
-			}
+
+			// Wrote something
+			$start += $amount;
+			$remaining -= $res;
 		}
 		while ($remaining);
 
@@ -1406,7 +1405,7 @@ class Stream
 			// Get rid of binary or t, should be at the end of the string
 			$tmode = trim($mode, 'btf123456789');
 
-			$stream   = explode("://", $filename, 2);
+			$stream   = explode('://', $filename, 2);
 			$scheme   = '';
 			$filename = $stream[0];
 
