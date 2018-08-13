@@ -101,11 +101,9 @@ class Client
 
 				return $token;
 			}
-			else
-			{
-				// As of 2.0 this will throw an UnexpectedResponseException
-				throw new RuntimeException('Error code ' . $response->code . ' received requesting access token: ' . $response->body . '.');
-			}
+
+			// As of 2.0 this will throw an UnexpectedResponseException
+			throw new RuntimeException('Error code ' . $response->code . ' received requesting access token: ' . $response->body . '.');
 		}
 
 		if ($this->getOption('sendheaders'))
@@ -138,14 +136,13 @@ class Client
 		{
 			return false;
 		}
-		elseif (array_key_exists('expires_in', $token) && $token['created'] + $token['expires_in'] < time() + 20)
+
+		if (array_key_exists('expires_in', $token) && $token['created'] + $token['expires_in'] < time() + 20)
 		{
 			return false;
 		}
-		else
-		{
-			return true;
-		}
+
+		return true;
 	}
 
 	/**
@@ -402,16 +399,14 @@ class Client
 
 			return $token;
 		}
-		else
-		{
-			throw new UnexpectedResponseException(
-				$response,
-				sprintf(
-					'Error code %s received refreshing token: %s.',
-					$response->code,
-					$response->body
-				)
-			);
-		}
+
+		throw new UnexpectedResponseException(
+			$response,
+			sprintf(
+				'Error code %s received refreshing token: %s.',
+				$response->code,
+				$response->body
+			)
+		);
 	}
 }
