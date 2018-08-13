@@ -225,7 +225,8 @@ class Container implements ContainerInterface
 		// If there are no parameters, just return a new object.
 		if ($constructor === null)
 		{
-			$callback = function () use ($resolvedKey) {
+			$callback = function () use ($resolvedKey)
+			{
 				return new $resolvedKey;
 			};
 		}
@@ -234,7 +235,8 @@ class Container implements ContainerInterface
 			$newInstanceArgs = $this->getMethodArgs($constructor);
 
 			// Create a callable for the dataStore
-			$callback = function () use ($reflection, $newInstanceArgs) {
+			$callback = function () use ($reflection, $newInstanceArgs)
+			{
 				return $reflection->newInstanceArgs($newInstanceArgs);
 			};
 		}
@@ -298,7 +300,8 @@ class Container implements ContainerInterface
 			throw new KeyNotFoundException(sprintf('The requested key %s does not exist to extend.', $key));
 		}
 
-		$closure = function ($c) use ($callable, $raw) {
+		$closure = function ($c) use ($callable, $raw)
+		{
 			return $callable($raw['callback']($c), $c);
 		};
 
@@ -385,7 +388,8 @@ class Container implements ContainerInterface
 		// If the provided $value is not a closure, make it one now for easy resolution.
 		if (!is_callable($value))
 		{
-			$value = function () use ($value) {
+			$value = function () use ($value)
+			{
 				return $value;
 			};
 		}
@@ -537,7 +541,8 @@ class Container implements ContainerInterface
 
 			if (!is_callable($callback))
 			{
-				$callback = function () use ($callback) {
+				$callback = function () use ($callback)
+				{
 					return $callback;
 				};
 			}
