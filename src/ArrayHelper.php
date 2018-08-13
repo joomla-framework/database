@@ -603,7 +603,7 @@ final class ArrayHelper
 	 */
 	public static function sortObjects(array $a, $k, $direction = 1, $caseSensitive = true, $locale = false)
 	{
-		if (!\is_array($locale) || !is_array($locale[0]))
+		if (!\is_array($locale) || !\is_array($locale[0]))
 		{
 			$locale = array($locale);
 		}
