@@ -594,7 +594,7 @@ class Session implements \IteratorAggregate
 			// Get the Joomla\Input\Cookie object
 			$cookie = $this->input->cookie;
 
-			if (\is_null($cookie->get($session_name)))
+			if ($cookie->get($session_name) === null)
 			{
 				$session_clean = $this->input->get($session_name, false, 'string');
 
