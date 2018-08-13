@@ -74,7 +74,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 			$callback = array($object, $method);
 
 			// Check if the callback is callable.
-			if (is_callable($callback))
+			if (\is_callable($callback))
 			{
 				// Call the method for the object.
 				$return[$key] = \call_user_func_array($callback, $arguments);
@@ -423,7 +423,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	 */
 	public function walk($funcname)
 	{
-		if (!is_callable($funcname))
+		if (!\is_callable($funcname))
 		{
 			$message = __METHOD__ . '() expects parameter 1 to be a valid callback';
 
