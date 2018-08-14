@@ -147,7 +147,7 @@ class PostgresqlImporter extends DatabaseImporter
 				$column = $oldFields[$fName];
 
 				// Test whether there is a change.
-				$change = ((string) $field['Type'] !== $column->Type) || ((string) $field['Null'] !== $column->null)
+				$change = ((string) $field['Type'] !== $column->Type) || ((string) $field['Null'] !== $column->Null)
 					|| ((string) $field['Default'] !== $column->Default);
 
 				if ($change)
