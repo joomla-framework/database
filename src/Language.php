@@ -967,7 +967,7 @@ class Language
 	/**
 	 * Determine who called Language or Text.
 	 *
-	 * @return  array  Caller information.
+	 * @return  mixed  Caller information or null if unavailable
 	 *
 	 * @since   1.0
 	 */
@@ -1368,7 +1368,7 @@ class Language
 	 *
 	 * @param   string  $path  Path to the XML files.
 	 *
-	 * @return  array  Array holding the found metadata as a key => value pair.
+	 * @return  mixed  Array holding the found metadata as a key => value pair or null on an invalid XML file
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
