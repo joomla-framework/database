@@ -592,48 +592,6 @@ abstract class PdoDriver extends DatabaseDriver
 	}
 
 	/**
-<<<<<<< HEAD
-=======
-	 * Sets the SQL statement string for later execution.
-	 *
-	 * @param   mixed    $query          The SQL statement to set either as a JDatabaseQuery object or a string.
-	 * @param   integer  $offset         The affected row offset to set.
-	 * @param   integer  $limit          The maximum affected rows to set.
-	 * @param   array    $driverOptions  The optional PDO driver options
-	 *
-	 * @return  PdoDriver  This object to support method chaining.
-	 *
-	 * @since   1.0
-	 */
-	public function setQuery($query, $offset = null, $limit = null, $driverOptions = array())
-	{
-		$this->connect();
-
-		$this->freeResult();
-
-		if (\is_string($query))
-		{
-			// Allows taking advantage of bound variables in a direct query:
-			$query = $this->getQuery(true)->setQuery($query);
-		}
-
-		if ($query instanceof LimitableInterface && !\is_null($offset) && !\is_null($limit))
-		{
-			$query->setLimit($limit, $offset);
-		}
-
-		$sql = $this->replacePrefix((string) $query);
-
-		$this->prepared = $this->connection->prepare($sql, $driverOptions);
-
-		// Store reference to the DatabaseQuery instance:
-		parent::setQuery($query, $offset, $limit);
-
-		return $this;
-	}
-
-	/**
->>>>>>> 485053508fc83aa8c9deaefb7e27efecf42a85e8
 	 * Set the connection to use UTF-8 character encoding.
 	 *
 	 * @return  boolean  True on success.
