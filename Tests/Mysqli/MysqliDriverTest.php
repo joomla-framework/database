@@ -831,7 +831,30 @@ class MysqliDriverTest extends MysqliCase
 	 */
 	public function testUpdateObject()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$exprValue = "CASE WHEN start_date < UTC_TIMESTAMP() THEN '2018-01-01 00:00:00' ELSE start_date END";
+
+		$row = (object) [
+			'id' => 4,
+			'title' => 'New title',
+			'start_date' => new \Joomla\Database\Expression($exprValue),
+			'description' => null,
+			'_ignoreMe' => 'ignoreMe',
+			'object' => (object) 'ignoreMe',
+			'array' => ['ignoreMe'],
+		];
+
+		self::$driver->updateObject('#__dbtest', $row, 'id');
+
+		$query = self::$driver->getQuery(true)
+			->select('*')
+			->from('#__dbtest')
+			->where('id = 4');
+
+		$result = self::$driver->setQuery($query)->loadRow();
+
+		$expected = ['4', 'New title', '2018-01-01 00:00:00', 'four'];
+
+		$this->assertThat($result, $this->equalTo($expected), __LINE__);
 	}
 
 	/**
