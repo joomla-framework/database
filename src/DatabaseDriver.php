@@ -1100,7 +1100,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 			}
 
 			// Only process non-null scalars.
-			if (\is_array($v) || \is_object($v) || $v === null)
+			if (\is_array($v) || (\is_object($v) && !$v instanceOf Expression) || $v === null)
 			{
 				continue;
 			}
@@ -1476,6 +1476,11 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 */
 	public function quote($text, $escape = true)
 	{
+		if ($text instanceOf Expression)
+		{
+			return (string) $text;
+		}
+
 		if (\is_array($text))
 		{
 			foreach ($text as $k => $v)
@@ -1851,7 +1856,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 			}
 
 			// Only process scalars that are not internal fields.
-			if (\is_array($v) || \is_object($v) || $k[0] === '_')
+			if (\is_array($v) || (\is_object($v) && !$v instanceOf Expression) || $k[0] === '_')
 			{
 				continue;
 			}
