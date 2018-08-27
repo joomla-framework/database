@@ -109,7 +109,7 @@ class Archive
 				}
 				else
 				{
-					Folder::create($path);
+					Folder::create($extractdir);
 					$result = File::copy($tmpfname, $extractdir . '/' . $filename, null, 0);
 				}
 
