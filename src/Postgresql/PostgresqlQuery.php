@@ -712,9 +712,9 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * Prefixing the interval with a - (negative sign) will cause subtraction to be used.
 	 *
-	 * @param   datetime  $date      The date to add to
-	 * @param   string    $interval  The string representation of the appropriate number of units
-	 * @param   string    $datePart  The part of the date to perform the addition on
+	 * @param   string  $date      The db quoted string representation of the date to add to
+	 * @param   string  $interval  The string representation of the appropriate number of units
+	 * @param   string  $datePart  The part of the date to perform the addition on
 	 *
 	 * @return  string  The string with the appropriate sql for addition of dates
 	 *
@@ -725,10 +725,10 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	{
 		if (substr($interval, 0, 1) !== '-')
 		{
-			return "timestamp '" . $date . "' + interval '" . $interval . ' ' . $datePart . "'";
+			return "timestamp " . $date . " + interval '" . $interval . " " . $datePart . "'";
 		}
 
-		return "timestamp '" . $date . "' - interval '" . ltrim($interval, '-') . ' ' . $datePart . "'";
+		return "timestamp " . $date . " - interval '" . ltrim($interval, '-') . " " . $datePart . "'";
 	}
 
 	/**
