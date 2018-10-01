@@ -815,10 +815,10 @@ class PostgresqlDriver extends DatabaseDriver
 
 			// Throw the normal query exception.
 			$this->log(
-					Log\LogLevel::ERROR,
-					'Database query failed (error #{code}): {message}; Failed query: {sql}',
-					array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
-				);
+				Log\LogLevel::ERROR,
+				'Database query failed (error #{code}): {message}; Failed query: {sql}',
+				array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
+			);
 
 			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
@@ -855,14 +855,14 @@ class PostgresqlDriver extends DatabaseDriver
 
 		// Rename indexes
 		$this->setQuery(
-				'SELECT relname
-					FROM pg_class
-					WHERE oid IN (
-						SELECT indexrelid
-						FROM pg_index, pg_class
-						WHERE pg_class.relname=' . $this->quote($oldTable, true) . '
-						AND pg_class.oid=pg_index.indrelid );'
-			);
+			'SELECT relname
+				FROM pg_class
+				WHERE oid IN (
+					SELECT indexrelid
+					FROM pg_index, pg_class
+					WHERE pg_class.relname=' . $this->quote($oldTable, true) . '
+					AND pg_class.oid=pg_index.indrelid );'
+		);
 
 		$oldIndexes = $this->loadColumn();
 
@@ -875,17 +875,17 @@ class PostgresqlDriver extends DatabaseDriver
 
 		// Rename sequence
 		$this->setQuery(
-				'SELECT relname
-					FROM pg_class
-					WHERE relkind = \'S\'
-					AND relnamespace IN (
-						SELECT oid
-						FROM pg_namespace
-						WHERE nspname NOT LIKE \'pg_%\'
-						AND nspname != \'information_schema\'
-					)
-					AND relname LIKE \'%' . $oldTable . '%\' ;'
-			);
+			'SELECT relname
+				FROM pg_class
+				WHERE relkind = \'S\'
+				AND relnamespace IN (
+					SELECT oid
+					FROM pg_namespace
+					WHERE nspname NOT LIKE \'pg_%\'
+					AND nspname != \'information_schema\'
+				)
+				AND relname LIKE \'%' . $oldTable . '%\' ;'
+		);
 
 		$oldSequences = $this->loadColumn();
 
