@@ -134,7 +134,7 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'length(' . $field . ')' . (isset($operator, $condition)   ? ' ' . $operator . ' ' . $condition : '');
+		return 'length(' . $field . ')' . (isset($operator, $condition) ? ' ' . $operator . ' ' . $condition : '');
 	}
 
 	/**
