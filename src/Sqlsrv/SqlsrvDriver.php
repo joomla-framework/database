@@ -686,10 +686,10 @@ class SqlsrvDriver extends DatabaseDriver
 
 			// Throw the normal query exception.
 			$this->log(
-					Log\LogLevel::ERROR,
-					'Database query failed (error #{code}): {message}; Failed query: {sql}',
-					array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
-				);
+				Log\LogLevel::ERROR,
+				'Database query failed (error #{code}): {message}; Failed query: {sql}',
+				array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
+			);
 
 			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
