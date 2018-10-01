@@ -476,7 +476,7 @@ abstract class DatabaseQuery
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'CHAR_LENGTH(' . $field . ')' . (isset($operator, $condition)   ? ' ' . $operator . ' ' . $condition : '');
+		return 'CHAR_LENGTH(' . $field . ')' . (isset($operator, $condition) ? ' ' . $operator . ' ' . $condition : '');
 	}
 
 	/**
