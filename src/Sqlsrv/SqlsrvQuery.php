@@ -225,7 +225,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'DATALENGTH(' . $field . ')' . (isset($operator, $condition)   ? ' ' . $operator . ' ' . $condition : '');
+		return 'DATALENGTH(' . $field . ')' . (isset($operator, $condition) ? ' ' . $operator . ' ' . $condition : '');
 	}
 
 	/**
