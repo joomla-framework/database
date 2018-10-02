@@ -243,6 +243,8 @@ class NosqlDriver extends DatabaseDriver
 		return new class($this) extends DatabaseQuery
 		{
 			protected $bounded = array();
+			protected $limit;
+			protected $offset;
 
 			public function bind($key = null, &$value = null, $dataType = ParameterType::STRING, $length = 0, $driverOptions = [])
 			{
@@ -294,6 +296,19 @@ class NosqlDriver extends DatabaseDriver
 				{
 					return $this->bounded[$key];
 				}
+			}
+
+			public function processLimit($query, $limit, $offset = 0)
+			{
+				$this->limit  = $limit;
+				$this->offset = $offset;
+
+				return $query;
+			}
+
+			public function setLimit($limit = 0, $offset = 0)
+			{
+				return $this;
 			}
 		};
 	}
