@@ -12,7 +12,6 @@ use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\PrepareStatementFailureException;
-use Joomla\Database\Query\LimitableInterface;
 use Joomla\Event\DispatcherAwareInterface;
 use Joomla\Event\DispatcherAwareTrait;
 use Joomla\Event\EventInterface;
@@ -1758,21 +1757,18 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 			);
 		}
 
-		if ($query instanceof LimitableInterface)
+		// Check for values set on the query object and use those if there is a zero value passed here
+		if ($limit === 0 && $query->limit > 0)
 		{
-			// Check for values set on the query object and use those if there is a zero value passed here
-			if ($limit === 0 && $query->limit > 0)
-			{
-				$limit = $query->limit;
-			}
-
-			if ($offset === 0 && $query->offset > 0)
-			{
-				$offset = $query->offset;
-			}
-
-			$query->setLimit($limit, $offset);
+			$limit = $query->get;
 		}
+
+		if ($offset === 0 && $query->offset > 0)
+		{
+			$offset = $query->offset;
+		}
+
+		$query->setLimit($limit, $offset);
 
 		$sql = $this->replacePrefix((string) $query);
 

@@ -10,7 +10,6 @@ namespace Joomla\Database\Mysqli;
 
 use Joomla\Database\DatabaseQuery;
 use Joomla\Database\ParameterType;
-use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\MysqlQueryBuilder;
 
 /**
