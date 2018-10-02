@@ -26,6 +26,12 @@ Support for PDO Oracle and native PostgreSQL has been removed.  PDO PostgreSQL i
 
 `Joomla\Database\QueryInterface` has been added to the package. All query objects must now implement this interface.
 
+### Query feature interfaces deprecated
+
+As `Joomla\Database\QueryInterface` is now extending `Joomla\Database\Query\LimitableInterface` and `Joomla\Database\Query\PreparableInterface`, these
+feature interfaces are no longer required and are deprecated. All query objects must implement `Joomla\Database\QueryInterface` and as of 3.0 the
+methods defined in the deprecated interfaces will be moved into `Joomla\Database\QueryInterface`.
+
 ### Support for parameterized queries required
 
 `Joomla\Database\QueryInterface` extends `Joomla\Database\Query\PrepareableInterface`, which is the interface defining that
