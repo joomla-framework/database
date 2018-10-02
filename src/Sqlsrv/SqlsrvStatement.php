@@ -188,7 +188,10 @@ class SqlsrvStatement implements StatementInterface
 		}
 
 		// Emulate freeing the result fetching and discarding rows, similarly to what PDO does in this case
-		while (sqlsrv_fetch($this->statement));
+		while (sqlsrv_fetch($this->statement))
+		{
+			// Do nothing (see above)
+		}
 
 		$this->result = false;
 
