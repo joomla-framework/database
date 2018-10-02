@@ -9,13 +9,24 @@
 namespace Joomla\Database\Query;
 
 use Joomla\Database\ParameterType;
+use Joomla\Database\QueryInterface;
+
+@trigger_error(
+	sprintf(
+		'%1$s is deprecated and will be removed in 3.0, all query objects should implement %2$s instead.',
+		PreparableInterface::class,
+		QueryInterface::class
+	),
+	E_USER_DEPRECATED
+);
 
 /**
  * Joomla Database Query Preparable Interface.
  *
  * Adds bind/unbind methods as well as a getBounded() method to retrieve the stored bounded variables on demand prior to query execution.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  3.0  Capabilities will be required in Joomla\Database\QueryInterface
  */
 interface PreparableInterface
 {
