@@ -10,7 +10,6 @@ namespace Joomla\Database\Pdo;
 
 use Joomla\Database\DatabaseQuery;
 use Joomla\Database\ParameterType;
-use Joomla\Database\Query\LimitableInterface;
 
 /**
  * PDO Query Building Class.

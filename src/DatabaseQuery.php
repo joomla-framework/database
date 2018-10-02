@@ -232,12 +232,7 @@ abstract class DatabaseQuery implements QueryInterface
 
 		if ($this->sql)
 		{
-			if ($this instanceof Query\LimitableInterface)
-			{
-				return $this->processLimit($this->sql, $this->limit, $this->offset);
-			}
-
-			return $this->sql;
+			return $this->processLimit($this->sql, $this->limit, $this->offset);
 		}
 
 		switch ($this->type)
@@ -296,7 +291,7 @@ abstract class DatabaseQuery implements QueryInterface
 			case 'querySet':
 				$query = $this->querySet;
 
-				if ($query->order || ($query instanceof Query\LimitableInterface && ($query->limit || $query->offset)))
+				if ($query->order || ($query->limit || $query->offset))
 				{
 					// If ORDER BY or LIMIT statement exist then parentheses is required for the first query
 					$query = "($query)";
@@ -396,12 +391,7 @@ abstract class DatabaseQuery implements QueryInterface
 				break;
 		}
 
-		if ($this instanceof Query\LimitableInterface)
-		{
-			$query = $this->processLimit($query, $this->limit, $this->offset);
-		}
-
-		return $query;
+		return $this->processLimit($query, $this->limit, $this->offset);
 	}
 
 	/**
