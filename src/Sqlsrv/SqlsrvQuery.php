@@ -19,7 +19,7 @@ use Joomla\Database\Query\QueryElement;
  *
  * @since  1.0
  */
-class SqlsrvQuery extends DatabaseQuery implements LimitableInterface
+class SqlsrvQuery extends DatabaseQuery
 {
 	/**
 	 * The character(s) used to quote SQL statement names such as table names or field names, etc.

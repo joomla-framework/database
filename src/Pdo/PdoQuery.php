@@ -17,7 +17,7 @@ use Joomla\Database\Query\LimitableInterface;
  *
  * @since  1.0
  */
-abstract class PdoQuery extends DatabaseQuery implements LimitableInterface
+abstract class PdoQuery extends DatabaseQuery
 {
 	/**
 	 * The offset for the result set.

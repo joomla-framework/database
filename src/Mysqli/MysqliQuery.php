@@ -18,7 +18,7 @@ use Joomla\Database\Query\MysqlQueryBuilder;
  *
  * @since  1.0
  */
-class MysqliQuery extends DatabaseQuery implements LimitableInterface
+class MysqliQuery extends DatabaseQuery
 {
 	use MysqlQueryBuilder;
 
