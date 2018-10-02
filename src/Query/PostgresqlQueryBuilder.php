@@ -21,7 +21,7 @@ trait PostgresqlQueryBuilder
 	 * @var    QueryElement
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $forUpdate = null;
+	protected $forUpdate;
 
 	/**
 	 * The FOR SHARE element used in "FOR SHARE" lock
@@ -29,7 +29,7 @@ trait PostgresqlQueryBuilder
 	 * @var    QueryElement
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $forShare = null;
+	protected $forShare;
 
 	/**
 	 * The NOWAIT element used in "FOR SHARE" and "FOR UPDATE" lock
@@ -37,7 +37,7 @@ trait PostgresqlQueryBuilder
 	 * @var    QueryElement
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $noWait = null;
+	protected $noWait;
 
 	/**
 	 * The LIMIT element
@@ -45,7 +45,7 @@ trait PostgresqlQueryBuilder
 	 * @var    QueryElement
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $limit = null;
+	protected $limit;
 
 	/**
 	 * The OFFSET element
@@ -53,7 +53,7 @@ trait PostgresqlQueryBuilder
 	 * @var    QueryElement
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $offset = null;
+	protected $offset;
 
 	/**
 	 * The RETURNING element of INSERT INTO
@@ -61,7 +61,7 @@ trait PostgresqlQueryBuilder
 	 * @var    QueryElement
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $returning = null;
+	protected $returning;
 
 	/**
 	 * Magic function to convert the query to a string, only for PostgreSQL specific queries
@@ -199,6 +199,7 @@ trait PostgresqlQueryBuilder
 
 			default:
 				$query = parent::__toString();
+
 				break;
 		}
 
@@ -225,26 +226,32 @@ trait PostgresqlQueryBuilder
 		{
 			case 'limit':
 				$this->limit = null;
+
 				break;
 
 			case 'offset':
 				$this->offset = null;
+
 				break;
 
 			case 'forUpdate':
 				$this->forUpdate = null;
+
 				break;
 
 			case 'forShare':
 				$this->forShare = null;
+
 				break;
 
 			case 'noWait':
 				$this->noWait = null;
+
 				break;
 
 			case 'returning':
 				$this->returning = null;
+
 				break;
 
 			case 'select':
@@ -261,18 +268,20 @@ trait PostgresqlQueryBuilder
 			case 'columns':
 			case 'values':
 				parent::clear($clause);
+
 				break;
 
 			default:
-				$this->bounded = array();
-				$this->type = null;
-				$this->limit = null;
-				$this->offset = null;
+				$this->bounded   = array();
+				$this->type      = null;
+				$this->limit     = null;
+				$this->offset    = null;
 				$this->forUpdate = null;
-				$this->forShare = null;
-				$this->noWait = null;
+				$this->forShare  = null;
+				$this->noWait    = null;
 				$this->returning = null;
 				parent::clear($clause);
+
 				break;
 		}
 
@@ -347,9 +356,9 @@ trait PostgresqlQueryBuilder
 	{
 		$this->type = 'forUpdate';
 
-		if (\is_null($this->forUpdate))
+		if ($this->forUpdate === null)
 		{
-			$glue = strtoupper($glue);
+			$glue            = strtoupper($glue);
 			$this->forUpdate = new QueryElement('FOR UPDATE', 'OF ' . $table_name, "$glue ");
 		}
 		else
@@ -374,9 +383,9 @@ trait PostgresqlQueryBuilder
 	{
 		$this->type = 'forShare';
 
-		if (\is_null($this->forShare))
+		if ($this->forShare === null)
 		{
-			$glue = strtoupper($glue);
+			$glue           = strtoupper($glue);
 			$this->forShare = new QueryElement('FOR SHARE', 'OF ' . $table_name, "$glue ");
 		}
 		else
@@ -500,7 +509,7 @@ trait PostgresqlQueryBuilder
 	{
 		$this->type = 'noWait';
 
-		if (\is_null($this->noWait))
+		if ($this->noWait === null)
 		{
 			$this->noWait = new QueryElement('NOWAIT', null);
 		}
@@ -519,7 +528,7 @@ trait PostgresqlQueryBuilder
 	 */
 	public function limit($limit = 0)
 	{
-		if (\is_null($this->limit))
+		if ($this->limit === null)
 		{
 			$this->limit = new QueryElement('LIMIT', (int) $limit);
 		}
@@ -538,7 +547,7 @@ trait PostgresqlQueryBuilder
 	 */
 	public function offset($offset = 0)
 	{
-		if (\is_null($this->offset))
+		if ($this->offset === null)
 		{
 			$this->offset = new QueryElement('OFFSET', (int) $offset);
 		}
@@ -557,7 +566,7 @@ trait PostgresqlQueryBuilder
 	 */
 	public function returning($pkCol)
 	{
-		if (\is_null($this->returning))
+		if ($this->returning === null)
 		{
 			$this->returning = new QueryElement('RETURNING', $pkCol);
 		}
@@ -600,9 +609,9 @@ trait PostgresqlQueryBuilder
 	 *
 	 * Prefixing the interval with a - (negative sign) will cause subtraction to be used.
 	 *
-	 * @param   datetime  $date      The date to add to
-	 * @param   string    $interval  The string representation of the appropriate number of units
-	 * @param   string    $datePart  The part of the date to perform the addition on
+	 * @param   string  $date      The db quoted string representation of the date to add to
+	 * @param   string  $interval  The string representation of the appropriate number of units
+	 * @param   string  $datePart  The part of the date to perform the addition on
 	 *
 	 * @return  string  The string with the appropriate sql for addition of dates
 	 *
@@ -613,12 +622,10 @@ trait PostgresqlQueryBuilder
 	{
 		if (substr($interval, 0, 1) !== '-')
 		{
-			return "timestamp '" . $date . "' + interval '" . $interval . ' ' . $datePart . "'";
+			return "timestamp " . $date . " + interval '" . $interval . " " . $datePart . "'";
 		}
-		else
-		{
-			return "timestamp '" . $date . "' - interval '" . ltrim($interval, '-') . ' ' . $datePart . "'";
-		}
+
+		return "timestamp " . $date . " - interval '" . ltrim($interval, '-') . " " . $datePart . "'";
 	}
 
 	/**

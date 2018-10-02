@@ -345,7 +345,7 @@ class PgsqlDriver extends PdoDriver
 		{
 			$name = [
 				's.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
-				'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option', 'info.start_value'
+				'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option', 'info.start_value',
 			];
 
 			$as = [
@@ -506,6 +506,7 @@ class PgsqlDriver extends PdoDriver
 			case 'serial':
 			case 'numeric,':
 				$val = $field_value === '' ? 'NULL' : $field_value;
+
 				break;
 
 			case 'date':
@@ -521,6 +522,7 @@ class PgsqlDriver extends PdoDriver
 
 			default:
 				$val = $this->quote($field_value);
+
 				break;
 		}
 
@@ -923,6 +925,7 @@ class PgsqlDriver extends PdoDriver
 			{
 				$key_val = $this->sqlValue($columns, $k, $v);
 				$where[] = $this->quoteName($k) . '=' . $key_val;
+
 				continue;
 			}
 
@@ -939,8 +942,8 @@ class PgsqlDriver extends PdoDriver
 				$val = 'NULL';
 			}
 			else
-			// The field is not null so we prep it for update.
 			{
+				// The field is not null so we prep it for update.
 				$val = $this->sqlValue($columns, $k, $v);
 			}
 

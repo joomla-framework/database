@@ -188,7 +188,7 @@ abstract class PdoDriver extends DatabaseDriver
 						$this->options['port'],
 						$this->options['database'],
 						$this->options['server'],
-						$this->options['protocol']
+						$this->options['protocol'],
 					];
 				}
 
@@ -544,8 +544,8 @@ abstract class PdoDriver extends DatabaseDriver
 			$status = (bool) $this->loadResult();
 		}
 		catch (\Exception $e)
-			// If we catch an exception here, we must not be connected.
 		{
+			// If we catch an exception here, we must not be connected.
 			$status = false;
 		}
 

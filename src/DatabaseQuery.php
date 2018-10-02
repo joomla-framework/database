@@ -21,7 +21,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    DatabaseInterface
 	 * @since  1.0
 	 */
-	protected $db = null;
+	protected $db;
 
 	/**
 	 * The SQL query (if a direct query string was provided).
@@ -29,7 +29,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected $sql = null;
+	protected $sql;
 
 	/**
 	 * The query type.
@@ -45,7 +45,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $element = null;
+	protected $element;
 
 	/**
 	 * The select element.
@@ -53,7 +53,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $select = null;
+	protected $select;
 
 	/**
 	 * The delete element.
@@ -61,7 +61,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $delete = null;
+	protected $delete;
 
 	/**
 	 * The update element.
@@ -69,7 +69,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $update = null;
+	protected $update;
 
 	/**
 	 * The insert element.
@@ -77,7 +77,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $insert = null;
+	protected $insert;
 
 	/**
 	 * The from element.
@@ -85,7 +85,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $from = null;
+	protected $from;
 
 	/**
 	 * The join element.
@@ -93,7 +93,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement[]
 	 * @since  1.0
 	 */
-	protected $join = null;
+	protected $join;
 
 	/**
 	 * The set element.
@@ -101,7 +101,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $set = null;
+	protected $set;
 
 	/**
 	 * The where element.
@@ -109,7 +109,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $where = null;
+	protected $where;
 
 	/**
 	 * The group by element.
@@ -117,7 +117,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $group = null;
+	protected $group;
 
 	/**
 	 * The having element.
@@ -125,7 +125,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $having = null;
+	protected $having;
 
 	/**
 	 * The column list for an INSERT statement.
@@ -133,7 +133,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $columns = null;
+	protected $columns;
 
 	/**
 	 * The values list for an INSERT statement.
@@ -141,7 +141,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $values = null;
+	protected $values;
 
 	/**
 	 * The order element.
@@ -149,7 +149,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $order = null;
+	protected $order;
 
 	/**
 	 * The auto increment insert field element.
@@ -157,7 +157,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $autoIncrementField = null;
+	protected $autoIncrementField;
 
 	/**
 	 * The call element.
@@ -165,7 +165,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $call = null;
+	protected $call;
 
 	/**
 	 * The exec element.
@@ -173,7 +173,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement
 	 * @since  1.0
 	 */
-	protected $exec = null;
+	protected $exec;
 
 	/**
 	 * The list of query elements, which may include UNION, UNION ALL, EXCEPT and INTERSECT.
@@ -244,6 +244,7 @@ abstract class DatabaseQuery implements QueryInterface
 		{
 			case 'element':
 				$query .= (string) $this->element;
+
 				break;
 
 			case 'select':
@@ -368,8 +369,8 @@ abstract class DatabaseQuery implements QueryInterface
 					$query .= (string) $this->set;
 				}
 				elseif ($this->values)
-				// Columns-Values method
 				{
+					// Columns-Values method
 					if ($this->columns)
 					{
 						$query .= (string) $this->columns;
@@ -389,10 +390,12 @@ abstract class DatabaseQuery implements QueryInterface
 
 			case 'call':
 				$query .= (string) $this->call;
+
 				break;
 
 			case 'exec':
 				$query .= (string) $this->exec;
+
 				break;
 		}
 
@@ -447,7 +450,7 @@ abstract class DatabaseQuery implements QueryInterface
 	{
 		$this->type = 'call';
 
-		if (\is_null($this->call))
+		if ($this->call === null)
 		{
 			$this->call = new Query\QueryElement('CALL', $columns);
 		}
@@ -496,7 +499,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'CHAR_LENGTH(' . $field . ')' . (isset($operator) && isset($condition) ? ' ' . $operator . ' ' . $condition : '');
+		return 'CHAR_LENGTH(' . $field . ')' . (isset($operator, $condition) ? ' ' . $operator . ' ' . $condition : '');
 	}
 
 	/**
@@ -518,22 +521,26 @@ abstract class DatabaseQuery implements QueryInterface
 				$this->select          = null;
 				$this->type            = null;
 				$this->selectRowNumber = null;
+
 				break;
 
 			case 'delete':
 				$this->delete = null;
 				$this->type   = null;
+
 				break;
 
 			case 'update':
 				$this->update = null;
 				$this->type   = null;
+
 				break;
 
 			case 'insert':
 				$this->insert             = null;
 				$this->type               = null;
 				$this->autoIncrementField = null;
+
 				break;
 
 			case 'querySet':
@@ -543,26 +550,32 @@ abstract class DatabaseQuery implements QueryInterface
 
 			case 'from':
 				$this->from = null;
+
 				break;
 
 			case 'join':
 				$this->join = null;
+
 				break;
 
 			case 'set':
 				$this->set = null;
+
 				break;
 
 			case 'where':
 				$this->where = null;
+
 				break;
 
 			case 'group':
 				$this->group = null;
+
 				break;
 
 			case 'having':
 				$this->having = null;
+
 				break;
 
 			case 'merge':
@@ -571,33 +584,40 @@ abstract class DatabaseQuery implements QueryInterface
 
 			case 'order':
 				$this->order = null;
+
 				break;
 
 			case 'columns':
 				$this->columns = null;
+
 				break;
 
 			case 'values':
 				$this->values = null;
+
 				break;
 
 			case 'exec':
 				$this->exec = null;
 				$this->type = null;
+
 				break;
 
 			case 'call':
 				$this->call = null;
 				$this->type = null;
+
 				break;
 
 			case 'limit':
 				$this->offset = 0;
 				$this->limit  = 0;
+
 				break;
 
 			case 'offset':
 				$this->offset = 0;
+
 				break;
 
 			default:
@@ -640,7 +660,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function columns($columns)
 	{
-		if (\is_null($this->columns))
+		if ($this->columns === null)
 		{
 			$this->columns = new Query\QueryElement('()', $columns);
 		}
@@ -699,7 +719,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Prefixing the interval with a - (negative sign) will cause subtraction to be used.
 	 * Note: Not all drivers support all units.
 	 *
-	 * @param   mixed   $date      The date to add to. May be date or datetime
+	 * @param   string  $date      The db quoted string representation of the date to add to. May be date or datetime
 	 * @param   string  $interval  The string representation of the appropriate number of units
 	 * @param   string  $datePart  The part of the date to perform the addition on
 	 *
@@ -710,7 +730,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function dateAdd($date, $interval, $datePart)
 	{
-		return trim("DATE_ADD('" . $date . "', INTERVAL " . $interval . ' ' . $datePart . ')');
+		return 'DATE_ADD(' . $date . ', INTERVAL ' . $interval . ' ' . $datePart . ')';
 	}
 
 	/**
@@ -765,7 +785,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function delete($table = null)
 	{
-		$this->type = 'delete';
+		$this->type   = 'delete';
 		$this->delete = new Query\QueryElement('DELETE', null);
 
 		if (!empty($table))
@@ -838,7 +858,7 @@ abstract class DatabaseQuery implements QueryInterface
 	{
 		$this->type = 'exec';
 
-		if (\is_null($this->exec))
+		if ($this->exec === null)
 		{
 			$this->exec = new Query\QueryElement('EXEC', $columns);
 		}
@@ -889,11 +909,11 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function from($tables, $subQueryAlias = null)
 	{
-		if (\is_null($this->from))
+		if ($this->from === null)
 		{
 			if ($tables instanceof $this)
 			{
-				if (\is_null($subQueryAlias))
+				if ($subQueryAlias === null)
 				{
 					throw new \RuntimeException('JLIB_DATABASE_ERROR_NULL_SUBQUERY_ALIAS');
 				}
@@ -1027,7 +1047,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function group($columns)
 	{
-		if (\is_null($this->group))
+		if ($this->group === null)
 		{
 			$this->group = new Query\QueryElement('GROUP BY', $columns);
 		}
@@ -1054,9 +1074,9 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function having($conditions, $glue = 'AND')
 	{
-		if (\is_null($this->having))
+		if ($this->having === null)
 		{
-			$glue = strtoupper($glue);
+			$glue         = strtoupper($glue);
 			$this->having = new Query\QueryElement('HAVING', $conditions, " $glue ");
 		}
 		else
@@ -1103,8 +1123,8 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function insert($table, $incrementField = false)
 	{
-		$this->type = 'insert';
-		$this->insert = new Query\QueryElement('INSERT INTO', $table);
+		$this->type               = 'insert';
+		$this->insert             = new Query\QueryElement('INSERT INTO', $table);
 		$this->autoIncrementField = $incrementField;
 
 		return $this;
@@ -1125,7 +1145,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function join($type, $conditions)
 	{
-		if (\is_null($this->join))
+		if ($this->join === null)
 		{
 			$this->join = [];
 		}
@@ -1248,7 +1268,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function order($columns)
 	{
-		if (\is_null($this->order))
+		if ($this->order === null)
 		{
 			$this->order = new Query\QueryElement('ORDER BY', $columns);
 		}
@@ -1444,7 +1464,7 @@ abstract class DatabaseQuery implements QueryInterface
 	{
 		$this->type = 'select';
 
-		if (\is_null($this->select))
+		if ($this->select === null)
 		{
 			$this->select = new Query\QueryElement('SELECT', $columns);
 		}
@@ -1473,9 +1493,9 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function set($conditions, $glue = ',')
 	{
-		if (\is_null($this->set))
+		if ($this->set === null)
 		{
-			$glue = strtoupper($glue);
+			$glue      = strtoupper($glue);
 			$this->set = new Query\QueryElement('SET', $conditions, PHP_EOL . "\t$glue ");
 		}
 		else
@@ -1522,7 +1542,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function update($table)
 	{
-		$this->type = 'update';
+		$this->type   = 'update';
 		$this->update = new Query\QueryElement('UPDATE', $table);
 
 		return $this;
@@ -1543,7 +1563,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function values($values)
 	{
-		if (\is_null($this->values))
+		if ($this->values === null)
 		{
 			$this->values = new Query\QueryElement('()', $values, '),(');
 		}
@@ -1572,9 +1592,9 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function where($conditions, $glue = 'AND')
 	{
-		if (\is_null($this->where))
+		if ($this->where === null)
 		{
-			$glue = strtoupper($glue);
+			$glue        = strtoupper($glue);
 			$this->where = new Query\QueryElement('WHERE', $conditions, " $glue ");
 		}
 		else
@@ -1845,10 +1865,10 @@ abstract class DatabaseQuery implements QueryInterface
 	public function format($format)
 	{
 		$query = $this;
-		$args = \array_slice(\func_get_args(), 1);
+		$args  = \array_slice(\func_get_args(), 1);
 		array_unshift($args, null);
 
-		$i = 1;
+		$i    = 1;
 		$func = function ($match) use ($query, $args, &$i)
 		{
 			if (isset($match[6]) && $match[6] === '%')
@@ -1861,15 +1881,12 @@ abstract class DatabaseQuery implements QueryInterface
 			{
 				case 't':
 					return $query->currentTimestamp();
-					break;
 
 				case 'z':
 					return $query->nullDate(false);
-					break;
 
 				case 'Z':
 					return $query->nullDate(true);
-					break;
 			}
 
 			// Increment the argument index only if argument specifier not provided.
@@ -1889,80 +1906,61 @@ abstract class DatabaseQuery implements QueryInterface
 			{
 				case 'a':
 					return 0 + $replacement;
-					break;
 
 				case 'e':
 					return $query->escape($replacement);
-					break;
 
 				case 'E':
 					return $query->escape($replacement, true);
-					break;
 
 				case 'n':
 					return $query->quoteName($replacement);
-					break;
 
 				case 'q':
 					return $query->quote($replacement);
-					break;
 
 				case 'Q':
 					return $query->quote($replacement, false);
-					break;
 
 				case 'r':
 					return $replacement;
-					break;
 
 				// Dates
 				case 'y':
 					return $query->year($query->quote($replacement));
-					break;
 
 				case 'Y':
 					return $query->year($query->quoteName($replacement));
-					break;
 
 				case 'm':
 					return $query->month($query->quote($replacement));
-					break;
 
 				case 'M':
 					return $query->month($query->quoteName($replacement));
-					break;
 
 				case 'd':
 					return $query->day($query->quote($replacement));
-					break;
 
 				case 'D':
 					return $query->day($query->quoteName($replacement));
-					break;
 
 				case 'h':
 					return $query->hour($query->quote($replacement));
-					break;
 
 				case 'H':
 					return $query->hour($query->quoteName($replacement));
-					break;
 
 				case 'i':
 					return $query->minute($query->quote($replacement));
-					break;
 
 				case 'I':
 					return $query->minute($query->quoteName($replacement));
-					break;
 
 				case 's':
 					return $query->second($query->quote($replacement));
-					break;
 
 				case 'S':
 					return $query->second($query->quoteName($replacement));
-					break;
 			}
 
 			return '';

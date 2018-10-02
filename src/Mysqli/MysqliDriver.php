@@ -178,7 +178,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		{
 			// Empty host, just port, e.g. ':3306'
 			$this->options['host'] = 'localhost';
-			$port = $matches['port'];
+			$port                  = $matches['port'];
 		}
 
 		// ... else we assume normal (naked) IPv6 address, so host and port stay as they are or default
@@ -278,7 +278,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	public function disconnect()
 	{
 		// Close the connection.
-		if (is_callable($this->connection, 'close'))
+		if (\is_callable($this->connection, 'close'))
 		{
 			$this->connection->close();
 		}
@@ -500,8 +500,8 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			}
 		}
 		else
-		// If we want the whole field data object add that to the list.
 		{
+			// If we want the whole field data object add that to the list.
 			foreach ($fields as $field)
 			{
 				$result[$field->Field] = $field;

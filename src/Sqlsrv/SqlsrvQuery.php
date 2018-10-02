@@ -188,15 +188,15 @@ class SqlsrvQuery extends DatabaseQuery
 				{
 					$query .= (string) $this->set;
 				}
-				// Columns-Values method
 				elseif ($this->values)
 				{
+					// Columns-Values method
 					if ($this->columns)
 					{
 						$query .= (string) $this->columns;
 					}
 
-					$elements = $this->insert->getElements();
+					$elements  = $this->insert->getElements();
 					$tableName = array_shift($elements);
 
 					$query .= 'VALUES ';
@@ -322,7 +322,7 @@ class SqlsrvQuery extends DatabaseQuery
 		}
 
 		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if (\is_null($value))
+		if ($value === null)
 		{
 			if (isset($this->bounded[$key]))
 			{
@@ -380,6 +380,7 @@ class SqlsrvQuery extends DatabaseQuery
 		{
 			case null:
 				$this->bounded = array();
+
 				break;
 		}
 
@@ -415,7 +416,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'DATALENGTH(' . $field . ')' . (isset($operator) && isset($condition) ? ' ' . $operator . ' ' . $condition : '');
+		return 'DATALENGTH(' . $field . ')' . (isset($operator, $condition) ? ' ' . $operator . ' ' . $condition : '');
 	}
 
 	/**
@@ -493,7 +494,7 @@ class SqlsrvQuery extends DatabaseQuery
 		list($table, $alias) = preg_split("/\sAS\s/i", $fromStr);
 
 		$tmpCols = $this->db->getTableColumns(trim($table));
-		$cols = array();
+		$cols    = array();
 
 		foreach ($tmpCols as $name => $type)
 		{
@@ -554,7 +555,7 @@ class SqlsrvQuery extends DatabaseQuery
 
 				// Get the table name
 				$tableColumns = preg_grep("/{$aliasStar}\.+/", $cols);
-				$columns = array_merge($columns, $tableColumns);
+				$columns      = array_merge($columns, $tableColumns);
 			}
 		}
 

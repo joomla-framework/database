@@ -9,6 +9,7 @@
 namespace Joomla\Database\Sqlite;
 
 use Joomla\Database\Pdo\PdoDriver;
+use SQLite3;
 
 /**
  * SQLite database driver supporting PDO based connections

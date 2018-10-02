@@ -69,7 +69,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public static function isSupported()
 	{
-		return function_exists('sqlsrv_connect');
+		return \function_exists('sqlsrv_connect');
 	}
 
 	/**
@@ -119,7 +119,7 @@ class SqlsrvDriver extends DatabaseDriver
 			'uid'                  => $this->options['user'],
 			'pwd'                  => $this->options['password'],
 			'CharacterSet'         => 'UTF-8',
-			'ReturnDatesAsStrings' => true
+			'ReturnDatesAsStrings' => true,
 		];
 
 		// Attempt to connect to the server.
@@ -372,11 +372,11 @@ class SqlsrvDriver extends DatabaseDriver
 			}
 		}
 		else
-		// If we want the whole field data object add that to the list.
 		{
+			// If we want the whole field data object add that to the list.
 			foreach ($fields as $field)
 			{
-				$field->Default = preg_replace("/(^(\(\(|\('|\(N'|\()|(('\)|(?<!\()\)\)|\))$))/i", '', $field->Default);
+				$field->Default        = preg_replace("/(^(\(\(|\('|\(N'|\()|(('\)|(?<!\()\)\)|\))$))/i", '', $field->Default);
 				$result[$field->Field] = $field;
 			}
 		}
@@ -627,13 +627,13 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public function replacePrefix($sql, $prefix = '#__')
 	{
-		$escaped = false;
-		$startPos = 0;
+		$escaped   = false;
+		$startPos  = 0;
 		$quoteChar = '';
-		$literal = '';
+		$literal   = '';
 
 		$sql = trim($sql);
-		$n = \strlen($sql);
+		$n   = \strlen($sql);
 
 		while ($startPos < $n)
 		{
@@ -650,7 +650,7 @@ class SqlsrvDriver extends DatabaseDriver
 			if (($k !== false) && (($k < $j) || ($j === false)))
 			{
 				$quoteChar = '"';
-				$j = $k;
+				$j         = $k;
 			}
 			else
 			{
@@ -675,7 +675,7 @@ class SqlsrvDriver extends DatabaseDriver
 			// Quote comes first, find end of quote
 			while (true)
 			{
-				$k = strpos($sql, $quoteChar, $j);
+				$k       = strpos($sql, $quoteChar, $j);
 				$escaped = false;
 
 				if ($k === false)
@@ -694,6 +694,7 @@ class SqlsrvDriver extends DatabaseDriver
 				if ($escaped)
 				{
 					$j = $k + 1;
+
 					continue;
 				}
 
@@ -856,9 +857,9 @@ class SqlsrvDriver extends DatabaseDriver
 		$this->connect();
 
 		$table = $this->replacePrefix((string) $table);
-		$sql = 'SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS' . " WHERE TABLE_NAME = '$table' AND COLUMN_NAME = '$field'" .
-			' ORDER BY ORDINAL_POSITION';
-		$this->setQuery($sql);
+		$this->setQuery(
+			"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table' AND COLUMN_NAME = '$field' ORDER BY ORDINAL_POSITION"
+		);
 
 		return (bool) $this->loadResult();
 	}
@@ -895,7 +896,7 @@ class SqlsrvDriver extends DatabaseDriver
 	{
 		$constraints = [];
 
-		if (!\is_null($prefix) && !\is_null($backup))
+		if ($prefix !== null && $backup !== null)
 		{
 			$constraints = $this->getTableConstraints($oldTable);
 		}

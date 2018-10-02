@@ -136,7 +136,7 @@ class MysqliQuery extends DatabaseQuery
 		}
 
 		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if (\is_null($value))
+		if ($value === null)
 		{
 			if (isset($this->bounded[$key]))
 			{
@@ -200,6 +200,7 @@ class MysqliQuery extends DatabaseQuery
 		{
 			case null:
 				$this->bounded = array();
+
 				break;
 		}
 
