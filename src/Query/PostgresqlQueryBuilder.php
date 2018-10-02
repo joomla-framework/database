@@ -202,12 +202,7 @@ trait PostgresqlQueryBuilder
 				break;
 		}
 
-		if ($this instanceof LimitableInterface)
-		{
-			$query = $this->processLimit($query, $this->limit, $this->offset);
-		}
-
-		return $query;
+		return $this->processLimit($query, $this->limit, $this->offset);
 	}
 
 	/**

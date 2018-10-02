@@ -11,7 +11,6 @@ use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\FetchOrientation;
 use Joomla\Database\ParameterType;
-use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\StatementInterface;
 
 /**
