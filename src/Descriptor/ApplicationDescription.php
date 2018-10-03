@@ -94,7 +94,7 @@ final class ApplicationDescription
 	 */
 	public function getNamespaces(): array
 	{
-		if (null === $this->namespaces)
+		if ($this->namespaces === null)
 		{
 			$this->inspectApplication();
 		}
@@ -111,7 +111,7 @@ final class ApplicationDescription
 	 */
 	public function getCommands(): array
 	{
-		if (null === $this->commands)
+		if ($this->commands === null)
 		{
 			$this->inspectApplication();
 		}

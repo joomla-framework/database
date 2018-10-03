@@ -1111,7 +1111,7 @@ class Application extends AbstractApplication
 					]
 				);
 
-				for ($i = 0, $count = \count($trace); $i < $count; ++$i)
+				for ($i = 0, $count = \count($trace); $i < $count; $i++)
 				{
 					$class    = $trace[$i]['class'] ?? '';
 					$type     = $trace[$i]['type'] ?? '';

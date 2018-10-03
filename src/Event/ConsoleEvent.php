@@ -10,7 +10,6 @@ namespace Joomla\Console\Event;
 
 use Joomla\Console\Application;
 use Joomla\Console\CommandInterface;
-use Joomla\Console\ConsoleEvents;
 use Joomla\Event\Event;
 
 /**

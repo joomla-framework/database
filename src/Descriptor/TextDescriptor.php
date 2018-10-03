@@ -11,9 +11,9 @@ namespace Joomla\Console\Descriptor;
 use Joomla\Console\Application;
 use Joomla\Console\CommandInterface;
 use Joomla\String\StringHelper;
+use Symfony\Component\Console\Descriptor\TextDescriptor as SymfonyTextDescriptor;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Descriptor\TextDescriptor as SymfonyTextDescriptor;
 
 /**
  * Text object descriptor.
@@ -202,7 +202,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 				continue;
 			}
 
-			if (!$describedNamespace && ApplicationDescription::GLOBAL_NAMESPACE !== $namespace['id'])
+			if (!$describedNamespace && $namespace['id'] !== ApplicationDescription::GLOBAL_NAMESPACE)
 			{
 				$this->writeText("\n");
 				$this->writeText(' <comment>' . $namespace['id'] . '</comment>', $options);
