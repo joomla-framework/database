@@ -45,7 +45,7 @@ interface RendererInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function render(string $template, array $data = array()): string;
+	public function render(string $template, array $data = []): string;
 
 	/**
 	 * Sets a piece of data

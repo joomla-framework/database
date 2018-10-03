@@ -8,8 +8,6 @@
 
 namespace Joomla\Renderer;
 
-use Joomla\Renderer\Twig\FilesystemLoader;
-
 /**
  * Twig class for rendering output.
  *
@@ -114,7 +112,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function render(string $template, array $data = array()): string
+	public function render(string $template, array $data = []): string
 	{
 		$data = array_merge($this->data, $data);
 

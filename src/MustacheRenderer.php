@@ -80,7 +80,7 @@ class MustacheRenderer extends AbstractRenderer
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function render(string $template, array $data = array()): string
+	public function render(string $template, array $data = []): string
 	{
 		$data = array_merge($this->data, $data);
 

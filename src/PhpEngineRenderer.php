@@ -8,9 +8,7 @@
 
 namespace Joomla\Renderer;
 
-use Symfony\Component\Templating\Loader\LoaderInterface;
 use Symfony\Component\Templating\PhpEngine;
-use Symfony\Component\Templating\TemplateNameParserInterface;
 use Symfony\Component\Templating\TemplateReferenceInterface;
 
 /**
@@ -76,7 +74,7 @@ class PhpEngineRenderer extends AbstractRenderer
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function render(string $template, array $data = array()): string
+	public function render(string $template, array $data = []): string
 	{
 		$data = array_merge($this->data, $data);
 
