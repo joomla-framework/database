@@ -302,10 +302,10 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 
 		// Sanitize the database connector options.
 		$options['driver']   = isset($options['driver']) ? preg_replace('/[^A-Z0-9_\.-]/i', '', $options['driver']) : 'mysqli';
-		$options['database'] = isset($options['database']) ? $options['database'] : null;
-		$options['select']   = isset($options['select']) ? $options['select'] : true;
-		$options['factory']  = isset($options['factory']) ? $options['factory'] : new DatabaseFactory;
-		$options['monitor']  = isset($options['monitor']) ? $options['monitor'] : null;
+		$options['database'] = $options['database'] ?? null;
+		$options['select']   = $options['select'] ?? true;
+		$options['factory']  = $options['factory'] ?? new DatabaseFactory;
+		$options['monitor']  = $options['monitor'] ?? null;
 
 		// Get the options signature for the database connector.
 		$signature = md5(serialize($options));
@@ -496,8 +496,8 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	public function __construct(array $options)
 	{
 		// Initialise object variables.
-		$this->database    = isset($options['database']) ? $options['database'] : '';
-		$this->tablePrefix = isset($options['prefix']) ? $options['prefix'] : '';
+		$this->database    = $options['database'] ?? '';
+		$this->tablePrefix = $options['prefix'] ?? '';
 		$this->count       = 0;
 		$this->errorNum    = 0;
 
@@ -505,10 +505,10 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		$this->options = $options;
 
 		// Register the DatabaseFactory
-		$this->factory = isset($options['factory']) ? $options['factory'] : new DatabaseFactory;
+		$this->factory = $options['factory'] ?? new DatabaseFactory;
 
 		// Register the query monitor if available
-		$this->monitor = isset($options['monitor']) ? $options['monitor'] : null;
+		$this->monitor = $options['monitor'] ?? null;
 	}
 
 	/**
@@ -533,7 +533,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 */
 	public function alterDbCharacterSet($dbName)
 	{
-		if (is_null($dbName))
+		if ($dbName === null)
 		{
 			throw new \RuntimeException('Database name must not be null.');
 		}
@@ -556,15 +556,17 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 */
 	public function createDatabase($options, $utf = true)
 	{
-		if (is_null($options))
+		if ($options === null)
 		{
 			throw new \RuntimeException('$options object must not be null.');
 		}
-		elseif (empty($options->db_name))
+
+		if (empty($options->db_name))
 		{
 			throw new \RuntimeException('$options object must have db_name set.');
 		}
-		elseif (empty($options->db_user))
+
+		if (empty($options->db_user))
 		{
 			throw new \RuntimeException('$options object must have db_user set.');
 		}
@@ -1207,7 +1209,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		// Get all of the rows from the result set.
 		while ($row = $this->fetchAssoc())
 		{
-			$value = $column ? (isset($row[$column]) ? $row[$column] : $row) : $row;
+			$value = $column ? ($row[$column] ?? $row) : $row;
 
 			if ($key)
 			{
@@ -1537,7 +1539,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 
 		$fin = [];
 
-		if (\is_null($as))
+		if ($as === null)
 		{
 			foreach ($name as $str)
 			{
@@ -1729,7 +1731,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 
 		$this->freeResult();
 
-		if (is_string($query))
+		if (\is_string($query))
 		{
 			// Allows taking advantage of bound variables in a direct query:
 			$query = $this->getQuery(true)->setQuery($query);
@@ -1740,7 +1742,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 				sprintf(
 					'A query must be a string or a %s instance, a %s was given.',
 					QueryInterface::class,
-					gettype($query) === 'object' ? (get_class($query) . ' instance') : gettype($query)
+					\gettype($query) === 'object' ? (\get_class($query) . ' instance') : \gettype($query)
 				)
 			);
 		}
@@ -1751,7 +1753,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 				sprintf(
 					'The "$offset" and "$limit" arguments of %1$s() are deprecated and will be removed in 3.0, use %2$s::setLimit() instead.',
 					__METHOD__,
-					get_class($query)
+					\get_class($query)
 				),
 				E_USER_DEPRECATED
 			);

@@ -91,7 +91,7 @@ abstract class PdoQuery extends DatabaseQuery
 		}
 
 		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if (is_null($value))
+		if ($value === null)
 		{
 			if (isset($this->bounded[$key]))
 			{
@@ -134,7 +134,8 @@ abstract class PdoQuery extends DatabaseQuery
 		switch ($clause)
 		{
 			case null:
-				$this->bounded = array();
+				$this->bounded = [];
+
 				break;
 		}
 
@@ -179,7 +180,7 @@ abstract class PdoQuery extends DatabaseQuery
 	 */
 	public function setLimit($limit = 0, $offset = 0)
 	{
-		$this->limit = (int) $limit;
+		$this->limit  = (int) $limit;
 		$this->offset = (int) $offset;
 
 		return $this;

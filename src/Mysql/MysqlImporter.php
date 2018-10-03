@@ -406,7 +406,7 @@ class MysqlImporter extends DatabaseImporter
 		$existingTables = $this->db->getTableList();
 		$tableName      = (string) $table['name'];
 
-		if (in_array($tableName, $existingTables))
+		if (\in_array($tableName, $existingTables))
 		{
 			throw new \RuntimeException('The table you are trying to create already exists');
 		}

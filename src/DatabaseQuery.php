@@ -181,7 +181,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\QueryElement[]
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $merge = null;
+	protected $merge;
 
 	/**
 	 * The query object.
@@ -189,7 +189,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    Query\DatabaseQuery
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $querySet = null;
+	protected $querySet;
 
 	/**
 	 * Details of window function.
@@ -197,7 +197,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @var    array
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $selectRowNumber = null;
+	protected $selectRowNumber;
 
 	/**
 	 * The list of zero or null representation of a datetime.
@@ -536,6 +536,7 @@ abstract class DatabaseQuery implements QueryInterface
 			case 'querySet':
 				$this->querySet = null;
 				$this->type     = null;
+
 				break;
 
 			case 'from':
@@ -570,6 +571,7 @@ abstract class DatabaseQuery implements QueryInterface
 
 			case 'merge':
 				$this->merge = null;
+
 				break;
 
 			case 'order':
@@ -633,6 +635,7 @@ abstract class DatabaseQuery implements QueryInterface
 				$this->call               = null;
 				$this->offset             = 0;
 				$this->limit              = 0;
+
 				break;
 		}
 

@@ -39,7 +39,7 @@ class SqliteQuery extends PdoQuery
 
 					if ($this->select === null)
 					{
-						$query = PHP_EOL . "SELECT 1"
+						$query = PHP_EOL . 'SELECT 1'
 							. (string) $this->from
 							. (string) $this->where;
 					}
@@ -49,11 +49,11 @@ class SqliteQuery extends PdoQuery
 						$tmpLimit     = $this->limit;
 						$this->offset = 0;
 						$this->limit  = 0;
-						$tmpOrder    = $this->order;
-						$this->order = null;
-						$query       = parent::__toString();
-						$column      = "w.*, $column";
-						$this->order = $tmpOrder;
+						$tmpOrder     = $this->order;
+						$this->order  = null;
+						$query        = parent::__toString();
+						$column       = "w.*, $column";
+						$this->order  = $tmpOrder;
 						$this->offset = $tmpOffset;
 						$this->limit  = $tmpLimit;
 					}
@@ -61,7 +61,7 @@ class SqliteQuery extends PdoQuery
 					// Special sqlite query to count ROW_NUMBER
 					$query = PHP_EOL . "SELECT $column"
 						. PHP_EOL . "FROM ($query" . PHP_EOL . "ORDER BY $orderBy"
-						. PHP_EOL . ") AS w,(SELECT ROW_NUMBER(0)) AS r"
+						. PHP_EOL . ') AS w,(SELECT ROW_NUMBER(0)) AS r'
 						// Forbid to flatten subqueries.
 						. ((string) $this->order ?: PHP_EOL . 'ORDER BY NULL');
 

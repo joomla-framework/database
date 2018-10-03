@@ -162,7 +162,7 @@ class MysqliStatement implements StatementInterface
 		}
 
 		$sql = trim($sql);
-		$n   = strlen($sql);
+		$n   = \strlen($sql);
 
 		while ($startPos < $n)
 		{
@@ -190,15 +190,15 @@ class MysqliStatement implements StatementInterface
 			}
 
 			// Search for named prepared parameters and replace it with ? and save its position
-			$replace = [];
+			$replace   = [];
 			$substring = substr($sql, $startPos, $j - $startPos);
 
 			if (preg_match_all($pattern, $substring, $matches, PREG_PATTERN_ORDER))
 			{
 				foreach ($matches[0] as $match)
 				{
-					$mapping[$match] = count($mapping);
-					$replace[] = $match;
+					$mapping[$match] = \count($mapping);
+					$replace[]       = $match;
 				}
 
 				$literal .= str_replace($replace, '?', $substring);
@@ -238,6 +238,7 @@ class MysqliStatement implements StatementInterface
 				if ($escaped)
 				{
 					$j = $k + 1;
+
 					continue;
 				}
 
@@ -281,7 +282,7 @@ class MysqliStatement implements StatementInterface
 	 */
 	public function bindParam($parameter, &$variable, $dataType = ParameterType::STRING, $length = null, $driverOptions = null)
 	{
-		$this->bindedValues[$parameter] =& $variable;
+		$this->bindedValues[$parameter]    =& $variable;
 		$this->typesKeyMapping[$parameter] = $dataType;
 
 		return true;
@@ -299,7 +300,7 @@ class MysqliStatement implements StatementInterface
 	private function bindValues(array $values)
 	{
 		$params = [];
-		$types  = str_repeat('s', count($values));
+		$types  = str_repeat('s', \count($values));
 
 		if (!empty($this->parameterKeyMapping))
 		{
@@ -320,7 +321,7 @@ class MysqliStatement implements StatementInterface
 
 		array_unshift($params, $types);
 
-		return call_user_func_array([$this->statement, 'bind_param'], $params);
+		return \call_user_func_array([$this->statement, 'bind_param'], $params);
 	}
 
 	/**
@@ -400,7 +401,7 @@ class MysqliStatement implements StatementInterface
 
 			array_unshift($params, implode('', $types));
 
-			if (!call_user_func_array([$this->statement, 'bind_param'], $params))
+			if (!\call_user_func_array([$this->statement, 'bind_param'], $params))
 			{
 				throw new PrepareStatementFailureException($this->statement->error, $this->statement->errno);
 			}
@@ -445,7 +446,7 @@ class MysqliStatement implements StatementInterface
 		{
 			$this->statement->store_result();
 
-			$this->rowBindedValues = array_fill(0, count($this->columnNames), null);
+			$this->rowBindedValues = array_fill(0, \count($this->columnNames), null);
 			$refs                  = [];
 
 			foreach ($this->rowBindedValues as $key => &$value)
@@ -453,7 +454,7 @@ class MysqliStatement implements StatementInterface
 				$refs[$key] =& $value;
 			}
 
-			if (!call_user_func_array([$this->statement, 'bind_result'], $refs))
+			if (!\call_user_func_array([$this->statement, 'bind_result'], $refs))
 			{
 				throw new \RuntimeException($this->statement->error, $this->statement->errno);
 			}

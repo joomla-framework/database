@@ -82,10 +82,10 @@ class SqlsrvDriver extends DatabaseDriver
 	public function __construct(array $options)
 	{
 		// Get some basic values from the options.
-		$options['host']     = isset($options['host']) ? $options['host'] : 'localhost';
-		$options['user']     = isset($options['user']) ? $options['user'] : '';
-		$options['password'] = isset($options['password']) ? $options['password'] : '';
-		$options['database'] = isset($options['database']) ? $options['database'] : '';
+		$options['host']     = $options['host'] ?? 'localhost';
+		$options['user']     = $options['user'] ?? '';
+		$options['password'] = $options['password'] ?? '';
+		$options['database'] = $options['database'] ?? '';
 		$options['select']   = isset($options['select']) ? (bool) $options['select'] : true;
 
 		// Finalize initialisation
@@ -186,7 +186,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 *
 	 * @since   1.0
 	 */
-	protected function renameConstraints($constraints = array(), $prefix = null, $backup = null)
+	protected function renameConstraints($constraints = [], $prefix = null, $backup = null)
 	{
 		$this->connect();
 
@@ -211,12 +211,12 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public function escape($text, $extra = false)
 	{
-		if (is_int($text))
+		if (\is_int($text))
 		{
 			return $text;
 		}
 
-		if (is_float($text))
+		if (\is_float($text))
 		{
 			// Force the dot as a decimal point.
 			return str_replace(',', '.', $text);
@@ -229,8 +229,8 @@ class SqlsrvDriver extends DatabaseDriver
 
 		// Fix for SQL Sever escape sequence, see https://support.microsoft.com/en-us/kb/164291
 		$result = str_replace(
-			array("\\\n",     "\\\r",     "\\\\\r\r\n"),
-			array("\\\\\n\n", "\\\\\r\r", "\\\\\r\n\r\n"),
+			["\\\n",     "\\\r",     "\\\\\r\r\n"],
+			["\\\\\n\n", "\\\\\r\r", "\\\\\r\n\r\n"],
 			$result
 		);
 
@@ -238,8 +238,8 @@ class SqlsrvDriver extends DatabaseDriver
 		{
 			// Escape special chars
 			$result = str_replace(
-				array('[',   '_',   '%'),
-				array('[[]', '[_]', '[%]'),
+				['[',   '_',   '%'],
+				['[[]', '[_]', '[%]'],
 				$result
 			);
 		}

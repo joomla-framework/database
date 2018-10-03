@@ -43,7 +43,7 @@ class MysqliQuery extends DatabaseQuery
 	 * @var    mixed
 	 * @since  1.5.0
 	 */
-	protected $bounded = array();
+	protected $bounded = [];
 
 	/**
 	 * Mapping array for parameter types.
@@ -124,12 +124,12 @@ class MysqliQuery extends DatabaseQuery
 	 *
 	 * @since   1.5.0
 	 */
-	public function bind($key = null, &$value = null, $dataType = ParameterType::STRING, $length = 0, $driverOptions = array())
+	public function bind($key = null, &$value = null, $dataType = ParameterType::STRING, $length = 0, $driverOptions = [])
 	{
 		// Case 1: Empty Key (reset $bounded array)
 		if (empty($key))
 		{
-			$this->bounded = array();
+			$this->bounded = [];
 
 			return $this;
 		}
@@ -198,7 +198,7 @@ class MysqliQuery extends DatabaseQuery
 		switch ($clause)
 		{
 			case null:
-				$this->bounded = array();
+				$this->bounded = [];
 
 				break;
 		}

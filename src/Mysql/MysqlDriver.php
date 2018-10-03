@@ -86,7 +86,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 
 		// Get some basic values from the options.
 		$options['driver']   = 'mysql';
-		$options['charset']  = isset($options['charset']) ? $options['charset'] : 'utf8';
+		$options['charset']  = $options['charset'] ?? 'utf8';
 		$options['sqlModes'] = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
 
 		$this->charset = $options['charset'];
@@ -186,7 +186,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		$beginningOfQuery = substr($query, 0, 12);
 		$beginningOfQuery = strtoupper($beginningOfQuery);
 
-		if (!\in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE'), true))
+		if (!\in_array($beginningOfQuery, ['ALTER TABLE ', 'CREATE TABLE'], true))
 		{
 			return $query;
 		}

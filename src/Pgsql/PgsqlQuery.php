@@ -183,6 +183,7 @@ class PgsqlQuery extends PdoQuery
 
 			default:
 				$query = parent::__toString();
+
 				break;
 		}
 
@@ -204,26 +205,32 @@ class PgsqlQuery extends PdoQuery
 		{
 			case 'limit':
 				$this->limit = null;
+
 				break;
 
 			case 'offset':
 				$this->offset = null;
+
 				break;
 
 			case 'forUpdate':
 				$this->forUpdate = null;
+
 				break;
 
 			case 'forShare':
 				$this->forShare = null;
+
 				break;
 
 			case 'noWait':
 				$this->noWait = null;
+
 				break;
 
 			case 'returning':
 				$this->returning = null;
+
 				break;
 
 			case 'select':
@@ -242,15 +249,17 @@ class PgsqlQuery extends PdoQuery
 			case 'columns':
 			case 'values':
 				parent::clear($clause);
+
 				break;
 
 			default:
 				$this->forUpdate = null;
-				$this->forShare = null;
-				$this->noWait = null;
+				$this->forShare  = null;
+				$this->noWait    = null;
 				$this->returning = null;
 
 				parent::clear($clause);
+
 				break;
 		}
 

@@ -182,7 +182,7 @@ class SqlsrvStatement implements StatementInterface
 	 */
 	public function closeCursor()
 	{
-		if (!$this->result || !is_resource($this->statement))
+		if (!$this->result || !\is_resource($this->statement))
 		{
 			return true;
 		}
@@ -305,7 +305,7 @@ class SqlsrvStatement implements StatementInterface
 			return sqlsrv_fetch_array($this->statement, $this->fetchMap[$fetchStyle]) ?: false;
 		}
 
-		if (in_array($fetchStyle, [FetchMode::STANDARD_OBJECT, FetchMode::CUSTOM_OBJECT], true))
+		if (\in_array($fetchStyle, [FetchMode::STANDARD_OBJECT, FetchMode::CUSTOM_OBJECT], true))
 		{
 			return sqlsrv_fetch_object($this->statement, $this->defaultObjectClass) ?: false;
 		}
@@ -383,7 +383,7 @@ class SqlsrvStatement implements StatementInterface
 		$options = [];
 
 		// SQLSRV Function sqlsrv_num_rows requires a static or keyset cursor.
-		if (strncmp(strtoupper(ltrim($this->query)), 'SELECT', strlen('SELECT')) === 0)
+		if (strncmp(strtoupper(ltrim($this->query)), 'SELECT', \strlen('SELECT')) === 0)
 		{
 			$options = ['Scrollable' => SQLSRV_CURSOR_KEYSET];
 		}
@@ -409,7 +409,7 @@ class SqlsrvStatement implements StatementInterface
 	 */
 	public function rowCount()
 	{
-		if (strncmp(strtoupper(ltrim($this->query)), 'SELECT', strlen('SELECT')) === 0)
+		if (strncmp(strtoupper(ltrim($this->query)), 'SELECT', \strlen('SELECT')) === 0)
 		{
 			return sqlsrv_num_rows($this->statement);
 		}

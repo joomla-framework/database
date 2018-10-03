@@ -9,7 +9,6 @@
 namespace Joomla\Database\Sqlite;
 
 use Joomla\Database\Pdo\PdoDriver;
-use SQLite3;
 
 /**
  * SQLite database driver supporting PDO based connections
@@ -79,7 +78,7 @@ class SqliteDriver extends PdoDriver
 					return $rownum;
 				}
 
-				$args = func_get_args();
+				$args = \func_get_args();
 				array_shift($args);
 
 				$partitionBy = $args ? implode(',', $args) : null;
@@ -320,7 +319,7 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		return $this->setQuery("SELECT sqlite_version()")->loadResult();
+		return $this->setQuery('SELECT sqlite_version()')->loadResult();
 	}
 
 	/**

@@ -70,14 +70,14 @@ abstract class PdoDriver extends DatabaseDriver
 	public function __construct(array $options)
 	{
 		// Get some basic values from the options.
-		$options['driver']        = isset($options['driver']) ? $options['driver'] : 'odbc';
-		$options['dsn']           = isset($options['dsn']) ? $options['dsn'] : '';
-		$options['host']          = isset($options['host']) ? $options['host'] : 'localhost';
-		$options['database']      = isset($options['database']) ? $options['database'] : '';
-		$options['user']          = isset($options['user']) ? $options['user'] : '';
+		$options['driver']        = $options['driver'] ?? 'odbc';
+		$options['dsn']           = $options['dsn'] ?? '';
+		$options['host']          = $options['host'] ?? 'localhost';
+		$options['database']      = $options['database'] ?? '';
+		$options['user']          = $options['user'] ?? '';
 		$options['port']          = isset($options['port']) ? (int) $options['port'] : null;
-		$options['password']      = isset($options['password']) ? $options['password'] : '';
-		$options['driverOptions'] = isset($options['driverOptions']) ? $options['driverOptions'] : [];
+		$options['password']      = $options['password'] ?? '';
+		$options['driverOptions'] = $options['driverOptions'] ?? [];
 
 		// Finalize initialisation
 		parent::__construct($options);

@@ -71,11 +71,11 @@ class PgsqlDriver extends PdoDriver
 	public function __construct($options)
 	{
 		$options['driver']   = 'pgsql';
-		$options['host']     = isset($options['host']) ? $options['host'] : 'localhost';
-		$options['user']     = isset($options['user']) ? $options['user'] : '';
-		$options['password'] = isset($options['password']) ? $options['password'] : '';
-		$options['database'] = isset($options['database']) ? $options['database'] : '';
-		$options['port']     = isset($options['port']) ? $options['port'] : null;
+		$options['host']     = $options['host'] ?? 'localhost';
+		$options['user']     = $options['user'] ?? '';
+		$options['password'] = $options['password'] ?? '';
+		$options['database'] = $options['database'] ?? '';
+		$options['port']     = $options['port'] ?? null;
 
 		// Finalize initialization
 		parent::__construct($options);
@@ -349,7 +349,7 @@ class PgsqlDriver extends PdoDriver
 			];
 
 			$as = [
-				'sequence', 'schema', 'table', 'column', 'data_type', 'minimum_value', 'maximum_value', 'increment', 'cycle_option', 'start_value'
+				'sequence', 'schema', 'table', 'column', 'data_type', 'minimum_value', 'maximum_value', 'increment', 'cycle_option', 'start_value',
 			];
 
 			// Get the details columns information.

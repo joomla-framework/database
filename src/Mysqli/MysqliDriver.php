@@ -99,13 +99,13 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		];
 
 		// Get some basic values from the options.
-		$options['host']     = isset($options['host']) ? $options['host'] : 'localhost';
-		$options['user']     = isset($options['user']) ? $options['user'] : 'root';
-		$options['password'] = isset($options['password']) ? $options['password'] : '';
-		$options['database'] = isset($options['database']) ? $options['database'] : '';
+		$options['host']     = $options['host'] ?? 'localhost';
+		$options['user']     = $options['user'] ?? 'root';
+		$options['password'] = $options['password'] ?? '';
+		$options['database'] = $options['database'] ?? '';
 		$options['select']   = isset($options['select']) ? (bool) $options['select'] : true;
 		$options['port']     = isset($options['port']) ? (int) $options['port'] : null;
-		$options['socket']   = isset($options['socket']) ? $options['socket'] : null;
+		$options['socket']   = $options['socket'] ?? null;
 		$options['utf8mb4']  = isset($options['utf8mb4']) ? (bool) $options['utf8mb4'] : false;
 		$options['sqlModes'] = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
 
@@ -259,7 +259,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		$beginningOfQuery = substr($query, 0, 12);
 		$beginningOfQuery = strtoupper($beginningOfQuery);
 
-		if (!\in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE'), true))
+		if (!\in_array($beginningOfQuery, ['ALTER TABLE ', 'CREATE TABLE'], true))
 		{
 			return $query;
 		}
@@ -298,12 +298,12 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 */
 	public function escape($text, $extra = false)
 	{
-		if (is_int($text))
+		if (\is_int($text))
 		{
 			return $text;
 		}
 
-		if (is_float($text))
+		if (\is_float($text))
 		{
 			// Force the dot as a decimal point.
 			return str_replace(',', '.', $text);
@@ -330,7 +330,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 */
 	public static function isSupported()
 	{
-		return extension_loaded('mysqli');
+		return \extension_loaded('mysqli');
 	}
 
 	/**
@@ -927,7 +927,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	public function getNullDate()
 	{
 		// Check the session sql mode;
-		if (in_array('NO_ZERO_DATE', $this->options['sqlModes']) !== false)
+		if (\in_array('NO_ZERO_DATE', $this->options['sqlModes']) !== false)
 		{
 			$this->nullDate = '1000-01-01 00:00:00';
 		}

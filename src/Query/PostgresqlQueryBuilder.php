@@ -267,7 +267,7 @@ trait PostgresqlQueryBuilder
 				break;
 
 			default:
-				$this->bounded   = array();
+				$this->bounded   = [];
 				$this->type      = null;
 				$this->limit     = null;
 				$this->offset    = null;
@@ -617,10 +617,10 @@ trait PostgresqlQueryBuilder
 	{
 		if (substr($interval, 0, 1) !== '-')
 		{
-			return "timestamp " . $date . " + interval '" . $interval . " " . $datePart . "'";
+			return 'timestamp ' . $date . " + interval '" . $interval . ' ' . $datePart . "'";
 		}
 
-		return "timestamp " . $date . " - interval '" . ltrim($interval, '-') . " " . $datePart . "'";
+		return 'timestamp ' . $date . " - interval '" . ltrim($interval, '-') . ' ' . $datePart . "'";
 	}
 
 	/**

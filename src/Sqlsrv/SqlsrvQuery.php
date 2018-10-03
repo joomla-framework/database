@@ -45,7 +45,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 * @var    mixed
 	 * @since  1.5.0
 	 */
-	protected $bounded = array();
+	protected $bounded = [];
 
 	/**
 	 * The offset for the result set.
@@ -310,12 +310,12 @@ class SqlsrvQuery extends DatabaseQuery
 	 *
 	 * @since   1.5.0
 	 */
-	public function bind($key = null, &$value = null, $dataType = ParameterType::STRING, $length = 0, $driverOptions = array())
+	public function bind($key = null, &$value = null, $dataType = ParameterType::STRING, $length = 0, $driverOptions = [])
 	{
 		// Case 1: Empty Key (reset $bounded array)
 		if (empty($key))
 		{
-			$this->bounded = array();
+			$this->bounded = [];
 
 			return $this;
 		}
@@ -378,7 +378,7 @@ class SqlsrvQuery extends DatabaseQuery
 		switch ($clause)
 		{
 			case null:
-				$this->bounded = array();
+				$this->bounded = [];
 
 				break;
 		}
@@ -487,13 +487,13 @@ class SqlsrvQuery extends DatabaseQuery
 		\is_string($columns) && $columns = explode(',', str_replace(' ', '', $columns));
 
 		// Get the _formatted_ FROM string and remove everything except `table AS alias`
-		$fromStr = str_replace(array('[', ']'), '', str_replace('#__', $this->db->getPrefix(), str_replace('FROM ', '', (string) $this->from)));
+		$fromStr = str_replace(['[', ']'], '', str_replace('#__', $this->db->getPrefix(), str_replace('FROM ', '', (string) $this->from)));
 
 		// Start setting up an array of alias => table
 		list($table, $alias) = preg_split("/\sAS\s/i", $fromStr);
 
 		$tmpCols = $this->db->getTableColumns(trim($table));
-		$cols    = array();
+		$cols    = [];
 
 		foreach ($tmpCols as $name => $type)
 		{
@@ -629,7 +629,7 @@ class SqlsrvQuery extends DatabaseQuery
 
 		foreach ($columns as $i => $column)
 		{
-			$size = count($column);
+			$size = \count($column);
 
 			if ($size == 0)
 			{
@@ -640,6 +640,7 @@ class SqlsrvQuery extends DatabaseQuery
 			{
 				// Alias exists, replace it to uppercase
 				$columns[$i][$size - 2] = 'AS';
+
 				continue;
 			}
 
@@ -651,7 +652,7 @@ class SqlsrvQuery extends DatabaseQuery
 			}
 
 			$lastWord = strtoupper($column[$size - 1]);
-			$length   = strlen($lastWord);
+			$length   = \strlen($lastWord);
 			$lastChar = $lastWord[$length - 1];
 
 			if ($lastChar == '*')
@@ -678,6 +679,7 @@ class SqlsrvQuery extends DatabaseQuery
 				 */
 				$columns[$i][] = 'AS';
 				$columns[$i][] = $this->quoteName('columnAlias' . $i);
+
 				continue;
 			}
 
@@ -697,6 +699,7 @@ class SqlsrvQuery extends DatabaseQuery
 					// If operator exists before last word then alias is required for subquery
 					$columns[$i][] = 'AS';
 					$columns[$i][] = $this->quoteName('columnAlias' . $i);
+
 					continue;
 				}
 			}
@@ -766,7 +769,7 @@ class SqlsrvQuery extends DatabaseQuery
 
 		foreach ($selectColumns as $i => $column)
 		{
-			$size = count($column);
+			$size = \count($column);
 
 			if ($size === 0)
 			{
@@ -784,7 +787,7 @@ class SqlsrvQuery extends DatabaseQuery
 				}
 
 				// Remove alias
-				$selectColumns[$i] = $column = array_slice($column, 0, -2);
+				$selectColumns[$i] = $column = \array_slice($column, 0, -2);
 
 				if ($size === 3 || ($size === 4 && strpos('+-*/%&|~^', $column[0][0]) !== false))
 				{
@@ -862,7 +865,7 @@ class SqlsrvQuery extends DatabaseQuery
 					$table = $table[0];
 
 					// Chek if exists a wildcard with current alias table?
-					if (in_array($alias, $wildcardTables, true))
+					if (\in_array($alias, $wildcardTables, true))
 					{
 						if (!isset($cacheCols[$table]))
 						{
@@ -895,16 +898,16 @@ class SqlsrvQuery extends DatabaseQuery
 				{
 					// Unquote and replace prefix
 					$joinTbl = str_replace($nquotes, '', (string) $join);
-					$joinTbl = str_replace("#__", $this->db->getPrefix(), $joinTbl);
+					$joinTbl = str_replace('#__', $this->db->getPrefix(), $joinTbl);
 
 					// Exclude subquery
 					if (preg_match('/JOIN\s+(\w+)(?:\s+AS)?(?:\s+(\w+))?/i', $joinTbl, $matches))
 					{
 						$table = $matches[1];
-						$alias = isset($matches[2]) ? $matches[2] : $table;
+						$alias = $matches[2] ?? $table;
 
 						// Chek if exists a wildcard with current alias table?
-						if (in_array($alias, $wildcardTables, true))
+						if (\in_array($alias, $wildcardTables, true))
 						{
 							if (!isset($cacheCols[$table]))
 							{
@@ -1012,7 +1015,7 @@ class SqlsrvQuery extends DatabaseQuery
 		$openC     = 0;
 		$comment   = false;
 		$endString = '';
-		$length    = strlen($string);
+		$length    = \strlen($string);
 		$columns   = [];
 		$column    = [];
 		$current   = '';
@@ -1046,7 +1049,7 @@ class SqlsrvQuery extends DatabaseQuery
 			$current      = substr($string, $i, 1);
 			$current2     = substr($string, $i, 2);
 			$current3     = substr($string, $i, 3);
-			$lenEndString = strlen($endString);
+			$lenEndString = \strlen($endString);
 			$testEnd      = substr($string, $i, $lenEndString);
 
 			if ($current == '[' || $current == '"' || $current == "'" || $current2 == '--'
@@ -1087,7 +1090,8 @@ class SqlsrvQuery extends DatabaseQuery
 								// There is only escaped quote
 								continue;
 							}
-							elseif ($n > 2)
+
+							if ($n > 2)
 							{
 								// The last right close quote is not escaped
 								$current = $string[$i];
