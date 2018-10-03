@@ -22,22 +22,6 @@ class Query extends \Joomla\Database\DatabaseQuery
 	protected $bounded = [];
 
 	/**
-	 * The offset for the result set.
-	 *
-	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
-	 */
-	protected $offset;
-
-	/**
-	 * The limit for the result set.
-	 *
-	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
-	 */
-	protected $limit;
-
-	/**
 	 * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution. Also
 	 * removes a variable that has been bounded from the internal bounded array when the passed in value is null.
 	 *
@@ -145,27 +129,5 @@ class Query extends \Joomla\Database\DatabaseQuery
 	public function processLimit($query, $limit, $offset = 0)
 	{
 		return $query;
-	}
-
-	/**
-	 * Sets the offset and limit for the result set, if the database driver supports it.
-	 *
-	 * Usage:
-	 * $query->setLimit(100, 0); (retrieve 100 rows, starting at first record)
-	 * $query->setLimit(50, 50); (retrieve 50 rows, starting at 50th record)
-	 *
-	 * @param   integer  $limit   The limit for the result set
-	 * @param   integer  $offset  The offset for the result set
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function setLimit($limit = 0, $offset = 0)
-	{
-		$this->limit  = $limit;
-		$this->offset = $offset;
-
-		return $this;
 	}
 }

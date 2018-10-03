@@ -22,22 +22,6 @@ class MysqliQuery extends DatabaseQuery
 	use MysqlQueryBuilder;
 
 	/**
-	 * The offset for the result set.
-	 *
-	 * @var    integer
-	 * @since  1.0
-	 */
-	protected $offset;
-
-	/**
-	 * The limit for the result set.
-	 *
-	 * @var    integer
-	 * @since  1.0
-	 */
-	protected $limit;
-
-	/**
 	 * Holds key / value pair of bound objects.
 	 *
 	 * @var    mixed
@@ -204,27 +188,5 @@ class MysqliQuery extends DatabaseQuery
 		}
 
 		return parent::clear($clause);
-	}
-
-	/**
-	 * Sets the offset and limit for the result set, if the database driver supports it.
-	 *
-	 * Usage:
-	 * $query->setLimit(100, 0); (retrieve 100 rows, starting at first record)
-	 * $query->setLimit(50, 50); (retrieve 50 rows, starting at 50th record)
-	 *
-	 * @param   integer  $limit   The limit for the result set
-	 * @param   integer  $offset  The offset for the result set
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function setLimit($limit = 0, $offset = 0)
-	{
-		$this->limit  = (int) $limit;
-		$this->offset = (int) $offset;
-
-		return $this;
 	}
 }

@@ -48,22 +48,6 @@ class SqlsrvQuery extends DatabaseQuery
 	protected $bounded = [];
 
 	/**
-	 * The offset for the result set.
-	 *
-	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
-	 */
-	protected $offset;
-
-	/**
-	 * The limit for the result set.
-	 *
-	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
-	 */
-	protected $limit;
-
-	/**
 	 * The list of zero or null representation of a datetime.
 	 *
 	 * @var    array
@@ -1283,28 +1267,6 @@ class SqlsrvQuery extends DatabaseQuery
 		}
 
 		return $query;
-	}
-
-	/**
-	 * Sets the offset and limit for the result set, if the database driver supports it.
-	 *
-	 * Usage:
-	 * $query->setLimit(100, 0); (retrieve 100 rows, starting at first record)
-	 * $query->setLimit(50, 50); (retrieve 50 rows, starting at 50th record)
-	 *
-	 * @param   integer  $limit   The limit for the result set
-	 * @param   integer  $offset  The offset for the result set
-	 *
-	 * @return  $this
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function setLimit($limit = 0, $offset = 0)
-	{
-		$this->limit  = (int) $limit;
-		$this->offset = (int) $offset;
-
-		return $this;
 	}
 
 	/**
