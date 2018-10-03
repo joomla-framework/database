@@ -1762,7 +1762,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		// Check for values set on the query object and use those if there is a zero value passed here
 		if ($limit === 0 && $query->limit > 0)
 		{
-			$limit = $query->get;
+			$limit = $query->limit;
 		}
 
 		if ($offset === 0 && $query->offset > 0)
