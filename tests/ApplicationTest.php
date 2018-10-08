@@ -7,15 +7,8 @@
 namespace Joomla\Console\Tests;
 
 use Joomla\Console\Application;
-use Joomla\Console\Loader\ContainerLoader;
-use Joomla\Console\Tests\Fixtures\Command\TestAliasedCommand;
-use Joomla\Console\Tests\Fixtures\Command\TestDisabledCommand;
-use Joomla\Console\Tests\Fixtures\Command\TestNoAliasCommand;
-use Joomla\Console\Tests\Fixtures\Command\TestNoAliasWithOptionsCommand;
-use Joomla\Console\Tests\Fixtures\Command\TestUnnamedCommand;
-use Joomla\Input\Cli;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 /**
  * Test class for \Joomla\Console\Application
@@ -39,134 +32,15 @@ class ApplicationTest extends TestCase
 	}
 
 	/**
-	 * @covers  Joomla\Console\Application::addCommand
-	 * @uses    Joomla\Console\Application::hasCommand
+	 * @covers  Joomla\Console\Application::execute
 	 */
-	public function testACommandCanBeAddedWithoutAliases()
+	public function testTheApplicationIsExecuted()
 	{
-		$command = new TestNoAliasCommand;
+		$output = new BufferedOutput;
 
-		$this->assertSame($command, $this->object->addCommand($command));
-		$this->assertTrue($this->object->hasCommand($command->getName()));
-	}
+		$this->object->setAutoExit(false);
+		$this->object->execute(null, $output);
 
-	/**
-	 * @covers  Joomla\Console\Application::addCommand
-	 * @uses    Joomla\Console\Application::hasCommand
-	 */
-	public function testACommandCanBeAddedWithAliases()
-	{
-		$command = new TestAliasedCommand;
-
-		$this->assertSame($command, $this->object->addCommand($command));
-		$this->assertTrue($this->object->hasCommand($command->getName()));
-
-		foreach ($command->getAliases() as $alias)
-		{
-			$this->assertTrue($this->object->hasCommand($alias));
-		}
-	}
-
-	/**
-	 * @covers  Joomla\Console\Application::addCommand
-	 * @uses    Joomla\Console\Application::hasCommand
-	 */
-	public function testADisabledCommandIsNotAdded()
-	{
-		$command = new TestDisabledCommand;
-
-		$this->assertSame($command, $this->object->addCommand($command));
-		$this->assertFalse($this->object->hasCommand($command->getName()));
-	}
-
-	/**
-	 * @covers  Joomla\Console\Application::addCommand
-	 *
-	 * @expectedException  LogicException
-	 */
-	public function testAnUnnamedCommandIsNotAdded()
-	{
-		$this->object->addCommand(new TestUnnamedCommand);
-	}
-
-	/**
-	 * @covers  Joomla\Console\Application::hasCommand
-	 * @uses    Joomla\Console\Application::addCommand
-	 */
-	public function testACommandIsReportedAsAvailable()
-	{
-		$availableCommand    = new TestNoAliasCommand;
-		$notAvailableCommand = new TestDisabledCommand;
-
-		$this->object->addCommand($availableCommand);
-		$this->object->addCommand($notAvailableCommand);
-
-		$this->assertTrue($this->object->hasCommand($availableCommand->getName()));
-		$this->assertFalse($this->object->hasCommand($notAvailableCommand->getName()));
-	}
-
-	/**
-	 * @covers  Joomla\Console\Application::hasCommand
-	 * @uses    Joomla\Console\Application::addCommand
-	 * @uses    Joomla\Console\Application::setCommandLoader
-	 */
-	public function testACommandIsReportedAsAvailableThroughACommandLoader()
-	{
-		$command = new TestNoAliasCommand;
-
-		$commandName = $command->getName();
-		$serviceId   = 'test.loader';
-
-		$container = $this->createMock(ContainerInterface::class);
-
-		$container->expects($this->once())
-			->method('has')
-			->with($serviceId)
-			->willReturn(true);
-
-		$this->object->setCommandLoader(new ContainerLoader($container, [$commandName => $serviceId]));
-
-		$this->assertTrue($this->object->hasCommand($command->getName()));
-	}
-
-	/**
-	 * @covers  Joomla\Console\Application::getCommand
-	 * @uses    Joomla\Console\Application::addCommand
-	 */
-	public function testACommandIsRetrieved()
-	{
-		$command = new TestNoAliasCommand;
-
-		$this->object->addCommand($command);
-		$this->assertSame($command, $this->object->getCommand($command->getName()));
-	}
-
-	/**
-	 * @covers  Joomla\Console\Application::getCommand
-	 * @uses    Joomla\Console\Application::addCommand
-	 * @uses    Joomla\Console\Application::setCommandLoader
-	 */
-	public function testACommandIsRetrievedThroughACommandLoader()
-	{
-		$command = new TestNoAliasCommand;
-
-		$commandName = $command->getName();
-		$serviceId   = 'test.loader';
-
-		$container = $this->createMock(ContainerInterface::class);
-
-		$container->expects($this->exactly(2))
-			->method('has')
-			->with($serviceId)
-			->willReturn(true);
-
-		$container->expects($this->once())
-			->method('get')
-			->with($serviceId)
-			->willReturn($command);
-
-		$this->object->setCommandLoader(new ContainerLoader($container, [$commandName => $serviceId]));
-
-		$this->assertSame($command, $this->object->getCommand($command->getName()));
+		$this->assertNotEmpty($output->fetch());
 	}
 }
