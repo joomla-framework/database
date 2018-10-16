@@ -14,7 +14,7 @@ namespace Joomla\Utilities;
  * This class is adapted from the `FOFUtilsIp` class distributed with the Joomla! CMS as part of the FOF library by Akeeba Ltd.
  * The original class is copyright of Nicholas K. Dionysopoulos / Akeeba Ltd.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.6.0
  */
 final class IpHelper
 {
@@ -22,7 +22,7 @@ final class IpHelper
 	 * The IP address of the current visitor
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.6.0
 	 */
 	private static $ip = null;
 
@@ -30,14 +30,14 @@ final class IpHelper
 	 * Should I allow IP overrides through X-Forwarded-For or Client-Ip HTTP headers?
 	 *
 	 * @var    boolean
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.6.0
 	 */
 	private static $allowIpOverrides = true;
 
 	/**
 	 * Private constructor to prevent instantiation of this class
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 */
 	private function __construct()
 	{
@@ -48,7 +48,7 @@ final class IpHelper
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 */
 	public static function getIp()
 	{
@@ -79,7 +79,7 @@ final class IpHelper
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 */
 	public static function setIp($ip)
 	{
@@ -93,7 +93,7 @@ final class IpHelper
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 */
 	public static function isIPv6($ip)
 	{
@@ -108,7 +108,7 @@ final class IpHelper
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 */
 	public static function IPinList($ip, $ipTable = '')
 	{
@@ -381,7 +381,7 @@ final class IpHelper
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 */
 	public static function workaroundIPIssues()
 	{
@@ -414,7 +414,7 @@ final class IpHelper
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 */
 	public static function setAllowIpOverrides($newState)
 	{
@@ -433,7 +433,7 @@ final class IpHelper
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 */
 	protected static function detectAndCleanIP()
 	{
@@ -465,7 +465,7 @@ final class IpHelper
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 */
 	protected static function detectIP()
 	{
@@ -526,7 +526,7 @@ final class IpHelper
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 */
 	protected static function inetToBits($inet)
 	{
@@ -558,7 +558,7 @@ final class IpHelper
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.6.0
 	 */
 	protected static function checkIPv6CIDR($ip, $cidrnet)
 	{
