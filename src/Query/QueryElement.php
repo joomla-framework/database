@@ -108,6 +108,18 @@ class QueryElement
 	}
 
 	/**
+	 * Gets the name of this element.
+	 *
+	 * @return  string  Name of the element.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
 	 * Sets the name of this element.
 	 *
 	 * @param   string  $name  Name of the element.
