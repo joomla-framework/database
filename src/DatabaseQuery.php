@@ -1737,9 +1737,19 @@ abstract class DatabaseQuery implements QueryInterface
 				continue;
 			}
 
-			if (\is_object($v) || \is_array($v))
+			if (\is_object($v))
 			{
-				$this->{$k} = unserialize(serialize($v));
+				$this->{$k} = clone $v;
+			}
+			elseif (\is_array($v))
+			{
+				foreach ($v as $i => $element)
+				{
+					if (\is_object($element))
+					{
+						$this->{$k}[$i] = clone $element;
+					}
+				}
 			}
 		}
 	}
