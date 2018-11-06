@@ -1097,23 +1097,6 @@ abstract class DatabaseQuery implements QueryInterface
 	}
 
 	/**
-	 * Add an INNER JOIN clause to the query.
-	 *
-	 * Usage:
-	 * $query->innerJoin('b ON b.id = a.id')->innerJoin('c ON c.id = b.id');
-	 *
-	 * @param   string  $condition  The join condition.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function innerJoin($condition)
-	{
-		return $this->join('INNER', $condition);
-	}
-
-	/**
 	 * Add a table name to the INSERT clause of the query.
 	 *
 	 * Note that you must not mix insert, update, delete and select method calls when building a query.
@@ -1143,42 +1126,102 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Add a JOIN clause to the query.
 	 *
 	 * Usage:
-	 * $query->join('INNER', 'b ON b.id = a.id);
+	 * $query->join('INNER', 'b', 'b.id = a.id);
 	 *
-	 * @param   string        $type        The type of join. This string is prepended to the JOIN keyword.
-	 * @param   array|string  $conditions  A string or array of conditions.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function join($type, $conditions)
-	{
-		if ($this->join === null)
-		{
-			$this->join = [];
-		}
-
-		$this->join[] = new Query\QueryElement(strtoupper($type) . ' JOIN', $conditions);
-
-		return $this;
-	}
-
-	/**
-	 * Add a LEFT JOIN clause to the query.
-	 *
-	 * Usage:
-	 * $query->leftJoin('b ON b.id = a.id')->leftJoin('c ON c.id = b.id');
-	 *
+	 * @param   string  $type       The type of join. This string is prepended to the JOIN keyword.
+	 * @param   string  $table      The name of table.
 	 * @param   string  $condition  The join condition.
 	 *
 	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
-	public function leftJoin($condition)
+	public function join($type, $table, $condition = null)
 	{
-		return $this->join('LEFT', $condition);
+		$type = strtoupper($type) . ' JOIN';
+
+		if ($condition !== null)
+		{
+			$this->join[] = new Query\QueryElement($type, [$table, $condition], ' ON ');
+		}
+		else
+		{
+			$this->join[] = new Query\QueryElement($type, $table);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Add an INNER JOIN clause to the query.
+	 *
+	 * Usage:
+	 * $query->innerJoin('b', 'b.id = a.id')->innerJoin('c', 'c.id = b.id');
+	 *
+	 * @param   string  $table      The name of table.
+	 * @param   string  $condition  The join condition.
+	 *
+	 * @return  $this
+	 *
+	 * @since   1.0
+	 */
+	public function innerJoin($table, $condition = null)
+	{
+		return $this->join('INNER', $table, $condition);
+	}
+
+	/**
+	 * Add an OUTER JOIN clause to the query.
+	 *
+	 * Usage:
+	 * $query->outerJoin('b', 'b.id = a.id')->leftJoin('c', 'c.id = b.id');
+	 *
+	 * @param   string  $table      The name of table.
+	 * @param   string  $condition  The join condition.
+	 *
+	 * @return  $this
+	 *
+	 * @since   1.0
+	 */
+	public function outerJoin($table, $condition = null)
+	{
+		return $this->join('OUTER', $table, $condition);
+	}
+
+	/**
+	 * Add a LEFT JOIN clause to the query.
+	 *
+	 * Usage:
+	 * $query->leftJoin('b', 'b.id = a.id')->leftJoin('c', 'c.id = b.id');
+	 *
+	 * @param   string  $table      The name of table.
+	 * @param   string  $condition  The join condition.
+	 *
+	 * @return  $this
+	 *
+	 * @since   1.0
+	 */
+	public function leftJoin($table, $condition = null)
+	{
+		return $this->join('LEFT', $table, $condition);
+	}
+
+	/**
+	 * Add a RIGHT JOIN clause to the query.
+	 *
+	 * Usage:
+	 * $query->rightJoin('b', 'b.id = a.id')->rightJoin('c', 'c.id = b.id');
+	 *
+	 * @param   string  $table      The name of table.
+	 * @param   string  $condition  The join condition.
+	 *
+	 * @return  $this
+	 *
+	 * @since   1.0
+	 */
+	public function rightJoin($table, $condition = null)
+	{
+		return $this->join('RIGHT', $table, $condition);
 	}
 
 	/**
@@ -1287,23 +1330,6 @@ abstract class DatabaseQuery implements QueryInterface
 		}
 
 		return $this;
-	}
-
-	/**
-	 * Add an OUTER JOIN clause to the query.
-	 *
-	 * Usage:
-	 * $query->outerJoin('b ON b.id = a.id')->outerJoin('c ON c.id = b.id');
-	 *
-	 * @param   string  $condition  The join condition.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function outerJoin($condition)
-	{
-		return $this->join('OUTER', $condition);
 	}
 
 	/**
@@ -1434,23 +1460,6 @@ abstract class DatabaseQuery implements QueryInterface
 	public function regexp($value)
 	{
 		return ' ' . $value;
-	}
-
-	/**
-	 * Add a RIGHT JOIN clause to the query.
-	 *
-	 * Usage:
-	 * $query->rightJoin('b ON b.id = a.id')->rightJoin('c ON c.id = b.id');
-	 *
-	 * @param   string  $condition  The join condition.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function rightJoin($condition)
-	{
-		return $this->join('RIGHT', $condition);
 	}
 
 	/**
