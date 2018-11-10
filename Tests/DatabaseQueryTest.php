@@ -1163,6 +1163,14 @@ class DatabaseQueryTest extends TestCase
 			$this->equalTo(TestHelper::getValue($q2, 'join')),
 			'Tests that innerJoin is an alias for join.'
 		);
+
+		$q3 = $this->dbo->getQuery(true)->innerJoin('foo', 'foo.id = bar.id');
+
+		$this->assertThat(
+			(string) TestHelper::getValue($q3, 'join')[0],
+			$this->equalTo((string) TestHelper::getValue($q1, 'join')[0]),
+			'Tests innerJoin condition.'
+		);
 	}
 
 	/**
@@ -1227,6 +1235,16 @@ class DatabaseQueryTest extends TestCase
 			$this->equalTo('OUTER JOIN goo ON goo.id = car.id'),
 			'Tests that second join renders correctly.'
 		);
+
+		$this->instance->join('OUTER', 'boo', 'boo.id = car.id');
+
+		$join = TestHelper::getValue($this->instance, 'join');
+
+		$this->assertThat(
+			trim($join[2]),
+			$this->equalTo('OUTER JOIN boo ON boo.id = car.id'),
+			'Tests that third join renders correctly.'
+		);
 	}
 
 	/**
@@ -1255,6 +1273,14 @@ class DatabaseQueryTest extends TestCase
 			TestHelper::getValue($q1, 'join'),
 			$this->equalTo(TestHelper::getValue($q2, 'join')),
 			'Tests that leftJoin is an alias for join.'
+		);
+
+		$q3 = $this->dbo->getQuery(true)->leftJoin('foo', 'foo.id = bar.id');
+
+		$this->assertThat(
+			(string) TestHelper::getValue($q3, 'join')[0],
+			$this->equalTo((string) TestHelper::getValue($q1, 'join')[0]),
+			'Tests leftJoin condition.'
 		);
 	}
 
@@ -1401,6 +1427,14 @@ class DatabaseQueryTest extends TestCase
 			$this->equalTo(TestHelper::getValue($q2, 'join')),
 			'Tests that outerJoin is an alias for join.'
 		);
+
+		$q3 = $this->dbo->getQuery(true)->outerJoin('foo', 'foo.id = bar.id');
+
+		$this->assertThat(
+			(string) TestHelper::getValue($q3, 'join')[0],
+			$this->equalTo((string) TestHelper::getValue($q1, 'join')[0]),
+			'Tests outerJoin condition.'
+		);
 	}
 
 	/**
@@ -1498,6 +1532,14 @@ class DatabaseQueryTest extends TestCase
 			TestHelper::getValue($q1, 'join'),
 			$this->equalTo(TestHelper::getValue($q2, 'join')),
 			'Tests that rightJoin is an alias for join.'
+		);
+
+		$q3 = $this->dbo->getQuery(true)->rightJoin('foo', 'foo.id = bar.id');
+
+		$this->assertThat(
+			(string) TestHelper::getValue($q3, 'join')[0],
+			$this->equalTo((string) TestHelper::getValue($q1, 'join')[0]),
+			'Tests rightJoin condition.'
 		);
 	}
 
