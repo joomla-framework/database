@@ -333,16 +333,17 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * Add a JOIN clause to the query.
 	 *
 	 * Usage:
-	 * $query->join('INNER', 'b ON b.id = a.id);
+	 * $query->join('INNER', 'b', 'b.id = a.id);
 	 *
-	 * @param   string        $type        The type of join. This string is prepended to the JOIN keyword.
-	 * @param   array|string  $conditions  A string or array of conditions.
+	 * @param   string  $type       The type of join. This string is prepended to the JOIN keyword.
+	 * @param   string  $table      The name of table.
+	 * @param   string  $condition  The join condition.
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function join($type, $conditions);
+	public function join($type, $table, $condition = null);
 
 	/**
 	 * Get the length of a string in bytes.
