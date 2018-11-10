@@ -127,7 +127,10 @@ class QueryElement
 	}
 
 	/**
-	 * Method to provide deep copy support to nested objects and arrays when cloning.
+	 * Method to provide basic copy support.
+	 *
+	 * Any object pushed into the data of this class should have its own __clone() implementation.
+	 * This method does not support copying objects in a multidimensional array.
 	 *
 	 * @return  void
 	 *
