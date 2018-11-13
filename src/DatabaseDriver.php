@@ -1524,17 +1524,14 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	{
 		if (\is_string($name))
 		{
-			$quotedName = $this->quoteNameStr(explode('.', $name));
-
-			$quotedAs = '';
+			$name = $this->quoteNameString($name);
 
 			if ($as !== null)
 			{
-				$as       = (array) $as;
-				$quotedAs .= ' AS ' . $this->quoteNameStr($as);
+				$name .= ' AS ' . $this->quoteNameString($as);
 			}
 
-			return $quotedName . $quotedAs;
+			return $name;
 		}
 
 		$fin = [];
@@ -1560,6 +1557,22 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
+	 * Quote string coming from quoteName call.
+	 *
+	 * @param   string  $name  Array of strings coming from quoteName dot-explosion.
+	 *
+	 * @return  string  Dot-imploded string of quoted parts.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function quoteNameString($name)
+	{
+		$q = $this->nameQuote . $this->nameQuote;
+
+		return $q[0] . str_replace('.', "$q[1].$q[0]", $name) . $q[1];
+	}
+
+	/**
 	 * Quote strings coming from quoteName call.
 	 *
 	 * @param   array  $strArr  Array of strings coming from quoteName dot-explosion.
@@ -1567,6 +1580,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * @return  string  Dot-imploded string of quoted parts.
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Use quoteNameString instead
 	 */
 	protected function quoteNameStr($strArr)
 	{

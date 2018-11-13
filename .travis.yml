@@ -32,7 +32,10 @@ jobs:
       php: 7.2
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml"
     - stage: Test
-      php: 7.2
+      php: 7.3
+      env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml"
+    - stage: Test
+      php: 7.3
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS=""
     - stage: Test
@@ -51,7 +54,10 @@ jobs:
       php: 7.2
       env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
     - stage: Test
-      php: 7.2
+      php: 7.3
+      env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
+    - stage: Test
+      php: 7.3
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
       env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS=""
     - stage: Test
@@ -73,7 +79,11 @@ jobs:
       sudo: required
       env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
     - stage: Test
-      php: 7.2
+      php: 7.3
+      sudo: required
+      env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
+    - stage: Test
+      php: 7.3
       sudo: required
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
       env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS=""
@@ -97,7 +107,11 @@ jobs:
       sudo: required
       env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
     - stage: Test
-      php: 7.2
+      php: 7.3
+      sudo: required
+      env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      php: 7.3
       sudo: required
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
       env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS=""
@@ -121,7 +135,11 @@ jobs:
       sudo: required
       env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
     - stage: Test
-      php: 7.2
+      php: 7.3
+      sudo: required
+      env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      php: 7.3
       sudo: required
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
       env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS=""
@@ -151,7 +169,13 @@ jobs:
         mariadb: 10.0
       env: DB="mariadb" MARIADB_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
     - stage: Test
-      php: 7.2
+      php: 7.3
+      sudo: required
+      addons:
+        mariadb: 10.0
+      env: DB="mariadb" MARIADB_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      php: 7.3
       sudo: required
       addons:
         mariadb: 10.0
@@ -185,7 +209,13 @@ jobs:
         mariadb: 10.1
       env: DB="mariadb" MARIADB_VERSION=10.1 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
     - stage: Test
-      php: 7.2
+      php: 7.3
+      sudo: required
+      addons:
+        mariadb: 10.1
+      env: DB="mariadb" MARIADB_VERSION=10.1 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
+    - stage: Test
+      php: 7.3
       sudo: required
       addons:
         mariadb: 10.1
@@ -219,7 +249,13 @@ jobs:
         mariadb: 10.2
       env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
     - stage: Test
-      php: 7.2
+      php: 7.3
+      sudo: required
+      addons:
+        mariadb: 10.2
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
+    - stage: Test
+      php: nightly
       sudo: required
       addons:
         mariadb: 10.2
@@ -292,7 +328,14 @@ jobs:
         - postgresql
       env: DB="pgsql" PGSQL_VERSION=9.6 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
     - stage: Test
-      php: 7.2
+      php: 7.3
+      addons:
+        postgresql: "9.6"
+      services:
+        - postgresql
+      env: DB="pgsql" PGSQL_VERSION=9.6 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
+    - stage: Test
+      php: 7.3
       addons:
         postgresql: "9.6"
       services:
@@ -356,7 +399,13 @@ jobs:
         - docker
       env: DB="sqlsrv" PHPUNIT_CONF=".travis/phpunit.sqlsrv.xml"
     - stage: Test
-      php: 7.2
+      php: 7.3
+      sudo: required
+      services:
+        - docker
+      env: DB="sqlsrv" PHPUNIT_CONF=".travis/phpunit.sqlsrv.xml"
+    - stage: Test
+      php: 7.3
       sudo: required
       services:
         - docker
