@@ -93,3 +93,10 @@ New methods:
 
 The DatabaseQuery object of type querySet can be used to generate a union query
 where the first SELECT statement has own ORDER BY and LIMIT.
+
+#### Changes in methods `join()`, `innerJoin()`, `outerJoin()`, `leftJoin()`, `rightJoin()`
+
+The last argument `$conditions` has been split into two arguments: $table and $condition.
+Instead of `$query->join('INNER', 'b ON b.id = a.id)` use `$query->join('INNER', 'b', 'b.id = a.id)`.
+
+Although the old syntax still works in many cases, it will not work on PostgreSQL update query.

@@ -196,7 +196,7 @@ class PgsqlQueryTest extends TestCase
 		$q = new PgsqlQuery($this->dbo);
 
 		$q->update('#__foo AS a')
-			->join('INNER', 'b ON b.id = a.id')
+			->join('INNER', 'b', 'b.id = a.id')
 			->set('a.id = 2')
 			->where('b.id = 1');
 

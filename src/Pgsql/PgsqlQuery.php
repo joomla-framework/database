@@ -127,13 +127,11 @@ class PgsqlQuery extends PdoQuery
 					{
 						$joinElem = $join->getElements();
 
-						$joinArray = preg_split('/\sON\s/i', $joinElem[0], 2);
+						$this->from($joinElem[0]);
 
-						$this->from($joinArray[0]);
-
-						if (isset($joinArray[1]))
+						if (isset($joinElem[1]))
 						{
-							$this->where($joinArray[1]);
+							$this->where($joinElem[1]);
 						}
 					}
 
