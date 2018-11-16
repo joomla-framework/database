@@ -1509,15 +1509,18 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	/**
 	 * Quote string coming from quoteName call.
 	 *
-	 * @param   string  $name  Array of strings coming from quoteName dot-explosion.
+	 * @param   string  $name  Identifier name to be quoted.
 	 *
-	 * @return  string  Dot-imploded string of quoted parts.
+	 * @return  string  Quoted identifier string.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
 	protected function quoteNameString($name)
 	{
 		$q = $this->nameQuote . $this->nameQuote;
+
+		// Double quote reserved keyword
+		$name = str_replace($q[1], $q[1] . $q[1], $name);
 
 		return $q[0] . str_replace('.', "$q[1].$q[0]", $name) . $q[1];
 	}
