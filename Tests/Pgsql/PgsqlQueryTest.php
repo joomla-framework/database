@@ -327,6 +327,33 @@ class PgsqlQueryTest extends TestCase
 	}
 
 	/**
+	 * Test for FROM clause with subquery.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__toStringFrom_subquery()
+	{
+		$subq = new PgsqlQuery($this->dbo);
+		$subq->select('col AS col2')->from('table')->where('a=1');
+
+		$q = new PgsqlQuery($this->dbo);
+		$q->select('col2')->from($subq->alias('alias'));
+
+		$this->assertThat(
+			(string) $q,
+			$this->equalTo(
+				PHP_EOL . 'SELECT col2' .
+				PHP_EOL . 'FROM (' .
+				PHP_EOL . 'SELECT col AS col2' .
+				PHP_EOL . 'FROM table' .
+				PHP_EOL . 'WHERE a=1) AS alias'
+			)
+		);
+	}
+
+	/**
 	 * Test for INSERT INTO clause with subquery.
 	 *
 	 * @return  void

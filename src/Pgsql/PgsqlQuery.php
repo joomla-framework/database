@@ -181,6 +181,15 @@ class PgsqlQuery extends PdoQuery
 
 			default:
 				$query = parent::__toString();
+		}
+
+		switch ($this->type)
+		{
+			case 'select':
+				if ($this->alias)
+				{
+					$query = '(' . $query . ') AS ' . $this->alias;
+				}
 
 				break;
 		}

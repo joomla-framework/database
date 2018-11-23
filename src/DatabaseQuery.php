@@ -40,6 +40,12 @@ abstract class DatabaseQuery implements QueryInterface
 	protected $type = '';
 
 	/**
+	 * @var    string  The query alias.
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $alias = null;
+
+	/**
 	 * The query element for a generic query (type = null).
 	 *
 	 * @var    Query\QueryElement
@@ -410,6 +416,17 @@ abstract class DatabaseQuery implements QueryInterface
 				break;
 		}
 
+		switch ($this->type)
+		{
+			case 'select':
+				if ($this->alias)
+				{
+					$query = '(' . $query . ') AS ' . $this->alias;
+				}
+
+				break;
+		}
+
 		return $this->processLimit($query, $this->limit, $this->offset);
 	}
 
@@ -523,6 +540,10 @@ abstract class DatabaseQuery implements QueryInterface
 
 		switch ($clause)
 		{
+			case 'alias':
+				$this->alias = null;
+				break;
+
 			case 'select':
 				$this->select          = null;
 				$this->type            = null;
@@ -630,6 +651,7 @@ abstract class DatabaseQuery implements QueryInterface
 
 			default:
 				$this->type               = null;
+				$this->alias              = null;
 				$this->select             = null;
 				$this->selectRowNumber    = null;
 				$this->delete             = null;
@@ -902,40 +924,51 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * Add a table to the FROM clause of the query.
 	 *
-	 * Note that while an array of tables can be provided, it is recommended you use explicit joins.
-	 *
 	 * Usage:
 	 * $query->select('*')->from('#__a');
+	 * $query->select('*')->from($subquery->alias('a'));
 	 *
-	 * @param   array|string  $tables         A string or array of table names.  This can be a DatabaseQuery object (or a child of it) when used
-	 *                                        as a subquery in FROM clause along with a value for $subQueryAlias.
-	 * @param   string        $subQueryAlias  Alias used when $tables is a DatabaseQuery.
+	 * @param   string|DatabaseQuery  $table  The name of the table or a DatabaseQuery object (or a child of it) with alias set.
 	 *
 	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public function from($tables, $subQueryAlias = null)
+	public function from($table)
 	{
+		if ($table instanceof $this && $table->alias === null)
+		{
+			throw new \RuntimeException('JLIB_DATABASE_ERROR_NULL_SUBQUERY_ALIAS');
+		}
+
 		if ($this->from === null)
 		{
-			if ($tables instanceof $this)
-			{
-				if ($subQueryAlias === null)
-				{
-					throw new \RuntimeException('JLIB_DATABASE_ERROR_NULL_SUBQUERY_ALIAS');
-				}
-
-				$tables = '( ' . (string) $tables . ' ) AS ' . $this->quoteName($subQueryAlias);
-			}
-
-			$this->from = new Query\QueryElement('FROM', $tables);
+			$this->from = new Query\QueryElement('FROM', $table);
 		}
 		else
 		{
-			$this->from->append($tables);
+			$this->from->append($table);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * Add alias for current query.
+	 *
+	 * Usage:
+	 * $query->select('*')->from('#__a')->alias('subquery');
+	 *
+	 * @param   string  $alias  Alias used for a JDatabaseQuery.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function alias($alias)
+	{
+		$this->alias = $alias;
 
 		return $this;
 	}
