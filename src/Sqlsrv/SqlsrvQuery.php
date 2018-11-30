@@ -132,12 +132,12 @@ class SqlsrvQuery extends DatabaseQuery
 					$query .= PHP_EOL . '/*ORDER BY (SELECT 0)*/';
 				}
 
-				if ($this->alias)
+				$query = $this->processLimit($query, $this->limit, $this->offset);
+
+				if ($this->alias !== null)
 				{
 					$query = '(' . $query . ') AS ' . $this->alias;
 				}
-
-				$query = $this->processLimit($query, $this->limit, $this->offset);
 
 				break;
 

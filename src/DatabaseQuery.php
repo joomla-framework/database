@@ -250,12 +250,12 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function __toString()
 	{
-		$query = '';
-
 		if ($this->sql)
 		{
 			return $this->processLimit($this->sql, $this->limit, $this->offset);
 		}
+
+		$query = '';
 
 		switch ($this->type)
 		{
@@ -416,18 +416,14 @@ abstract class DatabaseQuery implements QueryInterface
 				break;
 		}
 
-		switch ($this->type)
-		{
-			case 'select':
-				if ($this->alias)
-				{
-					$query = '(' . $query . ') AS ' . $this->alias;
-				}
+		$query = $this->processLimit($query, $this->limit, $this->offset);
 
-				break;
+		if ($this->type === 'select' && $this->alias !== null)
+		{
+			$query = '(' . $query . ') AS ' . $this->alias;
 		}
 
-		return $this->processLimit($query, $this->limit, $this->offset);
+		return $query;
 	}
 
 	/**
