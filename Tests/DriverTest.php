@@ -602,6 +602,12 @@ SQL
 		);
 
 		$this->assertThat(
+			$this->instance->quoteName('a.te]st'),
+			$this->equalTo('[a].[te]]st]'),
+			'Tests the left-right quotes on a dotted string with reserved keyword.'
+		);
+
+		$this->assertThat(
 			$this->instance->quoteName(array('a', 'test')),
 			$this->equalTo(array('[a]', '[test]')),
 			'Tests the left-right quotes on an array.'
@@ -642,6 +648,12 @@ SQL
 			$this->instance->quoteName('test'),
 			$this->equalTo('/test/'),
 			'Tests the uni-quotes on a string.'
+		);
+
+		$this->assertThat(
+			$this->instance->quoteName('te/st'),
+			$this->equalTo('/te//st/'),
+			'Tests the uni-quotes on a string with reserved keyword.'
 		);
 	}
 
