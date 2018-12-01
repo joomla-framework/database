@@ -554,7 +554,7 @@ class SqlsrvQueryTest extends TestCase
 	public function test__toStringFrom_subquery()
 	{
 		$subq = new SqlsrvQuery($this->dbo);
-		$subq->select('col AS col2')->from('table')->where('a=1');
+		$subq->select('col AS col2')->from('table')->where('a=1')->setLimit(1);
 
 		$q = new SqlsrvQuery($this->dbo);
 		$q->select('col2')->from($subq->alias('alias'));
@@ -564,7 +564,7 @@ class SqlsrvQueryTest extends TestCase
 			$this->equalTo(
 				PHP_EOL . 'SELECT col2' .
 				PHP_EOL . 'FROM (' .
-				PHP_EOL . 'SELECT col AS col2' .
+				PHP_EOL . 'SELECT TOP 1 col AS col2' .
 				PHP_EOL . 'FROM table' .
 				PHP_EOL . 'WHERE a=1' .
 				PHP_EOL . '/*ORDER BY (SELECT 0)*/) AS alias' .

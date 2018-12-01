@@ -363,7 +363,7 @@ class MysqliQueryTest extends TestCase
 	public function test__toStringFrom_subquery()
 	{
 		$subq = new MysqliQuery($this->dbo);
-		$subq->select('col AS col2')->from('table')->where('a=1');
+		$subq->select('col AS col2')->from('table')->where('a=1')->setLimit(1);
 
 		$q = new MysqliQuery($this->dbo);
 		$q->select('col2')->from($subq->alias('alias'));
@@ -375,7 +375,7 @@ class MysqliQueryTest extends TestCase
 				PHP_EOL . 'FROM (' .
 				PHP_EOL . 'SELECT col AS col2' .
 				PHP_EOL . 'FROM table' .
-				PHP_EOL . 'WHERE a=1) AS alias'
+				PHP_EOL . 'WHERE a=1 LIMIT 1) AS alias'
 			)
 		);
 	}

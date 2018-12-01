@@ -530,7 +530,7 @@ class SqliteQueryTest extends TestCase
 	public function test__toStringFrom_subquery()
 	{
 		$subq = new SqliteQuery($this->dbo);
-		$subq->select('col AS col2')->from('table')->where('a=1');
+		$subq->select('col AS col2')->from('table')->where('a=1')->setLimit(1);
 
 		$q = new SqliteQuery($this->dbo);
 		$q->select('col2')->from($subq->alias('alias'));
@@ -542,7 +542,7 @@ class SqliteQueryTest extends TestCase
 				PHP_EOL . 'FROM (' .
 				PHP_EOL . 'SELECT col AS col2' .
 				PHP_EOL . 'FROM table' .
-				PHP_EOL . 'WHERE a=1) AS alias'
+				PHP_EOL . 'WHERE a=1 LIMIT 0, 1) AS alias'
 			)
 		);
 	}
