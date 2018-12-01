@@ -128,6 +128,16 @@ class Query extends \Joomla\Database\DatabaseQuery
 	 */
 	public function processLimit($query, $limit, $offset = 0)
 	{
+		if ($limit > 0)
+		{
+			$query .= ' LIMIT ' . $limit;
+		}
+
+		if ($offset > 0)
+		{
+			$query .= ' OFFSET ' . $offset;
+		}
+
 		return $query;
 	}
 }

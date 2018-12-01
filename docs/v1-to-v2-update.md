@@ -100,3 +100,11 @@ The last argument `$conditions` has been split into two arguments: $table and $c
 Instead of `$query->join('INNER', 'b ON b.id = a.id)` use `$query->join('INNER', 'b', 'b.id = a.id)`.
 
 Although the old syntax still works in many cases, it will not work on PostgreSQL update query.
+
+#### Changes in the `from()` method
+
+The first argument, `$table`, stops accepting the array. Only `DatabaseQuery` object or string.
+
+- Argument `$subQueryAlias` has been removed.
+
+Instead of `$query->from($subquery, 'alias')` use `$query->from($subquery->alias('alias'))`.

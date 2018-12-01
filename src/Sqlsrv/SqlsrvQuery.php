@@ -134,6 +134,11 @@ class SqlsrvQuery extends DatabaseQuery
 
 				$query = $this->processLimit($query, $this->limit, $this->offset);
 
+				if ($this->alias !== null)
+				{
+					$query = '(' . $query . ') AS ' . $this->alias;
+				}
+
 				break;
 
 			case 'querySet':

@@ -181,11 +181,16 @@ class PgsqlQuery extends PdoQuery
 
 			default:
 				$query = parent::__toString();
-
-				break;
 		}
 
-		return $this->processLimit($query, $this->limit, $this->offset);
+		$query = $this->processLimit($query, $this->limit, $this->offset);
+
+		if ($this->type === 'select' && $this->alias !== null)
+		{
+			$query = '(' . $query . ') AS ' . $this->alias;
+		}
+
+		return $query;
 	}
 
 	/**

@@ -135,16 +135,19 @@ class DatabaseQueryTest extends TestCase
 	 */
 	public function test__toStringFrom_subquery()
 	{
-		$subq = $this->dbo->getQuery(true);
-		$subq->select('col2')->from('table')->where('a=1');
+		$subq = clone $this->instance;
+		$subq->select('col AS col2')->from('table')->where('a=1')->setLimit(1);
 
-		$this->instance->select('col')->from($subq, 'alias');
+		$this->instance->select('col2')->from($subq->alias('alias'));
 
 		$this->assertThat(
 			(string) $this->instance,
 			$this->equalTo(
-				PHP_EOL . 'SELECT col' . PHP_EOL .
-				'FROM ( ' . PHP_EOL . 'SELECT col2' . PHP_EOL . 'FROM table' . PHP_EOL . 'WHERE a=1 ) AS `alias`'
+				PHP_EOL . 'SELECT col2' .
+				PHP_EOL . 'FROM (' .
+				PHP_EOL . 'SELECT col AS col2' .
+				PHP_EOL . 'FROM table' .
+				PHP_EOL . 'WHERE a=1 LIMIT 1) AS alias'
 			)
 		);
 	}

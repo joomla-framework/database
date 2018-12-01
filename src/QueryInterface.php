@@ -182,20 +182,31 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	/**
 	 * Add a table to the FROM clause of the query.
 	 *
-	 * Note that while an array of tables can be provided, it is recommended you use explicit joins.
-	 *
 	 * Usage:
 	 * $query->select('*')->from('#__a');
+	 * $query->select('*')->from($subquery->alias('a'));
 	 *
-	 * @param   array|string  $tables         A string or array of table names.  This can be a QueryInterface object (or a child of it) when used
-	 *                                        as a subquery in FROM clause along with a value for $subQueryAlias.
-	 * @param   string        $subQueryAlias  Alias used when $tables is a QueryInterface.
+	 * @param   string|QueryInterface  $table  The name of the table or a QueryInterface object (or a child of it) with alias set.
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function from($tables, $subQueryAlias = null);
+	public function from($table);
+
+	/**
+	 * Add alias for current query.
+	 *
+	 * Usage:
+	 * $query->select('*')->from('#__a')->alias('subquery');
+	 *
+	 * @param   string  $alias  Alias used for a JDatabaseQuery.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function alias($alias);
 
 	/**
 	 * Used to get a string to extract year from date column.
