@@ -2029,6 +2029,32 @@ class DatabaseQueryTest extends TestCase
 	}
 
 	/**
+	 * Tests the \Joomla\Database\DatabaseQuery::__clone method properly clones nested objects.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function test__clone_nested_query()
+	{
+		/**
+		 * Add a custom closure to test the cloning of nested objects.
+		 *
+		 * DatabaseQuery->QueryElement->DatabaseQuery
+		 * $query       ->merge[0]    ->elements[0]
+		 */
+		$this->dbo->func = function() {};
+
+		$query = $this->instance->select('id')->from('#__content');
+		$query->union(clone $query);
+
+		// Real test for exception: Serialization of 'Closure' is not allowed
+		$query2 = clone $query;
+
+		$this->assertFalse($query->merge[0]->getElements()[0] === $query2->merge[0]->getElements()[0]);
+	}
+
+	/**
 	 * Tests the \Joomla\Database\DatabaseQuery::union method.
 	 *
 	 * @return  void

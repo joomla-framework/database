@@ -1731,7 +1731,10 @@ abstract class DatabaseQuery implements QueryInterface
 	}
 
 	/**
-	 * Method to provide deep copy support to nested objects and arrays when cloning.
+	 * Method to provide basic copy support.
+	 *
+	 * Any object pushed into the data of this class should have its own __clone() implementation.
+	 * This method does not support copying objects in a multidimensional array.
 	 *
 	 * @return  void
 	 *
@@ -1746,9 +1749,19 @@ abstract class DatabaseQuery implements QueryInterface
 				continue;
 			}
 
-			if (\is_object($v) || \is_array($v))
+			if (\is_object($v))
 			{
-				$this->{$k} = unserialize(serialize($v));
+				$this->{$k} = clone $v;
+			}
+			elseif (\is_array($v))
+			{
+				foreach ($v as $i => $element)
+				{
+					if (\is_object($element))
+					{
+						$this->{$k}[$i] = clone $element;
+					}
+				}
 			}
 		}
 	}
