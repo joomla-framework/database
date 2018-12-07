@@ -1728,13 +1728,13 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
-	 * Delete the query monitor.
+	 * Remove the query monitor.
 	 *
-	 * @return  QueryMonitorInterface|null
+	 * @return  QueryMonitorInterface|null  The removed monitor or null if not set.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function delMonitor()
+	public function removeMonitor()
 	{
 		$monitor       = $this->monitor;
 		$this->monitor = null;
