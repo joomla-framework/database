@@ -1728,6 +1728,21 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
+	 * Delete the query monitor.
+	 *
+	 * @return  QueryMonitorInterface|null
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function delMonitor()
+	{
+		$monitor       = $this->monitor;
+		$this->monitor = null;
+
+		return $monitor;
+	}
+
+	/**
 	 * Sets the SQL statement string for later execution.
 	 *
 	 * @param   string|QueryInterface  $query   The SQL statement to set either as a Query object or a string.
