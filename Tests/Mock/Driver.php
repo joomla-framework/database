@@ -77,6 +77,7 @@ class Driver
 			'lockTable',
 			'query',
 			'quote',
+			'quoteBinary',
 			'quoteName',
 			'renameTable',
 			'replacePrefix',
