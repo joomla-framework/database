@@ -124,7 +124,11 @@ class Socket implements TransportInterface
 		// Build the request payload.
 		$request   = array();
 		$request[] = strtoupper($method) . ' ' . ((empty($path)) ? '/' : $path) . ' HTTP/' . $protocolVersion;
-		$request[] = 'Host: ' . $uri->getHost();
+
+		if (!isset($headers['Host']))
+		{
+			$request[] = 'Host: ' . $uri->getHost();
+		}
 
 		// If an explicit user agent is given use it.
 		if (isset($userAgent))
