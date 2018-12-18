@@ -602,6 +602,12 @@ SQL
 		);
 
 		$this->assertThat(
+			$this->instance->quoteName('a.test', 'a.test'),
+			$this->equalTo('[a].[test] AS [a.test]'),
+			'Tests the left-right quotes on a dotted string for column alias.'
+		);
+
+		$this->assertThat(
 			$this->instance->quoteName('a.te]st'),
 			$this->equalTo('[a].[te]]st]'),
 			'Tests the left-right quotes on a dotted string with reserved keyword.'
