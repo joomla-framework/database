@@ -1732,7 +1732,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setMonitor($monitor)
+	public function setMonitor(QueryMonitorInterface $monitor = null)
 	{
 		$this->monitor = $monitor;
 
