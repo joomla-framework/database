@@ -42,7 +42,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected $nameQuote;
+	protected $nameQuote = '[]';
 
 	/**
 	 * The null or zero representation of a timestamp for the database driver.  This should be
