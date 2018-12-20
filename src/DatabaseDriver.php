@@ -1712,15 +1712,27 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
+	 * Get the query monitor.
+	 *
+	 * @return  QueryMonitorInterface|null  The query monitor or null if not set.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getMonitor()
+	{
+		return $this->monitor;
+	}
+
+	/**
 	 * Set a query monitor.
 	 *
-	 * @param   QueryMonitorInterface  $monitor  The query monitor.
+	 * @param   QueryMonitorInterface|null  $monitor  The query monitor.
 	 *
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setMonitor(QueryMonitorInterface $monitor)
+	public function setMonitor(QueryMonitorInterface $monitor = null)
 	{
 		$this->monitor = $monitor;
 
