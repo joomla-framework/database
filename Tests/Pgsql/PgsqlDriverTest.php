@@ -98,6 +98,10 @@ class PgsqlDriverTest extends PgsqlCase
 	public function dataTestQuoteName()
 	{
 		return array(
+			/* test escape double quote */
+			array('protected`title', null, '"protected`title"'),
+			array('protected"title', null, '"protected""title"'),
+			array('protected]title', null, '"protected]title"'),
 			/* no dot inside var */
 			array('dbtest', null, '"dbtest"'),
 			/* a dot inside var */

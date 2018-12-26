@@ -377,6 +377,12 @@ SQL
 			$this->instance->quoteName('a.test')
 		);
 
+		$this->assertThat(
+			$this->instance->quoteName('a.test', 'a.test'),
+			$this->equalTo('[a].[test] AS [a.test]'),
+			'Tests the left-right quotes on a dotted string for column alias.'
+		);
+
 		$this->assertSame(
 			array('[a]', '[test]'),
 			$this->instance->quoteName(array('a', 'test'))
@@ -402,7 +408,7 @@ SQL
 			$this->instance->quoteName((object) array('a', 'test'))
 		);
 
- 		TestHelper::setValue($this->instance, 'nameQuote', '/');
+		TestHelper::setValue($this->instance, 'nameQuote', '/');
 
 		$this->assertSame(
 			'/test/',

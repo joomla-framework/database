@@ -34,6 +34,22 @@ class MysqlDriverTest extends MysqlCase
 	}
 
 	/**
+	 * Data for the testQuoteName test.
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function dataTestQuoteName()
+	{
+		return array(
+			array('protected`title', null, '`protected``title`'),
+			array('protected"title', null, '`protected"title`'),
+			array('protected]title', null, '`protected]title`'),
+		);
+	}
+
+	/**
 	 * Data for the testTransactionRollback test.
 	 *
 	 * @return  array
@@ -147,6 +163,27 @@ class MysqlDriverTest extends MysqlCase
 
 		// Revert to origin locale
 		setLocale(LC_NUMERIC, $origin);
+	}
+
+	/**
+	 * Test the quoteName method.
+	 *
+	 * @param   string  $text      The column name or alias to be quote.
+	 * @param   string  $asPart    String used for AS query part.
+	 * @param   string  $expected  The expected result.
+	 *
+	 * @return  void
+	 *
+	 * @dataProvider  dataTestQuoteName
+	 * @since         __DEPLOY_VERSION__
+	 */
+	public function testQuoteName($text, $asPart, $expected)
+	{
+		$this->assertThat(
+			self::$driver->quoteName($text, $asPart),
+			$this->equalTo($expected),
+			'The name was not quoted properly'
+		);
 	}
 
 	/**

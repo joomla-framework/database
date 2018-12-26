@@ -1528,7 +1528,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 
 			if ($as !== null)
 			{
-				$name .= ' AS ' . $this->quoteNameString($as);
+				$name .= ' AS ' . $this->quoteNameString($as, true);
 			}
 
 			return $name;
@@ -1559,15 +1559,24 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	/**
 	 * Quote string coming from quoteName call.
 	 *
-	 * @param   string  $name  Array of strings coming from quoteName dot-explosion.
+	 * @param   string   $name          Identifier name to be quoted.
+	 * @param   boolean  $asSinglePart  Treat the name as a single part of the identifier.
 	 *
-	 * @return  string  Dot-imploded string of quoted parts.
+	 * @return  string  Quoted identifier string.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function quoteNameString($name)
+	protected function quoteNameString($name, $asSinglePart = false)
 	{
 		$q = $this->nameQuote . $this->nameQuote;
+
+		// Double quote reserved keyword
+		$name = str_replace($q[1], $q[1] . $q[1], $name);
+
+		if ($asSinglePart)
+		{
+			return $q[0] . $name . $q[1];
+		}
 
 		return $q[0] . str_replace('.', "$q[1].$q[0]", $name) . $q[1];
 	}
