@@ -32,6 +32,22 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 	}
 
 	/**
+	 * Data for the testQuoteBinary test.
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function dataTestQuoteBinary()
+	{
+		return array(
+			array('DATA', "decode('" . bin2hex('DATA') . "', 'hex')"),
+			array("\x00\x01\x02\xff", "decode('000102ff', 'hex')"),
+			array("\x01\x01\x02\xff", "decode('010102ff', 'hex')"),
+		);
+	}
+
+	/**
 	 * Data for the testGetEscaped test, proxies of escape, so same data test.
 	 *
 	 * @return  array
@@ -198,6 +214,25 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 	}
 
 	/**
+	 * Test the quoteBinary method.
+	 *
+	 * @param   string  $data  The binary quoted input string.
+	 *
+	 * @return  void
+	 *
+	 * @dataProvider  dataTestQuoteBinary
+	 * @since         __DEPLOY_VERSION__
+	 */
+	public function testQuoteBinary($data, $expected)
+	{
+		$this->assertThat(
+			self::$driver->quoteBinary($data),
+			$this->equalTo($expected),
+			'The binary data was not quoted properly'
+		);
+	}
+
+	/**
 	 * Test getAffectedRows method.
 	 *
 	 * @return  void
@@ -273,7 +308,13 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 	 */
 	public function testGetTableColumns()
 	{
-		$tableCol = array('id' => 'integer', 'title' => 'character varying', 'start_date' => 'timestamp without time zone', 'description' => 'text');
+		$tableCol = array(
+			'id' => 'integer',
+			'title' => 'character varying',
+			'start_date' => 'timestamp without time zone',
+			'description' => 'text',
+			'data' => 'bytea',
+		);
 
 		$this->assertThat(self::$driver->getTableColumns('jos_dbtest'), $this->equalTo($tableCol), __LINE__);
 
@@ -318,9 +359,27 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 		$description->Default = null;
 		$description->comments = '';
 
+		$data = new \stdClass;
+		$data->column_name = 'data';
+		$data->Field = 'data';
+		$data->type = 'bytea';
+		$data->Type = 'bytea';
+		$data->null = 'YES';
+		$data->Null = 'YES';
+		$data->Default = null;
+		$data->comments = '';
+
 		$this->assertThat(
 			self::$driver->getTableColumns('jos_dbtest', false),
-			$this->equalTo(array('id' => $id, 'title' => $title, 'start_date' => $start_date, 'description' => $description)),
+			$this->equalTo(
+				array(
+					'id' => $id,
+					'title' => $title,
+					'start_date' => $start_date,
+					'description' => $description,
+					'data' => $data,
+				)
+			),
 			__LINE__
 		);
 	}
@@ -629,6 +688,7 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 		$objCompare->title = 'Testing3';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'three';
+		$objCompare->data = null;
 
 		$this->assertThat($result, $this->equalTo($objCompare), __LINE__);
 	}
@@ -656,6 +716,7 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 		$objCompare->title = 'Testing';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'one';
+		$objCompare->data = null;
 
 		$expected[] = clone $objCompare;
 
@@ -664,6 +725,7 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 		$objCompare->title = 'Testing2';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'one';
+		$objCompare->data = null;
 
 		$expected[] = clone $objCompare;
 
@@ -672,6 +734,7 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 		$objCompare->title = 'Testing3';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'three';
+		$objCompare->data = null;
 
 		$expected[] = clone $objCompare;
 
@@ -680,6 +743,7 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 		$objCompare->title = 'Testing4';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'four';
+		$objCompare->data = null;
 
 		$expected[] = clone $objCompare;
 
@@ -722,7 +786,7 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadRow();
 
-		$expected = array(3, 'Testing3', '1980-04-18 00:00:00', 'three');
+		$expected = array(3, 'Testing3', '1980-04-18 00:00:00', 'three', null);
 
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
 	}
@@ -743,8 +807,101 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadRowList();
 
-		$expected = array(array(1, 'Testing', '1980-04-18 00:00:00', 'one'), array(2, 'Testing2', '1980-04-18 00:00:00', 'one'));
+		$expected = array(
+			array(1, 'Testing', '1980-04-18 00:00:00', 'one', null),
+			array(2, 'Testing2', '1980-04-18 00:00:00', 'one', null)
+		);
 
+		$this->assertThat($result, $this->equalTo($expected), __LINE__);
+	}
+
+	/**
+	 * Test quoteBinary and decodeBinary methods
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testLoadBinary()
+	{
+		// Add binary data with null byte
+		$query = self::$driver->getQuery(true)
+			->update('jos_dbtest')
+			->set('data = ' . self::$driver->quoteBinary("\x00\x01\x02\xff"))
+			->where('id = 3');
+
+		self::$driver->setQuery($query)->execute();
+
+		// Add binary data with invalid UTF-8
+		$query = self::$driver->getQuery(true)
+			->update('jos_dbtest')
+			->set('data = ' . self::$driver->quoteBinary("\x01\x01\x02\xff"))
+			->where('id = 4');
+
+		self::$driver->setQuery($query)->execute();
+
+		$selectRow3 = self::$driver->getQuery(true)
+			->select('id')
+			->from('jos_dbtest')
+			->where('data = ' . self::$driver->quoteBinary("\x00\x01\x02\xff"));
+
+		$selectRow4 = self::$driver->getQuery(true)
+			->select('id')
+			->from('jos_dbtest')
+			->where('data = '. self::$driver->quoteBinary("\x01\x01\x02\xff"));
+
+		$result = self::$driver->setQuery($selectRow3)->loadResult();
+		$this->assertThat($result, $this->equalTo(3), __LINE__);
+
+		$result = self::$driver->setQuery($selectRow4)->loadResult();
+		$this->assertThat($result, $this->equalTo(4), __LINE__);
+
+		$selectRows = self::$driver->getQuery(true)
+			->select('data')
+			->from('jos_dbtest')
+			->order('id');
+
+		// Test loadColumn
+		$result = self::$driver->setQuery($selectRows)->loadColumn();
+
+		foreach ($result as $i => $v)
+		{
+			$result[$i] = self::$driver->decodeBinary($v);
+		}
+
+		$expected = array(null, null, "\x00\x01\x02\xff", "\x01\x01\x02\xff");
+		$this->assertThat($result, $this->equalTo($expected), __LINE__);
+
+		// Test loadAssocList
+		$result = self::$driver->setQuery($selectRows)->loadAssocList();
+
+		foreach ($result as $i => $v)
+		{
+			$result[$i]['data'] = self::$driver->decodeBinary($v['data']);
+		}
+
+		$expected = array(
+			array('data' => null),
+			array('data' => null),
+			array('data' => "\x00\x01\x02\xff"),
+			array('data' => "\x01\x01\x02\xff"),
+		);
+		$this->assertThat($result, $this->equalTo($expected), __LINE__);
+
+		// Test loadObjectList
+		$result = self::$driver->setQuery($selectRows)->loadObjectList();
+
+		foreach ($result as $i => $v)
+		{
+			$result[$i]->data = self::$driver->decodeBinary($v->data);
+		}
+
+		$expected = array(
+			(object) array('data' => null),
+			(object) array('data' => null),
+			(object) array('data' => "\x00\x01\x02\xff"),
+			(object) array('data' => "\x01\x01\x02\xff"),
+		);
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
 	}
 
@@ -920,7 +1077,7 @@ class DriverPgsqlTest extends DatabasePgsqlCase
 		self::$driver->setQuery($queryCheck);
 		$result = self::$driver->loadRow();
 
-		$expected = array(6, 'testTitle', '1970-01-01 00:00:00', 'testDescription');
+		$expected = array(6, 'testTitle', '1970-01-01 00:00:00', 'testDescription', null);
 
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
 	}
