@@ -23,4 +23,26 @@ interface DatabaseInterface
 	 * @since   1.0
 	 */
 	public static function isSupported();
+
+	/**
+	 * Quotes a binary string to database requirements for use in database queries.
+	 *
+	 * @param   string  $data  A binary string to quote.
+	 *
+	 * @return  string  The binary quoted input string.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function quoteBinary($data);
+
+	/**
+	 * Replace special placeholder representing binary field with the original string.
+	 *
+	 * @param   string|resource  $data  Encoded string or resource.
+	 *
+	 * @return  string  The original string.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function decodeBinary($data);
 }
