@@ -155,7 +155,7 @@ class MysqliDriverTest extends MysqliCase
 		setLocale(LC_NUMERIC, $origin);
 	}
 
-	/*
+	/**
 	 * Test the quoteName method.
 	 *
 	 * @param   string  $text      The column name or alias to be quote.
