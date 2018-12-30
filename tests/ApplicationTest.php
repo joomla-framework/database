@@ -250,7 +250,7 @@ class ApplicationTest extends TestCase
 	}
 
 	/**
-	 * @expectedException  \Symfony\Component\Console\Exception\NamespaceNotFoundException
+	 * @expectedException  \Joomla\Console\Exception\NamespaceNotFoundException
 	 * @expectedExceptionMessage  The namespace "t" is ambiguous.
 	 */
 	public function testFindAmbiguousNamespace()
@@ -262,7 +262,7 @@ class ApplicationTest extends TestCase
 	}
 
 	/**
-	 * @expectedException  \Symfony\Component\Console\Exception\NamespaceNotFoundException
+	 * @expectedException  \Joomla\Console\Exception\NamespaceNotFoundException
 	 * @expectedExceptionMessage  There are no commands defined in the "test" namespace.
 	 */
 	public function testFindUnknownNamespace()
