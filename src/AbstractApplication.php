@@ -88,7 +88,7 @@ abstract class AbstractApplication implements LoggerAwareInterface
 	 * Method to run the application routines.  Most likely you will want to instantiate a controller
 	 * and execute it, or perform some sort of task directly.
 	 *
-	 * @return  void
+	 * @return  mixed
 	 *
 	 * @since   1.0
 	 */
