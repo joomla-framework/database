@@ -72,7 +72,12 @@ class CommandErrorEvent extends ConsoleEvent
 	 */
 	public function getExitCode(): int
 	{
-		return $this->exitCode !== null ? $this->exitCode : (\is_int($this->error->getCode()) && $this->error->getCode() !== 0 ? $this->error->getCode() : 1);
+		if ($this->exitCode !== null)
+		{
+			return $this->exitCode;
+		}
+
+		return \is_int($this->error->getCode()) && $this->error->getCode() !== 0 ? $this->error->getCode() : 1;
 	}
 
 	/**

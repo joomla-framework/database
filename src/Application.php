@@ -200,6 +200,8 @@ class Application extends AbstractApplication
 	 *
 	 * If a command with the same name already exists, it will be overridden. If the command is not enabled it will not be added.
 	 *
+	 * @param   AbstractCommand  $command  The command to add to the application.
+	 *
 	 * @return  AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
@@ -269,20 +271,23 @@ class Application extends AbstractApplication
 			if ($this->consoleInput->hasParameterOption('-vvv', true)
 				|| $this->consoleInput->hasParameterOption('--verbose=3', true)
 				|| $this->consoleInput->getParameterOption('--verbose', false, true) === 3
-			) {
+			)
+			{
 				$this->consoleOutput->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
 			}
 			elseif ($this->consoleInput->hasParameterOption('-vv', true)
 				|| $this->consoleInput->hasParameterOption('--verbose=2', true)
 				|| $this->consoleInput->getParameterOption('--verbose', false, true) === 2
-			) {
+			)
+			{
 				$this->consoleOutput->setVerbosity(OutputInterface::VERBOSITY_VERY_VERBOSE);
 			}
 			elseif ($this->consoleInput->hasParameterOption('-v', true)
 				|| $this->consoleInput->hasParameterOption('--verbose=1', true)
 				|| $this->consoleInput->hasParameterOption('--verbose', true)
 				|| $this->consoleInput->getParameterOption('--verbose', false, true)
-			) {
+			)
+			{
 				$this->consoleOutput->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
 			}
 		}

@@ -128,7 +128,7 @@ abstract class AbstractCommand
 	 */
 	public function __construct($name = null)
 	{
-		$this->definition = new InputDefinition();
+		$this->definition = new InputDefinition;
 
 		if ($name !== null || null !== $name = static::getDefaultName())
 		{
