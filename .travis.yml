@@ -4,6 +4,7 @@ dist: trusty
 
 env:
   global:
+    - SYMFONY_VERSION="3.4.*"
     - RUN_PHPCS="no"
     - COMPOSER_FLAGS="--prefer-stable"
 
@@ -20,6 +21,11 @@ matrix:
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
       env: COMPOSER_FLAGS=""
     - php: 7.2
+      env: SYMFONY_VERSION="4.1.*"
+    - php: 7.2
+      env: SYMFONY_VERSION="4.2.*"
+    - php: 7.2
+      env: SYMFONY_VERSION="4.3.*@dev"
     - php: 7.3
     - php: nightly
   allow_failures:
@@ -27,6 +33,7 @@ matrix:
 
 before_script:
   - composer self-update
+  - composer require --no-update symfony/console:${SYMFONY_VERSION}
   - composer update $COMPOSER_FLAGS
 
 script:
