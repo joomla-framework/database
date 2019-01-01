@@ -4,8 +4,9 @@ dist: trusty
 
 env:
   global:
-    - SYMFONY_VERSION="2.8.*"
-    - LARAVEL_VERSION="5.1.*"
+    - SYMFONY_VERSION="3.4.*"
+    - LARAVEL_VERSION="5.5.*"
+    - TWIG_VERSION="2.*"
     - RUN_PHPCS="no"
     - COMPOSER_FLAGS="--prefer-stable"
 
@@ -13,27 +14,25 @@ matrix:
   include:
     - php: 7.0
     - php: 7.0
-      env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
+      env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" TWIG_VERSION="~1.14"
     - php: 7.0
-      env: RUN_PHPCS="yes" SYMFONY_VERSION="3.3.*"
+      env: RUN_PHPCS="yes"
     - php: 7.1
     - php: 7.1
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
       env: COMPOSER_FLAGS=""
     - php: 7.1
-      env: SYMFONY_VERSION="3.4.*"
-    - php: 7.1
-      env: SYMFONY_VERSION="4.0.*"
-    - php: 7.1
-      env: LARAVEL_VERSION="5.5.*"
+      env: TWIG_VERSION="1.*"
     - php: 7.2
     - php: 7.2
       env: SYMFONY_VERSION="4.1.*"
     - php: 7.2
+      env: SYMFONY_VERSION="4.2.*"
+    - php: 7.2
       env: LARAVEL_VERSION="5.7.*"
     - php: 7.3
     - php: 7.3
-      env: SYMFONY_VERSION="4.2.*@dev"
+      env: SYMFONY_VERSION="4.3.*@dev"
     - php: 7.3
       env: LARAVEL_VERSION="5.8.*@dev"
     - php: nightly
@@ -44,6 +43,7 @@ before_script:
   - composer self-update
   - composer require --no-update symfony/templating:${SYMFONY_VERSION}
   - composer require --no-update illuminate/events:${LARAVEL_VERSION} illuminate/filesystem:${LARAVEL_VERSION} illuminate/view:${LARAVEL_VERSION}
+  - composer require --no-update twig/twig:${TWIG_VERSION}
   - composer update $COMPOSER_FLAGS
 
 script:

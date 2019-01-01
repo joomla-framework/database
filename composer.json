@@ -9,14 +9,14 @@
         "php": "~7.0"
     },
     "require-dev": {
-        "illuminate/events": "~5.1",
-        "illuminate/filesystem": "~5.1",
-        "illuminate/view": "~5.1",
+        "illuminate/events": "5.5.*|5.7.*",
+        "illuminate/filesystem": "5.5.*|5.7.*",
+        "illuminate/view": "5.5.*|5.7.*",
         "joomla/coding-standards": "~2.0@alpha",
         "league/plates": "~3.0",
         "mustache/mustache": "~2.3",
         "phpunit/phpunit": "~6.3",
-        "symfony/templating": "~2.7|~3.0|~4.0",
+        "symfony/templating": "~3.4|~4.0",
         "twig/twig": "~1.14|~2.0"
     },
     "suggest": {
