@@ -90,7 +90,7 @@ class Apcu extends Storage
 	/**
 	 * Test to see if the SessionHandler is available.
 	 *
-	 * @return boolean  True on success, false otherwise.
+	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
