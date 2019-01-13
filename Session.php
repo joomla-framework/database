@@ -303,7 +303,7 @@ class Session implements \IteratorAggregate
 	{
 		if ($this->getState() === 'destroyed')
 		{
-			// @TODO : raise error
+			// phpcs:ignore Joomla.Commenting.FunctionComment.InvalidReturnNotVoid
 			return;
 		}
 
@@ -321,6 +321,7 @@ class Session implements \IteratorAggregate
 	{
 		if ($this->getState() === 'destroyed')
 		{
+			// phpcs:ignore Joomla.Commenting.FunctionComment.InvalidReturnNotVoid
 			return;
 		}
 
@@ -433,10 +434,7 @@ class Session implements \IteratorAggregate
 
 		if ($this->getState() !== 'active' && $this->getState() !== 'expired')
 		{
-			// @TODO :: generated error here
-			$error = null;
-
-			return $error;
+			return;
 		}
 
 		if (isset($_SESSION[$namespace][$name]))
@@ -465,7 +463,6 @@ class Session implements \IteratorAggregate
 
 		if ($this->getState() !== 'active')
 		{
-			// @TODO :: generated error here
 			return;
 		}
 
@@ -500,7 +497,7 @@ class Session implements \IteratorAggregate
 
 		if ($this->getState() !== 'active')
 		{
-			// @TODO :: generated error here
+			// phpcs:ignore Joomla.Commenting.FunctionComment.InvalidReturnNotVoid
 			return;
 		}
 
