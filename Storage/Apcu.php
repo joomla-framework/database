@@ -15,6 +15,7 @@ use Joomla\Session\Storage;
  *
  * @link        https://secure.php.net/manual/en/function.session-set-save-handler.php
  * @since       __DEPLOY_VERSION__
+ * @deprecated  2.0  The Storage class chain will be removed.
  */
 class Apcu extends Storage
 {
