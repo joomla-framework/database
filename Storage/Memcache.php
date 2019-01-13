@@ -65,8 +65,11 @@ class Memcache extends Storage
 	 */
 	public function register()
 	{
-		ini_set('session.save_path', $this->_servers[0]['host'] . ':' . $this->_servers[0]['port']);
-		ini_set('session.save_handler', 'memcache');
+		if (!headers_sent())
+		{
+			ini_set('session.save_path', $this->_servers[0]['host'] . ':' . $this->_servers[0]['port']);
+			ini_set('session.save_handler', 'memcache');
+		}
 	}
 
 	/**

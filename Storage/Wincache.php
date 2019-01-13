@@ -47,7 +47,10 @@ class Wincache extends Storage
 	 */
 	public function register()
 	{
-		ini_set('session.save_handler', 'wincache');
+		if (!headers_sent())
+		{
+			ini_set('session.save_handler', 'wincache');
+		}
 	}
 
 	/**
