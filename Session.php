@@ -303,7 +303,7 @@ class Session implements \IteratorAggregate
 	{
 		if ($this->getState() === 'destroyed')
 		{
-			// phpcs:ignore Joomla.Commenting.FunctionComment.InvalidReturnNotVoid
+			// @codingStandardsIgnoreLine
 			return;
 		}
 
@@ -321,7 +321,7 @@ class Session implements \IteratorAggregate
 	{
 		if ($this->getState() === 'destroyed')
 		{
-			// phpcs:ignore Joomla.Commenting.FunctionComment.InvalidReturnNotVoid
+			// @codingStandardsIgnoreLine
 			return;
 		}
 
@@ -497,7 +497,7 @@ class Session implements \IteratorAggregate
 
 		if ($this->getState() !== 'active')
 		{
-			// phpcs:ignore Joomla.Commenting.FunctionComment.InvalidReturnNotVoid
+			// @codingStandardsIgnoreLine
 			return;
 		}
 
