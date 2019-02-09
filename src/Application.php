@@ -17,6 +17,7 @@ use Joomla\Console\Event\BeforeCommandExecuteEvent;
 use Joomla\Console\Event\CommandErrorEvent;
 use Joomla\Console\Event\TerminateEvent;
 use Joomla\Console\Exception\NamespaceNotFoundException;
+use Joomla\Registry\Registry;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Exception\LogicException;
