@@ -6,13 +6,13 @@ The Console package provides the infrastructure to build and run command line ap
 
 The Console package is built very closely modeling the [Symfony Console component](https://symfony.com/components/Console). Symfony provides an
 excellent infrastructure however its two main pieces, the base Application class and the base Command class, are largely incompatible with
-the Joomla code structure and methodology. Therefore, this package provides a replacement of sorts for these core classes and aims to be able
+the Joomla code structure and methodology. Therefore, this package provides a replacement for these core classes and aims to be able
 to use the Symfony component API as practical.
 
 ### Console Application
 
 Unlike the Application's `AbstractCliApplication` class, this package provides a fully functional and somewhat opinionated `Application` class
-which can be used to run `CommandInterface` implementations. In fact, your application can be bootstrapped with only a few lines of code.
+which can be used to run `AbstractCommand` implementations. In fact, your application can be bootstrapped with only a few lines of code.
 
 ```php
 <?php
@@ -27,13 +27,12 @@ $application->execute();
 
 ### Console Commands
 
-The `CommandInterface` defines the base API for console command classes, largely based on `Symfony\Component\Console\Command\Command`. To help
-developers get started, we provide a `AbstractCommand` for building command classes.
+The `AbstractCommand` defines the base API for console command classes, largely based on `Symfony\Component\Console\Command\Command`.
 
 When using the `AbstractCommand`, generally two methods are required in your classes to have a functional command:
 
-- `initialise` is a hook for configuring the command class, conceptually this is similar to `Symfony\Component\Console\Command\Command::configure()`
-- `execute` is the method which runs the command's logic
+- `configure` is a hook for configuring the command class, conceptually this is similar to `Symfony\Component\Console\Command\Command::configure()`
+- `doExecute` is the method which runs the command's logic, conceptually this is similar to `Symfony\Component\Console\Command\Command::execute()`
 
 The package comes with two commands commonly used in applications:
 
@@ -81,15 +80,15 @@ A `Joomla\Event\DispatcherInterface` must be injected into the application for e
 <?php
 use Joomla\Console\Application;
 use Joomla\Console\ConsoleEvents;
-use Joomla\Console\Event\ConsoleErrorEvent;
+use Joomla\Console\Event\ApplicationErrorEvent;
 use Joomla\Event\Dispatcher;
 
 $dispatcher = new Dispatcher;
 
 // Sample listener for the ConsoleEvents::ERROR event
 $dispatcher->addListener(
-	ConsoleEvents::ERROR,
-	function (ConsoleErrorEvent $event)
+	ConsoleEvents::APPLICATION_ERROR,
+	function (ApplicationErrorEvent $event)
 	{
 		$event->getApplication()->getConsoleOutput()->writeln('<comment>Error event triggered.</comment>');
 	}
@@ -103,9 +102,10 @@ $application->setDispatcher($dispatcher);
 $application->execute();
 ```
 
-The Application has inbuilt support for four events. In addition to the Application package's `BEFORE_EXECUTE` event,
-there are three console specific events:
+The Application has inbuilt support for four events. In addition to the Application package's `BEFORE_EXECUTE` and `AFTER_EXECUTE` events,
+there are several console specific events:
 
 - `ConsoleEvents::BEFORE_COMMAND_EXECUTE` is triggered immediately before executing a command, developers may listen for this event to optionally disable a command at runtime
-- `ConsoleEvents::ERROR` is triggered when the application catches any `Throwable` object that is not caught elsewhere in the application, this can be used to integrate extra error handling/reporting tools
+- `ConsoleEvents::APPLICATION_ERROR` is triggered when the application catches any `Throwable` object that is not caught elsewhere in the application, this can be used to integrate extra error handling/reporting tools
+- `ConsoleEvents::COMMAND_ERROR` is triggered when the application catches any `Throwable` object directly from a command, this can be used to integrate extra error handling/reporting tools
 - `ConsoleEvents::TERMINATE` is triggered immediately before the process is completed, developers may listen for this event to perform any actions required at the end of the process
