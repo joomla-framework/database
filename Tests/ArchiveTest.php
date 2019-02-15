@@ -57,6 +57,8 @@ class ArchiveTest extends ArchiveTestCase
 	{
 		// Filename, Adapter Type, Extracted Filename, Output is a File
 		return array(
+			// See https://github.com/joomla-framework/archive/issues/17
+			array('Caps-Logo.ZIP', 'Zip', 'logo-zip.png'),
 			array('logo.zip', 'Zip', 'logo-zip.png'),
 			array('logo.tar', 'Tar', 'logo-tar.png'),
 			array('logo.png.gz', 'Gzip', 'logo.png'),
