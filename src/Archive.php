@@ -74,7 +74,7 @@ class Archive
 		$path     = pathinfo($archivename, PATHINFO_DIRNAME);
 		$filename = pathinfo($archivename, PATHINFO_FILENAME);
 
-		switch ($ext)
+		switch (strtolower($ext))
 		{
 			case 'zip':
 				$result = $this->getAdapter('zip')->extract($archivename, $extractdir);
