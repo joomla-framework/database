@@ -216,21 +216,20 @@ class File
 
 			// Beef up the chunk size to a meg
 			$stream->set('chunksize', (1024 * 1024));
-
-			$stream->writeFile($file, $buffer);
+			$stream->writeFile($file, $buffer, $appendToFile);
 
 			return true;
 		}
 
 		$file = Path::clean($file);
 
-		// Set the reuired flag to only append to the file and not overwrite it
+		// Set the required flag to only append to the file and not overwrite it
 		if ($appendToFile === true)
 		{
 			return \is_int(file_put_contents($file, $buffer, FILE_APPEND));
 		}
 		
-		return \is_int(file_put_contents($file, $buffer, ));
+		return \is_int(file_put_contents($file, $buffer));
 	}
 
 	/**
