@@ -1367,14 +1367,23 @@ class Stream
 	 *
 	 * @param   string  $filename  The file name.
 	 * @param   string  $buffer    The data to write to the file.
+	 * @param   boolean  $appendOnly  Append to the file and not overwrite it.
 	 *
 	 * @return  boolean
 	 *
 	 * @since   1.0
 	 */
-	public function writeFile($filename, &$buffer)
+	public function writeFile($filename, &$buffer, $appendToFile = false)
 	{
-		if ($this->open($filename, 'w'))
+		$fileMode = 'w';
+		
+		// Switch the filemode when we want to append to the file
+		if ($appendToFile)
+		{
+			$fileMode = 'a';
+		}
+		
+		if ($this->open($filename, $fileMode))
 		{
 			$result = $this->write($buffer);
 			$this->chmod();
