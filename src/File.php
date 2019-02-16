@@ -194,12 +194,13 @@ class File
 	 * @param   string   $file        The full file path
 	 * @param   string   $buffer      The buffer to write
 	 * @param   boolean  $useStreams  Use streams
+	 * @param   boolean  $appendOnly  Append to the file and not overwrite it.
 	 *
 	 * @return  boolean  True on success
 	 *
 	 * @since   1.0
 	 */
-	public static function write($file, &$buffer, $useStreams = false)
+	public static function write($file, &$buffer, $useStreams = false, $appendToFile = false)
 	{
 		@set_time_limit(ini_get('max_execution_time'));
 
@@ -223,7 +224,13 @@ class File
 
 		$file = Path::clean($file);
 
-		return \is_int(file_put_contents($file, $buffer));
+		// Set the reuired flag to only append to the file and not overwrite it
+		if ($appendToFile === true)
+		{
+			return \is_int(file_put_contents($file, $buffer, FILE_APPEND));
+		}
+		
+		return \is_int(file_put_contents($file, $buffer, ));
 	}
 
 	/**
