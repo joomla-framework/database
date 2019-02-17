@@ -1156,4 +1156,49 @@ class StreamTest extends FilesystemTestCase
 			'This test has not been implemented yet.'
 		);
 	}
+
+	/**
+	 * Test the new append mode in the write method.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 *
+	 */
+	public function testwriteFileWithAppend()
+	{
+		$name = 'tempFile.txt';
+		$path = vfsStream::url('root');
+		$data = 'Lorem ipsum dolor sit amet';
+		$appendData = PHP_EOL . $data;
+
+		$this->assertTrue(
+			$this->object->writeFile($path . '/' . $name, $data),
+			'The file was not written.'
+		);
+
+		$this->assertFileExists(
+			$path . '/' . $name,
+			'The file was not written.'
+		);
+
+		$this->assertStringEqualsFile(
+			$path . '/' . $name,
+			$data,
+			'The file was not written with the correct data.'
+		);
+
+		$this->assertTrue(
+			$this->object->writeFile($path . '/' . $name, $appendData, true),
+			'The content was not appended.'
+		);
+
+		$this->assertStringEqualsFile(
+			$path . '/' . $name,
+			$data . $appendData,
+			'The content was not appended correctly.'
+		);
+
+		unlink($path . '/' . $name);
+	}
 }

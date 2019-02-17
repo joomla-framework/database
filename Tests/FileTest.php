@@ -550,4 +550,37 @@ class FileTest extends FilesystemTestCase
 			File::upload($this->testPath . '/' . $name . '.txt', $this->testPath . '/' . $name . '/' . $uploadedFileName)
 		);
 	}
+
+	/**
+	 * Test the new append mode in the write method.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 *
+	 */
+	public function testWriteWithAppend()
+	{
+		$name = 'tempFile.txt';
+		$data = 'Lorem ipsum dolor sit amet';
+		$appendData = PHP_EOL . $data;
+
+		$this->assertTrue(
+			File::write($this->testPath . '/' . $name, $data),
+			'The file was not written.'
+		);
+
+		$this->assertTrue(
+			File::write($this->testPath . '/' . $name, $appendData, false, true),
+			'The file was not appended.'
+		);
+
+		$this->assertStringEqualsFile(
+			$this->testPath . '/' . $name,
+			$data . $appendData,
+			'The written file should match the given content.'
+		);
+
+		unlink($this->testPath . '/' . $name);
+	}
 }
