@@ -1162,6 +1162,7 @@ class StreamTest extends FilesystemTestCase
 	 *
 	 * @return  void
 	 *
+	 * @requires PHP 5.4
 	 * @since   __DEPLOY_VERSION__
 	 *
 	 */
