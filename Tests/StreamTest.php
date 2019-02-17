@@ -1093,6 +1093,42 @@ class StreamTest extends FilesystemTestCase
 	}
 
 	/**
+	 * Test write method when appending to a file.
+	 *
+	 * @return  void
+	 *
+	 * @requires PHP 5.4
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testwriteFileWithAppend()
+	{
+		$name = 'tempFile';
+		$path = vfsStream::url('root');
+		$filename = $path . '/' . $name;
+
+		$data = 'Lorem ipsum dolor sit amet';
+		$appendData = PHP_EOL . $data;
+
+		$this->assertTrue(
+			$this->object->writeFile($path . '/' . $name, $data),
+			'The file was not written.'
+		);
+
+		$this->assertTrue(
+			$this->object->writeFile($path . '/' . $name, $appendData, true),
+			'The file was not appended.'
+		);
+
+		$this->assertFileExists($path . '/' . $name);
+		$this->assertStringEqualsFile(
+			$path . '/' . $name,
+			$data . $appendData
+		);
+
+		unlink($path . '/' . $name);
+	}
+
+	/**
 	 * Test data for _getFilename test
 	 *
 	 * @return  void
