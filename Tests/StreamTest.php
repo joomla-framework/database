@@ -1093,6 +1093,42 @@ class StreamTest extends FilesystemTestCase
 	}
 
 	/**
+	 * Test write method when appending to a file.
+	 *
+	 * @return  void
+	 *
+	 * @requires PHP 5.4
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function testwriteFileWithAppend()
+	{
+		$name = 'tempFile';
+		$path = vfsStream::url('root');
+		$filename = $path . '/' . $name;
+
+		$data = 'Lorem ipsum dolor sit amet';
+		$appendData = PHP_EOL . $data;
+
+		$this->assertTrue(
+			$this->object->writeFile($path . '/' . $name, $data),
+			'The file was not written.'
+		);
+
+		$this->assertTrue(
+			$this->object->writeFile($path . '/' . $name, $appendData, true),
+			'The file was not appended.'
+		);
+
+		$this->assertFileExists($path . '/' . $name);
+		$this->assertStringEqualsFile(
+			$path . '/' . $name,
+			$data . $appendData
+		);
+
+		unlink($path . '/' . $name);
+	}
+
+	/**
 	 * Test data for _getFilename test
 	 *
 	 * @return  void
@@ -1155,51 +1191,5 @@ class StreamTest extends FilesystemTestCase
 		$this->markTestIncomplete(
 			'This test has not been implemented yet.'
 		);
-	}
-
-	/**
-	 * Test the new append mode in the write method.
-	 *
-	 * @return  void
-	 *
-	 * @requires PHP 5.4
-	 * @since   __DEPLOY_VERSION__
-	 *
-	 */
-	public function testwriteFileWithAppend()
-	{
-		$name = 'tempFile.txt';
-		$path = vfsStream::url('root');
-		$data = 'Lorem ipsum dolor sit amet';
-		$appendData = PHP_EOL . $data;
-
-		$this->assertTrue(
-			$this->object->writeFile($path . '/' . $name, $data),
-			'The file was not written.'
-		);
-
-		$this->assertFileExists(
-			$path . '/' . $name,
-			'The file was not written.'
-		);
-
-		$this->assertStringEqualsFile(
-			$path . '/' . $name,
-			$data,
-			'The file was not written with the correct data.'
-		);
-
-		$this->assertTrue(
-			$this->object->writeFile($path . '/' . $name, $appendData, true),
-			'The content was not appended.'
-		);
-
-		$this->assertStringEqualsFile(
-			$path . '/' . $name,
-			$data . $appendData,
-			'The content was not appended correctly.'
-		);
-
-		unlink($path . '/' . $name);
 	}
 }
