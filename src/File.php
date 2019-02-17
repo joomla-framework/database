@@ -191,10 +191,10 @@ class File
 	/**
 	 * Write contents to a file
 	 *
-	 * @param   string   $file        The full file path
-	 * @param   string   $buffer      The buffer to write
-	 * @param   boolean  $useStreams  Use streams
-	 * @param   boolean  $appendOnly  Append to the file and not overwrite it.
+	 * @param   string   $file          The full file path
+	 * @param   string   $buffer        The buffer to write
+	 * @param   boolean  $useStreams    Use streams
+	 * @param   boolean  $appendToFile  Append to the file and not overwrite it.
 	 *
 	 * @return  boolean  True on success
 	 *
@@ -228,7 +228,7 @@ class File
 		{
 			return \is_int(file_put_contents($file, $buffer, FILE_APPEND));
 		}
-		
+
 		return \is_int(file_put_contents($file, $buffer));
 	}
 
