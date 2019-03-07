@@ -8,6 +8,10 @@ namespace Joomla\Renderer\Tests;
 
 use Joomla\Renderer\TwigRenderer;
 use PHPUnit\Framework\TestCase;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
+use Twig\Loader\FilesystemLoader;
+use Twig\Loader\LoaderInterface;
 
 /**
  * Test class for \Joomla\Renderer\TwigRenderer.
@@ -23,13 +27,13 @@ class TwigRendererTest extends TestCase
 	{
 		$renderer = new TwigRenderer;
 
-		$this->assertAttributeInstanceOf('Twig_Environment', 'renderer', $renderer);
+		$this->assertAttributeInstanceOf(Environment::class, 'renderer', $renderer);
 
 		$this->assertAttributeInstanceOf(
-			'Twig_Loader_Filesystem',
+			FilesystemLoader::class,
 			'loader',
 			$renderer->getRenderer(),
-			'A default Twig_Loader_Filesystem instance should be set as the loader for the environment.'
+			'A default FilesystemLoader instance should be set as the loader for the environment.'
 		);
 	}
 
@@ -40,7 +44,7 @@ class TwigRendererTest extends TestCase
 	 */
 	public function testTheTwigRendererIsInstantiatedWithInjectedParameters()
 	{
-		$environment = new \Twig_Environment(new \Twig_Loader_Array([]));
+		$environment = new Environment(new ArrayLoader([]));
 		$renderer    = new TwigRenderer($environment);
 
 		$this->assertAttributeSame($environment, 'renderer', $renderer);
@@ -67,7 +71,7 @@ class TwigRendererTest extends TestCase
 	 */
 	public function testTheRenderingEngineIsReturned()
 	{
-		$environment = new \Twig_Environment(new \Twig_Loader_Array([]));
+		$environment = new Environment(new ArrayLoader([]));
 		$renderer    = new TwigRenderer($environment);
 
 		$this->assertSame($environment, $renderer->getRenderer());
@@ -93,16 +97,16 @@ class TwigRendererTest extends TestCase
 	 */
 	public function testAPathCannotBeCheckedForExistenceWhenTheLoaderDoesNotSupportCheckingIt()
 	{
-		// Only test when Twig_LoaderInterface does not contain the exists method
-		if (method_exists('Twig_LoaderInterface', 'exists'))
+		// Only test when LoaderInterface does not contain the exists method
+		if (method_exists(LoaderInterface::class, 'exists'))
 		{
 			$this->markTestSkipped('Test only applies for Twig 1.x');
 		}
 
-		$loader = $this->getMockBuilder('Twig_LoaderInterface')
+		$loader = $this->getMockBuilder(LoaderInterface::class)
 			->getMock();
 
-		$renderer = new TwigRenderer(new \Twig_Environment($loader));
+		$renderer = new TwigRenderer(new Environment($loader));
 
 		$this->assertTrue($renderer->pathExists('index.twig'));
 	}

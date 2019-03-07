@@ -8,6 +8,11 @@
 
 namespace Joomla\Renderer;
 
+use Twig\Environment;
+use Twig\Loader\ExistsLoaderInterface;
+use Twig\Loader\FilesystemLoader;
+use Twig\Loader\LoaderInterface;
+
 /**
  * Twig class for rendering output.
  *
@@ -18,7 +23,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	/**
 	 * Rendering engine
 	 *
-	 * @var    \Twig_Environment
+	 * @var    Environment
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $renderer;
@@ -26,13 +31,13 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	/**
 	 * Constructor.
 	 *
-	 * @param   \Twig_Environment  $renderer  Rendering engine
+	 * @param   Environment  $renderer  Rendering engine
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct(\Twig_Environment $renderer = null)
+	public function __construct(Environment $renderer = null)
 	{
-		$this->renderer = $renderer ?: new \Twig_Environment(new \Twig_Loader_Filesystem);
+		$this->renderer = $renderer ?: new Environment(new FilesystemLoader);
 	}
 
 	/**
@@ -54,7 +59,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 		{
 			if ($alias === '')
 			{
-				$alias = \Twig_Loader_Filesystem::MAIN_NAMESPACE;
+				$alias = FilesystemLoader::MAIN_NAMESPACE;
 			}
 
 			$loader->addPath($directory, $alias);
@@ -66,7 +71,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	/**
 	 * Get the rendering engine
 	 *
-	 * @return  \Twig_Environment
+	 * @return  Environment
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -89,11 +94,11 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 		$loader = $this->getRenderer()->getLoader();
 
 		/*
-		 * For Twig 1.x compatibility, check if the loader implements Twig_ExistsLoaderInterface
-		 * As of Twig 2.0, the `exists()` method is part of Twig_LoaderInterface
+		 * For Twig 1.x compatibility, check if the loader implements ExistsLoaderInterface
+		 * As of Twig 2.0, the `exists()` method is part of LoaderInterface
 		 * This conditional may be removed when dropping Twig 1.x support
 		 */
-		if ($loader instanceof \Twig_ExistsLoaderInterface || method_exists('Twig_LoaderInterface', 'exists'))
+		if ($loader instanceof ExistsLoaderInterface || method_exists(LoaderInterface::class, 'exists'))
 		{
 			return $loader->exists($path);
 		}
