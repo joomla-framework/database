@@ -9,9 +9,9 @@
         "php": "~7.0"
     },
     "require-dev": {
-        "illuminate/events": "5.5.*|5.7.*",
-        "illuminate/filesystem": "5.5.*|5.7.*",
-        "illuminate/view": "5.5.*|5.7.*",
+        "illuminate/events": "5.5.*|5.8.*",
+        "illuminate/filesystem": "5.5.*|5.8.*",
+        "illuminate/view": "5.5.*|5.8.*",
         "joomla/coding-standards": "~2.0@alpha",
         "league/plates": "~3.0",
         "mustache/mustache": "~2.3",
@@ -20,11 +20,11 @@
         "twig/twig": "~1.34|~2.4"
     },
     "suggest": {
-        "illuminate/view": "Install ~5.1 if you are using Laravel's Blade template engine.",
+        "illuminate/view": "Install 5.5.*|5.8.* if you are using Laravel's Blade template engine.",
         "league/plates": "Install ~3.0 if you are using the Plates template engine.",
         "mustache/mustache": "Install ~2.3 if you are using the Mustache template engine.",
-        "symfony/templating": "Install ~2.7|~3.0|~4.0 if you are using Symfony's PHP template component.",
-        "twig/twig": "Install ~1.14|~2.0 if you are using the Twig template engine."
+        "symfony/templating": "Install ~3.4|~4.0 if you are using Symfony's PHP template component.",
+        "twig/twig": "Install ~1.34|~2.4 if you are using the Twig template engine."
     },
     "autoload": {
         "psr-4": {
