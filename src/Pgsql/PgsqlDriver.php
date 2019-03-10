@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -989,7 +989,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  string  The binary quoted input string.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.7.0
 	 */
 	public function quoteBinary($data)
 	{
@@ -1003,7 +1003,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  string  The original string.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.7.0
 	 */
 	public function decodeBinary($data)
 	{

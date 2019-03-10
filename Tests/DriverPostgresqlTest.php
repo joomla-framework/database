@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -104,7 +104,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.7.0
 	 */
 	public function dataTestQuoteBinary()
 	{
@@ -217,7 +217,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	 * @return  void
 	 *
 	 * @dataProvider  dataTestQuoteBinary
-	 * @since         __DEPLOY_VERSION__
+	 * @since         1.7.0
 	 */
 	public function testQuoteBinary($data, $expected)
 	{
@@ -846,7 +846,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.7.0
 	 */
 	public function testLoadBinary()
 	{

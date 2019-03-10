@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -34,7 +34,7 @@ class DriverSqliteTest extends DatabaseSqliteCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.7.0
 	 */
 	public function dataTestQuoteBinary()
 	{
@@ -50,7 +50,7 @@ class DriverSqliteTest extends DatabaseSqliteCase
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.7.0
 	 */
 	public function dataTestQuoteName()
 	{
@@ -142,7 +142,7 @@ class DriverSqliteTest extends DatabaseSqliteCase
 	 * @return  void
 	 *
 	 * @dataProvider  dataTestQuoteBinary
-	 * @since         __DEPLOY_VERSION__
+	 * @since         1.7.0
 	 */
 	public function testQuoteBinary($data, $expected)
 	{
@@ -163,7 +163,7 @@ class DriverSqliteTest extends DatabaseSqliteCase
 	 * @return  void
 	 *
 	 * @dataProvider  dataTestQuoteName
-	 * @since         __DEPLOY_VERSION__
+	 * @since         1.7.0
 	 */
 	public function testQuoteName($text, $asPart, $expected)
 	{
@@ -649,7 +649,7 @@ class DriverSqliteTest extends DatabaseSqliteCase
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.7.0
 	 */
 	public function testLoadBinary()
 	{
