@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Authentication Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -11,7 +11,7 @@ namespace Joomla\Authentication\Password;
 /**
  * Password handler for Argon2id hashed passwords
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.3.0
  */
 class Argon2idHandler implements HandlerInterface
 {
@@ -23,7 +23,7 @@ class Argon2idHandler implements HandlerInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 * @throws  \LogicException
 	 */
 	public function hashPassword($plaintext, array $options = array())
@@ -42,7 +42,7 @@ class Argon2idHandler implements HandlerInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public static function isSupported()
 	{
@@ -63,7 +63,7 @@ class Argon2idHandler implements HandlerInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 * @throws  \LogicException
 	 */
 	public function validatePassword($plaintext, $hashed)
