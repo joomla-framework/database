@@ -157,6 +157,15 @@ interface DatabaseInterface
 	public function getMinimum();
 
 	/**
+	 * Get the name of the database driver.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getName();
+
+	/**
 	 * Get the null or zero representation of a timestamp for the database driver.
 	 *
 	 * @return  string
@@ -499,6 +508,18 @@ interface DatabaseInterface
 	 * @throws  \RuntimeException
 	 */
 	public function transactionStart($asSavepoint = false);
+
+	/**
+	 * Method to truncate a table.
+	 *
+	 * @param   string  $table  The table to truncate
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function truncateTable($table);
 
 	/**
 	 * Unlocks tables in the database.
