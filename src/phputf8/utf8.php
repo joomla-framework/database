@@ -42,7 +42,7 @@ if ( extension_loaded('mbstring')) {
      * and https://github.com/php/php-src/commit/97df99a6d7d96a886ac143337fecad775907589a
      * for additional references
      */
-    if ( PHP_VERSION_ID <= 80000 && ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING ) {
+    if ( PHP_VERSION_ID < 80000 && ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING ) {
         trigger_error('String functions are overloaded by mbstring',E_USER_ERROR);
     }
     mb_internal_encoding('UTF-8');
