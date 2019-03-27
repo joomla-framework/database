@@ -53,7 +53,7 @@ class WebClient
 	const ANDROIDTABLET = 22;
 	const EDGE          = 23;
 	const BLINK         = 24;
-	const EDG           = 75;
+	const EDG           = 25;
 
 	/**
 	 * @var    integer  The detected platform on which the web client runs.
