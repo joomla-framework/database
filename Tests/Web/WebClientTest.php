@@ -121,6 +121,8 @@ class WebClientTest extends TestCase
 				'Mozilla/5.0 (compatible; Konqueror/4.4; Linux 2.6.32-22-generic; X11; en_US) KHTML/4.4.3 (like Gecko) Kubuntu'),
 			array('', false, WebClient::AMAYA, '', '', 'amaya/11.3.1 libwww/5.4.1'),
 			array(WebClient::WINDOWS, false, WebClient::PRESTO, WebClient::OPERA, '8.50', 'Mozilla/5.0 (Windows NT 5.1; U; de) Opera 8.50'),
+			array(WebClient::WINDOWS, false, WebClient::BLINK, WebClient::EDG, '75.0.107.0',
+				'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3738.0 Safari/537.36 Edg/75.0.107.0'),
 		);
 	}
 

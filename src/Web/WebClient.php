@@ -53,6 +53,7 @@ class WebClient
 	const ANDROIDTABLET = 22;
 	const EDGE          = 23;
 	const BLINK         = 24;
+	const EDG           = 25;
 
 	/**
 	 * @var    integer  The detected platform on which the web client runs.
@@ -280,6 +281,11 @@ class WebClient
 			$this->browser  = self::EDGE;
 			$patternBrowser = 'Edge';
 		}
+		elseif (stripos($userAgent, 'Edg') !== false)
+		{
+			$this->browser  = self::EDG;
+			$patternBrowser = 'Edg';
+		}
 		elseif ((stripos($userAgent, 'Firefox') !== false) && (stripos($userAgent, 'like Firefox') === false))
 		{
 			$this->browser  = self::FIREFOX;
@@ -388,6 +394,10 @@ class WebClient
 		elseif (stripos($userAgent, 'Edge') !== false || stripos($userAgent, 'EdgeHTML') !== false)
 		{
 			$this->engine = self::EDGE;
+		}
+		elseif (stripos($userAgent, 'Edg') !== false)
+		{
+			$this->engine = self::BLINK;
 		}
 		elseif (stripos($userAgent, 'Chrome') !== false)
 		{
