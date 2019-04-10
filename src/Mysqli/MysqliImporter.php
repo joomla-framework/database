@@ -99,7 +99,7 @@ class MysqliImporter extends DatabaseImporter
 	/**
 	 * Get alters for table if there is a difference.
 	 *
-	 * @param   \SimpleXMLElement  $structure  The XML structure pf the table.
+	 * @param   \SimpleXMLElement  $structure  The XML structure of the table.
 	 *
 	 * @return  array
 	 *
