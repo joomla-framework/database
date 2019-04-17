@@ -106,7 +106,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 	 *
 	 * @return  integer  The custom count as an integer.
 	 *
-	 * @link    https://secure.php.net/manual/en/countable.count.php
+	 * @link    https://www.php.net/manual/en/countable.count.php
 	 * @since   1.3.0
 	 */
 	public function count()
