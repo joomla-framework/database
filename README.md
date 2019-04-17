@@ -397,7 +397,7 @@ be reasonable for the controllers to have access to the container in order to bu
 
 ### Container Aware Trait
 
-Since PHP 5.4 traits are [available](http://www.php.net/traits), so you can use `ContainerAwareTrait`.
+Since PHP 5.4 traits are [available](https://www.php.net/traits), so you can use `ContainerAwareTrait`.
 
 Usage:
 
