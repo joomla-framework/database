@@ -151,7 +151,7 @@ abstract class StringHelper
 	 *
 	 * @return  integer Unicode ordinal for the character
 	 *
-	 * @link    https://secure.php.net/ord
+	 * @link    https://www.php.net/ord
 	 * @since   1.4.0
 	 */
 	public static function ord($chr)
@@ -170,7 +170,7 @@ abstract class StringHelper
 	 *
 	 * @return  mixed  Number of characters before the first match or FALSE on failure
 	 *
-	 * @link    https://secure.php.net/strpos
+	 * @link    https://www.php.net/strpos
 	 * @since   1.3.0
 	 */
 	public static function strpos($str, $search, $offset = false)
@@ -194,7 +194,7 @@ abstract class StringHelper
 	 *
 	 * @return  mixed  Number of characters before the last match or false on failure
 	 *
-	 * @link    https://secure.php.net/strrpos
+	 * @link    https://www.php.net/strrpos
 	 * @since   1.3.0
 	 */
 	public static function strrpos($str, $search, $offset = 0)
@@ -213,7 +213,7 @@ abstract class StringHelper
 	 *
 	 * @return  mixed string or FALSE if failure
 	 *
-	 * @link    https://secure.php.net/substr
+	 * @link    https://www.php.net/substr
 	 * @since   1.3.0
 	 */
 	public static function substr($str, $offset, $length = false)
@@ -238,7 +238,7 @@ abstract class StringHelper
 	 *
 	 * @return  mixed  Either string in lowercase or FALSE is UTF-8 invalid
 	 *
-	 * @link    https://secure.php.net/strtolower
+	 * @link    https://www.php.net/strtolower
 	 * @since   1.3.0
 	 */
 	public static function strtolower($str)
@@ -258,7 +258,7 @@ abstract class StringHelper
 	 *
 	 * @return  mixed  Either string in uppercase or FALSE is UTF-8 invalid
 	 *
-	 * @link    https://secure.php.net/strtoupper
+	 * @link    https://www.php.net/strtoupper
 	 * @since   1.3.0
 	 */
 	public static function strtoupper($str)
@@ -275,7 +275,7 @@ abstract class StringHelper
 	 *
 	 * @return  integer  Number of UTF-8 characters in string.
 	 *
-	 * @link    https://secure.php.net/strlen
+	 * @link    https://www.php.net/strlen
 	 * @since   1.3.0
 	 */
 	public static function strlen($str)
@@ -295,7 +295,7 @@ abstract class StringHelper
 	 *
 	 * @return  string  UTF-8 String
 	 *
-	 * @link    https://secure.php.net/str_ireplace
+	 * @link    https://www.php.net/str_ireplace
 	 * @since   1.3.0
 	 */
 	public static function str_ireplace($search, $replace, $str, $count = null)
@@ -321,7 +321,7 @@ abstract class StringHelper
 	 *
 	 * @return  string
 	 *
-	 * @link    https://secure.php.net/str_pad
+	 * @link    https://www.php.net/str_pad
 	 * @since   1.4.0
 	 */
 	public static function str_pad($input, $length, $padStr = ' ', $type = STR_PAD_RIGHT)
@@ -339,7 +339,7 @@ abstract class StringHelper
 	 *
 	 * @return  array
 	 *
-	 * @link    https://secure.php.net/str_split
+	 * @link    https://www.php.net/str_split
 	 * @since   1.3.0
 	 */
 	public static function str_split($str, $splitLen = 1)
@@ -358,9 +358,9 @@ abstract class StringHelper
 	 *
 	 * @return  integer   < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
 	 *
-	 * @link    https://secure.php.net/strcasecmp
-	 * @link    https://secure.php.net/strcoll
-	 * @link    https://secure.php.net/setlocale
+	 * @link    https://www.php.net/strcasecmp
+	 * @link    https://www.php.net/strcoll
+	 * @link    https://www.php.net/setlocale
 	 * @since   1.3.0
 	 */
 	public static function strcasecmp($str1, $str2, $locale = false)
@@ -415,9 +415,9 @@ abstract class StringHelper
 	 *
 	 * @return  integer  < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
 	 *
-	 * @link    https://secure.php.net/strcmp
-	 * @link    https://secure.php.net/strcoll
-	 * @link    https://secure.php.net/setlocale
+	 * @link    https://www.php.net/strcmp
+	 * @link    https://www.php.net/strcoll
+	 * @link    https://www.php.net/setlocale
 	 * @since   1.3.0
 	 */
 	public static function strcmp($str1, $str2, $locale = false)
@@ -470,7 +470,7 @@ abstract class StringHelper
 	 *
 	 * @return  integer  The length of the initial segment of str1 which does not contain any of the characters in str2
 	 *
-	 * @link    https://secure.php.net/strcspn
+	 * @link    https://www.php.net/strcspn
 	 * @since   1.3.0
 	 */
 	public static function strcspn($str, $mask, $start = null, $length = null)
@@ -499,7 +499,7 @@ abstract class StringHelper
 	 *
 	 * @return string the sub string
 	 *
-	 * @link    https://secure.php.net/stristr
+	 * @link    https://www.php.net/stristr
 	 * @since   1.3.0
 	 */
 	public static function stristr($str, $search)
@@ -516,7 +516,7 @@ abstract class StringHelper
 	 *
 	 * @return  string   The string in reverse character order
 	 *
-	 * @link    https://secure.php.net/strrev
+	 * @link    https://www.php.net/strrev
 	 * @since   1.3.0
 	 */
 	public static function strrev($str)
@@ -536,7 +536,7 @@ abstract class StringHelper
 	 *
 	 * @return  integer
 	 *
-	 * @link    https://secure.php.net/strspn
+	 * @link    https://www.php.net/strspn
 	 * @since   1.3.0
 	 */
 	public static function strspn($str, $mask, $start = null, $length = null)
@@ -566,7 +566,7 @@ abstract class StringHelper
 	 *
 	 * @return  string
 	 *
-	 * @link    https://secure.php.net/substr_replace
+	 * @link    https://www.php.net/substr_replace
 	 * @since   1.3.0
 	 */
 	public static function substr_replace($str, $repl, $start, $length = null)
@@ -591,7 +591,7 @@ abstract class StringHelper
 	 *
 	 * @return  string  The trimmed string
 	 *
-	 * @link    https://secure.php.net/ltrim
+	 * @link    https://www.php.net/ltrim
 	 * @since   1.3.0
 	 */
 	public static function ltrim($str, $charlist = false)
@@ -620,7 +620,7 @@ abstract class StringHelper
 	 *
 	 * @return  string  The trimmed string
 	 *
-	 * @link    https://secure.php.net/rtrim
+	 * @link    https://www.php.net/rtrim
 	 * @since   1.3.0
 	 */
 	public static function rtrim($str, $charlist = false)
@@ -649,7 +649,7 @@ abstract class StringHelper
 	 *
 	 * @return  string  The trimmed string
 	 *
-	 * @link    https://secure.php.net/trim
+	 * @link    https://www.php.net/trim
 	 * @since   1.3.0
 	 */
 	public static function trim($str, $charlist = false)
@@ -680,7 +680,7 @@ abstract class StringHelper
 	 *                  else consider the string of words separated by the delimiter, apply the ucfirst to each words
 	 *                  and return the string with the new delimiter
 	 *
-	 * @link    https://secure.php.net/ucfirst
+	 * @link    https://www.php.net/ucfirst
 	 * @since   1.3.0
 	 */
 	public static function ucfirst($str, $delimiter = null, $newDelimiter = null)
@@ -707,7 +707,7 @@ abstract class StringHelper
 	 *
 	 * @return  string  String with first char of each word uppercase
 	 *
-	 * @link    https://secure.php.net/ucwords
+	 * @link    https://www.php.net/ucwords
 	 * @since   1.3.0
 	 */
 	public static function ucwords($str)
@@ -776,7 +776,7 @@ abstract class StringHelper
 	 * @return  boolean  TRUE if string is valid UTF-8
 	 *
 	 * @see     StringHelper::valid
-	 * @link    https://secure.php.net/manual/en/reference.pcre.pattern.modifiers.php#54805
+	 * @link    https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php#54805
 	 * @since   1.3.0
 	 */
 	public static function compliant($str)
