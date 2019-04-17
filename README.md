@@ -260,7 +260,7 @@ array
       'size' => int 0
 ```
 
-Unlike the PHP `$_FILES` supergobal, this array is very easier to parse. The example above assumes two files were submitted, but only one was specified. The 'blank' file contains an error code (see [PHP file upload errors](http://php.net/manual/en/features.file-upload.errors.php)).
+Unlike the PHP `$_FILES` supergobal, this array is very easier to parse. The example above assumes two files were submitted, but only one was specified. The 'blank' file contains an error code (see [PHP file upload errors](https://www.php.net/manual/en/features.file-upload.errors.php)).
 
 The `set` method is disabled in `Input\Files`.
 
