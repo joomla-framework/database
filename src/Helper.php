@@ -24,7 +24,7 @@ class Helper
 	 *
 	 * @return  mixed
 	 *
-	 * @link    https://secure.php.net/manual/en/function.filesize.php#71098
+	 * @link    https://www.php.net/manual/en/function.filesize.php#71098
 	 * @since   1.0
 	 */
 	public static function remotefsize($url)
@@ -123,7 +123,7 @@ class Helper
 	 *
 	 * @return  mixed
 	 *
-	 * @link    https://secure.php.net/manual/en/function.ftp-chmod.php
+	 * @link    https://www.php.net/manual/en/function.ftp-chmod.php
 	 * @since   1.0
 	 */
 	public static function ftpChmod($url, $mode)
