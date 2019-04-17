@@ -34,7 +34,7 @@ class Curl implements TransportInterface
 	 *
 	 * @param   array|\ArrayAccess  $options  Client options array.
 	 *
-	 * @link    https://secure.php.net/manual/en/function.curl-setopt.php
+	 * @link    https://www.php.net/manual/en/function.curl-setopt.php
 	 * @since   1.0
 	 * @throws  \InvalidArgumentException
 	 * @throws  \RuntimeException
