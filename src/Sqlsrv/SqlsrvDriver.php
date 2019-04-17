@@ -20,7 +20,7 @@ use Psr\Log;
 /**
  * SQL Server Database Driver
  *
- * @link   https://secure.php.net/manual/en/book.sqlsrv.php
+ * @link   https://www.php.net/manual/en/book.sqlsrv.php
  * @since  1.0
  */
 class SqlsrvDriver extends DatabaseDriver

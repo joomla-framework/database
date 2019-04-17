@@ -13,7 +13,7 @@ use Joomla\Database\Pdo\PdoDriver;
 /**
  * Oracle Database Driver supporting PDO based connections
  *
- * @link        https://secure.php.net/manual/en/ref.pdo-oci.php
+ * @link        https://www.php.net/manual/en/ref.pdo-oci.php
  * @since       1.0
  * @deprecated  2.0  Oracle support will be removed.
  */

@@ -14,7 +14,7 @@ use Joomla\Database\Pdo\PdoDriver;
 /**
  * MySQL database driver supporting PDO based connections
  *
- * @link   https://secure.php.net/manual/en/ref.pdo-mysql.php
+ * @link   https://www.php.net/manual/en/ref.pdo-mysql.php
  * @since  1.0
  */
 class MysqlDriver extends PdoDriver

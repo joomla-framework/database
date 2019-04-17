@@ -19,7 +19,7 @@ use Psr\Log;
 /**
  * Joomla Framework PDO Database Driver Class
  *
- * @link   https://secure.php.net/pdo
+ * @link   https://www.php.net/pdo
  * @since  1.0
  */
 abstract class PdoDriver extends DatabaseDriver
@@ -476,7 +476,7 @@ abstract class PdoDriver extends DatabaseDriver
 
 	/**
 	 * Retrieve a PDO database connection attribute
-	 * http://www.php.net/manual/en/pdo.getattribute.php
+	 * https://www.php.net/manual/en/pdo.getattribute.php
 	 *
 	 * Usage: $db->getOption(PDO::ATTR_CASE);
 	 *
@@ -521,7 +521,7 @@ abstract class PdoDriver extends DatabaseDriver
 
 	/**
 	 * Sets an attribute on the PDO database handle.
-	 * http://www.php.net/manual/en/pdo.setattribute.php
+	 * https://www.php.net/manual/en/pdo.setattribute.php
 	 *
 	 * Usage: $db->setOption(PDO::ATTR_CASE, PDO::CASE_UPPER);
 	 *

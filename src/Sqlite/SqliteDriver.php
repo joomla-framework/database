@@ -14,7 +14,7 @@ use SQLite3;
 /**
  * SQLite database driver supporting PDO based connections
  *
- * @link   https://secure.php.net/manual/en/ref.pdo-sqlite.php
+ * @link   https://www.php.net/manual/en/ref.pdo-sqlite.php
  * @since  1.0
  */
 class SqliteDriver extends PdoDriver
