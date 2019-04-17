@@ -18,7 +18,7 @@ class Cipher_3DES extends Cipher_Mcrypt
 {
 	/**
 	 * @var    integer  The mcrypt cipher constant.
-	 * @see    http://www.php.net/manual/en/mcrypt.ciphers.php
+	 * @see    https://www.php.net/manual/en/mcrypt.ciphers.php
 	 * @since  1.0
 	 * @deprecated  2.0  Use \Joomla\Crypt\Cipher_Crypto instead
 	 */
@@ -26,7 +26,7 @@ class Cipher_3DES extends Cipher_Mcrypt
 
 	/**
 	 * @var    integer  The mcrypt block cipher mode.
-	 * @see    http://www.php.net/manual/en/mcrypt.constants.php
+	 * @see    https://www.php.net/manual/en/mcrypt.constants.php
 	 * @since  1.0
 	 * @deprecated  2.0  Use \Joomla\Crypt\Cipher_Crypto instead
 	 */
