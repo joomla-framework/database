@@ -784,10 +784,10 @@ class PgsqlDriver extends PdoDriver
 	}
 
 	/**
-	 * This function replaces a string identifier <var>$prefix</var> with the string held is the <var>tablePrefix</var> class variable.
+	 * This function replaces a string identifier with the configured table prefix.
 	 *
 	 * @param   string  $sql     The SQL statement to prepare.
-	 * @param   string  $prefix  The common table prefix.
+	 * @param   string  $prefix  The table prefix.
 	 *
 	 * @return  string  The processed SQL statement.
 	 *

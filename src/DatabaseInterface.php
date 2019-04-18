@@ -449,6 +449,18 @@ interface DatabaseInterface
 	public function renameTable($oldTable, $newTable, $backup = null, $prefix = null);
 
 	/**
+	 * This function replaces a string identifier with the configured table prefix.
+	 *
+	 * @param   string  $sql     The SQL statement to prepare.
+	 * @param   string  $prefix  The table prefix.
+	 *
+	 * @return  string  The processed SQL statement.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function replacePrefix($sql, $prefix = '#__');
+
+	/**
 	 * Select a database for use.
 	 *
 	 * @param   string  $database  The name of the database to select for use.
