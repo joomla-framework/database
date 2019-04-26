@@ -226,16 +226,6 @@ class PgsqlDriver extends PdoDriver
 		{
 			foreach ($fields as $field)
 			{
-				if (stristr(strtolower($field->type), 'character varying'))
-				{
-					$field->Default = '';
-				}
-
-				if (stristr(strtolower($field->type), 'text'))
-				{
-					$field->Default = '';
-				}
-
 				// Do some dirty translation to MySQL output.
 				// @todo: Come up with and implement a standard across databases.
 				$result[$field->column_name] = (object) [
@@ -281,12 +271,13 @@ class PgsqlDriver extends PdoDriver
 
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
+		$tableSub = $this->replacePrefix($table);
 
-		if (\in_array($table, $tableList, true))
+		if (\in_array($tableSub, $tableList, true))
 		{
 			// Get the details columns information.
 			$this->setQuery('
-				SELECT indexname AS "idxName", indisprimary AS "isPrimary", indisunique  AS "isUnique",
+				SELECT indexname AS "idxName", indisprimary AS "isPrimary", indisunique  AS "isUnique", indkey AS "indKey",
 					CASE WHEN indisprimary = true THEN
 						( SELECT \'ALTER TABLE \' || tablename || \' ADD \' || pg_catalog.pg_get_constraintdef(const.oid, true)
 							FROM pg_constraint AS const WHERE const.conname= pgClassFirst.relname )
@@ -295,13 +286,47 @@ class PgsqlDriver extends PdoDriver
 				FROM pg_indexes
 				LEFT JOIN pg_class AS pgClassFirst ON indexname=pgClassFirst.relname
 				LEFT JOIN pg_index AS pgIndex ON pgClassFirst.oid=pgIndex.indexrelid
-				WHERE tablename=' . $this->quote($table) . ' ORDER BY indkey'
+				WHERE tablename=' . $this->quote($tableSub) . ' ORDER BY indkey'
 			);
 
 			return $this->loadObjectList();
 		}
 
 		return [];
+	}
+
+	/**
+	 * Get the list of column names this index indexes.
+	 *
+	 * @param   string  $table   The name of the table.
+	 * @param   string  $indKey  The list of column numbers for the table
+	 *
+	 * @return  string  A list of the column names for the table.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function getNamesKey($table, $indKey)
+	{
+		$this->connect();
+
+		$tableSub = $this->replacePrefix($table);
+
+		$tabInd = explode(' ', $indKey);
+		$colNames = array();
+
+		foreach ($tabInd as $numCol)
+		{
+			$query = $this->getQuery(true)
+				->select('attname')
+				->from('pg_attribute')
+				->join('LEFT', 'pg_class ON pg_class.relname=' . $this->quote($tableSub))
+				->where('attnum=' . $numCol . ' AND attrelid=pg_class.oid');
+			$this->setQuery($query);
+			$colNames[] = $this->loadResult();
+		}
+
+		return implode(', ', $colNames);
 	}
 
 	/**
@@ -340,8 +365,9 @@ class PgsqlDriver extends PdoDriver
 	{
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
+		$tableSub = $this->replacePrefix($table);
 
-		if (\in_array($table, $tableList, true))
+		if (\in_array($tableSub, $tableList, true))
 		{
 			$name = [
 				's.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
@@ -361,13 +387,59 @@ class PgsqlDriver extends PdoDriver
 				->leftJoin('pg_namespace n ON n.oid = t.relnamespace')
 				->leftJoin('pg_attribute a ON a.attrelid = t.oid AND a.attnum = d.refobjsubid')
 				->leftJoin('information_schema.sequences AS info ON info.sequence_name = s.relname')
-				->where('s.relkind = ' . $this->quote('S') . ' AND d.deptype = ' . $this->quote('a') . ' AND t.relname = ' . $this->quote($table));
+				->where('s.relkind = ' . $this->quote('S') . ' AND d.deptype = ' . $this->quote('a') . ' AND t.relname = ' . $this->quote($tableSub));
 			$this->setQuery($query);
 
 			return $this->loadObjectList();
 		}
 
 		return [];
+	}
+
+	/**
+	 * Method to get the last value of a sequence in the database.
+	 *
+	 * @param   string  $sequence  The name of the sequence.
+	 *
+	 * @return  integer  The last value of the sequence.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function getSequenceLastValue($sequence)
+	{
+		$this->connect();
+
+		$query = $this->getQuery(true)
+			->select($this->quoteName('last_value'))
+			->from($sequence);
+
+		$this->setQuery($query);
+
+		return $this->loadResult();
+	}
+
+	/**
+	 * Method to get the is_called attribute of a sequence.
+	 *
+	 * @param   string  $sequence  The name of the sequence.
+	 *
+	 * @return  boolean  The is_called attribute of the sequence.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function getSequenceIsCalled($sequence)
+	{
+		$this->connect();
+
+		$query = $this->getQuery(true)
+			->select($this->quoteName('is_called'))
+			->from($sequence);
+
+		$this->setQuery($query);
+
+		return $this->loadResult();
 	}
 
 	/**

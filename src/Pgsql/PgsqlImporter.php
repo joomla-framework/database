@@ -107,6 +107,7 @@ class PgsqlImporter extends DatabaseImporter
 				if ($change)
 				{
 					$alters[] = $this->getChangeSequenceSql($kSeqName, $vSeq);
+					$alters[] = $this->getSetvalSequenceSql($kSeqName, $vSeq);
 				}
 
 				// Unset this field so that what we have left are fields that need to be removed.
@@ -116,6 +117,7 @@ class PgsqlImporter extends DatabaseImporter
 			{
 				// The sequence is new
 				$alters[] = $this->getAddSequenceSql($newSequenceLook[$kSeqName][0]);
+				$alters[] = $this->getSetvalSequenceSql($newSequenceLook[$kSeqName][0]);
 			}
 		}
 
@@ -262,7 +264,7 @@ class PgsqlImporter extends DatabaseImporter
 	 */
 	protected function getAddSequenceSql(\SimpleXMLElement $field)
 	{
-		$sql = 'CREATE SEQUENCE ' . (string) $field['Name']
+		$sql = 'CREATE SEQUENCE IF NOT EXISTS ' . (string) $field['Name']
 			. ' INCREMENT BY ' . (string) $field['Increment'] . ' MINVALUE ' . $field['Min_Value']
 			. ' MAXVALUE ' . (string) $field['Max_Value'] . ' START ' . (string) $field['Start_Value']
 			. (((string) $field['Cycle_option'] === 'NO') ? ' NO' : '') . ' CYCLE'
@@ -288,6 +290,22 @@ class PgsqlImporter extends DatabaseImporter
 			. ' OWNED BY ' . $this->db->quoteName((string) $field['Schema'] . '.' . (string) $field['Table'] . '.' . (string) $field['Column']);
 
 		return $sql;
+	}
+
+	/**
+	 * Get the syntax to setval a sequence.
+	 *
+	 * @param   \SimpleXMLElement  $field  The XML definition for the sequence.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function getSetvalSequenceSql($field)
+	{
+		$is_called = $field['Is_called'] == 't' || $field['Is_called'] == '1' ? 'TRUE' : 'FALSE';
+
+		return 'SELECT setval(\'' . (string) $field['Name'] . '\', ' . (string) $field['Last_Value'] . ', ' . $is_called . ')';
 	}
 
 	/**
@@ -376,18 +394,22 @@ class PgsqlImporter extends DatabaseImporter
 	 */
 	protected function getColumnSql(\SimpleXMLElement $field)
 	{
-		// TODO Incorporate into parent class and use $this.
-		$blobs = ['text', 'smalltext', 'mediumtext', 'largetext'];
-
 		$fName = (string) $field['Field'];
 		$fType = (string) $field['Type'];
 		$fNull = (string) $field['Null'];
 
-		$fDefault = (isset($field['Default']) && $field['Default'] != 'NULL') ?
-			preg_match('/^[0-9]$/', $field['Default']) ? $field['Default'] : $this->db->quote((string) $field['Default'])
-			: null;
+		if (strpos($field['Default'], '::') != false)
+		{
+			$fDefault = strstr($field['Default'], '::', true);
+		}
+		else
+		{
+			$fDefault = isset($field['Default']) && strlen($field['Default']) != 0 ?
+							preg_match('/^[0-9]$/', $field['Default']) ? $field['Default'] : $this->db->quote((string) $field['Default'])
+							: null;
+		}
 
-		// Note, nextval() as default value means that type field is serial.
+		/* nextval() as default value means that type field is serial */
 		if (strpos($fDefault, 'nextval') !== false)
 		{
 			$sql = $this->db->quoteName($fName) . ' SERIAL';
@@ -396,9 +418,9 @@ class PgsqlImporter extends DatabaseImporter
 		{
 			$sql = $this->db->quoteName($fName) . ' ' . $fType;
 
-			if ($fNull === 'NO')
+			if ($fNull == 'NO')
 			{
-				if ($fDefault === null || \in_array($fType, $blobs, true))
+				if ($fDefault === null)
 				{
 					$sql .= ' NOT NULL';
 				}
@@ -485,6 +507,34 @@ class PgsqlImporter extends DatabaseImporter
 	}
 
 	/**
+	 * Get the SQL syntax to add a unique constraint for a table key.
+	 *
+	 * @param   string  $table  The table name.
+	 * @param   array   $key    The key.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function getAddUniqueSql($table, $key)
+	{
+		if ($key instanceof \SimpleXMLElement)
+		{
+			$kName = (string) $key['Key_name'];
+			$kIndex = (string) $key['Index'];
+		}
+		else
+		{
+			$kName = $key->Key_name;
+			$kIndex = $key->Index;
+		}
+
+		$unique = $kIndex . ' UNIQUE (' . $kName . ')';
+
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD CONSTRAINT ' . $unique;
+	}
+
+	/**
 	 * Get the details list of sequences for a table.
 	 *
 	 * @param   array  $sequences  An array of objects that comprise the sequences for the table.
@@ -532,7 +582,42 @@ class PgsqlImporter extends DatabaseImporter
 	 */
 	protected function xmlToCreate(\SimpleXMLElement $table)
 	{
-		// TODO - Implement this
-		return '';
+		$existingTables = $this->db->getTableList();
+		$tableName = (string) $table['name'];
+
+		if (in_array($tableName, $existingTables))
+		{
+			throw new \RuntimeException('The table you are trying to create already exists');
+		}
+
+		$createTableStatement = 'CREATE TABLE ' . $this->db->quoteName($tableName) . ' (';
+
+		foreach ($table->xpath('field') as $field)
+		{
+			$createTableStatement .= $this->getColumnSQL($field) . ', ';
+		}
+
+		$createTableStatement = rtrim($createTableStatement, ', ');
+		$createTableStatement .= ');';
+
+		foreach ($table->xpath('sequence') as $seq)
+		{
+			$createTableStatement .= $this->getAddSequenceSql($seq) . ';';
+			$createTableStatement .= $this->getSetvalSequenceSql($seq) . ';';
+		}
+
+		foreach ($table->xpath('key') as $key)
+		{
+			if ((($key['is_primary'] == 'f') || ($key['is_primary'] == '')) && (($key['is_unique'] == 't') || ($key['is_unique'] == '1')))
+			{
+				$createTableStatement .= $this->getAddUniqueSql($tableName, $key) . ';';
+			}
+			else
+			{
+				$createTableStatement .= $this->getAddIndexSql($key) . ';';
+			}
+		}
+
+		return $createTableStatement;
 	}
 }
