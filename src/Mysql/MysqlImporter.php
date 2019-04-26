@@ -422,12 +422,14 @@ class MysqlImporter extends DatabaseImporter
 
 		foreach ($table->xpath('field') as $field)
 		{
-			$createTableStatement .= $this->getColumnSQL($field) . ', ';
+			$createTableStatement .= $this->getColumnSql($field) . ', ';
 		}
 
-		foreach ($table->xpath('key') as $key)
+		$newLookup = $this->getKeyLookup($table->xpath('key'));
+
+		foreach ($newLookup as $key)
 		{
-			$createTableStatement .= $this->getKeySQL([$key]) . ', ';
+			$createTableStatement .= $this->getKeySql($key) . ', ';
 		}
 
 		$createTableStatement = rtrim($createTableStatement, ', ');

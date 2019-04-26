@@ -594,7 +594,7 @@ class PgsqlImporter extends DatabaseImporter
 
 		foreach ($table->xpath('field') as $field)
 		{
-			$createTableStatement .= $this->getColumnSQL($field) . ', ';
+			$createTableStatement .= $this->getColumnSql($field) . ', ';
 		}
 
 		$createTableStatement = rtrim($createTableStatement, ', ');
