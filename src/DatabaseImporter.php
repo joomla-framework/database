@@ -219,6 +219,53 @@ abstract class DatabaseImporter
 	}
 
 	/**
+	 * Import the data from the source into the existing tables.
+	 *
+	 * @return  void
+	 *
+	 * @note    Currently only supports XML format.
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException on error.
+	 */
+	public function importData()
+	{
+		if ($this->from instanceof \SimpleXMLElement)
+		{
+			$xml = $this->from;
+		}
+		else
+		{
+			$xml = new \SimpleXMLElement($this->from);
+		}
+
+		// Get all the table definitions.
+		$xmlTables = $xml->xpath('database/table_data');
+
+		foreach ($xmlTables as $table)
+		{
+			// Convert the magic prefix into the real table name.
+			$tableName = $this->getRealTableName((string) $table['name']);
+
+			$rows = $table->children();
+
+			foreach ($rows as $row)
+			{
+				if ($row->getName() == 'row')
+				{
+					$entry = new stdClass;
+
+					foreach ($row->children() as $data)
+					{
+						$entry->{(string) $data['name']} = (string) $data;
+					}
+
+					$this->db->insertObject($tableName, $entry);
+				}
+			}
+		}
+	}
+
+	/**
 	 * Merges the incoming structure definition with the existing structure.
 	 *
 	 * @return  void
@@ -265,9 +312,16 @@ abstract class DatabaseImporter
 			{
 				// This is a new table.
 				$sql = $this->xmlToCreate($table);
+				$queries = explode(';', (string) $sql);
 
-				$this->db->setQuery((string) $sql);
-				$this->db->execute();
+				foreach ($queries as $query)
+				{
+					if (!empty($query))
+					{
+						$this->db->setQuery((string) $query);
+						$this->db->execute();
+					}
+				}
 			}
 		}
 	}

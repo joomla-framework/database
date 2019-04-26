@@ -94,6 +94,76 @@ class PgsqlExporter extends DatabaseExporter
 	}
 
 	/**
+	 * Builds the XML data to export.
+	 *
+	 * @return  array  An array of XML lines (strings).
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \Exception if an error occurs.
+	 */
+	protected function buildXmlData()
+	{
+		$buffer = array();
+
+		foreach ($this->from as $table)
+		{
+			// Replace the magic prefix if found.
+			$table = $this->getGenericTableName($table);
+
+			// Get the details columns information.
+			$fields  = $this->db->getTableColumns($table, false);
+			$colblob = array();
+
+			foreach ($fields as $field)
+			{
+				// Catch blob for xml conversion
+				// PostgreSQL binary large object type
+				if ($field->Type == 'bytea')
+				{
+					$colblob[] = $field->Field;
+				}
+			}
+
+			$query = $this->db->getQuery(true);
+			$query->select($query->quoteName(array_keys($fields)))
+				->from($query->quoteName($table));
+			$this->db->setQuery($query);
+
+			$rows = $this->db->loadObjectList();
+
+			if (!count($rows))
+			{
+				continue;
+			}
+
+			$buffer[] = '  <table_data name="' . $table . '">';
+
+			foreach ($rows as $row)
+			{
+				$buffer[] = '   <row>';
+
+				foreach ($row as $key => $value)
+				{
+					if (!in_array($key, $colblob))
+					{
+						$buffer[] = '    <field name="' . $key . '">' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '</field>';
+					}
+					else
+					{
+						$buffer[] = '    <field name="' . $key . '">' . stream_get_contents($value) . '</field>';
+					}
+				}
+
+				$buffer[] = '   </row>';
+			}
+
+			$buffer[] = '  </table_data>';
+		}
+
+		return $buffer;
+	}
+
+	/**
 	 * Checks if all data and options are in order prior to exporting.
 	 *
 	 * @return  $this
