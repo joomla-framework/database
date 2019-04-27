@@ -277,7 +277,7 @@ class PgsqlExporterTest extends TestCase
 		// Set up the export settings.
 		$instance
 			->setDbo($this->dbo)
-			->from('jos_test')
+			->from('jos_dbtest')
 			->withStructure(true);
 
 		/* Depending on which version is running, 9.1.0 or older */
