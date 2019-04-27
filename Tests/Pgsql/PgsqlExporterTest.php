@@ -50,7 +50,7 @@ class PgsqlExporterTest extends TestCase
 					'getTableSequences',
 					'getSequenceLastValue',
 					'getSequenceIsCalled',
-					'getNamesKey'
+					'getNamesKey',
 					'getVersion',
 					'quoteName',
 					'loadObjectList',
