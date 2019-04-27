@@ -48,6 +48,7 @@ class PgsqlImporterTest extends TestCase
 					'getTableColumns',
 					'getTableKeys',
 					'getTableSequences',
+					'getSetvalSequenceSql',
 					'getVersion',
 					'quote',
 					'quoteName',
@@ -103,12 +104,14 @@ class PgsqlImporterTest extends TestCase
 						'Index' => 'jos_dbtest_pkey',
 						'is_primary' => 'TRUE',
 						'is_unique' => 'TRUE',
+						'Key_name' => 'id',
 						'Query' => 'ALTER TABLE jos_dbtest ADD PRIMARY KEY (id)',
 					),
 					(object) array(
 						'Index' => 'jos_dbtest_idx_name',
 						'is_primary' => 'FALSE',
 						'is_unique' => 'FALSE',
+						'Key_name' => 'name',
 						'Query' => 'CREATE INDEX jos_dbtest_idx_name ON jos_dbtest USING btree (name)',
 					)
 				)
@@ -261,26 +264,26 @@ class PgsqlImporterTest extends TestCase
 		$f3 = '<field Field="alias" Type="character varying(255)" Null="NO" Default="test" Comments="" />';
 		$f2_def = '<field Field="title" Type="character varying(50)" Null="NO" Default="add default" Comments="" />';
 
-		$k1 = '<key Index="jos_dbtest_pkey" is_primary="TRUE" is_unique="TRUE" Query="ALTER TABLE jos_dbtest ADD PRIMARY KEY (id)" />';
-		$k2 = '<key Index="jos_dbtest_idx_name" is_primary="FALSE" is_unique="FALSE" Query="CREATE INDEX jos_dbtest_idx_name ON' .
+		$k1 = '<key Index="jos_dbtest_pkey" is_primary="TRUE" is_unique="TRUE" Key_name="id" Query="ALTER TABLE jos_dbtest ADD PRIMARY KEY (id)" />';
+		$k2 = '<key Index="jos_dbtest_idx_name" is_primary="FALSE" is_unique="FALSE" Key_name="name" Query="CREATE INDEX jos_dbtest_idx_name ON' .
 			' jos_dbtest USING btree (name)" />';
-		$k3 = '<key Index="jos_dbtest_idx_title" is_primary="FALSE" is_unique="FALSE" Query="CREATE INDEX ' .
+		$k3 = '<key Index="jos_dbtest_idx_title" is_primary="FALSE" is_unique="FALSE" Key_name="title" Query="CREATE INDEX ' .
 			'jos_dbtest_idx_title ON jos_dbtest USING btree (title)" />';
-		$k4 = '<key Index="jos_dbtest_uidx_name" is_primary="FALSE" is_unique="TRUE" Query="CREATE UNIQUE INDEX ' .
+		$k4 = '<key Index="jos_dbtest_uidx_name" is_primary="FALSE" is_unique="TRUE" Key_name="name" Query="CREATE UNIQUE INDEX ' .
 			'jos_dbtest_uidx_name ON jos_dbtest USING btree (name)" />';
-		$pk = '<key Index="jos_dbtest_title_pkey" is_primary="TRUE" is_unique="TRUE" ' .
+		$pk = '<key Index="jos_dbtest_title_pkey" is_primary="TRUE" is_unique="TRUE" Key_name="title" ' .
 			'Query="ALTER TABLE jos_dbtest ADD PRIMARY KEY (title)" />';
 
 		$s1 = '<sequence Name="jos_dbtest_id_seq" Schema="public" Table="jos_dbtest" Column="id" Type="bigint" Start_Value="1" ' .
 			'Min_Value="1" Max_Value="9223372036854775807" Increment="1" Cycle_option="NO" />';
 		$s2 = '<sequence Name="jos_dbtest_title_seq" Schema="public" Table="jos_dbtest" Column="title" Type="bigint" Start_Value="1" Min_Value="1" ' .
-			'Max_Value="9223372036854775807" Increment="1" Cycle_option="NO" />';
+			'Max_Value="9223372036854775807" Last_Value="1" Increment="1" Cycle_option="NO" />';
 
-		$addSequence = 'CREATE SEQUENCE jos_dbtest_title_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 ' .
+		$addSequence = 'CREATE SEQUENCE IF NOT EXISTS jos_dbtest_title_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 ' .
 			'NO CYCLE OWNED BY "public.jos_dbtest.title"';
 		$changeCol = 'ALTER TABLE "jos_test" ALTER COLUMN "title"  TYPE character ' .
 			"varying(50),\nALTER COLUMN \"title\" SET NOT NULL,\nALTER COLUMN \"title\" SET DEFAULT 'add default'";
-		$changeSeq = 'CREATE SEQUENCE jos_dbtest_title_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 ' .
+		$changeSeq = 'CREATE SEQUENCE IF NOT EXISTS jos_dbtest_title_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 ' .
 			'START 1 NO CYCLE OWNED BY "public.jos_dbtest.title"';
 
 		return array(
@@ -317,6 +320,7 @@ class PgsqlImporterTest extends TestCase
 				new \SimpleXmlElement('<table_structure name="#__test">' . $s1 . $s2 . $f1 . $f2 . $k1 . $k2 . '</table_structure>'),
 				array(
 					$addSequence,
+					$setValSequence,
 				),
 				'getAlterTableSQL should add the new sequence.'
 			),
@@ -371,6 +375,7 @@ class PgsqlImporterTest extends TestCase
 				new \SimpleXmlElement('<table_structure name="#__test">' . $s2 . $f1 . $f2 . $k1 . $k2 . '</table_structure>'),
 				array(
 					$changeSeq,
+					$setValSequence,
 					'DROP SEQUENCE "jos_dbtest_id_seq"',),
 				'getAlterTableSQL should change sequence.'
 			),
@@ -406,9 +411,9 @@ class PgsqlImporterTest extends TestCase
 	{
 		$sample = array(
 			'xml-id-field' => '<field Field="id" Type="integer" Null="NO" Default="nextval(\'jos_dbtest_id_seq\'::regclass)" Comments="" />',
-			'xml-title-field' => '<field Field="title" Type="character varying(50)" Null="NO" Default="NULL" Comments="" />',
+			'xml-title-field' => '<field Field="title" Type="character varying(50)" Null="NO" Default="" Comments="" />',
 			'xml-title-def' => '<field Field="title" Type="character varying(50)" Null="NO" Default="this is a test" Comments="" />',
-			'xml-body-field' => '<field Field="description" Type="text" Null="NO" Default="NULL" Comments="" />',);
+			'xml-body-field' => '<field Field="description" Type="text" Null="NO" Default="" Comments="" />',);
 
 		return array(
 			array(
@@ -602,7 +607,7 @@ class PgsqlImporterTest extends TestCase
 		$instance->setDbo($this->dbo);
 
 		$sample = array(
-			'xml-title-field' => '<field Field="title" Type="character varying(50)" Null="NO" Default="NULL" Comments="" />',
+			'xml-title-field' => '<field Field="title" Type="character varying(50)" Null="NO" Default="" Comments="" />',
 			'xml-title-def' => '<field Field="title" Type="character varying(50)" Null="NO" Default="this is a test" Comments="" />',
 			'xml-int-defnum' => '<field Field="title" Type="integer" Null="NO" Default="0" Comments="" />',);
 
@@ -662,7 +667,7 @@ class PgsqlImporterTest extends TestCase
 				new \SimpleXmlElement($xmlIdSeq)
 			),
 			$this->equalTo(
-				'CREATE SEQUENCE jos_dbtest_id_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 NO CYCLE OWNED BY "public.jos_dbtest.id"'
+				'CREATE SEQUENCE IF NOT EXISTS jos_dbtest_id_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 NO CYCLE OWNED BY "public.jos_dbtest.id"'
 			),
 			'getAddSequenceSQL did not yield the expected result.'
 		);
@@ -677,9 +682,9 @@ class PgsqlImporterTest extends TestCase
 	 */
 	public function testGetAddIndexSql()
 	{
-		$xmlIndex = '<key Index="jos_dbtest_idx_name" is_primary="FALSE" is_unique="FALSE" ' .
+		$xmlIndex = '<key Index="jos_dbtest_idx_name" is_primary="FALSE" is_unique="FALSE" Key_name="name" ' .
 			'Query="CREATE INDEX jos_dbtest_idx_name ON jos_dbtest USING btree (name)" />';
-		$xmlPrimaryKey = '<key Index="jos_dbtest_pkey" is_primary="TRUE" is_unique="TRUE" ' .
+		$xmlPrimaryKey = '<key Index="jos_dbtest_pkey" is_primary="TRUE" is_unique="TRUE" Key_name="id" ' .
 			'Query="ALTER TABLE jos_dbtest ADD PRIMARY KEY (id)" />';
 
 		$instance = new PgsqlImporterInspector;

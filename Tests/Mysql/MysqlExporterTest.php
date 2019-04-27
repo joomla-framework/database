@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @since  1.0
  */
-class MysqlExporterText extends TestCase
+class MysqlExporterTest extends TestCase
 {
 	/**
 	 * @var    object  The mocked database object for use by test methods.
@@ -215,7 +215,7 @@ class MysqlExporterText extends TestCase
   <table_structure name="#__test">
    <field Field="id" Type="int(11) unsigned" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
    <field Field="title" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />
-   <key Table="#__test" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="id" Collation="A" Null="" Index_type="BTREE" Comment="" />
+   <key Table="#__test" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="id" Collation="A" Null="" Index_type="BTREE" Sub_part="" Comment="" />
   </table_structure>
  </database>
 </mysqldump>';
@@ -278,7 +278,7 @@ class MysqlExporterText extends TestCase
   <table_structure name="#__test">
    <field Field="id" Type="int(11) unsigned" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
    <field Field="title" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />
-   <key Table="#__test" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="id" Collation="A" Null="" Index_type="BTREE" Comment="" />
+   <key Table="#__test" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="id" Collation="A" Null="" Index_type="BTREE" Sub_part="" Comment="" />
   </table_structure>
  </database>
 </mysqldump>';
@@ -318,7 +318,7 @@ class MysqlExporterText extends TestCase
 					'   <field Field="id" Type="int(11) unsigned" Null="NO" Key="PRI" Default="" Extra="auto_increment" />',
 					'   <field Field="title" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />',
 					'   <key Table="#__test" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="id" Collation="A" ' .
-					'Null="" Index_type="BTREE" Comment="" />',
+					'Null="" Index_type="BTREE" Sub_part="" Comment="" />',
 					'  </table_structure>'
 				)
 			),

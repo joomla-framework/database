@@ -360,24 +360,28 @@ class PgsqlDriverTest extends PgsqlCase
 		$pkey->idxName = 'assets_pkey';
 		$pkey->isPrimary = true;
 		$pkey->isUnique = true;
+		$pkey->indKey = '1';
 		$pkey->Query = 'ALTER TABLE assets ADD PRIMARY KEY (id)';
 
 		$asset = new \stdClass;
 		$asset->idxName = 'idx_asset_name';
 		$asset->isPrimary = false;
 		$asset->isUnique = true;
+		$asset->indKey = '6';
 		$asset->Query = 'CREATE UNIQUE INDEX idx_asset_name ON assets USING btree (name)';
 
 		$lftrgt = new \stdClass;
 		$lftrgt->idxName = 'assets_idx_lft_rgt';
 		$lftrgt->isPrimary = false;
 		$lftrgt->isUnique = false;
+		$lftrgt->indKey = '3 4';
 		$lftrgt->Query = 'CREATE INDEX assets_idx_lft_rgt ON assets USING btree (lft, rgt)';
 
 		$id = new \stdClass;
 		$id->idxName = 'assets_idx_parent_id';
 		$id->isPrimary = false;
 		$id->isUnique = false;
+		$id->indKey = '2';
 		$id->Query = 'CREATE INDEX assets_idx_parent_id ON assets USING btree (parent_id)';
 
 		$this->assertThat(self::$driver->getTableKeys('assets'), $this->equalTo(array($pkey, $id, $lftrgt, $asset)), __LINE__);
