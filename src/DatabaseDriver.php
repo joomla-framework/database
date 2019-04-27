@@ -1112,12 +1112,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 				continue;
 			}
 
-			// Ignore null datetime fields.
-			if (($tableColumns[$k] == "datetime") && empty($v))
-			{
-				continue;
-			}
-
 			// Prepare and sanitize the fields and values for the database query.
 			$fields[] = $this->quoteName($k);
 			$values[] = $this->quote($v);

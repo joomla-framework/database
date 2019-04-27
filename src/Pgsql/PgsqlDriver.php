@@ -726,6 +726,12 @@ class PgsqlDriver extends PdoDriver
 				continue;
 			}
 
+			// Ignore null timestamp fields.
+			if (($tableColumns[$k] == "timestamp without time zone") && empty($v))
+			{
+				continue;
+			}
+
 			// Prepare and sanitize the fields and values for the database query.
 			$fields[] = $this->quoteName($k);
 			$values[] = $this->sqlValue($columns, $k, $v);

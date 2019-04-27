@@ -587,6 +587,76 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	}
 
 	/**
+	 * Inserts a row into a table based on an object's properties.
+	 *
+	 * @param   string  $table   The name of the database table to insert into.
+	 * @param   object  $object  A reference to an object whose public properties match the table fields.
+	 * @param   string  $key     The name of the primary key. If provided the object property is updated.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function insertObject($table, &$object, $key = null)
+	{
+		$fields       = [];
+		$values       = [];
+		$tableColumns = $this->getTableColumns($table);
+
+		// Iterate over the object variables to build the query fields and values.
+		foreach (get_object_vars($object) as $k => $v)
+		{
+			// Skip columns that don't exist in the table.
+			if (!array_key_exists($k, $tableColumns))
+			{
+				continue;
+			}
+
+			// Only process non-null scalars.
+			if (\is_array($v) || \is_object($v) || $v === null)
+			{
+				continue;
+			}
+
+			// Ignore any internal fields.
+			if ($k[0] === '_')
+			{
+				continue;
+			}
+
+			// Ignore null datetime fields.
+			if (($tableColumns[$k] == "datetime") && empty($v))
+			{
+				continue;
+			}
+
+			// Prepare and sanitize the fields and values for the database query.
+			$fields[] = $this->quoteName($k);
+			$values[] = $this->quote($v);
+		}
+
+		// Create the base insert statement.
+		$query = $this->getQuery(true)
+			->insert($this->quoteName($table))
+			->columns($fields)
+			->values(implode(',', $values));
+
+		// Set the query and execute the insert.
+		$this->setQuery($query)->execute();
+
+		// Update the primary key if it exists.
+		$id = $this->insertid();
+
+		if ($key && $id && \is_string($key))
+		{
+			$object->$key = $id;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Locks a table in the database.
 	 *
 	 * @param   string  $table  The name of the table to unlock.
