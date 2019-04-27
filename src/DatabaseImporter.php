@@ -252,7 +252,7 @@ abstract class DatabaseImporter
 			{
 				if ($row->getName() == 'row')
 				{
-					$entry = new stdClass;
+					$entry = new \stdClass;
 
 					foreach ($row->children() as $data)
 					{
