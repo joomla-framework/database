@@ -281,6 +281,7 @@ class PgsqlImporterTest extends TestCase
 
 		$addSequence = 'CREATE SEQUENCE IF NOT EXISTS jos_dbtest_title_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 ' .
 			'NO CYCLE OWNED BY "public.jos_dbtest.title"';
+		$setValSequence = 'SELECT setval(\'jos_dbtest_title_seq\', 1, FALSE)';
 		$changeCol = 'ALTER TABLE "jos_test" ALTER COLUMN "title"  TYPE character ' .
 			"varying(50),\nALTER COLUMN \"title\" SET NOT NULL,\nALTER COLUMN \"title\" SET DEFAULT 'add default'";
 		$changeSeq = 'CREATE SEQUENCE IF NOT EXISTS jos_dbtest_title_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 ' .
