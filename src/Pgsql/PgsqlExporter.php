@@ -70,21 +70,23 @@ class PgsqlExporter extends DatabaseExporter
 				$buffer[] = '   <sequence Name="' . $sequence->sequence . '" Schema="' . $sequence->schema . '"' .
 					' Table="' . $sequence->table . '" Column="' . $sequence->column . '" Type="' . $sequence->data_type . '"' .
 					' Start_Value="' . $sequence->start_value . '" Min_Value="' . $sequence->minimum_value . '"' .
-					' Max_Value="' . $sequence->maximum_value . '" Increment="' . $sequence->increment . '"' .
-					' Cycle_option="' . $sequence->cycle_option . '"' .
+					' Max_Value="' . $sequence->maximum_value . '"' . ' Last_Value="' . $this->db->getSequenceLastValue($sequence->sequence) . '"' .
+					' Increment="' . $sequence->increment . '"' . ' Cycle_option="' . $sequence->cycle_option . '"' .
+					' Is_called="' . $this->db->getSequenceIsCalled($sequence->sequence) . '"' .
 					' />';
 			}
 
 			foreach ($fields as $field)
 			{
 				$buffer[] = '   <field Field="' . $field->column_name . '" Type="' . $field->type . '" Null="' . $field->null . '"' .
-					(isset($field->default) ? ' Default="' . $field->default . '"' : '') . ' Comments="' . $field->comments . '" />';
+					' Default="' . $field->Default . '"' . ' Comments="' . $field->comments . '" />';
 			}
 
 			foreach ($keys as $key)
 			{
-				$buffer[] = '   <key Index="' . $key->idxName . '" is_primary="' . $key->isPrimary . '" is_unique="' . $key->isUnique . '"'
-					. ' Query="' . $key->Query . '" />';
+				$buffer[] = '   <key Index="' . $this->getGenericTableName($key->idxName) . '"' . ' is_primary="' . $key->isPrimary . '"' .
+					' is_unique="' . $key->isUnique . '"' . ' Key_name="' . $this->db->getNamesKey($table, $key->indKey) . '"' .
+					' Query=\'' . $key->Query . '\' />';
 			}
 
 			$buffer[] = '  </table_structure>';
