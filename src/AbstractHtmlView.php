@@ -106,7 +106,7 @@ abstract class AbstractHtmlView extends AbstractView
 	 * @param   string  $layout  The base name of the layout file (excluding extension).
 	 * @param   string  $ext     The extension of the layout file (default: "php").
 	 *
-	 * @return  mixed  The layout file name if found, false otherwise.
+	 * @return  string|boolean  The layout file name if found, false otherwise.
 	 *
 	 * @since   1.0
 	 * @deprecated  2.0  In 2.0, a RendererInterface object will be required which will manage paths.
@@ -117,9 +117,7 @@ abstract class AbstractHtmlView extends AbstractView
 		$file = Path::clean($layout . '.' . $ext);
 
 		// Find the layout file path.
-		$path = Path::find(clone $this->paths, $file);
-
-		return $path;
+		return Path::find(clone $this->paths, $file);
 	}
 
 	/**
