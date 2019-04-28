@@ -296,7 +296,7 @@ class Path
 	 * @param   mixed   $paths  A path string or array of path strings to search in
 	 * @param   string  $file   The file name to look for.
 	 *
-	 * @return  mixed   The full path and file name for the target file, or boolean false if the file is not found in any of the paths.
+	 * @return  string|boolean   The full path and file name for the target file, or boolean false if the file is not found in any of the paths.
 	 *
 	 * @since   1.0
 	 */

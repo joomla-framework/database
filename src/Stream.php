@@ -441,7 +441,7 @@ class Stream
 	/**
 	 * Retrieve the file size of the path
 	 *
-	 * @return  mixed
+	 * @return  integer|boolean
 	 *
 	 * @since   1.0
 	 * @throws  FilesystemException
@@ -508,7 +508,7 @@ class Stream
 	 *
 	 * @param   integer  $length  The number of bytes (optional) to read.
 	 *
-	 * @return  mixed
+	 * @return  string
 	 *
 	 * @since   1.0
 	 * @throws  FilesystemException
@@ -559,7 +559,7 @@ class Stream
 	 *
 	 * @param   integer  $length  Length of data to read
 	 *
-	 * @return  mixed
+	 * @return  string
 	 *
 	 * @link    https://www.php.net/manual/en/function.fread.php
 	 * @since   1.0
@@ -711,7 +711,7 @@ class Stream
 	/**
 	 * Returns the current position of the file read/write pointer.
 	 *
-	 * @return  mixed
+	 * @return  integer
 	 *
 	 * @since   1.0
 	 * @throws  FilesystemException
@@ -934,7 +934,7 @@ class Stream
 	 * Stream contexts
 	 * Builds the context from the array
 	 *
-	 * @return  mixed
+	 * @return  void
 	 *
 	 * @since   1.0
 	 */
@@ -1028,7 +1028,7 @@ class Stream
 	 *
 	 * Use this to change the values of the context after you've opened a stream
 	 *
-	 * @return  mixed
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  FilesystemException
@@ -1065,7 +1065,7 @@ class Stream
 	 * @param   integer  $readWrite   Optional. Defaults to STREAM_FILTER_READ.
 	 * @param   array    $params      An array of params for the stream_filter_append call.
 	 *
-	 * @return  mixed
+	 * @return  resource|boolean
 	 *
 	 * @link    https://www.php.net/manual/en/function.stream-filter-append.php
 	 * @since   1.0
@@ -1105,7 +1105,7 @@ class Stream
 	 * @param   integer  $readWrite   Optional. Defaults to STREAM_FILTER_READ.
 	 * @param   array    $params      An array of params for the stream_filter_prepend call.
 	 *
-	 * @return  mixed
+	 * @return  resource|boolean
 	 *
 	 * @link    https://www.php.net/manual/en/function.stream-filter-prepend.php
 	 * @since   1.0
@@ -1187,7 +1187,7 @@ class Stream
 	 * @param   boolean   $usePrefix  Controls the use of a prefix (optional).
 	 * @param   boolean   $relative   Determines if the filename given is relative. Relative paths do not have JPATH_ROOT stripped.
 	 *
-	 * @return  mixed
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  FilesystemException
@@ -1244,7 +1244,7 @@ class Stream
 	 * @param   boolean   $usePrefix  Controls the use of a prefix (optional).
 	 * @param   boolean   $relative   Determines if the filename given is relative. Relative paths do not have JPATH_ROOT stripped.
 	 *
-	 * @return  mixed
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  FilesystemException
@@ -1296,7 +1296,7 @@ class Stream
 	 * @param   boolean   $usePrefix  Controls the use of a prefix (optional).
 	 * @param   boolean   $relative   Determines if the filename given is relative. Relative paths do not have JPATH_ROOT stripped.
 	 *
-	 * @return  mixed
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  FilesystemException
@@ -1346,7 +1346,7 @@ class Stream
 	 * @param   boolean   $usePrefix  Controls the use of a prefix (optional).
 	 * @param   boolean   $relative   Determines if the filename given is relative. Relative paths do not have JPATH_ROOT stripped.
 	 *
-	 * @return  mixed
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  FilesystemException

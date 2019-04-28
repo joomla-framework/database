@@ -121,7 +121,7 @@ class Helper
 	 * @param   string   $url   Link identifier
 	 * @param   integer  $mode  The new permissions, given as an octal value.
 	 *
-	 * @return  mixed
+	 * @return  integer|boolean
 	 *
 	 * @link    https://www.php.net/manual/en/function.ftp-chmod.php
 	 * @since   1.0
