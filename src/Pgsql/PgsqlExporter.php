@@ -33,7 +33,15 @@ class PgsqlExporter extends DatabaseExporter
 		$buffer[] = '<postgresqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
 		$buffer[] = ' <database name="">';
 
-		$buffer = array_merge($buffer, $this->buildXmlStructure());
+		if ($this->options->withStructure)
+		{
+			$buffer = array_merge($buffer, $this->buildXmlStructure());
+		}
+
+		if ($this->options->withData)
+		{
+			$buffer = array_merge($buffer, $this->buildXmlData());
+		}
 
 		$buffer[] = ' </database>';
 		$buffer[] = '</postgresqldump>';

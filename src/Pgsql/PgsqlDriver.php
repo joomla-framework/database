@@ -582,7 +582,7 @@ class PgsqlDriver extends PdoDriver
 				break;
 
 			case 'date':
-			case 'timestamp without time zone':
+			//case 'timestamp without time zone':
 				if (empty($field_value))
 				{
 					$field_value = $this->getNullDate();
@@ -727,7 +727,7 @@ class PgsqlDriver extends PdoDriver
 			}
 
 			// Ignore null timestamp fields.
-			if (($tableColumns[$k] == "timestamp without time zone") && empty($v))
+			if (($columns[$k] == "timestamp without time zone") && empty($v))
 			{
 				continue;
 			}
