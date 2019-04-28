@@ -48,7 +48,7 @@ trait ContainerAwareTrait
 	 *
 	 * @param   Container  $container  The DI container.
 	 *
-	 * @return  mixed  Returns itself to support chaining.
+	 * @return  $this  Returns itself to support chaining.
 	 *
 	 * @since   1.2
 	 */
