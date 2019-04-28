@@ -77,7 +77,7 @@ class Inflector
 	 *
 	 * The array is in the form [singular => plural]
 	 *
-	 * @var    array
+	 * @var    string[]
 	 * @since  1.0
 	 */
 	private $cache = array();
@@ -151,7 +151,7 @@ class Inflector
 	 *
 	 * @param   string  $singular  A singular form of a word.
 	 *
-	 * @return  mixed  The cached inflection or false if none found.
+	 * @return  string|boolean  The cached inflection or false if none found.
 	 *
 	 * @since   1.0
 	 */
@@ -173,7 +173,7 @@ class Inflector
 	 *
 	 * @param   string  $plural  A plural form of a word.
 	 *
-	 * @return  mixed  The cached inflection or false if none found.
+	 * @return  string|boolean  The cached inflection or false if none found.
 	 *
 	 * @since   1.0
 	 */
@@ -193,7 +193,7 @@ class Inflector
 	 * @param   string  $word      The string input.
 	 * @param   string  $ruleType  String (eg, singular|plural)
 	 *
-	 * @return  mixed  An inflected string, or false if no rule could be applied.
+	 * @return  string|boolean  An inflected string, or false if no rule could be applied.
 	 *
 	 * @since   1.0
 	 */
@@ -409,7 +409,7 @@ class Inflector
 	 *
 	 * @param   string  $word  The singular word to pluralise.
 	 *
-	 * @return  mixed  An inflected string, or false if no rule could be applied.
+	 * @return  string|boolean  An inflected string, or false if no rule could be applied.
 	 *
 	 * @since   1.0
 	 */
@@ -448,7 +448,7 @@ class Inflector
 	 *
 	 * @param   string  $word  The plural word to singularise.
 	 *
-	 * @return  mixed  An inflected string, or false if no rule could be applied.
+	 * @return  string|boolean  An inflected string, or false if no rule could be applied.
 	 *
 	 * @since   1.0
 	 */

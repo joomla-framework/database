@@ -168,7 +168,7 @@ abstract class StringHelper
 	 * @param   string   $search  String being searched for
 	 * @param   integer  $offset  Optional, specifies the position from which the search should be performed
 	 *
-	 * @return  mixed  Number of characters before the first match or FALSE on failure
+	 * @return  integer|boolean  Number of characters before the first match or FALSE on failure
 	 *
 	 * @link    https://www.php.net/strpos
 	 * @since   1.3.0
@@ -192,7 +192,7 @@ abstract class StringHelper
 	 * @param   string   $search  String being searched for.
 	 * @param   integer  $offset  Offset from the left of the string.
 	 *
-	 * @return  mixed  Number of characters before the last match or false on failure
+	 * @return  integer|boolean  Number of characters before the last match or false on failure
 	 *
 	 * @link    https://www.php.net/strrpos
 	 * @since   1.3.0
@@ -211,7 +211,7 @@ abstract class StringHelper
 	 * @param   integer  $offset  Number of UTF-8 characters offset (from left)
 	 * @param   integer  $length  Optional length in UTF-8 characters from offset
 	 *
-	 * @return  mixed string or FALSE if failure
+	 * @return  string|boolean
 	 *
 	 * @link    https://www.php.net/substr
 	 * @since   1.3.0
@@ -236,7 +236,7 @@ abstract class StringHelper
 	 *
 	 * @param   string  $str  String being processed
 	 *
-	 * @return  mixed  Either string in lowercase or FALSE is UTF-8 invalid
+	 * @return  string|boolean  Either string in lowercase or FALSE is UTF-8 invalid
 	 *
 	 * @link    https://www.php.net/strtolower
 	 * @since   1.3.0
@@ -256,7 +256,7 @@ abstract class StringHelper
 	 *
 	 * @param   string  $str  String being processed
 	 *
-	 * @return  mixed  Either string in uppercase or FALSE is UTF-8 invalid
+	 * @return  string|boolean  Either string in uppercase or FALSE is UTF-8 invalid
 	 *
 	 * @link    https://www.php.net/strtoupper
 	 * @since   1.3.0
