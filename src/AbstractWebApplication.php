@@ -595,7 +595,7 @@ abstract class AbstractWebApplication extends AbstractApplication
 	 *
 	 * @param   boolean  $asArray  True to return the body as an array of strings.
 	 *
-	 * @return  mixed  The response body either as an array or concatenated string.
+	 * @return  string|string[]  The response body either as an array or concatenated string.
 	 *
 	 * @since   1.0
 	 */
