@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -104,7 +104,17 @@ abstract class SqlsrvCase extends AbstractDatabaseTestCase
 
 		// Create the PDO object from the DSN and options.
 		$pdo = new \PDO($dsn, static::$options['user'], static::$options['password']);
-		$pdo->exec('create table [dbtest]([id] [int] IDENTITY(1,1) NOT NULL, [title] [nvarchar](50) NOT NULL, [start_date] [datetime] NOT NULL, [description] [nvarchar](max) NOT NULL, CONSTRAINT [PK_jos_dbtest_id] PRIMARY KEY CLUSTERED ([id] ASC) WITH (STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF))');
+        $pdo->exec("
+			IF OBJECT_ID('dbtest', 'U') IS NOT NULL DROP TABLE [dbtest];
+			CREATE TABLE [dbtest] (
+				[id] [int] IDENTITY(1,1) NOT NULL,
+				[title] nvarchar(50) NOT NULL,
+				[start_date] datetime NOT NULL,
+				[description] nvarchar(max) NOT NULL,
+				[data] varbinary(max),
+				CONSTRAINT [PK_jos_dbtest_id] PRIMARY KEY CLUSTERED ([id] ASC) WITH (STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF)
+			);"
+        );
 
 		return $this->createDefaultDBConnection($pdo, static::$options['database']);
 	}

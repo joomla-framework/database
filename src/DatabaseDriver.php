@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -1491,6 +1491,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Alias for quoteName method
 	 *
 	 * @param   array|string  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
@@ -1505,6 +1506,35 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	public function qn($name, $as = null)
 	{
 		return $this->quoteName($name, $as);
+	}
+
+	/**
+	 * Quotes a binary string to database requirements for use in database queries.
+	 *
+	 * @param   string  $data  A binary string to quote.
+	 *
+	 * @return  string  The binary quoted input string.
+	 *
+	 * @since   1.7.0
+	 */
+	public function quoteBinary($data)
+	{
+		// SQL standard syntax for hexadecimal literals
+		return "X'" . bin2hex($data) . "'";
+	}
+
+	/**
+	 * Replace special placeholder representing binary field with the original string.
+	 *
+	 * @param   string|resource  $data  Encoded string or resource.
+	 *
+	 * @return  string  The original string.
+	 *
+	 * @since   1.7.0
+	 */
+	public function decodeBinary($data)
+	{
+		return $data;
 	}
 
 	/**
@@ -1564,7 +1594,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  string  Quoted identifier string.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.7.0
 	 */
 	protected function quoteNameString($name, $asSinglePart = false)
 	{

@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -15,7 +15,7 @@ use Joomla\Database\UTF8MB4SupportInterface;
 /**
  * MySQL database driver supporting PDO based connections
  *
- * @link   https://secure.php.net/manual/en/ref.pdo-mysql.php
+ * @link   https://www.php.net/manual/en/ref.pdo-mysql.php
  * @since  1.0
  */
 class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
@@ -267,7 +267,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	/**
 	 * Method to get the database collation in use by sampling a text field of a table in the database.
 	 *
-	 * @return  mixed  The collation in use by the database (string) or boolean false if not supported.
+	 * @return  string|boolean  The collation in use by the database (string) or boolean false if not supported.
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -282,7 +282,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	/**
 	 * Method to get the database connection collation in use by sampling a text field of a table in the database.
 	 *
-	 * @return  mixed  The collation in use by the database connection (string) or boolean false if not supported.
+	 * @return  string|boolean  The collation in use by the database connection (string) or boolean false if not supported.
 	 *
 	 * @since   1.6.0
 	 * @throws  \RuntimeException

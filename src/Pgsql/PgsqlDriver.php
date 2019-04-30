@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -122,7 +122,7 @@ class PgsqlDriver extends PdoDriver
 	/**
 	 * Method to get the database collation in use by sampling a text field of a table in the database.
 	 *
-	 * @return  mixed  The collation in use by the database or boolean false if not supported.
+	 * @return  string|boolean  The collation in use by the database or boolean false if not supported.
 	 *
 	 * @since   1.5.0
 	 * @throws  \RuntimeException
@@ -138,7 +138,7 @@ class PgsqlDriver extends PdoDriver
 	/**
 	 * Method to get the database connection collation in use by sampling a text field of a table in the database.
 	 *
-	 * @return  mixed  The collation in use by the database connection (string) or boolean false if not supported.
+	 * @return  string|boolean  The collation in use by the database connection (string) or boolean false if not supported.
 	 *
 	 * @since   1.6.0
 	 * @throws  \RuntimeException
@@ -961,5 +961,38 @@ class PgsqlDriver extends PdoDriver
 		$this->setQuery(sprintf($statement, implode(',', $fields), implode(' AND ', $where)));
 
 		return $this->execute();
+	}
+
+	/**
+	 * Quotes a binary string to database requirements for use in database queries.
+	 *
+	 * @param   string  $data  A binary string to quote.
+	 *
+	 * @return  string  The binary quoted input string.
+	 *
+	 * @since   1.7.0
+	 */
+	public function quoteBinary($data)
+	{
+		return "decode('" . bin2hex($data) . "', 'hex')";
+	}
+
+	/**
+	 * Replace special placeholder representing binary field with the original string.
+	 *
+	 * @param   string|resource  $data  Encoded string or resource.
+	 *
+	 * @return  string  The original string.
+	 *
+	 * @since   1.7.0
+	 */
+	public function decodeBinary($data)
+	{
+		if (is_resource($data))
+		{
+			return stream_get_contents($data);
+		}
+
+		return $data;
 	}
 }

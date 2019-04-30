@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -20,7 +20,7 @@ use Joomla\Database\StatementInterface;
 /**
  * SQL Server Database Driver
  *
- * @link   https://secure.php.net/manual/en/book.sqlsrv.php
+ * @link   https://www.php.net/manual/en/book.sqlsrv.php
  * @since  1.0
  */
 class SqlsrvDriver extends DatabaseDriver
@@ -269,6 +269,21 @@ class SqlsrvDriver extends DatabaseDriver
 	}
 
 	/**
+	 * Quotes a binary string to database requirements for use in database queries.
+	 *
+	 * @param   string  $data  A binary string to quote.
+	 *
+	 * @return  string  The binary quoted input string.
+	 *
+	 * @since   1.7.0
+	 */
+	public function quoteBinary($data)
+	{
+		// ODBC syntax for hexadecimal literals
+		return '0x' . bin2hex($data);
+	}
+
+	/**
 	 * Determines if the connection to the server is active.
 	 *
 	 * @return  boolean  True if connected to the database engine.
@@ -315,7 +330,7 @@ class SqlsrvDriver extends DatabaseDriver
 	/**
 	 * Method to get the database collation in use by sampling a text field of a table in the database.
 	 *
-	 * @return  mixed  The collation in use by the database or boolean false if not supported.
+	 * @return  string|boolean  The collation in use by the database or boolean false if not supported.
 	 *
 	 * @since   1.0
 	 */
@@ -328,7 +343,7 @@ class SqlsrvDriver extends DatabaseDriver
 	/**
 	 * Method to get the database connection collation in use by sampling a text field of a table in the database.
 	 *
-	 * @return  mixed  The collation in use by the database connection (string) or boolean false if not supported.
+	 * @return  string|boolean  The collation in use by the database connection (string) or boolean false if not supported.
 	 *
 	 * @since   1.6.0
 	 * @throws  \RuntimeException
