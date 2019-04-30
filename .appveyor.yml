@@ -77,7 +77,7 @@ install:
           $source = "https://windows.php.net/downloads/pecl/releases/sqlsrv/$($env:DLLVersion)/php_sqlsrv-$($env:DLLVersion)-$($env:php)-nts-$($env:VC)-$($env:PHPBuild).zip"
           $destination = "c:\tools\php\ext\php_sqlsrv-$($env:DLLVersion)-$($env:php)-nts-$($env:VC)-$($env:PHPBuild).zip"
           Invoke-WebRequest $source -OutFile $destination
-          7z x -y php_sqlsrv-$($DLLVersion)-$($env:php)-nts-$($env:VC)-$($env:PHPBuild).zip > $null
+          7z x -y php_sqlsrv-$($env:DLLVersion)-$($env:php)-nts-$($env:VC)-$($env:PHPBuild).zip > $null
           $source = "https://windows.php.net/downloads/pecl/releases/pdo_sqlsrv/$($env:DLLVersion)/php_pdo_sqlsrv-$($env:DLLVersion)-$($env:php)-nts-$($env:VC)-$($env:PHPBuild).zip"
           $destination = "c:\tools\php\ext\php_pdo_sqlsrv-$($env:DLLVersion)-$($env:php)-nts-$($env:VC)-$($env:PHPBuild).zip"
           Invoke-WebRequest $source -OutFile $destination
