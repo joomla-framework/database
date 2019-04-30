@@ -18,6 +18,8 @@ jobs:
       env: PGSQL_VERSION=10.0
     - php: 7.2
       env: PGSQL_VERSION=10.0
+    - php: 7.3
+      env: DB="sqlsrv"
     - php: nightly
   include:
     # SQLite
