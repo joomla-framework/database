@@ -1491,7 +1491,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Alias for quoteName method
 	 *
 	 * @param   array|string  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
