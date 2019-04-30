@@ -362,27 +362,27 @@ SQL
 		);
 	}
 
-    /**
-     * Tests the Joomla\Database\DatabaseDriver::quoteBinary method.
-     *
-     * @return  void
-     *
-     * @since   1.7.0
-     */
-    public function testQuoteBinary()
-    {
-        $this->assertThat(
-            $this->instance->quoteBinary('DATA'),
-            $this->equalTo("X'" . bin2hex('DATA') . "'"),
-            'Tests the binary data 1.'
-        );
+	/**
+	 * Tests the Joomla\Database\DatabaseDriver::quoteBinary method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.7.0
+	 */
+	public function testQuoteBinary()
+	{
+		$this->assertThat(
+			$this->instance->quoteBinary('DATA'),
+			$this->equalTo("X'" . bin2hex('DATA') . "'"),
+			'Tests the binary data 1.'
+		);
 
-        $this->assertThat(
-            $this->instance->quoteBinary("\x00\x01\x02\xff"),
-            $this->equalTo("X'000102ff'"),
-            'Tests the binary data 2.'
-        );
-    }
+		$this->assertThat(
+			$this->instance->quoteBinary("\x00\x01\x02\xff"),
+			$this->equalTo("X'000102ff'"),
+			'Tests the binary data 2.'
+		);
+	}
 
 	/**
 	 * Tests the Joomla\Database\DatabaseDriver::quoteName method.
