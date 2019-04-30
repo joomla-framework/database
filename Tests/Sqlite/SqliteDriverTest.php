@@ -691,7 +691,7 @@ class SqliteDriverTest extends SqliteCase
 	{
 		// Add binary data with null byte
 		$query = self::$driver->getQuery(true)
-			->update('jos_dbtest')
+			->update('dbtest')
 			->set('data = ' . self::$driver->quoteBinary("\x00\x01\x02\xff"))
 			->where('id = 3');
 
@@ -699,7 +699,7 @@ class SqliteDriverTest extends SqliteCase
 
 		// Add binary data with invalid UTF-8
 		$query = self::$driver->getQuery(true)
-			->update('jos_dbtest')
+			->update('dbtest')
 			->set('data = ' . self::$driver->quoteBinary("\x01\x01\x02\xff"))
 			->where('id = 4');
 
@@ -707,12 +707,12 @@ class SqliteDriverTest extends SqliteCase
 
 		$selectRow3 = self::$driver->getQuery(true)
 			->select('id')
-			->from('jos_dbtest')
+			->from('dbtest')
 			->where('data = ' . self::$driver->quoteBinary("\x00\x01\x02\xff"));
 
 		$selectRow4 = self::$driver->getQuery(true)
 			->select('id')
-			->from('jos_dbtest')
+			->from('dbtest')
 			->where('data = '. self::$driver->quoteBinary("\x01\x01\x02\xff"));
 
 		$result = self::$driver->setQuery($selectRow3)->loadResult();
@@ -723,7 +723,7 @@ class SqliteDriverTest extends SqliteCase
 
 		$selectRows = self::$driver->getQuery(true)
 			->select('data')
-			->from('jos_dbtest')
+			->from('dbtest')
 			->order('id');
 
 		// Test loadColumn
