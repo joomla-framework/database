@@ -357,7 +357,7 @@ jobs:
             - postgresql-client-10
       services:
         - postgresql
-      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" PGPORT=5433
+      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql10.xml" PGPORT=5433
     - stage: Test
       php: 7.2
       sudo: required
@@ -370,7 +370,7 @@ jobs:
       services:
         - postgresql
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
-      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="" PGPORT=5433
+      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql10.xml" COMPOSER_FLAGS="" PGPORT=5433
     - stage: Test
       php: nightly
       sudo: required
@@ -382,46 +382,7 @@ jobs:
             - postgresql-client-10
       services:
         - postgresql
-      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" PGPORT=5433
-
-    # PDO PostgreSQL 11.0
-    - stage: Test
-      php: 7.2
-      sudo: required
-      addons:
-        postgresql: "11"
-        apt:
-          packages:
-            - postgresql-11
-            - postgresql-client-11
-      services:
-        - postgresql
-      env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" PGPORT=5433
-    - stage: Test
-      php: 7.2
-      sudo: required
-      addons:
-        postgresql: "11"
-        apt:
-          packages:
-            - postgresql-11
-            - postgresql-client-11
-      services:
-        - postgresql
-      # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
-      env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="" PGPORT=5433
-    - stage: Test
-      php: nightly
-      sudo: required
-      addons:
-        postgresql: "11"
-        apt:
-          packages:
-            - postgresql-11
-            - postgresql-client-11
-      services:
-        - postgresql
-      env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" PGPORT=5433
+      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql10.xml" PGPORT=5433
 
     # SQL Server
     - stage: Test
@@ -464,6 +425,7 @@ jobs:
         - vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards && vendor/bin/phpcs -p --report=full --extensions=php --standard=ruleset.xml src/
 
 before_install:
+  - if [[ "$PGSQL_VERSION" == "10.0" ]]; then sudo -u postgres psql -c "CREATE USER postgres WITH PASSWORD ''"; fi;
   - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{,.disabled} || echo "xdebug not available"
 
 before_script:
