@@ -9,7 +9,6 @@ cache:
 
 env:
   - COMPOSER_FLAGS="--prefer-stable"
-  - SQL_SERVER_VERSION=""
 
 jobs:
   allow_failures:
