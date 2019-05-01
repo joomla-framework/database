@@ -357,7 +357,7 @@ jobs:
             - postgresql-client-10
       services:
         - postgresql
-      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
+      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" PGPORT=5433
     - stage: Test
       php: 7.2
       sudo: required
@@ -370,7 +370,7 @@ jobs:
       services:
         - postgresql
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
-      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS=""
+      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="" PGPORT=5433
     - stage: Test
       php: nightly
       sudo: required
@@ -382,7 +382,7 @@ jobs:
             - postgresql-client-10
       services:
         - postgresql
-      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
+      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" PGPORT=5433
 
     # PDO PostgreSQL 11.0
     - stage: Test
@@ -396,7 +396,7 @@ jobs:
             - postgresql-client-11
       services:
         - postgresql
-      env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
+      env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" PGPORT=5433
     - stage: Test
       php: 7.2
       sudo: required
@@ -409,7 +409,7 @@ jobs:
       services:
         - postgresql
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
-      env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS=""
+      env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="" PGPORT=5433
     - stage: Test
       php: nightly
       sudo: required
@@ -421,7 +421,7 @@ jobs:
             - postgresql-client-11
       services:
         - postgresql
-      env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
+      env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" PGPORT=5433
 
     # SQL Server
     - stage: Test
