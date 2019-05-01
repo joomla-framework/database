@@ -22,6 +22,7 @@
         "phpunit/dbunit": "~3.0"
     },
     "suggest": {
+        "joomla/console": "If you want to use the ExporterCommand and ImporterCommand classes, please install joomla/console:~2.0",
         "joomla/di": "To use the Database ServiceProviderInterface objects, install joomla/di.",
         "joomla/registry": "To use the Database ServiceProviderInterface objects, install joomla/registry.",
         "ext-mysqli": "To connect to a MySQL database via MySQLi",
