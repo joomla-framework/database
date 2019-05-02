@@ -10,6 +10,7 @@ namespace Joomla\Database\Command;
 
 use Joomla\Console\Command\AbstractCommand;
 use Joomla\Database\DatabaseInterface;
+use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Filesystem\Folder;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,7 +21,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * @since  __DEPLOY_VERSION__
  */
-class ImporterCommand extends AbstractCommand
+class ImportCommand extends AbstractCommand
 {
 	/**
 	 * The default command name
@@ -28,7 +29,7 @@ class ImporterCommand extends AbstractCommand
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected static $defaultName = 'database:importer';
+	protected static $defaultName = 'database:import';
 
 	/**
 	 * Database connector
@@ -67,23 +68,19 @@ class ImporterCommand extends AbstractCommand
 		$symfonyStyle = new SymfonyStyle($input, $output);
 
 		$symfonyStyle->title('Importing Database');
-		$output->writeln([
-			'DbImporterCmd',
-      '=============',
-      '',
-    ]);
+
 		$total_time = microtime(true);
 
 		$folderPath = $input->getOption('folder');
 		$tableName = $input->getOption('table');
-		$all = $input->getArgument('all');
+		$all = $input->getOption('all');
 
 		$tables = Folder::files($folderPath, '\.xml$');
 
 		if (($tableName == null) && ($all == null))
 		{
-			$symfonyStyle->warning("[WARNING] Missing or wrong parameters");
-			return 0;
+			$symfonyStyle->warning("Either the --table or --all option must be specified");
+			return 1;
 		}
 
 		if ($tableName)
@@ -100,7 +97,6 @@ class ImporterCommand extends AbstractCommand
 			if (!file_exists($percorso))
 			{
 				$symfonyStyle->error('Not Found ' . $table . '....');
-				$symfonyStyle->newLine();
 				return 1;
 			}
 
@@ -114,7 +110,6 @@ class ImporterCommand extends AbstractCommand
 			catch (\Exception $e)
 			{
 				$symfonyStyle->error('Error on getImporter' . $table . ' ' . $e);
-				$symfonyStyle->newLine();
 				return 1;
 			}
 
@@ -125,10 +120,9 @@ class ImporterCommand extends AbstractCommand
 				$symfonyStyle->text('Drop ' . $table_name);
 				$this->db->dropTable($table_name, true);
 			}
-			catch (\Exception $e)
+			catch (ExecutionFailureException $e)
 			{
 				$symfonyStyle->error(' Error in DROP TABLE ' . $table_name . ' ' . $e);
-				$symfonyStyle->newLine();
 				return 1;
 			}
 
@@ -139,7 +133,6 @@ class ImporterCommand extends AbstractCommand
 			catch (\Exception $e)
 			{
 				$symfonyStyle->error('Error on mergeStructure' . $table . ' ' . $e);
-				$symfonyStyle->newLine();
 				return 1;
 			}
 
@@ -152,7 +145,6 @@ class ImporterCommand extends AbstractCommand
 			catch (\Exception $e)
 			{
 				$symfonyStyle->error('Error on importData' . $table . ' ' . $e);
-				$symfonyStyle->newLine();
 				return 1;
 			}
 			$symfonyStyle->text('Data loaded ' . $table . ' in ' . round(microtime(true) - $task_i_time, 3));
@@ -174,13 +166,6 @@ class ImporterCommand extends AbstractCommand
 		$this->setDescription('Import the database');
 		$this->addOption('folder', null, InputOption::VALUE_OPTIONAL, 'Import from folder path', '.');
 		$this->addOption('table', null, InputOption::VALUE_REQUIRED, 'Import table name');
-		$this->addArgument('all', InputArgument::OPTIONAL, 'Import all files');
-		$this->setHelp(
-<<<EOF
-The <info>%command.name%</info> command for importing the database
-
-<info>php %command.full_name%</info>
-EOF
-		);
+		$this->addOption('all', null, InputOption::VALUE_NONE, 'Import all files');
 	}
 }

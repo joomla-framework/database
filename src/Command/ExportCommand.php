@@ -21,7 +21,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * @since  __DEPLOY_VERSION__
  */
-class ExporterCommand extends AbstractCommand
+class ExportCommand extends AbstractCommand
 {
 	/**
 	 * The default command name
@@ -29,7 +29,7 @@ class ExporterCommand extends AbstractCommand
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected static $defaultName = 'database:exporter';
+	protected static $defaultName = 'database:export';
 
 	/**
 	 * Database connector
@@ -68,11 +68,7 @@ class ExporterCommand extends AbstractCommand
 		$symfonyStyle = new SymfonyStyle($input, $output);
 
 		$symfonyStyle->title('Exporting Database');
-		$output->writeln([
-			'DbExporterCmd',
-      '=============',
-      '',
-    ]);
+
 		$total_time = microtime(true);
 
 		$tables   = $this->db->getTableList();
@@ -81,23 +77,22 @@ class ExporterCommand extends AbstractCommand
 
 		$folderPath = $input->getOption('folder');
 		$tableName = $input->getOption('table');
-		$all = $input->getArgument('all');
-		$zip = $input->getArgument('zip');
+		$all = $input->getOption('all');
+		$zip = $input->getOption('zip');
 
 		$zipFile = $folderPath . 'data_exported_' . $this->db->getDateFormat() . '.zip';
 
 		if (($tableName == null) && ($all == null))
 		{
-			$symfonyStyle->warning("[WARNING] Missing or wrong parameters");
-			return 0;
+			$symfonyStyle->warning("Either the --table or --all option must be specified");
+			return 1;
 		}
 
 		if($tableName)
 		{
 			if (!\in_array($tableName, $tables))
 			{
-				$symfonyStyle->error('Not Found ' . $tableName . '....');
-				$symfonyStyle->newLine();
+				$symfonyStyle->error($tableName . ' does not exist in the database.');
 				return 1;
 			}
 			$tables = array($tableName);
@@ -155,14 +150,7 @@ class ExporterCommand extends AbstractCommand
 		$this->setDescription('Exports the database');
 		$this->addOption('folder', null, InputOption::VALUE_OPTIONAL, 'Dump in folder path', '.');
 		$this->addOption('table', null, InputOption::VALUE_REQUIRED, 'Dump table name');
-		$this->addArgument('all', InputArgument::OPTIONAL, 'Dump all tables');
-		$this->addArgument('zip', InputArgument::OPTIONAL, 'Dump in zip format');
-		$this->setHelp(
-<<<EOF
-The <info>%command.name%</info> command for exporting the database
-
-<info>php %command.full_name%</info>
-EOF
-		);
+		$this->addOption('all', null, InputOption::VALUE_NONE, 'Dump all tables');
+		$this->addOption('zip', null, InputOption::VALUE_NONE, 'Dump in zip format');
 	}
 }
