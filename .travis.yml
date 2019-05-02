@@ -8,7 +8,7 @@ cache:
     - $HOME/.composer/cache
 
 env:
-  - COMPOSER_FLAGS="--prefer-stable"
+  - COMPOSER_FLAGS="--prefer-stable" PGPORT=5432
 
 jobs:
   allow_failures:
@@ -425,7 +425,7 @@ jobs:
         - vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards && vendor/bin/phpcs -p --report=full --extensions=php --standard=ruleset.xml src/
 
 before_install:
-  - if [[ "$PGSQL_VERSION" == "10.0" ]]; then sudo -u postgres psql -c "CREATE USER postgres WITH PASSWORD ''"; fi;
+  - if [[ "$PGSQL_VERSION" == "10.0" ]]; then psql -p $PGPORT -c "CREATE USER postgres WITH PASSWORD ''"; fi;
   - mv ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini{,.disabled} || echo "xdebug not available"
 
 before_script:
@@ -433,8 +433,8 @@ before_script:
   - if [[ "$DB" == "sqlsrv" ]]; then bash ./.travis/install-mssql.sh $SQL_SERVER_VERSION; fi;
   - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == "mariadb" ]]; then mysql -u root -e 'create database joomla_ut;'; fi;
   - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == "mariadb" ]]; then mysql -u root joomla_ut < Tests/Stubs/mysql.sql; fi;
-  - if [[ "$DB" == "pgsql" ]]; then psql -U postgres -c 'create database joomla_ut;'; fi;
-  - if [[ "$DB" == "pgsql" ]]; then psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql; fi;
+  - if [[ "$DB" == "pgsql" ]]; then psql -p $PGPORT -U postgres -c 'create database joomla_ut;'; fi;
+  - if [[ "$DB" == "pgsql" ]]; then psql -p $PGPORT -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql; fi;
   - if [[ "$DB" == "sqlsrv" ]]; then /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 -b -Q "CREATE DATABASE joomla_ut"; fi;
   - if [[ "$DB" == "sqlsrv" ]]; then /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 -i Tests/Stubs/sqlsrv.sql; fi;
 
