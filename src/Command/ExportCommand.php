@@ -71,6 +71,8 @@ class ExportCommand extends AbstractCommand
 		$symfonyStyle->title('Exporting Database');
 
 		$total_time = microtime(true);
+		$date = getDate();
+		$dateFormat = sprintf("%s-%02s-%02s",$date['year'], $date['mon'], $date['mday']);
 
 		$tables   = $this->db->getTableList();
 		$prefix   = $this->db->getPrefix();
@@ -81,7 +83,7 @@ class ExportCommand extends AbstractCommand
 		$all = $input->getOption('all');
 		$zip = $input->getOption('zip');
 
-		$zipFile = $folderPath . 'data_exported_' . $this->db->getDateFormat() . '.zip';
+		$zipFile = $folderPath . '/' . 'data_exported_' . $dateFormat . '.zip';
 
 		if (($tableName == null) && ($all == null))
 		{
