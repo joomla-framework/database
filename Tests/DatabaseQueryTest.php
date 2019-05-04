@@ -1821,7 +1821,7 @@ class DatabaseQueryTest extends TestCase
 		$this->instance->whereIn('id', [1, 2, 3]);
 		$this->assertThat(
 			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo([':preparedArray1', ':preparedArray2', ':preparedArray3']),
+			$this->equalTo(':preparedArray1,:preparedArray2,:preparedArray3'),
 			'Tests rendered value.'
 		);
 	}
@@ -1837,7 +1837,7 @@ class DatabaseQueryTest extends TestCase
 
 		$this->assertThat(
 			$result,
-			$this->equalTo(':preparedArray1,:preparedArray2,:preparedArray3'),
+			$this->equalTo([':preparedArray1', ':preparedArray2', ':preparedArray3']),
 			'Tests rendered value.'
 		);
 
