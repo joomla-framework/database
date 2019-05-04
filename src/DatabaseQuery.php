@@ -1690,13 +1690,13 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @param   string $keyName   key name for the where clause
 	 * @param   array  $keyValues array of values to be matched
-	 * @param string $dataType
+	 * @param   string $dataType
 	 *
 	 * @return  $this
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function whereIn($keyName, $keyValues, $dataType = ParameterType::STRING)
+	public function whereIn($keyName, $keyValues, $dataType = ParameterType::INTEGER)
 	{
 		return $this->where(
 			$keyName . ' IN (' . implode(',', $this->bindArray($keyValues, $dataType)) . ')'
@@ -1709,14 +1709,14 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Usage:
 	 * $query->where('column in (' . implode(',', $this->bindArray($keyValues, $dataType)) . ')');
 	 *
-	 * @param        $values
-	 * @param string $dataType
+	 * @param   array  $values   Values to bind
+	 * @param   string $dataType Type of the values to bind
 	 *
-	 * @return array
+	 * @return  array   An array with parameter names
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function bindArray($values, $dataType = ParameterType::STRING)
+	public function bindArray($values, $dataType = ParameterType::INTEGER)
 	{
 		$parameterNames = [];
 
