@@ -1308,7 +1308,7 @@ class SqliteQueryTest extends TestCase
 
 		$this->assertThat(
 			$result,
-			$this->equalTo(':preparedArray1,:preparedArray2,:preparedArray3'),
+			$this->equalTo([':preparedArray1', ':preparedArray2', ':preparedArray3']),
 			'Tests rendered value.'
 		);
 
