@@ -230,6 +230,14 @@ abstract class DatabaseQuery implements QueryInterface
 	protected $limit;
 
 	/**
+	 * An internal index for the bindArray function for unique prepared parameters.
+	 *
+	 * @var    integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $preparedIndex = 0;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @param   DatabaseInterface  $db  The database driver.
@@ -1682,16 +1690,45 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @param   string $keyName   key name for the where clause
 	 * @param   array  $keyValues array of values to be matched
+	 * @param string $dataType
 	 *
 	 * @return  $this
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function whereIn($keyName, $keyValues)
+	public function whereIn($keyName, $keyValues, $dataType = ParameterType::STRING)
 	{
 		return $this->where(
-			$keyName . ' IN (' . implode(', ', $keyValues) . ')'
+			$keyName . ' IN (' . implode(',', $this->bindArray($keyValues, $dataType)) . ')'
 		);
+	}
+
+	/**
+	 * Binds an array of values and returns an array of prepared parameter names.
+	 *
+	 * Usage:
+	 * $query->where('column in (' . implode(',', $this->bindArray($keyValues, $dataType)) . ')');
+	 *
+	 * @param        $values
+	 * @param string $dataType
+	 *
+	 * @return array
+	 *
+	 * @since __DEPLOY_VERSION__
+	 */
+	public function bindArray($values, $dataType = ParameterType::STRING)
+	{
+		$parameterNames = [];
+
+		foreach($values as $value)
+		{
+			$bindKey          = ':preparedArray' . ++$this->preparedIndex;
+			$parameterNames[] = $bindKey;
+
+			$this->bind($bindKey, $value, $dataType);
+		}
+
+		return $parameterNames;
 	}
 
 	/**
