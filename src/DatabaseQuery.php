@@ -1726,6 +1726,9 @@ abstract class DatabaseQuery implements QueryInterface
 			$parameterNames[] = $bindKey;
 
 			$this->bind($bindKey, $value, $dataType);
+
+			// We unset the referenced variable but want to keep it referenced for the bind call
+			unset($value);
 		}
 
 		return $parameterNames;
