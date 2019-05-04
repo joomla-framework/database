@@ -1137,7 +1137,7 @@ class MysqliQueryTest extends TestCase
 	public function testBindArray()
 	{
 		$q = new MysqliQuery($this->dbo);
-		$result = $q->bindArray('id', [1, 2, 3], ParameterType::INTEGER);
+		$result = $q->bindArray([1, 2, 3], ParameterType::INTEGER);
 
 		$this->assertThat(
 			$result,

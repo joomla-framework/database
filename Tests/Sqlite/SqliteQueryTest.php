@@ -1303,8 +1303,8 @@ class SqliteQueryTest extends TestCase
 	 */
 	public function testBindArray()
 	{
-		$q = new MysqlQuery($this->dbo);
-		$result = $q->bindArray('id', [1, 2, 3], ParameterType::INTEGER);
+		$q = new SqliteQuery($this->dbo);
+		$result = $q->bindArray([1, 2, 3], ParameterType::INTEGER);
 
 		$this->assertThat(
 			$result,
