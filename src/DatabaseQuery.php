@@ -1690,7 +1690,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @param   string $keyName   key name for the where clause
 	 * @param   array  $keyValues array of values to be matched
-	 * @param   string $dataType
+	 * @param   string $dataType  Type of the values to bind
 	 *
 	 * @return  $this
 	 *
@@ -1720,9 +1720,9 @@ abstract class DatabaseQuery implements QueryInterface
 	{
 		$parameterNames = [];
 
-		foreach($values as $value)
+		foreach ($values as $value)
 		{
-			$bindKey          = ':preparedArray' . ++$this->preparedIndex;
+			$bindKey          = ':preparedArray' . (++$this->preparedIndex);
 			$parameterNames[] = $bindKey;
 
 			$this->bind($bindKey, $value, $dataType);
