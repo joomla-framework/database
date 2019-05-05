@@ -91,7 +91,7 @@ class ImportCommand extends AbstractCommand
 		$tableName  = $input->getOption('table');
 		$all        = $input->getOption('all');
 
-		if ($tableName === null && $all === null)
+		if ($tableName === null && $all === false)
 		{
 			$symfonyStyle->warning('Either the --table or --all option must be specified');
 
@@ -163,7 +163,7 @@ class ImportCommand extends AbstractCommand
 			$symfonyStyle->text(sprintf('Imported data for %s in %d seconds', $table, round(microtime(true) - $taskTime, 3)));
 		}
 
-		$symfonyStyle->text(sprintf('Import completed in %d seconds', round(microtime(true) - $totalTime, 3)));
+		$symfonyStyle->success(sprintf('Import completed in %d seconds', round(microtime(true) - $totalTime, 3)));
 
 		return 0;
 	}

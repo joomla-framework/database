@@ -11,6 +11,7 @@ namespace Joomla\Database\Command;
 use Joomla\Archive\Archive;
 use Joomla\Console\Command\AbstractCommand;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Filesystem\File;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -71,32 +72,45 @@ class ExportCommand extends AbstractCommand
 		$symfonyStyle->title('Exporting Database');
 
 		$totalTime  = microtime(true);
-		$date       = getdate();
-		$dateFormat = sprintf("%s-%02s-%02s", $date['year'], $date['mon'], $date['mday']);
 
-		$tables   = $this->db->getTableList();
-		$prefix   = $this->db->getPrefix();
-		$exporter = $this->db->getExporter()->withStructure();
+		// Make sure the database supports exports before we get going
+		try
+		{
+			$exporter = $this->db->getExporter()
+				->withStructure();
+		}
+		catch (UnsupportedAdapterException $e)
+		{
+			$symfonyStyle->error(sprintf('The "%s" database driver does not support exporting data.', $this->db->getName()));
+
+			return 1;
+		}
 
 		$folderPath = $input->getOption('folder');
 		$tableName  = $input->getOption('table');
 		$all        = $input->getOption('all');
 		$zip        = $input->getOption('zip');
 
-		$zipFile = $folderPath . '/data_exported_' . $dateFormat . '.zip';
-
-		if ($tableName === null && $all === null)
+		if ($tableName === null && $all === false)
 		{
-			$symfonyStyle->warning("Either the --table or --all option must be specified");
+			$symfonyStyle->warning('Either the --table or --all option must be specified');
 
 			return 1;
 		}
+
+		$date       = getdate();
+		$dateFormat = sprintf("%s-%02s-%02s", $date['year'], $date['mon'], $date['mday']);
+
+		$zipFile = $folderPath . '/data_exported_' . $dateFormat . '.zip';
+
+		$tables = $this->db->getTableList();
+		$prefix = $this->db->getPrefix();
 
 		if ($tableName)
 		{
 			if (!\in_array($tableName, $tables))
 			{
-				$symfonyStyle->error($tableName . ' does not exist in the database.');
+				$symfonyStyle->error(sprintf('The %s table does not exist in the database.', $tableName));
 
 				return 1;
 			}
@@ -111,12 +125,13 @@ class ExportCommand extends AbstractCommand
 
 		foreach ($tables as $table)
 		{
-			if (strpos(substr($table, 0, strlen($prefix)), $prefix) !== false)
+			// If an empty prefix is in use then we will dump all tables, otherwise the prefix must match
+			if (strlen($prefix) === 0 || strpos(substr($table, 0, strlen($prefix)), $prefix) !== false)
 			{
 				$taskTime = microtime(true);
 				$filename = $folderPath . '/' . $table . '.xml';
 
-				$symfonyStyle->text('Exporting ' . $table . '....');
+				$symfonyStyle->text(sprintf('Processing the %s table', $table));
 
 				$data = (string) $exporter->from($table)->withData(true);
 
@@ -134,12 +149,11 @@ class ExportCommand extends AbstractCommand
 					File::delete($filename);
 				}
 
-				$symfonyStyle->text('Exported in ' . round(microtime(true) - $taskTime, 3));
+				$symfonyStyle->text(sprintf('Exported data for %s in %d seconds', $table, round(microtime(true) - $taskTime, 3)));
 			}
 		}
 
-		$symfonyStyle->text('Total time: ' . round(microtime(true) - $totalTime, 3));
-		$symfonyStyle->success('Finished Exporting Database');
+		$symfonyStyle->success(sprintf('Export completed in %d seconds', round(microtime(true) - $totalTime, 3)));
 
 		return 0;
 	}
