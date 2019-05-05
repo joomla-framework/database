@@ -8,7 +8,8 @@ cache:
     - $HOME/.composer/cache
 
 env:
-  - COMPOSER_FLAGS="--prefer-stable"
+  global:
+    - COMPOSER_FLAGS="--prefer-stable"
 
 jobs:
   allow_failures:
