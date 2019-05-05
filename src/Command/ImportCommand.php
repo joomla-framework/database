@@ -115,7 +115,7 @@ class ImportCommand extends AbstractCommand
 			// Check file
 			if (!file_exists($percorso))
 			{
-				$symfonyStyle->error('The file to import the ' . $table . ' does not exist.');
+				$symfonyStyle->error(sprintf('The %s file does not exist.', $table));
 
 				return 1;
 			}
