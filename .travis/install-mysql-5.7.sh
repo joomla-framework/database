@@ -7,7 +7,6 @@ echo "Installing MySQL 5.7..."
 sudo docker run \
     -d \
     -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
-    -e MYSQL_DATABASE=joomla_ut \
     -p 33306:3306 \
     --name mysql57 \
     mysql:5.7
