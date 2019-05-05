@@ -371,19 +371,15 @@ jobs:
     - stage: Test
       php: 7.3
       sudo: required
-      addons:
-        postgresql: "9.6"
       services:
-        - postgresql
+        - docker
       env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
     - stage: Test
       if: NOT type = pull_request
       php: 7.4snapshot
       sudo: required
-      addons:
-        postgresql: "9.6"
       services:
-        - postgresql
+        - docker
       env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
 
     # PostgreSQL 9.1
@@ -495,19 +491,15 @@ jobs:
     - stage: Test
       php: 7.3
       sudo: required
-      addons:
-        postgresql: "9.6"
       services:
-        - postgresql
+        - docker
       env: DB="postgresql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml"
     - stage: Test
       if: NOT type = pull_request
       php: 7.4snapshot
       sudo: required
-      addons:
-        postgresql: "9.6"
       services:
-        - postgresql
+        - docker
       env: DB="postgresql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml"
 
     # PHPCS
