@@ -64,6 +64,9 @@ abstract class MysqliCase extends AbstractDatabaseTestCase
 				case 'host':
 					static::$options['host'] = $v;
 					break;
+				case 'port':
+					static::$options['port'] = $v;
+					break;
 				case 'dbname':
 					static::$options['database'] = $v;
 					break;
