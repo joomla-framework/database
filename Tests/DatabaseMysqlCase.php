@@ -69,6 +69,9 @@ abstract class DatabaseMysqlCase extends TestDatabase
 				case 'host':
 					self::$options['host'] = $v;
 					break;
+				case 'port':
+					self::$options['port'] = $v;
+					break;
 				case 'dbname':
 					self::$options['database'] = $v;
 					break;
