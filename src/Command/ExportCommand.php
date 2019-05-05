@@ -8,9 +8,9 @@
 
 namespace Joomla\Database\Command;
 
-use Joomla\Console\Command\AbstractCommand;
-use Joomla\Database\DatabaseInterface;
 use Joomla\Archive\Archive;
+use Joomla\Console\Command\AbstractCommand;
+use Joomla\Database\DatabaseDriver;
 use Joomla\Filesystem\File;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -35,7 +35,7 @@ class ExportCommand extends AbstractCommand
 	/**
 	 * Database connector
 	 *
-	 * @var    DatabaseInterface
+	 * @var    DatabaseDriver
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $db;
@@ -43,11 +43,11 @@ class ExportCommand extends AbstractCommand
 	/**
 	 * Instantiate the command.
 	 *
-	 * @param   DatabaseInterface  $db  Database connector
+	 * @param   DatabaseDriver  $db  Database connector
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct(DatabaseInterface $db)
+	public function __construct(DatabaseDriver $db)
 	{
 		$this->db = $db;
 
@@ -70,52 +70,55 @@ class ExportCommand extends AbstractCommand
 
 		$symfonyStyle->title('Exporting Database');
 
-		$total_time = microtime(true);
-		$date = getDate();
-		$dateFormat = sprintf("%s-%02s-%02s",$date['year'], $date['mon'], $date['mday']);
+		$totalTime  = microtime(true);
+		$date       = getdate();
+		$dateFormat = sprintf("%s-%02s-%02s", $date['year'], $date['mon'], $date['mday']);
 
 		$tables   = $this->db->getTableList();
 		$prefix   = $this->db->getPrefix();
-		$exp      = $this->db->getExporter()->withStructure();
+		$exporter = $this->db->getExporter()->withStructure();
 
 		$folderPath = $input->getOption('folder');
-		$tableName = $input->getOption('table');
-		$all = $input->getOption('all');
-		$zip = $input->getOption('zip');
+		$tableName  = $input->getOption('table');
+		$all        = $input->getOption('all');
+		$zip        = $input->getOption('zip');
 
 		$zipFile = $folderPath . '/' . 'data_exported_' . $dateFormat . '.zip';
 
-		if (($tableName == null) && ($all == null))
+		if ($tableName === null && $all === null)
 		{
 			$symfonyStyle->warning("Either the --table or --all option must be specified");
+
 			return 1;
 		}
 
-		if($tableName)
+		if ($tableName)
 		{
 			if (!\in_array($tableName, $tables))
 			{
 				$symfonyStyle->error($tableName . ' does not exist in the database.');
+
 				return 1;
 			}
-			$tables = array($tableName);
+
+			$tables = [$tableName];
 		}
 
 		if ($zip)
 		{
-			$archive = new Archive;
-			$zipArchive = $archive->getAdapter('zip');
+			$zipArchive = (new Archive)->getAdapter('zip');
 		}
 
 		foreach ($tables as $table)
 		{
 			if (strpos(substr($table, 0, strlen($prefix)), $prefix) !== false)
 			{
-				$task_i_time = microtime(true);
-				$filename    = $folderPath . '/' . $table . '.xml';
-				$symfonyStyle->newLine();
+				$taskTime = microtime(true);
+				$filename = $folderPath . '/' . $table . '.xml';
+
 				$symfonyStyle->text('Exporting ' . $table . '....');
-				$data = (string) $exp->from($table)->withData(true);
+
+				$data = (string) $exporter->from($table)->withData(true);
 
 				if (file_exists($filename))
 				{
@@ -126,16 +129,16 @@ class ExportCommand extends AbstractCommand
 
 				if ($zip)
 				{
-					$zipFilesArray[] = array('name' => $table . '.xml', 'data' => $data);
+					$zipFilesArray[] = ['name' => $table . '.xml', 'data' => $data];
 					$zipArchive->create($zipFile, $zipFilesArray);
 					File::delete($filename);
 				}
 
-				$symfonyStyle->text('Exported in ' . round(microtime(true) - $task_i_time, 3));
+				$symfonyStyle->text('Exported in ' . round(microtime(true) - $taskTime, 3));
 			}
 		}
 
-		$symfonyStyle->text('Total time: ' . round(microtime(true) - $total_time, 3));
+		$symfonyStyle->text('Total time: ' . round(microtime(true) - $totalTime, 3));
 		$symfonyStyle->success('Finished Exporting Database');
 
 		return 0;

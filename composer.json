@@ -7,23 +7,25 @@
     "license": "GPL-2.0-or-later",
     "require": {
         "php": "~7.0",
-        "joomla/event": "~2.0@dev",
+        "joomla/event": "~2.0",
         "psr/log": "~1.0"
     },
     "require-dev": {
+        "joomla/archive": "~2.0",
         "joomla/coding-standards": "~2.0@alpha",
         "joomla/console": "~2.0",
-        "joomla/archive": "~2.0@dev",
-        "joomla/filesystem": "~2.0@dev",
         "joomla/di": "~1.0|~2.0",
+        "joomla/filesystem": "~1.3|~2.0",
         "joomla/registry": "^1.4.5|~2.0",
         "joomla/test": "~1.2",
         "phpunit/phpunit": "~6.3",
         "phpunit/dbunit": "~3.0"
     },
     "suggest": {
-        "joomla/console": "If you want to use the ExporterCommand and ImporterCommand classes, please install joomla/console:~2.0",
+        "joomla/archive": "To use the ExportCommand class, install joomla/archive",
+        "joomla/console": "To use the ExportCommand and ImportCommand classes, install joomla/console",
         "joomla/di": "To use the Database ServiceProviderInterface objects, install joomla/di.",
+        "joomla/filesystem": "To use the ExportCommand and ImportCommand classes, install joomla/filesystem",
         "joomla/registry": "To use the Database ServiceProviderInterface objects, install joomla/registry.",
         "ext-mysqli": "To connect to a MySQL database via MySQLi",
         "ext-pdo": "To connect to a MySQL, Oracle, PostgreSQL, or SQLite database via PDO",
