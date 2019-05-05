@@ -1683,14 +1683,16 @@ abstract class DatabaseQuery implements QueryInterface
 	}
 
 	/**
-	 * Add a WHERE IN statement to the query
+	 * Add a WHERE IN statement to the query.
+	 *
+	 * Note that all values must be the same data type.
 	 *
 	 * Usage
 	 * $query->whereIn('id', [1, 2, 3]);
 	 *
-	 * @param   string $keyName   key name for the where clause
-	 * @param   array  $keyValues array of values to be matched
-	 * @param   string $dataType  Type of the values to bind
+	 * @param   string  $keyName    Key name for the where clause
+	 * @param   array   $keyValues  Array of values to be matched
+	 * @param   string  $dataType   Type of the values to bind
 	 *
 	 * @return  $this
 	 *
@@ -1706,11 +1708,13 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * Binds an array of values and returns an array of prepared parameter names.
 	 *
+	 * Note that all values must be the same data type.
+	 *
 	 * Usage:
 	 * $query->where('column in (' . implode(',', $this->bindArray($keyValues, $dataType)) . ')');
 	 *
-	 * @param   array  $values   Values to bind
-	 * @param   string $dataType Type of the values to bind
+	 * @param   array   $values    Values to bind
+	 * @param   string  $dataType  Type of the values to bind
 	 *
 	 * @return  array   An array with parameter names
 	 *
