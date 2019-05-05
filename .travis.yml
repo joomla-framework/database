@@ -116,7 +116,7 @@ jobs:
       env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -p 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
+        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       if: NOT type = pull_request
       php: 7.2
@@ -126,7 +126,7 @@ jobs:
       env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -p 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
+        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       php: 7.3
       sudo: required
@@ -135,7 +135,7 @@ jobs:
       env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -p 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
+        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       php: 7.3
       sudo: required
@@ -145,7 +145,7 @@ jobs:
       env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS=""
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -p 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
+        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       if: NOT type = pull_request
       php: 7.4snapshot
@@ -155,7 +155,7 @@ jobs:
       env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -p 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
+        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # PDO MySQL 8.0
     - stage: Test
@@ -166,7 +166,7 @@ jobs:
       env: DB="mysql.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
       before_script:
         - bash ./.travis/install-mysql-8.0.sh
-        - mysql -h 127.0.0.1 -p 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
+        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       if: NOT type = pull_request
       php: 7.4snapshot
@@ -176,7 +176,7 @@ jobs:
       env: DB="mysql.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
       before_script:
         - bash ./.travis/install-mysql-8.0.sh
-        - mysql -h 127.0.0.1 -p 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
+        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # MySQLi 5.5
     - stage: Test
@@ -233,7 +233,7 @@ jobs:
       env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -p 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
+        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       if: NOT type = pull_request
       php: 7.2
@@ -243,7 +243,7 @@ jobs:
       env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -p 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
+        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       php: 7.3
       sudo: required
@@ -252,7 +252,7 @@ jobs:
       env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -p 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
+        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       php: 7.3
       sudo: required
@@ -262,7 +262,7 @@ jobs:
       env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS=""
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -p 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
+        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       php: 7.4snapshot
       sudo: required
@@ -271,7 +271,7 @@ jobs:
       env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -p 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
+        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # MySQLi 8.0
     - stage: Test
@@ -282,7 +282,7 @@ jobs:
       env: DB="mysqli.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
       before_script:
         - bash ./.travis/install-mysql-8.0.sh
-        - mysql -h 127.0.0.1 -p 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
+        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       php: 7.4snapshot
       sudo: required
@@ -291,7 +291,7 @@ jobs:
       env: DB="mysqli.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
       before_script:
         - bash ./.travis/install-mysql-8.0.sh
-        - mysql -h 127.0.0.1 -p 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
+        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # MariaDB 10.0 (MySQLi)
     - stage: Test
