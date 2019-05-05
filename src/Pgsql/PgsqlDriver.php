@@ -312,8 +312,8 @@ class PgsqlDriver extends PdoDriver
 
 		$tableSub = $this->replacePrefix($table);
 
-		$tabInd = explode(' ', $indKey);
-		$colNames = array();
+		$tabInd   = explode(' ', $indKey);
+		$colNames = [];
 
 		foreach ($tabInd as $numCol)
 		{
@@ -582,7 +582,6 @@ class PgsqlDriver extends PdoDriver
 				break;
 
 			case 'date':
-				// Case 'timestamp without time zone':
 				if (empty($field_value))
 				{
 					$field_value = $this->getNullDate();
@@ -727,7 +726,7 @@ class PgsqlDriver extends PdoDriver
 			}
 
 			// Ignore null timestamp fields.
-			if (($columns[$k] == "timestamp without time zone") && empty($v))
+			if ($columns[$k] === 'timestamp without time zone' && empty($v))
 			{
 				continue;
 			}

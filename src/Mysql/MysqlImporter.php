@@ -371,7 +371,7 @@ class MysqlImporter extends DatabaseImporter
 		$kName      = (string) $columns[0]['Key_name'];
 		$prefix     = '';
 
-		if ($kName == 'PRIMARY')
+		if ($kName === 'PRIMARY')
 		{
 			$prefix = 'PRIMARY ';
 		}
@@ -380,7 +380,7 @@ class MysqlImporter extends DatabaseImporter
 			$prefix = 'UNIQUE ';
 		}
 
-		$kColumns = array();
+		$kColumns = [];
 
 		foreach ($columns as $column)
 		{
@@ -394,7 +394,7 @@ class MysqlImporter extends DatabaseImporter
 			$kColumns[] = $this->db->quoteName((string) $column['Column_name']) . $kLength;
 		}
 
-		return $prefix . 'KEY ' . ($kName != 'PRIMARY' ? $this->db->quoteName($kName) : '') . ' (' . implode(',', $kColumns) . ')';
+		return $prefix . 'KEY ' . ($kName !== 'PRIMARY' ? $this->db->quoteName($kName) : '') . ' (' . implode(',', $kColumns) . ')';
 	}
 
 	/**

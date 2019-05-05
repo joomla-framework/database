@@ -113,7 +113,7 @@ class PgsqlExporter extends DatabaseExporter
 	 */
 	protected function buildXmlData()
 	{
-		$buffer = array();
+		$buffer = [];
 
 		foreach ($this->from as $table)
 		{
@@ -122,7 +122,7 @@ class PgsqlExporter extends DatabaseExporter
 
 			// Get the details columns information.
 			$fields  = $this->db->getTableColumns($table, false);
-			$colblob = array();
+			$colblob = [];
 
 			foreach ($fields as $field)
 			{

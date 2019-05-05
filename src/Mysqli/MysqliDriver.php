@@ -626,7 +626,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			}
 
 			// Ignore null datetime fields.
-			if (($tableColumns[$k] == "datetime") && empty($v))
+			if ($tableColumns[$k] === 'datetime' && empty($v))
 			{
 				continue;
 			}
