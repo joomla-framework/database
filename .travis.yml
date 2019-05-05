@@ -14,8 +14,10 @@ env:
 jobs:
   allow_failures:
     - php: 7.4snapshot
-    - env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
-    - env: DB="postgresql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml"
+    - env: DB="mysql.docker" MYSQL_VERSION=8.0
+    - env: DB="mysqli.docker" MYSQL_VERSION=8.0
+    - env: DB="pgsql" PGSQL_VERSION=11.0
+    - env: DB="postgresql" PGSQL_VERSION=11.0
   include:
     # SQLite
     - stage: Test
@@ -122,6 +124,21 @@ jobs:
         - docker
       env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
 
+    # PDO MySQL 8.0
+    - stage: Test
+      php: 7.3
+      sudo: required
+      services:
+        - docker
+      env: DB="mysql.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
+    - stage: Test
+      if: NOT type = pull_request
+      php: 7.4snapshot
+      sudo: required
+      services:
+        - docker
+      env: DB="mysql.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
+
     # MySQLi 5.5
     - stage: Test
       php: 5.3
@@ -183,6 +200,20 @@ jobs:
       services:
         - docker
       env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
+
+    # MySQLi 8.0
+    - stage: Test
+      php: 7.3
+      sudo: required
+      services:
+        - docker
+      env: DB="mysqli.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
+    - stage: Test
+      php: 7.4snapshot
+      sudo: required
+      services:
+        - docker
+      env: DB="mysqli.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
 
     # MariaDB 10.0 (MySQLi)
     - stage: Test
@@ -490,6 +521,7 @@ before_install:
 
 before_script:
   - if [[ "$MYSQL_VERSION" == "5.7" ]]; then bash ./.travis/install-mysql-5.7.sh; fi;
+  - if [[ "$MYSQL_VERSION" == "8.0" ]]; then bash ./.travis/install-mysql-8.0.sh; fi;
   - if [[ "$PGSQL_VERSION" == "10.0" ]]; then bash ./.travis/install-postgres-10.sh; fi;
   - if [[ "$PGSQL_VERSION" == "11.0" ]]; then bash ./.travis/install-postgres-11.sh; fi;
   - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == "mariadb" ]]; then mysql -u root -e 'create database joomla_ut;'; fi;

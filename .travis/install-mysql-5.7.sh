@@ -4,6 +4,7 @@ set -ex
 
 echo "Installing MySQL 5.7..."
 
+sudo docker pull mysql:5.7
 sudo docker run \
     -d \
     -e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
