@@ -136,6 +136,11 @@ abstract class DatabaseMysqliCase extends TestDatabase
 		// Compile the connection DSN.
 		$dsn = 'mysql:host=' . self::$options['host'] . ';dbname=' . self::$options['database'];
 
+		if (isset(self::$options['port']))
+		{
+			$dsn .= ';port=' . self::$options['port'];
+		}
+
 		// Create the PDO object from the DSN and options.
 		$pdo = new \PDO($dsn, self::$options['user'], self::$options['password']);
 
