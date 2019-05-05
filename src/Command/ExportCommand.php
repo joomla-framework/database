@@ -83,7 +83,7 @@ class ExportCommand extends AbstractCommand
 		$all        = $input->getOption('all');
 		$zip        = $input->getOption('zip');
 
-		$zipFile = $folderPath . '/' . 'data_exported_' . $dateFormat . '.zip';
+		$zipFile = $folderPath . '/data_exported_' . $dateFormat . '.zip';
 
 		if ($tableName === null && $all === null)
 		{

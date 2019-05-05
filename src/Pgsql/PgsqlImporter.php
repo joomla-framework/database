@@ -409,7 +409,7 @@ class PgsqlImporter extends DatabaseImporter
 							: null;
 		}
 
-		/* nextval() as default value means that type field is serial */
+		// The nextval() function as default value means that type field is serial
 		if (strpos($fDefault, 'nextval') !== false)
 		{
 			$sql = $this->db->quoteName($fName) . ' SERIAL';

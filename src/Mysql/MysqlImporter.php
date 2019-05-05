@@ -267,7 +267,6 @@ class MysqlImporter extends DatabaseImporter
 				{
 					$sql .= ' NOT NULL DEFAULT ' . $this->db->quote($fDefault);
 				}
-
 			}
 		}
 		else

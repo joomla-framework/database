@@ -75,11 +75,11 @@ class PgsqlExporter extends DatabaseExporter
 
 			foreach ($sequences as $sequence)
 			{
-				$buffer[] = '   <sequence Name="' . $this->getGenericTableName($sequence->sequence) . '"' . ' Schema="' . $sequence->schema . '"' .
-					' Table="' . $table . '"' . ' Column="' . $sequence->column . '"' . ' Type="' . $sequence->data_type . '"' .
+				$buffer[] = '   <sequence Name="' . $this->getGenericTableName($sequence->sequence) . '" Schema="' . $sequence->schema . '"' .
+					' Table="' . $table . '" Column="' . $sequence->column . '" Type="' . $sequence->data_type . '"' .
 					' Start_Value="' . $sequence->start_value . '" Min_Value="' . $sequence->minimum_value . '"' .
-					' Max_Value="' . $sequence->maximum_value . '"' . ' Last_Value="' . $this->db->getSequenceLastValue($sequence->sequence) . '"' .
-					' Increment="' . $sequence->increment . '"' . ' Cycle_option="' . $sequence->cycle_option . '"' .
+					' Max_Value="' . $sequence->maximum_value . '" Last_Value="' . $this->db->getSequenceLastValue($sequence->sequence) . '"' .
+					' Increment="' . $sequence->increment . '" Cycle_option="' . $sequence->cycle_option . '"' .
 					' Is_called="' . $this->db->getSequenceIsCalled($sequence->sequence) . '"' .
 					' />';
 			}
@@ -87,13 +87,13 @@ class PgsqlExporter extends DatabaseExporter
 			foreach ($fields as $field)
 			{
 				$buffer[] = '   <field Field="' . $field->column_name . '" Type="' . $field->type . '" Null="' . $field->null . '"' .
-					' Default="' . $field->Default . '"' . ' Comments="' . $field->comments . '" />';
+					' Default="' . $field->Default . '" Comments="' . $field->comments . '" />';
 			}
 
 			foreach ($keys as $key)
 			{
-				$buffer[] = '   <key Index="' . $this->getGenericTableName($key->idxName) . '"' . ' is_primary="' . $key->isPrimary . '"' .
-					' is_unique="' . $key->isUnique . '"' . ' Key_name="' . $this->db->getNamesKey($table, $key->indKey) . '"' .
+				$buffer[] = '   <key Index="' . $this->getGenericTableName($key->idxName) . '" is_primary="' . $key->isPrimary . '"' .
+					' is_unique="' . $key->isUnique . '" Key_name="' . $this->db->getNamesKey($table, $key->indKey) . '"' .
 					' Query=\'' . $key->Query . '\' />';
 			}
 
