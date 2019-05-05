@@ -66,12 +66,14 @@ class MysqliImporter extends DatabaseImporter
 
 		foreach ($table->xpath('field') as $field)
 		{
-			$createTableStatement .= $this->getColumnSQL($field) . ', ';
+			$createTableStatement .= $this->getColumnSql($field) . ', ';
 		}
 
-		foreach ($table->xpath('key') as $key)
+		$newLookup = $this->getKeyLookup($table->xpath('key'));
+
+		foreach ($newLookup as $key)
 		{
-			$createTableStatement .= $this->getKeySQL([$key]) . ', ';
+			$createTableStatement .= $this->getKeySql($key) . ', ';
 		}
 
 		$createTableStatement = rtrim($createTableStatement, ', ');
@@ -176,6 +178,7 @@ class MysqliImporter extends DatabaseImporter
 							&& ((string) $newLookup[$name][$i]['Column_name'] === $oldLookup[$name][$i]->Column_name)
 							&& ((string) $newLookup[$name][$i]['Seq_in_index'] === $oldLookup[$name][$i]->Seq_in_index)
 							&& ((string) $newLookup[$name][$i]['Collation'] === $oldLookup[$name][$i]->Collation)
+							&& ((string) $newLookup[$name][$i]['Sub_part'] == $oldLookup[$name][$i]->Sub_part)
 							&& ((string) $newLookup[$name][$i]['Index_type'] === $oldLookup[$name][$i]->Index_type));
 
 						/*
@@ -193,6 +196,9 @@ class MysqliImporter extends DatabaseImporter
 						echo '<br>Collation:    '.
 							((string) $newLookup[$name][$i]['Collation'] == $oldLookup[$name][$i]->Collation ? 'Pass' : 'Fail').' '.
 							(string) $newLookup[$name][$i]['Collation'].' vs '.$oldLookup[$name][$i]->Collation;
+						echo '<br>Sub_part:    '.
+							((string) $newLookup[$name][$i]['Sub_part'] == $oldLookup[$name][$i]->Sub_part ? 'Pass' : 'Fail').' '.
+							(string) $newLookup[$name][$i]['Sub_part'].' vs '.$oldLookup[$name][$i]->Sub_part;
 						echo '<br>Index_type:   '.
 							((string) $newLookup[$name][$i]['Index_type'] == $oldLookup[$name][$i]->Index_type ? 'Pass' : 'Fail').' '.
 							(string) $newLookup[$name][$i]['Index_type'].' vs '.$oldLookup[$name][$i]->Index_type;
@@ -292,7 +298,14 @@ class MysqliImporter extends DatabaseImporter
 			else
 			{
 				// TODO Don't quote numeric values.
-				$sql .= ' NOT NULL DEFAULT ' . $this->db->quote($fDefault);
+				if (strpos($fDefault, 'CURRENT') !== false)
+				{
+					$sql .= ' NOT NULL DEFAULT CURRENT_TIMESTAMP()';
+				}
+				else
+				{
+					$sql .= ' NOT NULL DEFAULT ' . $this->db->quote($fDefault);
+				}
 			}
 		}
 		else
@@ -392,13 +405,9 @@ class MysqliImporter extends DatabaseImporter
 	 */
 	protected function getKeySql($columns)
 	{
-		// TODO Error checking on array and element types.
-
 		$kNonUnique = (string) $columns[0]['Non_unique'];
 		$kName      = (string) $columns[0]['Key_name'];
-		$kColumn    = (string) $columns[0]['Column_name'];
-
-		$prefix = '';
+		$prefix     = '';
 
 		if ($kName === 'PRIMARY')
 		{
@@ -409,19 +418,18 @@ class MysqliImporter extends DatabaseImporter
 			$prefix = 'UNIQUE ';
 		}
 
-		$nColumns = \count($columns);
 		$kColumns = [];
 
-		if ($nColumns === 1)
+		foreach ($columns as $column)
 		{
-			$kColumns[] = $this->db->quoteName($kColumn);
-		}
-		else
-		{
-			foreach ($columns as $column)
+			$kLength = '';
+
+			if (!empty($column['Sub_part']))
 			{
-				$kColumns[] = (string) $column['Column_name'];
+				$kLength = '(' . $column['Sub_part'] . ')';
 			}
+
+			$kColumns[] = $this->db->quoteName((string) $column['Column_name']) . $kLength;
 		}
 
 		return $prefix . 'KEY ' . ($kName !== 'PRIMARY' ? $this->db->quoteName($kName) : '') . ' (' . implode(',', $kColumns) . ')';

@@ -48,6 +48,9 @@ class PgsqlExporterTest extends TestCase
 					'getTableColumns',
 					'getTableKeys',
 					'getTableSequences',
+					'getSequenceLastValue',
+					'getSequenceIsCalled',
+					'getNamesKey',
 					'getVersion',
 					'quoteName',
 					'loadObjectList',
@@ -77,28 +80,28 @@ class PgsqlExporterTest extends TestCase
 						'column_name' => 'id',
 						'type' => 'integer',
 						'null' => 'NO',
-						'default' => 'nextval(\'jos_dbtest_id_seq\'::regclass)',
+						'Default' => 'nextval(\'jos_dbtest_id_seq\'::regclass)',
 						'comments' => '',
 					),
 					(object) array(
 						'column_name' => 'title',
 						'type' => 'character varying(50)',
 						'null' => 'NO',
-						'default' => 'NULL',
+						'Default' => 'NULL',
 						'comments' => '',
 					),
 					(object) array(
 						'column_name' => 'start_date',
 						'type' => 'timestamp without time zone',
 						'null' => 'NO',
-						'default' => 'NULL',
+						'Default' => 'NULL',
 						'comments' => '',
 					),
 					(object) array(
 						'column_name' => 'description',
 						'type' => 'text',
 						'null' => 'NO',
-						'default' => 'NULL',
+						'Default' => 'NULL',
 						'comments' => '',
 					)
 				)
@@ -116,9 +119,40 @@ class PgsqlExporterTest extends TestCase
 						'idxName' => 'jos_dbtest_pkey',
 						'isPrimary' => 'TRUE',
 						'isUnique' => 'TRUE',
+						'indKey' => '1',
 						'Query' => 'ALTER TABLE "jos_dbtest" ADD PRIMARY KEY (id)',
 					)
 				)
+			)
+		);
+
+		$this->dbo->expects(
+			$this->any()
+		)
+		->method('getNamesKey')
+		->will(
+			$this->returnValue(
+				'id'
+			)
+		);
+
+		$this->dbo->expects(
+			$this->any()
+		)
+		->method('getSequenceLastValue')
+		->will(
+			$this->returnValue(
+				'1'
+			)
+		);
+
+		$this->dbo->expects(
+			$this->any()
+		)
+		->method('getSequenceIsCalled')
+		->will(
+			$this->returnValue(
+				'f'
 			)
 		);
 
@@ -243,7 +277,7 @@ class PgsqlExporterTest extends TestCase
 		// Set up the export settings.
 		$instance
 			->setDbo($this->dbo)
-			->from('jos_test')
+			->from('jos_dbtest')
 			->withStructure(true);
 
 		/* Depending on which version is running, 9.1.0 or older */
@@ -252,14 +286,14 @@ class PgsqlExporterTest extends TestCase
 		$expecting = '<?xml version="1.0"?>
 <postgresqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
  <database name="">
-  <table_structure name="#__test">
-   <sequence Name="jos_dbtest_id_seq" Schema="public" Table="jos_dbtest" Column="id" Type="bigint" Start_Value="' .
-			$start_val . '" Min_Value="1" Max_Value="9223372036854775807" Increment="1" Cycle_option="NO" />
+  <table_structure name="#__dbtest">
+   <sequence Name="#__dbtest_id_seq" Schema="public" Table="#__dbtest" Column="id" Type="bigint" Start_Value="' .
+			$start_val . '" Min_Value="1" Max_Value="9223372036854775807" Last_Value="1" Increment="1" Cycle_option="NO" Is_called="f" />
    <field Field="id" Type="integer" Null="NO" Default="nextval(\'jos_dbtest_id_seq\'::regclass)" Comments="" />
    <field Field="title" Type="character varying(50)" Null="NO" Default="NULL" Comments="" />
    <field Field="start_date" Type="timestamp without time zone" Null="NO" Default="NULL" Comments="" />
    <field Field="description" Type="text" Null="NO" Default="NULL" Comments="" />
-   <key Index="jos_dbtest_pkey" is_primary="TRUE" is_unique="TRUE" Query="ALTER TABLE "jos_dbtest" ADD PRIMARY KEY (id)" />
+   <key Index="#__dbtest_pkey" is_primary="TRUE" is_unique="TRUE" Key_name="id" Query=\'ALTER TABLE "jos_dbtest" ADD PRIMARY KEY (id)\' />
   </table_structure>
  </database>
 </postgresqldump>';
@@ -314,7 +348,7 @@ class PgsqlExporterTest extends TestCase
 		// Set up the export settings.
 		$instance
 			->setDbo($this->dbo)
-			->from('jos_test')
+			->from('jos_dbtest')
 			->withStructure(true);
 
 		/* Depending on which version is running, 9.1.0 or older */
@@ -323,14 +357,14 @@ class PgsqlExporterTest extends TestCase
 		$expecting = '<?xml version="1.0"?>
 <postgresqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
  <database name="">
-  <table_structure name="#__test">
-   <sequence Name="jos_dbtest_id_seq" Schema="public" Table="jos_dbtest" Column="id" Type="bigint" Start_Value="' .
-			$start_val . '" Min_Value="1" Max_Value="9223372036854775807" Increment="1" Cycle_option="NO" />
+  <table_structure name="#__dbtest">
+   <sequence Name="#__dbtest_id_seq" Schema="public" Table="#__dbtest" Column="id" Type="bigint" Start_Value="' .
+			$start_val . '" Min_Value="1" Max_Value="9223372036854775807" Last_Value="1" Increment="1" Cycle_option="NO" Is_called="f" />
    <field Field="id" Type="integer" Null="NO" Default="nextval(\'jos_dbtest_id_seq\'::regclass)" Comments="" />
    <field Field="title" Type="character varying(50)" Null="NO" Default="NULL" Comments="" />
    <field Field="start_date" Type="timestamp without time zone" Null="NO" Default="NULL" Comments="" />
    <field Field="description" Type="text" Null="NO" Default="NULL" Comments="" />
-   <key Index="jos_dbtest_pkey" is_primary="TRUE" is_unique="TRUE" Query="ALTER TABLE "jos_dbtest" ADD PRIMARY KEY (id)" />
+   <key Index="#__dbtest_pkey" is_primary="TRUE" is_unique="TRUE" Key_name="id" Query=\'ALTER TABLE "jos_dbtest" ADD PRIMARY KEY (id)\' />
   </table_structure>
  </database>
 </postgresqldump>';
@@ -359,7 +393,7 @@ class PgsqlExporterTest extends TestCase
 		// Set up the export settings.
 		$instance
 			->setDbo($this->dbo)
-			->from('jos_test')
+			->from('jos_dbtest')
 			->withStructure(true);
 
 		/* Depending on which version is running, 9.1.0 or older */
@@ -369,14 +403,14 @@ class PgsqlExporterTest extends TestCase
 			$instance->buildXmlStructure(),
 			$this->equalTo(
 				array(
-					'  <table_structure name="#__test">',
-					'   <sequence Name="jos_dbtest_id_seq" Schema="public" Table="jos_dbtest" Column="id" Type="bigint" Start_Value="' .
-					$start_val . '" Min_Value="1" Max_Value="9223372036854775807" Increment="1" Cycle_option="NO" />',
+					'  <table_structure name="#__dbtest">',
+					'   <sequence Name="#__dbtest_id_seq" Schema="public" Table="#__dbtest" Column="id" Type="bigint" Start_Value="' .
+					$start_val . '" Min_Value="1" Max_Value="9223372036854775807" Last_Value="1" Increment="1" Cycle_option="NO" Is_called="f" />',
 					'   <field Field="id" Type="integer" Null="NO" Default="nextval(\'jos_dbtest_id_seq\'::regclass)" Comments="" />',
 					'   <field Field="title" Type="character varying(50)" Null="NO" Default="NULL" Comments="" />',
 					'   <field Field="start_date" Type="timestamp without time zone" Null="NO" Default="NULL" Comments="" />',
 					'   <field Field="description" Type="text" Null="NO" Default="NULL" Comments="" />',
-					'   <key Index="jos_dbtest_pkey" is_primary="TRUE" is_unique="TRUE" Query="ALTER TABLE "jos_dbtest" ADD PRIMARY KEY (id)" />',
+					'   <key Index="#__dbtest_pkey" is_primary="TRUE" is_unique="TRUE" Key_name="id" Query=\'ALTER TABLE "jos_dbtest" ADD PRIMARY KEY (id)\' />',
 					'  </table_structure>'
 				)
 			),
@@ -542,8 +576,8 @@ class PgsqlExporterTest extends TestCase
 		$instance->setDbo($this->dbo);
 
 		$this->assertThat(
-			$instance->getGenericTableName('jos_test'),
-			$this->equalTo('#__test'),
+			$instance->getGenericTableName('jos_dbtest'),
+			$this->equalTo('#__dbtest'),
 			'The testGetGenericTableName should replace the database prefix with #__.'
 		);
 	}

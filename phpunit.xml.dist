@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php" colors="false">
+<phpunit bootstrap="tests/bootstrap.php" colors="false">
 	<!-- These constants help setup environment configurations for running optional tests.
 	<php>
 		<const name="JTEST_DATABASE_MYSQL_DSN" value="host=localhost;dbname=joomla_ut;user=utuser;pass=ut1234" />
 		<const name="JTEST_DATABASE_MYSQLI_DSN" value="host=localhost;dbname=joomla_ut;user=utuser;pass=ut1234" />
 		<const name="JTEST_DATABASE_PGSQL_DSN" value="host=localhost;port=5432;dbname=joomla_ut;user=utuser;pass=ut1234" />
 		<const name="JTEST_DATABASE_SQLSRV_DSN" value="host=localhost;dbname=joomla_ut;user=utuser;pass=ut1234" />
+		<const name="JPATH_ROOT" value="/path/to/database"/>
 	</php>
 	-->
 	<testsuites>
