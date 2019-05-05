@@ -384,8 +384,8 @@ jobs:
       env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
       before_script:
         - bash ./.travis/install-postgres-11.sh
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -h localhost -c 'create database joomla_ut;'
+        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/postgresql.sql
     - stage: Test
       if: NOT type = pull_request
       php: 7.4snapshot
@@ -394,8 +394,8 @@ jobs:
       env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
       before_script:
         - bash ./.travis/install-postgres-11.sh
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -h localhost -c 'create database joomla_ut;'
+        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/postgresql.sql
 
     # SQL Server
     - stage: Test
