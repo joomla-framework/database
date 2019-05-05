@@ -12,7 +12,6 @@ env:
 
 jobs:
   allow_failures:
-    - env: PGSQL_VERSION=10.0
     - php: nightly
   include:
     # SQLite
