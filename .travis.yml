@@ -452,6 +452,12 @@ jobs:
         - /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 -b -Q "CREATE DATABASE joomla_ut"
         - /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 -i Tests/Stubs/sqlsrv.sql
 
+    # PHPCS
+    - stage: Coding standard
+      php: 7.1
+      script:
+        - vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards && vendor/bin/phpcs -p --report=full --extensions=php --standard=ruleset.xml src/
+
 install:
   - rm -f composer.lock
   - travis_retry composer -n update $COMPOSER_FLAGS
