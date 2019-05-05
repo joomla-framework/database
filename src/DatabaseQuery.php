@@ -230,6 +230,14 @@ abstract class DatabaseQuery implements QueryInterface
 	protected $limit;
 
 	/**
+	 * An internal index for the bindArray function for unique prepared parameters.
+	 *
+	 * @var    integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $preparedIndex = 0;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @param   DatabaseInterface  $db  The database driver.
@@ -1675,22 +1683,25 @@ abstract class DatabaseQuery implements QueryInterface
 	}
 
 	/**
-	 * Add a WHERE IN statement to the query
+	 * Add a WHERE IN statement to the query.
+	 *
+	 * Note that all values must be the same data type.
 	 *
 	 * Usage
 	 * $query->whereIn('id', [1, 2, 3]);
 	 *
-	 * @param   string $keyName   key name for the where clause
-	 * @param   array  $keyValues array of values to be matched
+	 * @param   string  $keyName    Key name for the where clause
+	 * @param   array   $keyValues  Array of values to be matched
+	 * @param   string  $dataType   Type of the values to bind
 	 *
 	 * @return  $this
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function whereIn($keyName, $keyValues)
+	public function whereIn(string $keyName, array $keyValues, string $dataType = ParameterType::INTEGER)
 	{
 		return $this->where(
-			$keyName . ' IN (' . implode(', ', $keyValues) . ')'
+			$keyName . ' IN (' . implode(',', $this->bindArray($keyValues, $dataType)) . ')'
 		);
 	}
 
@@ -1757,6 +1768,39 @@ abstract class DatabaseQuery implements QueryInterface
 	public function andWhere($conditions, $glue = 'OR')
 	{
 		return $this->extendWhere('AND', $conditions, $glue);
+	}
+
+	/**
+	 * Binds an array of values and returns an array of prepared parameter names.
+	 *
+	 * Note that all values must be the same data type.
+	 *
+	 * Usage:
+	 * $query->where('column in (' . implode(',', $query->bindArray($keyValues, $dataType)) . ')');
+	 *
+	 * @param   array   $values    Values to bind
+	 * @param   string  $dataType  Type of the values to bind
+	 *
+	 * @return  array   An array with parameter names
+	 *
+	 * @since __DEPLOY_VERSION__
+	 */
+	public function bindArray(array $values, string $dataType = ParameterType::INTEGER)
+	{
+		$parameterNames = [];
+
+		foreach ($values as $value)
+		{
+			$bindKey          = ':preparedArray' . (++$this->preparedIndex);
+			$parameterNames[] = $bindKey;
+
+			$this->bind($bindKey, $value, $dataType);
+
+			// We unset the referenced variable but want to keep it referenced for the bind call
+			unset($value);
+		}
+
+		return $parameterNames;
 	}
 
 	/**
