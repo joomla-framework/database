@@ -524,8 +524,9 @@ before_script:
   - if [[ "$MYSQL_VERSION" == "8.0" ]]; then bash ./.travis/install-mysql-8.0.sh; fi;
   - if [[ "$PGSQL_VERSION" == "10.0" ]]; then bash ./.travis/install-postgres-10.sh; fi;
   - if [[ "$PGSQL_VERSION" == "11.0" ]]; then bash ./.travis/install-postgres-11.sh; fi;
+  # For the Docker images, the database is created as part of the image setup
   - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == "mariadb" ]]; then mysql -u root -e 'create database joomla_ut;'; fi;
-  - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == "mariadb" ]]; then mysql -u root joomla_ut < Tests/Stubs/mysql.sql; fi;
+  - if [[ "$DB" == "mysql" || "$DB" == "mysqli" || "$DB" == "mysql.docker" || "$DB" == "mysqli.docker" || "$DB" == "mariadb" ]]; then mysql -u root joomla_ut < Tests/Stubs/mysql.sql; fi;
   - if [[ "$DB" == "pgsql" || "$DB" == "postgresql" ]]; then psql -U postgres -c 'create database joomla_ut;'; fi;
   - if [[ "$DB" == "pgsql" || "$DB" == "postgresql" ]]; then psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql; fi;
 
