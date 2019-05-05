@@ -71,7 +71,6 @@ jobs:
 
     # PDO MySQL 5.6
     - stage: Test
-      if: NOT type = pull_request
       php: 5.4
       env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
     - stage: Test
@@ -83,21 +82,17 @@ jobs:
       env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
     - stage: Test
       if: NOT type = pull_request
-      php: 7.1
+      php: 7.0
       env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
 
     # PDO MySQL 5.7
     - stage: Test
       if: NOT type = pull_request
-      php: 7.0
-      sudo: required
-      env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
-    - stage: Test
-      if: NOT type = pull_request
       php: 7.1
       sudo: required
       env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
     - stage: Test
+      if: NOT type = pull_request
       php: 7.2
       sudo: required
       env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
@@ -111,6 +106,7 @@ jobs:
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
       env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS=""
     - stage: Test
+      if: NOT type = pull_request
       php: 7.4snapshot
       sudo: required
       env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
@@ -127,7 +123,6 @@ jobs:
 
     # MySQLi 5.6
     - stage: Test
-      if: NOT type = pull_request
       php: 5.4
       env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
     - stage: Test
@@ -139,15 +134,11 @@ jobs:
       php: 5.6
       env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
     - stage: Test
-      php: 7.1
+      if: NOT type = pull_request
+      php: 7.0
       env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
 
     # MySQLi 5.7
-    - stage: Test
-      if: NOT type = pull_request
-      php: 7.0
-      sudo: required
-      env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
     - stage: Test
       if: NOT type = pull_request
       php: 7.1
@@ -173,7 +164,7 @@ jobs:
 
     # MariaDB 10.0 (MySQLi)
     - stage: Test
-      php: 5.3
+      php: 7.1
       dist: precise
       addons:
         mariadb: 10.0
@@ -181,14 +172,14 @@ jobs:
 
     # MariaDB 10.1 (MySQLi)
     - stage: Test
-      php: 5.4
+      php: 7.2
       addons:
         mariadb: 10.1
       env: DB="mariadb" MARIADB_VERSION=10.1 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
 
     # MariaDB 10.2 (MySQLi)
     - stage: Test
-      php: 5.5
+      php: 7.3
       addons:
         mariadb: 10.2
       env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
@@ -200,29 +191,19 @@ jobs:
 
     # MariaDB 10.0 (PDO MySQL)
     - stage: Test
-      php: 5.6
+      php: 7.1
       addons:
         mariadb: 10.0
       env: DB="mariadb" MARIADB_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
 
     # MariaDB 10.1 (PDO MySQL)
     - stage: Test
-      php: 7.0
+      php: 7.2
       addons:
         mariadb: 10.1
       env: DB="mariadb" MARIADB_VERSION=10.1 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
 
     # MariaDB 10.2 (PDO MySQL)
-    - stage: Test
-      php: 7.1
-      addons:
-        mariadb: 10.2
-      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
-    - stage: Test
-      php: 7.2
-      addons:
-        mariadb: 10.2
-      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
     - stage: Test
       php: 7.3
       addons:
