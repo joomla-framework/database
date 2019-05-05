@@ -90,26 +90,36 @@ jobs:
       if: NOT type = pull_request
       php: 7.1
       sudo: required
-      env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
+      services:
+        - docker
+      env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
     - stage: Test
       if: NOT type = pull_request
       php: 7.2
       sudo: required
-      env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
+      services:
+        - docker
+      env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
     - stage: Test
       php: 7.3
       sudo: required
-      env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
+      services:
+        - docker
+      env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
     - stage: Test
       php: 7.3
       sudo: required
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
-      env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS=""
+      services:
+        - docker
+      env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS=""
     - stage: Test
       if: NOT type = pull_request
       php: 7.4snapshot
       sudo: required
-      env: DB="mysql" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
+      services:
+        - docker
+      env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml"
 
     # MySQLi 5.5
     - stage: Test
@@ -143,24 +153,34 @@ jobs:
       if: NOT type = pull_request
       php: 7.1
       sudo: required
-      env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
+      services:
+        - docker
+      env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
     - stage: Test
       php: 7.2
       sudo: required
-      env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
+      services:
+        - docker
+      env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
     - stage: Test
       php: 7.3
       sudo: required
-      env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
+      services:
+        - docker
+      env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
     - stage: Test
       php: 7.3
       sudo: required
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
-      env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS=""
+      services:
+        - docker
+      env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS=""
     - stage: Test
       php: 7.4snapshot
       sudo: required
-      env: DB="mysqli" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
+      services:
+        - docker
+      env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml"
 
     # MariaDB 10.0 (MySQLi)
     - stage: Test
