@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Tests;
 
 use Joomla\Database\Mysql\MysqlQuery;
+use Joomla\Database\ParameterType;
 use Joomla\Database\Tests\Mock\Driver;
 use Joomla\Test\TestHelper;
 use PHPUnit\Framework\TestCase;
@@ -1096,7 +1097,48 @@ class MysqlQueryTest extends TestCase
 
 		$this->assertThat(
 			trim($q->where),
-			$this->equalTo('WHERE id IN (1, 2, 3)'),
+			$this->equalTo('WHERE id IN (:preparedArray1,:preparedArray2,:preparedArray3)'),
+			'Tests rendered value.'
+		);
+	}
+
+	/**
+	 * Tests bindArray function.
+	 *
+	 * @return  void
+	 */
+	public function testBindArray()
+	{
+		$q = new MysqlQuery($this->dbo);
+		$result = $q->bindArray([1, 2, 3], ParameterType::INTEGER);
+
+		$this->assertThat(
+			$result,
+			$this->equalTo([':preparedArray1', ':preparedArray2', ':preparedArray3']),
+			'Tests rendered value.'
+		);
+
+		$this->assertThat(
+			count($q->getBounded()),
+			$this->equalTo(3),
+			'Tests rendered value.'
+		);
+
+		$this->assertThat(
+			$q->getBounded(':preparedArray1')->value,
+			$this->equalTo(1),
+			'Tests rendered value.'
+		);
+
+		$this->assertThat(
+			$q->getBounded(':preparedArray2')->value,
+			$this->equalTo(2),
+			'Tests rendered value.'
+		);
+
+		$this->assertThat(
+			$q->getBounded(':preparedArray3')->value,
+			$this->equalTo(3),
 			'Tests rendered value.'
 		);
 	}

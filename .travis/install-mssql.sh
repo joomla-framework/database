@@ -3,8 +3,8 @@
 set -ex
 
 echo Installing extensions
-pecl install sqlsrv-5.2.0
-pecl install pdo_sqlsrv-5.2.0
+pecl install sqlsrv-$1
+pecl install pdo_sqlsrv-$1
 
 echo Installing drivers
 curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -

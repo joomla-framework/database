@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -359,6 +359,28 @@ SQL
 			// Below line may generate "'-3.14-'" or "'-3,14-'"
 			"'-" . 3.14 . "-'",
 			$this->instance->quote(3.14)
+		);
+	}
+
+	/**
+	 * Tests the Joomla\Database\DatabaseDriver::quoteBinary method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.7.0
+	 */
+	public function testQuoteBinary()
+	{
+		$this->assertThat(
+			$this->instance->quoteBinary('DATA'),
+			$this->equalTo("X'" . bin2hex('DATA') . "'"),
+			'Tests the binary data 1.'
+		);
+
+		$this->assertThat(
+			$this->instance->quoteBinary("\x00\x01\x02\xff"),
+			$this->equalTo("X'000102ff'"),
+			'Tests the binary data 2.'
 		);
 	}
 

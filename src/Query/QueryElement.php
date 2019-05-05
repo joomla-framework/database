@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -115,7 +115,7 @@ class QueryElement
 	 *
 	 * @return  string  Name of the element.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.7.0
 	 */
 	public function getName()
 	{
