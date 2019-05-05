@@ -10,5 +10,3 @@ sudo docker run \
     -p 33306:3306 \
     --name mysql57 \
     mysql:5.7
-
-sudo docker exec -i mysql57 bash <<< 'until echo \\q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
