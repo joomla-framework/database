@@ -1698,44 +1698,11 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function whereIn($keyName, $keyValues, $dataType = ParameterType::INTEGER)
+	public function whereIn(string $keyName, array $keyValues, string $dataType = ParameterType::INTEGER)
 	{
 		return $this->where(
 			$keyName . ' IN (' . implode(',', $this->bindArray($keyValues, $dataType)) . ')'
 		);
-	}
-
-	/**
-	 * Binds an array of values and returns an array of prepared parameter names.
-	 *
-	 * Note that all values must be the same data type.
-	 *
-	 * Usage:
-	 * $query->where('column in (' . implode(',', $this->bindArray($keyValues, $dataType)) . ')');
-	 *
-	 * @param   array   $values    Values to bind
-	 * @param   string  $dataType  Type of the values to bind
-	 *
-	 * @return  array   An array with parameter names
-	 *
-	 * @since __DEPLOY_VERSION__
-	 */
-	public function bindArray($values, $dataType = ParameterType::INTEGER)
-	{
-		$parameterNames = [];
-
-		foreach ($values as $value)
-		{
-			$bindKey          = ':preparedArray' . (++$this->preparedIndex);
-			$parameterNames[] = $bindKey;
-
-			$this->bind($bindKey, $value, $dataType);
-
-			// We unset the referenced variable but want to keep it referenced for the bind call
-			unset($value);
-		}
-
-		return $parameterNames;
 	}
 
 	/**
@@ -1801,6 +1768,39 @@ abstract class DatabaseQuery implements QueryInterface
 	public function andWhere($conditions, $glue = 'OR')
 	{
 		return $this->extendWhere('AND', $conditions, $glue);
+	}
+
+	/**
+	 * Binds an array of values and returns an array of prepared parameter names.
+	 *
+	 * Note that all values must be the same data type.
+	 *
+	 * Usage:
+	 * $query->where('column in (' . implode(',', $query->bindArray($keyValues, $dataType)) . ')');
+	 *
+	 * @param   array   $values    Values to bind
+	 * @param   string  $dataType  Type of the values to bind
+	 *
+	 * @return  array   An array with parameter names
+	 *
+	 * @since __DEPLOY_VERSION__
+	 */
+	public function bindArray(array $values, string $dataType = ParameterType::INTEGER)
+	{
+		$parameterNames = [];
+
+		foreach ($values as $value)
+		{
+			$bindKey          = ':preparedArray' . (++$this->preparedIndex);
+			$parameterNames[] = $bindKey;
+
+			$this->bind($bindKey, $value, $dataType);
+
+			// We unset the referenced variable but want to keep it referenced for the bind call
+			unset($value);
+		}
+
+		return $parameterNames;
 	}
 
 	/**

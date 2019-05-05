@@ -547,19 +547,22 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	public function where($conditions, $glue = 'AND');
 
 	/**
-	 * Add a WHERE IN statement to the query
+	 * Add a WHERE IN statement to the query.
 	 *
-	 * Usage:
+	 * Note that all values must be the same data type.
+	 *
+	 * Usage
 	 * $query->whereIn('id', [1, 2, 3]);
 	 *
-	 * @param   string $keyName   A string representing the key name for the where clause
-	 * @param   array  $keyValues The array of values to be matched
+	 * @param   string  $keyName    Key name for the where clause
+	 * @param   array   $keyValues  Array of values to be matched
+	 * @param   string  $dataType   Type of the values to bind
 	 *
 	 * @return  $this
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function whereIn($keyName, $keyValues);
+	public function whereIn(string $keyName, array $keyValues, string $dataType = ParameterType::INTEGER);
 
 	/**
 	 * Extend the WHERE clause with a single condition or an array of conditions, with a potentially different logical operator from the one in the
@@ -578,6 +581,23 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function extendWhere($outerGlue, $conditions, $innerGlue = 'AND');
+
+	/**
+	 * Binds an array of values and returns an array of prepared parameter names.
+	 *
+	 * Note that all values must be the same data type.
+	 *
+	 * Usage:
+	 * $query->whereIn('column in (' . implode(',', $query->bindArray($keyValues, $dataType)) . ')');
+	 *
+	 * @param   array   $values    Values to bind
+	 * @param   string  $dataType  Type of the values to bind
+	 *
+	 * @return  array   An array with parameter names
+	 *
+	 * @since __DEPLOY_VERSION__
+	 */
+	public function bindArray(array $values, string $dataType = ParameterType::INTEGER);
 
 	/**
 	 * Add a query to UNION with the current query.
