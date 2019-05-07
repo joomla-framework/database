@@ -1711,7 +1711,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Note that all values must be the same data type.
 	 *
 	 * Usage
-	 * $query->whereIn('id', [1, 2, 3]);
+	 * $query->whereNotIn('id', [1, 2, 3]);
 	 *
 	 * @param   string  $keyName    Key name for the where clause
 	 * @param   array   $keyValues  Array of values to be matched
