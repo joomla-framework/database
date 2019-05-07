@@ -765,6 +765,14 @@ class SqlsrvQuery extends DatabaseQuery
 				continue;
 			}
 
+			if ($i == 0 && stripos(' DISTINCT ALL ', " $column[0] ") !== false)
+			{
+				// These words are reserved, they are not column names
+				array_shift($selectColumns[0]);
+				array_shift($column);
+				$size--;
+			}
+
 			if ($size > 2 && $column[$size - 2] === 'AS')
 			{
 				// Save and remove AS alias
