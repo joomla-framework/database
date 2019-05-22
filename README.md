@@ -267,15 +267,15 @@ $container->set(
     'UserRepositoryInterface',
     function ()
     {
-        retur new User;
+        return new User;
     }
 );
 
 $userProfile = $container->buildObject('UserProfile');
 
 // Use reflection to get the $user property from $userProfile
-var_dump($user instanceof User); // prints bool(true)
-var_dump($user instanceof UserRepositoryInterface); // prints bool(true)
+var_dump($userProfile instanceof User); // prints bool(true)
+var_dump($userProfile instanceof UserRepositoryInterface); // prints bool(true)
 ```
 
 When you build an object, the information required to actually build it (dependencies, etc) are
