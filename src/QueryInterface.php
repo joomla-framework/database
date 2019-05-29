@@ -565,6 +565,24 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	public function whereIn(string $keyName, array $keyValues, string $dataType = ParameterType::INTEGER);
 
 	/**
+	 * Add a WHERE NOT IN statement to the query.
+	 *
+	 * Note that all values must be the same data type.
+	 *
+	 * Usage
+	 * $query->whereNotIn('id', [1, 2, 3]);
+	 *
+	 * @param   string  $keyName    Key name for the where clause
+	 * @param   array   $keyValues  Array of values to be matched
+	 * @param   string  $dataType   Type of the values to bind
+	 *
+	 * @return  $this
+	 *
+	 * @since __DEPLOY_VERSION__
+	 */
+	public function whereNotIn(string $keyName, array $keyValues, string $dataType = ParameterType::INTEGER);
+
+	/**
 	 * Extend the WHERE clause with a single condition or an array of conditions, with a potentially different logical operator from the one in the
 	 * current WHERE clause.
 	 *
