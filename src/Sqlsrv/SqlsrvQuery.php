@@ -40,14 +40,6 @@ class SqlsrvQuery extends DatabaseQuery
 	protected $null_date = '1900-01-01 00:00:00';
 
 	/**
-	 * Holds key / value pair of bound objects.
-	 *
-	 * @var    mixed
-	 * @since  1.5.0
-	 */
-	protected $bounded = [];
-
-	/**
 	 * The list of zero or null representation of a datetime.
 	 *
 	 * @var    array
@@ -328,29 +320,6 @@ class SqlsrvQuery extends DatabaseQuery
 		$this->bounded[$key] = $obj;
 
 		return $this;
-	}
-
-	/**
-	 * Retrieves the bound parameters array when key is null and returns it by reference. If a key is provided then that item is
-	 * returned.
-	 *
-	 * @param   mixed  $key  The bounded variable key to retrieve.
-	 *
-	 * @return  mixed
-	 *
-	 * @since   1.5.0
-	 */
-	public function &getBounded($key = null)
-	{
-		if (empty($key))
-		{
-			return $this->bounded;
-		}
-
-		if (isset($this->bounded[$key]))
-		{
-			return $this->bounded[$key];
-		}
 	}
 
 	/**
