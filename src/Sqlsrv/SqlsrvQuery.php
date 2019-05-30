@@ -93,7 +93,7 @@ class SqlsrvQuery extends DatabaseQuery
 			ParameterType::STRING       => SQLSRV_SQLTYPE_VARCHAR('max'),
 		];
 
-		return parrent::__construct($db);
+		return parent::__construct($db);
 	}
 
 	/**
