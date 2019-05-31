@@ -501,7 +501,14 @@ class SqlsrvStatement implements StatementInterface
 				$variable[] = SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY);
 			}
 
-			$params[] = $variable;
+			if (isset($this->parameterKeyMapping[$key]))
+			{
+				$params[$this->parameterKeyMapping[$key]] = $variable;
+			}
+			else
+			{
+				$params[] = $variable;
+			}
 		}
 
 		// Cleanup referenced variable
