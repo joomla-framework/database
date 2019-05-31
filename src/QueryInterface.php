@@ -610,14 +610,15 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * Usage:
 	 * $query->whereIn('column in (' . implode(',', $query->bindArray($keyValues, $dataType)) . ')');
 	 *
-	 * @param   array   $values    Values to bind
-	 * @param   string  $dataType  Type of the values to bind
+	 * @param   array         $values    Values to bind
+	 * @param   array|string  $dataType  Constant corresponding to a SQL datatype. It can be an array, in this case it
+	 *                                   has to be same length of $key
 	 *
 	 * @return  array   An array with parameter names
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function bindArray(array $values, string $dataType = ParameterType::INTEGER);
+	public function bindArray(array $values, $dataType = ParameterType::INTEGER);
 
 	/**
 	 * Add a query to UNION with the current query.
