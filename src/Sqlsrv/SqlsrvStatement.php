@@ -495,10 +495,10 @@ class SqlsrvStatement implements StatementInterface
 				SQLSRV_PARAM_IN
 			];
 
-			if ($this->typesKeyMapping[$key] === SQLSRV_SQLTYPE_VARBINARY('max'))
+			if ($this->typesKeyMapping[$key] === SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY))
 			{
 				$variable[] = $this->typesKeyMapping[$key];
-				$variable[] = SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY);
+				$variable[] = SQLSRV_SQLTYPE_VARBINARY('max');
 			}
 
 			if (isset($this->parameterKeyMapping[$key]))

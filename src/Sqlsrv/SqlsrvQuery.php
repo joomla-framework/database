@@ -81,11 +81,11 @@ class SqlsrvQuery extends DatabaseQuery
 		// Initial parameter types for prepared statements
 
 		$this->parameterMapping = [
-			ParameterType::BOOLEAN      => SQLSRV_SQLTYPE_BIT,
-			ParameterType::INTEGER      => SQLSRV_SQLTYPE_INT,
-			ParameterType::LARGE_OBJECT => SQLSRV_SQLTYPE_VARBINARY('max'),
-			ParameterType::NULL         => SQLSRV_SQLTYPE_VARCHAR(1),
-			ParameterType::STRING       => SQLSRV_SQLTYPE_VARCHAR('max'),
+			ParameterType::BOOLEAN      => SQLSRV_PHPTYPE_INT,
+			ParameterType::INTEGER      => SQLSRV_PHPTYPE_INT,
+			ParameterType::LARGE_OBJECT => SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY),
+			ParameterType::NULL         => SQLSRV_PHPTYPE_NULL,
+			ParameterType::STRING       => SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR),
 		];
 
 		return parent::__construct($db);
