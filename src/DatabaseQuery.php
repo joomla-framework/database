@@ -1866,9 +1866,9 @@ abstract class DatabaseQuery implements QueryInterface
 		{
 			if (\is_array($value))
 			{
-				$localValue &= $value[$i];
+				$localValue = &$value[$i];
 			} else {
-				$localValue &= $value;
+				$localValue = &$value;
 			}
 
 			if (\is_array($dataType))
