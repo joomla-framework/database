@@ -554,15 +554,16 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * Usage
 	 * $query->whereIn('id', [1, 2, 3]);
 	 *
-	 * @param   string  $keyName    Key name for the where clause
-	 * @param   array   $keyValues  Array of values to be matched
-	 * @param   string  $dataType   Type of the values to bind
+	 * @param   string        $keyName    Key name for the where clause
+	 * @param   array         $keyValues  Array of values to be matched
+	 * @param   array|string  $dataType   Constant corresponding to a SQL datatype. It can be an array, in this case it
+	 *                                    has to be same length of $keyValues
 	 *
 	 * @return  $this
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function whereIn(string $keyName, array $keyValues, string $dataType = ParameterType::INTEGER);
+	public function whereIn(string $keyName, array $keyValues, $dataType = ParameterType::INTEGER);
 
 	/**
 	 * Add a WHERE NOT IN statement to the query.
