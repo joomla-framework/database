@@ -486,54 +486,26 @@ class SqlsrvStatement implements StatementInterface
 	private function prepare()
 	{
 		$params = [];
-
-		if (!empty($this->parameterKeyMapping))
-		{
-			foreach ($this->bindedValues as $key => &$value)
-			{
-				$variable = [
-					&$value,
-					SQLSRV_PARAM_IN,
-					null,
-					$this->typesKeyMapping[$key]
-				];
-
-				if ($this->typesKeyMapping[$key] === SQLSRV_SQLTYPE_VARBINARY('max'))
-				{
-					$variable[2] = SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY);
-				}
-
-				$params[] = $variable;
-			}
-			unset($value);
-		}
-		else
-		{
-			foreach ($this->bindedValues as $key => &$value)
-			{
-				$params[]    =& $value;
-				$types[$key] = $this->typesKeyMapping[$key];
-
-				$variable = [
-					&$value,
-					SQLSRV_PARAM_IN,
-					null,
-					$this->typesKeyMapping[$key]
-				];
-
-				if ($this->typesKeyMapping[$key] === SQLSRV_SQLTYPE_VARBINARY('max'))
-				{
-					$variable[2] = SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY);
-				}
-
-				$params[] = $variable;
-			}
-			unset($value);
-		}
-
-		ksort($params);
-
 		$options = [];
+
+		foreach ($this->bindedValues as $key => &$value)
+		{
+			$variable = [
+				&$value,
+				SQLSRV_PARAM_IN
+			];
+
+			if ($this->typesKeyMapping[$key] === SQLSRV_SQLTYPE_VARBINARY('max'))
+			{
+				$variable[] = $this->typesKeyMapping[$key];
+				$variable[] = SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY);
+			}
+
+			$params[] = $variable;
+		}
+
+		// Cleanup referenced variable
+		unset($value);
 
 		// SQLSRV Function sqlsrv_num_rows requires a static or keyset cursor.
 		if (strncmp(strtoupper(ltrim($this->query)), 'SELECT', \strlen('SELECT')) === 0)
