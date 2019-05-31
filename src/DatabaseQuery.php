@@ -27,6 +27,20 @@ abstract class DatabaseQuery implements QueryInterface
 	protected $bounded = [];
 
 	/**
+	 * Mapping array for parameter types.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $parameterMapping = [
+		ParameterType::BOOLEAN      => ParameterType::BOOLEAN,
+		ParameterType::INTEGER      => ParameterType::INTEGER,
+		ParameterType::LARGE_OBJECT => ParameterType::LARGE_OBJECT,
+		ParameterType::NULL         => ParameterType::NULL,
+		ParameterType::STRING       => ParameterType::STRING,
+	];
+
+	/**
 	 * The database driver.
 	 *
 	 * @var    DatabaseInterface
@@ -1705,7 +1719,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @param   string        $keyName    Key name for the where clause
 	 * @param   array         $keyValues  Array of values to be matched
 	 * @param   array|string  $dataType   Constant corresponding to a SQL datatype. It can be an array, in this case it
-	 *                                    has to be same length of $key
+	 *                                    has to be same length of $keyValues
 	 *
 	 * @return  $this
 	 *
@@ -1729,7 +1743,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @param   string        $keyName    Key name for the where clause
 	 * @param   array         $keyValues  Array of values to be matched
 	 * @param   array|string  $dataType   Constant corresponding to a SQL datatype. It can be an array, in this case it
-	 *                                    has to be same length of $key
+	 *                                    has to be same length of $keyValues
 	 *
 	 * @return  $this
 	 *
