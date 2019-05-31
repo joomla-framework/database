@@ -12,11 +12,6 @@ use Joomla\Database\DatabaseInterface;
 use Joomla\Database\DatabaseQuery;
 use Joomla\Database\ParameterType;
 use Joomla\Database\Query\QueryElement;
-use function SQLSRV_SQLTYPE_BINARY;
-use const SQLSRV_SQLTYPE_BIT;
-use const SQLSRV_SQLTYPE_INT;
-use function SQLSRV_SQLTYPE_VARBINARY;
-use function SQLSRV_SQLTYPE_VARCHAR;
 
 /**
  * SQL Server Query Building Class.
