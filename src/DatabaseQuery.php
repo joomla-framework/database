@@ -1926,7 +1926,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function bindArray(array $values, $dataType = ParameterType::INTEGER)
+	public function bindArray(array &$values, $dataType = ParameterType::INTEGER)
 	{
 		$parameterNames = [];
 

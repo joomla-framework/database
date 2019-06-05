@@ -618,7 +618,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function bindArray(array $values, $dataType = ParameterType::INTEGER);
+	public function bindArray(array &$values, $dataType = ParameterType::INTEGER);
 
 	/**
 	 * Add a query to UNION with the current query.
