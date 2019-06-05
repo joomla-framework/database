@@ -41,6 +41,20 @@ class MysqliStatement implements StatementInterface
 	protected $parameterKeyMapping;
 
 	/**
+	 * Mapping array for parameter types.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $parameterTypeMapping = [
+		ParameterType::BOOLEAN      => 'i',
+		ParameterType::INTEGER      => 'i',
+		ParameterType::LARGE_OBJECT => 's',
+		ParameterType::NULL         => 's',
+		ParameterType::STRING       => 's',
+	];
+
+	/**
 	 * Column names from the executed statement.
 	 *
 	 * @var    array|boolean|null
@@ -283,7 +297,14 @@ class MysqliStatement implements StatementInterface
 	public function bindParam($parameter, &$variable, $dataType = ParameterType::STRING, $length = null, $driverOptions = null)
 	{
 		$this->bindedValues[$parameter]    =& $variable;
-		$this->typesKeyMapping[$parameter] = $dataType;
+
+		// Validate parameter type
+		if (!isset($this->parameterTypeMapping[$dataType]))
+		{
+			throw new \InvalidArgumentException(sprintf('Unsupported parameter type `%s`', $dataType));
+		}
+
+		$this->typesKeyMapping[$parameter] = $this->parameterTypeMapping[$dataType];
 
 		return true;
 	}

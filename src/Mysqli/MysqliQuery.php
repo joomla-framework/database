@@ -30,20 +30,6 @@ class MysqliQuery extends DatabaseQuery
 	protected $bounded = [];
 
 	/**
-	 * Mapping array for parameter types.
-	 *
-	 * @var    array
-	 * @since  __DEPLOY_VERSION__
-	 */
-	protected $parameterMapping = [
-		ParameterType::BOOLEAN      => 'i',
-		ParameterType::INTEGER      => 'i',
-		ParameterType::LARGE_OBJECT => 's',
-		ParameterType::NULL         => 's',
-		ParameterType::STRING       => 's',
-	];
-
-	/**
 	 * The list of zero or null representation of a datetime.
 	 *
 	 * @var    array
@@ -129,15 +115,9 @@ class MysqliQuery extends DatabaseQuery
 			return $this;
 		}
 
-		// Validate parameter type
-		if (!isset($this->parameterMapping[$dataType]))
-		{
-			throw new \InvalidArgumentException(sprintf('Unsupported parameter type `%s`', $dataType));
-		}
-
 		$obj           = new \stdClass;
 		$obj->value    = &$value;
-		$obj->dataType = $this->parameterMapping[$dataType];
+		$obj->dataType = $dataType;
 
 		// Case 3: Simply add the Key/Value into the bounded array
 		$this->bounded[$key] = $obj;
