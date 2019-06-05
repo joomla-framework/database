@@ -108,6 +108,19 @@ class SqlsrvStatement implements StatementInterface
 	 */
 	protected $parameterKeyMapping;
 
+	/**
+	 * Mapping array for parameter types.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $parameterTypeMapping = [
+		ParameterType::BOOLEAN      => ParameterType::BOOLEAN,
+		ParameterType::INTEGER      => ParameterType::INTEGER,
+		ParameterType::LARGE_OBJECT => ParameterType::LARGE_OBJECT,
+		ParameterType::NULL         => ParameterType::NULL,
+		ParameterType::STRING       => ParameterType::STRING,
+	];
 
 	/**
 	 * Constructor.
@@ -120,6 +133,15 @@ class SqlsrvStatement implements StatementInterface
 	 */
 	public function __construct($connection, string $query)
 	{
+		// Initial parameter types for prepared statements
+		$this->parameterMapping = [
+			ParameterType::BOOLEAN      => SQLSRV_PHPTYPE_INT,
+			ParameterType::INTEGER      => SQLSRV_PHPTYPE_INT,
+			ParameterType::LARGE_OBJECT => SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY),
+			ParameterType::NULL         => SQLSRV_PHPTYPE_NULL,
+			ParameterType::STRING       => SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR),
+		];
+
 		$this->connection = $connection;
 		$this->query      = $this->prepareParameterKeyMapping($query);
 	}
@@ -271,7 +293,14 @@ class SqlsrvStatement implements StatementInterface
 	public function bindParam($parameter, &$variable, $dataType = ParameterType::STRING, $length = null, $driverOptions = null)
 	{
 		$this->bindedValues[$parameter]    =& $variable;
-		$this->typesKeyMapping[$parameter] = $dataType;
+
+		// Validate parameter type
+		if (!isset($this->parameterTypeMapping[$dataType]))
+		{
+			throw new \InvalidArgumentException(sprintf('Unsupported parameter type `%s`', $dataType));
+		}
+
+		$this->typesKeyMapping[$parameter] = $this->parameterTypeMapping[$dataType];
 
 		$this->statement = null;
 
@@ -495,7 +524,7 @@ class SqlsrvStatement implements StatementInterface
 				SQLSRV_PARAM_IN
 			];
 
-			if ($this->typesKeyMapping[$key] === SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY))
+			if ($this->typesKeyMapping[$key] === $this->parameterTypeMapping[ParameterType::LARGE_OBJECT])
 			{
 				$variable[] = $this->typesKeyMapping[$key];
 				$variable[] = SQLSRV_SQLTYPE_VARBINARY('max');
