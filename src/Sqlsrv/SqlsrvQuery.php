@@ -48,12 +48,48 @@ class SqlsrvQuery extends DatabaseQuery
 	protected $bounded = [];
 
 	/**
+	 * Mapping array for parameter types.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $parameterMapping = [
+		ParameterType::BOOLEAN      => ParameterType::BOOLEAN,
+		ParameterType::INTEGER      => ParameterType::INTEGER,
+		ParameterType::LARGE_OBJECT => ParameterType::LARGE_OBJECT,
+		ParameterType::NULL         => ParameterType::NULL,
+		ParameterType::STRING       => ParameterType::STRING,
+	];
+
+	/**
 	 * The list of zero or null representation of a datetime.
 	 *
 	 * @var    array
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $nullDatetimeList = ['1900-01-01 00:00:00'];
+
+	/**
+	 * Class constructor.
+	 *
+	 * @param   DatabaseInterface  $db  The database driver.
+	 *
+	 * @since   1.0
+	 */
+	public function __construct(DatabaseInterface $db = null)
+	{
+		// Initial parameter types for prepared statements
+
+		$this->parameterMapping = [
+			ParameterType::BOOLEAN      => SQLSRV_PHPTYPE_INT,
+			ParameterType::INTEGER      => SQLSRV_PHPTYPE_INT,
+			ParameterType::LARGE_OBJECT => SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY),
+			ParameterType::NULL         => SQLSRV_PHPTYPE_NULL,
+			ParameterType::STRING       => SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR),
+		];
+
+		return parent::__construct($db);
+	}
 
 	/**
 	 * Magic function to convert the query to a string.
@@ -320,9 +356,15 @@ class SqlsrvQuery extends DatabaseQuery
 			return $this;
 		}
 
+		// Validate parameter type
+		if (!isset($this->parameterMapping[$dataType]))
+		{
+			throw new \InvalidArgumentException(sprintf('Unsupported parameter type `%s`', $dataType));
+		}
+
 		$obj           = new \stdClass;
 		$obj->value    = &$value;
-		$obj->dataType = $dataType;
+		$obj->dataType = $this->parameterMapping[$dataType];
 
 		// Case 3: Simply add the Key/Value into the bounded array
 		$this->bounded[$key] = $obj;
