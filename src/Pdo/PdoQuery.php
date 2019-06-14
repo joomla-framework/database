@@ -27,20 +27,6 @@ abstract class PdoQuery extends DatabaseQuery
 	protected $bounded = [];
 
 	/**
-	 * Mapping array for parameter types.
-	 *
-	 * @var    array
-	 * @since  __DEPLOY_VERSION__
-	 */
-	protected $parameterMapping = [
-		ParameterType::BOOLEAN      => \PDO::PARAM_BOOL,
-		ParameterType::INTEGER      => \PDO::PARAM_INT,
-		ParameterType::LARGE_OBJECT => \PDO::PARAM_LOB,
-		ParameterType::NULL         => \PDO::PARAM_NULL,
-		ParameterType::STRING       => \PDO::PARAM_STR,
-	];
-
-	/**
 	 * The list of zero or null representation of a datetime.
 	 *
 	 * @var    array
@@ -85,16 +71,10 @@ abstract class PdoQuery extends DatabaseQuery
 			return $this;
 		}
 
-		// Validate parameter type
-		if (!isset($this->parameterMapping[$dataType]))
-		{
-			throw new \InvalidArgumentException(sprintf('Unsupported parameter type `%s`', $dataType));
-		}
-
 		$obj = new \stdClass;
 
 		$obj->value         = &$value;
-		$obj->dataType      = $this->parameterMapping[$dataType];
+		$obj->dataType      = $dataType;
 		$obj->length        = $length;
 		$obj->driverOptions = $driverOptions;
 
