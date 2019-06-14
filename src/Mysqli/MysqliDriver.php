@@ -75,7 +75,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected static $dbMinimum = '5.5.3';
+	protected static $dbMinimum = '5.6';
 
 	/**
 	 * Constructor.
@@ -833,19 +833,9 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 
 		if (!$asSavepoint || !$this->transactionDepth)
 		{
-			if (version_compare($this->getVersion(), '5.6', 'ge'))
+			if ($this->connection->begin_transaction())
 			{
-				if ($this->connection->begin_transaction())
-				{
-					$this->transactionDepth = 1;
-				}
-			}
-			else
-			{
-				if ($this->executeUnpreparedQuery('START TRANSACTION'))
-				{
-					$this->transactionDepth = 1;
-				}
+				$this->transactionDepth = 1;
 			}
 
 			return;

@@ -37,21 +37,13 @@ jobs:
       php: 7.4snapshot
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml"
 
-    # PDO MySQL 5.5
-    - stage: Test
-      php: 7.0
-      env: DB="mysql" MYSQL_VERSION=5.5 PHPUNIT_CONF=".travis/phpunit.mysql.xml"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
-    - stage: Test
-      php: 7.0
-      env: DB="mysql" MYSQL_VERSION=5.5 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
-
     # PDO MySQL 5.6
+    - stage: Test
+      php: 7.0
+      env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
+      before_script:
+        - mysql -u root -e 'create database joomla_ut;'
+        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       if: NOT type = pull_request
       php: 7.1
@@ -106,21 +98,13 @@ jobs:
         - bash ./.travis/install-mysql-8.0.sh
         - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
 
-    # MySQLi 5.5
-    - stage: Test
-      php: 7.0
-      env: DB="mysqli" MYSQL_VERSION=5.5 PHPUNIT_CONF=".travis/phpunit.mysqli.xml"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
-    - stage: Test
-      php: 7.0
-      env: DB="mysqli" MYSQL_VERSION=5.5 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
-
     # MySQLi 5.6
+    - stage: Test
+      php: 7.0
+      env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
+      before_script:
+        - mysql -u root -e 'create database joomla_ut;'
+        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       if: NOT type = pull_request
       php: 7.1
