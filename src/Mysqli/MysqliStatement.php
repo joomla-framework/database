@@ -296,7 +296,7 @@ class MysqliStatement implements StatementInterface
 	 */
 	public function bindParam($parameter, &$variable, $dataType = ParameterType::STRING, $length = null, $driverOptions = null)
 	{
-		$this->bindedValues[$parameter]    =& $variable;
+		$this->bindedValues[$parameter] =& $variable;
 
 		// Validate parameter type
 		if (!isset($this->parameterTypeMapping[$dataType]))

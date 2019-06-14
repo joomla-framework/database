@@ -134,7 +134,7 @@ class SqlsrvStatement implements StatementInterface
 	public function __construct($connection, string $query)
 	{
 		// Initial parameter types for prepared statements
-		$this->parameterMapping = [
+		$this->parameterTypeMapping = [
 			ParameterType::BOOLEAN      => SQLSRV_PHPTYPE_INT,
 			ParameterType::INTEGER      => SQLSRV_PHPTYPE_INT,
 			ParameterType::LARGE_OBJECT => SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY),
@@ -292,7 +292,7 @@ class SqlsrvStatement implements StatementInterface
 	 */
 	public function bindParam($parameter, &$variable, $dataType = ParameterType::STRING, $length = null, $driverOptions = null)
 	{
-		$this->bindedValues[$parameter]    =& $variable;
+		$this->bindedValues[$parameter] =& $variable;
 
 		// Validate parameter type
 		if (!isset($this->parameterTypeMapping[$dataType]))
