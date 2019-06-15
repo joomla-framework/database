@@ -90,6 +90,15 @@ class Session implements \IteratorAggregate
 	protected $cookie_path;
 
 	/**
+	 * The configuration of the HttpOnly cookie.
+	 *
+	 * @var    mixed
+	 * @since  1.0
+	 * @deprecated  2.0
+	 */
+	protected $cookie_httponly;
+
+	/**
 	 * The configuration of the SameSite cookie.
 	 *
 	 * @var    mixed
@@ -607,7 +616,7 @@ class Session implements \IteratorAggregate
 				if ($session_clean)
 				{
 					session_id($session_clean);
-					$cookie->set($session_name, '', 1);
+					$cookie->set($session_name, '', array('expires' => 1));
 				}
 			}
 		}
@@ -736,6 +745,9 @@ class Session implements \IteratorAggregate
 		// Re-register the session store after a session has been destroyed, to avoid PHP bug
 		$this->store->register();
 
+		// Force HttpOnly cokkie parameter.
+		$cookie['httponly'] = true;
+
 		// Restore config
 		if (version_compare(PHP_VERSION, '7.3', '>='))
 		{
@@ -743,7 +755,7 @@ class Session implements \IteratorAggregate
 		}
 		else
 		{
-			session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], true);
+			session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly']);
 		}
 
 		// Restart session with new id
@@ -833,6 +845,8 @@ class Session implements \IteratorAggregate
 			$cookie['path'] = $this->cookie_path;
 		}
 
+		$cookie['httponly'] = $this->cookie_httponly ? $this->cookie_httponly : true;
+
 		if ($this->cookie_samesite)
 		{
 			$cookie['samesite'] = $this->cookie_samesite;
@@ -844,7 +858,7 @@ class Session implements \IteratorAggregate
 		}
 		else
 		{
-			session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], true);
+			session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly']);
 		}
 	}
 
@@ -1007,6 +1021,11 @@ class Session implements \IteratorAggregate
 		if (isset($options['cookie_path']))
 		{
 			$this->cookie_path = $options['cookie_path'];
+		}
+
+		if (isset($options['cookie_httponly']))
+		{
+			$this->cookie_httponly = $options['cookie_httponly'];
 		}
 
 		if (isset($options['cookie_samesite']))
