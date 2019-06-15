@@ -93,10 +93,10 @@ class Session implements \IteratorAggregate
 	 * The configuration of the HttpOnly cookie.
 	 *
 	 * @var    mixed
-	 * @since  1.0
+	 * @since  __DEPLOY_VERSION__
 	 * @deprecated  2.0
 	 */
-	protected $cookie_httponly;
+	protected $cookie_httponly = true;
 
 	/**
 	 * The configuration of the SameSite cookie.
@@ -745,9 +745,6 @@ class Session implements \IteratorAggregate
 		// Re-register the session store after a session has been destroyed, to avoid PHP bug
 		$this->store->register();
 
-		// Force HttpOnly cokkie parameter.
-		$cookie['httponly'] = true;
-
 		// Restore config
 		if (version_compare(PHP_VERSION, '7.3', '>='))
 		{
@@ -845,7 +842,7 @@ class Session implements \IteratorAggregate
 			$cookie['path'] = $this->cookie_path;
 		}
 
-		$cookie['httponly'] = $this->cookie_httponly ? $this->cookie_httponly : true;
+		$cookie['httponly'] = $this->cookie_httponly;
 
 		if ($this->cookie_samesite)
 		{
@@ -1025,7 +1022,7 @@ class Session implements \IteratorAggregate
 
 		if (isset($options['cookie_httponly']))
 		{
-			$this->cookie_httponly = $options['cookie_httponly'];
+			$this->cookie_httponly = (bool) $options['cookie_httponly'];
 		}
 
 		if (isset($options['cookie_samesite']))
