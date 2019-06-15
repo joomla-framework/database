@@ -728,7 +728,14 @@ class Session implements \IteratorAggregate
 		$this->store->register();
 
 		// Restore config
-		session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], true);
+		if (version_compare(PHP_VERSION, '7.3', '>='))
+		{
+			session_set_cookie_params($cookie);
+		}
+		else
+		{
+			session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], true);
+		}
 
 		// Restart session with new id
 		session_regenerate_id(true);
