@@ -7,8 +7,9 @@
     "license": "GPL-2.0-or-later",
     "require": {
         "php": "^5.3.10|~7.0",
-        "joomla/filter": "~1.0",
         "joomla/event": "~1.1",
+        "joomla/filter": "~1.0",
+        "joomla/input": "~1.4",
         "paragonie/random_compat": "~1.0|~2.0"
     },
     "require-dev": {
@@ -25,6 +26,12 @@
     "autoload": {
         "psr-0": {
             "Joomla\\Session": ""
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
         }
     }
 }

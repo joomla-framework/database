@@ -646,7 +646,20 @@ class Session implements \IteratorAggregate
 		 */
 		$cookie = session_get_cookie_params();
 
-		$this->input->cookie->set($this->getName(), '', 1, $cookie['path'], $cookie['domain'], $cookie['secure'], true);
+		$cookieOptions = array(
+			'expires'  => 1,
+			'path'     => $cookie['path'],
+			'domain'   => $cookie['domain'],
+			'secure'   => $cookie['secure'],
+			'httponly' => true,
+		);
+
+		if (isset($cookie['samesite']))
+		{
+			$cookieOptions['samesite'] = $cookie['samesite'];
+		}
+
+		$this->input->cookie->set($this->getName(), '', $cookieOptions);
 
 		session_unset();
 		session_destroy();
