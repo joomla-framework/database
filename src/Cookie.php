@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Input Package
  *
- * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -63,7 +63,7 @@ class Cookie extends Input
 	 *
 	 * @since   1.0
 	 *
-	 * @note    As of __DEPLOY_VERSION__, the (name, value, expire, path, domain, secure, httpOnly) signature is deprecated and will not be supported
+	 * @note    As of 1.4.0, the (name, value, expire, path, domain, secure, httpOnly) signature is deprecated and will not be supported
 	 *          when support for PHP 7.2 and earlier is dropped
 	 */
 	public function set($name, $value, $options = array())
