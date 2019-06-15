@@ -61,15 +61,32 @@ class CookieTest extends TestCase
 	 *
 	 * @return  void
 	 *
-	 * @todo    Figure out out to tests w/o ob_start() in bootstrap. setcookie() prevents this.
+	 * @covers  Joomla\Input\Cookie::set
+	 * @since   1.0
+	 */
+	public function testSetWithLegacySignature()
+	{
+		$instance = new Cookie;
+		$instance->set('foo', 'bar', 15);
+
+		$data = TestHelper::getValue($instance, 'data');
+
+		$this->assertArrayHasKey('foo', $data);
+		$this->assertContains('bar', $data);
+	}
+
+	/**
+	 * Test the Joomla\Input\Cookie::set method with new signature.
+	 *
+	 * @return  void
 	 *
 	 * @covers  Joomla\Input\Cookie::set
 	 * @since   1.0
 	 */
-	public function testSet()
+	public function testSetWithNewSignature()
 	{
 		$instance = new Cookie;
-		$instance->set('foo', 'bar');
+		$instance->set('foo', 'bar', array('expire' => 15, 'samesite' => 'Strict'));
 
 		$data = TestHelper::getValue($instance, 'data');
 
@@ -81,22 +98,43 @@ class CookieTest extends TestCase
 // Stub for setcookie
 namespace Joomla\Input;
 
-/**
- * Stub.
- *
- * @param   string  $name      Name
- * @param   string  $value     Value
- * @param   int     $expire    Expire
- * @param   string  $path      Path
- * @param   string  $domain    Domain
- * @param   bool    $secure    Secure
- * @param   bool    $httpOnly  HttpOnly
- *
- * @return  void
- *
- * @since   1.1.4
- */
-function setcookie($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httpOnly = false)
+if (version_compare(PHP_VERSION, '7.3', '>='))
 {
-	return true;
+	/**
+	 * Stub.
+	 *
+	 * @param   string  $name     Name
+	 * @param   string  $value    Value
+	 * @param   array   $options  Expire
+	 *
+	 * @return  bool
+	 *
+	 * @since   1.1.4
+	 */
+	function setcookie($name, $value, $options = array())
+	{
+		return true;
+	}
+}
+else
+{
+	/**
+	 * Stub.
+	 *
+	 * @param   string  $name      Name
+	 * @param   string  $value     Value
+	 * @param   int     $expire    Expire
+	 * @param   string  $path      Path
+	 * @param   string  $domain    Domain
+	 * @param   bool    $secure    Secure
+	 * @param   bool    $httpOnly  HttpOnly
+	 *
+	 * @return  bool
+	 *
+	 * @since   1.1.4
+	 */
+	function setcookie($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httpOnly = false)
+	{
+		return true;
+	}
 }
