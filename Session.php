@@ -93,7 +93,7 @@ class Session implements \IteratorAggregate
 	 * The configuration of the HttpOnly cookie.
 	 *
 	 * @var    mixed
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 * @deprecated  2.0
 	 */
 	protected $cookie_httponly = true;
@@ -102,7 +102,7 @@ class Session implements \IteratorAggregate
 	 * The configuration of the SameSite cookie.
 	 *
 	 * @var    mixed
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 * @deprecated  2.0
 	 */
 	protected $cookie_samesite;
