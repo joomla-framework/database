@@ -90,6 +90,15 @@ class Session implements \IteratorAggregate
 	protected $cookie_path;
 
 	/**
+	 * The configuration of the SameSite cookie.
+	 *
+	 * @var    mixed
+	 * @since  __DEPLOY_VERSION__
+	 * @deprecated  2.0
+	 */
+	protected $cookie_samesite;
+
+	/**
 	 * Session instances container.
 	 *
 	 * @var    Session
@@ -824,7 +833,19 @@ class Session implements \IteratorAggregate
 			$cookie['path'] = $this->cookie_path;
 		}
 
-		session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], true);
+		if ($this->cookie_samesite)
+		{
+			$cookie['samesite'] = $this->cookie_samesite;
+		}
+
+		if (version_compare(PHP_VERSION, '7.3', '>='))
+		{
+			session_set_cookie_params($cookie);
+		}
+		else
+		{
+			session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], true);
+		}
 	}
 
 	/**
@@ -986,6 +1007,11 @@ class Session implements \IteratorAggregate
 		if (isset($options['cookie_path']))
 		{
 			$this->cookie_path = $options['cookie_path'];
+		}
+
+		if (isset($options['cookie_samesite']))
+		{
+			$this->cookie_samesite = $options['cookie_samesite'];
 		}
 
 		// Sync the session maxlifetime
