@@ -61,8 +61,10 @@ class Cookie extends Input
 	 * @link    https://www.ietf.org/rfc/rfc2109.txt
 	 * @link    https://php.net/manual/en/function.setcookie.php
 	 *
-	 * @since      1.0
-	 * @deprecated 2.0  The (name, value, expire, path, domain, secure, httpOnly) method signature is deprecated, use (name, value, options) instead.
+	 * @since   1.0
+	 *
+	 * @note    As of __DEPLOY_VERSION__, the (name, value, expire, path, domain, secure, httpOnly) signature is deprecated and will not be supported
+	 *          when support for PHP 7.2 and earlier is dropped
 	 */
 	public function set($name, $value, $options = array())
 	{
