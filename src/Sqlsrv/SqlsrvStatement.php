@@ -87,10 +87,10 @@ class SqlsrvStatement implements StatementInterface
 	/**
 	 * Bound parameter types.
 	 *
-	 * @var    string
+	 * @var    array
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $types;
+	protected $typesKeyMapping;
 
 	/**
 	 * References to the variables bound as statement parameters.
@@ -98,7 +98,29 @@ class SqlsrvStatement implements StatementInterface
 	 * @var    array
 	 * @since  __DEPLOY_VERSION__
 	 */
-	private $variables = [];
+	private $bindedValues = [];
+
+	/**
+	 * Mapping between named parameters and position in query.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $parameterKeyMapping;
+
+	/**
+	 * Mapping array for parameter types.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $parameterTypeMapping = [
+		ParameterType::BOOLEAN      => ParameterType::BOOLEAN,
+		ParameterType::INTEGER      => ParameterType::INTEGER,
+		ParameterType::LARGE_OBJECT => ParameterType::LARGE_OBJECT,
+		ParameterType::NULL         => ParameterType::NULL,
+		ParameterType::STRING       => ParameterType::STRING,
+	];
 
 	/**
 	 * Constructor.
@@ -111,8 +133,146 @@ class SqlsrvStatement implements StatementInterface
 	 */
 	public function __construct($connection, string $query)
 	{
+		// Initial parameter types for prepared statements
+		$this->parameterTypeMapping = [
+			ParameterType::BOOLEAN      => SQLSRV_PHPTYPE_INT,
+			ParameterType::INTEGER      => SQLSRV_PHPTYPE_INT,
+			ParameterType::LARGE_OBJECT => SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY),
+			ParameterType::NULL         => SQLSRV_PHPTYPE_NULL,
+			ParameterType::STRING       => SQLSRV_PHPTYPE_STRING(SQLSRV_ENC_CHAR),
+		];
+
 		$this->connection = $connection;
-		$this->query      = $query;
+		$this->query      = $this->prepareParameterKeyMapping($query);
+	}
+
+	/**
+	 * Replace named parameters with numbered parameters
+	 *
+	 * @param   string  $sql  The SQL statement to prepare.
+	 *
+	 * @return  string  The processed SQL statement.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function prepareParameterKeyMapping($sql)
+	{
+		$escaped   	= false;
+		$startPos  	= 0;
+		$quoteChar 	= '';
+		$literal    = '';
+		$mapping    = [];
+		$replace    = [];
+		$matches    = [];
+		$pattern    = '/([:][a-zA-Z0-9_]+)/';
+
+		if (!preg_match($pattern, $sql, $matches))
+		{
+			return $sql;
+		}
+
+		$sql = trim($sql);
+		$n   = \strlen($sql);
+
+		while ($startPos < $n)
+		{
+			if (!preg_match($pattern, $sql, $matches, 0, $startPos))
+			{
+				break;
+			}
+
+			$j = strpos($sql, "'", $startPos);
+			$k = strpos($sql, '"', $startPos);
+
+			if (($k !== false) && (($k < $j) || ($j === false)))
+			{
+				$quoteChar = '"';
+				$j         = $k;
+			}
+			else
+			{
+				$quoteChar = "'";
+			}
+
+			if ($j === false)
+			{
+				$j = $n;
+			}
+
+			// Search for named prepared parameters and replace it with ? and save its position
+			$replace   = [];
+			$substring = substr($sql, $startPos, $j - $startPos);
+
+			if (preg_match_all($pattern, $substring, $matches, PREG_PATTERN_ORDER))
+			{
+				foreach ($matches[0] as $match)
+				{
+					$mapping[$match] = \count($mapping);
+					$replace[]       = $match;
+				}
+
+				$literal .= str_replace($replace, '?', $substring);
+			}
+			else
+			{
+				$literal .= $substring;
+			}
+
+			$startPos = $j;
+			$j++;
+
+			if ($j >= $n)
+			{
+				break;
+			}
+
+			// Quote comes first, find end of quote
+			while (true)
+			{
+				$k       = strpos($sql, $quoteChar, $j);
+				$escaped = false;
+
+				if ($k === false)
+				{
+					break;
+				}
+
+				$l = $k - 1;
+
+				while ($l >= 0 && $sql{$l} === '\\')
+				{
+					$l--;
+					$escaped = !$escaped;
+				}
+
+				if ($escaped)
+				{
+					$j = $k + 1;
+
+					continue;
+				}
+
+				break;
+			}
+
+			if ($k === false)
+			{
+				// Error in the query - no end quote; ignore it
+				break;
+			}
+
+			$literal .= substr($sql, $startPos, $k - $startPos + 1);
+			$startPos = $k + 1;
+		}
+
+		if ($startPos < $n)
+		{
+			$literal .= substr($sql, $startPos, $n - $startPos);
+		}
+
+		$this->parameterKeyMapping = $mapping;
+
+		return $literal;
 	}
 
 	/**
@@ -122,7 +282,7 @@ class SqlsrvStatement implements StatementInterface
 	 *                                           name of the form `:name`. For a prepared statement using question mark placeholders, this will be
 	 *                                           the 1-indexed position of the parameter.
 	 * @param   mixed           $variable        Name of the PHP variable to bind to the SQL statement parameter.
-	 * @param   integer         $dataType        Constant corresponding to a SQL datatype, this should be the processed type from the QueryInterface.
+	 * @param   string          $dataType        Constant corresponding to a SQL datatype, this should be the processed type from the QueryInterface.
 	 * @param   integer         $length          The length of the variable. Usually required for OUTPUT parameters.
 	 * @param   array           $driverOptions   Optional driver options to be used.
 	 *
@@ -132,15 +292,15 @@ class SqlsrvStatement implements StatementInterface
 	 */
 	public function bindParam($parameter, &$variable, $dataType = ParameterType::STRING, $length = null, $driverOptions = null)
 	{
-		if (!is_numeric($parameter))
+		$this->bindedValues[$parameter] =& $variable;
+
+		// Validate parameter type
+		if (!isset($this->parameterTypeMapping[$dataType]))
 		{
-			throw new \InvalidArgumentException(
-				'SQL Server does not support named parameters for queries, use question mark (?) placeholders instead.'
-			);
+			throw new \InvalidArgumentException(sprintf('Unsupported parameter type `%s`', $dataType));
 		}
 
-		$this->variables[$parameter] =& $variable;
-		$this->types[$parameter]     = $dataType;
+		$this->typesKeyMapping[$parameter] = $this->parameterTypeMapping[$dataType];
 
 		$this->statement = null;
 
@@ -154,7 +314,7 @@ class SqlsrvStatement implements StatementInterface
 	 *                                           name of the form `:name`. For a prepared statement using question mark placeholders, this will be
 	 *                                           the 1-indexed position of the parameter.
 	 * @param   mixed           $variable        Name of the PHP variable to bind to the SQL statement parameter.
-	 * @param   integer         $dataType        Constant corresponding to a SQL datatype, this should be the processed type from the QueryInterface.
+	 * @param   string          $dataType        Constant corresponding to a SQL datatype, this should be the processed type from the QueryInterface.
 	 *
 	 * @return  void
 	 *
@@ -162,15 +322,8 @@ class SqlsrvStatement implements StatementInterface
 	 */
 	private function bindValue($parameter, $variable, $dataType = ParameterType::STRING)
 	{
-		if (!is_numeric($parameter))
-		{
-			throw new \InvalidArgumentException(
-				'SQL Server does not support named parameters for queries, use question mark (?) placeholders instead.'
-			);
-		}
-
-		$this->variables[$parameter] = $variable;
-		$this->types[$parameter]     = $dataType;
+		$this->bindedValues[$parameter]    = $variable;
+		$this->typesKeyMapping[$parameter] = $dataType;
 	}
 
 	/**
@@ -240,7 +393,7 @@ class SqlsrvStatement implements StatementInterface
 	 */
 	public function execute($parameters = null)
 	{
-		if ($parameters)
+		if (empty($this->bindedValues) && $parameters !== null)
 		{
 			$hasZeroIndex = array_key_exists(0, $parameters);
 
@@ -362,25 +515,33 @@ class SqlsrvStatement implements StatementInterface
 	private function prepare()
 	{
 		$params = [];
+		$options = [];
 
-		foreach ($this->variables as $column => &$variable)
+		foreach ($this->bindedValues as $key => &$value)
 		{
-			if ($this->types[$column] === ParameterType::LARGE_OBJECT)
+			$variable = [
+				&$value,
+				SQLSRV_PARAM_IN
+			];
+
+			if ($this->typesKeyMapping[$key] === $this->parameterTypeMapping[ParameterType::LARGE_OBJECT])
 			{
-				$params[$column - 1] = [
-					&$variable,
-					SQLSRV_PARAM_IN,
-					SQLSRV_PHPTYPE_STREAM(SQLSRV_ENC_BINARY),
-					SQLSRV_SQLTYPE_VARBINARY('max'),
-				];
+				$variable[] = $this->typesKeyMapping[$key];
+				$variable[] = SQLSRV_SQLTYPE_VARBINARY('max');
+			}
+
+			if (isset($this->parameterKeyMapping[$key]))
+			{
+				$params[$this->parameterKeyMapping[$key]] = $variable;
 			}
 			else
 			{
-				$params[$column - 1] =& $variable;
+				$params[] = $variable;
 			}
 		}
 
-		$options = [];
+		// Cleanup referenced variable
+		unset($value);
 
 		// SQLSRV Function sqlsrv_num_rows requires a static or keyset cursor.
 		if (strncmp(strtoupper(ltrim($this->query)), 'SELECT', \strlen('SELECT')) === 0)
