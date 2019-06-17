@@ -43,7 +43,7 @@ class HelpCommand extends AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function configure()
+	protected function configure(): void
 	{
 		$this->setDescription('Show the help for a command');
 		$this->setHelp(<<<'EOF'
@@ -93,7 +93,7 @@ EOF
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setCommand(AbstractCommand $command)
+	public function setCommand(AbstractCommand $command): void
 	{
 		$this->command = $command;
 	}

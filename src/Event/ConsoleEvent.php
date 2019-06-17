@@ -44,7 +44,7 @@ class ConsoleEvent extends Event
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct(string $name, Application $application, AbstractCommand $command = null)
+	public function __construct(string $name, Application $application, ?AbstractCommand $command = null)
 	{
 		parent::__construct($name);
 
@@ -71,7 +71,7 @@ class ConsoleEvent extends Event
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getCommand()
+	public function getCommand(): ?AbstractCommand
 	{
 		return $this->command;
 	}

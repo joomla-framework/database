@@ -36,7 +36,7 @@ class TerminateEvent extends ConsoleEvent
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct(int $exitCode, Application $application, AbstractCommand $command = null)
+	public function __construct(int $exitCode, Application $application, ?AbstractCommand $command = null)
 	{
 		parent::__construct(ConsoleEvents::TERMINATE, $application, $command);
 
@@ -64,7 +64,7 @@ class TerminateEvent extends ConsoleEvent
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setExitCode(int $exitCode)
+	public function setExitCode(int $exitCode): void
 	{
 		$this->exitCode = $exitCode;
 	}

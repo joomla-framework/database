@@ -35,7 +35,7 @@ class ListCommand extends AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function configure()
+	protected function configure(): void
 	{
 		$this->setDescription("List the application's available commands");
 		$this->addArgument('namespace', InputArgument::OPTIONAL, 'The namespace name');

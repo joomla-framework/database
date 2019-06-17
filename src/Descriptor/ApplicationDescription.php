@@ -19,7 +19,13 @@ use Joomla\Console\Exception\CommandNotFoundException;
  */
 final class ApplicationDescription
 {
-	const GLOBAL_NAMESPACE = '_global';
+	/**
+	 * Placeholder for commands in the global namespace.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	public const GLOBAL_NAMESPACE = '_global';
 
 	/**
 	 * The application's aliased commands.
@@ -149,7 +155,7 @@ final class ApplicationDescription
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	private function extractNamespace(string $name, $limit = null)
+	private function extractNamespace(string $name, ?int $limit = null): string
 	{
 		$parts = explode(':', $name);
 		array_pop($parts);
@@ -164,7 +170,7 @@ final class ApplicationDescription
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	private function inspectApplication()
+	private function inspectApplication(): void
 	{
 		$this->commands   = [];
 		$this->namespaces = [];

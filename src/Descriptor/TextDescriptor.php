@@ -86,7 +86,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	private function describeConsoleCommand(AbstractCommand $command, array $options)
+	private function describeConsoleCommand(AbstractCommand $command, array $options): void
 	{
 		$command->getSynopsis(true);
 		$command->getSynopsis(false);
@@ -131,7 +131,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	private function describeJoomlaApplication(Application $app, array $options)
+	private function describeJoomlaApplication(Application $app, array $options): void
 	{
 		$describedNamespace = $options['namespace'] ?? '';
 		$description        = new ApplicationDescription($app, $describedNamespace);
@@ -270,7 +270,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	private function writeText($content, array $options = [])
+	private function writeText($content, array $options = []): void
 	{
 		$this->write(
 			isset($options['raw_text']) && $options['raw_text'] ? strip_tags($content) : $content,

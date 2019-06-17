@@ -23,7 +23,7 @@ final class ConsoleEvents
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const APPLICATION_ERROR = 'console.application_error';
+	public const APPLICATION_ERROR = 'console.application_error';
 
 	/**
 	 * The BEFORE_COMMAND_EXECUTE event is an event triggered before a command is executed.
@@ -34,7 +34,7 @@ final class ConsoleEvents
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const BEFORE_COMMAND_EXECUTE = 'console.before_command_execute';
+	public const BEFORE_COMMAND_EXECUTE = 'console.before_command_execute';
 
 	/**
 	 * The COMMAND_ERROR event is an event triggered when an uncaught Throwable from a command is received.
@@ -44,7 +44,7 @@ final class ConsoleEvents
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const COMMAND_ERROR = 'console.command_error';
+	public const COMMAND_ERROR = 'console.command_error';
 
 	/**
 	 * The TERMINATE event is an event triggered immediately before the application is exited.
@@ -55,5 +55,5 @@ final class ConsoleEvents
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const TERMINATE = 'console.terminate';
+	public const TERMINATE = 'console.terminate';
 }

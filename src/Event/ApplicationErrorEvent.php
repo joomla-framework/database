@@ -44,7 +44,7 @@ class ApplicationErrorEvent extends ConsoleEvent
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct(\Throwable $error, Application $application, AbstractCommand $command = null)
+	public function __construct(\Throwable $error, Application $application, ?AbstractCommand $command = null)
 	{
 		parent::__construct(ConsoleEvents::APPLICATION_ERROR, $application, $command);
 
@@ -84,7 +84,7 @@ class ApplicationErrorEvent extends ConsoleEvent
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setError(\Throwable $error)
+	public function setError(\Throwable $error): void
 	{
 		$this->error = $error;
 	}
@@ -98,7 +98,7 @@ class ApplicationErrorEvent extends ConsoleEvent
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setExitCode(int $exitCode)
+	public function setExitCode(int $exitCode): void
 	{
 		$this->exitCode = $exitCode;
 

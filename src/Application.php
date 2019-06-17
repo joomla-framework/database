@@ -180,7 +180,7 @@ class Application extends AbstractApplication
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct(InputInterface $input = null, OutputInterface $output = null, Registry $config = null)
+	public function __construct(?InputInterface $input = null, ?OutputInterface $output = null, ?Registry $config = null)
 	{
 		// Close the application if we are not executed from the command line.
 		if (!\defined('STDOUT') || !\defined('STDIN') || !isset($_SERVER['argv']))
@@ -246,7 +246,7 @@ class Application extends AbstractApplication
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function configureIO()
+	protected function configureIO(): void
 	{
 		if ($this->consoleInput->hasParameterOption(['--ansi'], true))
 		{
@@ -302,7 +302,7 @@ class Application extends AbstractApplication
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \Throwable
 	 */
-	protected function doExecute()
+	protected function doExecute(): int
 	{
 		$input  = $this->getConsoleInput();
 		$output = $this->getConsoleOutput();
@@ -597,7 +597,7 @@ class Application extends AbstractApplication
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function getCommandName(InputInterface $input)
+	protected function getCommandName(InputInterface $input): ?string
 	{
 		return $input->getFirstArgument();
 	}
@@ -690,7 +690,7 @@ class Application extends AbstractApplication
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function getDefaultHelperSet()
+	protected function getDefaultHelperSet(): HelperSet
 	{
 		return new HelperSet(
 			[
@@ -845,7 +845,7 @@ class Application extends AbstractApplication
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function initialise()
+	protected function initialise(): void
 	{
 		// Set the current directory.
 		$this->set('cwd', getcwd());
@@ -946,7 +946,7 @@ class Application extends AbstractApplication
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setAutoExit(bool $autoExit)
+	public function setAutoExit(bool $autoExit): void
 	{
 		$this->autoExit = $autoExit;
 	}
@@ -960,7 +960,7 @@ class Application extends AbstractApplication
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setCatchThrowables(bool $catchThrowables)
+	public function setCatchThrowables(bool $catchThrowables): void
 	{
 		$this->catchThrowables = $catchThrowables;
 	}
@@ -974,7 +974,7 @@ class Application extends AbstractApplication
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setCommandLoader(Loader\LoaderInterface $loader)
+	public function setCommandLoader(Loader\LoaderInterface $loader): void
 	{
 		$this->commandLoader = $loader;
 	}
@@ -988,7 +988,7 @@ class Application extends AbstractApplication
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setHelperSet(HelperSet $helperSet)
+	public function setHelperSet(HelperSet $helperSet): void
 	{
 		$this->helperSet = $helperSet;
 	}
@@ -1002,7 +1002,7 @@ class Application extends AbstractApplication
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setName(string $name)
+	public function setName(string $name): void
 	{
 		$this->name = $name;
 	}
@@ -1016,7 +1016,7 @@ class Application extends AbstractApplication
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setVersion(string $version)
+	public function setVersion(string $version): void
 	{
 		$this->version = $version;
 	}
@@ -1085,7 +1085,7 @@ class Application extends AbstractApplication
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	private function extractNamespace(string $name, $limit = null)
+	private function extractNamespace(string $name, ?int $limit = null): string
 	{
 		$parts = explode(':', $name);
 		array_pop($parts);
@@ -1100,7 +1100,7 @@ class Application extends AbstractApplication
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	private function initCommands()
+	private function initCommands(): void
 	{
 		if ($this->initialised)
 		{

@@ -126,7 +126,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct($name = null)
+	public function __construct(?string $name = null)
 	{
 		$this->definition = new InputDefinition;
 
@@ -150,7 +150,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function addArgument($name, $mode = null, $description = '', $default = null)
+	public function addArgument(string $name, ?int $mode = null, string $description = '', $default = null): self
 	{
 		$this->definition->addArgument(new InputArgument($name, $mode, $description, $default));
 
@@ -170,7 +170,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function addOption($name, $shortcut = null, $mode = null, $description = '', $default = null)
+	public function addOption(string $name, $shortcut = null, ?int $mode = null, $description = '', $default = null): self
 	{
 		$this->definition->addOption(new InputOption($name, $shortcut, $mode, $description, $default));
 
@@ -184,7 +184,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function configure()
+	protected function configure(): void
 	{
 	}
 
@@ -274,7 +274,7 @@ abstract class AbstractCommand
 	 *
 	 * @since  __DEPLOY_VERSION__
 	 */
-	public static function getDefaultName()
+	public static function getDefaultName(): ?string
 	{
 		$class = \get_called_class();
 		$r     = new \ReflectionProperty($class, 'defaultName');
@@ -289,7 +289,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getDefinition()
+	public function getDefinition(): ?InputDefinition
 	{
 		return $this->definition;
 	}
@@ -337,7 +337,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getName()
+	public function getName(): ?string
 	{
 		return $this->name;
 	}
@@ -400,7 +400,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function initialise(InputInterface $input, OutputInterface $output)
+	protected function initialise(InputInterface $input, OutputInterface $output): void
 	{
 	}
 
@@ -438,7 +438,7 @@ abstract class AbstractCommand
 	 * @since   __DEPLOY_VERSION__
 	 * @internal  This method should not be relied on as part of the public API
 	 */
-	final public function mergeApplicationDefinition(bool $mergeArgs = true)
+	final public function mergeApplicationDefinition(bool $mergeArgs = true): void
 	{
 		if (!$this->application || ($this->applicationDefinitionMerged && ($this->applicationDefinitionMergedWithArgs || !$mergeArgs)))
 		{
@@ -468,7 +468,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setAliases(array $aliases)
+	public function setAliases(array $aliases): void
 	{
 		$this->aliases = $aliases;
 	}
@@ -482,7 +482,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setApplication(Application $application = null)
+	public function setApplication(?Application $application = null): void
 	{
 		$this->application = $application;
 
@@ -505,7 +505,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setDefinition($definition)
+	public function setDefinition($definition): void
 	{
 		if ($definition instanceof InputDefinition)
 		{
@@ -528,7 +528,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setDescription(string $description)
+	public function setDescription(string $description): void
 	{
 		$this->description = $description;
 	}
@@ -542,7 +542,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setHelp(string $help)
+	public function setHelp(string $help): void
 	{
 		$this->help = $help;
 	}
@@ -556,7 +556,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setHelperSet(HelperSet $helperSet)
+	public function setHelperSet(HelperSet $helperSet): void
 	{
 		$this->helperSet = $helperSet;
 	}
@@ -570,7 +570,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setHidden(bool $hidden)
+	public function setHidden(bool $hidden): void
 	{
 		$this->hidden = $hidden;
 	}
@@ -584,7 +584,7 @@ abstract class AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function setName(string $name)
+	public function setName(string $name): void
 	{
 		$this->name = $name;
 	}

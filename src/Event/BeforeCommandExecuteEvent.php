@@ -25,7 +25,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 * @var    integer
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const RETURN_CODE_DISABLED = 113;
+	public const RETURN_CODE_DISABLED = 113;
 
 	/**
 	 * Flag indicating the command is enabled
@@ -43,7 +43,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct(Application $application, AbstractCommand $command = null)
+	public function __construct(Application $application, ?AbstractCommand $command = null)
 	{
 		parent::__construct(ConsoleEvents::BEFORE_COMMAND_EXECUTE, $application, $command);
 
@@ -60,7 +60,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function disableCommand()
+	public function disableCommand(): void
 	{
 		$this->commandEnabled = false;
 	}
@@ -72,7 +72,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function enableCommand()
+	public function enableCommand(): void
 	{
 		$this->commandEnabled = false;
 	}
