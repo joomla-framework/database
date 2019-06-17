@@ -21,7 +21,7 @@ final class ParameterType
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const BOOLEAN = 'boolean';
+	public const BOOLEAN = 'boolean';
 
 	/**
 	 * Defines an integer parameter
@@ -29,7 +29,7 @@ final class ParameterType
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const INTEGER = 'int';
+	public const INTEGER = 'int';
 
 	/**
 	 * Defines a large object parameter
@@ -37,7 +37,7 @@ final class ParameterType
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const LARGE_OBJECT = 'lob';
+	public const LARGE_OBJECT = 'lob';
 
 	/**
 	 * Defines a null parameter
@@ -45,7 +45,7 @@ final class ParameterType
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const NULL = 'null';
+	public const NULL = 'null';
 
 	/**
 	 * Defines a string parameter
@@ -53,7 +53,7 @@ final class ParameterType
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const STRING = 'string';
+	public const STRING = 'string';
 
 	/**
 	 * Private constructor to prevent instantiation of this class

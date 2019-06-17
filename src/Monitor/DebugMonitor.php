@@ -58,7 +58,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function startQuery(string $sql)
+	public function startQuery(string $sql): void
 	{
 		$this->logs[]       = $sql;
 		$this->callStacks[] = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
@@ -73,7 +73,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function stopQuery()
+	public function stopQuery(): void
 	{
 		$this->timings[]    = microtime(true);
 		$this->memoryLogs[] = memory_get_usage();
@@ -86,7 +86,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getCallStacks()
+	public function getCallStacks(): array
 	{
 		return $this->callStacks;
 	}
@@ -98,7 +98,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getLogs()
+	public function getLogs(): array
 	{
 		return $this->logs;
 	}
@@ -110,7 +110,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getMemoryLogs()
+	public function getMemoryLogs(): array
 	{
 		return $this->memoryLogs;
 	}
@@ -122,7 +122,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getTimings()
+	public function getTimings(): array
 	{
 		return $this->timings;
 	}

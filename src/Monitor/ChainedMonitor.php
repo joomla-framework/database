@@ -34,7 +34,7 @@ class ChainedMonitor implements QueryMonitorInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function addMonitor(QueryMonitorInterface $monitor)
+	public function addMonitor(QueryMonitorInterface $monitor): void
 	{
 		$this->monitors[] = $monitor;
 	}
@@ -48,7 +48,7 @@ class ChainedMonitor implements QueryMonitorInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function startQuery(string $sql)
+	public function startQuery(string $sql): void
 	{
 		foreach ($this->monitors as $monitor)
 		{
@@ -63,7 +63,7 @@ class ChainedMonitor implements QueryMonitorInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function stopQuery()
+	public function stopQuery(): void
 	{
 		foreach ($this->monitors as $monitor)
 		{

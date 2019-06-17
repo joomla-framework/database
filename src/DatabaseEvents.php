@@ -32,7 +32,7 @@ final class DatabaseEvents
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const POST_CONNECT = 'onAfterConnect';
+	public const POST_CONNECT = 'onAfterConnect';
 
 	/**
 	 * Database event which is dispatched after the connection to the database server is closed.
@@ -42,5 +42,5 @@ final class DatabaseEvents
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const POST_DISCONNECT = 'onAfterDisconnect';
+	public const POST_DISCONNECT = 'onAfterDisconnect';
 }

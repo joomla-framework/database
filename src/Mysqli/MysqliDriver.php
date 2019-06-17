@@ -131,7 +131,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		// Make sure the MySQLi extension for PHP is installed and enabled.
 		if (!static::isSupported())
 		{
-			throw new \RuntimeException('The MySQLi extension is not available');
+			throw new UnsupportedAdapterException('The MySQLi extension is not available');
 		}
 
 		/*
@@ -191,12 +191,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		else
 		{
 			$this->options['socket'] = $port;
-		}
-
-		// Make sure the MySQLi extension for PHP is installed and enabled.
-		if (!static::isSupported())
-		{
-			throw new UnsupportedAdapterException('The MySQLi extension is not available');
 		}
 
 		$this->connection = mysqli_init();

@@ -30,7 +30,7 @@ class LoggingMonitor implements QueryMonitorInterface, LoggerAwareInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function startQuery(string $sql)
+	public function startQuery(string $sql): void
 	{
 		if ($this->logger)
 		{
@@ -49,7 +49,7 @@ class LoggingMonitor implements QueryMonitorInterface, LoggerAwareInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function stopQuery()
+	public function stopQuery(): void
 	{
 		// Nothing to do
 	}
