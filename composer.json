@@ -21,5 +21,11 @@
         "psr-4": {
             "Joomla\\Test\\": "src/"
         }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-1.x-dev": "1.x-dev"
+        }
     }
 }
