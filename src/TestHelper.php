@@ -29,6 +29,7 @@ class TestHelper
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Manage callbacks within your test cases
 	 */
 	public static function assignMockCallbacks(\PHPUnit_Framework_MockObject_MockObject $mockObject, TestCase $test, $array)
 	{
@@ -62,6 +63,7 @@ class TestHelper
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0  Manage returns within your test cases
 	 */
 	public static function assignMockReturns(\PHPUnit_Framework_MockObject_MockObject $mockObject, TestCase $test, $array)
 	{
@@ -83,6 +85,7 @@ class TestHelper
 	 *
 	 * @since   1.0
 	 * @throws  \InvalidArgumentException if property not available.
+	 * @throws  \ReflectionException
 	 */
 	public static function getValue($object, $propertyName)
 	{
@@ -123,6 +126,7 @@ class TestHelper
 	 * @return  mixed
 	 *
 	 * @since   1.0
+	 * @throws  \ReflectionException
 	 */
 	public static function invoke($object, $methodName)
 	{
@@ -151,6 +155,7 @@ class TestHelper
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @throws  \ReflectionException
 	 */
 	public static function setValue($object, $propertyName, $value)
 	{
