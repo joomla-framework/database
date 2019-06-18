@@ -15,6 +15,7 @@ use Joomla\Database\Sqlite\SqliteDriver;
  * Abstract test case class for database testing.
  *
  * @since  1.0
+ * @deprecated  2.0  Deprecated due to the deprecation of `phpunit/dbunit`
  */
 abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 {
@@ -23,6 +24,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 *
 	 * @var    DatabaseDriver
 	 * @since  1.0
+	 * @deprecated  2.0
 	 */
 	protected static $driver;
 
@@ -32,6 +34,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0
 	 */
 	public static function setUpBeforeClass()
 	{
@@ -74,6 +77,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0
 	 */
 	public static function tearDownAfterClass()
 	{
@@ -125,6 +129,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 * @return  \PHPUnit_Extensions_Database_DB_IDatabaseConnection
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0
 	 */
 	protected function getConnection()
 	{
@@ -140,6 +145,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 * @return  \PHPUnit_Extensions_Database_DataSet_IDataSet
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0
 	 */
 	protected function getDataSet()
 	{
@@ -152,6 +158,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 * @return  \PHPUnit_Extensions_Database_Operation_IDatabaseOperation
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0
 	 */
 	protected function getSetUpOperation()
 	{
@@ -170,6 +177,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 * @return  \PHPUnit_Extensions_Database_Operation_IDatabaseOperation
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0
 	 */
 	protected function getTearDownOperation()
 	{
@@ -185,6 +193,7 @@ abstract class TestDatabase extends \PHPUnit_Extensions_Database_TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @deprecated  2.0
 	 */
 	protected function setUp()
 	{
