@@ -99,6 +99,23 @@ class SqliteDriver extends PdoDriver
 	}
 
 	/**
+	 * Create a new database using information from $options object.
+	 *
+	 * @param   \stdClass  $options  Object used to pass user and database name to database driver. This object must have "db_name" and "db_user" set.
+	 * @param   boolean    $utf      True if the database supports the UTF-8 character set.
+	 *
+	 * @return  boolean|resource
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function createDatabase($options, $utf = true)
+	{
+		// SQLite doesn't have a query for this
+		return true;
+	}
+
+	/**
 	 * Method to escape a string for usage in an SQLite statement.
 	 *
 	 * Note: Using query objects with bound variables is preferable to the below.
