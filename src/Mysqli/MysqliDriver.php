@@ -119,6 +119,7 @@ class MysqliDriver extends DatabaseDriver
 		$options['port']     = isset($options['port']) ? (int) $options['port'] : null;
 		$options['socket']   = isset($options['socket']) ? $options['socket'] : null;
 		$options['utf8mb4']  = isset($options['utf8mb4']) ? (bool) $options['utf8mb4'] : false;
+		$options['flags']    = isset($options['flags']) ? $options['flags'] : null;
 
 		// Finalize initialisation.
 		parent::__construct($options);
@@ -221,7 +222,7 @@ class MysqliDriver extends DatabaseDriver
 
 		// Attempt to connect to the server.
 		$connected = $this->connection->real_connect(
-			$this->options['host'], $this->options['user'], $this->options['password'], null, $this->options['port'], $this->options['socket']
+			$this->options['host'], $this->options['user'], $this->options['password'], null, $this->options['port'], $this->options['socket'], $this->options['flags']
 		);
 
 		if (!$connected)
