@@ -120,15 +120,15 @@ class MysqliDriver extends DatabaseDriver
 		$options['socket']   = isset($options['socket']) ? $options['socket'] : null;
 		$options['utf8mb4']  = isset($options['utf8mb4']) ? (bool) $options['utf8mb4'] : false;
 		$options['flags']    = isset($options['flags']) ? $options['flags'] : null;
-		$options['ssl']      = (isset($options['ssl'])) ? $options['ssl'] : null;
+		$options['ssl']      = isset($options['ssl']) ? $options['ssl'] : null;
 
 		if ($options['ssl'] !== null)
 		{
-			$options['ssl']['key']    = (isset($options['ssl']['key'])) ? $options['ssl']['key'] : null;
-			$options['ssl']['cert']   = (isset($options['ssl']['cert'])) ? $options['ssl']['cert'] : null;
-			$options['ssl']['ca']     = (isset($options['ssl']['ca'])) ? $options['ssl']['ca'] : null;
-			$options['ssl']['capath'] = (isset($options['ssl']['capath'])) ? $options['ssl']['capath'] : null;
-			$options['ssl']['cipher'] = (isset($options['ssl']['key'])) ? $options['ssl']['cipher'] : null;
+			$options['ssl']['key']    = isset($options['ssl']['key']) ? $options['ssl']['key'] : null;
+			$options['ssl']['cert']   = isset($options['ssl']['cert']) ? $options['ssl']['cert'] : null;
+			$options['ssl']['ca']     = isset($options['ssl']['ca']) ? $options['ssl']['ca'] : null;
+			$options['ssl']['capath'] = isset($options['ssl']['capath']) ? $options['ssl']['capath'] : null;
+			$options['ssl']['cipher'] = isset($options['ssl']['key']) ? $options['ssl']['cipher'] : null;
 		}
 
 		// Finalize initialisation.
