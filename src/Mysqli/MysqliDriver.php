@@ -131,7 +131,6 @@ class MysqliDriver extends DatabaseDriver
 			$options['ssl']['cipher'] = isset($options['ssl']['cipher']) ? $options['ssl']['cipher'] : null;
 		}
 
-
 		// Finalize initialisation.
 		parent::__construct($options);
 	}
