@@ -299,14 +299,14 @@ class SqlsrvDriver extends DatabaseDriver
 	/**
 	 * Drops a table from the database.
 	 *
-	 * @param   string   $tableName  The name of the database table to drop.
-	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
+	 * @param   string   $table     The name of the database table to drop.
+	 * @param   boolean  $ifExists  Optionally specify that the table must exist before it is dropped.
 	 *
 	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
-	public function dropTable($tableName, $ifExists = true)
+	public function dropTable($table, $ifExists = true)
 	{
 		$this->connect();
 
@@ -314,12 +314,12 @@ class SqlsrvDriver extends DatabaseDriver
 		{
 			$this->setQuery(
 				'IF EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '
-					. $this->quote($tableName) . ') DROP TABLE ' . $tableName
+					. $this->quote($table) . ') DROP TABLE ' . $table
 			);
 		}
 		else
 		{
-			$this->setQuery('DROP TABLE ' . $tableName);
+			$this->setQuery('DROP TABLE ' . $table);
 		}
 
 		$this->execute();

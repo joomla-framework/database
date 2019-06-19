@@ -102,24 +102,6 @@ class PgsqlDriver extends PdoDriver
 	}
 
 	/**
-	 * Drops a table from the database.
-	 *
-	 * @param   string   $tableName  The name of the database table to drop.
-	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
-	 *
-	 * @return  boolean
-	 *
-	 * @since   1.5.0
-	 * @throws  \RuntimeException
-	 */
-	public function dropTable($tableName, $ifExists = true)
-	{
-		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($tableName))->execute();
-
-		return true;
-	}
-
-	/**
 	 * Method to get the database collation in use by sampling a text field of a table in the database.
 	 *
 	 * @return  string|boolean  The collation in use by the database or boolean false if not supported.

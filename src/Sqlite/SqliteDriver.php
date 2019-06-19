@@ -99,26 +99,6 @@ class SqliteDriver extends PdoDriver
 	}
 
 	/**
-	 * Drops a table from the database.
-	 *
-	 * @param   string   $tableName  The name of the database table to drop.
-	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function dropTable($tableName, $ifExists = true)
-	{
-		$this->connect();
-
-		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($tableName))
-			->execute();
-
-		return $this;
-	}
-
-	/**
 	 * Method to escape a string for usage in an SQLite statement.
 	 *
 	 * Note: Using query objects with bound variables is preferable to the below.
