@@ -222,7 +222,13 @@ class MysqliDriver extends DatabaseDriver
 
 		// Attempt to connect to the server.
 		$connected = $this->connection->real_connect(
-			$this->options['host'], $this->options['user'], $this->options['password'], null, $this->options['port'], $this->options['socket'], $this->options['flags']
+			$this->options['host'],
+			$this->options['user'],
+			$this->options['password'],
+			null,
+			$this->options['port'],
+			$this->options['socket'],
+			$this->options['flags']
 		);
 
 		if (!$connected)
