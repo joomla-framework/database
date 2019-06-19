@@ -233,7 +233,13 @@ class MysqliDriver extends DatabaseDriver
 		// Add SSL/TLS options.
 		if ($this->options['ssl'] !== null)
 		{
-			$this->connection->ssl_set($this->options['ssl']['key'], $this->options['ssl']['cert'], $this->options['ssl']['ca'], $this->options['ssl']['capath'], $this->options['ssl']['cipher']);
+			$this->connection->ssl_set(
+				$this->options['ssl']['key'],
+				$this->options['ssl']['cert'],
+				$this->options['ssl']['ca'],
+				$this->options['ssl']['capath'],
+				$this->options['ssl']['cipher']
+			);
 		}
 
 		// Attempt to connect to the server.
