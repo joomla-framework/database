@@ -128,7 +128,7 @@ class MysqliDriver extends DatabaseDriver
 			$options['ssl']['cert']   = isset($options['ssl']['cert']) ? $options['ssl']['cert'] : null;
 			$options['ssl']['ca']     = isset($options['ssl']['ca']) ? $options['ssl']['ca'] : null;
 			$options['ssl']['capath'] = isset($options['ssl']['capath']) ? $options['ssl']['capath'] : null;
-			$options['ssl']['cipher'] = isset($options['ssl']['key']) ? $options['ssl']['cipher'] : null;
+			$options['ssl']['cipher'] = isset($options['ssl']['cipher']) ? $options['ssl']['cipher'] : null;
 		}
 
 		// Finalize initialisation.
