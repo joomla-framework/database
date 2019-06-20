@@ -425,6 +425,18 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	}
 
 	/**
+	 * Get the minimum supported database version.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getMinimum()
+	{
+		return $this->mariadb ? static::dbMinMariadb : static::$dbMinimum;
+	}
+
+	/**
 	 * Determine whether the database engine support the UTF-8 Multibyte (utf8mb4) character encoding.
 	 *
 	 * @return  boolean  True if the database engine supports UTF-8 Multibyte.
