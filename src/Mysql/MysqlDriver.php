@@ -72,7 +72,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	protected static $dbMinimum = '5.6';
 
 	/**
-	 * The minimum supported MariaDb database version.
+	 * The minimum supported MariaDB database version.
 	 *
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
