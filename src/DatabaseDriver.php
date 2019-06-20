@@ -1167,7 +1167,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 */
 	public function isMinimumVersion()
 	{
-		return version_compare($this->getVersion(), static::$dbMinimum) >= 0;
+		return version_compare($this->getVersion(), $this->getMinimum()) >= 0;
 	}
 
 	/**

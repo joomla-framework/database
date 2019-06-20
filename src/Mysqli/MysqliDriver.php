@@ -78,7 +78,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	protected $mariadb = false;
 
 	/**
-	 * The minimum supported database version.
+	 * The minimum supported MySQL database version.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -554,6 +554,18 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		}
 
 		return $this->connection->server_info;
+	}
+
+	/**
+	 * Get the minimum supported database version.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getMinimum()
+	{
+		return $this->mariadb ? $this->dbMinMariadb : static::$dbMinimum;
 	}
 
 	/**
