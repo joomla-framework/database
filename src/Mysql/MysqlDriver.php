@@ -424,6 +424,29 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		return $this->setQuery('SHOW TABLES')->loadColumn();
 	}
 
+
+	/**
+	 * Get the version of the database connector.
+	 *
+	 * @return  string  The database connector version.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getVersion()
+	{
+		$this->connect();
+
+		$version = $this->getOption(\PDO::ATTR_SERVER_VERSION);
+
+		if (stripos($version, 'mariadb') !== false)
+		{
+			// MariaDB: Strip off any leading '5.5.5-', if present
+			return preg_replace('/^5\.5\.5-/', '', $version);
+		}
+
+		return $version;
+	}
+
 	/**
 	 * Get the minimum supported database version.
 	 *
