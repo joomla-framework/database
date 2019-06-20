@@ -433,7 +433,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 */
 	public function getMinimum()
 	{
-		return $this->mariadb ? static::dbMinMariadb : static::$dbMinimum;
+		return $this->mariadb ? static::$dbMinMariadb : static::$dbMinimum;
 	}
 
 	/**
