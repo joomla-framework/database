@@ -91,7 +91,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected static $dbMinMariadb = '10.2';
+	protected static $dbMinMariadb = '10.0';
 
 	/**
 	 * Constructor.
