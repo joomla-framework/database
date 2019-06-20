@@ -459,7 +459,15 @@ abstract class PdoDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		return $this->getOption(\PDO::ATTR_SERVER_VERSION);
+		$version = $this->getOption(\PDO::ATTR_SERVER_VERSION);
+
+		if (stripos($version, 'mariadb') !== false)
+		{
+			// MariaDB: Strip off any leading '5.5.5-', if present
+			return preg_replace('/^5\.5\.5-/', '', $version);
+		}
+
+		return $version;
 	}
 
 	/**

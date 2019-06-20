@@ -70,12 +70,28 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	protected $utf8mb4 = false;
 
 	/**
+	 * True if the database engine is MariaDB.
+	 *
+	 * @var    boolean
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $mariadb = false;
+
+	/**
 	 * The minimum supported database version.
 	 *
 	 * @var    string
 	 * @since  1.0
 	 */
 	protected static $dbMinimum = '5.6';
+
+	/**
+	 * The minimum supported MariaDb database version.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected static $dbMinMariadb = '10.2';
 
 	/**
 	 * Constructor.
@@ -203,7 +219,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		if (!$connected)
 		{
 			throw new ConnectionFailureException(
-				'Could not connect to MySQL: ' . $this->connection->connect_error,
+				'Could not connect to database: ' . $this->connection->connect_error,
 				$this->connection->connect_errno
 			);
 		}
@@ -223,9 +239,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			$this->select($this->options['database']);
 		}
 
+		$this->mariadb = stripos($this->connection->server_info, 'mariadb') !== false;
+
 		$this->utf8mb4 = $this->serverClaimsUtf8mb4Support();
 
-		// Set charactersets (needed for MySQL 4.1.2+).
+		// Set charactersets (needed for MySQL 4.1.2+ and MariaDB).
 		$this->utf = $this->setUtf();
 
 		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_CONNECT, $this));
@@ -528,6 +546,12 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	public function getVersion()
 	{
 		$this->connect();
+
+		if ($this->mariadb)
+		{
+			// MariaDB: Strip off any leading '5.5.5-', if present
+			return preg_replace('/^5\.5\.5-/', '', $this->connection->server_info);
+		}
 
 		return $this->connection->server_info;
 	}
@@ -936,6 +960,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		$server_version = $this->getVersion();
 
 		if (version_compare($server_version, '5.5.3', '<'))
+		{
+			return false;
+		}
+
+		if ($this->mariadb && version_compare($server_version, '10.0.0', '<'))
 		{
 			return false;
 		}
