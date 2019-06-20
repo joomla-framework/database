@@ -424,7 +424,6 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		return $this->setQuery('SHOW TABLES')->loadColumn();
 	}
 
-
 	/**
 	 * Get the version of the database connector.
 	 *
