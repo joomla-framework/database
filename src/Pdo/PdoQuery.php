@@ -9,7 +9,6 @@
 namespace Joomla\Database\Pdo;
 
 use Joomla\Database\DatabaseQuery;
-use Joomla\Database\ParameterType;
 
 /**
  * PDO Query Building Class.
@@ -18,14 +17,6 @@ use Joomla\Database\ParameterType;
  */
 abstract class PdoQuery extends DatabaseQuery
 {
-	/**
-	 * Holds key / value pair of bound objects.
-	 *
-	 * @var    mixed
-	 * @since  __DEPLOY_VERSION__
-	 */
-	protected $bounded = [];
-
 	/**
 	 * The list of zero or null representation of a datetime.
 	 *

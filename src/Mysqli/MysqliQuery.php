@@ -9,7 +9,6 @@
 namespace Joomla\Database\Mysqli;
 
 use Joomla\Database\DatabaseQuery;
-use Joomla\Database\ParameterType;
 use Joomla\Database\Query\MysqlQueryBuilder;
 
 /**
@@ -20,14 +19,6 @@ use Joomla\Database\Query\MysqlQueryBuilder;
 class MysqliQuery extends DatabaseQuery
 {
 	use MysqlQueryBuilder;
-
-	/**
-	 * Holds key / value pair of bound objects.
-	 *
-	 * @var    mixed
-	 * @since  1.5.0
-	 */
-	protected $bounded = [];
 
 	/**
 	 * The list of zero or null representation of a datetime.
