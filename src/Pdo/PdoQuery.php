@@ -19,18 +19,12 @@ use Joomla\Database\ParameterType;
 abstract class PdoQuery extends DatabaseQuery
 {
 	/**
-	 * Mapping array for parameter types.
+	 * Holds key / value pair of bound objects.
 	 *
-	 * @var    array
+	 * @var    mixed
 	 * @since  __DEPLOY_VERSION__
 	 */
-	protected $parameterMapping = [
-		ParameterType::BOOLEAN      => \PDO::PARAM_BOOL,
-		ParameterType::INTEGER      => \PDO::PARAM_INT,
-		ParameterType::LARGE_OBJECT => \PDO::PARAM_LOB,
-		ParameterType::NULL         => \PDO::PARAM_NULL,
-		ParameterType::STRING       => \PDO::PARAM_STR,
-	];
+	protected $bounded = [];
 
 	/**
 	 * The list of zero or null representation of a datetime.

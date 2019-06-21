@@ -24,7 +24,7 @@ interface QueryMonitorInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function startQuery(string $sql);
+	public function startQuery(string $sql): void;
 
 	/**
 	 * Act on a query being stopped.
@@ -33,5 +33,5 @@ interface QueryMonitorInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function stopQuery();
+	public function stopQuery(): void;
 }

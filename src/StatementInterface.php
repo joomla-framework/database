@@ -24,7 +24,7 @@ interface StatementInterface
 	 *                                          name of the form `:name`. For a prepared statement using question mark placeholders, this will be
 	 *                                          the 1-indexed position of the parameter.
 	 * @param   mixed           $variable       Name of the PHP variable to bind to the SQL statement parameter.
-	 * @param   integer         $dataType       Constant corresponding to a SQL datatype, this should be the processed type from the QueryInterface.
+	 * @param   integer|string  $dataType       Constant corresponding to a SQL datatype, this should be the processed type from the QueryInterface.
 	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters.
 	 * @param   array           $driverOptions  Optional driver options to be used.
 	 *

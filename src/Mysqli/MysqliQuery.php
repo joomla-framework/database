@@ -11,7 +11,6 @@ namespace Joomla\Database\Mysqli;
 use Joomla\Database\DatabaseQuery;
 use Joomla\Database\ParameterType;
 use Joomla\Database\Query\MysqlQueryBuilder;
-use Joomla\Database\Query\PreparableInterface;
 
 /**
  * MySQLi Query Building Class.
@@ -23,18 +22,12 @@ class MysqliQuery extends DatabaseQuery
 	use MysqlQueryBuilder;
 
 	/**
-	 * Mapping array for parameter types.
+	 * Holds key / value pair of bound objects.
 	 *
-	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @var    mixed
+	 * @since  1.5.0
 	 */
-	protected $parameterMapping = [
-		ParameterType::BOOLEAN      => 'i',
-		ParameterType::INTEGER      => 'i',
-		ParameterType::LARGE_OBJECT => 's',
-		ParameterType::NULL         => 's',
-		ParameterType::STRING       => 's',
-	];
+	protected $bounded = [];
 
 	/**
 	 * The list of zero or null representation of a datetime.

@@ -691,13 +691,13 @@ class SqlsrvDriverTest extends SqlsrvCase
 	}
 
 	/**
-	 * Test the execute method with a prepared statement
+	 * Test the execute method with an unnamed prepared statement
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0
 	 */
-	public function testExecutePreparedStatement()
+	public function testExecuteUnnamedPreparedStatement()
 	{
 		$title       = 'testTitle';
 		$startDate   = '2013-04-01 00:00:00.000';
@@ -711,6 +711,33 @@ class SqlsrvDriverTest extends SqlsrvCase
 		$query->bind(1, $title);
 		$query->bind(2, $startDate);
 		$query->bind(3, $description);
+
+		self::$driver->setQuery($query);
+
+		$this->assertNotEquals(self::$driver->execute(), false, __LINE__);
+	}
+
+	/**
+	 * Test the execute method with a named prepared statement
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function testExecuteNamedPreparedStatement()
+	{
+		$title       = 'testTitleNamed';
+		$startDate   = '2013-04-01 00:00:00.000';
+		$description = 'NamedTesting';
+
+		/** @var \Joomla\Database\Sqlsrv\SqlsrvQuery $query */
+		$query = self::$driver->getQuery(true);
+		$query->insert('dbtest')
+					->columns('title,start_date,description')
+					->values(':title, :start_date, :description123');
+		$query->bind(":description123", $description);
+		$query->bind(":title", $title);
+		$query->bind(":start_date", $startDate);
 
 		self::$driver->setQuery($query);
 

@@ -23,7 +23,7 @@ final class FetchOrientation
 	 * @var    integer
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const NEXT = 0;
+	public const NEXT = 0;
 
 	/**
 	 * Fetch the previous row in the result set. Valid only for scrollable cursors.
@@ -31,7 +31,7 @@ final class FetchOrientation
 	 * @var    integer
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const PRIOR = 1;
+	public const PRIOR = 1;
 
 	/**
 	 * Fetch the first row in the result set. Valid only for scrollable cursors.
@@ -39,7 +39,7 @@ final class FetchOrientation
 	 * @var    integer
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const FIRST = 2;
+	public const FIRST = 2;
 
 	/**
 	 * Fetch the last row in the result set. Valid only for scrollable cursors.
@@ -47,7 +47,7 @@ final class FetchOrientation
 	 * @var    integer
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const LAST = 3;
+	public const LAST = 3;
 
 	/**
 	 * Fetch the requested row by row number from the result set. Valid only for scrollable cursors.
@@ -55,7 +55,7 @@ final class FetchOrientation
 	 * @var    integer
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const ABS = 4;
+	public const ABS = 4;
 
 	/**
 	 * Fetch the requested row by relative position from the current position of the cursor in the result set. Valid only for scrollable cursors.
@@ -63,7 +63,7 @@ final class FetchOrientation
 	 * @var    integer
 	 * @since  __DEPLOY_VERSION__
 	 */
-	const REL = 5;
+	public const REL = 5;
 
 	/**
 	 * Private constructor to prevent instantiation of this class

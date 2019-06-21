@@ -175,7 +175,7 @@ class ImportCommand extends AbstractCommand
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	protected function configure()
+	protected function configure(): void
 	{
 		$this->setDescription('Import the database');
 		$this->addOption('folder', null, InputOption::VALUE_OPTIONAL, 'Import from folder path', '.');

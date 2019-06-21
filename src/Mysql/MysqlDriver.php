@@ -56,12 +56,28 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	protected $utf8mb4 = false;
 
 	/**
+	 * True if the database engine is MariaDB.
+	 *
+	 * @var    boolean
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $mariadb = false;
+
+	/**
 	 * The minimum supported database version.
 	 *
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected static $dbMinimum = '5.5.3';
+	protected static $dbMinimum = '5.6';
+
+	/**
+	 * The minimum supported MariaDB database version.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected static $dbMinMariadb = '10.0';
 
 	/**
 	 * Constructor.
@@ -139,11 +155,19 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 			parent::connect();
 		}
 
+		$serverVersion = $this->getVersion();
+
+		$this->mariadb = stripos($serverVersion, 'mariadb') !== false;
+
 		if ($this->utf8mb4)
 		{
 			// At this point we know the client supports utf8mb4.  Now we must check if the server supports utf8mb4 as well.
-			$serverVersion = $this->getVersion();
 			$this->utf8mb4 = version_compare($serverVersion, '5.5.3', '>=');
+
+			if ($this->mariadb && version_compare($server_version, '10.0.0', '<'))
+			{
+				$this->utf8mb4 = false;
+			}
 
 			if (!$this->utf8mb4)
 			{
@@ -204,27 +228,6 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	public static function isSupported()
 	{
 		return class_exists('\\PDO') && \in_array('mysql', \PDO::getAvailableDrivers(), true);
-	}
-
-	/**
-	 * Drops a table from the database.
-	 *
-	 * @param   string   $tableName  The name of the database table to drop.
-	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	public function dropTable($tableName, $ifExists = true)
-	{
-		$this->connect();
-
-		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($tableName))
-			->execute();
-
-		return $this;
 	}
 
 	/**
@@ -419,6 +422,40 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 
 		// Set the query to get the tables statement.
 		return $this->setQuery('SHOW TABLES')->loadColumn();
+	}
+
+	/**
+	 * Get the version of the database connector.
+	 *
+	 * @return  string  The database connector version.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getVersion()
+	{
+		$this->connect();
+
+		$version = $this->getOption(\PDO::ATTR_SERVER_VERSION);
+
+		if (stripos($version, 'mariadb') !== false)
+		{
+			// MariaDB: Strip off any leading '5.5.5-', if present
+			return preg_replace('/^5\.5\.5-/', '', $version);
+		}
+
+		return $version;
+	}
+
+	/**
+	 * Get the minimum supported database version.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getMinimum()
+	{
+		return $this->mariadb ? static::$dbMinMariadb : static::$dbMinimum;
 	}
 
 	/**

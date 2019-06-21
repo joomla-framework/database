@@ -70,12 +70,28 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	protected $utf8mb4 = false;
 
 	/**
-	 * The minimum supported database version.
+	 * True if the database engine is MariaDB.
+	 *
+	 * @var    boolean
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $mariadb = false;
+
+	/**
+	 * The minimum supported MySQL database version.
 	 *
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected static $dbMinimum = '5.5.3';
+	protected static $dbMinimum = '5.6';
+
+	/**
+	 * The minimum supported MariaDB database version.
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected static $dbMinMariadb = '10.0';
 
 	/**
 	 * Constructor.
@@ -131,7 +147,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		// Make sure the MySQLi extension for PHP is installed and enabled.
 		if (!static::isSupported())
 		{
-			throw new \RuntimeException('The MySQLi extension is not available');
+			throw new UnsupportedAdapterException('The MySQLi extension is not available');
 		}
 
 		/*
@@ -193,12 +209,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			$this->options['socket'] = $port;
 		}
 
-		// Make sure the MySQLi extension for PHP is installed and enabled.
-		if (!static::isSupported())
-		{
-			throw new UnsupportedAdapterException('The MySQLi extension is not available');
-		}
-
 		$this->connection = mysqli_init();
 
 		// Attempt to connect to the server, use error suppression to silence warnings and allow us to throw an Exception separately.
@@ -209,7 +219,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		if (!$connected)
 		{
 			throw new ConnectionFailureException(
-				'Could not connect to MySQL: ' . $this->connection->connect_error,
+				'Could not connect to database: ' . $this->connection->connect_error,
 				$this->connection->connect_errno
 			);
 		}
@@ -229,9 +239,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			$this->select($this->options['database']);
 		}
 
+		$this->mariadb = stripos($this->connection->server_info, 'mariadb') !== false;
+
 		$this->utf8mb4 = $this->serverClaimsUtf8mb4Support();
 
-		// Set charactersets (needed for MySQL 4.1.2+).
+		// Set charactersets (needed for MySQL 4.1.2+ and MariaDB).
 		$this->utf = $this->setUtf();
 
 		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_CONNECT, $this));
@@ -348,27 +360,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		}
 
 		return false;
-	}
-
-	/**
-	 * Drops a table from the database.
-	 *
-	 * @param   string   $tableName  The name of the database table to drop.
-	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	public function dropTable($tableName, $ifExists = true)
-	{
-		$this->connect();
-
-		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($tableName))
-			->execute();
-
-		return $this;
 	}
 
 	/**
@@ -556,7 +547,25 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	{
 		$this->connect();
 
+		if ($this->mariadb)
+		{
+			// MariaDB: Strip off any leading '5.5.5-', if present
+			return preg_replace('/^5\.5\.5-/', '', $this->connection->server_info);
+		}
+
 		return $this->connection->server_info;
+	}
+
+	/**
+	 * Get the minimum supported database version.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getMinimum()
+	{
+		return $this->mariadb ? static::$dbMinMariadb : static::$dbMinimum;
 	}
 
 	/**
@@ -833,19 +842,9 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 
 		if (!$asSavepoint || !$this->transactionDepth)
 		{
-			if (version_compare($this->getVersion(), '5.6', 'ge'))
+			if ($this->connection->begin_transaction())
 			{
-				if ($this->connection->begin_transaction())
-				{
-					$this->transactionDepth = 1;
-				}
-			}
-			else
-			{
-				if ($this->executeUnpreparedQuery('START TRANSACTION'))
-				{
-					$this->transactionDepth = 1;
-				}
+				$this->transactionDepth = 1;
 			}
 
 			return;
@@ -973,6 +972,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		$server_version = $this->getVersion();
 
 		if (version_compare($server_version, '5.5.3', '<'))
+		{
+			return false;
+		}
+
+		if ($this->mariadb && version_compare($server_version, '10.0.0', '<'))
 		{
 			return false;
 		}

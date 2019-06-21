@@ -99,23 +99,20 @@ class SqliteDriver extends PdoDriver
 	}
 
 	/**
-	 * Drops a table from the database.
+	 * Create a new database using information from $options object.
 	 *
-	 * @param   string   $tableName  The name of the database table to drop.
-	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
+	 * @param   \stdClass  $options  Object used to pass user and database name to database driver. This object must have "db_name" and "db_user" set.
+	 * @param   boolean    $utf      True if the database supports the UTF-8 character set.
 	 *
-	 * @return  $this
+	 * @return  boolean|resource
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
 	 */
-	public function dropTable($tableName, $ifExists = true)
+	public function createDatabase($options, $utf = true)
 	{
-		$this->connect();
-
-		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($tableName))
-			->execute();
-
-		return $this;
+		// SQLite doesn't have a query for this
+		return true;
 	}
 
 	/**

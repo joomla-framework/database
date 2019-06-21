@@ -26,7 +26,7 @@ final class FetchMode
 	 * @since  __DEPLOY_VERSION__
 	 * @see    \PDO::FETCH_ASSOC
 	 */
-	const ASSOCIATIVE = 2;
+	public const ASSOCIATIVE = 2;
 
 	/**
 	 * Specifies that the fetch method shall return each row as an array indexed by column number as returned in the corresponding result set,
@@ -36,7 +36,7 @@ final class FetchMode
 	 * @since  __DEPLOY_VERSION__
 	 * @see    \PDO::FETCH_NUM
 	 */
-	const NUMERIC = 3;
+	public const NUMERIC = 3;
 
 	/**
 	 * Specifies that the fetch method shall return each row as an array indexed by both column name and number as returned in the corresponding
@@ -46,7 +46,7 @@ final class FetchMode
 	 * @since  __DEPLOY_VERSION__
 	 * @see    \PDO::FETCH_BOTH
 	 */
-	const MIXED = 4;
+	public const MIXED = 4;
 
 	/**
 	 * Specifies that the fetch method shall return each row as an object with property names that correspond to the column names returned in the
@@ -56,7 +56,7 @@ final class FetchMode
 	 * @since  __DEPLOY_VERSION__
 	 * @see    \PDO::FETCH_OBJ
 	 */
-	const STANDARD_OBJECT = 5;
+	public const STANDARD_OBJECT = 5;
 
 	/**
 	 * Specifies that the fetch method shall return only a single requested column from the next row in the result set.
@@ -65,7 +65,7 @@ final class FetchMode
 	 * @since  __DEPLOY_VERSION__
 	 * @see    \PDO::FETCH_COLUMN
 	 */
-	const COLUMN = 7;
+	public const COLUMN = 7;
 
 	/**
 	 * Specifies that the fetch method shall return a new instance of the requested class, mapping the columns to named properties in the class.
@@ -74,7 +74,7 @@ final class FetchMode
 	 * @since  __DEPLOY_VERSION__
 	 * @see    \PDO::FETCH_CLASS
 	 */
-	const CUSTOM_OBJECT = 8;
+	public const CUSTOM_OBJECT = 8;
 
 	/**
 	 * Private constructor to prevent instantiation of this class

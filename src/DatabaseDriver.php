@@ -613,6 +613,27 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
+	 * Drops a table from the database.
+	 *
+	 * @param   string   $table     The name of the database table to drop.
+	 * @param   boolean  $ifExists  Optionally specify that the table must exist before it is dropped.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function dropTable($table, $ifExists = true)
+	{
+		$this->connect();
+
+		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($table))
+			->execute();
+
+		return $this;
+	}
+
+	/**
 	 * Execute the SQL statement.
 	 *
 	 * @return  boolean
@@ -1146,7 +1167,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 */
 	public function isMinimumVersion()
 	{
-		return version_compare($this->getVersion(), static::$dbMinimum) >= 0;
+		return version_compare($this->getVersion(), $this->getMinimum()) >= 0;
 	}
 
 	/**
