@@ -471,6 +471,20 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	}
 
 	/**
+	 * Determine if the database engine is MariaDB.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function isMariaDb(): bool
+	{
+		$this->connect();
+
+		return $this->mariadb;
+	}
+
+	/**
 	 * Locks a table in the database.
 	 *
 	 * @param   string  $table  The name of the table to unlock.
