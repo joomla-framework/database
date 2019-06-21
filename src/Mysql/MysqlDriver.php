@@ -101,7 +101,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 
 		// Get some basic values from the options.
 		$options['driver']   = 'mysql';
-		$options['charset']  = $options['charset'] ?? 'utf8';
+		$options['charset']  = $options['charset'] ?? 'utf8mb4';
 		$options['sqlModes'] = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
 
 		$this->charset = $options['charset'];
