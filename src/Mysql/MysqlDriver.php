@@ -479,6 +479,8 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 */
 	public function isMariaDb()
 	{
+		$this->connect();
+
 		return $this->mariadb;
 	}
 
