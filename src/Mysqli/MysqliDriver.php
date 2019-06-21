@@ -583,11 +583,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	/**
 	 * Determine if the database engine is MariaDB.
 	 *
-	 * @return  boolean  True if the database engine is MariaDB.
+	 * @return  boolean
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function isMariaDb()
+	public function isMariaDb(): bool
 	{
 		$this->connect();
 
