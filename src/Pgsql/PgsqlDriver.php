@@ -51,7 +51,7 @@ class PgsqlDriver extends PdoDriver
 	 * @var    string
 	 * @since  1.5.0
 	 */
-	protected static $dbMinimum = '9.2.0';
+	protected static $dbMinimum = '9.4.0';
 
 	/**
 	 * Operator used for concatenation
