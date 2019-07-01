@@ -219,7 +219,7 @@ class MysqliStatement implements StatementInterface
 					$endOfPlaceholder       = $match[1] + strlen($match[0]);
 					$beginOfNextPlaceholder = $matches[0][$i + 1][1] ?? strlen($substring);
 					$beginOfNextPlaceholder -= $endOfPlaceholder;
-					$literal                .= '?' . substr($substring, $endPlaceholder, $beginOfNextPlaceholder);
+					$literal                .= '?' . substr($substring, $endOfPlaceholder, $beginOfNextPlaceholder);
 				}
 			}
 			else
