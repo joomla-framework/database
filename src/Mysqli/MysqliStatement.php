@@ -204,18 +204,23 @@ class MysqliStatement implements StatementInterface
 			}
 
 			// Search for named prepared parameters and replace it with ? and save its position
-			$replace   = [];
 			$substring = substr($sql, $startPos, $j - $startPos);
 
-			if (preg_match_all($pattern, $substring, $matches, PREG_PATTERN_ORDER))
+			if (preg_match_all($pattern, $substring, $matches, PREG_PATTERN_ORDER + PREG_OFFSET_CAPTURE))
 			{
-				foreach ($matches[0] as $match)
+				foreach ($matches[0] as $i => $match)
 				{
-					$mapping[$match] = \count($mapping);
-					$replace[]       = $match;
-				}
+					if ($i === 0)
+					{
+						$literal .= substr($substring, 0, $match[1]);
+					}
 
-				$literal .= str_replace($replace, '?', $substring);
+					$mapping[$match[0]]     = \count($mapping);
+					$endOfPlaceholder       = $match[1] + strlen($match[0]);
+					$beginOfNextPlaceholder = $matches[0][$i + 1][1] ?? strlen($substring);
+					$beginOfNextPlaceholder -= $endOfPlaceholder;
+					$literal                .= '?' . substr($substring, $endPlaceholder, $beginOfNextPlaceholder);
+				}
 			}
 			else
 			{
@@ -321,7 +326,7 @@ class MysqliStatement implements StatementInterface
 	private function bindValues(array $values)
 	{
 		$params = [];
-		$types  = str_repeat('s', \count($values));
+		$types  = str_repeat('s', count($values));
 
 		if (!empty($this->parameterKeyMapping))
 		{
@@ -467,7 +472,7 @@ class MysqliStatement implements StatementInterface
 		{
 			$this->statement->store_result();
 
-			$this->rowBindedValues = array_fill(0, \count($this->columnNames), null);
+			$this->rowBindedValues = array_fill(0, count($this->columnNames), null);
 			$refs                  = [];
 
 			foreach ($this->rowBindedValues as $key => &$value)
