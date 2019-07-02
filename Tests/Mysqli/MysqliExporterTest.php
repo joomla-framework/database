@@ -48,21 +48,9 @@ class MysqliExporterTest extends TestCase
 	 */
 	public function testCheckWithNoDbo()
 	{
+		$this->expectException(\RuntimeException::class);
 		$instance = new MysqliExporter;
-
-		try
-		{
-			$instance->check();
-		}
-		catch (\Exception $e)
-		{
-			// Exception expected.
-			return;
-		}
-
-		$this->fail(
-			'Check method should throw exception if DBO not set'
-		);
+		$instance->check();
 	}
 
 	/**
@@ -74,22 +62,10 @@ class MysqliExporterTest extends TestCase
 	 */
 	public function testCheckWithNoTables()
 	{
+		$this->expectException(\RuntimeException::class);
 		$instance = new MysqliExporter;
 		$instance->setDbo($this->dbo);
-
-		try
-		{
-			$instance->check();
-		}
-		catch (\Exception $e)
-		{
-			// Exception expected.
-			return;
-		}
-
-		$this->fail(
-			'Check method should throw exception if DBO not set'
-		);
+		$instance->check();
 	}
 
 	/**

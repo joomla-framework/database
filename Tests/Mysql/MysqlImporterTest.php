@@ -380,21 +380,9 @@ class ImporterMySqlTest extends TestCase
 	 */
 	public function testCheckWithNoDbo()
 	{
+		$this->expectException(\RuntimeException::class);
 		$instance = new MysqlImporterInspector;
-
-		try
-		{
-			$instance->check();
-		}
-		catch (\Exception $e)
-		{
-			// Exception expected.
-			return;
-		}
-
-		$this->fail(
-			'Check method should throw exception if DBO not set'
-		);
+		$instance->check();
 	}
 
 	/**
@@ -406,22 +394,10 @@ class ImporterMySqlTest extends TestCase
 	 */
 	public function testCheckWithNoFrom()
 	{
+		$this->expectException(\RuntimeException::class);
 		$instance = new MysqlImporterInspector;
 		$instance->setDbo($this->dbo);
-
-		try
-		{
-			$instance->check();
-		}
-		catch (\Exception $e)
-		{
-			// Exception expected.
-			return;
-		}
-
-		$this->fail(
-			'Check method should throw exception if DBO not set'
-		);
+		$instance->check();
 	}
 
 	/**
@@ -437,22 +413,11 @@ class ImporterMySqlTest extends TestCase
 		$instance->setDbo($this->dbo);
 		$instance->from('foobar');
 
-		try
-		{
-			$result = $instance->check();
-
-			$this->assertThat(
-				$result,
-				$this->identicalTo($instance),
-				'check must return an object to support chaining.'
-			);
-		}
-		catch (\Exception $e)
-		{
-			$this->fail(
-				'Check method should not throw exception with good setup: ' . $e->getMessage()
-			);
-		}
+		$this->assertThat(
+			$instance->check(),
+			$this->identicalTo($instance),
+			'check must return an object to support chaining.'
+		);
 	}
 
 	/**
@@ -466,28 +431,19 @@ class ImporterMySqlTest extends TestCase
 	{
 		$instance = new MysqlImporterInspector;
 
-		try
-		{
-			$result = $instance->from('foobar');
+		$result = $instance->from('foobar');
 
-			$this->assertThat(
-				$result,
-				$this->identicalTo($instance),
-				'from must return an object to support chaining.'
-			);
+		$this->assertThat(
+			$result,
+			$this->identicalTo($instance),
+			'from must return an object to support chaining.'
+		);
 
-			$this->assertThat(
-				$instance->from,
-				$this->equalTo('foobar'),
-				'The from method did not store the value as expected.'
-			);
-		}
-		catch (\Exception $e)
-		{
-			$this->fail(
-				'From method should not throw exception with good input: ' . $e->getMessage()
-			);
-		}
+		$this->assertThat(
+			$instance->from,
+			$this->equalTo('foobar'),
+			'The from method did not store the value as expected.'
+		);
 	}
 
 	/**

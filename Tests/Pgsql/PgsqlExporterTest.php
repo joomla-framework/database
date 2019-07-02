@@ -427,21 +427,9 @@ class PgsqlExporterTest extends TestCase
 	 */
 	public function testCheckWithNoDbo()
 	{
+		$this->expectException(\Exception::class);
 		$instance = new PgsqlExporterInspector;
-
-		try
-		{
-			$instance->check();
-		}
-		catch (\Exception $e)
-		{
-			// Exception expected.
-			return;
-		}
-
-		$this->fail(
-			'Check method should throw exception if DBO not set'
-		);
+		$instance->check();
 	}
 
 	/**
@@ -453,22 +441,10 @@ class PgsqlExporterTest extends TestCase
 	 */
 	public function testCheckWithNoTables()
 	{
+		$this->expectException(\Exception::class);
 		$instance	= new PgsqlExporterInspector;
 		$instance->setDbo($this->dbo);
-
-		try
-		{
-			$instance->check();
-		}
-		catch (\Exception $e)
-		{
-			// Exception expected.
-			return;
-		}
-
-		$this->fail(
-			'Check method should throw exception if DBO not set'
-		);
+		$instance->check();
 	}
 
 	/**
@@ -511,21 +487,9 @@ class PgsqlExporterTest extends TestCase
 	 */
 	public function testFromWithBadInput()
 	{
+		$this->expectException(\InvalidArgumentException::class);
 		$instance = new PgsqlExporterInspector;
-
-		try
-		{
-			$instance->from(new \stdClass);
-		}
-		catch (\Exception $e)
-		{
-			// Exception expected.
-			return;
-		}
-
-		$this->fail(
-			'From method should thrown an exception if argument is not a string or array.'
-		);
+		$instance->from(new \stdClass);
 	}
 
 	/**
