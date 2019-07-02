@@ -326,7 +326,7 @@ class MysqliStatement implements StatementInterface
 	private function bindValues(array $values)
 	{
 		$params = [];
-		$types  = str_repeat('s', count($values));
+		$types  = str_repeat('s', \count($values));
 
 		if (!empty($this->parameterKeyMapping))
 		{
@@ -472,7 +472,7 @@ class MysqliStatement implements StatementInterface
 		{
 			$this->statement->store_result();
 
-			$this->rowBindedValues = array_fill(0, count($this->columnNames), null);
+			$this->rowBindedValues = array_fill(0, \count($this->columnNames), null);
 			$refs                  = [];
 
 			foreach ($this->rowBindedValues as $key => &$value)
