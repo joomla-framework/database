@@ -581,6 +581,20 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	}
 
 	/**
+	 * Determine if the database engine is MariaDB.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function isMariaDb(): bool
+	{
+		$this->connect();
+
+		return $this->mariadb;
+	}
+
+	/**
 	 * Method to get the auto-incremented value from the last INSERT statement.
 	 *
 	 * @return  mixed  The value of the auto-increment field from the last inserted row.
