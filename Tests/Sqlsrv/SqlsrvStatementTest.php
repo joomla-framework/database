@@ -6,15 +6,15 @@
 
 namespace Joomla\Database\Tests\Sqlqrv;
 
-use Joomla\Database\Mysqli\MysqliStatement;
-use Joomla\Database\Tests\Cases\MysqliCase;
+use Joomla\Database\Sqlsrv\SqlsrvStatement;
+use Joomla\Database\Tests\Cases\SqlsrvCase;
 
 /**
- * Test class for \Joomla\Database\Mysqli\SqlsrvStatement.
+ * Test class for \Joomla\Database\Sqlsrv\SqlsrvStatement.
  *
  * @since  1.0
  */
-class SqlsrvStatementTest extends MysqliCase
+class SqlsrvStatementTest extends SqlsrvCase
 {
 	/**
 	 * Regression test to ensure that named values with matching named params are correctly prepared.
@@ -33,7 +33,7 @@ class SqlsrvStatementTest extends MysqliCase
         // Dummy assertion to ensure we haven't thrown an exception preparing the statement
         $this->assertInstanceOf(
             '\\Joomla\\Database\\Sqlsrv\\SqlsrvStatement',
-            new MysqliStatement(static::$driver->getConnection(), $query)
+            new SqlsrvStatement(static::$driver->getConnection(), $query)
         );
 	}
 
@@ -53,7 +53,7 @@ class SqlsrvStatementTest extends MysqliCase
         // Dummy assertion to ensure we haven't thrown an exception preparing the statement
         $this->assertInstanceOf(
             '\\Joomla\\Database\\Sqlsrv\\SqlsrvStatement',
-            new MysqliStatement(static::$driver->getConnection(), $query)
+            new SqlsrvStatement(static::$driver->getConnection(), $query)
         );
     }
 
@@ -73,7 +73,7 @@ class SqlsrvStatementTest extends MysqliCase
         // Dummy assertion to ensure we haven't thrown an exception preparing the statement
         $this->assertInstanceOf(
             '\\Joomla\\Database\\Sqlsrv\\SqlsrvStatement',
-            new MysqliStatement(static::$driver->getConnection(), $query)
+            new SqlsrvStatement(static::$driver->getConnection(), $query)
         );
     }
 }
