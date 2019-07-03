@@ -483,21 +483,9 @@ class PgsqlImporterTest extends TestCase
 	 */
 	public function testCheckWithNoDbo()
 	{
+		$this->expectException(\Exception::class);
 		$instance = new PgsqlImporterInspector;
-
-		try
-		{
-			$instance->check();
-		}
-		catch (\Exception $e)
-		{
-			// Exception expected.
-			return;
-		}
-
-		$this->fail(
-			'Check method should throw exception if DBO not set'
-		);
+		$instance->check();
 	}
 
 	/**
@@ -509,22 +497,10 @@ class PgsqlImporterTest extends TestCase
 	 */
 	public function testCheckWithNoFrom()
 	{
+		$this->expectException(\Exception::class);
 		$instance	= new PgsqlImporterInspector;
 		$instance->setDbo($this->dbo);
-
-		try
-		{
-			$instance->check();
-		}
-		catch (\Exception $e)
-		{
-			// Exception expected.
-			return;
-		}
-
-		$this->fail(
-			'Check method should throw exception if DBO not set'
-		);
+		$instance->check();
 	}
 
 	/**

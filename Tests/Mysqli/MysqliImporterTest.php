@@ -48,21 +48,9 @@ class MysqliImporterTest extends TestCase
 	 */
 	public function testCheckWithNoDbo()
 	{
+		$this->expectException(\RuntimeException::class);
 		$instance = new MysqliImporter;
-
-		try
-		{
-			$instance->check();
-		}
-		catch (\Exception $e)
-		{
-			// Exception expected.
-			return;
-		}
-
-		$this->fail(
-			'Check method should throw exception if DBO not set'
-		);
+		$instance->check();
 	}
 
 	/**
@@ -74,22 +62,10 @@ class MysqliImporterTest extends TestCase
 	 */
 	public function testCheckWithNoTables()
 	{
+		$this->expectException(\RuntimeException::class);
 		$instance = new MysqliImporter;
 		$instance->setDbo($this->dbo);
-
-		try
-		{
-			$instance->check();
-		}
-		catch (\Exception $e)
-		{
-			// Exception expected.
-			return;
-		}
-
-		$this->fail(
-			'Check method should throw exception if DBO not set'
-		);
+		$instance->check();
 	}
 
 	/**
@@ -105,22 +81,13 @@ class MysqliImporterTest extends TestCase
 		$instance->setDbo($this->dbo);
 		$instance->from('foobar');
 
-		try
-		{
-			$result = $instance->check();
+		$result = $instance->check();
 
-			$this->assertThat(
-				$result,
-				$this->identicalTo($instance),
-				'check must return an object to support chaining.'
-			);
-		}
-		catch (\Exception $e)
-		{
-			$this->fail(
-				'Check method should not throw exception with good setup: ' . $e->getMessage()
-			);
-		}
+		$this->assertThat(
+			$result,
+			$this->identicalTo($instance),
+			'check must return an object to support chaining.'
+		);
 	}
 
 	/**
@@ -133,23 +100,12 @@ class MysqliImporterTest extends TestCase
 	public function testSetDboWithGoodInput()
 	{
 		$instance = new MysqliImporter;
+		$result   = $instance->setDbo($this->dbo);
 
-		try
-		{
-			$result = $instance->setDbo($this->dbo);
-
-			$this->assertThat(
-				$result,
-				$this->identicalTo($instance),
-				'setDbo must return an object to support chaining.'
-			);
-		}
-		catch (\PHPUnit_Framework_Error $e)
-		{
-			// Unknown error has occurred.
-			$this->fail(
-				$e->getMessage()
-			);
-		}
+		$this->assertThat(
+			$result,
+			$this->identicalTo($instance),
+			'setDbo must return an object to support chaining.'
+		);
 	}
 }
