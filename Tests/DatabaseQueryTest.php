@@ -1818,10 +1818,13 @@ class DatabaseQueryTest extends TestCase
 	 */
 	public function testWhereIn()
 	{
-		$this->instance->whereIn('id', [1, 2, 3]);
+		$this->instance->whereIn('id', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
 		$this->assertThat(
 			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo('WHERE id IN (:preparedArray1,:preparedArray2,:preparedArray3)'),
+			$this->equalTo(
+				'WHERE id IN (:preparedArray1,:preparedArray2,:preparedArray3,:preparedArray4,:preparedArray5,:preparedArray6,'
+				. ':preparedArray7,:preparedArray8,:preparedArray9,:preparedArray10,:preparedArray11,:preparedArray12)'
+			),
 			'Tests rendered value.'
 		);
 	}
