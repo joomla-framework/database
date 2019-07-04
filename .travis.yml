@@ -252,35 +252,9 @@ jobs:
         - mysql -u root -e 'create database joomla_ut;'
         - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
 
-    # PDO PostgreSQL 9.2
-    - stage: Test
-      php: 7.2
-      addons:
-        postgresql: "9.2"
-      services:
-        - postgresql
-      env: DB="pgsql" PGSQL_VERSION=9.2 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
-      before_script:
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-
-    # PDO PostgreSQL 9.3
-    - stage: Test
-      if: NOT type = pull_request
-      php: 7.2
-      addons:
-        postgresql: "9.3"
-      services:
-        - postgresql
-      env: DB="pgsql" PGSQL_VERSION=9.3 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
-      before_script:
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-
     # PDO PostgreSQL 9.4
     - stage: Test
-      if: NOT type = pull_request
-      php: 7.3
+      php: 7.2
       addons:
         postgresql: "9.4"
       services:
@@ -293,7 +267,7 @@ jobs:
     # PDO PostgreSQL 9.5
     - stage: Test
       if: NOT type = pull_request
-      php: 7.3
+      php: 7.2
       addons:
         postgresql: "9.5"
       services:
