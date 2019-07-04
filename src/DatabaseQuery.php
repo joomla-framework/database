@@ -17,7 +17,6 @@ use stdClass;
  */
 abstract class DatabaseQuery implements QueryInterface
 {
-
 	/**
 	 * Holds key / value pair of bound objects.
 	 *
@@ -1867,14 +1866,18 @@ abstract class DatabaseQuery implements QueryInterface
 			if (\is_array($value))
 			{
 				$localValue = &$value[$i];
-			} else {
+			}
+			else
+			{
 				$localValue = &$value;
 			}
 
 			if (\is_array($dataType))
 			{
 				$localDataType = $dataType[$i];
-			} else {
+			}
+			else
+			{
 				$localDataType = $dataType;
 			}
 
