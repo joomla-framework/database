@@ -1106,21 +1106,6 @@ abstract class DatabaseQuery implements QueryInterface
 	}
 
 	/**
-	 * Aggregate function to get input values concatenated into a string, separated by delimiter
-	 *
-	 * Usage:
-	 * $query->group_concat('id', ',');
-	 *
-	 * @param   string  $column      The name of the column to be concatenated.
-	 * @param   string  $separator   The delimiter of each concatenated value
-	 *
-	 * @return  string
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	abstract public function group_concat($column, $separator = ',');
-
-	/**
 	 * A conditions to the HAVING clause of the query.
 	 *
 	 * Usage:
