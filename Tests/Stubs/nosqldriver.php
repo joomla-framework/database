@@ -282,6 +282,11 @@ class NosqlDriver extends DatabaseDriver
 				return parent::clear($clause);
 			}
 
+			public function groupConcat($column, $separator = ',')
+			{
+				return '';
+			}
+
 			public function &getBounded($key = null)
 			{
 				if (empty($key))
