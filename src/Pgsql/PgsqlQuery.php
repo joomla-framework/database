@@ -268,4 +268,22 @@ class PgsqlQuery extends PdoQuery
 
 		return $this;
 	}
+
+	/**
+	 * Aggregate function to get input values concatenated into a string, separated by delimiter
+	 *
+	 * Usage:
+	 * $query->groupConcat('id', ',');
+	 *
+	 * @param   string  $column      The name of the column to be concatenated.
+	 * @param   string  $separator   The delimiter of each concatenated value
+	 *
+	 * @return  string  Input values concatenated into a string, separated by delimiter
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function groupConcat($column, $separator = ',')
+	{
+		return 'string_agg(' . $column . '::text, ' . $this->quote($separator) . ')';
+	}
 }

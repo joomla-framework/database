@@ -256,4 +256,22 @@ class SqliteQuery extends PdoQuery
 		// Set up the name with parentheses, the DISTINCT flag is redundant
 		return $this->merge($distinct ? 'UNION SELECT * FROM ()' : 'UNION ALL SELECT * FROM ()', $query);
 	}
+
+	/**
+	 * Aggregate function to get input values concatenated into a string, separated by delimiter
+	 *
+	 * Usage:
+	 * $query->groupConcat('id', ',');
+	 *
+	 * @param   string  $column      The name of the column to be concatenated.
+	 * @param   string  $separator   The delimiter of each concatenated value
+	 *
+	 * @return  string  Input values concatenated into a string, separated by delimiter
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function groupConcat($column, $separator = ',')
+	{
+		return 'group_concat(' . $column . ', ' . $this->quote($separator) . ')';
+	}
 }
