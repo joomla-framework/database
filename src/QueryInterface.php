@@ -569,15 +569,16 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * Usage
 	 * $query->whereIn('id', [1, 2, 3]);
 	 *
-	 * @param   string  $keyName    Key name for the where clause
-	 * @param   array   $keyValues  Array of values to be matched
-	 * @param   string  $dataType   Type of the values to bind
+	 * @param   string        $keyName    Key name for the where clause
+	 * @param   array         $keyValues  Array of values to be matched
+	 * @param   array|string  $dataType   Constant corresponding to a SQL datatype. It can be an array, in this case it
+	 *                                    has to be same length of $keyValues
 	 *
 	 * @return  $this
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function whereIn(string $keyName, array $keyValues, string $dataType = ParameterType::INTEGER);
+	public function whereIn(string $keyName, array $keyValues, $dataType = ParameterType::INTEGER);
 
 	/**
 	 * Add a WHERE NOT IN statement to the query.
@@ -587,15 +588,16 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * Usage
 	 * $query->whereNotIn('id', [1, 2, 3]);
 	 *
-	 * @param   string  $keyName    Key name for the where clause
-	 * @param   array   $keyValues  Array of values to be matched
-	 * @param   string  $dataType   Type of the values to bind
+	 * @param   string        $keyName    Key name for the where clause
+	 * @param   array         $keyValues  Array of values to be matched
+	 * @param   array|string  $dataType   Constant corresponding to a SQL datatype. It can be an array, in this case it
+	 *                                    has to be same length of $keyValues
 	 *
 	 * @return  $this
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function whereNotIn(string $keyName, array $keyValues, string $dataType = ParameterType::INTEGER);
+	public function whereNotIn(string $keyName, array $keyValues, $dataType = ParameterType::INTEGER);
 
 	/**
 	 * Extend the WHERE clause with a single condition or an array of conditions, with a potentially different logical operator from the one in the
@@ -623,14 +625,15 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * Usage:
 	 * $query->whereIn('column in (' . implode(',', $query->bindArray($keyValues, $dataType)) . ')');
 	 *
-	 * @param   array   $values    Values to bind
-	 * @param   string  $dataType  Type of the values to bind
+	 * @param   array         $values    Values to bind
+	 * @param   array|string  $dataType  Constant corresponding to a SQL datatype. It can be an array, in this case it
+	 *                                   has to be same length of $key
 	 *
 	 * @return  array   An array with parameter names
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function bindArray(array $values, string $dataType = ParameterType::INTEGER);
+	public function bindArray(array $values, $dataType = ParameterType::INTEGER);
 
 	/**
 	 * Add a query to UNION with the current query.

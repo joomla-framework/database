@@ -8,6 +8,8 @@
 
 namespace Joomla\Database;
 
+use stdClass;
+
 /**
  * Joomla Framework Query Building Class.
  *
@@ -15,6 +17,28 @@ namespace Joomla\Database;
  */
 abstract class DatabaseQuery implements QueryInterface
 {
+	/**
+	 * Holds key / value pair of bound objects.
+	 *
+	 * @var    mixed
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $bounded = [];
+
+	/**
+	 * Mapping array for parameter types.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $parameterMapping = [
+		ParameterType::BOOLEAN      => ParameterType::BOOLEAN,
+		ParameterType::INTEGER      => ParameterType::INTEGER,
+		ParameterType::LARGE_OBJECT => ParameterType::LARGE_OBJECT,
+		ParameterType::NULL         => ParameterType::NULL,
+		ParameterType::STRING       => ParameterType::STRING,
+	];
+
 	/**
 	 * The database driver.
 	 *
@@ -656,6 +680,7 @@ abstract class DatabaseQuery implements QueryInterface
 			default:
 				$this->type               = null;
 				$this->alias              = null;
+				$this->bounded            = [];
 				$this->select             = null;
 				$this->selectRowNumber    = null;
 				$this->delete             = null;
@@ -1690,15 +1715,16 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Usage
 	 * $query->whereIn('id', [1, 2, 3]);
 	 *
-	 * @param   string  $keyName    Key name for the where clause
-	 * @param   array   $keyValues  Array of values to be matched
-	 * @param   string  $dataType   Type of the values to bind
+	 * @param   string        $keyName    Key name for the where clause
+	 * @param   array         $keyValues  Array of values to be matched
+	 * @param   array|string  $dataType   Constant corresponding to a SQL datatype. It can be an array, in this case it
+	 *                                    has to be same length of $keyValues
 	 *
 	 * @return  $this
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function whereIn(string $keyName, array $keyValues, string $dataType = ParameterType::INTEGER)
+	public function whereIn(string $keyName, array $keyValues, $dataType = ParameterType::INTEGER)
 	{
 		return $this->where(
 			$keyName . ' IN (' . implode(',', $this->bindArray($keyValues, $dataType)) . ')'
@@ -1713,15 +1739,16 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Usage
 	 * $query->whereNotIn('id', [1, 2, 3]);
 	 *
-	 * @param   string  $keyName    Key name for the where clause
-	 * @param   array   $keyValues  Array of values to be matched
-	 * @param   string  $dataType   Type of the values to bind
+	 * @param   string        $keyName    Key name for the where clause
+	 * @param   array         $keyValues  Array of values to be matched
+	 * @param   array|string  $dataType   Constant corresponding to a SQL datatype. It can be an array, in this case it
+	 *                                    has to be same length of $keyValues
 	 *
 	 * @return  $this
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function whereNotIn(string $keyName, array $keyValues, string $dataType = ParameterType::INTEGER)
+	public function whereNotIn(string $keyName, array $keyValues, $dataType = ParameterType::INTEGER)
 	{
 		return $this->where(
 			$keyName . ' NOT IN (' . implode(',', $this->bindArray($keyValues, $dataType)) . ')'
@@ -1794,6 +1821,99 @@ abstract class DatabaseQuery implements QueryInterface
 	}
 
 	/**
+	 * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution. Also
+	 * removes a variable that has been bounded from the internal bounded array when the passed in value is null.
+	 *
+	 * @param   array|string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
+	 *                                                the form ':key', but can also be an integer.
+	 * @param   mixed                 $value          The value that will be bound. It can be an array, in this case it has to be
+	 *                                                same length of $key; The value is passed by reference to support output
+	 *                                                parameters such as those possible with stored procedures.
+	 * @param   array|string          $dataType       Constant corresponding to a SQL datatype. It can be an array, in this case it
+	 *                                                has to be same length of $key
+	 * @param   integer               $length         The length of the variable. Usually required for OUTPUT parameters.
+	 * @param   array                 $driverOptions  Optional driver options to be used.
+	 *
+	 * @return  $this
+	 *
+	 * @since   1.5.0
+	 */
+	public function bind($key = null, &$value = null, $dataType = ParameterType::STRING, $length = 0, $driverOptions = [])
+	{
+		// Case 1: Empty Key (reset $bounded array)
+		if (empty($key))
+		{
+			$this->bounded = [];
+
+			return $this;
+		}
+
+		$key   = (array) $key;
+		$count = \count($key);
+
+		if (\is_array($value) && $count != \count($value))
+		{
+			throw new \InvalidArgumentException('Array length of $key and $value are not equal');
+		}
+
+		if (\is_array($dataType) && $count != \count($dataType))
+		{
+			throw new \InvalidArgumentException('Array length of $key and $dataType are not equal');
+		}
+
+		for ($i = 0; $i < $count; $i++)
+		{
+			if (\is_array($value))
+			{
+				$localValue = &$value[$i];
+			}
+			else
+			{
+				$localValue = &$value;
+			}
+
+			if (\is_array($dataType))
+			{
+				$localDataType = $dataType[$i];
+			}
+			else
+			{
+				$localDataType = $dataType;
+			}
+
+			// Case 2: Key Provided, null value (unset key from $bounded array)
+			if ($localValue === null)
+			{
+				if (isset($this->bounded[$key[$i]]))
+				{
+					unset($this->bounded[$key[$i]]);
+				}
+
+				continue;
+			}
+
+			// Validate parameter type
+			if (!isset($this->parameterMapping[$localDataType]))
+			{
+				throw new \InvalidArgumentException(sprintf('Unsupported parameter type `%s`', $localDataType));
+			}
+
+			$obj                = new \stdClass;
+			$obj->value         = &$localValue;
+			$obj->dataType      = $this->parameterMapping[$localDataType];
+			$obj->length        = $length;
+			$obj->driverOptions = $driverOptions;
+
+			// Case 3: Simply add the Key/Value into the bounded array
+			$this->bounded[$key[$i]] = $obj;
+
+			unset($localValue);
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Binds an array of values and returns an array of prepared parameter names.
 	 *
 	 * Note that all values must be the same data type.
@@ -1801,27 +1921,24 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Usage:
 	 * $query->where('column in (' . implode(',', $query->bindArray($keyValues, $dataType)) . ')');
 	 *
-	 * @param   array   $values    Values to bind
-	 * @param   string  $dataType  Type of the values to bind
+	 * @param   array         $values    Values to bind
+	 * @param   array|string  $dataType  Constant corresponding to a SQL datatype. It can be an array, in this case it
+	 *                                   has to be same length of $key
 	 *
 	 * @return  array   An array with parameter names
 	 *
 	 * @since __DEPLOY_VERSION__
 	 */
-	public function bindArray(array $values, string $dataType = ParameterType::INTEGER)
+	public function bindArray(array $values, $dataType = ParameterType::INTEGER)
 	{
 		$parameterNames = [];
 
-		foreach ($values as $value)
+		for ($i = 0; $i < count($values); $i++)
 		{
-			$bindKey          = ':preparedArray' . (++$this->preparedIndex);
-			$parameterNames[] = $bindKey;
-
-			$this->bind($bindKey, $value, $dataType);
-
-			// We unset the referenced variable but want to keep it referenced for the bind call
-			unset($value);
+			$parameterNames[] = ':preparedArray' . (++$this->preparedIndex);
 		}
+
+		$this->bind($parameterNames, $values, $dataType);
 
 		return $parameterNames;
 	}
@@ -1859,6 +1976,29 @@ abstract class DatabaseQuery implements QueryInterface
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * Retrieves the bound parameters array when key is null and returns it by reference. If a key is provided then that item is
+	 * returned.
+	 *
+	 * @param   mixed  $key  The bounded variable key to retrieve.
+	 *
+	 * @return  mixed
+	 *
+	 * @since   1.5.0
+	 */
+	public function &getBounded($key = null)
+	{
+		if (empty($key))
+		{
+			return $this->bounded;
+		}
+
+		if (isset($this->bounded[$key]))
+		{
+			return $this->bounded[$key];
 		}
 	}
 
