@@ -7,6 +7,7 @@
 namespace Joomla\Renderer\Tests;
 
 use Joomla\Renderer\AbstractRenderer;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,9 +22,8 @@ class AbstractRendererTest extends TestCase
 	 */
 	public function testADataKeyIsSetToTheRenderer()
 	{
-		/** @var \PHPUnit_Framework_MockObject_MockObject|AbstractRenderer $renderer */
-		$renderer = $this->getMockBuilder(AbstractRenderer::class)
-			->getMockForAbstractClass();
+		/** @var MockObject|AbstractRenderer $renderer */
+		$renderer = $this->getMockForAbstractClass(AbstractRenderer::class);
 
 		$renderer->set('foo', 'bar');
 
@@ -37,9 +37,8 @@ class AbstractRendererTest extends TestCase
 	 */
 	public function testADataArrayIsSetToTheRenderer()
 	{
-		/** @var \PHPUnit_Framework_MockObject_MockObject|AbstractRenderer $renderer */
-		$renderer = $this->getMockBuilder(AbstractRenderer::class)
-			->getMockForAbstractClass();
+		/** @var MockObject|AbstractRenderer $renderer */
+		$renderer = $this->getMockForAbstractClass(AbstractRenderer::class);
 
 		$renderer->setData(['foo' => 'bar']);
 
@@ -53,9 +52,8 @@ class AbstractRendererTest extends TestCase
 	 */
 	public function testTheRenderersDataArrayIsReset()
 	{
-		/** @var \PHPUnit_Framework_MockObject_MockObject|AbstractRenderer $renderer */
-		$renderer = $this->getMockBuilder(AbstractRenderer::class)
-			->getMockForAbstractClass();
+		/** @var MockObject|AbstractRenderer $renderer */
+		$renderer = $this->getMockForAbstractClass(AbstractRenderer::class);
 
 		$renderer->setData(['foo' => 'bar']);
 		$renderer->unsetData();

@@ -11,4 +11,5 @@ composer.phar
 composer.lock
 
 # Local PHPUnit configuration #
+.phpunit.result.cache
 phpunit.xml

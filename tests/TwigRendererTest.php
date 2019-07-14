@@ -103,8 +103,7 @@ class TwigRendererTest extends TestCase
 			$this->markTestSkipped('Test only applies for Twig 1.x');
 		}
 
-		$loader = $this->getMockBuilder(LoaderInterface::class)
-			->getMock();
+		$loader = $this->createMock(LoaderInterface::class);
 
 		$renderer = new TwigRenderer(new Environment($loader));
 

@@ -17,14 +17,12 @@ class MustacheRendererTest extends TestCase
 	/**
 	 * Data provider for path existence checks
 	 *
-	 * @return  array
+	 * @return  \Generator
 	 */
-	public function dataPathExists()
+	public function dataPathExists(): \Generator
 	{
-		return [
-			'Existing file'     => ['index.mustache', true],
-			'Non-existing file' => ['error.mustache', false],
-		];
+		yield 'Existing file' => ['index.mustache', true];
+		yield 'Non-existing file' => ['error.mustache', false];
 	}
 
 	/**
