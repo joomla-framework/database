@@ -116,8 +116,8 @@ class AbstractCommandTest extends TestCase
 			}
 		};
 
-		$this->assertContains('The test:command command is used...', $command->getProcessedHelp(), 'getProcessedHelp() replaces %command.name%');
-		$this->assertNotContains('%command.full_name%', $command->getProcessedHelp(), 'getProcessedHelp() replaces %command.full_name%');
+		$this->assertStringContainsString('The test:command command is used...', $command->getProcessedHelp(), 'getProcessedHelp() replaces %command.name%');
+		$this->assertStringNotContainsString('%command.full_name%', $command->getProcessedHelp(), 'getProcessedHelp() replaces %command.full_name%');
 	}
 
 	public function testTheCommandSynopsisIsProcessed()

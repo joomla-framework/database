@@ -14,7 +14,7 @@
     },
     "require-dev": {
         "joomla/coding-standards": "~2.0@alpha",
-        "phpunit/phpunit": "~6.3",
+        "phpunit/phpunit": "~8.2",
         "psr/container": "~1.0"
     },
     "suggest": {

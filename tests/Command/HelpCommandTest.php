@@ -36,7 +36,7 @@ class HelpCommandTest extends TestCase
 		$this->assertSame(0, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('list [<namespace>]', $screenOutput);
+		$this->assertStringContainsString('list [<namespace>]', $screenOutput);
 	}
 
 	public function testTheCommandIsExecutedWithACommandClass()
@@ -57,6 +57,6 @@ class HelpCommandTest extends TestCase
 		$this->assertSame(0, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('list [<namespace>]', $screenOutput);
+		$this->assertStringContainsString('list [<namespace>]', $screenOutput);
 	}
 }

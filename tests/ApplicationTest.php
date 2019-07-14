@@ -14,6 +14,7 @@ use Joomla\Console\ConsoleEvents;
 use Joomla\Console\Event\ApplicationErrorEvent;
 use Joomla\Console\Event\BeforeCommandExecuteEvent;
 use Joomla\Console\Event\CommandErrorEvent;
+use Joomla\Console\Exception\NamespaceNotFoundException;
 use Joomla\Console\Loader\ContainerLoader;
 use Joomla\Console\Tests\Fixtures\Command\AliasedCommand;
 use Joomla\Console\Tests\Fixtures\Command\AnonymousCommand;
@@ -26,6 +27,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -48,7 +50,7 @@ class ApplicationTest extends TestCase
 	 *
 	 * @return  void
 	 */
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->object = new Application;
 	}
@@ -79,17 +81,15 @@ class ApplicationTest extends TestCase
 	/**
 	 * Data provider for testGetLongVersion
 	 *
-	 * @return  array
+	 * @return  \Generator
 	 */
-	public function dataGetLongVersion(): array
+	public function dataGetLongVersion(): \Generator
 	{
 		// Args: App Name, App Version, Expected Return
-		return [
-			'Empty name and version' => ['', '', 'Joomla Console Application'],
-			'Name without version' => ['Console Application', '', 'Console Application'],
-			'Version without name' => ['', '1.0.0', 'Joomla Console Application <info>1.0.0</info>'],
-			'Version with name' => ['Console Application', '1.0.0', 'Console Application <info>1.0.0</info>'],
-		];
+		yield 'Empty name and version' => ['', '', 'Joomla Console Application'];
+		yield 'Name without version' => ['Console Application', '', 'Console Application'];
+		yield 'Version without name' => ['', '1.0.0', 'Joomla Console Application <info>1.0.0</info>'];
+		yield 'Version with name' => ['Console Application', '1.0.0', 'Console Application <info>1.0.0</info>'];
 	}
 
 	/**
@@ -152,21 +152,19 @@ class ApplicationTest extends TestCase
 		$this->assertFalse($this->object->hasCommand('test:disabled'));
 	}
 
-	/**
-	 * @expectedException  \Symfony\Component\Console\Exception\LogicException
-	 * @expectedExceptionMessage  Command class "Joomla\Console\Tests\Fixtures\Command\SkipConfigurationCommand" is not correctly initialised.
-	 */
 	public function testAddCommandWithBrokenConstructor()
 	{
+		$this->expectException(LogicException::class);
+		$this->expectExceptionMessage('Command class "Joomla\Console\Tests\Fixtures\Command\SkipConfigurationCommand" is not correctly initialised.');
+
 		$this->object->addCommand(new SkipConfigurationCommand);
 	}
 
-	/**
-	 * @expectedException  \Symfony\Component\Console\Exception\LogicException
-	 * @expectedExceptionMessage  The command class "Joomla\Console\Tests\Fixtures\Command\AnonymousCommand" does not have a name.
-	 */
 	public function testAddCommandWithNoName()
 	{
+		$this->expectException(LogicException::class);
+		$this->expectExceptionMessage('The command class "Joomla\Console\Tests\Fixtures\Command\AnonymousCommand" does not have a name.');
+
 		$this->object->addCommand(new AnonymousCommand);
 	}
 
@@ -218,12 +216,11 @@ class ApplicationTest extends TestCase
 		$this->assertInstanceOf(NamespacedCommand::class, $this->object->getCommand('test:namespaced'));
 	}
 
-	/**
-	 * @expectedException  \Symfony\Component\Console\Exception\CommandNotFoundException
-	 * @expectedExceptionMessage  The command "test" does not exist.
-	 */
 	public function testGetCommandForUnknownCommand()
 	{
+		$this->expectException(CommandNotFoundException::class);
+		$this->expectExceptionMessage('The command "test" does not exist.');
+
 		$this->object->getCommand('test');
 	}
 
@@ -249,24 +246,22 @@ class ApplicationTest extends TestCase
 		$this->assertEquals('test', $this->object->findNamespace('test'));
 	}
 
-	/**
-	 * @expectedException  \Joomla\Console\Exception\NamespaceNotFoundException
-	 * @expectedExceptionMessage  The namespace "t" is ambiguous.
-	 */
 	public function testFindAmbiguousNamespace()
 	{
+		$this->expectException(NamespaceNotFoundException::class);
+		$this->expectExceptionMessage('The namespace "t" is ambiguous.');
+
 		$this->object->addCommand(new NamespacedCommand);
 		$this->object->addCommand(new TopNamespacedCommand());
 
 		$this->object->findNamespace('t');
 	}
 
-	/**
-	 * @expectedException  \Joomla\Console\Exception\NamespaceNotFoundException
-	 * @expectedExceptionMessage  There are no commands defined in the "test" namespace.
-	 */
 	public function testFindUnknownNamespace()
 	{
+		$this->expectException(NamespaceNotFoundException::class);
+		$this->expectExceptionMessage('There are no commands defined in the "test" namespace.');
+
 		$this->object->findNamespace('test');
 	}
 
@@ -303,7 +298,7 @@ class ApplicationTest extends TestCase
 
 		$screenOutput = $output->fetch();
 		$this->assertNotEmpty($screenOutput);
-		$this->assertContains('Command "foo" is not defined.', $screenOutput);
+		$this->assertStringContainsString('Command "foo" is not defined.', $screenOutput);
 
 		$app->setCatchThrowables(false);
 
