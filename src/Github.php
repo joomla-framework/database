@@ -36,13 +36,17 @@ use Joomla\Registry\Registry;
 class Github
 {
 	/**
-	 * @var    array  Options for the GitHub object.
+	 * Options for the GitHub object.
+	 *
+	 * @var    array
 	 * @since  1.0
 	 */
 	protected $options;
 
 	/**
-	 * @var    Http  The HTTP client object to use in sending HTTP requests.
+	 * The HTTP client object to use in sending HTTP requests.
+	 *
+	 * @var    Http
 	 * @since  1.0
 	 */
 	protected $client;

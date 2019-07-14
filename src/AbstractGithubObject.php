@@ -22,19 +22,25 @@ use Joomla\Uri\Uri;
 abstract class AbstractGithubObject
 {
 	/**
-	 * @var    Registry  Options for the GitHub object.
+	 * Options for the GitHub object.
+	 *
+	 * @var    Registry
 	 * @since  1.0
 	 */
 	protected $options;
 
 	/**
-	 * @var    Http  The HTTP client object to use in sending HTTP requests.
+	 * The HTTP client object to use in sending HTTP requests.
+	 *
+	 * @var    Http
 	 * @since  1.0
 	 */
 	protected $client;
 
 	/**
-	 * @var    string  The package the object resides in
+	 * The package the object resides in
+	 *
+	 * @var    string
 	 * @since  1.0
 	 */
 	protected $package = '';
