@@ -473,7 +473,8 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	{
 		$this->connect();
 
-		$variables = $this->setQuery('SHOW SESSION STATUS WHERE `Variable_name` IN (\'Ssl_version\', \'Ssl_cipher\')')->loadObjectList('Variable_name');
+		$variables = $this->setQuery('SHOW SESSION STATUS WHERE `Variable_name` IN (\'Ssl_version\', \'Ssl_cipher\')')
+			->loadObjectList('Variable_name');
 
 		if (!empty($variables['Ssl_cipher']->Value))
 		{
