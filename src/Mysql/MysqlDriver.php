@@ -163,12 +163,13 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 			if ($tlsContextIsNull === true)
 			{
 				$this->options['driverOptions'][\PDO::MYSQL_ATTR_SSL_CIPHER] = implode(':', [
-					'AES128-GCM-SHA256',
-					'AES256-GCM-SHA384',
-					'AES128-CBC-SHA256',
-					'AES256-CBC-SHA384',
-					'DES-CBC3-SHA',
-				]);
+						'AES128-GCM-SHA256',
+						'AES256-GCM-SHA384',
+						'AES128-CBC-SHA256',
+						'AES256-CBC-SHA384',
+						'DES-CBC3-SHA',
+					]
+				);
 			}
 
 			// If costumized, for capable systems (PHP 7.0.14+ and 7.1.4+) verify certificate chain and Common Name to driver options.
