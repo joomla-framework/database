@@ -124,6 +124,18 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		$options['socket']   = $options['socket'] ?? null;
 		$options['utf8mb4']  = isset($options['utf8mb4']) ? (bool) $options['utf8mb4'] : false;
 		$options['sqlModes'] = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
+		$options['ssl']      = isset($options['ssl']) ? $options['ssl'] : [];
+
+		if ($options['ssl'] !== [])
+		{
+			$options['ssl']['enable']             = isset($options['ssl']['enable']) ? $options['ssl']['enable'] : false;
+			$options['ssl']['cipher']             = isset($options['ssl']['cipher']) ? $options['ssl']['cipher'] : null;
+			$options['ssl']['ca']                 = isset($options['ssl']['ca']) ? $options['ssl']['ca'] : null;
+			$options['ssl']['capath']             = isset($options['ssl']['capath']) ? $options['ssl']['capath'] : null;
+			$options['ssl']['key']                = isset($options['ssl']['key']) ? $options['ssl']['key'] : null;
+			$options['ssl']['cert']               = isset($options['ssl']['cert']) ? $options['ssl']['cert'] : null;
+			$options['ssl']['verify_server_cert'] = isset($options['ssl']['verify_server_cert']) ? $options['ssl']['verify_server_cert'] : null;
+		}
 
 		// Finalize initialisation.
 		parent::__construct($options);
@@ -211,9 +223,50 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 
 		$this->connection = mysqli_init();
 
+		$connectionFlags = 0;
+
+		// For SSL/TLS connection encryption.
+		if ($this->options['ssl'] !== [] && $this->options['ssl']['enable'] === true)
+		{
+			$connectionFlags += MYSQLI_CLIENT_SSL;
+
+			// Verify server certificate is only availble in PHP 5.6.16+. See https://www.php.net/ChangeLog-5.php#5.6.16
+			if (isset($this->options['ssl']['verify_server_cert']))
+			{
+				// New constants in PHP 5.6.16+. See https://www.php.net/ChangeLog-5.php#5.6.16
+				if ($this->options['ssl']['verify_server_cert'] === true && defined('MYSQLI_CLIENT_SSL_VERIFY_SERVER_CERT'))
+				{
+					$connectionFlags += MYSQLI_CLIENT_SSL_VERIFY_SERVER_CERT;
+				}
+				elseif ($this->options['ssl']['verify_server_cert'] === false && defined('MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT'))
+				{
+					$connectionFlags += MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT;
+				}
+				elseif (defined('MYSQLI_OPT_SSL_VERIFY_SERVER_CERT'))
+				{
+					$this->connection->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, $this->options['ssl']['verify_server_cert']);
+				}
+			}
+
+			// Add SSL/TLS options only if changed.
+			$this->connection->ssl_set(
+				$this->options['ssl']['key'],
+				$this->options['ssl']['cert'],
+				$this->options['ssl']['ca'],
+				$this->options['ssl']['capath'],
+				$this->options['ssl']['cipher']
+			);
+		}
+
 		// Attempt to connect to the server, use error suppression to silence warnings and allow us to throw an Exception separately.
 		$connected = @$this->connection->real_connect(
-			$this->options['host'], $this->options['user'], $this->options['password'], null, $this->options['port'], $this->options['socket']
+			$this->options['host'],
+			$this->options['user'],
+			$this->options['password'],
+			null,
+			$this->options['port'],
+			$this->options['socket'],
+			$connectionFlags
 		);
 
 		if (!$connected)
@@ -406,6 +459,28 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		$this->connect();
 
 		return $this->setQuery('SELECT @@collation_connection;')->loadResult();
+	}
+
+	/**
+	 * Method to get the database encryption details (cipher and protocol) in use.
+	 *
+	 * @return  string  The database encryption details.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function getConnectionEncryption(): string
+	{
+		$this->connect();
+
+		$variables = $this->setQuery('SHOW SESSION STATUS WHERE `Variable_name` IN (\'Ssl_version\', \'Ssl_cipher\')')->loadObjectList('Variable_name');
+
+		if (!empty($variables['Ssl_cipher']->Value))
+		{
+			return $variables['Ssl_version']->Value . ' (' . $variables['Ssl_cipher']->Value . ')';
+		}
+
+		return '';
 	}
 
 	/**
