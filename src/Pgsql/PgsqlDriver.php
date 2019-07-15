@@ -134,6 +134,20 @@ class PgsqlDriver extends PdoDriver
 	}
 
 	/**
+	 * Method to get the database encryption details (cipher and protocol) in use.
+	 *
+	 * @return  string  The database encryption details.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function getConnectionEncryption(): string
+	{
+		// TODO: Not fake this
+		return '';
+	}
+
+	/**
 	 * Shows the table CREATE statement that creates the given tables.
 	 *
 	 * This is unsuported by PostgreSQL.
