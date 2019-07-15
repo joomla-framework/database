@@ -355,6 +355,20 @@ class SqlsrvDriver extends DatabaseDriver
 	}
 
 	/**
+	 * Method to get the database encryption details (cipher and protocol) in use.
+	 *
+	 * @return  string  The database encryption details.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function getConnectionEncryption(): string
+	{
+		// TODO: Not fake this
+		return '';
+	}
+
+	/**
 	 * Retrieves field information about the given tables.
 	 *
 	 * @param   mixed    $table     A table name
