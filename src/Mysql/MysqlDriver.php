@@ -80,6 +80,20 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	protected static $dbMinMariadb = '10.0';
 
 	/**
+	 * The default cipher suit for TLS connections.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected static $defaultCipherSuit = [
+		'AES128-GCM-SHA256',
+		'AES256-GCM-SHA384',
+		'AES128-CBC-SHA256',
+		'AES256-CBC-SHA384',
+		'DES-CBC3-SHA',
+	];
+
+	/**
 	 * Constructor.
 	 *
 	 * @param   array  $options  Array of database options with keys: host, user, password, database, select.
@@ -147,7 +161,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		// For SSL/TLS connection encryption.
 		if ($this->options['ssl'] !== [] && $this->options['ssl']['enable'] === true)
 		{
-			$tlsContextIsNull = true;
+			$sslContextIsNull = true;
 
 			// If costumized, add ciphersuit, ca file path, ca path, private key file path and certificate file path to PDO driver options.
 			foreach (['cipher', 'ca', 'capath', 'key', 'cert'] as $key => $value)
@@ -155,21 +169,14 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 				if ($this->options['ssl'][$value] !== null)
 				{
 					$this->options['driverOptions'][constant('\PDO::MYSQL_ATTR_SSL_' . strtoupper($value))] = $this->options['ssl'][$value];
-					$tlsContextIsNull                                                                    = false;
+					$sslContextIsNull                                                                       = false;
 				}
 			}
 
 			// PDO, if no cipher, ca, capath, cert and key are set, can't start TLS one-way connection, set a common ciphers suit to force it.
-			if ($tlsContextIsNull === true)
+			if ($sslContextIsNull === true)
 			{
-				$this->options['driverOptions'][\PDO::MYSQL_ATTR_SSL_CIPHER] = implode(':', [
-						'AES128-GCM-SHA256',
-						'AES256-GCM-SHA384',
-						'AES128-CBC-SHA256',
-						'AES256-CBC-SHA384',
-						'DES-CBC3-SHA',
-					]
-				);
+				$this->options['driverOptions'][\PDO::MYSQL_ATTR_SSL_CIPHER] = implode(':', $this->defaultCipherSuit);
 			}
 
 			// If costumized, for capable systems (PHP 7.0.14+ and 7.1.4+) verify certificate chain and Common Name to driver options.
