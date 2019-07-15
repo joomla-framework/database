@@ -103,6 +103,18 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		$options['driver']   = 'mysql';
 		$options['charset']  = $options['charset'] ?? 'utf8';
 		$options['sqlModes'] = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
+		$options['ssl']      = isset($options['ssl']) ? $options['ssl'] : [];
+
+		if ($options['ssl'] !== [])
+		{
+			$options['ssl']['enable']             = isset($options['ssl']['enable']) ? $options['ssl']['enable'] : false;
+			$options['ssl']['cipher']             = isset($options['ssl']['cipher']) ? $options['ssl']['cipher'] : null;
+			$options['ssl']['ca']                 = isset($options['ssl']['ca']) ? $options['ssl']['ca'] : null;
+			$options['ssl']['capath']             = isset($options['ssl']['capath']) ? $options['ssl']['capath'] : null;
+			$options['ssl']['key']                = isset($options['ssl']['key']) ? $options['ssl']['key'] : null;
+			$options['ssl']['cert']               = isset($options['ssl']['cert']) ? $options['ssl']['cert'] : null;
+			$options['ssl']['verify_server_cert'] = isset($options['ssl']['verify_server_cert']) ? $options['ssl']['verify_server_cert'] : null;
+		}
 
 		$this->charset = $options['charset'];
 
@@ -130,6 +142,34 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		if ($this->getConnection())
 		{
 			return;
+		}
+
+		// For SSL/TLS connection encryption.
+		if ($this->options['ssl'] !== [] && $this->options['ssl']['enable'] === true)
+		{
+			$tlsContextIsNull = true;
+
+			// If costumized, add ciphersuit, ca file path, ca path, private key file path and certificate file path to PDO driver options.
+			foreach (['cipher', 'ca', 'capath', 'key', 'cert'] as $key => $value)
+			{
+				if ($this->options['ssl'][$value] !== null)
+				{
+					$this->options['driverOptions'][constant('\PDO::MYSQL_ATTR_SSL_' . strtoupper($value))] = $this->options['ssl'][$value];
+					$tlsContextIsNull                                                                    = false;
+				}
+			}
+
+			// In PDO, if no cipher, ca, capath, cert and key are set, we can't start TLS one-way encryption, so set a ciphersuit with common ciphers to force it.
+			if ($tlsContextIsNull === true)
+			{
+				$this->options['driverOptions'][\PDO::MYSQL_ATTR_SSL_CIPHER] = 'AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-CBC-SHA256:AES256-CBC-SHA384:DES-CBC3-SHA';
+			}
+
+			// If costumized, for capable systems (PHP 7.0.14+ or PHP 7.1.4+) add flag to verify server certificate (along with Common Name) to PDO driver options.
+			if ($this->options['ssl']['verify_server_cert'] !== null && defined('\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT'))
+			{
+				$this->options['driverOptions'][\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = $this->options['ssl']['verify_server_cert'];
+			}
 		}
 
 		try
@@ -294,6 +334,28 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		$this->connect();
 
 		return $this->setQuery('SELECT @@collation_connection;')->loadResult();
+	}
+
+	/**
+	 * Method to get the database encryption details (cipher and protocol) in use.
+	 *
+	 * @return  string  The database encryption details.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function getConnectionEncryption(): string
+	{
+		$this->connect();
+
+		$variables = $this->setQuery('SHOW SESSION STATUS WHERE `Variable_name` IN (\'Ssl_version\', \'Ssl_cipher\')')->loadObjectList('Variable_name');
+
+		if (!empty($variables['Ssl_cipher']->Value))
+		{
+			return $variables['Ssl_version']->Value . ' (' . $variables['Ssl_cipher']->Value . ')';
+		}
+
+		return '';
 	}
 
 	/**
