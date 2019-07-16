@@ -265,6 +265,29 @@ abstract class PdoDriver extends DatabaseDriver
 				$replace = ['#HOST#', '#PORT#', '#DBNAME#'];
 				$with    = [$this->options['host'], $this->options['port'], $this->options['database']];
 
+				// For data in transit TLS encryption.
+				if ($this->options['ssl'] !== [] && $this->options['ssl']['enable'] === true)
+				{
+					$format .= ';sslmode=' . (isset($this->options['ssl']['verify_server_cert']) && $this->options['ssl']['verify_server_cert'] === true ? 'verify-full' : 'required');
+
+					$sslKeysMapping = [
+						'cipher' => null,
+						'ca'     => 'sslrootcert',
+						'capath' => null,
+						'key'    => 'sslkey',
+						'cert'   => 'sslcert',
+					];
+
+					// If costumized, add ciphersuit, ca file path, ca path, private key file path and certificate file path to PDO driver options.
+					foreach (['cipher', 'ca', 'capath', 'key', 'cert'] as $key => $value)
+					{
+						if ($sslKeysMapping[$key] !== null && $this->options['ssl'][$value] !== null)
+						{
+							$format .= ';' . $sslKeysMapping[$key] . '=' . $this->options['ssl'][$value];
+						}
+					}
+				}
+
 				break;
 
 			case 'sqlite':
