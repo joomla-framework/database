@@ -143,7 +143,18 @@ class PgsqlDriver extends PdoDriver
 	 */
 	public function getConnectionEncryption(): string
 	{
-		// TODO: Not fake this
+		$query = $this->getQuery(true)
+			->select($this->quoteName(['version', 'cipher']))
+			->from($this->quoteName('pg_stat_ssl'))
+			->where($this->quoteName('pid') . ' = pg_backend_pid()');
+
+		$variables = $this->setQuery($query)->loadAssoc();
+
+		if (!empty($variables['cipher']))
+		{
+			return $variables['version'] . ' (' . $variables['cipher'] . ')';
+		}
+
 		return '';
 	}
 
