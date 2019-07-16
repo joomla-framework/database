@@ -117,18 +117,6 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		$options['driver']   = 'mysql';
 		$options['charset']  = $options['charset'] ?? 'utf8';
 		$options['sqlModes'] = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
-		$options['ssl']      = isset($options['ssl']) ? $options['ssl'] : [];
-
-		if ($options['ssl'] !== [])
-		{
-			$options['ssl']['enable']             = isset($options['ssl']['enable']) ? $options['ssl']['enable'] : false;
-			$options['ssl']['cipher']             = isset($options['ssl']['cipher']) ? $options['ssl']['cipher'] : null;
-			$options['ssl']['ca']                 = isset($options['ssl']['ca']) ? $options['ssl']['ca'] : null;
-			$options['ssl']['capath']             = isset($options['ssl']['capath']) ? $options['ssl']['capath'] : null;
-			$options['ssl']['key']                = isset($options['ssl']['key']) ? $options['ssl']['key'] : null;
-			$options['ssl']['cert']               = isset($options['ssl']['cert']) ? $options['ssl']['cert'] : null;
-			$options['ssl']['verify_server_cert'] = isset($options['ssl']['verify_server_cert']) ? $options['ssl']['verify_server_cert'] : null;
-		}
 
 		$this->charset = $options['charset'];
 
