@@ -268,7 +268,14 @@ abstract class PdoDriver extends DatabaseDriver
 				// For data in transit TLS encryption.
 				if ($this->options['ssl'] !== [] && $this->options['ssl']['enable'] === true)
 				{
-					$format .= ';sslmode=' . (isset($this->options['ssl']['verify_server_cert']) && $this->options['ssl']['verify_server_cert'] === true ? 'verify-full' : 'required');
+					if (isset($this->options['ssl']['verify_server_cert']) && $this->options['ssl']['verify_server_cert'] === true)
+					{
+						$format .= ';sslmode=verify-full';
+					}
+					else
+					{
+						$format .= ';sslmode=required';
+					}
 
 					$sslKeysMapping = [
 						'cipher' => null,
