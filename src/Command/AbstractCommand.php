@@ -42,7 +42,7 @@ abstract class AbstractCommand
 	/**
 	 * The application running this command.
 	 *
-	 * @var    Application
+	 * @var    Application|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $application;
