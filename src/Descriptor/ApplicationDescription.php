@@ -62,7 +62,7 @@ final class ApplicationDescription
 	/**
 	 * The application's command namespaces.
 	 *
-	 * @var    string[]
+	 * @var    array[]
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $namespaces;
@@ -94,7 +94,7 @@ final class ApplicationDescription
 	/**
 	 * Get the application's command namespaces.
 	 *
-	 * @return  string[]
+	 * @return  array[]
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -181,7 +181,6 @@ final class ApplicationDescription
 		{
 			$names = [];
 
-			/** @var AbstractCommand $command */
 			foreach ($commands as $name => $command)
 			{
 				if (!$command->getName() || (!$this->showHidden && $command->isHidden()))
@@ -210,7 +209,7 @@ final class ApplicationDescription
 	 *
 	 * @param   AbstractCommand[]  $commands  The commands to sort.
 	 *
-	 * @return  AbstractCommand[]
+	 * @return  AbstractCommand[][]
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
