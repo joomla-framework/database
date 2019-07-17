@@ -72,7 +72,7 @@ class Application extends AbstractApplication
 	/**
 	 * The command loader.
 	 *
-	 * @var    Loader\LoaderInterface
+	 * @var    Loader\LoaderInterface|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $commandLoader;
@@ -565,8 +565,8 @@ class Application extends AbstractApplication
 			throw new CommandNotFoundException(sprintf('The command "%s" does not exist.', $name));
 		}
 
-		// If the command isn't registered, pull it from the loader
-		if (!isset($this->commands[$name]))
+		// If the command isn't registered, pull it from the loader if registered
+		if (!isset($this->commands[$name]) && $this->commandLoader)
 		{
 			$this->addCommand($this->commandLoader->get($name));
 		}
