@@ -865,11 +865,14 @@ class Application extends AbstractApplication
 	 */
 	protected function runCommand(AbstractCommand $command, InputInterface $input, OutputInterface $output): int
 	{
-		foreach ($command->getHelperSet() as $helper)
+		if ($command->getHelperSet() !== null)
 		{
-			if ($helper instanceof InputAwareInterface)
+			foreach ($command->getHelperSet() as $helper)
 			{
-				$helper->setInput($input);
+				if ($helper instanceof InputAwareInterface)
+				{
+					$helper->setInput($input);
+				}
 			}
 		}
 
