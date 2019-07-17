@@ -10,7 +10,7 @@ namespace Joomla\Console\Descriptor;
 
 use Joomla\Console\Application;
 use Joomla\Console\Command\AbstractCommand;
-use Joomla\Console\Exception\CommandNotFoundException;
+use Symfony\Component\Console\Exception\CommandNotFoundException;
 
 /**
  * Describes an application.
