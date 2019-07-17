@@ -31,7 +31,7 @@ class HelpCommand extends AbstractCommand
 	/**
 	 * The command to process help for
 	 *
-	 * @var    AbstractCommand
+	 * @var    AbstractCommand|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $command;
