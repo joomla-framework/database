@@ -61,7 +61,10 @@ EOF
 	{
 		$descriptor = new DescriptorHelper;
 
-		$this->getHelperSet()->set($descriptor);
+		if ($this->getHelperSet() !== null)
+		{
+			$this->getHelperSet()->set($descriptor);
+		}
 
 		$descriptor->describe(
 			$output,
