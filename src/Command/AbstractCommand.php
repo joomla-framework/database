@@ -285,11 +285,11 @@ abstract class AbstractCommand
 	/**
 	 * Gets the InputDefinition attached to this command.
 	 *
-	 * @return  InputDefinition|null
+	 * @return  InputDefinition
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getDefinition(): ?InputDefinition
+	public function getDefinition(): InputDefinition
 	{
 		return $this->definition;
 	}
