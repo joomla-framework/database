@@ -104,7 +104,7 @@ class Application extends AbstractApplication
 	/**
 	 * The application input definition.
 	 *
-	 * @var    InputDefinition
+	 * @var    InputDefinition|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $definition;
@@ -112,7 +112,7 @@ class Application extends AbstractApplication
 	/**
 	 * The application helper set.
 	 *
-	 * @var    HelperSet
+	 * @var    HelperSet|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $helperSet;
