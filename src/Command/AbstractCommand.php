@@ -90,7 +90,7 @@ abstract class AbstractCommand
 	/**
 	 * The command's input helper set.
 	 *
-	 * @var    HelperSet
+	 * @var    HelperSet|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $helperSet;
@@ -321,11 +321,11 @@ abstract class AbstractCommand
 	/**
 	 * Get the command's input helper set.
 	 *
-	 * @return  HelperSet
+	 * @return  HelperSet|null
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getHelperSet(): HelperSet
+	public function getHelperSet(): ?HelperSet
 	{
 		return $this->helperSet;
 	}
