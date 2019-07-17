@@ -263,8 +263,8 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	/**
 	 * Writes text to the output.
 	 *
-	 * @param   string|array  $content  The message as an array of lines or a single string.
-	 * @param   array         $options  The options to use for formatting the output.
+	 * @param   string  $content  The message.
+	 * @param   array   $options  The options to use for formatting the output.
 	 *
 	 * @return  void
 	 *
