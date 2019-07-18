@@ -219,9 +219,13 @@ class Application extends AbstractApplication
 
 		$command->setApplication($this);
 
-		if ($command->getDefinition() === null)
+		try
 		{
-			throw new LogicException(sprintf('Command class "%s" is not correctly initialised.', \get_class($command)));
+			$command->getDefinition();
+		}
+		catch (\TypeError $exception)
+		{
+			throw new LogicException(sprintf('Command class "%s" is not correctly initialised.', \get_class($command)), 0, $exception);
 		}
 
 		if (!$command->getName())
