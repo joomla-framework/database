@@ -22,7 +22,7 @@ class TerminateEvent extends ConsoleEvent
 	/**
 	 * The exit code to use for the application.
 	 *
-	 * @var    integer|null
+	 * @var    integer
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $exitCode;

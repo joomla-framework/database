@@ -30,7 +30,7 @@ class ConsoleEvent extends Event
 	/**
 	 * The command being executed.
 	 *
-	 * @var    AbstractCommand
+	 * @var    AbstractCommand|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $command;
