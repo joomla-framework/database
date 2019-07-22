@@ -285,7 +285,7 @@ abstract class PdoDriver extends DatabaseDriver
 						'cert'   => 'sslcert',
 					];
 
-					// If costumized, add ciphersuit, ca file path, ca path, private key file path and certificate file path to PDO driver options.
+					// If customised, add cipher suite, ca file path, ca path, private key file path and certificate file path to PDO driver options.
 					foreach (['cipher', 'ca', 'capath', 'key', 'cert'] as $key => $value)
 					{
 						if ($sslKeysMapping[$key] !== null && $this->options['ssl'][$value] !== null)
