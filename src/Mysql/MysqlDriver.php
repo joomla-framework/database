@@ -161,7 +161,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 				}
 			}
 
-			// PDO, if no cipher, ca, capath, cert and key are set, can't start TLS one-way connection, set a common ciphers suit to force it.
+			// PDO, if no cipher, ca, capath, cert and key are set, can't start TLS one-way connection, set a common ciphers suite to force it.
 			if ($sslContextIsNull === true)
 			{
 				$this->options['driverOptions'][\PDO::MYSQL_ATTR_SSL_CIPHER] = implode(':', static::$defaultCipherSuit);
