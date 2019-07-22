@@ -151,7 +151,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		{
 			$sslContextIsNull = true;
 
-			// If costumized, add ciphersuit, ca file path, ca path, private key file path and certificate file path to PDO driver options.
+			// If customised, add cipher suite, ca file path, ca path, private key file path and certificate file path to PDO driver options.
 			foreach (['cipher', 'ca', 'capath', 'key', 'cert'] as $key => $value)
 			{
 				if ($this->options['ssl'][$value] !== null)
