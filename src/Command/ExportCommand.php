@@ -167,7 +167,7 @@ class ExportCommand extends AbstractCommand
 	 */
 	protected function configure(): void
 	{
-		$this->setDescription('Exports the database');
+		$this->setDescription('Export the database');
 		$this->addOption('folder', null, InputOption::VALUE_OPTIONAL, 'Dump in folder path', '.');
 		$this->addOption('table', null, InputOption::VALUE_REQUIRED, 'Dump table name');
 		$this->addOption('all', null, InputOption::VALUE_NONE, 'Dump all tables');
