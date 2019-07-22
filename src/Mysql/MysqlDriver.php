@@ -80,7 +80,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	protected static $dbMinMariadb = '10.0';
 
 	/**
-	 * The default cipher suit for TLS connections.
+	 * The default cipher suite for TLS connections.
 	 *
 	 * @var    array
 	 * @since  __DEPLOY_VERSION__
