@@ -16,8 +16,6 @@ matrix:
       env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
     - php: 7.2
       env: RUN_PHPCS="yes"
-    - php: 7.2
-      env: SYMFONY_VERSION="4.2.*"
     - php: 7.3
       env: SYMFONY_VERSION="4.3.*"
     - php: 7.3
