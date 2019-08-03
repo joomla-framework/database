@@ -128,4 +128,34 @@ class MysqliQueryTest extends TestCase
 			$this->query->regexp('foo')
 		);
 	}
+
+	/**
+	 * @testdox  A string is cast as a character string for the driver
+	 */
+	public function testCastAsWithChar()
+	{
+		$this->assertSame('123', $this->query->castAs('CHAR', '123'));
+	}
+
+	/**
+	 * @testdox  The length param is added to the CAST statement when provided
+	 */
+	public function testCastAsWithCharAndLengthParam()
+	{
+		$this->assertSame(
+			'CAST(123 AS CHAR(2))',
+			$this->query->castAs('CHAR', '123', 2)
+		);
+	}
+
+	/**
+	 * @testdox  Test castAs behaviour with INT (adds 0 to the input)
+	 */
+	public function testCastAsWithIntegerType()
+	{
+		$this->assertSame(
+			'(123 + 0)',
+			$this->query->castAs('INT', '123')
+		);
+	}
 }

@@ -10,6 +10,7 @@ use Joomla\Database\DatabaseInterface;
 use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Exception\QueryTypeAlreadyDefinedException;
 use Joomla\Database\ParameterType;
+use Joomla\Database\Exception\UnknownTypeException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -82,6 +83,31 @@ class DatabaseQueryTest extends TestCase
 	public function testCastAsChar()
 	{
 		$this->assertSame('foo', $this->query->castAsChar('foo'));
+	}
+
+	/**
+	 * @testdox  A string is cast as a character string for the driver
+	 */
+	public function testCastAs()
+	{
+		$this->assertSame('123', $this->query->castAs('CHAR', '123'));
+	}
+
+	/**
+	 * @testdox  The length param is ignored for castAs when the sql driver doesn't support it
+	 */
+	public function testCastAsLengthParamIgnoredWhenNotSupported()
+	{
+		$this->assertSame('123', $this->query->castAs('CHAR', '123', 2));
+	}
+
+	/**
+	 * @testdox  Test an unknown type case return an unknown type exception
+	 */
+	public function testCastAsWithUnknownType()
+	{
+		$this->expectException(UnknownTypeException::class);
+		$this->query->castAs('INT', '123');
 	}
 
 	/**

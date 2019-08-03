@@ -8,6 +8,7 @@
 
 namespace Joomla\Database\Sqlite;
 
+use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Pdo\PdoQuery;
 use Joomla\Database\Query\QueryElement;
 

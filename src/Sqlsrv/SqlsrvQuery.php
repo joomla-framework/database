@@ -260,15 +260,34 @@ class SqlsrvQuery extends DatabaseQuery
 	 *
 	 * Ensure that the value is properly quoted before passing to the method.
 	 *
-	 * @param   string  $value  The value to cast as a char.
+	 * Usage:
+	 * $query->select($query->castAs('CHAR', 'a'));
 	 *
-	 * @return  string  Returns the cast value.
+	 * @param   string  $type    The type of string to cast as.
+	 * @param   string  $value   The value to cast as a char.
+	 * @param   string  $length  The value to cast as a char.
+	 *
+	 * @return  string  SQL statement to cast the value as a char type.
 	 *
 	 * @since   1.0
 	 */
-	public function castAsChar($value)
+	public function castAs(string $type, string $value, ?string $length = null)
 	{
-		return 'CAST(' . $value . ' as NVARCHAR(10))';
+		switch (strtoupper($type))
+		{
+			case 'CHAR':
+				if (!$length)
+				{
+					$length = '10';
+				}
+
+				return 'CAST(' . $value . ' as NVARCHAR(' . $length . '))';
+
+			case 'INT':
+				return 'CAST(' . $value . ' AS INT)';
+		}
+
+		return parent::castAs($type, $value, $length);
 	}
 
 	/**

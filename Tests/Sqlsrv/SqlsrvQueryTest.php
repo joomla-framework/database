@@ -54,6 +54,36 @@ class SqlsrvQueryTest extends TestCase
 	}
 
 	/**
+	 * @testdox  A string is cast as a character string for the driver
+	 */
+	public function testCastAsWithChar()
+	{
+		$this->assertSame('CAST(foo as NVARCHAR(10))', $this->query->castAs('CHAR', 'foo'));
+	}
+
+	/**
+	 * @testdox  The length param is added to the CAST statement when provided
+	 */
+	public function testCastAsWithCharAndLengthParam()
+	{
+		$this->assertSame(
+			'CAST(foo as NVARCHAR(2))',
+			$this->query->castAs('CHAR', 'foo', 2)
+		);
+	}
+
+	/**
+	 * @testdox  Test castAs behaviour with INT
+	 */
+	public function testCastAsWithIntegerType()
+	{
+		$this->assertSame(
+			'CAST(123 AS INT)',
+			$this->query->castAs('INT', '123')
+		);
+	}
+
+	/**
 	 * Data provider for character length test cases
 	 *
 	 * @return  \Generator

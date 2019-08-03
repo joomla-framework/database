@@ -224,4 +224,41 @@ trait MysqlQueryBuilder
 
 		return $this->select("(SELECT @rownum := @rownum + 1 FROM (SELECT @rownum := 0) AS r) AS $orderColumnAlias");
 	}
+
+	/**
+	 * Casts a value to a char.
+	 *
+	 * Ensure that the value is properly quoted before passing to the method.
+	 *
+	 * Usage:
+	 * $query->select($query->castAs('CHAR', 'a'));
+	 *
+	 * @param   string  $type    The type of string to cast as.
+	 * @param   string  $value   The value to cast as a char.
+	 * @param   string  $length  The value to cast as a char.
+	 *
+	 * @return  string  SQL statement to cast the value as a char type.
+	 *
+	 * @since   1.0
+	 */
+	public function castAs(string $type, string $value, ?string $length = null)
+	{
+		switch (strtoupper($type))
+		{
+			case 'CHAR':
+				if (!$length)
+				{
+					return $value;
+				}
+				else
+				{
+					return 'CAST(' . $value . ' AS CHAR(' . $length . '))';
+				}
+
+			case 'INT':
+				return '(' . $value . ' + 0)';
+		}
+
+		return parent::castAs($type, $value, $length);
+	}
 }
