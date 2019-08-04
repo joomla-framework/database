@@ -7,6 +7,12 @@
 /**
 * UTF-8 aware alternative to ord
 * Returns the unicode ordinal for a character
+*
+* Joomla modification - As of PHP 7.4, curly brace access has been deprecated. As a result this function has been
+* modified to use square brace syntax
+* See https://github.com/php/php-src/commit/d574df63dc375f5fc9202ce5afde23f866b6450a
+* for additional references
+*
 * @param string UTF-8 encoded character
 * @return int unicode ordinal for the character
 * @see http://www.php.net/ord
