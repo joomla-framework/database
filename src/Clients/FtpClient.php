@@ -1458,7 +1458,7 @@ class FtpClient
 
 				if (@preg_match($regexp, $file, $regs))
 				{
-					$fType = (int) strpos('-dl', $regs[1]{0});
+					$fType = (int) strpos('-dl', $regs[1][0]);
 
 					// $tmpArray['line'] = $regs[0];
 					$tmpArray['type']   = $fType;
