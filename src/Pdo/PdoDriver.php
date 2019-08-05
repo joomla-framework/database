@@ -448,22 +448,29 @@ abstract class PdoDriver extends DatabaseDriver
 			$errorMsg = (string) implode(', ', $this->statement->errorInfo());
 
 			// Check if the server was disconnected.
-			if (!$this->connected())
+			try
 			{
-				try
+				if (!$this->connected())
 				{
-					// Attempt to reconnect.
-					$this->connection = null;
-					$this->connect();
-				}
-				catch (ConnectionFailureException $e)
-				{
-					// If connect fails, ignore that exception and throw the normal exception.
-					throw new ExecutionFailureException($sql, $errorMsg, $errorNum);
-				}
+					try
+					{
+						// Attempt to reconnect.
+						$this->connection = null;
+						$this->connect();
+					}
+					catch (ConnectionFailureException $e)
+					{
+						// If connect fails, ignore that exception and throw the normal exception.
+						throw new ExecutionFailureException($sql, $errorMsg, $errorNum);
+					}
 
-				// Since we were able to reconnect, run the query again.
-				return $this->execute();
+					// Since we were able to reconnect, run the query again.
+					return $this->execute();
+				}
+			}
+			catch (\LogicException $e)
+			{
+				throw new ExecutionFailureException($sql, $errorMsg, $errorNum, $e);
 			}
 
 			// Throw the normal query exception.
@@ -566,8 +573,9 @@ abstract class PdoDriver extends DatabaseDriver
 		if ($checkingConnected)
 		{
 			// Reset this flag and throw an exception.
-			$checkingConnected = true;
-			die('Recursion trying to check if connected.');
+			$checkingConnected = false;
+
+			throw new \LogicException('Recursion trying to check if connected.');
 		}
 
 		// Backup the query state.
