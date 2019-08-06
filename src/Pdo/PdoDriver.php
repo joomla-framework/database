@@ -274,7 +274,7 @@ abstract class PdoDriver extends DatabaseDriver
 					}
 					else
 					{
-						$format .= ';sslmode=required';
+						$format .= ';sslmode=require';
 					}
 
 					$sslKeysMapping = [
@@ -286,11 +286,11 @@ abstract class PdoDriver extends DatabaseDriver
 					];
 
 					// If customised, add cipher suite, ca file path, ca path, private key file path and certificate file path to PDO driver options.
-					foreach (['cipher', 'ca', 'capath', 'key', 'cert'] as $key => $value)
+					foreach ($sslKeysMapping as $key => $value)
 					{
-						if ($sslKeysMapping[$key] !== null && $this->options['ssl'][$value] !== null)
+						if ($value !== null && $this->options['ssl'][$key] !== null)
 						{
-							$format .= ';' . $sslKeysMapping[$key] . '=' . $this->options['ssl'][$value];
+							$format .= ';' . $value . '=' . $this->options['ssl'][$key];
 						}
 					}
 				}
