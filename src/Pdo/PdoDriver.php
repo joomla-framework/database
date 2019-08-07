@@ -78,6 +78,18 @@ abstract class PdoDriver extends DatabaseDriver
 		$options['port']          = isset($options['port']) ? (int) $options['port'] : null;
 		$options['password']      = $options['password'] ?? '';
 		$options['driverOptions'] = $options['driverOptions'] ?? [];
+		$options['ssl']           = isset($options['ssl']) ? $options['ssl'] : [];
+
+		if ($options['ssl'] !== [])
+		{
+			$options['ssl']['enable']             = isset($options['ssl']['enable']) ? $options['ssl']['enable'] : false;
+			$options['ssl']['cipher']             = isset($options['ssl']['cipher']) ? $options['ssl']['cipher'] : null;
+			$options['ssl']['ca']                 = isset($options['ssl']['ca']) ? $options['ssl']['ca'] : null;
+			$options['ssl']['capath']             = isset($options['ssl']['capath']) ? $options['ssl']['capath'] : null;
+			$options['ssl']['key']                = isset($options['ssl']['key']) ? $options['ssl']['key'] : null;
+			$options['ssl']['cert']               = isset($options['ssl']['cert']) ? $options['ssl']['cert'] : null;
+			$options['ssl']['verify_server_cert'] = isset($options['ssl']['verify_server_cert']) ? $options['ssl']['verify_server_cert'] : null;
+		}
 
 		// Finalize initialisation
 		parent::__construct($options);
@@ -252,6 +264,36 @@ abstract class PdoDriver extends DatabaseDriver
 
 				$replace = ['#HOST#', '#PORT#', '#DBNAME#'];
 				$with    = [$this->options['host'], $this->options['port'], $this->options['database']];
+
+				// For data in transit TLS encryption.
+				if ($this->options['ssl'] !== [] && $this->options['ssl']['enable'] === true)
+				{
+					if (isset($this->options['ssl']['verify_server_cert']) && $this->options['ssl']['verify_server_cert'] === true)
+					{
+						$format .= ';sslmode=verify-full';
+					}
+					else
+					{
+						$format .= ';sslmode=require';
+					}
+
+					$sslKeysMapping = [
+						'cipher' => null,
+						'ca'     => 'sslrootcert',
+						'capath' => null,
+						'key'    => 'sslkey',
+						'cert'   => 'sslcert',
+					];
+
+					// If customised, add cipher suite, ca file path, ca path, private key file path and certificate file path to PDO driver options.
+					foreach ($sslKeysMapping as $key => $value)
+					{
+						if ($value !== null && $this->options['ssl'][$key] !== null)
+						{
+							$format .= ';' . $value . '=' . $this->options['ssl'][$key];
+						}
+					}
+				}
 
 				break;
 

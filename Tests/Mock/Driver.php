@@ -48,6 +48,7 @@ class Driver
 			'getAffectedRows',
 			'getCollation',
 			'getConnectionCollation',
+			'getConnectionEncryption',
 			'getConnectors',
 			'getDateFormat',
 			'getInstance',
