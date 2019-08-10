@@ -558,6 +558,7 @@ CREATE TABLE "dbtest" (
   "id" serial NOT NULL,
   "title" character varying(50) NOT NULL,
   "start_date" timestamp without time zone NOT NULL,
+  "end_date" timestamp without time zone DEFAULT '1970-01-01 00:00:00' NOT NULL,
   "description" text NOT NULL,
   "data" bytea,
   PRIMARY KEY ("id")

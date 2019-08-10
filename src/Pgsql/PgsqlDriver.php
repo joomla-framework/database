@@ -566,6 +566,7 @@ class PgsqlDriver extends PdoDriver
 
 				break;
 
+			case 'timestamp without time zone':
 			case 'date':
 				if (empty($field_value))
 				{
