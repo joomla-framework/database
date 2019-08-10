@@ -126,6 +126,8 @@ trait PostgresqlQueryBuilder
 					$query .= (string) $this->noWait;
 				}
 
+				$query = $this->processLimit($query, $this->limit, $this->offset);
+
 				break;
 
 			case 'update':
@@ -168,6 +170,8 @@ trait PostgresqlQueryBuilder
 					$query .= (string) $this->where;
 				}
 
+				$query = $this->processLimit($query, $this->limit, $this->offset);
+
 				break;
 
 			case 'insert':
@@ -195,6 +199,8 @@ trait PostgresqlQueryBuilder
 					}
 				}
 
+				$query = $this->processLimit($query, $this->limit, $this->offset);
+
 				break;
 
 			default:
@@ -203,7 +209,7 @@ trait PostgresqlQueryBuilder
 				break;
 		}
 
-		return $this->processLimit($query, $this->limit, $this->offset);
+		return $query;
 	}
 
 	/**
