@@ -141,6 +141,15 @@ interface DatabaseInterface
 	public function getConnectionCollation();
 
 	/**
+	 * Method to get the database encryption details (cipher and protocol) in use.
+	 *
+	 * @return  string  The database encryption details.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getConnectionEncryption(): string;
+
+	/**
 	 * Get the total number of SQL statements executed by the database driver.
 	 *
 	 * @return  integer

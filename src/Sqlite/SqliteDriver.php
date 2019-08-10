@@ -169,6 +169,20 @@ class SqliteDriver extends PdoDriver
 	}
 
 	/**
+	 * Method to get the database encryption details (cipher and protocol) in use.
+	 *
+	 * @return  string  The database encryption details.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function getConnectionEncryption(): string
+	{
+		// TODO: Not fake this
+		return '';
+	}
+
+	/**
 	 * Shows the table CREATE statement that creates the given tables.
 	 *
 	 * Note: Doesn't appear to have support in SQLite

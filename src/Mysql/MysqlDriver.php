@@ -80,6 +80,20 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	protected static $dbMinMariadb = '10.0';
 
 	/**
+	 * The default cipher suite for TLS connections.
+	 *
+	 * @var    array
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected static $defaultCipherSuite = [
+		'AES128-GCM-SHA256',
+		'AES256-GCM-SHA384',
+		'AES128-CBC-SHA256',
+		'AES256-CBC-SHA384',
+		'DES-CBC3-SHA',
+	];
+
+	/**
 	 * Constructor.
 	 *
 	 * @param   array  $options  Array of database options with keys: host, user, password, database, select.
@@ -130,6 +144,34 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		if ($this->getConnection())
 		{
 			return;
+		}
+
+		// For SSL/TLS connection encryption.
+		if ($this->options['ssl'] !== [] && $this->options['ssl']['enable'] === true)
+		{
+			$sslContextIsNull = true;
+
+			// If customised, add cipher suite, ca file path, ca path, private key file path and certificate file path to PDO driver options.
+			foreach (['cipher', 'ca', 'capath', 'key', 'cert'] as $key => $value)
+			{
+				if ($this->options['ssl'][$value] !== null)
+				{
+					$this->options['driverOptions'][constant('\PDO::MYSQL_ATTR_SSL_' . strtoupper($value))] = $this->options['ssl'][$value];
+					$sslContextIsNull                                                                       = false;
+				}
+			}
+
+			// PDO, if no cipher, ca, capath, cert and key are set, can't start TLS one-way connection, set a common ciphers suite to force it.
+			if ($sslContextIsNull === true)
+			{
+				$this->options['driverOptions'][\PDO::MYSQL_ATTR_SSL_CIPHER] = implode(':', static::$defaultCipherSuite);
+			}
+
+			// If customised, for capable systems (PHP 7.0.14+ and 7.1.4+) verify certificate chain and Common Name to driver options.
+			if ($this->options['ssl']['verify_server_cert'] !== null && defined('\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT'))
+			{
+				$this->options['driverOptions'][\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = $this->options['ssl']['verify_server_cert'];
+			}
 		}
 
 		try
@@ -294,6 +336,29 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		$this->connect();
 
 		return $this->setQuery('SELECT @@collation_connection;')->loadResult();
+	}
+
+	/**
+	 * Method to get the database encryption details (cipher and protocol) in use.
+	 *
+	 * @return  string  The database encryption details.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function getConnectionEncryption(): string
+	{
+		$this->connect();
+
+		$variables = $this->setQuery('SHOW SESSION STATUS WHERE `Variable_name` IN (\'Ssl_version\', \'Ssl_cipher\')')
+			->loadObjectList('Variable_name');
+
+		if (!empty($variables['Ssl_cipher']->Value))
+		{
+			return $variables['Ssl_version']->Value . ' (' . $variables['Ssl_cipher']->Value . ')';
+		}
+
+		return '';
 	}
 
 	/**

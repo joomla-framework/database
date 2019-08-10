@@ -134,6 +134,31 @@ class PgsqlDriver extends PdoDriver
 	}
 
 	/**
+	 * Method to get the database encryption details (cipher and protocol) in use.
+	 *
+	 * @return  string  The database encryption details.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function getConnectionEncryption(): string
+	{
+		$query = $this->getQuery(true)
+			->select($this->quoteName(['version', 'cipher']))
+			->from($this->quoteName('pg_stat_ssl'))
+			->where($this->quoteName('pid') . ' = pg_backend_pid()');
+
+		$variables = $this->setQuery($query)->loadAssoc();
+
+		if (!empty($variables['cipher']))
+		{
+			return $variables['version'] . ' (' . $variables['cipher'] . ')';
+		}
+
+		return '';
+	}
+
+	/**
 	 * Shows the table CREATE statement that creates the given tables.
 	 *
 	 * This is unsuported by PostgreSQL.
