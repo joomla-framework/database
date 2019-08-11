@@ -334,6 +334,7 @@ class PgsqlDriverTest extends PgsqlCase
 			'id' => 'integer',
 			'title' => 'character varying',
 			'start_date' => 'timestamp without time zone',
+			'end_date' => 'timestamp without time zone',
 			'description' => 'text',
 			'data' => 'bytea',
 		);
@@ -371,6 +372,16 @@ class PgsqlDriverTest extends PgsqlCase
 		$start_date->Default = null;
 		$start_date->comments = '';
 
+		$end_date = new \stdClass;
+		$end_date->column_name = 'end_date';
+		$end_date->Field = 'end_date';
+		$end_date->type = 'timestamp without time zone';
+		$end_date->Type = 'timestamp without time zone';
+		$end_date->null = 'NO';
+		$end_date->Null = 'NO';
+		$end_date->Default = '1970-01-01 00:00:00';
+		$end_date->comments = '';
+
 		$description = new \stdClass;
 		$description->column_name = 'description';
 		$description->Field = 'description';
@@ -398,6 +409,7 @@ class PgsqlDriverTest extends PgsqlCase
 					'id' => $id,
 					'title' => $title,
 					'start_date' => $start_date,
+					'end_date' => $end_date,
 					'description' => $description,
 					'data' => $data,
 				)
@@ -702,6 +714,7 @@ class PgsqlDriverTest extends PgsqlCase
 		$objCompare->id = 3;
 		$objCompare->title = 'Testing3';
 		$objCompare->start_date = '1980-04-18 00:00:00';
+		$objCompare->end_date = '1970-01-01 00:00:00';
 		$objCompare->description = 'three';
 		$objCompare->data = null;
 
@@ -730,6 +743,7 @@ class PgsqlDriverTest extends PgsqlCase
 		$objCompare->id = 1;
 		$objCompare->title = 'Testing';
 		$objCompare->start_date = '1980-04-18 00:00:00';
+		$objCompare->end_date = '1970-01-01 00:00:00';
 		$objCompare->description = 'one';
 		$objCompare->data = null;
 
@@ -739,6 +753,7 @@ class PgsqlDriverTest extends PgsqlCase
 		$objCompare->id = 2;
 		$objCompare->title = 'Testing2';
 		$objCompare->start_date = '1980-04-18 00:00:00';
+		$objCompare->end_date = '1970-01-01 00:00:00';
 		$objCompare->description = 'one';
 		$objCompare->data = null;
 
@@ -748,6 +763,7 @@ class PgsqlDriverTest extends PgsqlCase
 		$objCompare->id = 3;
 		$objCompare->title = 'Testing3';
 		$objCompare->start_date = '1980-04-18 00:00:00';
+		$objCompare->end_date = '1970-01-01 00:00:00';
 		$objCompare->description = 'three';
 		$objCompare->data = null;
 
@@ -757,6 +773,7 @@ class PgsqlDriverTest extends PgsqlCase
 		$objCompare->id = 4;
 		$objCompare->title = 'Testing4';
 		$objCompare->start_date = '1980-04-18 00:00:00';
+		$objCompare->end_date = '1970-01-01 00:00:00';
 		$objCompare->description = 'four';
 		$objCompare->data = null;
 
@@ -801,7 +818,7 @@ class PgsqlDriverTest extends PgsqlCase
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadRow();
 
-		$expected = array(3, 'Testing3', '1980-04-18 00:00:00', 'three', null);
+		$expected = array(3, 'Testing3', '1980-04-18 00:00:00', '1970-01-01 00:00:00', 'three', null);
 
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
 	}
@@ -823,8 +840,8 @@ class PgsqlDriverTest extends PgsqlCase
 		$result = self::$driver->loadRowList();
 
 		$expected = array(
-			array(1, 'Testing', '1980-04-18 00:00:00', 'one', null),
-			array(2, 'Testing2', '1980-04-18 00:00:00', 'one', null)
+			array(1, 'Testing', '1980-04-18 00:00:00', '1970-01-01 00:00:00', 'one', null),
+			array(2, 'Testing2', '1980-04-18 00:00:00', '1970-01-01 00:00:00', 'one', null)
 		);
 
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
@@ -1078,7 +1095,7 @@ class PgsqlDriverTest extends PgsqlCase
 		self::$driver->setQuery($queryCheck);
 		$result = self::$driver->loadRow();
 
-		$expected = array(6, 'testTitle', '1970-01-01 00:00:00', 'testDescription', null);
+		$expected = array(6, 'testTitle', '1970-01-01 00:00:00', '1970-01-01 00:00:00', 'testDescription', null);
 
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
 	}

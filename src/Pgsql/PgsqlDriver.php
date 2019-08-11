@@ -233,6 +233,18 @@ class PgsqlDriver extends PdoDriver
 		{
 			foreach ($fields as $field)
 			{
+				// Change Postgresql's NULL::* type with PHP's null one
+				if (preg_match('/^NULL::*/', $field->Default))
+				{
+					$field->Default = null;
+				}
+
+				// Normalise default values like datetime
+				if (preg_match('/^\'(.*)\'::.*/', $field->Default, $matches))
+				{
+					$field->Default = $matches[1];
+				}
+
 				// Do some dirty translation to MySQL output.
 				// @todo: Come up with and implement a standard across databases.
 				$result[$field->column_name] = (object) [
@@ -247,15 +259,6 @@ class PgsqlDriver extends PdoDriver
 					// @todo: Improve query above to return primary key info as well
 					// 'Key' => ($field->PK == '1' ? 'PRI' : '')
 				];
-			}
-		}
-
-		// Change Postgresql's NULL::* type with PHP's null one
-		foreach ($fields as $field)
-		{
-			if (preg_match('/^NULL::*/', $field->Default))
-			{
-				$field->Default = null;
 			}
 		}
 
@@ -588,6 +591,7 @@ class PgsqlDriver extends PdoDriver
 
 				break;
 
+			case 'timestamp without time zone':
 			case 'date':
 			case 'timestamp without time zone':
 				if (empty($field_value))
