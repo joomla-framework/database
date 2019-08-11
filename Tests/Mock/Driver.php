@@ -49,6 +49,7 @@ class Driver
 			'getCollation',
 			'getConnectionCollation',
 			'getConnectionEncryption',
+			'isConnectionEncryptionSupported',
 			'getConnectors',
 			'getDateFormat',
 			'getInstance',

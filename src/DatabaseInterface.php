@@ -150,6 +150,15 @@ interface DatabaseInterface
 	public function getConnectionEncryption(): string;
 
 	/**
+	 * Method to test if the database TLS connections encryption are supported.
+	 *
+	 * @return  boolean  Whether the databse supports TLS connections encryption.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function isConnectionEncryptionSupported(): bool;
+
+	/**
 	 * Get the total number of SQL statements executed by the database driver.
 	 *
 	 * @return  integer

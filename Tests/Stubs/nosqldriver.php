@@ -228,6 +228,18 @@ class NosqlDriver extends DatabaseDriver
 	}
 
 	/**
+	 * Method to test if the database TLS connections encryption are supported.
+	 *
+	 * @return  boolean  Whether the databse supports TLS connections encryption.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function isConnectionEncryptionSupported(): bool
+	{
+		return false;
+	}
+
+	/**
 	 * Get the number of returned rows for the previous executed SQL statement.
 	 *
 	 * @param   resource  $cursor  An optional database cursor resource to extract the row count from.

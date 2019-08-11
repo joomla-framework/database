@@ -159,6 +159,20 @@ class PgsqlDriver extends PdoDriver
 	}
 
 	/**
+	 * Method to test if the database TLS connections encryption are supported.
+	 *
+	 * @return  boolean  Whether the databse supports TLS connections encryption.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function isConnectionEncryptionSupported(): bool
+	{
+		$variables = $this->setQuery('SHOW "ssl"')->loadAssoc();
+
+		return !empty($variables['ssl']) && $variables['ssl'] === 'on';
+	}
+
+	/**
 	 * Shows the table CREATE statement that creates the given tables.
 	 *
 	 * This is unsuported by PostgreSQL.
@@ -233,18 +247,6 @@ class PgsqlDriver extends PdoDriver
 		{
 			foreach ($fields as $field)
 			{
-				// Change Postgresql's NULL::* type with PHP's null one
-				if (preg_match('/^NULL::*/', $field->Default))
-				{
-					$field->Default = null;
-				}
-
-				// Normalise default values like datetime
-				if (preg_match('/^\'(.*)\'::.*/', $field->Default, $matches))
-				{
-					$field->Default = $matches[1];
-				}
-
 				// Do some dirty translation to MySQL output.
 				// @todo: Come up with and implement a standard across databases.
 				$result[$field->column_name] = (object) [
@@ -259,6 +261,15 @@ class PgsqlDriver extends PdoDriver
 					// @todo: Improve query above to return primary key info as well
 					// 'Key' => ($field->PK == '1' ? 'PRI' : '')
 				];
+			}
+		}
+
+		// Change Postgresql's NULL::* type with PHP's null one
+		foreach ($fields as $field)
+		{
+			if (preg_match('/^NULL::*/', $field->Default))
+			{
+				$field->Default = null;
 			}
 		}
 
@@ -591,7 +602,6 @@ class PgsqlDriver extends PdoDriver
 
 				break;
 
-			case 'timestamp without time zone':
 			case 'date':
 			case 'timestamp without time zone':
 				if (empty($field_value))
