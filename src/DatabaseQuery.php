@@ -2062,7 +2062,7 @@ abstract class DatabaseQuery implements QueryInterface
 
 	/**
 	 * Set a single query to the query set.
-	 * On this type of DatabaseQuery you can use union(), unioAll(), order() and setLimit()
+	 * On this type of DatabaseQuery you can use union(), unionAll(), order() and setLimit()
 	 *
 	 * Usage:
 	 * $query->querySet($query2->select('name')->from('#__foo')->order('id DESC')->setLimit(1))

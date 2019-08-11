@@ -110,6 +110,8 @@ class PgsqlQuery extends PdoQuery
 					$query .= (string) $this->noWait;
 				}
 
+				$query = $this->processLimit($query, $this->limit, $this->offset);
+
 				break;
 
 			case 'update':
@@ -150,6 +152,8 @@ class PgsqlQuery extends PdoQuery
 					$query .= (string) $this->where;
 				}
 
+				$query = $this->processLimit($query, $this->limit, $this->offset);
+
 				break;
 
 			case 'insert':
@@ -177,13 +181,13 @@ class PgsqlQuery extends PdoQuery
 					}
 				}
 
+				$query = $this->processLimit($query, $this->limit, $this->offset);
+
 				break;
 
 			default:
 				$query = parent::__toString();
 		}
-
-		$query = $this->processLimit($query, $this->limit, $this->offset);
 
 		if ($this->type === 'select' && $this->alias !== null)
 		{
