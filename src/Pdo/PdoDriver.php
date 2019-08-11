@@ -564,6 +564,7 @@ abstract class PdoDriver extends DatabaseDriver
 	 * @return  boolean  True if connected to the database engine.
 	 *
 	 * @since   1.0
+	 * @throws  \LogicException
 	 */
 	public function connected()
 	{
