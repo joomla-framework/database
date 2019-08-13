@@ -1659,7 +1659,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 			}
 			else
 			{
-				$parts[] = $q{0} . $part . $q{1};
+				$parts[] = $q[0] . $part . $q[1];
 			}
 		}
 
@@ -1736,7 +1736,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 
 				$l = $k - 1;
 
-				while ($l >= 0 && $sql{$l} === '\\')
+				while ($l >= 0 && $sql[$l] === '\\')
 				{
 					$l--;
 					$escaped = !$escaped;
