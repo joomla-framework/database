@@ -602,7 +602,7 @@ class OracleDriver extends PdoDriver
 
 				$l = $k - 1;
 
-				while ($l >= 0 && $sql{$l} === '\\')
+				while ($l >= 0 && $sql[$l] === '\\')
 				{
 					$l--;
 					$escaped = !$escaped;
