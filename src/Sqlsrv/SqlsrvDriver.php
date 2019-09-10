@@ -369,6 +369,19 @@ class SqlsrvDriver extends DatabaseDriver
 	}
 
 	/**
+	 * Method to test if the database TLS connections encryption are supported.
+	 *
+	 * @return  boolean  Whether the databse supports TLS connections encryption.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function isConnectionEncryptionSupported(): bool
+	{
+		// TODO: Not fake this
+		return false;
+	}
+
+	/**
 	 * Retrieves field information about the given tables.
 	 *
 	 * @param   mixed    $table     A table name

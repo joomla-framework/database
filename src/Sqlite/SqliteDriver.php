@@ -183,6 +183,19 @@ class SqliteDriver extends PdoDriver
 	}
 
 	/**
+	 * Method to test if the database TLS connections encryption are supported.
+	 *
+	 * @return  boolean  Whether the databse supports TLS connections encryption.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function isConnectionEncryptionSupported(): bool
+	{
+		// TODO: Not fake this
+		return false;
+	}
+
+	/**
 	 * Shows the table CREATE statement that creates the given tables.
 	 *
 	 * Note: Doesn't appear to have support in SQLite

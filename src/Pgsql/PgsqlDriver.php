@@ -159,6 +159,20 @@ class PgsqlDriver extends PdoDriver
 	}
 
 	/**
+	 * Method to test if the database TLS connections encryption are supported.
+	 *
+	 * @return  boolean  Whether the databse supports TLS connections encryption.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function isConnectionEncryptionSupported(): bool
+	{
+		$variables = $this->setQuery('SHOW "ssl"')->loadAssoc();
+
+		return !empty($variables['ssl']) && $variables['ssl'] === 'on';
+	}
+
+	/**
 	 * Shows the table CREATE statement that creates the given tables.
 	 *
 	 * This is unsuported by PostgreSQL.
