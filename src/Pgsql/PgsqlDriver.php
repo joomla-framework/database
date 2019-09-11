@@ -253,12 +253,6 @@ class PgsqlDriver extends PdoDriver
 					$field->Default = null;
 				}
 
-				// Normalise default values like datetime
-				if (preg_match('/^\'(.*)\'::.*/', $field->Default, $matches))
-				{
-					$field->Default = $matches[1];
-				}
-
 				// Do some dirty translation to MySQL output.
 				// @todo: Come up with and implement a standard across databases.
 				$result[$field->column_name] = (object) [
