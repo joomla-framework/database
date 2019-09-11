@@ -649,6 +649,12 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 				continue;
 			}
 
+			// Ignore null integer fields.
+			if (stristr($tableColumns[$k], 'int') !== FALSE && $v === '')
+			{
+				continue;
+			}
+
 			// Prepare and sanitize the fields and values for the database query.
 			$fields[] = $this->quoteName($k);
 			$values[] = $this->quote($v);
