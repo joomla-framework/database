@@ -193,7 +193,7 @@ class Application extends AbstractApplication
 		$this->terminal      = new Terminal;
 
 		// Call the constructor as late as possible (it runs `initialise`).
-		parent::__construct(null, $config);
+		parent::__construct($config);
 	}
 
 	/**
