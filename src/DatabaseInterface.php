@@ -159,6 +159,15 @@ interface DatabaseInterface
 	public function isConnectionEncryptionSupported(): bool;
 
 	/**
+	 * Method to check whether the installed database version is supported by the database driver
+	 *
+	 * @return  boolean  True if the database version is supported
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function isMinimumVersion();
+
+	/**
 	 * Get the total number of SQL statements executed by the database driver.
 	 *
 	 * @return  integer
