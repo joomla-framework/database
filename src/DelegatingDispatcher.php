@@ -11,7 +11,8 @@ namespace Joomla\Event;
 /**
  * A dispatcher delegating its methods to an other dispatcher.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0 Create your own delegating (decorating) dispatcher as needed.
  */
 final class DelegatingDispatcher implements DispatcherInterface
 {
@@ -19,7 +20,6 @@ final class DelegatingDispatcher implements DispatcherInterface
 	 * The delegated dispatcher.
 	 *
 	 * @var    DispatcherInterface
-	 *
 	 * @since  1.0
 	 */
 	private $dispatcher;
