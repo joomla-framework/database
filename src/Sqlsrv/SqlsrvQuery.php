@@ -20,25 +20,6 @@ use Joomla\Database\Query\QueryElement;
 class SqlsrvQuery extends DatabaseQuery
 {
 	/**
-	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
-	 *
-	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
-	 * opening quote and the second for the closing quote.
-	 *
-	 * @var    string
-	 * @since  1.0
-	 */
-	protected $name_quotes = '`';
-
-	/**
-	 * The null or zero representation of a timestamp for the database driver.
-	 *
-	 * @var    string
-	 * @since  1.0
-	 */
-	protected $null_date = '1900-01-01 00:00:00';
-
-	/**
 	 * The list of zero or null representation of a datetime.
 	 *
 	 * @var    array

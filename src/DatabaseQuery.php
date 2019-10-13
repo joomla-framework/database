@@ -8,19 +8,48 @@
 
 namespace Joomla\Database;
 
-use stdClass;
-
 /**
  * Joomla Framework Query Building Class.
  *
  * @since  1.0
+ *
+ * @property-read  array                      $bounded             Holds key / value pair of bound objects.
+ * @property-read  array                      $parameterMapping    Mapping array for parameter types.
+ * @property-read  DatabaseInterface          $db                  The database driver.
+ * @property-read  string                     $sql                 The SQL query (if a direct query string was provided).
+ * @property-read  string                     $type                The query type.
+ * @property-read  string|null                $alias               The query alias.
+ * @property-read  Query\QueryElement         $element             The query element for a generic query (type = null).
+ * @property-read  Query\QueryElement         $select              The select element.
+ * @property-read  Query\QueryElement         $delete              The delete element.
+ * @property-read  Query\QueryElement         $update              The update element.
+ * @property-read  Query\QueryElement         $insert              The insert element.
+ * @property-read  Query\QueryElement         $from                The from element.
+ * @property-read  Query\QueryElement[]|null  $join                The join elements.
+ * @property-read  Query\QueryElement         $set                 The set element.
+ * @property-read  Query\QueryElement         $where               The where element.
+ * @property-read  Query\QueryElement         $group               The group element.
+ * @property-read  Query\QueryElement         $having              The having element.
+ * @property-read  Query\QueryElement         $columns             The column list for an INSERT statement.
+ * @property-read  Query\QueryElement         $values              The values list for an INSERT statement.
+ * @property-read  Query\QueryElement         $order               The order element.
+ * @property-read  boolean                    $autoIncrementField  The auto increment insert field element.
+ * @property-read  Query\QueryElement         $call                The call element.
+ * @property-read  Query\QueryElement         $exec                The exec element.
+ * @property-read  Query\QueryElement[]|null  $merge               The list of query elements, which may include UNION, UNION ALL, EXCEPT and INTERSECT.
+ * @property-read  DatabaseQuery|null         $querySet            The query object.
+ * @property-read  array|null                 $selectRowNumber     Details of window function.
+ * @property-read  string[]                   $nullDatetimeList    The list of zero or null representation of a datetime.
+ * @property-read  integer|null               $offset              The offset for the result set.
+ * @property-read  integer|null               $limit               The limit for the result set.
+ * @property-read  integer                    $preparedIndex       An internal index for the bindArray function for unique prepared parameters.
  */
 abstract class DatabaseQuery implements QueryInterface
 {
 	/**
 	 * Holds key / value pair of bound objects.
 	 *
-	 * @var    mixed
+	 * @var    array
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $bounded = [];
@@ -64,7 +93,9 @@ abstract class DatabaseQuery implements QueryInterface
 	protected $type = '';
 
 	/**
-	 * @var    string  The query alias.
+	 * The query alias.
+	 *
+	 * @var    string|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $alias = null;
@@ -118,7 +149,7 @@ abstract class DatabaseQuery implements QueryInterface
 	protected $from;
 
 	/**
-	 * The join element.
+	 * The join elements.
 	 *
 	 * @var    Query\QueryElement[]
 	 * @since  1.0
@@ -184,10 +215,10 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * The auto increment insert field element.
 	 *
-	 * @var    object
+	 * @var    boolean
 	 * @since  1.0
 	 */
-	protected $autoIncrementField;
+	protected $autoIncrementField = false;
 
 	/**
 	 * The call element.
@@ -224,7 +255,7 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * Details of window function.
 	 *
-	 * @var    array
+	 * @var    array|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $selectRowNumber;
@@ -232,7 +263,7 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * The list of zero or null representation of a datetime.
 	 *
-	 * @var    array
+	 * @var    string[]
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $nullDatetimeList = [];
@@ -240,7 +271,7 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * The offset for the result set.
 	 *
-	 * @var    integer
+	 * @var    integer|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $offset;
@@ -248,7 +279,7 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * The limit for the result set.
 	 *
-	 * @var    integer
+	 * @var    integer|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $limit;

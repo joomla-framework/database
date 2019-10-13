@@ -10,11 +10,17 @@ namespace Joomla\Database\Pgsql;
 
 use Joomla\Database\Pdo\PdoQuery;
 use Joomla\Database\Query\PostgresqlQueryBuilder;
+use Joomla\Database\Query\QueryElement;
 
 /**
  * PDO PostgreSQL Query Building Class.
  *
  * @since  1.0
+ *
+ * @property-read  QueryElement  $forUpdate  The FOR UPDATE element used in "FOR UPDATE" lock
+ * @property-read  QueryElement  $forShare   The FOR SHARE element used in "FOR SHARE" lock
+ * @property-read  QueryElement  $noWait     The NOWAIT element used in "FOR SHARE" and "FOR UPDATE" lock
+ * @property-read  QueryElement  $returning  The RETURNING element of INSERT INTO
  */
 class PgsqlQuery extends PdoQuery
 {
