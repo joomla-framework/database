@@ -329,13 +329,13 @@ abstract class DatabaseImporter
 	/**
 	 * Sets the database connector to use for exporting structure and/or data.
 	 *
-	 * @param   DatabaseDriver  $db  The database connector.
+	 * @param   DatabaseInterface  $db  The database connector.
 	 *
 	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
-	public function setDbo(DatabaseDriver $db)
+	public function setDbo(DatabaseInterface $db)
 	{
 		$this->db = $db;
 
