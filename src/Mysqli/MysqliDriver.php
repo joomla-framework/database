@@ -17,6 +17,7 @@ use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\StatementInterface;
 use Joomla\Database\UTF8MB4SupportInterface;
+
 /**
  * MySQLi Database Driver
  *
