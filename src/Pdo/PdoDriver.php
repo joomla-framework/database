@@ -230,7 +230,13 @@ abstract class PdoDriver extends DatabaseDriver
 				}
 
 				$replace = ['#HOST#', '#PORT#', '#SOCKET#', '#DBNAME#', '#CHARSET#'];
-				$with    = [$this->options['host'], $this->options['port'], $this->options['socket'], $this->options['database'], $this->options['charset']];
+				$with    = [
+					$this->options['host'],
+					$this->options['port'],
+					$this->options['socket'],
+					$this->options['database'],
+					$this->options['charset']
+				];
 
 				break;
 
