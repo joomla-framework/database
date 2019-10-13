@@ -7,7 +7,6 @@
  */
 
 namespace Joomla\Database\Mysqli;
-
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\DatabaseEvents;
 use Joomla\Database\Event\ConnectionEvent;
