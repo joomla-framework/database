@@ -230,7 +230,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		{
 			$connectionFlags += MYSQLI_CLIENT_SSL;
 
-			// Verify server certificate is only availble in PHP 5.6.16+. See https://www.php.net/ChangeLog-5.php#5.6.16
+			// Verify server certificate is only available in PHP 5.6.16+. See https://www.php.net/ChangeLog-5.php#5.6.16
 			if (isset($this->options['ssl']['verify_server_cert']))
 			{
 				// New constants in PHP 5.6.16+. See https://www.php.net/ChangeLog-5.php#5.6.16
