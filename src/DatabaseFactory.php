@@ -16,7 +16,7 @@ namespace Joomla\Database;
 class DatabaseFactory
 {
 	/**
-	 * Method to return a DatabaseDriver instance based on the given options.
+	 * Method to return a database driver based on the given options.
 	 *
 	 * There are three global options and then the rest are specific to the database driver. The 'database' option determines which database is to
 	 * be used for the connection. The 'select' option determines whether the connector should automatically select the chosen database.
@@ -45,7 +45,6 @@ class DatabaseFactory
 			throw new Exception\UnsupportedAdapterException(sprintf('Unable to load Database Driver: %s', $options['driver']));
 		}
 
-		// Create our new DatabaseDriver connector based on the options given.
 		return new $class($options);
 	}
 

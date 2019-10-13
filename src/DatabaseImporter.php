@@ -26,7 +26,7 @@ abstract class DatabaseImporter
 	/**
 	 * The database connector to use for exporting structure and/or data.
 	 *
-	 * @var    DatabaseDriver
+	 * @var    DatabaseInterface
 	 * @since  1.0
 	 */
 	protected $db;
