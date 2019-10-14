@@ -11,10 +11,6 @@ namespace Joomla\Database\Query;
 /**
  * Query Element Class.
  *
- * @property-read  string  $name      The name of the element.
- * @property-read  array   $elements  An array of elements.
- * @property-read  string  $glue      Glue piece.
- *
  * @since  1.0
  */
 class QueryElement
