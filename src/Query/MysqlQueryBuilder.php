@@ -44,8 +44,8 @@ trait MysqlQueryBuilder
 	/**
 	 * Concatenates an array of column names or values.
 	 *
-	 * @param   array   $values     An array of values to concatenate.
-	 * @param   string  $separator  As separator to place between each value.
+	 * @param   string[]     $values     An array of values to concatenate.
+	 * @param   string|null  $separator  As separator to place between each value.
 	 *
 	 * @return  string  The concatenated values.
 	 *
@@ -53,16 +53,16 @@ trait MysqlQueryBuilder
 	 */
 	public function concatenate($values, $separator = null)
 	{
-		if ($separator)
+		if ($separator !== null)
 		{
-			$concat_string = 'CONCAT_WS(' . $this->quote($separator);
+			$statement = 'CONCAT_WS(' . $this->quote($separator);
 
 			foreach ($values as $value)
 			{
-				$concat_string .= ', ' . $value;
+				$statement .= ', ' . $value;
 			}
 
-			return $concat_string . ')';
+			return $statement . ')';
 		}
 
 		return 'CONCAT(' . implode(',', $values) . ')';

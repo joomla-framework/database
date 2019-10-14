@@ -297,8 +297,8 @@ class SqlsrvQuery extends DatabaseQuery
 	/**
 	 * Concatenates an array of column names or values.
 	 *
-	 * @param   array   $values     An array of values to concatenate.
-	 * @param   string  $separator  As separator to place between each value.
+	 * @param   string[]     $values     An array of values to concatenate.
+	 * @param   string|null  $separator  As separator to place between each value.
 	 *
 	 * @return  string  The concatenated values.
 	 *
@@ -306,7 +306,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 */
 	public function concatenate($values, $separator = null)
 	{
-		if ($separator)
+		if ($separator !== null)
 		{
 			return '(' . implode('+' . $this->quote($separator) . '+', $values) . ')';
 		}
