@@ -853,7 +853,7 @@ abstract class DatabaseQuery implements QueryInterface
 	}
 
 	/**
-	 * Creates a formatted dump of the query for debugging purposes.
+	 * Creates a HTML formatted dump of the query for debugging purposes.
 	 *
 	 * Usage:
 	 * echo $query->dump();
@@ -861,9 +861,18 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  string
 	 *
 	 * @since   1.0
+	 * @deprecated  3.0  Deprecated without replacement
 	 */
 	public function dump()
 	{
+		@trigger_error(
+			sprintf(
+				'%1$s() is deprecated and will be removed in 3.0.',
+				__METHOD__
+			),
+			E_USER_DEPRECATED
+		);
+
 		return '<pre class="jdatabasequery">' . str_replace('#__', $this->db->getPrefix(), $this) . '</pre>';
 	}
 
