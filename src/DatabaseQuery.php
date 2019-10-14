@@ -571,9 +571,9 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Usage:
 	 * $query->select($query->charLength('a'));
 	 *
-	 * @param   string  $field      A value.
-	 * @param   string  $operator   Comparison operator between charLength integer value and $condition
-	 * @param   string  $condition  Integer value to compare charLength with.
+	 * @param   string       $field      A value.
+	 * @param   string|null  $operator   Comparison operator between charLength integer value and $condition
+	 * @param   string|null  $condition  Integer value to compare charLength with.
 	 *
 	 * @return  string  The required char length call.
 	 *
@@ -581,7 +581,14 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'CHAR_LENGTH(' . $field . ')' . (isset($operator, $condition) ? ' ' . $operator . ' ' . $condition : '');
+		$statement = 'CHAR_LENGTH(' . $field . ')';
+
+		if ($operator !== null && $condition !== null)
+		{
+			$statement .= ' ' . $operator . ' ' . $condition;
+		}
+
+		return $statement;
 	}
 
 	/**

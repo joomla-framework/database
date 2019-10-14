@@ -69,9 +69,9 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * Usage:
 	 * $query->select($query->charLength('a'));
 	 *
-	 * @param   string  $field      A value.
-	 * @param   string  $operator   Comparison operator between charLength integer value and $condition
-	 * @param   string  $condition  Integer value to compare charLength with.
+	 * @param   string       $field      A value.
+	 * @param   string|null  $operator   Comparison operator between charLength integer value and $condition
+	 * @param   string|null  $condition  Integer value to compare charLength with.
 	 *
 	 * @return  string  SQL statement to get the length of a character.
 	 *

@@ -156,9 +156,9 @@ class SqliteQuery extends PdoQuery
 	 * Usage:
 	 * $query->select($query->charLength('a'));
 	 *
-	 * @param   string  $field      A value.
-	 * @param   string  $operator   Comparison operator between charLength integer value and $condition
-	 * @param   string  $condition  Integer value to compare charLength with.
+	 * @param   string       $field      A value.
+	 * @param   string|null  $operator   Comparison operator between charLength integer value and $condition
+	 * @param   string|null  $condition  Integer value to compare charLength with.
 	 *
 	 * @return  string  The required char length call.
 	 *
@@ -166,7 +166,14 @@ class SqliteQuery extends PdoQuery
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'length(' . $field . ')' . (isset($operator, $condition) ? ' ' . $operator . ' ' . $condition : '');
+		$statement =  'length(' . $field . ')';
+
+		if ($operator !== null && $condition !== null)
+		{
+			$statement .= ' ' . $operator . ' ' . $condition;
+		}
+
+		return $statement;
 	}
 
 	/**
