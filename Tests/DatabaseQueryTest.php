@@ -6,32 +6,30 @@
 
 namespace Joomla\Database\Tests;
 
+use Joomla\Database\DatabaseInterface;
+use Joomla\Database\DatabaseQuery;
 use Joomla\Database\ParameterType;
-use Joomla\Test\TestHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for \Joomla\Database\DatabaseQuery.
- *
- * @since  1.0
+ * Test class for Joomla\Database\DatabaseQuery
  */
 class DatabaseQueryTest extends TestCase
 {
 	/**
-	 * A mock of the Driver object for testing purposes.
+	 * Object being tested
 	 *
-	 * @var    \Joomla\Database\DatabaseDriver
-	 * @since  1.0
+	 * @var  MockObject|DatabaseQuery
 	 */
-	protected $dbo;
+	private $query;
 
 	/**
-	 * The instance of the object to test.
+	 * Mock database driver
 	 *
-	 * @var    \Joomla\Database\DatabaseQuery
-	 * @since  1.0
+	 * @var  MockObject|DatabaseInterface
 	 */
-	private $instance;
+	private $db;
 
 	/**
 	 * Sets up the fixture.
@@ -39,2220 +37,927 @@ class DatabaseQueryTest extends TestCase
 	 * This method is called before a test is executed.
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
-		$this->dbo = Mock\Driver::create($this);
-
-		$this->instance = new Mock\Query($this->dbo);
-	}
-
-	/**
-	 * Data for the testNullDate test.
-	 *
-	 * @return  array
-	 *
-	 * @since   1.0
-	 */
-	public function seedNullDateTest()
-	{
-		return array(
-			// @todo quoted, expected
-			array(true, "'_0000-00-00 00:00:00_'"),
-			array(false, '0000-00-00 00:00:00'),
+		$this->db    = $this->createMock(DatabaseInterface::class);
+		$this->query = $this->getMockForAbstractClass(
+			DatabaseQuery::class,
+			[$this->db]
 		);
 	}
 
 	/**
-	 * Data for the testNullDate test.
-	 *
-	 * @return  array
-	 *
-	 * @since   1.0
-	 */
-	public function seedQuoteTest()
-	{
-		return array(
-			// Text, escaped, expected
-			array('text', false, "'text'"),
-			array('text', true, "'_text_'"),
-			array(array('text1', 'text2'), false, array("'text1'", "'text2'")),
-			array(array('text1', 'text2'), true, array("'_text1_'", "'_text2_'")),
-		);
-	}
-
-	/**
-	 * Test for the \Joomla\Database\DatabaseQuery::__call method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function test__call()
-	{
-		$this->assertThat(
-			$this->instance->e('foo'),
-			$this->equalTo($this->instance->escape('foo')),
-			'Tests the e alias of escape.'
-		);
-
-		$this->assertThat(
-			$this->instance->q('foo'),
-			$this->equalTo($this->instance->quote('foo')),
-			'Tests the q alias of quote.'
-		);
-
-		$this->assertThat(
-			$this->instance->qn('foo'),
-			$this->equalTo($this->instance->quoteName('foo')),
-			'Tests the qn alias of quoteName.'
-		);
-	}
-
-	/**
-	 * Test for the \Joomla\Database\DatabaseQuery::__get method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::__get
-	 * @since   1.0
-	 */
-	public function test__get()
-	{
-		$this->instance->select('*');
-		$this->assertEquals('select', TestHelper::getValue($this->instance, 'type'));
-	}
-
-	/**
-	 * Test for FROM clause with subquery.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function test__toStringFrom_subquery()
-	{
-		$subq = clone $this->instance;
-		$subq->select('col AS col2')->from('table')->where('a=1')->setLimit(1);
-
-		$this->instance->select('col2')->from($subq->alias('alias'));
-
-		$this->assertThat(
-			(string) $this->instance,
-			$this->equalTo(
-				PHP_EOL . 'SELECT col2' .
-				PHP_EOL . 'FROM (' .
-				PHP_EOL . 'SELECT col AS col2' .
-				PHP_EOL . 'FROM table' .
-				PHP_EOL . 'WHERE a=1 LIMIT 1) AS alias'
-			)
-		);
-	}
-
-	/**
-	 * Test for INSERT INTO clause with subquery.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function test__toStringInsert_subquery()
-	{
-		$subq = $this->dbo->getQuery(true);
-		$subq->select('col2')->where('a=1');
-
-		$this->instance->insert('table')->columns('col')->values($subq);
-
-		$this->assertThat(
-			(string) $this->instance,
-			$this->equalTo(PHP_EOL . 'INSERT INTO table' . PHP_EOL . '(col)' . PHP_EOL . '(' . PHP_EOL . 'SELECT col2' . PHP_EOL . 'WHERE a=1)')
-		);
-
-		$this->instance->clear();
-		$this->instance->insert('table')->columns('col')->values('3');
-		$this->assertThat(
-			(string) $this->instance,
-			$this->equalTo(PHP_EOL . 'INSERT INTO table' . PHP_EOL . '(col) VALUES ' . PHP_EOL . '(3)')
-		);
-	}
-
-	/**
-	 * Test for year extraction from date.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function test__toStringYear()
-	{
-		$this->instance->select($this->instance->year($this->instance->quoteName('col')))->from('table');
-
-		$this->assertThat(
-			(string) $this->instance,
-			$this->equalTo(PHP_EOL . 'SELECT YEAR(`col`)' . PHP_EOL . 'FROM table')
-		);
-	}
-
-	/**
-	 * Test for month extraction from date.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function test__toStringMonth()
-	{
-		$this->instance->select($this->instance->month($this->instance->quoteName('col')))->from('table');
-
-		$this->assertThat(
-			(string) $this->instance,
-			$this->equalTo(PHP_EOL . 'SELECT MONTH(`col`)' . PHP_EOL . 'FROM table')
-		);
-	}
-
-	/**
-	 * Test for day extraction from date.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function test__toStringDay()
-	{
-		$this->instance->select($this->instance->day($this->instance->quoteName('col')))->from('table');
-
-		$this->assertThat(
-			(string) $this->instance,
-			$this->equalTo(PHP_EOL . 'SELECT DAY(`col`)' . PHP_EOL . 'FROM table')
-		);
-	}
-
-	/**
-	 * Test for hour extraction from date.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function test__toStringHour()
-	{
-		$this->instance->select($this->instance->hour($this->instance->quoteName('col')))->from('table');
-
-		$this->assertThat(
-			(string) $this->instance,
-			$this->equalTo(PHP_EOL . 'SELECT HOUR(`col`)' . PHP_EOL . 'FROM table')
-		);
-	}
-
-	/**
-	 * Test for minute extraction from date.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function test__toStringMinute()
-	{
-		$this->instance->select($this->instance->minute($this->instance->quoteName('col')))->from('table');
-
-		$this->assertThat(
-			(string) $this->instance,
-			$this->equalTo(PHP_EOL . 'SELECT MINUTE(`col`)' . PHP_EOL . 'FROM table')
-		);
-	}
-
-	/**
-	 * Test for seconds extraction from date.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function test__toStringSecond()
-	{
-		$this->instance->select($this->instance->second($this->instance->quoteName('col')))->from('table');
-
-		$this->assertThat(
-			(string) $this->instance,
-			$this->equalTo(PHP_EOL . 'SELECT SECOND(`col`)' . PHP_EOL . 'FROM table')
-		);
-	}
-
-	/**
-	 * Test for the \Joomla\Database\DatabaseQuery::__string method for a 'select' case.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function test__toStringSelect()
-	{
-		$this->instance->select('a.id')
-			->from('a')
-			->innerJoin('b ON b.id = a.id')
-			->where('b.id = 1')
-			->group('a.id')
-			->having('COUNT(a.id) > 3')
-			->order('a.id');
-
-		$this->assertThat(
-			(string) $this->instance,
-			$this->equalTo(
-				PHP_EOL . 'SELECT a.id' .
-					PHP_EOL . 'FROM a' .
-					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-					PHP_EOL . 'WHERE b.id = 1' .
-					PHP_EOL . 'GROUP BY a.id' .
-					PHP_EOL . 'HAVING COUNT(a.id) > 3' .
-					PHP_EOL . 'ORDER BY a.id'
-			),
-			'Tests for correct rendering.'
-		);
-	}
-
-	/**
-	 * Test for the \Joomla\Database\DatabaseQuery::__string method for a 'select' case.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function test__toStringSelectWithUnion()
-	{
-		$this->instance->select('a.id')
-			->from('a')
-			->innerJoin('b ON b.id = a.id')
-			->where('b.id = 1');
-
-		$union = new Mock\Query($this->dbo);
-
-		$union->select('a.id')
-			->from('a')
-			->innerJoin('b ON b.id = a.id')
-			->where('b.name = ' . $union->quote('name'));
-
-		$this->instance->union($union);
-
-		$this->assertThat(
-			(string) $this->instance,
-			$this->equalTo(
-				PHP_EOL . 'SELECT a.id' .
-					PHP_EOL . 'FROM a' .
-					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-					PHP_EOL . 'WHERE b.id = 1' .
-				PHP_EOL . 'UNION (' .
-					PHP_EOL . 'SELECT a.id' .
-					PHP_EOL . 'FROM a' .
-					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-					PHP_EOL . 'WHERE b.name = \'_name_\')'
-			),
-			'Tests for correct rendering unions.'
-		);
-	}
-
-	/**
-	 * Test for the \Joomla\Database\DatabaseQuery::__string method for a 'select' case.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function test__toStringSelectWithUnionAndOrderBy()
-	{
-		$this->instance->select('a.id')
-			->from('a')
-			->innerJoin('b ON b.id = a.id')
-			->where('b.id = 1')
-			->order('b.name');
-
-		$union = new Mock\Query($this->dbo);
-
-		$union->select('a.id')
-			->from('a')
-			->innerJoin('b ON b.id = a.id')
-			->where('b.name = ' . $union->quote('name'));
-
-		$this->instance->union($union);
-
-		$this->assertThat(
-			(string) $this->instance,
-			$this->equalTo(
-				PHP_EOL . 'SELECT a.id' .
-					PHP_EOL . 'FROM a' .
-					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-					PHP_EOL . 'WHERE b.id = 1' .
-				PHP_EOL . 'UNION (' .
-					PHP_EOL . 'SELECT a.id' .
-					PHP_EOL . 'FROM a' .
-					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-					PHP_EOL . 'WHERE b.name = \'_name_\')' .
-				PHP_EOL . 'ORDER BY b.name'
-			),
-			'Tests for correct rendering unions with order by.'
-		);
-	}
-
-	/**
-	 * Test for the \Joomla\Database\DatabaseQuery::__string method for a 'querySet' case.
-	 *
-	 * @return  void
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function test__toStringQuerySetWithIndividualOrderBy()
-	{
-		$query = new Mock\Query($this->dbo);
-
-		$query->select('a.id')
-			->from('a')
-			->innerJoin('b ON b.id = a.id')
-			->where('b.id = 1')
-			->order('a.id');
-
-		$union = new Mock\Query($this->dbo);
-
-		$union->select('a.id')
-			->from('a')
-			->innerJoin('b ON b.id = a.id')
-			->where('b.name = ' . $union->quote('name'))
-			->order('a.id');
-
-
-		$this->instance->querySet($query)
-			->union($union)
-			->order('id');
-
-		$this->assertThat(
-			(string) $this->instance,
-			$this->equalTo(
-				'(' .
-					PHP_EOL . 'SELECT a.id' .
-					PHP_EOL . 'FROM a' .
-					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-					PHP_EOL . 'WHERE b.id = 1' .
-					PHP_EOL . 'ORDER BY a.id)' .
-				PHP_EOL . 'UNION (' .
-					PHP_EOL . 'SELECT a.id' .
-					PHP_EOL . 'FROM a' .
-					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-					PHP_EOL . 'WHERE b.name = \'_name_\'' .
-					PHP_EOL . 'ORDER BY a.id)' .
-				PHP_EOL . 'ORDER BY id'
-			),
-			'Tests for correct rendering querySet with global order by.'
-		);
-	}
-
-	/**
-	 * Test for the \Joomla\Database\DatabaseQuery::__string method for a 'toQuerySet' case.
-	 *
-	 * @return  void
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function test__toStringQuerySetWithIndividualOrderBy2()
-	{
-		$this->instance->select('a.id')
-			->from('a')
-			->innerJoin('b ON b.id = a.id')
-			->where('b.id = 1')
-			->order('a.id');
-
-		$union = new Mock\Query($this->dbo);
-
-		$union->select('a.id')
-			->from('a')
-			->innerJoin('b ON b.id = a.id')
-			->where('b.name = ' . $union->quote('name'))
-			->order('a.id');
-
-		$query = $this->instance->toQuerySet()
-			->union($union)
-			->order('id');
-
-		$this->assertThat(
-			(string) $query,
-			$this->equalTo(
-				'(' .
-					PHP_EOL . 'SELECT a.id' .
-					PHP_EOL . 'FROM a' .
-					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-					PHP_EOL . 'WHERE b.id = 1' .
-					PHP_EOL . 'ORDER BY a.id)' .
-				PHP_EOL . 'UNION (' .
-					PHP_EOL . 'SELECT a.id' .
-					PHP_EOL . 'FROM a' .
-					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-					PHP_EOL . 'WHERE b.name = \'_name_\'' .
-					PHP_EOL . 'ORDER BY a.id)' .
-				PHP_EOL . 'ORDER BY id'
-			),
-			'Tests for correct rendering querySet with global order by.'
-		);
-	}
-
-	/**
-	 * Test for the \Joomla\Database\DatabaseQuery::__string method for a 'update' case.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function test__toStringUpdate()
-	{
-		$this->instance->update('#__foo AS a')
-			->join('INNER', 'b ON b.id = a.id')
-			->set('a.id = 2')
-			->where('b.id = 1');
-
-		$this->assertThat(
-			(string) $this->instance,
-			$this->equalTo(
-				PHP_EOL . 'UPDATE #__foo AS a' .
-					PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
-					PHP_EOL . 'SET a.id = 2' .
-					PHP_EOL . 'WHERE b.id = 1'
-			),
-			'Tests for correct rendering.'
-		);
-	}
-
-	/**
-	 * Tests the union element of __toString.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::__toString
-	 * @since   1.0
-	 */
-	public function test__toStringUnion()
-	{
-		$this->instance->union('SELECT id FROM a');
-
-		$this->assertEquals(PHP_EOL . 'UNION (SELECT id FROM a)', $this->instance);
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::call method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::call
-	 * @since   1.0
+	 * @testdox  The call method correctly creates and manages a CALL query element
 	 */
 	public function testCall()
 	{
-		$this->assertSame($this->instance, $this->instance->call('foo'), 'Checks chaining');
-		$this->instance->call('bar');
-		$this->assertEquals('CALL foo,bar', trim(TestHelper::getValue($this->instance, 'call')), 'Checks method by rendering.');
+		$this->assertSame($this->query, $this->query->call('foo'), 'The query builder supports method chaining');
+		$this->query->call('bar');
+
+		$this->assertSame(
+			['foo', 'bar'],
+			$this->query->call->getElements()
+		);
 	}
 
 	/**
-	 * Tests the call property in  method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::__toString
-	 * @since   1.0
-	 */
-	public function testCall__toString()
-	{
-		$this->assertEquals('CALL foo', trim($this->instance->call('foo')), 'Checks method by rendering.');
-	}
-
-	/**
-	 * Test for the castAsChar method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::castAsChar
-	 * @since   1.0
+	 * @testdox  A string is cast as a character string for the driver
 	 */
 	public function testCastAsChar()
 	{
-		$this->assertThat(
-			$this->instance->castAsChar('123'),
-			$this->equalTo('123'),
-			'The default castAsChar behaviour is to return the input.'
-		);
+		$this->assertSame('foo', $this->query->castAsChar('foo'));
 	}
 
 	/**
-	 * Test for the charLength method.
+	 * Data provider for character length test cases
 	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::charLength
-	 * @since   1.0
+	 * @return  \Generator
 	 */
-	public function testCharLength()
+	public function dataCharLength(): \Generator
 	{
-		$this->assertThat(
-			$this->instance->charLength('a.title'),
-			$this->equalTo('CHAR_LENGTH(a.title)')
-		);
-
-		$this->assertThat(
-			$this->instance->charLength('a.title', '!=', '0'),
-			$this->equalTo('CHAR_LENGTH(a.title) != 0')
-		);
-
-		$this->assertThat(
-			$this->instance->charLength('a.title', 'IS', 'NOT NULL'),
-			$this->equalTo('CHAR_LENGTH(a.title) IS NOT NULL')
-		);
+		yield 'field without comparison' => ['a.title', null, null, 'CHAR_LENGTH(a.title)'];
+		yield 'field with comparison' => ['a.title', '!=', '0', 'CHAR_LENGTH(a.title) != 0'];
 	}
 
 	/**
-	 * Test for the clear method (clearing all types and clauses).
+	 * @testdox  A SQL statement for checking the character length of a field is generated
 	 *
-	 * @return  void
+	 * @param   string       $field      A value.
+	 * @param   string|null  $operator   Comparison operator between charLength integer value and $condition
+	 * @param   string|null  $condition  Integer value to compare charLength with.
+	 * @param   string       $expected   The expected query string.
 	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::clear
-	 * @since   1.0
+	 * @dataProvider  dataCharLength
 	 */
-	public function testClear_all()
+	public function testCharLength(string $field, ?string $operator, ?string $condition, string $expected)
 	{
-		$properties = array(
-			'select',
-			'delete',
-			'update',
-			'insert',
-			'from',
-			'join',
-			'set',
-			'where',
-			'group',
-			'having',
-			'order',
-			'columns',
-			'values',
-			'merge',
-			'exec',
-			'call',
-		);
-
-		// First pass - set the values.
-		foreach ($properties as $property)
-		{
-			TestHelper::setValue($this->instance, $property, $property);
-		}
-
-		// Clear the whole query.
-		$this->instance->clear();
-
-		// Check that all properties have been cleared
-		foreach ($properties as $property)
-		{
-			$this->assertThat(
-				TestHelper::getValue($this->instance, $property),
-				$this->equalTo(null)
-			);
-		}
-
-		// And check that the type has been cleared.
-		$this->assertThat(
-			TestHelper::getValue($this->instance, 'type'),
-			$this->equalTo(null)
+		$this->assertSame(
+			$expected,
+			$this->query->charLength($field, $operator, $condition)
 		);
 	}
 
 	/**
-	 * Test for the clear method (clearing each clause).
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::clear
-	 * @since   1.0
-	 */
-	public function testClear_clause()
-	{
-		$clauses = array(
-			'from',
-			'join',
-			'set',
-			'where',
-			'group',
-			'having',
-			'order',
-			'columns',
-			'values',
-			'merge',
-			'exec',
-			'call',
-		);
-
-		// Test each clause.
-		foreach ($clauses as $clause)
-		{
-			$q = $this->dbo->getQuery(true);
-
-			// Set the clauses
-			foreach ($clauses as $clause2)
-			{
-				TestHelper::setValue($q, $clause2, $clause2);
-			}
-
-			// Clear the clause.
-			$q->clear($clause);
-
-			// Check that clause was cleared.
-			$this->assertThat(
-				TestHelper::getValue($q, $clause),
-				$this->equalTo(null)
-			);
-
-			// Check the state of the other clauses.
-			foreach ($clauses as $clause2)
-			{
-				if ($clause !== $clause2)
-				{
-					$this->assertThat(
-						TestHelper::getValue($q, $clause2),
-						$this->equalTo($clause2),
-						"Clearing $clause resulted in $clause2 having a value of " . TestHelper::getValue($q, $clause2) . '.'
-					);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Test for the clear method (clearing each query type).
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::clear
-	 * @since   1.0
-	 */
-	public function testClear_type()
-	{
-		$types = array(
-			'select',
-			'delete',
-			'update',
-			'insert',
-			'querySet',
-		);
-
-		$clauses = array(
-			'from',
-			'join',
-			'set',
-			'where',
-			'group',
-			'having',
-			'merge',
-			'order',
-			'columns',
-			'values',
-		);
-
-		// Set the clauses.
-		foreach ($clauses as $clause)
-		{
-			TestHelper::setValue($this->instance, $clause, $clause);
-		}
-
-		// Check that all properties have been cleared
-		foreach ($types as $type)
-		{
-			// Set the type.
-			TestHelper::setValue($this->instance, $type, $type);
-
-			// Clear the type.
-			$this->instance->clear($type);
-
-			// Check the type has been cleared.
-			$this->assertThat(
-				TestHelper::getValue($this->instance, 'type'),
-				$this->equalTo(null)
-			);
-
-			$this->assertThat(
-				TestHelper::getValue($this->instance, $type),
-				$this->equalTo(null)
-			);
-
-			// Now check the claues have not been affected.
-			foreach ($clauses as $clause)
-			{
-				$this->assertThat(
-					TestHelper::getValue($this->instance, $clause),
-					$this->equalTo($clause)
-				);
-			}
-		}
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::columns method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::columns
-	 * @since   1.0
+	 * @testdox  The columns method correctly creates and manages a list of columns
 	 */
 	public function testColumns()
 	{
-		$this->assertThat(
-			$this->instance->columns('foo'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->assertSame($this->query, $this->query->columns('foo'), 'The query builder supports method chaining');
+		$this->query->columns('bar');
 
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'columns')),
-			$this->equalTo('(foo)'),
-			'Tests rendered value.'
-		);
-
-		// Add another column.
-		$this->instance->columns('bar');
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'columns')),
-			$this->equalTo('(foo,bar)'),
-			'Tests rendered value after second use.'
+		$this->assertSame(
+			['foo', 'bar'],
+			$this->query->columns->getElements()
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::concatenate method.
+	 * Data provider for concatenate test cases
 	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::concatenate
-	 * @since   1.0
+	 * @return  \Generator
 	 */
-	public function testConcatenate()
+	public function dataConcatenate(): \Generator
 	{
-		$this->assertThat(
-			$this->instance->concatenate(array('foo', 'bar')),
-			$this->equalTo('CONCATENATE(foo || bar)'),
-			'Tests without separator.'
-		);
+		yield 'values without separator' => [['foo', 'bar'], null, 'CONCATENATE(foo || bar)'];
+		yield 'values with separator' => [['foo', 'bar'], ' and ', "CONCATENATE(foo || ' and ' || bar)"];
+	}
 
-		$this->assertThat(
-			$this->instance->concatenate(array('foo', 'bar'), ' and '),
-			$this->equalTo("CONCATENATE(foo || '_ and _' || bar)"),
-			'Tests without separator.'
+	/**
+	 * @testdox  A SQL statement for concatenating values is generated
+	 *
+	 * @param   string[]     $values     An array of values to concatenate.
+	 * @param   string|null  $separator  As separator to place between each value.
+	 * @param   string       $expected   The expected query string.
+	 *
+	 * @dataProvider  dataConcatenate
+	 */
+	public function testConcatenate(array $values, ?string $separator, string $expected)
+	{
+		$this->db->expects($this->any())
+			->method('quote')
+			->willReturnCallback(function ($text, $escape = true) {
+				return "'" . $text . "'";
+			});
+
+		$this->assertSame(
+			$expected,
+			$this->query->concatenate($values, $separator)
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::currentTimestamp method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::currentTimestamp
-	 * @since   1.0
+	 * @testdox  A SQL statement for the current timestamp is generated
 	 */
 	public function testCurrentTimestamp()
 	{
-		$this->assertThat(
-			$this->instance->currentTimestamp(),
-			$this->equalTo('CURRENT_TIMESTAMP()')
+		$this->assertSame(
+			'CURRENT_TIMESTAMP()',
+			$this->query->currentTimestamp()
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::dateFormat method.
+	 * Data provider for dateAdd test cases
 	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::dateFormat
-	 * @since   1.0
+	 * @return  \Generator
 	 */
-	public function testDateFormat()
+	public function dataDateAdd(): \Generator
 	{
-		$this->assertThat(
-			$this->instance->dateFormat(),
-			$this->equalTo('Y-m-d H:i:s')
-		);
+		yield 'date with positive interval' => ["'2019-10-13'", '1', 'DAY', "DATE_ADD('2019-10-13', INTERVAL 1 DAY)"];
+		yield 'date with negative interval' => ["'2019-10-13'", '-1', 'DAY', "DATE_ADD('2019-10-13', INTERVAL -1 DAY)"];
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::dateFormat method for an expected exception.
+	 * @testdox  A SQL statement for adding date values is generated
 	 *
-	 * @return  void
+	 * @param   string  $date      The db quoted string representation of the date to add to. May be date or datetime
+	 * @param   string  $interval  The string representation of the appropriate number of units
+	 * @param   string  $datePart  The part of the date to perform the addition on
+	 * @param   string  $expected  The expected query string.
 	 *
-	 * @covers             \Joomla\Database\DatabaseQuery::dateFormat
-	 * @expectedException  \RuntimeException
-	 * @since           1.0
+	 * @dataProvider  dataDateAdd
 	 */
-	public function testDateFormatException()
+	public function testDateAdd(string $date, string $interval, string $datePart, string $expected)
 	{
-		// Override the internal database for testing.
-		TestHelper::setValue($this->instance, 'db', new \stdClass);
-
-		$this->instance->dateFormat();
+		$this->assertSame(
+			$expected,
+			$this->query->dateAdd($date, $interval, $datePart)
+		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::delete method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::delete
-	 * @since   1.0
+	 * @testdox  The delete method correctly creates a DELETE query element without a table name
 	 */
-	public function testDelete()
+	public function testDeleteWithoutTable()
 	{
-		$this->assertThat(
-			$this->instance->delete('#__foo'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->assertSame($this->query, $this->query->delete(), 'The query builder supports method chaining');
 
-		$this->assertThat(
-			TestHelper::getValue($this->instance, 'type'),
-			$this->equalTo('delete'),
-			'Tests the type property is set correctly.'
-		);
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'delete')),
-			$this->equalTo('DELETE'),
-			'Tests the delete element is set correctly.'
-		);
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'from')),
-			$this->equalTo('FROM #__foo'),
-			'Tests the from element is set correctly.'
-		);
+		$this->assertNotNull($this->query->delete);
+		$this->assertNull($this->query->from);
 	}
 
 	/**
-	 * Tests the delete property in \Joomla\Database\DatabaseQuery::__toString method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::__toString
-	 * @since   1.0
+	 * @testdox  The delete method correctly creates a DELETE and FROM query element with a table name
 	 */
-	public function testDelete__toString()
+	public function testDeleteWithTable()
 	{
-		$this->instance->delete('#__foo')
-			->innerJoin('join')
-			->where('bar=1');
+		$this->assertSame($this->query, $this->query->delete('#__content'), 'The query builder supports method chaining');
 
-		$this->assertEquals(
-			implode(PHP_EOL, array('DELETE ', 'FROM #__foo', 'INNER JOIN join', 'WHERE bar=1')),
-			trim($this->instance)
-		);
+		$this->assertNotNull($this->query->delete);
+		$this->assertNotNull($this->query->from);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::dump method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::dump
-	 * @since   1.0
-	 */
-	public function testDump()
-	{
-		$this->instance->select('*')
-			->from('#__foo');
-
-		$this->assertThat(
-			$this->instance->dump(),
-			$this->equalTo(
-				'<pre class="jdatabasequery">' .
-					PHP_EOL . 'SELECT *' . PHP_EOL . 'FROM foo' .
-					'</pre>'
-			),
-			'Tests that the dump method replaces the prefix correctly.'
-		);
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::escape method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::escape
-	 * @since   1.0
-	 */
-	public function testEscape()
-	{
-		$this->assertThat(
-			$this->instance->escape('foo'),
-			$this->equalTo('_foo_')
-		);
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::escape method for an expected exception.
-	 *
-	 * @return  void
-	 *
-	 * @covers             \Joomla\Database\DatabaseQuery::escape
-	 * @expectedException  \RuntimeException
-	 * @since           1.0
-	 */
-	public function testEscapeException()
-	{
-		// Override the internal database for testing.
-		TestHelper::setValue($this->instance, 'db', new \stdClass);
-
-		$this->instance->escape('foo');
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::exec method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::exec
-	 * @since   1.0
+	 * @testdox  The exec method correctly creates and manages a EXEC query element
 	 */
 	public function testExec()
 	{
-		$this->assertSame($this->instance, $this->instance->exec('a.*'), 'Checks chaining');
-		$this->instance->exec('b.*');
-		$this->assertEquals('EXEC a.*,b.*', trim(TestHelper::getValue($this->instance, 'exec')), 'Checks method by rendering.');
+		$this->assertSame($this->query, $this->query->exec('foo'), 'The query builder supports method chaining');
+		$this->query->exec('bar');
+
+		$this->assertSame(
+			['foo', 'bar'],
+			$this->query->exec->getElements()
+		);
 	}
 
 	/**
-	 * Tests the exec property in \Joomla\Database\DatabaseQuery::__toString method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::__toString
-	 * @since   1.0
+	 * @testdox  A SQL statement for the MySQL find_in_set() function is generated
 	 */
-	public function testExec__toString()
+	public function testFindInSet()
 	{
-		$this->assertEquals('EXEC a.*', trim($this->instance->exec('a.*')));
+		$this->assertSame(
+			'',
+			$this->query->findInSet('foo', 'a.data')
+		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::from method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::from
-	 * @since   1.0
+	 * @testdox  The from method correctly creates and manages a FROM query element
 	 */
 	public function testFrom()
 	{
-		$this->assertThat(
-			$this->instance->from('#__foo'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->assertSame($this->query, $this->query->from('foo'), 'The query builder supports method chaining');
+		$this->query->from('bar');
 
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'from')),
-			$this->equalTo('FROM #__foo'),
-			'Tests rendered value.'
-		);
-
-		// Add another column.
-		$this->instance->from('#__bar');
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'from')),
-			$this->equalTo('FROM #__foo,#__bar'),
-			'Tests rendered value after second use.'
+		$this->assertSame(
+			['foo', 'bar'],
+			$this->query->from->getElements()
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::group method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::group
-	 * @since   1.0
+	 * @testdox  The query can be aliased
+	 */
+	public function testAlias()
+	{
+		$this->assertSame($this->query, $this->query->alias('foo'), 'The query builder supports method chaining');
+
+		$this->assertSame(
+			'foo',
+			$this->query->alias
+		);
+	}
+
+	/**
+	 * @testdox  A SQL statement to extract the year from a date is generated
+	 */
+	public function testYear()
+	{
+		$this->assertSame(
+			'YEAR(a.created)',
+			$this->query->year('a.created')
+		);
+	}
+
+	/**
+	 * @testdox  A SQL statement to extract the month from a date is generated
+	 */
+	public function testMonth()
+	{
+		$this->assertSame(
+			'MONTH(a.created)',
+			$this->query->month('a.created')
+		);
+	}
+
+	/**
+	 * @testdox  A SQL statement to extract the day from a date is generated
+	 */
+	public function testDay()
+	{
+		$this->assertSame(
+			'DAY(a.created)',
+			$this->query->day('a.created')
+		);
+	}
+
+	/**
+	 * @testdox  A SQL statement to extract the hour from a date is generated
+	 */
+	public function testHour()
+	{
+		$this->assertSame(
+			'HOUR(a.created)',
+			$this->query->hour('a.created')
+		);
+	}
+
+	/**
+	 * @testdox  A SQL statement to extract the minute from a date is generated
+	 */
+	public function testMinute()
+	{
+		$this->assertSame(
+			'MINUTE(a.created)',
+			$this->query->minute('a.created')
+		);
+	}
+
+	/**
+	 * @testdox  A SQL statement to extract the second from a date is generated
+	 */
+	public function testSecond()
+	{
+		$this->assertSame(
+			'SECOND(a.created)',
+			$this->query->second('a.created')
+		);
+	}
+
+	/**
+	 * @testdox  The group method correctly creates and manages a GROUP BY query element
 	 */
 	public function testGroup()
 	{
-		$this->assertThat(
-			$this->instance->group('foo'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->assertSame($this->query, $this->query->group('foo'), 'The query builder supports method chaining');
+		$this->query->group('bar');
 
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'group')),
-			$this->equalTo('GROUP BY foo'),
-			'Tests rendered value.'
-		);
-
-		// Add another column.
-		$this->instance->group('bar');
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'group')),
-			$this->equalTo('GROUP BY foo,bar'),
-			'Tests rendered value after second use.'
+		$this->assertSame(
+			['foo', 'bar'],
+			$this->query->group->getElements()
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::having method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::having
-	 * @since   1.0
+	 * @testdox  The having method correctly creates and manages a HAVING query element
 	 */
 	public function testHaving()
 	{
-		$this->assertThat(
-			$this->instance->having('COUNT(foo) > 1'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->assertSame($this->query, $this->query->having('foo'), 'The query builder supports method chaining');
+		$this->query->having('bar');
 
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'having')),
-			$this->equalTo('HAVING COUNT(foo) > 1'),
-			'Tests rendered value.'
-		);
-
-		// Add another column.
-		$this->instance->having('COUNT(bar) > 2');
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'having')),
-			$this->equalTo('HAVING COUNT(foo) > 1 AND COUNT(bar) > 2'),
-			'Tests rendered value after second use.'
-		);
-
-		// Reset the field to test the glue.
-		TestHelper::setValue($this->instance, 'having', null);
-		$this->instance->having('COUNT(foo) > 1', 'OR');
-		$this->instance->having('COUNT(bar) > 2');
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'having')),
-			$this->equalTo('HAVING COUNT(foo) > 1 OR COUNT(bar) > 2'),
-			'Tests rendered value with OR glue.'
+		$this->assertSame(
+			['foo', 'bar'],
+			$this->query->having->getElements()
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::innerJoin method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::innerJoin
-	 * @since   1.0
-	 */
-	public function testInnerJoin()
-	{
-		$q1 = $this->dbo->getQuery(true);
-		$q2 = $this->dbo->getQuery(true);
-		$condition = 'foo ON foo.id = bar.id';
-
-		$this->assertThat(
-			$q1->innerJoin($condition),
-			$this->identicalTo($q1),
-			'Tests chaining.'
-		);
-
-		$q2->join('INNER', $condition);
-
-		$this->assertThat(
-			TestHelper::getValue($q1, 'join'),
-			$this->equalTo(TestHelper::getValue($q2, 'join')),
-			'Tests that innerJoin is an alias for join.'
-		);
-
-		$q3 = $this->dbo->getQuery(true)->innerJoin('foo', 'foo.id = bar.id');
-
-		$this->assertThat(
-			(string) TestHelper::getValue($q3, 'join')[0],
-			$this->equalTo((string) TestHelper::getValue($q1, 'join')[0]),
-			'Tests innerJoin condition.'
-		);
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::insert method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::insert
-	 * @since   1.0
+	 * @testdox  The insert method correctly creates a INSERT query element
 	 */
 	public function testInsert()
 	{
-		$this->assertThat(
-			$this->instance->insert('#__foo'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->assertSame($this->query, $this->query->insert('foo'), 'The query builder supports method chaining');
 
-		$this->assertThat(
-			TestHelper::getValue($this->instance, 'type'),
-			$this->equalTo('insert'),
-			'Tests the type property is set correctly.'
-		);
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'insert')),
-			$this->equalTo('INSERT INTO #__foo'),
-			'Tests the delete element is set correctly.'
-		);
+		$this->assertNotNull($this->query->insert);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::join method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::join
-	 * @since   1.0
+	 * @testdox  The join method correctly creates a JOIN query element
 	 */
 	public function testJoin()
 	{
-		$this->assertThat(
-			$this->instance->join('INNER', 'foo ON foo.id = bar.id'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->assertSame($this->query, $this->query->join('inner', 'foo'), 'The query builder supports method chaining');
+		$this->query->join('inner', 'bar');
 
-		$join = TestHelper::getValue($this->instance, 'join');
-
-		$this->assertThat(
-			trim($join[0]),
-			$this->equalTo('INNER JOIN foo ON foo.id = bar.id'),
-			'Tests that first join renders correctly.'
-		);
-
-		$this->instance->join('OUTER', 'goo ON goo.id = car.id');
-
-		$join = TestHelper::getValue($this->instance, 'join');
-
-		$this->assertThat(
-			trim($join[1]),
-			$this->equalTo('OUTER JOIN goo ON goo.id = car.id'),
-			'Tests that second join renders correctly.'
-		);
-
-		$this->instance->join('OUTER', 'boo', 'boo.id = car.id');
-
-		$join = TestHelper::getValue($this->instance, 'join');
-
-		$this->assertThat(
-			trim($join[2]),
-			$this->equalTo('OUTER JOIN boo ON boo.id = car.id'),
-			'Tests that third join renders correctly.'
+		$this->assertCount(
+			2,
+			$this->query->join
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::leftJoin method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::leftJoin
-	 * @since   1.0
+	 * @testdox  The innerJoin method correctly creates a INNER JOIN query element
 	 */
-	public function testLeftJoin()
+	public function testInnerJoin()
 	{
-		$q1 = $this->dbo->getQuery(true);
-		$q2 = $this->dbo->getQuery(true);
-		$condition = 'foo ON foo.id = bar.id';
+		$this->assertSame($this->query, $this->query->innerJoin('foo'), 'The query builder supports method chaining');
+		$this->query->innerJoin('bar');
 
-		$this->assertThat(
-			$q1->leftJoin($condition),
-			$this->identicalTo($q1),
-			'Tests chaining.'
-		);
-
-		$q2->join('LEFT', $condition);
-
-		$this->assertThat(
-			TestHelper::getValue($q1, 'join'),
-			$this->equalTo(TestHelper::getValue($q2, 'join')),
-			'Tests that leftJoin is an alias for join.'
-		);
-
-		$q3 = $this->dbo->getQuery(true)->leftJoin('foo', 'foo.id = bar.id');
-
-		$this->assertThat(
-			(string) TestHelper::getValue($q3, 'join')[0],
-			$this->equalTo((string) TestHelper::getValue($q1, 'join')[0]),
-			'Tests leftJoin condition.'
+		$this->assertCount(
+			2,
+			$this->query->join
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::length method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::length
-	 * @since   1.0
-	 */
-	public function testLength()
-	{
-		$this->assertThat(
-			trim($this->instance->length('foo')),
-			$this->equalTo('LENGTH(foo)'),
-			'Tests method renders correctly.'
-		);
-	}
-
-	/**
-	 * Tests the quoteName method.
-	 *
-	 * @param   boolean  $quoted    The value of the quoted argument.
-	 * @param   string   $expected  The expected result.
-	 *
-	 * @return  void
-	 *
-	 * @covers        \Joomla\Database\DatabaseQuery::nullDate
-	 * @dataProvider  seedNullDateTest
-	 * @since      1.0
-	 */
-	public function testNullDate($quoted, $expected)
-	{
-		$this->assertThat(
-			$this->instance->nullDate($quoted),
-			$this->equalTo($expected),
-			'The nullDate method should be a proxy for the JDatabase::getNullDate method.'
-		);
-	}
-
-	/**
-	 * Tests the isNullDatetime method.
-	 *
-	 * @return  void
-	 *
-	 * @covers     \Joomla\Database\DatabaseQuery::isNullDatetime
-	 * @since      __DEPLOY_VERSION__
-	 */
-	public function testIsNullDatetime()
-	{
-		$this->assertThat(
-			$this->instance->isNullDatetime('publish_up'),
-			$this->equalTo('publish_up IS NULL'),
-			'Test isNullDatetime failed.'
-		);
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::nullDate method for an expected exception.
-	 *
-	 * @return  void
-	 *
-	 * @covers             \Joomla\Database\DatabaseQuery::nullDate
-	 * @expectedException  \RuntimeException
-	 * @since           1.0
-	 */
-	public function testNullDateException()
-	{
-		// Override the internal database for testing.
-		TestHelper::setValue($this->instance, 'db', new \stdClass);
-
-		$this->instance->nullDate();
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::order method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::order
-	 * @since   1.0
-	 */
-	public function testOrder()
-	{
-		$this->assertThat(
-			$this->instance->order('foo'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'order')),
-			$this->equalTo('ORDER BY foo'),
-			'Tests rendered value.'
-		);
-
-		// Add another column.
-		$this->instance->order('bar');
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'order')),
-			$this->equalTo('ORDER BY foo,bar'),
-			'Tests rendered value after second use.'
-		);
-
-		$this->instance->order(
-			array(
-				'goo', 'car'
-			)
-		);
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'order')),
-			$this->equalTo('ORDER BY foo,bar,goo,car'),
-			'Tests array input.'
-		);
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::outerJoin method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::outerJoin
-	 * @since   1.0
+	 * @testdox  The outerJoin method correctly creates a OUTER JOIN query element
 	 */
 	public function testOuterJoin()
 	{
-		$q1 = $this->dbo->getQuery(true);
-		$q2 = $this->dbo->getQuery(true);
-		$condition = 'foo ON foo.id = bar.id';
+		$this->assertSame($this->query, $this->query->outerJoin('foo'), 'The query builder supports method chaining');
+		$this->query->outerJoin('bar');
 
-		$this->assertThat(
-			$q1->outerJoin($condition),
-			$this->identicalTo($q1),
-			'Tests chaining.'
-		);
-
-		$q2->join('OUTER', $condition);
-
-		$this->assertThat(
-			TestHelper::getValue($q1, 'join'),
-			$this->equalTo(TestHelper::getValue($q2, 'join')),
-			'Tests that outerJoin is an alias for join.'
-		);
-
-		$q3 = $this->dbo->getQuery(true)->outerJoin('foo', 'foo.id = bar.id');
-
-		$this->assertThat(
-			(string) TestHelper::getValue($q3, 'join')[0],
-			$this->equalTo((string) TestHelper::getValue($q1, 'join')[0]),
-			'Tests outerJoin condition.'
+		$this->assertCount(
+			2,
+			$this->query->join
 		);
 	}
 
 	/**
-	 * Tests the quote method.
-	 *
-	 * @param   boolean  $text      The value to be quoted.
-	 * @param   boolean  $escape    True to escape the string, false to leave it unchanged.
-	 * @param   string   $expected  The expected result.
-	 *
-	 * @return  void
-	 *
-	 * @covers        \Joomla\Database\DatabaseQuery::quote
-	 * @since      1.0
-	 * @dataProvider  seedQuoteTest
+	 * @testdox  The leftJoin method correctly creates a LEFT JOIN query element
 	 */
-	public function testQuote($text, $escape, $expected)
+	public function testLeftJoin()
 	{
-		$this->assertEquals($expected, $this->instance->quote($text, $escape));
-	}
+		$this->assertSame($this->query, $this->query->leftJoin('foo'), 'The query builder supports method chaining');
+		$this->query->leftJoin('bar');
 
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::nullDate method for an expected exception.
-	 *
-	 * @return  void
-	 *
-	 * @covers             \Joomla\Database\DatabaseQuery::quote
-	 * @expectedException  \RuntimeException
-	 * @since           1.0
-	 */
-	public function testQuoteException()
-	{
-		// Override the internal database for testing.
-		TestHelper::setValue($this->instance, 'db', new \stdClass);
-
-		$this->instance->quote('foo');
-	}
-
-	/**
-	 * Tests the quoteName method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::quoteName
-	 * @since   1.0
-	 */
-	public function testQuoteName()
-	{
-		$this->assertThat(
-			$this->instance->quoteName('test'),
-			$this->equalTo('`test`'),
-			'The quoteName method should be a proxy for the JDatabase::escape method.'
+		$this->assertCount(
+			2,
+			$this->query->join
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::quoteName method for an expected exception.
-	 *
-	 * @return  void
-	 *
-	 * @covers             \Joomla\Database\DatabaseQuery::quoteName
-	 * @expectedException  \RuntimeException
-	 * @since           1.0
-	 */
-	public function testQuoteNameException()
-	{
-		// Override the internal database for testing.
-		TestHelper::setValue($this->instance, 'db', new \stdClass);
-
-		$this->instance->quoteName('foo');
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::rightJoin method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::rightJoin
-	 * @since   1.0
+	 * @testdox  The rightJoin method correctly creates a RIGHT JOIN query element
 	 */
 	public function testRightJoin()
 	{
-		$q1 = $this->dbo->getQuery(true);
-		$q2 = $this->dbo->getQuery(true);
-		$condition = 'foo ON foo.id = bar.id';
+		$this->assertSame($this->query, $this->query->rightJoin('foo'), 'The query builder supports method chaining');
+		$this->query->rightJoin('bar');
 
-		$this->assertThat(
-			$q1->rightJoin($condition),
-			$this->identicalTo($q1),
-			'Tests chaining.'
-		);
-
-		$q2->join('RIGHT', $condition);
-
-		$this->assertThat(
-			TestHelper::getValue($q1, 'join'),
-			$this->equalTo(TestHelper::getValue($q2, 'join')),
-			'Tests that rightJoin is an alias for join.'
-		);
-
-		$q3 = $this->dbo->getQuery(true)->rightJoin('foo', 'foo.id = bar.id');
-
-		$this->assertThat(
-			(string) TestHelper::getValue($q3, 'join')[0],
-			$this->equalTo((string) TestHelper::getValue($q1, 'join')[0]),
-			'Tests rightJoin condition.'
+		$this->assertCount(
+			2,
+			$this->query->join
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::select method.
+	 * @testdox  A SQL statement to get the length of a field is generated
+	 */
+	public function testLength()
+	{
+		$this->assertSame(
+			'LENGTH(a.created)',
+			$this->query->length('a.created')
+		);
+	}
+
+	/**
+	 * Data provider for null date test cases
 	 *
-	 * @return  void
+	 * @return  \Generator
+	 */
+	public function dataNullDate(): \Generator
+	{
+		yield 'null date with quote' => [true, "'0000-00-00 00:00:00'"];
+		yield 'null date without quote' => [false, '0000-00-00 00:00:00'];
+	}
+
+	/**
+	 * @testdox  The null date from the database driver is retrieved
 	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::select
-	 * @since   1.0
+	 * @param   boolean  $quoted    Optionally wraps the null date in database quotes (true by default).
+	 * @param   string   $expected  The expected query string.
+	 *
+	 * @dataProvider  dataNullDate
+	 */
+	public function testNullDate(bool $quoted, string $expected)
+	{
+		$this->db->expects($this->once())
+			->method('getNullDate')
+			->willReturn('0000-00-00 00:00:00');
+
+		$this->db->expects($this->any())
+			->method('quote')
+			->willReturnCallback(function ($text, $escape = true) {
+				return "'" . $text . "'";
+			});
+
+		$this->assertSame(
+			$expected,
+			$this->query->nullDate($quoted)
+		);
+	}
+
+	/**
+	 * @testdox  The null date cannot be retrieved from the database driver if no driver is present
+	 */
+	public function testNullDateException()
+	{
+		$this->expectException(\RuntimeException::class);
+
+		$query = $this->getMockForAbstractClass(
+			DatabaseQuery::class,
+			[]
+		);
+
+		$query->nullDate();
+	}
+
+	/**
+	 * @testdox  A SQL statement to determine if a field contains a null date is generated when the query has no known null dates
+	 */
+	public function testIsNullDatetimeNoDates()
+	{
+		$this->assertSame(
+			'a.created IS NULL',
+			$this->query->isNullDatetime('a.created')
+		);
+	}
+
+	/**
+	 * @testdox  A SQL statement to determine if a field contains a null date is generated when the query has known null dates
+	 */
+	public function testIsNullDatetimeWithDates()
+	{
+		$this->db->expects($this->any())
+			->method('quote')
+			->willReturnCallback(function ($text, $escape = true) {
+				foreach ($text as $k => $v)
+				{
+					$text[$k] = "'" . $v . "'";
+				}
+
+				return $text;
+			});
+
+		$query = new class($this->db) extends DatabaseQuery
+		{
+			protected $nullDatetimeList = ['0000-00-00 00:00:00', '1000-01-01 00:00:00'];
+
+			public function groupConcat($column, $separator = ',')
+			{
+				return '';
+			}
+
+			public function processLimit($query, $limit, $offset = 0)
+			{
+				return $query;
+			}
+		};
+
+		$this->assertSame(
+			"(a.created IN ('0000-00-00 00:00:00', '1000-01-01 00:00:00') OR a.created IS NULL)",
+			$query->isNullDatetime('a.created')
+		);
+	}
+
+	/**
+	 * @testdox  A SQL statement to determine if a field contains a null date cannot be retrieved from the database driver if no driver is present
+	 */
+	public function testIsNullDatetimeException()
+	{
+		$this->expectException(\RuntimeException::class);
+
+		$query = $this->getMockForAbstractClass(
+			DatabaseQuery::class,
+			[]
+		);
+
+		$query->isNullDatetime('a.created');
+	}
+
+	/**
+	 * @testdox  The order method correctly creates and manages a ORDER BY query element
+	 */
+	public function testOrder()
+	{
+		$this->assertSame($this->query, $this->query->order('foo'), 'The query builder supports method chaining');
+		$this->query->order('bar');
+
+		$this->assertSame(
+			['foo', 'bar'],
+			$this->query->order->getElements()
+		);
+	}
+
+	/**
+	 * @testdox  A string can be quoted
+	 */
+	public function testQuote()
+	{
+		$this->db->expects($this->any())
+			->method('quote')
+			->willReturnCallback(function ($text, $escape = true) {
+				return "'" . $text . "'";
+			});
+
+		$this->assertSame(
+			"'foo'",
+			$this->query->quote('foo')
+		);
+	}
+
+	/**
+	 * @testdox  A string cannot be quoted if no database driver is present
+	 */
+	public function testQuoteException()
+	{
+		$this->expectException(\RuntimeException::class);
+
+		$query = $this->getMockForAbstractClass(
+			DatabaseQuery::class,
+			[]
+		);
+
+		$query->quote('foo');
+	}
+
+	/**
+	 * @testdox  A string can be quoted as a field identifier
+	 */
+	public function testQuoteName()
+	{
+		$this->db->expects($this->any())
+			->method('quoteName')
+			->willReturnCallback(function ($text, $escape = true) {
+				return "`" . $text . "`";
+			});
+
+		$this->assertSame(
+			"`foo`",
+			$this->query->quoteName('foo')
+		);
+	}
+
+	/**
+	 * @testdox  A string cannot be quoted as a field identifier if no database driver is present
+	 */
+	public function testQuoteNameException()
+	{
+		$this->expectException(\RuntimeException::class);
+
+		$query = $this->getMockForAbstractClass(
+			DatabaseQuery::class,
+			[]
+		);
+
+		$query->quoteName('foo');
+	}
+
+	/**
+	 * @testdox  A SQL statement to get a random floating point value is generated
+	 */
+	public function testRand()
+	{
+		$this->assertSame(
+			'',
+			$this->query->rand()
+		);
+	}
+
+	/**
+	 * @testdox  A SQL statement to prepend a string with a regex operator is generated
+	 */
+	public function testRegexp()
+	{
+		$this->assertSame(
+			' foo',
+			$this->query->regexp('foo')
+		);
+	}
+
+	/**
+	 * @testdox  The select method correctly creates and manages a SELECT query element
 	 */
 	public function testSelect()
 	{
-		$this->assertThat(
-			$this->instance->select('foo'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->assertSame($this->query, $this->query->select('foo'), 'The query builder supports method chaining');
+		$this->query->select('bar');
 
-		$this->assertThat(
-			TestHelper::getValue($this->instance, 'type'),
-			$this->equalTo('select'),
-			'Tests the type property is set correctly.'
-		);
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'select')),
-			$this->equalTo('SELECT foo'),
-			'Tests the select element is set correctly.'
-		);
-
-		$this->instance->select('bar');
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'select')),
-			$this->equalTo('SELECT foo,bar'),
-			'Tests the second use appends correctly.'
-		);
-
-		$this->instance->select(
-			array(
-				'goo', 'car'
-			)
-		);
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'select')),
-			$this->equalTo('SELECT foo,bar,goo,car'),
-			'Tests the second use appends correctly.'
+		$this->assertSame(
+			['foo', 'bar'],
+			$this->query->select->getElements()
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::set method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::set
-	 * @since   1.0
+	 * @testdox  The set method correctly creates and manages a SET query element
 	 */
 	public function testSet()
 	{
-		$this->assertThat(
-			$this->instance->set('foo = 1'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->assertSame($this->query, $this->query->set('foo'), 'The query builder supports method chaining');
+		$this->query->set('bar');
 
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'set')),
-			$this->identicalTo('SET foo = 1'),
-			'Tests set with a string.'
-		);
-
-		$this->instance->set('bar = 2');
-		$this->assertEquals('SET foo = 1' . PHP_EOL . "\t, bar = 2", trim(TestHelper::getValue($this->instance, 'set')), 'Tests appending with set().');
-
-		// Clear the set.
-		TestHelper::setValue($this->instance, 'set', null);
-		$this->instance->set(
-			array(
-				'foo = 1',
-				'bar = 2',
-			)
-		);
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'set')),
-			$this->identicalTo('SET foo = 1' . PHP_EOL . "\t, bar = 2"),
-			'Tests set with an array.'
-		);
-
-		// Clear the set.
-		TestHelper::setValue($this->instance, 'set', null);
-		$this->instance->set(
-			array(
-				'foo = 1',
-				'bar = 2',
-			),
-			';'
-		);
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'set')),
-			$this->identicalTo('SET foo = 1' . PHP_EOL . "\t; bar = 2"),
-			'Tests set with an array and glue.'
+		$this->assertSame(
+			['foo', 'bar'],
+			$this->query->set->getElements()
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::setQuery method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::setQuery
-	 * @since   1.0
+	 * @testdox  The setLimit method correctly manages the limit and offset for a query
+	 */
+	public function testSetLimit()
+	{
+		$this->assertSame($this->query, $this->query->setLimit(10, 25), 'The query builder supports method chaining');
+
+		$this->assertSame(
+			10,
+			$this->query->limit
+		);
+
+		$this->assertSame(
+			25,
+			$this->query->offset
+		);
+	}
+
+	/**
+	 * @testdox  The setQuery method correctly manages an injected SQL query
 	 */
 	public function testSetQuery()
 	{
-		$this->assertSame($this->instance, $this->instance->setQuery('Some SQL'), 'Check chaining.');
-		$this->assertAttributeEquals('Some SQL', 'sql', $this->instance, 'Checks the property was set correctly.');
-		$this->assertEquals('Some SQL', (string) $this->instance, 'Checks the rendering of the raw SQL.');
+		$query = 'SELECT foo FROM bar';
+
+		$this->assertSame($this->query, $this->query->setQuery($query), 'The query builder supports method chaining');
+
+		$this->assertSame(
+			$query,
+			$this->query->sql
+		);
 	}
 
 	/**
-	 * Tests rendering coupled with the \Joomla\Database\DatabaseQuery::setQuery method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::__toString
-	 * @since   1.0
-	 */
-	public function testSetQuery__toString()
-	{
-		$this->assertEquals('Some SQL', trim($this->instance->setQuery('Some SQL')));
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::update method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::update
-	 * @since   1.0
+	 * @testdox  The update method correctly creates a UPDATE query element
 	 */
 	public function testUpdate()
 	{
-		$this->assertThat(
-			$this->instance->update('#__foo'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->assertSame($this->query, $this->query->update('foo'), 'The query builder supports method chaining');
 
-		$this->assertThat(
-			TestHelper::getValue($this->instance, 'type'),
-			$this->equalTo('update'),
-			'Tests the type property is set correctly.'
-		);
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'update')),
-			$this->equalTo('UPDATE #__foo'),
-			'Tests the update element is set correctly.'
-		);
+		$this->assertNotNull($this->query->update);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::values method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::values
-	 * @since   1.0
+	 * @testdox  The values method correctly creates and manages a list of values
 	 */
 	public function testValues()
 	{
-		$this->assertThat(
-			$this->instance->values('1,2,3'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->assertSame($this->query, $this->query->values('foo'), 'The query builder supports method chaining');
+		$this->query->values('bar');
 
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'values')),
-			$this->equalTo('(1,2,3)'),
-			'Tests rendered value.'
-		);
-
-		// Add another column.
-		$this->instance->values(
-			array(
-				'4,5,6',
-				'7,8,9',
-			)
-		);
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'values')),
-			$this->equalTo('(1,2,3),(4,5,6),(7,8,9)'),
-			'Tests rendered value after second use and array input.'
+		$this->assertSame(
+			['foo', 'bar'],
+			$this->query->values->getElements()
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::where method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::where
-	 * @since   1.0
+	 * @testdox  The where method correctly creates and manages a WHERE query element
 	 */
 	public function testWhere()
 	{
-		$this->assertThat(
-			$this->instance->where('foo = 1'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->assertSame($this->query, $this->query->where('foo'), 'The query builder supports method chaining');
+		$this->query->where('bar');
 
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo('WHERE foo = 1'),
-			'Tests rendered value.'
-		);
-
-		// Add another column.
-		$this->instance->where(
-			array(
-				'bar = 2',
-				'goo = 3',
-			)
-		);
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo('WHERE foo = 1 AND bar = 2 AND goo = 3'),
-			'Tests rendered value after second use and array input.'
-		);
-
-		// Add more columns but specify different glue.
-		// Note that the change of glue is ignored.
-		$this->instance->where(array('faz = 4', 'gaz = 5'), 'OR');
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo('WHERE foo = 1 AND bar = 2 AND goo = 3 AND faz = 4 AND gaz = 5'),
-			'Tests rendered value after third use, array input and different glue.'
-		);
-
-		// Clear the where
-		TestHelper::setValue($this->instance, 'where', null);
-		$this->instance->where(
-			array(
-				'bar = 2',
-				'goo = 3',
-			),
-			'OR'
-		);
-
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo('WHERE bar = 2 OR goo = 3'),
-			'Tests rendered value with glue.'
+		$this->assertSame(
+			['foo', 'bar'],
+			$this->query->where->getElements()
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::whereIn method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::whereIn
+	 * @testdox  The whereIn method correctly creates and manages a WHERE query element with parameter binding
 	 */
 	public function testWhereIn()
 	{
-		$this->instance->whereIn('id', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo(
-				'WHERE id IN (:preparedArray1,:preparedArray2,:preparedArray3,:preparedArray4,:preparedArray5,:preparedArray6,'
-				. ':preparedArray7,:preparedArray8,:preparedArray9,:preparedArray10,:preparedArray11,:preparedArray12)'
-			),
-			'Tests rendered value.'
+		$this->assertSame($this->query, $this->query->whereIn('foo', [1, 2]), 'The query builder supports method chaining');
+		$this->query->whereIn('bar', [3, 4]);
+
+		$this->assertSame(
+			['foo IN (:preparedArray1,:preparedArray2)', 'bar IN (:preparedArray3,:preparedArray4)'],
+			$this->query->where->getElements()
 		);
 	}
 
 	/**
-	 * Tests bindArray function.
-	 *
-	 * @return  void
+	 * @testdox  The whereNotIn method correctly creates and manages a WHERE query element with parameter binding
 	 */
-	public function testBindArray()
+	public function testWhereNotIn()
 	{
-		$result = $this->instance->bindArray([1, 2, 3], ParameterType::INTEGER);
+		$this->assertSame($this->query, $this->query->whereNotIn('foo', [1, 2]), 'The query builder supports method chaining');
+		$this->query->whereNotIn('bar', [3, 4]);
 
-		$this->assertThat(
-			$result,
-			$this->equalTo([':preparedArray1', ':preparedArray2', ':preparedArray3']),
-			'Tests rendered value.'
-		);
-
-		$this->assertThat(
-			count($this->instance->getBounded()),
-			$this->equalTo(3),
-			'Tests rendered value.'
-		);
-
-		$this->assertThat(
-			$this->instance->getBounded(':preparedArray1')->value,
-			$this->equalTo(1),
-			'Tests rendered value.'
-		);
-
-		$this->assertThat(
-			$this->instance->getBounded(':preparedArray2')->value,
-			$this->equalTo(2),
-			'Tests rendered value.'
-		);
-
-		$this->assertThat(
-			$this->instance->getBounded(':preparedArray3')->value,
-			$this->equalTo(3),
-			'Tests rendered value.'
+		$this->assertSame(
+			['foo NOT IN (:preparedArray1,:preparedArray2)', 'bar NOT IN (:preparedArray3,:preparedArray4)'],
+			$this->query->where->getElements()
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::extendWhere method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.3.0
+	 * @testdox  The extendWhere method correctly overrides a WHERE query element
 	 */
 	public function testExtendWhere()
 	{
-		$this->assertThat(
-			$this->instance->where('foo = 1')->extendWhere('ABC', 'bar = 2'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->query->where('foo');
+		$this->assertSame($this->query, $this->query->extendWhere('OR', 'bar'), 'The query builder supports method chaining');
 
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo('WHERE '
-				. PHP_EOL . '(foo = 1) ABC '
-				. PHP_EOL . '(bar = 2)'),
-			'Tests rendered value.'
-		);
-
-		// Add another set of where conditions.
-		$this->instance->extendWhere('XYZ', array('baz = 3', 'goo = 4'));
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo('WHERE '
-				. PHP_EOL . '('
-				. PHP_EOL . '(foo = 1) ABC '
-				. PHP_EOL . '(bar = 2)) XYZ '
-				. PHP_EOL . '(baz = 3 AND goo = 4)'),
-			'Tests rendered value after second use and array input.'
-		);
-
-		// Add another set of where conditions with some different glue.
-		$this->instance->extendWhere('STU', array('faz = 5', 'gaz = 6'), 'VWX');
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo('WHERE '
-				. PHP_EOL . '('
-				. PHP_EOL . '('
-				. PHP_EOL . '(foo = 1) ABC '
-				. PHP_EOL . '(bar = 2)) XYZ '
-				. PHP_EOL . '(baz = 3 AND goo = 4)) STU '
-				. PHP_EOL . '(faz = 5 VWX gaz = 6)'),
-			'Tests rendered value after third use, array input and different glue.'
+		$this->assertCount(
+			2,
+			$this->query->where->getElements()
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::orWhere method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.3.0
+	 * @testdox  The orWhere method correctly overrides a WHERE query element
 	 */
 	public function testOrWhere()
 	{
-		$this->assertThat(
-			$this->instance->where('foo = 1')->orWhere('bar = 2'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->query->where('foo');
+		$this->assertSame($this->query, $this->query->orWhere('bar'), 'The query builder supports method chaining');
 
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo('WHERE '
-				. PHP_EOL . '(foo = 1) OR '
-				. PHP_EOL . '(bar = 2)'),
-			'Tests rendered value.'
-		);
-
-		// Add another set of where conditions.
-		$this->instance->orWhere(array('baz = 3', 'goo = 4'));
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo('WHERE '
-				. PHP_EOL . '('
-				. PHP_EOL . '(foo = 1) OR '
-				. PHP_EOL . '(bar = 2)) OR '
-				. PHP_EOL . '(baz = 3 AND goo = 4)'),
-			'Tests rendered value after second use and array input.'
-		);
-
-		// Add another set of where conditions with some different glue.
-		$this->instance->orWhere(array('faz = 5', 'gaz = 6'), 'XOR');
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo('WHERE '
-				. PHP_EOL . '('
-				. PHP_EOL . '('
-				. PHP_EOL . '(foo = 1) OR '
-				. PHP_EOL . '(bar = 2)) OR '
-				. PHP_EOL . '(baz = 3 AND goo = 4)) OR '
-				. PHP_EOL . '(faz = 5 XOR gaz = 6)'),
-			'Tests rendered value after third use, array input and different glue.'
+		$this->assertCount(
+			2,
+			$this->query->where->getElements()
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::andWhere method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.3.0
+	 * @testdox  The andWhere method correctly overrides a WHERE query element
 	 */
 	public function testAndWhere()
 	{
-		$this->assertThat(
-			$this->instance->where('foo = 1')->andWhere('bar = 2'),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
-		);
+		$this->query->where('foo');
+		$this->assertSame($this->query, $this->query->andWhere('bar'), 'The query builder supports method chaining');
 
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo('WHERE '
-				. PHP_EOL . '(foo = 1) AND '
-				. PHP_EOL . '(bar = 2)'),
-			'Tests rendered value.'
-		);
-
-		// Add another set of where conditions.
-		$this->instance->andWhere(array('baz = 3', 'goo = 4'));
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo('WHERE '
-				. PHP_EOL . '('
-				. PHP_EOL . '(foo = 1) AND '
-				. PHP_EOL . '(bar = 2)) AND '
-				. PHP_EOL . '(baz = 3 OR goo = 4)'),
-			'Tests rendered value after second use and array input.'
-		);
-
-		// Add another set of where conditions with some different glue.
-		$this->instance->andWhere(array('faz = 5', 'gaz = 6'), 'XOR');
-		$this->assertThat(
-			trim(TestHelper::getValue($this->instance, 'where')),
-			$this->equalTo('WHERE '
-				. PHP_EOL . '('
-				. PHP_EOL . '('
-				. PHP_EOL . '(foo = 1) AND '
-				. PHP_EOL . '(bar = 2)) AND '
-				. PHP_EOL . '(baz = 3 OR goo = 4)) AND '
-				. PHP_EOL . '(faz = 5 XOR gaz = 6)'),
-			'Tests rendered value after third use, array input and different glue.'
+		$this->assertCount(
+			2,
+			$this->query->where->getElements()
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::__clone method properly clones an array.
+	 * Data provider for bind test cases
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @return  \Generator
 	 */
-	public function test__clone_array()
+	public function dataBind(): \Generator
 	{
-		$baseElement = $this->dbo->getQuery(true);
-
-		$baseElement->testArray = array();
-
-		$cloneElement = clone $baseElement;
-
-		$baseElement->testArray[] = 'test';
-
-		$this->assertThat(
-			TestHelper::getValue($baseElement, 'db'),
-			$this->identicalTo(
-				TestHelper::getValue($cloneElement, 'db')
-			),
-			'The cloned $db variable should be identical after cloning.'
-		);
-
-		$this->assertFalse($baseElement === $cloneElement);
-		$this->assertTrue(\count($cloneElement->testArray) === 0);
+		yield 'string field' => ['foo', 'bar', ParameterType::STRING];
+		yield 'numeric field' => ['foo', 42, ParameterType::INTEGER];
+		yield 'numeric key' => [1, 'bar', ParameterType::STRING];
+		yield 'array of data' => [[1, 'foo'], [42, 'bar'], [ParameterType::INTEGER, ParameterType::STRING]];
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::__clone method properly clones an object.
+	 * @testdox  The bind method records a bound parameter for the query
 	 *
-	 * @return  void
+	 * @param   array|string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
+	 *                                                the form ':key', but can also be an integer.
+	 * @param   mixed                 $value          The value that will be bound. It can be an array, in this case it has to be
+	 *                                                same length of $key; The value is passed by reference to support output
+	 *                                                parameters such as those possible with stored procedures.
+	 * @param   array|string          $dataType       Constant corresponding to a SQL datatype. It can be an array, in this case it
+	 *                                                has to be same length of $key
 	 *
-	 * @since   1.0
+	 * @dataProvider  dataBind
 	 */
-	public function test__clone_object()
+	public function testBind($key, $value, $dataType)
 	{
-		$baseElement = $this->dbo->getQuery(true);
+		$this->assertSame($this->query, $this->query->bind($key, $value, $dataType), 'The query builder supports method chaining');
 
-		$baseElement->testObject = new \stdClass;
-
-		$cloneElement = clone $baseElement;
-
-		$this->assertThat(
-			TestHelper::getValue($baseElement, 'db'),
-			$this->identicalTo(
-				TestHelper::getValue($cloneElement, 'db')
-			),
-			'The cloned $db variable should be identical after cloning.'
-		);
-
-		$this->assertFalse($baseElement === $cloneElement);
-		$this->assertFalse($baseElement->testObject === $cloneElement->testObject);
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::__clone method properly clones nested objects.
-	 *
-	 * @return  void
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function test__clone_nested_query()
-	{
-		/**
-		 * Add a custom closure to test the cloning of nested objects.
-		 *
-		 * DatabaseQuery->QueryElement->DatabaseQuery
-		 * $query       ->merge[0]    ->elements[0]
-		 */
-		$this->dbo->func = function() {};
-
-		$query = $this->instance->select('id')->from('#__content');
-		$query->union(clone $query);
-
-		// Real test for exception: Serialization of 'Closure' is not allowed
-		$query2 = clone $query;
-
-		$this->assertFalse($query->merge[0]->getElements()[0] === $query2->merge[0]->getElements()[0]);
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::union method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::union
-	 * @since   1.0
-	 */
-	public function testUnionChain()
-	{
-		$this->assertThat(
-			$this->instance->union($this->instance),
-			$this->identicalTo($this->instance),
-			'Tests chaining.'
+		$this->assertCount(
+			is_array($key) ? count($key) : 1,
+			$this->query->bounded
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::union method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::union
-	 * @since   1.0
+	 * @testdox  The bind method does not record bound parameters when the keys and values are an unbalanced number of items
+	 */
+	public function testBindUnbalancedKeyValue()
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('Array length of $key and $value are not equal');
+
+		$keys      = [1, 2, 3];
+		$values    = ['bar'];
+		$dataTypes = [ParameterType::STRING, ParameterType::STRING, ParameterType::STRING];
+
+		$this->query->bind($keys, $values, $dataTypes);
+	}
+
+	/**
+	 * @testdox  The bind method does not record bound parameters when the keys and data types are an unbalanced number of items
+	 */
+	public function testBindUnbalancedKeyDataType()
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('Array length of $key and $dataType are not equal');
+
+		$keys      = [1, 2, 3];
+		$values    = ['bar', 'car', 'far'];
+		$dataTypes = [ParameterType::STRING];
+
+		$this->query->bind($keys, $values, $dataTypes);
+	}
+
+	/**
+	 * @testdox  The bindArray method creates bound parameters for an array and returns the parameter names
+	 */
+	public function testBindArray()
+	{
+		$this->assertSame(
+			[':preparedArray1', ':preparedArray2', ':preparedArray3'],
+			$this->query->bindArray([1, 2, 3], ParameterType::INTEGER)
+		);
+	}
+
+	/**
+	 * @testdox  The union method correctly creates and manages a merge query element
 	 */
 	public function testUnion()
 	{
-		$this->instance->union('SELECT name FROM foo');
+		$this->assertSame($this->query, $this->query->union('foo'), 'The query builder supports method chaining');
+		$this->query->union('bar');
 
-		$string = implode('', $this->instance->merge);
-
-		$this->assertThat(
-			$string,
-			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)'),
-			'Tests rendered query with union.'
+		$this->assertCount(
+			2,
+			$this->query->merge
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::unionAll method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::unionAll
-	 * @since   1.0
+	 * @testdox  The unionAll method correctly creates and manages a merge query element
 	 */
 	public function testUnionAll()
 	{
-		$this->instance->unionAll('SELECT name FROM foo');
+		$this->assertSame($this->query, $this->query->unionAll('foo'), 'The query builder supports method chaining');
+		$this->query->unionAll('bar');
 
-		$string = implode('', $this->instance->merge);
-
-		$this->assertThat(
-			$string,
-			$this->equalTo(PHP_EOL . 'UNION ALL (SELECT name FROM foo)'),
-			'Tests rendered query with union all.'
+		$this->assertCount(
+			2,
+			$this->query->merge
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::union method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::union
-	 * @since   1.0
+	 * @testdox  The querySet method correctly marks the query type
 	 */
-	public function testUnionTwo()
+	public function testQuerySet()
 	{
-		$this->instance->union('SELECT name FROM foo');
-		$this->instance->union('SELECT name FROM bar');
+		$this->assertSame($this->query, $this->query->querySet('SELECT foo FROM bar'), 'The query builder supports method chaining');
 
-		$string = implode('', $this->instance->merge);
-
-		$this->assertThat(
-			$string,
-			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)' . PHP_EOL . 'UNION (SELECT name FROM bar)'),
-			'Tests rendered query with two unions sequentially.'
+		$this->assertSame(
+			'SELECT foo FROM bar',
+			$this->query->querySet
 		);
 	}
 
 	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::union method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::union
-	 * @since   1.0
+	 * @testdox  The query is converted to a querySet type
 	 */
-	public function testUnionsOrdering()
+	public function testToQuerySet()
 	{
-		$this->instance->unionAll('SELECT name FROM foo');
-		$this->instance->union('SELECT name FROM bar');
+		$this->query->setQuery('SELECT foo FROM bar');
 
-		$string = implode('', $this->instance->merge);
+		$querySetQuery = $this->query->toQuerySet();
 
-		$this->assertThat(
-			$string,
-			$this->equalTo(PHP_EOL . 'UNION ALL (SELECT name FROM foo)' . PHP_EOL . 'UNION (SELECT name FROM bar)'),
-			'Tests rendered query with two different unions sequentially.'
-		);
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::union method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::union
-	 * @since   1.0
-	 */
-	public function testUnionsOrdering2()
-	{
-		$this->instance->union('SELECT name FROM foo');
-		$this->instance->unionAll('SELECT name FROM bar');
-
-		$string = implode('', $this->instance->merge);
-
-		$this->assertThat(
-			$string,
-			$this->equalTo(PHP_EOL . 'UNION (SELECT name FROM foo)' . PHP_EOL . 'UNION ALL (SELECT name FROM bar)'),
-			'Tests rendered query with two different unions sequentially.'
-		);
-	}
-
-	/**
-	 * Tests the \Joomla\Database\DatabaseQuery::format method.
-	 *
-	 * @return  void
-	 *
-	 * @covers  \Joomla\Database\DatabaseQuery::format
-	 * @since   1.0
-	 */
-	public function testFormat()
-	{
-		$result = $this->instance->format('SELECT %n FROM %n WHERE %n = %a', 'foo', '#__bar', 'id', 10);
-		$expected = 'SELECT ' . $this->instance->qn('foo') . ' FROM ' . $this->instance->qn('#__bar') .
-			' WHERE ' . $this->instance->qn('id') . ' = 10';
-		$this->assertThat(
-			$result,
-			$this->equalTo($expected),
-			'Line: ' . __LINE__ . '.'
-		);
-
-		$result = $this->instance->format('SELECT %n FROM %n WHERE %n = %t OR %3$n = %Z', 'id', '#__foo', 'date');
-		$expected = 'SELECT ' . $this->instance->qn('id') . ' FROM ' . $this->instance->qn('#__foo') .
-			' WHERE ' . $this->instance->qn('date') . ' = ' . $this->instance->currentTimestamp() .
-			' OR ' . $this->instance->qn('date') . ' = ' . $this->instance->nullDate(true);
-		$this->assertThat(
-			$result,
-			$this->equalTo($expected),
-			'Line: ' . __LINE__ . '.'
-		);
+		$this->assertNotSame($querySetQuery, $this->query);
 	}
 }
