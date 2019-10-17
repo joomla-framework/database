@@ -8,6 +8,7 @@
 
 namespace Joomla\Database;
 
+use Joomla\Database\Exception\QueryTypeAlreadyDefinedException;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
 
@@ -30,9 +31,6 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	/**
 	 * Add a single column, or array of columns to the CALL clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 * The call method can, however, be called multiple times in the same query.
-	 *
 	 * Usage:
 	 * $query->call('a.*')->call('b.id');
 	 * $query->call(array('a.*', 'b.id'));
@@ -42,6 +40,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function call($columns);
 
@@ -131,8 +130,6 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	/**
 	 * Add a table name to the DELETE clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 *
 	 * Usage:
 	 * $query->delete('#__a')->where('id = 1');
 	 *
@@ -141,14 +138,12 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function delete($table = null);
 
 	/**
 	 * Add a single column, or array of columns to the EXEC clause of the query.
-	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 * The exec method can, however, be called multiple times in the same query.
 	 *
 	 * Usage:
 	 * $query->exec('a.*')->exec('b.id');
@@ -159,6 +154,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function exec($columns);
 
@@ -339,8 +335,6 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	/**
 	 * Add a table name to the INSERT clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 *
 	 * Usage:
 	 * $query->insert('#__a')->set('id = 1');
 	 * $query->insert('#__a')->columns('id, title')->values('1,2')->values('3,4');
@@ -352,6 +346,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function insert($table, $incrementField = false);
 
@@ -463,9 +458,6 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	/**
 	 * Add a single column, or array of columns to the SELECT clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 * The select method can, however, be called multiple times in the same query.
-	 *
 	 * Usage:
 	 * $query->select('a.*')->select('b.id');
 	 * $query->select(array('a.*', 'b.id'));
@@ -475,6 +467,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function select($columns);
 
@@ -516,8 +509,6 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	/**
 	 * Add a table name to the UPDATE clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 *
 	 * Usage:
 	 * $query->update('#__foo')->set(...);
 	 *
@@ -526,6 +517,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function update($table);
 

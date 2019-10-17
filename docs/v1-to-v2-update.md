@@ -108,3 +108,9 @@ The first argument, `$table`, stops accepting the array. Only `DatabaseQuery` ob
 - Argument `$subQueryAlias` has been removed.
 
 Instead of `$query->from($subquery, 'alias')` use `$query->from($subquery->alias('alias'))`.
+
+#### Query type immutability enforced
+
+Several methods which defined a query type (i.e. INSERT, SELECT, UPDATE) contained doc blocks indicating the query type should not be changed, but
+this was not enforced in the code. As of 2.0, an exception will be thrown if trying to change a query type. If intending to change the query type,
+either call `DatabaseQuery::clear()` (optionally only clearing the type clause) or a new query object should be created instead.

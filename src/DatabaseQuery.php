@@ -8,6 +8,8 @@
 
 namespace Joomla\Database;
 
+use Joomla\Database\Exception\QueryTypeAlreadyDefinedException;
+
 /**
  * Joomla Framework Query Building Class.
  *
@@ -87,7 +89,7 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * The query type.
 	 *
-	 * @var    string
+	 * @var    string|null
 	 * @since  1.0
 	 */
 	protected $type = '';
@@ -515,9 +517,6 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * Add a single column, or array of columns to the CALL clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 * The call method can, however, be called multiple times in the same query.
-	 *
 	 * Usage:
 	 * $query->call('a.*')->call('b.id');
 	 * $query->call(array('a.*', 'b.id'));
@@ -527,9 +526,21 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function call($columns)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'call')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "call" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type = 'call';
 
 		if ($this->call === null)
@@ -879,8 +890,6 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * Add a table name to the DELETE clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 *
 	 * Usage:
 	 * $query->delete('#__a')->where('id = 1');
 	 *
@@ -889,9 +898,21 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function delete($table = null)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'delete')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "delete" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type   = 'delete';
 		$this->delete = new Query\QueryElement('DELETE', null);
 
@@ -948,9 +969,6 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * Add a single column, or array of columns to the EXEC clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 * The exec method can, however, be called multiple times in the same query.
-	 *
 	 * Usage:
 	 * $query->exec('a.*')->exec('b.id');
 	 * $query->exec(array('a.*', 'b.id'));
@@ -960,9 +978,21 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function exec($columns)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'exec')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "exec" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type = 'exec';
 
 		if ($this->exec === null)
@@ -1208,8 +1238,6 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * Add a table name to the INSERT clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 *
 	 * Usage:
 	 * $query->insert('#__a')->set('id = 1');
 	 * $query->insert('#__a')->columns('id, title')->values('1,2')->values('3,4');
@@ -1221,9 +1249,21 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function insert($table, $incrementField = false)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'insert')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "insert" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type               = 'insert';
 		$this->insert             = new Query\QueryElement('INSERT INTO', $table);
 		$this->autoIncrementField = $incrementField;
@@ -1586,9 +1626,21 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function select($columns)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'select')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "select" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type = 'select';
 
 		if ($this->select === null)
@@ -1678,8 +1730,6 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * Add a table name to the UPDATE clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 *
 	 * Usage:
 	 * $query->update('#__foo')->set(...);
 	 *
@@ -1688,9 +1738,21 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function update($table)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'update')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "update" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type   = 'update';
 		$this->update = new Query\QueryElement('UPDATE', $table);
 
