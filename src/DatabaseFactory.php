@@ -35,6 +35,7 @@ class DatabaseFactory
 		$options['driver']   = preg_replace('/[^A-Z0-9_\.-]/i', '', $name);
 		$options['database'] = $options['database'] ?? null;
 		$options['select']   = $options['select'] ?? true;
+		$options['factory']  = $options['factory'] ?? $this;
 
 		// Derive the class name from the driver.
 		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($options['driver'])) . '\\' . ucfirst(strtolower($options['driver'])) . 'Driver';
