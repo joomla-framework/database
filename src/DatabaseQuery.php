@@ -731,13 +731,32 @@ abstract class DatabaseQuery
 	 * Usage:
 	 * echo $query->dump();
 	 *
+	 * To get only the query without <pre> tags:
+	 * echo $query->dump(false);
+	 *
+	 * @param.  boolean  $format  Set if the query should be surrounded by pre tags
+	 *
 	 * @return  string
 	 *
 	 * @since   1.0
 	 */
-	public function dump()
+	public function dump(bool $format = true)
 	{
-		return '<pre class="jdatabasequery">' . str_replace('#__', $this->db->getPrefix(), $this) . '</pre>';
+		$query = '';
+		
+		if ($format)
+		{
+			$query .= '<pre class="jdatabasequery">';
+		}
+		
+		$query .= str_replace('#__', $this->db->getPrefix(), $this);
+		
+		if ($format)
+		{
+			$query .= '</pre>';
+		}
+		
+		return $query;
 	}
 
 	/**
