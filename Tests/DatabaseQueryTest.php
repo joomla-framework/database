@@ -960,4 +960,288 @@ class DatabaseQueryTest extends TestCase
 
 		$this->assertNotSame($querySetQuery, $this->query);
 	}
+
+	/**
+	 * @testdox  A query object containing a SELECT query is converted to a proper SQL string
+	 */
+	public function testCastingToStringSelect()
+	{
+		$query = new class($this->db) extends DatabaseQuery
+		{
+			public function groupConcat($column, $separator = ',')
+			{
+				return '';
+			}
+
+			public function processLimit($query, $limit, $offset = 0)
+			{
+				if ($limit > 0 && $offset > 0)
+				{
+					$query .= ' LIMIT ' . $offset . ', ' . $limit;
+				}
+				elseif ($limit > 0)
+				{
+					$query .= ' LIMIT ' . $limit;
+				}
+
+				return $query;
+			}
+		};
+
+		$query->select(['a.*', 'COUNT(b.a_id) AS b_things'])
+			->from('foo a')
+			->leftJoin('bar b', 'a.id = b.a_id')
+			->where($query->isNullDatetime('a.created'))
+			->group('a.language')
+			->having('b_things > 3')
+			->order(['a.id ASC'])
+			->setLimit(10, 1);
+
+		$expected = PHP_EOL . 'SELECT a.*,COUNT(b.a_id) AS b_things';
+		$expected .= PHP_EOL . 'FROM foo a';
+		$expected .= PHP_EOL . 'LEFT JOIN bar b ON a.id = b.a_id';
+		$expected .= PHP_EOL . 'WHERE a.created IS NULL';
+		$expected .= PHP_EOL . 'GROUP BY a.language';
+		$expected .= PHP_EOL . 'HAVING b_things > 3';
+		$expected .= PHP_EOL . 'ORDER BY a.id ASC LIMIT 1, 10';
+
+		$this->assertSame($expected, (string) $query);
+	}
+
+	/**
+	 * @testdox  A query object containing an aliased SELECT query is converted to a proper SQL string
+	 */
+	public function testCastingToStringSelectAliased()
+	{
+		$query = new class($this->db) extends DatabaseQuery
+		{
+			public function groupConcat($column, $separator = ',')
+			{
+				return '';
+			}
+
+			public function processLimit($query, $limit, $offset = 0)
+			{
+				return $query;
+			}
+		};
+
+		$query->select(['a.*', 'COUNT(b.a_id) AS b_things'])
+			->from('foo a')
+			->leftJoin('bar b', 'a.id = b.a_id')
+			->alias('sub');
+
+		$expected = '(';
+		$expected .= PHP_EOL . 'SELECT a.*,COUNT(b.a_id) AS b_things';
+		$expected .= PHP_EOL . 'FROM foo a';
+		$expected .= PHP_EOL . 'LEFT JOIN bar b ON a.id = b.a_id) AS sub';
+
+		$this->assertSame($expected, (string) $query);
+	}
+
+	/**
+	 * @testdox  A query object containing a DELETE query is converted to a proper SQL string
+	 */
+	public function testCastingToStringDelete()
+	{
+		$query = new class($this->db) extends DatabaseQuery
+		{
+			public function groupConcat($column, $separator = ',')
+			{
+				return '';
+			}
+
+			public function processLimit($query, $limit, $offset = 0)
+			{
+				return $query;
+			}
+		};
+
+		$query->delete('foo a')
+			->leftJoin('bar b', 'a.id = b.a_id')
+			->where($query->isNullDatetime('a.created'));
+
+		// There is an expected trailing whitespace after the DELETE statement
+		$expected = PHP_EOL . 'DELETE ';
+		$expected .= PHP_EOL . 'FROM foo a';
+		$expected .= PHP_EOL . 'LEFT JOIN bar b ON a.id = b.a_id';
+		$expected .= PHP_EOL . 'WHERE a.created IS NULL';
+
+		$this->assertSame($expected, (string) $query);
+	}
+
+	/**
+	 * @testdox  A query object containing a UPDATE query is converted to a proper SQL string
+	 */
+	public function testCastingToStringUpdate()
+	{
+		$query = new class($this->db) extends DatabaseQuery
+		{
+			public function groupConcat($column, $separator = ',')
+			{
+				return '';
+			}
+
+			public function processLimit($query, $limit, $offset = 0)
+			{
+				return $query;
+			}
+		};
+
+		$query->update('foo a')
+			->leftJoin('bar b', 'a.id = b.a_id')
+			->set('a.updated = ' . $query->currentTimestamp())
+			->whereIn('b.id', [1, 2, 3]);
+
+		$expected = PHP_EOL . 'UPDATE foo a';
+		$expected .= PHP_EOL . 'LEFT JOIN bar b ON a.id = b.a_id';
+		$expected .= PHP_EOL . 'SET a.updated = CURRENT_TIMESTAMP()';
+		$expected .= PHP_EOL . 'WHERE b.id IN (:preparedArray1,:preparedArray2,:preparedArray3)';
+
+		$this->assertSame($expected, (string) $query);
+	}
+
+	/**
+	 * @testdox  A query object containing a INSERT query with SET notation is converted to a proper SQL string
+	 */
+	public function testCastingToStringInsertSet()
+	{
+		$this->db->expects($this->any())
+			->method('quote')
+			->willReturnCallback(function ($text, $escape = true) {
+				return "'" . $text . "'";
+			});
+
+		$query = new class($this->db) extends DatabaseQuery
+		{
+			public function groupConcat($column, $separator = ',')
+			{
+				return '';
+			}
+
+			public function processLimit($query, $limit, $offset = 0)
+			{
+				return $query;
+			}
+		};
+
+		$query->insert('foo a')
+			->set('a.data = ' . $query->quote(json_encode(['hello' => 'world'])))
+			->set('a.updated = ' . $query->currentTimestamp());
+
+		$expected = PHP_EOL . 'INSERT INTO foo a';
+		$expected .= PHP_EOL . 'SET a.data = \'{"hello":"world"}\'';
+		$expected .= PHP_EOL . "\t, a.updated = CURRENT_TIMESTAMP()";
+
+		$this->assertSame($expected, (string) $query);
+	}
+
+	/**
+	 * @testdox  A query object containing a INSERT query with COLUMNS/VALUES notation is converted to a proper SQL string
+	 */
+	public function testCastingToStringInsertColumnsValues()
+	{
+		$this->db->expects($this->any())
+			->method('quote')
+			->willReturnCallback(function ($text, $escape = true) {
+				return "'" . $text . "'";
+			});
+
+		$query = new class($this->db) extends DatabaseQuery
+		{
+			public function groupConcat($column, $separator = ',')
+			{
+				return '';
+			}
+
+			public function processLimit($query, $limit, $offset = 0)
+			{
+				return $query;
+			}
+		};
+
+		$query->insert('foo a')
+			->columns(['a.data', 'a.updated'])
+			->values([$query->quote(json_encode(['hello' => 'world'])) . ', ' . $query->currentTimestamp()]);
+
+		// There is an expected trailing whitespace after the VALUES statement
+		$expected = PHP_EOL . 'INSERT INTO foo a';
+		$expected .= PHP_EOL . '(a.data,a.updated) VALUES ';
+		$expected .= PHP_EOL . '(\'{"hello":"world"}\', CURRENT_TIMESTAMP())';
+
+		$this->assertSame($expected, (string) $query);
+	}
+
+	/**
+	 * @testdox  A query object containing a CALL query is converted to a proper SQL string
+	 */
+	public function testCastingToStringCall()
+	{
+		$query = new class($this->db) extends DatabaseQuery
+		{
+			public function groupConcat($column, $separator = ',')
+			{
+				return '';
+			}
+
+			public function processLimit($query, $limit, $offset = 0)
+			{
+				return $query;
+			}
+		};
+
+		$query->call('a.foo');
+
+		$expected = PHP_EOL . 'CALL a.foo';
+
+		$this->assertSame($expected, (string) $query);
+	}
+
+	/**
+	 * @testdox  A query object containing a EXEC query is converted to a proper SQL string
+	 */
+	public function testCastingToStringExec()
+	{
+		$query = new class($this->db) extends DatabaseQuery
+		{
+			public function groupConcat($column, $separator = ',')
+			{
+				return '';
+			}
+
+			public function processLimit($query, $limit, $offset = 0)
+			{
+				return $query;
+			}
+		};
+
+		$query->exec('a.foo');
+
+		$expected = PHP_EOL . 'EXEC a.foo';
+
+		$this->assertSame($expected, (string) $query);
+	}
+
+	/**
+	 * @testdox  A query object containing an injected query is converted to a proper SQL string
+	 */
+	public function testCastingToStringInjectedQuery()
+	{
+		$query = new class($this->db) extends DatabaseQuery
+		{
+			public function groupConcat($column, $separator = ',')
+			{
+				return '';
+			}
+
+			public function processLimit($query, $limit, $offset = 0)
+			{
+				return $query;
+			}
+		};
+
+		$query->setQuery('SELECT foo FROM bar');
+
+		$this->assertSame('SELECT foo FROM bar', (string) $query);
+	}
 }
