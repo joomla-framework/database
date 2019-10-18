@@ -10,9 +10,12 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Database\DatabaseExporter;
 use Joomla\Database\DatabaseFactory;
 use Joomla\Database\DatabaseImporter;
+use Joomla\Database\DatabaseInterface;
+use Joomla\Database\DatabaseIterator;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Mysqli\MysqliDriver;
 use Joomla\Database\QueryInterface;
+use Joomla\Database\StatementInterface;
 use Joomla\Test\TestHelper;
 use PHPUnit\Framework\TestCase;
 
@@ -40,6 +43,45 @@ class DatabaseFactoryTest extends TestCase
 		parent::setUp();
 
 		$this->factory = new DatabaseFactory;
+	}
+
+	/**
+	 * Data provider for driver test cases
+	 *
+	 * @return  \Generator
+	 */
+	public function dataGetDriver(): \Generator
+	{
+		yield 'supported driver' => [
+			'mysqli',
+			false,
+		];
+
+		yield 'unsupported exporter' => [
+			'mariadb',
+			true,
+		];
+	}
+
+	/**
+	 * @testdox  The factory builds a database driver correctly
+	 *
+	 * @param   string   $adapter               The type of adapter to create
+	 * @param   boolean  $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
+	 *
+	 * @dataProvider  dataGetDriver
+	 */
+	public function testGetDriver(string $adapter, bool $shouldRaiseException)
+	{
+		if ($shouldRaiseException)
+		{
+			$this->expectException(UnsupportedAdapterException::class);
+		}
+
+		$this->assertInstanceOf(
+			DatabaseInterface::class,
+			$this->factory->getDriver($adapter)
+		);
 	}
 
 	/**
@@ -156,6 +198,35 @@ class DatabaseFactoryTest extends TestCase
 				$databaseDriver
 			);
 		}
+	}
+
+	/**
+	 * Data provider for iterator test cases
+	 *
+	 * @return  \Generator
+	 */
+	public function dataGetIterator(): \Generator
+	{
+		yield 'driver without custom iterator' => [
+			'mysqli',
+			$this->createMock(StatementInterface::class),
+		];
+	}
+
+	/**
+	 * @testdox  The factory builds a database iterator correctly
+	 *
+	 * @param   string              $adapter    The type of adapter to create
+	 * @param   StatementInterface  $statement  Statement holding the result set to be iterated.
+	 *
+	 * @dataProvider  dataGetIterator
+	 */
+	public function testGetIterator(string $adapter, StatementInterface $statement)
+	{
+		$this->assertInstanceOf(
+			DatabaseIterator::class,
+			$this->factory->getIterator($adapter, $statement)
+		);
 	}
 
 	/**
