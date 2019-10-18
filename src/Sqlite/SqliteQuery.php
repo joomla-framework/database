@@ -166,7 +166,7 @@ class SqliteQuery extends PdoQuery
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		$statement =  'length(' . $field . ')';
+		$statement = 'length(' . $field . ')';
 
 		if ($operator !== null && $condition !== null)
 		{

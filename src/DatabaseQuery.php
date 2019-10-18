@@ -36,7 +36,7 @@ namespace Joomla\Database;
  * @property-read  boolean                    $autoIncrementField  The auto increment insert field element.
  * @property-read  Query\QueryElement         $call                The call element.
  * @property-read  Query\QueryElement         $exec                The exec element.
- * @property-read  Query\QueryElement[]|null  $merge               The list of query elements, which may include UNION, UNION ALL, EXCEPT and INTERSECT.
+ * @property-read  Query\QueryElement[]|null  $merge               The list of query elements.
  * @property-read  DatabaseQuery|null         $querySet            The query object.
  * @property-read  array|null                 $selectRowNumber     Details of window function.
  * @property-read  string[]                   $nullDatetimeList    The list of zero or null representation of a datetime.
