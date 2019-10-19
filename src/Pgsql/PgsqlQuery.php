@@ -285,15 +285,15 @@ class PgsqlQuery extends PdoQuery
 	 * Usage:
 	 * $query->groupConcat('id', ',');
 	 *
-	 * @param   string  $column      The name of the column to be concatenated.
+	 * @param   string  $expression  The expression to apply concatenation to, this may be a column name or complex SQL statement.
 	 * @param   string  $separator   The delimiter of each concatenated value
 	 *
 	 * @return  string  Input values concatenated into a string, separated by delimiter
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function groupConcat($column, $separator = ',')
+	public function groupConcat($expression, $separator = ',')
 	{
-		return 'string_agg(' . $column . '::text, ' . $this->quote($separator) . ')';
+		return 'string_agg(' . $expression . ', ' . $this->quote($separator) . ')';
 	}
 }

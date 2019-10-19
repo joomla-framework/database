@@ -530,7 +530,7 @@ class DatabaseQueryTest extends TestCase
 		{
 			protected $nullDatetimeList = ['0000-00-00 00:00:00', '1000-01-01 00:00:00'];
 
-			public function groupConcat($column, $separator = ',')
+			public function groupConcat($expression, $separator = ',')
 			{
 				return '';
 			}
@@ -968,7 +968,7 @@ class DatabaseQueryTest extends TestCase
 	{
 		$query = new class($this->db) extends DatabaseQuery
 		{
-			public function groupConcat($column, $separator = ',')
+			public function groupConcat($expression, $separator = ',')
 			{
 				return '';
 			}
@@ -1015,7 +1015,7 @@ class DatabaseQueryTest extends TestCase
 	{
 		$query = new class($this->db) extends DatabaseQuery
 		{
-			public function groupConcat($column, $separator = ',')
+			public function groupConcat($expression, $separator = ',')
 			{
 				return '';
 			}
@@ -1046,7 +1046,7 @@ class DatabaseQueryTest extends TestCase
 	{
 		$query = new class($this->db) extends DatabaseQuery
 		{
-			public function groupConcat($column, $separator = ',')
+			public function groupConcat($expression, $separator = ',')
 			{
 				return '';
 			}
@@ -1077,7 +1077,7 @@ class DatabaseQueryTest extends TestCase
 	{
 		$query = new class($this->db) extends DatabaseQuery
 		{
-			public function groupConcat($column, $separator = ',')
+			public function groupConcat($expression, $separator = ',')
 			{
 				return '';
 			}
@@ -1114,7 +1114,7 @@ class DatabaseQueryTest extends TestCase
 
 		$query = new class($this->db) extends DatabaseQuery
 		{
-			public function groupConcat($column, $separator = ',')
+			public function groupConcat($expression, $separator = ',')
 			{
 				return '';
 			}
@@ -1149,7 +1149,7 @@ class DatabaseQueryTest extends TestCase
 
 		$query = new class($this->db) extends DatabaseQuery
 		{
-			public function groupConcat($column, $separator = ',')
+			public function groupConcat($expression, $separator = ',')
 			{
 				return '';
 			}
@@ -1179,7 +1179,7 @@ class DatabaseQueryTest extends TestCase
 	{
 		$query = new class($this->db) extends DatabaseQuery
 		{
-			public function groupConcat($column, $separator = ',')
+			public function groupConcat($expression, $separator = ',')
 			{
 				return '';
 			}
@@ -1204,7 +1204,7 @@ class DatabaseQueryTest extends TestCase
 	{
 		$query = new class($this->db) extends DatabaseQuery
 		{
-			public function groupConcat($column, $separator = ',')
+			public function groupConcat($expression, $separator = ',')
 			{
 				return '';
 			}
@@ -1229,7 +1229,7 @@ class DatabaseQueryTest extends TestCase
 	{
 		$query = new class($this->db) extends DatabaseQuery
 		{
-			public function groupConcat($column, $separator = ',')
+			public function groupConcat($expression, $separator = ',')
 			{
 				return '';
 			}

@@ -105,7 +105,7 @@ class MysqlQueryTest extends TestCase
 			});
 
 		$this->assertSame(
-			"GROUP_CONCAT(a.fooSEPARATOR',')",
+			"GROUP_CONCAT(a.foo SEPARATOR ',')",
 			$this->query->groupConcat('a.foo')
 		);
 	}

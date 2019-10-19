@@ -307,7 +307,7 @@ class NosqlDriver extends DatabaseDriver
 				return parent::clear($clause);
 			}
 
-			public function groupConcat($column, $separator = ',')
+			public function groupConcat($expression, $separator = ',')
 			{
 				return '';
 			}
