@@ -4,7 +4,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Database\Tests;
+namespace Joomla\Database\Tests\Mysql;
 
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Mysql\MysqlQuery;
