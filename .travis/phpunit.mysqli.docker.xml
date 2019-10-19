@@ -2,6 +2,7 @@
 <phpunit bootstrap="../Tests/bootstrap.php" colors="false">
 	<php>
 		<const name="JTEST_DATABASE_MYSQLI_DSN" value="host=127.0.0.1;port=33306;dbname=joomla_ut;user=root;pass=" />
+		<env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
 	</php>
 	<testsuites>
 		<testsuite name="Unit">

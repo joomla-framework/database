@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstra-="../Tests/bootstrap.php" colors="false">
+<phpunit bootstrap="../Tests/bootstrap.php" colors="false">
 	<php>
 		<const name="JTEST_DATABASE_SQLSRV_DSN" value="host=(local)\SQL2012SP1;dbname=joomla_ut;user=sa;pass=Password12!" />
+		<env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
 	</php>
 	<testsuites>
 		<testsuite name="Unit">

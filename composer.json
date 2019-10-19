@@ -19,7 +19,8 @@
         "joomla/test": "~1.2",
         "phpunit/phpunit": "~6.3",
         "phpunit/dbunit": "~3.0",
-        "psr/log": "~1.1"
+        "psr/log": "~1.1",
+        "symfony/phpunit-bridge": "~4.3"
     },
     "suggest": {
         "joomla/archive": "To use the ExportCommand class, install joomla/archive",
