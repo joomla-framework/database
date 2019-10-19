@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstra-="../tests/bootstrap.php" colors="false">
+<phpunit bootstra-="../Tests/bootstrap.php" colors="false">
 	<php>
 		<const name="JTEST_DATABASE_SQLSRV_DSN" value="host=(local)\SQL2017;dbname=joomla_ut;user=sa;pass=Password12!" />
 	</php>
