@@ -69,6 +69,24 @@ trait MysqlQueryBuilder
 	}
 
 	/**
+	 * Aggregate function to get input values concatenated into a string, separated by delimiter
+	 *
+	 * Usage:
+	 * $query->groupConcat('id', ',');
+	 *
+	 * @param   string  $column      The name of the column to be concatenated.
+	 * @param   string  $separator   The delimiter of each concatenated value
+	 *
+	 * @return  string  Input values concatenated into a string, separated by delimiter
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function groupConcat($column, $separator = ',')
+	{
+		return 'GROUP_CONCAT(' . $column . 'SEPARATOR' . $this->quote($separator) . ')';
+	}
+
+	/**
 	 * Method to quote and optionally escape a string to database requirements for insertion into the database.
 	 *
 	 * This method is provided for use where the query object is passed to a function for modification.
