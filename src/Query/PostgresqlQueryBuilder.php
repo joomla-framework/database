@@ -68,7 +68,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string	The completed query.
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function __toString()
 	{
@@ -94,6 +94,16 @@ trait PostgresqlQueryBuilder
 					$query .= (string) $this->where;
 				}
 
+				if ($this->selectRowNumber)
+				{
+					if ($this->order)
+					{
+						$query .= (string) $this->order;
+					}
+
+					break;
+				}
+
 				if ($this->group)
 				{
 					$query .= (string) $this->group;
@@ -102,6 +112,15 @@ trait PostgresqlQueryBuilder
 				if ($this->having)
 				{
 					$query .= (string) $this->having;
+				}
+
+				if ($this->merge)
+				{
+					// Special case for merge
+					foreach ($this->merge as $element)
+					{
+						$query .= (string) $element;
+					}
 				}
 
 				if ($this->order)
@@ -145,13 +164,11 @@ trait PostgresqlQueryBuilder
 					{
 						$joinElem = $join->getElements();
 
-						$joinArray = preg_split('/\sON\s/i', $joinElem[0], 2);
+						$this->from($joinElem[0]);
 
-						$this->from($joinArray[0]);
-
-						if (isset($joinArray[1]))
+						if (isset($joinElem[1]))
 						{
-							$this->where($joinArray[1]);
+							$this->where($joinElem[1]);
 						}
 					}
 
@@ -205,8 +222,11 @@ trait PostgresqlQueryBuilder
 
 			default:
 				$query = parent::__toString();
+		}
 
-				break;
+		if ($this->type === 'select' && $this->alias !== null)
+		{
+			$query = '(' . $query . ') AS ' . $this->alias;
 		}
 
 		return $query;
@@ -217,9 +237,9 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @param   string  $clause  Optionally, the name of the clause to clear, or nothing to clear the whole query.
 	 *
-	 * @return  PostgresqlQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
-	 * @since   1.0
+	 * @since   __DEPLOY_VERSION__
 	 */
 	public function clear($clause = null)
 	{
@@ -259,12 +279,14 @@ trait PostgresqlQueryBuilder
 			case 'update':
 			case 'delete':
 			case 'insert':
+			case 'querySet':
 			case 'from':
 			case 'join':
 			case 'set':
 			case 'where':
 			case 'group':
 			case 'having':
+			case 'merge':
 			case 'order':
 			case 'columns':
 			case 'values':
@@ -273,14 +295,11 @@ trait PostgresqlQueryBuilder
 				break;
 
 			default:
-				$this->bounded   = [];
-				$this->type      = null;
-				$this->limit     = null;
-				$this->offset    = null;
 				$this->forUpdate = null;
 				$this->forShare  = null;
 				$this->noWait    = null;
 				$this->returning = null;
+
 				parent::clear($clause);
 
 				break;
@@ -395,6 +414,24 @@ trait PostgresqlQueryBuilder
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Aggregate function to get input values concatenated into a string, separated by delimiter
+	 *
+	 * Usage:
+	 * $query->groupConcat('id', ',');
+	 *
+	 * @param   string  $expression  The expression to apply concatenation to, this may be a column name or complex SQL statement.
+	 * @param   string  $separator   The delimiter of each concatenated value
+	 *
+	 * @return  string  Input values concatenated into a string, separated by delimiter
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function groupConcat($expression, $separator = ',')
+	{
+		return 'string_agg(' . $expression . ', ' . $this->quote($separator) . ')';
 	}
 
 	/**
