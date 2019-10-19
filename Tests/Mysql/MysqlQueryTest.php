@@ -8,9 +8,6 @@ namespace Joomla\Database\Tests;
 
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Mysql\MysqlQuery;
-use Joomla\Database\ParameterType;
-use Joomla\Database\Tests\Mock\Driver;
-use Joomla\Test\TestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
