@@ -16,6 +16,47 @@ namespace Joomla\Database\Query;
 trait MysqlQueryBuilder
 {
 	/**
+	 * Magic function to convert the query to a string.
+	 *
+	 * @return  string  The completed query.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function __toString()
+	{
+		switch ($this->type)
+		{
+			case 'select':
+				if ($this->selectRowNumber)
+				{
+					$orderBy      = $this->selectRowNumber['orderBy'];
+					$tmpOffset    = $this->offset;
+					$tmpLimit     = $this->limit;
+					$this->offset = 0;
+					$this->limit  = 0;
+					$tmpOrder     = $this->order;
+					$this->order  = null;
+					$query        = parent::__toString();
+					$this->order  = $tmpOrder;
+					$this->offset = $tmpOffset;
+					$this->limit  = $tmpLimit;
+
+					// Add support for second order by, offset and limit
+					$query = PHP_EOL . 'SELECT * FROM (' . $query . PHP_EOL . "ORDER BY $orderBy" . PHP_EOL . ') w';
+
+					if ($this->order)
+					{
+						$query .= (string) $this->order;
+					}
+
+					return $this->processLimit($query, $this->limit, $this->offset);
+				}
+		}
+
+		return parent::__toString();
+	}
+
+	/**
 	 * Method to modify a query already in string format with the needed additions to make the query limited to a particular number of
 	 * results, or start at a particular offset.
 	 *
