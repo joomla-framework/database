@@ -379,7 +379,7 @@ class PgsqlDriverTest extends PgsqlCase
 		$end_date->Type = 'timestamp without time zone';
 		$end_date->null = 'NO';
 		$end_date->Null = 'NO';
-		$end_date->Default = "'1970-01-01 00:00:00'::timestamp without time zone";
+		$end_date->Default = '1970-01-01 00:00:00';
 		$end_date->comments = '';
 
 		$description = new \stdClass;
