@@ -6,126 +6,301 @@
 
 namespace Joomla\Database\Tests\Mysqli;
 
+use Joomla\Database\DatabaseInterface;
+use Joomla\Database\Mysqli\MysqliDriver;
 use Joomla\Database\Mysqli\MysqliExporter;
+use Joomla\Database\Mysqli\MysqliQuery;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests the \Joomla\Database\Mysqli\MysqliExporter class.
- *
- * @since  1.0
+ * Test class for Joomla\Database\Mysqli\MysqliExporter.
  */
 class MysqliExporterTest extends TestCase
 {
 	/**
-	 * @var    object  The mocked database object for use by test methods.
-	 * @since  1.0
+	 * Mock database driver
+	 *
+	 * @var  MockObject|MysqliDriver
 	 */
-	protected $dbo = null;
+	private $db;
 
 	/**
-	 * Sets up the testing conditions
+	 * Sets up the fixture.
+	 *
+	 * This method is called before a test is executed.
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function setup()
 	{
 		parent::setUp();
 
-		// Set up the database object mock.
-		$this->dbo = $this->getMockBuilder('Joomla\\Database\\Mysqli\MysqliDriver')
-			->disableOriginalConstructor()
-			->getMock();
+		$this->db = $this->createMock(MysqliDriver::class);
+
+		$this->db->expects($this->any())
+			->method('getPrefix')
+			->willReturn('jos_');
+
+		$this->db->expects($this->any())
+			->method('getQuery')
+			->willReturnCallback(function () {
+				return new MysqliQuery($this->db);
+			});
+
+		$this->db->expects($this->any())
+			->method('getTableColumns')
+			->willReturn(
+				[
+					'id'    => (object) [
+						'Field'      => 'id',
+						'Type'       => 'int(11) unsigned',
+						'Collation'  => null,
+						'Null'       => 'NO',
+						'Key'        => 'PRI',
+						'Default'    => '',
+						'Extra'      => 'auto_increment',
+						'Privileges' => 'select,insert,update,references',
+						'Comment'    => '',
+					],
+					'title' => (object) [
+						'Field'      => 'title',
+						'Type'       => 'varchar(255)',
+						'Collation'  => 'utf8_general_ci',
+						'Null'       => 'NO',
+						'Key'        => '',
+						'Default'    => '',
+						'Extra'      => '',
+						'Privileges' => 'select,insert,update,references',
+						'Comment'    => '',
+					],
+				]
+			);
+
+		$this->db->expects($this->any())
+			->method('getTableKeys')
+			->willReturn(
+				[
+					(object) [
+						'Table'        => 'jos_test',
+						'Non_unique'   => '0',
+						'Key_name'     => 'PRIMARY',
+						'Seq_in_index' => '1',
+						'Column_name'  => 'id',
+						'Collation'    => 'A',
+						'Cardinality'  => '2695',
+						'Sub_part'     => '',
+						'Packed'       => '',
+						'Null'         => '',
+						'Index_type'   => 'BTREE',
+						'Comment'      => '',
+					],
+				]
+			);
+
+		$this->db->expects($this->any())
+			->method('quoteName')
+			->willReturnCallback(
+				function ($name, $as = null) {
+					if (is_string($name))
+					{
+						return "`$name`";
+					}
+
+					$fields = [];
+
+					foreach ($name as $value)
+					{
+						$fields[] = "`$value`";
+					}
+
+					return $fields;
+				}
+			);
 	}
 
 	/**
-	 * Tests the check method.
+	 * Data provider for string casting test cases
 	 *
-	 * @return void
-	 *
-	 * @since  1.0
+	 * @return  \Generator
 	 */
-	public function testCheckWithNoDbo()
+	public function dataCastingToString(): \Generator
 	{
-		$this->expectException(\RuntimeException::class);
-		$instance = new MysqliExporter;
-		$instance->check();
+		yield 'without structure or data' => [
+			false,
+			false,
+			<<<XML
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <database name="">
+ </database>
+</mysqldump>
+XML,
+		];
+
+		yield 'with only structure' => [
+			true,
+			false,
+			<<<XML
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <database name="">
+    <table_structure name="#__test">
+     <field Field="id" Type="int(11) unsigned" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+     <field Field="title" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />
+     <key Table="#__test" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="id" Collation="A" Null="" Index_type="BTREE" Sub_part="" Comment="" />
+    </table_structure>
+  </database>
+</mysqldump>
+XML,
+		];
+
+		yield 'with only data' => [
+			false,
+			true,
+			<<<XML
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <database name="">
+    <table_data name="#__test">
+      <row>
+        <field name="id">1</field>
+        <field name="title">Row 1</field>
+      </row>
+      <row>
+        <field name="id">2</field>
+        <field name="title">Row 2</field>
+      </row>
+    </table_data>
+  </database>
+</mysqldump>
+XML,
+		];
+
+		yield 'with structure and data' => [
+			true,
+			true,
+			<<<XML
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <database name="">
+    <table_structure name="#__test">
+      <field Field="id" Type="int(11) unsigned" Null="NO" Key="PRI" Default="" Extra="auto_increment" />
+      <field Field="title" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />
+      <key Table="#__test" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="id" Collation="A" Null="" Index_type="BTREE" Sub_part="" Comment="" />
+    </table_structure>
+    <table_data name="#__test">
+      <row>
+        <field name="id">1</field>
+        <field name="title">Row 1</field>
+      </row>
+      <row>
+        <field name="id">2</field>
+        <field name="title">Row 2</field>
+      </row>
+    </table_data>
+  </database>
+</mysqldump>
+XML,
+		];
 	}
 
 	/**
-	 * Tests the check method.
+	 * @testdox  The exporter can be cast to a string
 	 *
-	 * @return void
+	 * @param   boolean  $withStructure  True to export the structure, false to not.
+	 * @param   boolean  $withData       True to export the data, false to not.
+	 * @param   string   $expectedXml    Expected XML string.
 	 *
-	 * @since  1.0
+	 * @dataProvider  dataCastingToString
 	 */
-	public function testCheckWithNoTables()
+	public function testCastingToString(bool $withStructure, bool $withData, string $expectedXml)
 	{
-		$this->expectException(\RuntimeException::class);
-		$instance = new MysqliExporter;
-		$instance->setDbo($this->dbo);
-		$instance->check();
+		$exporter = new MysqliExporter;
+
+		$exporter->setDbo($this->db)
+			->from('jos_test')
+			->withStructure($withStructure)
+			->withData($withData);
+
+		if ($withData)
+		{
+			$this->db->expects($this->once())
+				->method('loadObjectList')
+				->willReturn(
+					[
+						(object) [
+							'id'    => 1,
+							'title' => 'Row 1',
+						],
+						(object) [
+							'id'    => 2,
+							'title' => 'Row 2',
+						],
+					]
+				);
+		}
+
+		$this->assertXmlStringEqualsXmlString($expectedXml, (string) $exporter);
 	}
 
 	/**
-	 * Tests the check method.
+	 * Data provider for check test cases
 	 *
-	 * @return void
-	 *
-	 * @since  1.0
+	 * @return  \Generator
 	 */
-	public function testCheckWithGoodInput()
+	public function dataCheck(): \Generator
 	{
-		$instance = new MysqliExporter;
-		$instance->setDbo($this->dbo);
-		$instance->from('foobar');
+		yield 'passes checks' => [
+			$this->createMock(MysqliDriver::class),
+			'#__dbtest',
+			null,
+		];
 
-		try
-		{
-			$result = $instance->check();
+		yield 'fails checks with incorrect database driver subclass' => [
+			$this->createMock(DatabaseInterface::class),
+			'#__dbtest',
+			'Database connection wrong type.',
+		];
 
-			$this->assertThat(
-				$result,
-				$this->identicalTo($instance),
-				'check must return an object to support chaining.'
-			);
-		}
-		catch (\Exception $e)
-		{
-			$this->fail(
-				'Check method should not throw exception with good setup: ' . $e->getMessage()
-			);
-		}
+		yield 'fails checks with no database driver' => [
+			null,
+			'#__dbtest',
+			'Database connection wrong type.',
+		];
+
+		yield 'fails checks with no tables' => [
+			$this->createMock(MysqliDriver::class),
+			null,
+			'ERROR: No Tables Specified',
+		];
 	}
 
 	/**
-	 * Tests the setDbo method with the wrong type of class.
+	 * @testdox  The exporter checks for errors
 	 *
-	 * @return void
+	 * @param   DatabaseInterface|null  $db                Database driver to set in the exporter.
+	 * @param   string[]|string|null    $from              Database tables to export from.
+	 * @param   string|null             $exceptionMessage  If an Exception should be thrown, the expected message
 	 *
-	 * @since  1.0
+	 * @dataProvider  dataCheck
 	 */
-	public function testSetDboWithGoodInput()
+	public function testCheck(?DatabaseInterface $db, $from, ?string $exceptionMessage)
 	{
-		$instance = new MysqliExporter;
-
-		try
+		if ($exceptionMessage)
 		{
-			$result = $instance->setDbo($this->dbo);
+			$this->expectException(\RuntimeException::class);
+			$this->expectExceptionMessage($exceptionMessage);
+		}
 
-			$this->assertThat(
-				$result,
-				$this->identicalTo($instance),
-				'setDbo must return an object to support chaining.'
-			);
-		}
-		catch (PHPUnit_Framework_Error $e)
+		$exporter = new MysqliExporter;
+
+		if ($db)
 		{
-			// Unknown error has occurred.
-			$this->fail(
-				$e->getMessage()
-			);
+			$exporter->setDbo($db);
 		}
+
+		if ($from)
+		{
+			$exporter->from($from);
+		}
+
+		$this->assertSame($exporter, $exporter->check(), 'The exporter supports method chaining');
 	}
 }
