@@ -164,7 +164,7 @@ class DatabaseIterator implements \Countable, \Iterator
 		if ($this->current)
 		{
 			// Set the key as being the indexed column (if it exists)
-			if (isset($this->current->{$this->column}))
+			if ($this->column && isset($this->current->{$this->column}))
 			{
 				$this->key = $this->current->{$this->column};
 			}
