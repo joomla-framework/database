@@ -8,6 +8,7 @@ namespace Joomla\Database\Tests;
 
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\DatabaseQuery;
+use Joomla\Database\Exception\QueryTypeAlreadyDefinedException;
 use Joomla\Database\ParameterType;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -61,6 +62,18 @@ class DatabaseQueryTest extends TestCase
 			['foo', 'bar'],
 			$this->query->call->getElements()
 		);
+	}
+
+	/**
+	 * @testdox  The call method raises an exception if changing the query type
+	 */
+	public function testCallChangeQueryType()
+	{
+		$this->expectException(QueryTypeAlreadyDefinedException::class);
+
+		$this->query->select('foo')
+			->from('bar')
+			->call('foo');
 	}
 
 	/**
@@ -211,6 +224,18 @@ class DatabaseQueryTest extends TestCase
 	}
 
 	/**
+	 * @testdox  The delete method raises an exception if changing the query type
+	 */
+	public function testDeleteChangeQueryType()
+	{
+		$this->expectException(QueryTypeAlreadyDefinedException::class);
+
+		$this->query->select('foo')
+			->from('bar')
+			->delete('foo');
+	}
+
+	/**
 	 * @testdox  The exec method correctly creates and manages a EXEC query element
 	 */
 	public function testExec()
@@ -222,6 +247,18 @@ class DatabaseQueryTest extends TestCase
 			['foo', 'bar'],
 			$this->query->exec->getElements()
 		);
+	}
+
+	/**
+	 * @testdox  The exec method raises an exception if changing the query type
+	 */
+	public function testExecChangeQueryType()
+	{
+		$this->expectException(QueryTypeAlreadyDefinedException::class);
+
+		$this->query->select('foo')
+			->from('bar')
+			->exec('foo');
 	}
 
 	/**
@@ -364,6 +401,18 @@ class DatabaseQueryTest extends TestCase
 		$this->assertSame($this->query, $this->query->insert('foo'), 'The query builder supports method chaining');
 
 		$this->assertNotNull($this->query->insert);
+	}
+
+	/**
+	 * @testdox  The insert method raises an exception if changing the query type
+	 */
+	public function testInsertChangeQueryType()
+	{
+		$this->expectException(QueryTypeAlreadyDefinedException::class);
+
+		$this->query->select('foo')
+			->from('bar')
+			->insert('foo');
 	}
 
 	/**
@@ -677,6 +726,17 @@ class DatabaseQueryTest extends TestCase
 	}
 
 	/**
+	 * @testdox  The select method raises an exception if changing the query type
+	 */
+	public function testSelectChangeQueryType()
+	{
+		$this->expectException(QueryTypeAlreadyDefinedException::class);
+
+		$this->query->delete('foo')
+			->select('foo');
+	}
+
+	/**
 	 * @testdox  The set method correctly creates and manages a SET query element
 	 */
 	public function testSet()
@@ -731,6 +791,18 @@ class DatabaseQueryTest extends TestCase
 		$this->assertSame($this->query, $this->query->update('foo'), 'The query builder supports method chaining');
 
 		$this->assertNotNull($this->query->update);
+	}
+
+	/**
+	 * @testdox  The update method raises an exception if changing the query type
+	 */
+	public function testUpdateChangeQueryType()
+	{
+		$this->expectException(QueryTypeAlreadyDefinedException::class);
+
+		$this->query->select('foo')
+			->from('bar')
+			->update('foo');
 	}
 
 	/**
