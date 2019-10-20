@@ -750,7 +750,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			}
 
 			// Ignore null integer fields.
-			if (stristr($tableColumns[$k], 'int') !== FALSE && $v === '')
+			if (stristr($tableColumns[$k], 'int') !== false && $v === '')
 			{
 				continue;
 			}
