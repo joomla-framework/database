@@ -156,7 +156,8 @@ class PgsqlExporterTest extends TestCase
  <database name="">
  </database>
 </postgresqldump>
-XML,
+XML
+			,
 		];
 
 		yield 'with only structure' => [
@@ -175,7 +176,8 @@ XML,
     </table_structure>
   </database>
 </postgresqldump>
-XML,
+XML
+			,
 		];
 
 		yield 'with only data' => [
@@ -196,7 +198,8 @@ XML,
     </table_data>
   </database>
 </postgresqldump>
-XML,
+XML
+			,
 		];
 
 		yield 'with structure and data' => [
@@ -225,7 +228,8 @@ XML,
     </table_data>
   </database>
 </postgresqldump>
-XML,
+XML
+			,
 		];
 	}
 

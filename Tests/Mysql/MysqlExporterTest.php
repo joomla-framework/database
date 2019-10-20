@@ -134,7 +134,8 @@ class MysqlExporterTest extends TestCase
  <database name="">
  </database>
 </mysqldump>
-XML,
+XML
+			,
 		];
 
 		yield 'with only structure' => [
@@ -150,7 +151,8 @@ XML,
     </table_structure>
   </database>
 </mysqldump>
-XML,
+XML
+			,
 		];
 
 		yield 'with only data' => [
@@ -171,7 +173,8 @@ XML,
     </table_data>
   </database>
 </mysqldump>
-XML,
+XML
+			,
 		];
 
 		yield 'with structure and data' => [
@@ -197,7 +200,8 @@ XML,
     </table_data>
   </database>
 </mysqldump>
-XML,
+XML
+			,
 		];
 	}
 
