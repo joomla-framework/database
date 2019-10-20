@@ -9,6 +9,7 @@ namespace Joomla\Database\Tests\Cases;
 use Joomla\Database\Mysql\MysqlDriver;
 use Joomla\Database\Mysqli\MysqliDriver;
 use Joomla\Database\DatabaseDriver;
+use PHPUnit\DbUnit\Database\DefaultConnection;
 
 /**
  * Abstract test case class for MySQLi database testing.
@@ -93,7 +94,7 @@ abstract class MysqliCase extends AbstractDatabaseTestCase
 	/**
 	 * Returns the default database connection for running the tests.
 	 *
-	 * @return  \PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection
+	 * @return  DefaultConnection
 	 */
 	protected function getConnection()
 	{

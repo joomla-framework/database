@@ -34,7 +34,7 @@ class PgsqlImporterTest extends TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function setup()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

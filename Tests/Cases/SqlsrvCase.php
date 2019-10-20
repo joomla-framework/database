@@ -8,6 +8,7 @@ namespace Joomla\Database\Tests\Cases;
 
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Sqlsrv\SqlsrvDriver;
+use PHPUnit\DbUnit\Database\DefaultConnection;
 
 /**
  * Abstract test case class for Microsoft SQL Server database testing.
@@ -95,7 +96,7 @@ abstract class SqlsrvCase extends AbstractDatabaseTestCase
 	/**
 	 * Returns the default database connection for running the tests.
 	 *
-	 * @return  \PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection
+	 * @return  DefaultConnection
 	 */
 	protected function getConnection()
 	{

@@ -16,9 +16,9 @@
         "joomla/di": "~1.0|~2.0",
         "joomla/filesystem": "~1.3|~2.0",
         "joomla/registry": "^1.4.5|~2.0",
-        "joomla/test": "~1.2",
-        "phpunit/phpunit": "~6.3",
-        "phpunit/dbunit": "~3.0",
+        "joomla/test": "^1.3.1",
+        "phpunit/phpunit": "~7.5",
+        "phpunit/dbunit": "~4.0",
         "psr/log": "~1.1",
         "symfony/phpunit-bridge": "~4.3"
     },

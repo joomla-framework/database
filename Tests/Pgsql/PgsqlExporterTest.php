@@ -32,7 +32,7 @@ class PgsqlExporterTest extends TestCase
 	 *
 	 * @return  void
 	 */
-	public function setup()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
@@ -166,12 +166,12 @@ XML,
 <postgresqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <database name="">
     <table_structure name="#__dbtest">
-     <sequence column="id" cycle_option="no" increment="1" is_called="" last_value="" max_value="9223372036854775807" min_value="1" name="#__dbtest_id_seq" schema="public" start_value="1" table="#__dbtest" type="bigint"/>
-     <field comments="" default="nextval('jos_dbtest_id_seq'::regclass)" field="id" null="no" type="integer"/>
-     <field comments="" default="null" field="title" null="no" type="character varying(50)"/>
-     <field comments="" default="null" field="start_date" null="no" type="timestamp without time zone"/>
-     <field comments="" default="null" field="description" null="no" type="text"/>
-     <key Index="#__dbtest_pkey" is_primary="true" is_unique="true" Key_name="" Query="alter table &quot;jos_dbtest&quot; add primary key (id)"/>
+     <sequence Column="id" Cycle_option="NO" Increment="1" Is_called="" Last_Value="" Max_Value="9223372036854775807" Min_Value="1" Name="#__dbtest_id_seq" Schema="public" Start_Value="1" Table="#__dbtest" Type="bigint"/>
+     <field Comments="" Default="nextval('jos_dbtest_id_seq'::regclass)" Field="id" Null="NO" Type="integer"/>
+     <field Comments="" Default="NULL" Field="title" Null="NO" Type="character varying(50)"/>
+     <field Comments="" Default="NULL" Field="start_date" Null="NO" Type="timestamp without time zone"/>
+     <field Comments="" Default="NULL" Field="description" Null="NO" Type="text"/>
+     <key Index="#__dbtest_pkey" Key_name="" Query="ALTER TABLE &quot;jos_dbtest&quot; ADD PRIMARY KEY (id)" is_primary="TRUE" is_unique="TRUE"/>
     </table_structure>
   </database>
 </postgresqldump>
@@ -206,12 +206,12 @@ XML,
 <postgresqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <database name="">
     <table_structure name="#__dbtest">
-      <sequence column="id" cycle_option="no" increment="1" is_called="" last_value="" max_value="9223372036854775807" min_value="1" name="#__dbtest_id_seq" schema="public" start_value="1" table="#__dbtest" type="bigint"/>
-      <field comments="" default="nextval('jos_dbtest_id_seq'::regclass)" field="id" null="no" type="integer"/>
-      <field comments="" default="null" field="title" null="no" type="character varying(50)"/>
-      <field comments="" default="null" field="start_date" null="no" type="timestamp without time zone"/>
-      <field comments="" default="null" field="description" null="no" type="text"/>
-      <key Index="#__dbtest_pkey" is_primary="true" is_unique="true" Key_name="" Query="alter table &quot;jos_dbtest&quot; add primary key (id)"/>
+      <sequence Column="id" Cycle_option="NO" Increment="1" Is_called="" Last_Value="" Max_Value="9223372036854775807" Min_Value="1" Name="#__dbtest_id_seq" Schema="public" Start_Value="1" Table="#__dbtest" Type="bigint"/>
+      <field Comments="" Default="nextval('jos_dbtest_id_seq'::regclass)" Field="id" Null="NO" Type="integer"/>
+      <field Comments="" Default="NULL" Field="title" Null="NO" Type="character varying(50)"/>
+      <field Comments="" Default="NULL" Field="start_date" Null="NO" Type="timestamp without time zone"/>
+      <field Comments="" Default="NULL" Field="description" Null="NO" Type="text"/>
+      <key Index="#__dbtest_pkey" Key_name="" Query="ALTER TABLE &quot;jos_dbtest&quot; ADD PRIMARY KEY (id)" is_primary="TRUE" is_unique="TRUE"/>
     </table_structure>
     <table_data name="#__dbtest">
       <row>

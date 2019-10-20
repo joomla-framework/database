@@ -29,7 +29,7 @@ class MysqliImporterTest extends TestCase
 	 *
 	 * @since   1.0
 	 */
-	protected function setup()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

@@ -32,7 +32,7 @@ class MysqliExporterTest extends TestCase
 	 *
 	 * @return  void
 	 */
-	public function setup()
+	protected function setUp(): void
 	{
 		parent::setUp();
 

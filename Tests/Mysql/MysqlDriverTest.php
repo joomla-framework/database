@@ -405,8 +405,7 @@ class MysqlDriverTest extends MysqlCase
 					'description' => $description,
 					'data' => $data,
 				)
-			),
-			self::$driver->getTableColumns('dbtest', false)
+			)
 		);
 	}
 

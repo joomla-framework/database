@@ -40,7 +40,7 @@ abstract class AbstractDatabaseTestCase extends TestCase
 	 *
 	 * @return  void
 	 */
-	protected function setUp()
+	protected function setUp(): void
 	{
 		if (!static::$driver)
 		{
