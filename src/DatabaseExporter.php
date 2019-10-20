@@ -42,7 +42,7 @@ abstract class DatabaseExporter
 	/**
 	 * An array input sources (table names).
 	 *
-	 * @var    array
+	 * @var    string[]
 	 * @since  1.0
 	 */
 	protected $from = [];
@@ -159,7 +159,7 @@ abstract class DatabaseExporter
 	/**
 	 * Specifies a list of table names to export.
 	 *
-	 * @param   mixed  $from  The name of a single table, or an array of the table names to export.
+	 * @param   string[]|string  $from  The name of a single table, or an array of the table names to export.
 	 *
 	 * @return  $this
 	 *
