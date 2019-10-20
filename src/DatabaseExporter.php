@@ -198,9 +198,7 @@ abstract class DatabaseExporter
 		$prefix = $this->db->getPrefix();
 
 		// Replace the magic prefix if found.
-		$table = preg_replace("|^$prefix|", '#__', $table);
-
-		return $table;
+		return preg_replace("|^$prefix|", '#__', $table);
 	}
 
 	/**
@@ -261,7 +259,7 @@ abstract class DatabaseExporter
 	 */
 	protected function buildXmlData()
 	{
-		$buffer = array();
+		$buffer = [];
 
 		foreach ($this->from as $table)
 		{
@@ -270,7 +268,7 @@ abstract class DatabaseExporter
 
 			// Get the details columns information.
 			$fields  = $this->db->getTableColumns($table, false);
-			$colblob = array();
+			$colblob = [];
 
 			foreach ($fields as $field)
 			{
@@ -281,10 +279,11 @@ abstract class DatabaseExporter
 				}
 			}
 
-			$query = $this->db->getQuery(true);
-			$query->select($query->quoteName(array_keys($fields)))
-				->from($query->quoteName($table));
-			$this->db->setQuery($query);
+			$this->db->setQuery(
+				$this->db->getQuery(true)
+					->select($this->db->quoteName(array_keys($fields)))
+					->from($this->db->quoteName($table))
+			);
 
 			$rows = $this->db->loadObjectList();
 
