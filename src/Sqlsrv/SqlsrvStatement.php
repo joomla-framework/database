@@ -507,7 +507,9 @@ class SqlsrvStatement implements StatementInterface
 	{
 		$this->defaultObjectClass = $className;
 
-		return $this->fetch(FetchMode::STANDARD_OBJECT);
+		$fetchMode = $className === \stdClass::class ? FetchMode::STANDARD_OBJECT : FetchMode::CUSTOM_OBJECT;
+
+		return $this->fetch($fetchMode);
 	}
 
 	/**
