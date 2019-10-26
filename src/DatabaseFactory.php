@@ -129,7 +129,12 @@ class DatabaseFactory
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getIterator(string $name, StatementInterface $statement, ?string $column = null, string $class = '\\stdClass'): DatabaseIterator
+	public function getIterator(
+		string $name,
+		StatementInterface $statement,
+		?string $column = null,
+		string $class = \stdClass::class
+	): DatabaseIterator
 	{
 		// Derive the class name from the driver.
 		$iteratorClass = __NAMESPACE__ . '\\' . ucfirst($name) . '\\' . ucfirst($name) . 'Iterator';

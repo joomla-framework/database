@@ -745,17 +745,17 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	/**
 	 * Method to fetch a row from the result set cursor as an object.
 	 *
-	 * @param   string  $class  The class name to use for the returned row object.
+	 * Note, the fetch mode should be configured before calling this method using `StatementInterface::setFetchMode()`.
 	 *
 	 * @return  mixed   Either the next row from the result set or false if there are no more rows.
 	 *
 	 * @since   1.0
 	 */
-	protected function fetchObject($class = '\\stdClass')
+	protected function fetchObject()
 	{
 		if ($this->statement)
 		{
-			return $this->statement->fetchObject($class);
+			return $this->statement->fetch();
 		}
 	}
 
@@ -1059,7 +1059,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @since   1.0
 	 */
-	public function getIterator($column = null, $class = '\\stdClass')
+	public function getIterator($column = null, $class = \stdClass::class)
 	{
 		if (!$this->executed)
 		{
@@ -1288,17 +1288,32 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public function loadObject($class = 'stdClass')
+	public function loadObject($class = \stdClass::class)
 	{
 		$this->connect();
 
 		$ret = null;
 
+		if ($this->statement)
+		{
+			$fetchMode = $class === \stdClass::class ? FetchMode::STANDARD_OBJECT : FetchMode::CUSTOM_OBJECT;
+
+			// PDO doesn't allow extra arguments for \PDO::FETCH_CLASS, so only forward the class for the custom object mode
+			if ($fetchMode === FetchMode::STANDARD_OBJECT)
+			{
+				$this->statement->setFetchMode($fetchMode);
+			}
+			else
+			{
+				$this->statement->setFetchMode($fetchMode, $class);
+			}
+		}
+
 		// Execute the query and get the result set cursor.
 		$this->execute();
 
 		// Get the first row from the result set as an object of type $class.
-		$object = $this->fetchObject($class);
+		$object = $this->fetchObject();
 
 		if ($object)
 		{
@@ -1325,17 +1340,32 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public function loadObjectList($key = '', $class = 'stdClass')
+	public function loadObjectList($key = '', $class = \stdClass::class)
 	{
 		$this->connect();
 
 		$array = [];
 
+		if ($this->statement)
+		{
+			$fetchMode = $class === \stdClass::class ? FetchMode::STANDARD_OBJECT : FetchMode::CUSTOM_OBJECT;
+
+			// PDO doesn't allow extra arguments for \PDO::FETCH_CLASS, so only forward the class for the custom object mode
+			if ($fetchMode === FetchMode::STANDARD_OBJECT)
+			{
+				$this->statement->setFetchMode($fetchMode);
+			}
+			else
+			{
+				$this->statement->setFetchMode($fetchMode, $class);
+			}
+		}
+
 		// Execute the query and get the result set cursor.
 		$this->execute();
 
 		// Get all of the rows from the result set as objects of type $class.
-		while ($row = $this->fetchObject($class))
+		while ($row = $this->fetchObject())
 		{
 			if ($key)
 			{

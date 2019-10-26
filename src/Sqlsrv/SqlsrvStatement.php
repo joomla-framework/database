@@ -295,7 +295,7 @@ class SqlsrvStatement implements StatementInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function bindParam($parameter, &$variable, $dataType = ParameterType::STRING, $length = null, $driverOptions = null)
+	public function bindParam($parameter, &$variable, string $dataType = ParameterType::STRING, ?int $length = null, ?array $driverOptions = null)
 	{
 		$this->bindedValues[$parameter] =& $variable;
 
@@ -334,15 +334,15 @@ class SqlsrvStatement implements StatementInterface
 	/**
 	 * Closes the cursor, enabling the statement to be executed again.
 	 *
-	 * @return  boolean
+	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function closeCursor()
+	public function closeCursor(): void
 	{
 		if (!$this->result || !\is_resource($this->statement))
 		{
-			return true;
+			return;
 		}
 
 		// Emulate freeing the result fetching and discarding rows, similarly to what PDO does in this case
@@ -352,8 +352,6 @@ class SqlsrvStatement implements StatementInterface
 		}
 
 		$this->result = false;
-
-		return true;
 	}
 
 	/**
@@ -390,13 +388,13 @@ class SqlsrvStatement implements StatementInterface
 	/**
 	 * Executes a prepared statement
 	 *
-	 * @param   array  $parameters  An array of values with as many elements as there are bound parameters in the SQL statement being executed.
+	 * @param   array|null  $parameters  An array of values with as many elements as there are bound parameters in the SQL statement being executed.
 	 *
 	 * @return  boolean
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function execute($parameters = null)
+	public function execute(?array $parameters = null)
 	{
 		if (empty($this->bindedValues) && $parameters !== null)
 		{
@@ -429,22 +427,22 @@ class SqlsrvStatement implements StatementInterface
 	/**
 	 * Fetches the next row from a result set
 	 *
-	 * @param   integer $fetchStyle          Controls how the next row will be returned to the caller. This value must be one of the
-	 *                                       FetchMode constants, defaulting to value of FetchMode::MIXED.
-	 * @param   integer $cursorOrientation   For a StatementInterface object representing a scrollable cursor, this value determines which row will
-	 *                                       be returned to the caller. This value must be one of the FetchOrientation constants, defaulting to
-	 *                                       FetchOrientation::NEXT.
-	 * @param   integer $cursorOffset        For a StatementInterface object representing a scrollable cursor for which the cursorOrientation
-	 *                                       parameter is set to FetchOrientation::ABS, this value specifies the absolute number of the row in the
-	 *                                       result set that shall be fetched. For a StatementInterface object representing a scrollable cursor for
-	 *                                       which the cursorOrientation parameter is set to FetchOrientation::REL, this value specifies the row to
-	 *                                       fetch relative to the cursor position before StatementInterface::fetch() was called.
+	 * @param   integer|null  $fetchStyle         Controls how the next row will be returned to the caller. This value must be one of the
+	 *                                            FetchMode constants, defaulting to value of FetchMode::MIXED.
+	 * @param   integer       $cursorOrientation  For a StatementInterface object representing a scrollable cursor, this value determines which row
+	 *                                            will be returned to the caller. This value must be one of the FetchOrientation constants,
+	 *                                            defaulting to FetchOrientation::NEXT.
+	 * @param   integer       $cursorOffset       For a StatementInterface object representing a scrollable cursor for which the cursorOrientation
+	 *                                            parameter is set to FetchOrientation::ABS, this value specifies the absolute number of the row in
+	 *                                            the result set that shall be fetched. For a StatementInterface object representing a scrollable
+	 *                                            cursor for which the cursorOrientation parameter is set to FetchOrientation::REL, this value
+	 *                                            specifies the row to fetch relative to the cursor position before `fetch()` was called.
 	 *
 	 * @return  mixed  The return value of this function on success depends on the fetch type. In all cases, boolean false is returned on failure.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function fetch($fetchStyle = null, $cursorOrientation = FetchOrientation::NEXT, $cursorOffset = 0)
+	public function fetch(?int $fetchStyle = null, int $cursorOrientation = FetchOrientation::NEXT, int $cursorOffset = 0)
 	{
 		if (!$this->result)
 		{
@@ -491,23 +489,6 @@ class SqlsrvStatement implements StatementInterface
 		}
 
 		return $row[$columnIndex] ?? null;
-	}
-
-	/**
-	 * Fetches the next row and returns it as an object.
-	 *
-	 * @param   string  $className        Name of the created class.
-	 * @param   array   $constructorArgs  Elements of this array are passed to the constructor.
-	 *
-	 * @return  mixed  An instance of the required class with property names that correspond to the column names or boolean false on failure.
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function fetchObject($className = null, $constructorArgs = null)
-	{
-		$this->defaultObjectClass = $className;
-
-		return $this->fetch(FetchMode::STANDARD_OBJECT);
 	}
 
 	/**
@@ -573,7 +554,7 @@ class SqlsrvStatement implements StatementInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function rowCount()
+	public function rowCount(): int
 	{
 		if (strncmp(strtoupper(ltrim($this->query)), 'SELECT', \strlen('SELECT')) === 0)
 		{
@@ -581,5 +562,25 @@ class SqlsrvStatement implements StatementInterface
 		}
 
 		return sqlsrv_rows_affected($this->statement);
+	}
+
+	/**
+	 * Sets the fetch mode to use while iterating this statement.
+	 *
+	 * @param   integer  $fetchMode  The fetch mode, must be one of the FetchMode constants.
+	 * @param   mixed    ...$args    Optional mode-specific arguments.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setFetchMode(int $fetchMode, ...$args): void
+	{
+		$this->defaultFetchStyle = $fetchMode;
+
+		if (isset($args[0]))
+		{
+			$this->defaultObjectClass = $args[0];
+		}
 	}
 }
