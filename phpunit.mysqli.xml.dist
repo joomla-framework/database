@@ -4,6 +4,7 @@
 		<!-- These constants help setup environment configurations for running the database driver tests and should be configured to test the expected driver. -->
 		<env name="JOOMLA_TEST_DB_DRIVER" value="mysqli" />
 		<env name="JOOMLA_TEST_DB_HOST" value="localhost" />
+		<env name="JOOMLA_TEST_DB_PORT" value="" />
 		<env name="JOOMLA_TEST_DB_USER" value="" />
 		<env name="JOOMLA_TEST_DB_PASSWORD" value="" />
 		<env name="JOOMLA_TEST_DB_DATABASE" value="jfw_test" />

@@ -6,6 +6,7 @@
 		<env name="JOOMLA_TEST_DB_DRIVER" value="sqlite" />
 		<env name="JOOMLA_TEST_DB_HOST" value="" />
 		<env name="JOOMLA_TEST_DB_USER" value="" />
+		<env name="JOOMLA_TEST_DB_PORT" value="" />
 		<env name="JOOMLA_TEST_DB_PASSWORD" value="" />
 		<env name="JOOMLA_TEST_DB_DATABASE" value=":memory:" />
 		<env name="JOOMLA_TEST_DB_PREFIX" value="" />
