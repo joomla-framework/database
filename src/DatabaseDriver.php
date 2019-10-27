@@ -1512,23 +1512,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
-	 * Alias for quoteName method
-	 *
-	 * @param   array|string  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
-	 *                               Each type supports dot-notation name.
-	 * @param   array|string  $as    The AS query part associated to $name. It can be string or array, in latter case it has to be
-	 *                               same length of $name; if is null there will not be any AS part for string or array element.
-	 *
-	 * @return  array|string  The quote wrapped name, same type of $name.
-	 *
-	 * @since   1.0
-	 */
-	public function qn($name, $as = null)
-	{
-		return $this->quoteName($name, $as);
-	}
-
-	/**
 	 * Quotes a binary string to database requirements for use in database queries.
 	 *
 	 * @param   string  $data  A binary string to quote.
@@ -1555,6 +1538,23 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	public function decodeBinary($data)
 	{
 		return $data;
+	}
+
+	/**
+	 * Alias for quoteName method
+	 *
+	 * @param   array|string  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
+	 *                               Each type supports dot-notation name.
+	 * @param   array|string  $as    The AS query part associated to $name. It can be string or array, in latter case it has to be
+	 *                               same length of $name; if is null there will not be any AS part for string or array element.
+	 *
+	 * @return  array|string  The quote wrapped name, same type of $name.
+	 *
+	 * @since   1.0
+	 */
+	public function qn($name, $as = null)
+	{
+		return $this->quoteName($name, $as);
 	}
 
 	/**
