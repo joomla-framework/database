@@ -744,8 +744,16 @@ class MysqlDriverTest extends DatabaseTestCase
 	 */
 	public function testGetNullDate()
 	{
+		$result   = static::$connection->setQuery('SELECT @@SESSION.sql_mode;')->loadResult();
+		$expected = '0000-00-00 00:00:00';
+
+		if (strpos($result, 'NO_ZERO_DATE') !== false)
+		{
+			$expected = '1000-01-01 00:00:00';
+		}
+
 		$this->assertSame(
-			'0000-00-00 00:00:00',
+			$expected,
 			static::$connection->getNullDate()
 		);
 	}
