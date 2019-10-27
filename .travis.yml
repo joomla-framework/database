@@ -208,7 +208,7 @@ jobs:
       env: DB="pgsql" PGSQL_VERSION=9.4 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
       before_script:
         - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
 
     # PDO PostgreSQL 9.5
     - stage: Test
@@ -221,7 +221,7 @@ jobs:
       env: DB="pgsql" PGSQL_VERSION=9.5 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
       before_script:
         - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
 
     # PDO PostgreSQL 9.6
     - stage: Test
@@ -233,7 +233,7 @@ jobs:
       env: DB="pgsql" PGSQL_VERSION=9.6 PHPUNIT_CONF=".travis/phpunit.pgsql.xml"
       before_script:
         - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
 
     # PDO PostgreSQL 10.0
     - stage: Test
@@ -246,7 +246,7 @@ jobs:
       before_script:
         - bash ./.travis/install-postgres-10.sh
         - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
     - stage: Test
       if: NOT type = pull_request
       php: 7.3
@@ -259,7 +259,7 @@ jobs:
       before_script:
         - bash ./.travis/install-postgres-10.sh
         - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
     - stage: Test
       if: NOT type = pull_request
       php: 7.4snapshot
@@ -271,7 +271,7 @@ jobs:
       before_script:
         - bash ./.travis/install-postgres-10.sh
         - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
 
     # PDO PostgreSQL 11.0
     - stage: Test
@@ -282,7 +282,7 @@ jobs:
       before_script:
         - bash ./.travis/install-postgres-11.sh
         - psql -U postgres -h localhost -c 'create database joomla_ut;'
-        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
     - stage: Test
       if: NOT type = pull_request
       php: 7.4snapshot
@@ -292,7 +292,7 @@ jobs:
       before_script:
         - bash ./.travis/install-postgres-11.sh
         - psql -U postgres -h localhost -c 'create database joomla_ut;'
-        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
 
     # SQL Server
     - stage: Test

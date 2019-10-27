@@ -9,6 +9,7 @@
 		<env name="JOOMLA_TEST_DB_PASSWORD" value="" />
 		<env name="JOOMLA_TEST_DB_DATABASE" value="jfw_test" />
 		<env name="JOOMLA_TEST_DB_PREFIX" value="" />
+		<env name="JOOMLA_TEST_DB_SELECT" value="true" />
 
 		<env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
 
