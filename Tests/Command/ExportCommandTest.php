@@ -9,17 +9,17 @@ namespace Joomla\Database\Tests\Command;
 use Joomla\Console\Application;
 use Joomla\Database\Command\ExportCommand;
 use Joomla\Database\DatabaseDriver;
-use Joomla\Database\DatabaseExporter;
+use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Joomla\Database\Tests\Cases\MysqlCase;
 use Joomla\Filesystem\Folder;
+use Joomla\Test\DatabaseTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 /**
- * Test class for \Joomla\Database\Command\ExportCommand
+ * Test class for Joomla\Database\Command\ExportCommand
  */
-class ExportCommandTest extends MysqlCase
+class ExportCommandTest extends DatabaseTestCase
 {
 	/**
 	 * Path to the test space
@@ -40,7 +40,7 @@ class ExportCommandTest extends MysqlCase
 	 *
 	 * @return  void
 	 */
-	public static function setUpBeforeClass()
+	public static function setUpBeforeClass(): void
 	{
 		if (!\defined('JPATH_ROOT'))
 		{
@@ -48,6 +48,11 @@ class ExportCommandTest extends MysqlCase
 		}
 
 		parent::setUpBeforeClass();
+
+		if (!static::$connection || static::$connection->getName() !== 'mysql')
+		{
+			self::markTestSkipped('MySQL database not configured.');
+		}
 	}
 
 	/**
@@ -59,6 +64,24 @@ class ExportCommandTest extends MysqlCase
 	protected function setUp(): void
 	{
 		parent::setUp();
+
+		try
+		{
+			foreach (DatabaseDriver::splitSql(file_get_contents(dirname(__DIR__) . '/Stubs/Schema/mysql.sql')) as $query)
+			{
+				static::$connection->setQuery($query)
+					->execute();
+			}
+		}
+		catch (ExecutionFailureException $exception)
+		{
+			$this->markTestSkipped(
+				\sprintf(
+					'Could not load MySQL database: %s',
+					$exception->getMessage()
+				)
+			);
+		}
 
 		$this->umask    = umask(0);
 		$this->testPath = sys_get_temp_dir() . '/' . microtime(true) . '.' . mt_rand();
@@ -80,11 +103,58 @@ class ExportCommandTest extends MysqlCase
 
 		umask($this->umask);
 
+		foreach (static::$connection->getTableList() as $table)
+		{
+			static::$connection->dropTable($table);
+		}
+
 		parent::tearDown();
+	}
+
+	/**
+	 * Loads the example data into the database.
+	 *
+	 * @return  void
+	 */
+	protected function loadExampleData(): void
+	{
+		$data = [
+			(object) [
+				'id'          => 1,
+				'title'       => 'Testing1',
+				'start_date'  => '2019-10-26 00:00:00',
+				'description' => 'test row one',
+			],
+			(object) [
+				'id'          => 2,
+				'title'       => 'Testing2',
+				'start_date'  => '2019-10-26 00:00:00',
+				'description' => 'test row two',
+			],
+			(object) [
+				'id'          => 3,
+				'title'       => 'Testing3',
+				'start_date'  => '2019-10-26 00:00:00',
+				'description' => 'test row three',
+			],
+			(object) [
+				'id'          => 4,
+				'title'       => 'Testing4',
+				'start_date'  => '2019-10-26 00:00:00',
+				'description' => 'test row four',
+			],
+		];
+
+		foreach ($data as $row)
+		{
+			static::$connection->insertObject('#__dbtest', $row);
+		}
 	}
 
 	public function testTheDatabaseIsExportedWithAllTables()
 	{
+		$this->loadExampleData();
+
 		$input  = new ArrayInput(
 			[
 				'command'  => 'database:export',
@@ -96,7 +166,7 @@ class ExportCommandTest extends MysqlCase
 
 		$application = new Application($input, $output);
 
-		$command = new ExportCommand(static::$driver);
+		$command = new ExportCommand(static::$connection);
 		$command->setApplication($application);
 
 		$this->assertSame(0, $command->execute($input, $output));
@@ -107,6 +177,8 @@ class ExportCommandTest extends MysqlCase
 
 	public function testTheDatabaseIsExportedWithAllTablesInZipFormat()
 	{
+		$this->loadExampleData();
+
 		$input  = new ArrayInput(
 			[
 				'command'  => 'database:export',
@@ -119,7 +191,7 @@ class ExportCommandTest extends MysqlCase
 
 		$application = new Application($input, $output);
 
-		$command = new ExportCommand(static::$driver);
+		$command = new ExportCommand(static::$connection);
 		$command->setApplication($application);
 
 		$this->assertSame(0, $command->execute($input, $output));
@@ -130,6 +202,8 @@ class ExportCommandTest extends MysqlCase
 
 	public function testTheDatabaseIsExportedWithASingleTable()
 	{
+		$this->loadExampleData();
+
 		$input  = new ArrayInput(
 			[
 				'command'  => 'database:export',
@@ -141,7 +215,7 @@ class ExportCommandTest extends MysqlCase
 
 		$application = new Application($input, $output);
 
-		$command = new ExportCommand(static::$driver);
+		$command = new ExportCommand(static::$connection);
 		$command->setApplication($application);
 
 		$this->assertSame(0, $command->execute($input, $output));
@@ -192,7 +266,7 @@ class ExportCommandTest extends MysqlCase
 
 		$application = new Application($input, $output);
 
-		$command = new ExportCommand(static::$driver);
+		$command = new ExportCommand(static::$connection);
 		$command->setApplication($application);
 
 		$this->assertSame(1, $command->execute($input, $output));
@@ -203,28 +277,12 @@ class ExportCommandTest extends MysqlCase
 
 	public function testTheCommandFailsIfTheRequestedTableDoesNotExistInTheDatabase()
 	{
-		$exporter = $this->createMock(DatabaseExporter::class);
-		$exporter->expects($this->once())
-			->method('withStructure')
-			->willReturnSelf();
-
-		$db = $this->createMock(DatabaseDriver::class);
-		$db->expects($this->once())
-			->method('getExporter')
-			->willReturn($exporter);
-
-		$db->expects($this->once())
-			->method('getTableList')
-			->willReturn([]);
-
-		$db->expects($this->once())
-			->method('getPrefix')
-			->willReturn('');
+		$this->loadExampleData();
 
 		$input  = new ArrayInput(
 			[
 				'command'  => 'database:export',
-				'--table'  => 'dbtest',
+				'--table'  => 'unexisting_table',
 				'--folder' => $this->testPath,
 			]
 		);
@@ -232,12 +290,12 @@ class ExportCommandTest extends MysqlCase
 
 		$application = new Application($input, $output);
 
-		$command = new ExportCommand($db);
+		$command = new ExportCommand(static::$connection);
 		$command->setApplication($application);
 
 		$this->assertSame(1, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('The dbtest table does not exist', $screenOutput);
+		$this->assertContains('The unexisting_table table does not exist', $screenOutput);
 	}
 }
