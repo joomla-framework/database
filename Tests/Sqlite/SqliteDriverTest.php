@@ -765,6 +765,14 @@ class SqliteDriverTest extends DatabaseTestCase
 	 */
 	public function testGetIterator()
 	{
+		$this->loadExampleData();
+
+		static::$connection->setQuery(
+			static::$connection->getQuery(true)
+				->select('*')
+				->from('#__dbtest')
+		);
+
 		$this->assertInstanceOf(
 			DatabaseIterator::class,
 			static::$connection->getIterator()
@@ -1075,6 +1083,98 @@ class SqliteDriverTest extends DatabaseTestCase
 	}
 
 	/**
+	 * @testdox  Binary values are correctly supported
+	 */
+	public function testQuoteAndDecodeBinary()
+	{
+		$this->loadExampleData();
+
+		// Add binary data with null byte
+		$query = static::$connection->getQuery(true)
+			->update('#__dbtest')
+			->set('data = ' . static::$connection->quoteBinary("\x00\x01\x02\xff"))
+			->where('id = 3');
+
+		static::$connection->setQuery($query)->execute();
+
+		// Add binary data with invalid UTF-8
+		$query = static::$connection->getQuery(true)
+			->update('#__dbtest')
+			->set('data = ' . static::$connection->quoteBinary("\x01\x01\x02\xff"))
+			->where('id = 4');
+
+		static::$connection->setQuery($query)->execute();
+
+		$selectRow3 = static::$connection->getQuery(true)
+			->select('id')
+			->from('#__dbtest')
+			->where('data = ' . static::$connection->quoteBinary("\x00\x01\x02\xff"));
+
+		$selectRow4 = static::$connection->getQuery(true)
+			->select('id')
+			->from('#__dbtest')
+			->where('data = '. static::$connection->quoteBinary("\x01\x01\x02\xff"));
+
+		$result = static::$connection->setQuery($selectRow3)->loadResult();
+		$this->assertEquals(3, $result);
+
+		$result = static::$connection->setQuery($selectRow4)->loadResult();
+		$this->assertEquals(4, $result);
+
+		$selectRows = static::$connection->getQuery(true)
+			->select('data')
+			->from('#__dbtest')
+			->order('id');
+
+		// Test loadColumn
+		$result = static::$connection->setQuery($selectRows)->loadColumn();
+
+		foreach ($result as $i => $v)
+		{
+			$result[$i] = static::$connection->decodeBinary($v);
+		}
+
+		$this->assertEquals(
+			[null, null, "\x00\x01\x02\xff", "\x01\x01\x02\xff"],
+			$result
+		);
+
+		// Test loadAssocList
+		$result = static::$connection->setQuery($selectRows)->loadAssocList();
+
+		foreach ($result as $i => $v)
+		{
+			$result[$i]['data'] = static::$connection->decodeBinary($v['data']);
+		}
+
+		$expected = [
+			['data' => null],
+			['data' => null],
+			['data' => "\x00\x01\x02\xff"],
+			['data' => "\x01\x01\x02\xff"],
+		];
+
+		$this->assertEquals($expected, $result);
+
+		// Test loadObjectList
+		$result = static::$connection->setQuery($selectRows)->loadObjectList();
+
+		foreach ($result as $i => $v)
+		{
+			$result[$i]->data = static::$connection->decodeBinary($v->data);
+		}
+
+		$expected = [
+			(object) ['data' => null],
+			(object) ['data' => null],
+			(object) ['data' => "\x00\x01\x02\xff"],
+			(object) ['data' => "\x01\x01\x02\xff"],
+		];
+
+		$this->assertEquals($expected, $result);
+	}
+
+	/**
 	 * @testdox  Values can be escaped in a locale aware context
 	 */
 	public function testEscapeNonLocaleAware()
@@ -1301,98 +1401,6 @@ class SqliteDriverTest extends DatabaseTestCase
 		)->loadObject();
 
 		$this->assertSame($row->title, $data->title);
-	}
-
-	/**
-	 * @testdox  Binary values are correctly supported
-	 */
-	public function testQuoteAndDecodeBinary()
-	{
-		$this->loadExampleData();
-
-		// Add binary data with null byte
-		$query = static::$connection->getQuery(true)
-			->update('#__dbtest')
-			->set('data = ' . static::$connection->quoteBinary("\x00\x01\x02\xff"))
-			->where('id = 3');
-
-		static::$connection->setQuery($query)->execute();
-
-		// Add binary data with invalid UTF-8
-		$query = static::$connection->getQuery(true)
-			->update('#__dbtest')
-			->set('data = ' . static::$connection->quoteBinary("\x01\x01\x02\xff"))
-			->where('id = 4');
-
-		static::$connection->setQuery($query)->execute();
-
-		$selectRow3 = static::$connection->getQuery(true)
-			->select('id')
-			->from('#__dbtest')
-			->where('data = ' . static::$connection->quoteBinary("\x00\x01\x02\xff"));
-
-		$selectRow4 = static::$connection->getQuery(true)
-			->select('id')
-			->from('#__dbtest')
-			->where('data = '. static::$connection->quoteBinary("\x01\x01\x02\xff"));
-
-		$result = static::$connection->setQuery($selectRow3)->loadResult();
-		$this->assertEquals(3, $result);
-
-		$result = static::$connection->setQuery($selectRow4)->loadResult();
-		$this->assertEquals(4, $result);
-
-		$selectRows = static::$connection->getQuery(true)
-			->select('data')
-			->from('#__dbtest')
-			->order('id');
-
-		// Test loadColumn
-		$result = static::$connection->setQuery($selectRows)->loadColumn();
-
-		foreach ($result as $i => $v)
-		{
-			$result[$i] = static::$connection->decodeBinary($v);
-		}
-
-		$this->assertEquals(
-			[null, null, "\x00\x01\x02\xff", "\x01\x01\x02\xff"],
-			$result
-		);
-
-		// Test loadAssocList
-		$result = static::$connection->setQuery($selectRows)->loadAssocList();
-
-		foreach ($result as $i => $v)
-		{
-			$result[$i]['data'] = static::$connection->decodeBinary($v['data']);
-		}
-
-		$expected = [
-			['data' => null],
-			['data' => null],
-			['data' => "\x00\x01\x02\xff"],
-			['data' => "\x01\x01\x02\xff"],
-		];
-
-		$this->assertEquals($expected, $result);
-
-		// Test loadObjectList
-		$result = static::$connection->setQuery($selectRows)->loadObjectList();
-
-		foreach ($result as $i => $v)
-		{
-			$result[$i]->data = static::$connection->decodeBinary($v->data);
-		}
-
-		$expected = [
-			(object) ['data' => null],
-			(object) ['data' => null],
-			(object) ['data' => "\x00\x01\x02\xff"],
-			(object) ['data' => "\x01\x01\x02\xff"],
-		];
-
-		$this->assertEquals($expected, $result);
 	}
 
 	/**
