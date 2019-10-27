@@ -324,6 +324,10 @@ class MysqlDriverTest extends DatabaseTestCase
 			$dbtestPrimaryKey['Expression'] = null;
 		}
 
+		$keys = [
+			(object) $dbtestPrimaryKey,
+		];
+
 		$this->assertEquals(
 			$keys,
 			static::$connection->getTableKeys('#__dbtest')
