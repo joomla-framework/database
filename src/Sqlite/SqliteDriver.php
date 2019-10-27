@@ -48,6 +48,21 @@ class SqliteDriver extends PdoDriver
 	}
 
 	/**
+	 * Alter database's character set.
+	 *
+	 * @param   string  $dbName  The database name that will be altered
+	 *
+	 * @return  boolean|resource
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	public function alterDbCharacterSet($dbName)
+	{
+		return false;
+	}
+
+	/**
 	 * Connects to the database if needed.
 	 *
 	 * @return  void  Returns void if the database connected successfully.
@@ -152,7 +167,7 @@ class SqliteDriver extends PdoDriver
 	 */
 	public function getCollation()
 	{
-		return $this->charset;
+		return false;
 	}
 
 	/**
@@ -165,7 +180,7 @@ class SqliteDriver extends PdoDriver
 	 */
 	public function getConnectionCollation()
 	{
-		return $this->charset;
+		return false;
 	}
 
 	/**
@@ -321,13 +336,12 @@ class SqliteDriver extends PdoDriver
 
 		$type = 'table';
 
-		/** @var SqliteQuery $query */
-		$query = $this->getQuery(true);
-		$query->select('name');
-		$query->from('sqlite_master');
-		$query->where('type = :type');
-		$query->bind(':type', $type);
-		$query->order('name');
+		$query = $this->getQuery(true)
+			->select('name')
+			->from('sqlite_master')
+			->where('type = :type')
+			->bind(':type', $type)
+			->order('name');
 
 		return $this->setQuery($query)->loadColumn();
 	}
