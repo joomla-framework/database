@@ -143,6 +143,12 @@ class PgsqlDriver extends PdoDriver
 	 */
 	public function getConnectionEncryption(): string
 	{
+		// Requires PostgreSQL 9.5 or newer
+		if (version_compare($this->getVersion(), '9.5', '<'))
+		{
+			return '';
+		}
+
 		$query = $this->getQuery(true)
 			->select($this->quoteName(['version', 'cipher']))
 			->from($this->quoteName('pg_stat_ssl'))
