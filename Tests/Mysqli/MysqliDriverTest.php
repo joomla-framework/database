@@ -340,24 +340,35 @@ class MysqliDriverTest extends DatabaseTestCase
 	 */
 	public function testGetTableKeys()
 	{
+		$dbtestPrimaryKey = [
+			'Table'         => static::$connection->replacePrefix('#__dbtest'),
+			'Non_unique'    => '0',
+			'Key_name'      => 'PRIMARY',
+			'Seq_in_index'  => '1',
+			'Column_name'   => 'id',
+			'Collation'     => 'A',
+			'Cardinality'   => '0',
+			'Sub_part'      => null,
+			'Packed'        => null,
+			'Null'          => '',
+			'Index_type'    => 'BTREE',
+			'Comment'       => '',
+			'Index_comment' => '',
+		];
+
+		// MySQL 8.0 adds additional data and casts certain keys to integers
+		if (!static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '8.0', '>='))
+		{
+			$dbtestPrimaryKey['Non_unique']   = (int) $dbtestPrimaryKey['Non_unique'];
+			$dbtestPrimaryKey['Seq_in_index'] = (int) $dbtestPrimaryKey['Seq_in_index'];
+			$dbtestPrimaryKey['Cardinality']  = (int) $dbtestPrimaryKey['Cardinality'];
+
+			$dbtestPrimaryKey['Visible']    = 'YES';
+			$dbtestPrimaryKey['Expression'] = null;
+		}
+
 		$this->assertEquals(
-			[
-				(object) [
-					'Table'         => static::$connection->replacePrefix('#__dbtest'),
-					'Non_unique'    => '0',
-					'Key_name'      => 'PRIMARY',
-					'Seq_in_index'  => '1',
-					'Column_name'   => 'id',
-					'Collation'     => 'A',
-					'Cardinality'   => '0',
-					'Sub_part'      => null,
-					'Packed'        => null,
-					'Null'          => '',
-					'Index_type'    => 'BTREE',
-					'Comment'       => '',
-					'Index_comment' => '',
-				],
-			],
+			$keys,
 			static::$connection->getTableKeys('#__dbtest')
 		);
 	}
