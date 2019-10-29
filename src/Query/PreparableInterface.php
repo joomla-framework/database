@@ -50,6 +50,17 @@ interface PreparableInterface
 	public function bind($key, &$value, $dataType = ParameterType::STRING, $length = 0, $driverOptions = []);
 
 	/**
+	 * Method to unbind a bound variable.
+	 *
+	 * @param   array|string|integer  $key  The key or array of keys to unbind.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function unbind($key);
+
+	/**
 	 * Retrieves the bound parameters array when key is null and returns it by reference. If a key is provided then that item is returned.
 	 *
 	 * @param   mixed  $key  The bounded variable key to retrieve.

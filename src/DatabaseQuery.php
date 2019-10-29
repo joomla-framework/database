@@ -2021,7 +2021,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function unbind($key): self
+	public function unbind($key)
 	{
 		if (\is_array($key))
 		{
