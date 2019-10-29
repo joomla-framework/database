@@ -726,6 +726,11 @@ abstract class DatabaseQuery implements QueryInterface
 
 				break;
 
+			case 'bounded':
+				$this->bounded = [];
+
+				break;
+
 			default:
 				$this->type               = null;
 				$this->alias              = null;
@@ -1930,8 +1935,7 @@ abstract class DatabaseQuery implements QueryInterface
 	}
 
 	/**
-	 * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution. Also
-	 * removes a variable that has been bounded from the internal bounded array when the passed in value is null.
+	 * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution.
 	 *
 	 * @param   array|string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
 	 *                                                the form ':key', but can also be an integer.
@@ -1947,14 +1951,11 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @since   1.5.0
 	 */
-	public function bind($key = null, &$value = null, $dataType = ParameterType::STRING, $length = 0, $driverOptions = [])
+	public function bind($key, &$value, $dataType = ParameterType::STRING, $length = 0, $driverOptions = [])
 	{
-		// Case 1: Empty Key (reset $bounded array)
-		if (empty($key))
+		if (!$key)
 		{
-			$this->bounded = [];
-
-			return $this;
+			throw new \InvalidArgumentException('A key is required');
 		}
 
 		$key   = (array) $key;
@@ -1990,17 +1991,6 @@ abstract class DatabaseQuery implements QueryInterface
 				$localDataType = $dataType;
 			}
 
-			// Case 2: Key Provided, null value (unset key from $bounded array)
-			if ($localValue === null)
-			{
-				if (isset($this->bounded[$key[$i]]))
-				{
-					unset($this->bounded[$key[$i]]);
-				}
-
-				continue;
-			}
-
 			// Validate parameter type
 			if (!isset($this->parameterMapping[$localDataType]))
 			{
@@ -2013,10 +2003,42 @@ abstract class DatabaseQuery implements QueryInterface
 			$obj->length        = $length;
 			$obj->driverOptions = $driverOptions;
 
-			// Case 3: Simply add the Key/Value into the bounded array
+			// Add the Key/Value into the bounded array
 			$this->bounded[$key[$i]] = $obj;
 
 			unset($localValue);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Method to unbind a bound variable.
+	 *
+	 * @param   array|string|integer  $key  The key or array of keys to unbind.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function unbind($key): self
+	{
+		if (\is_array($key))
+		{
+			foreach ($key as $k)
+			{
+				if (\array_key_exists($this->bounded[$k]))
+				{
+					unset($this->bounded[$k]);
+				}
+			}
+		}
+		else
+		{
+			if (\array_key_exists($this->bounded[$key]))
+			{
+				unset($this->bounded[$key]);
+			}
 		}
 
 		return $this;

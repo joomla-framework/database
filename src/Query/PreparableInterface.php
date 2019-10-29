@@ -31,8 +31,7 @@ use Joomla\Database\QueryInterface;
 interface PreparableInterface
 {
 	/**
-	 * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution. Also
-	 * removes a variable that has been bounded from the internal bounded array when the passed in value is null.
+	 * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution.
 	 *
 	 * @param   array|string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
 	 *                                                the form ':key', but can also be an integer.
@@ -48,7 +47,7 @@ interface PreparableInterface
 	 *
 	 * @since   1.0
 	 */
-	public function bind($key = null, &$value = null, $dataType = ParameterType::STRING, $length = 0, $driverOptions = []);
+	public function bind($key, &$value, $dataType = ParameterType::STRING, $length = 0, $driverOptions = []);
 
 	/**
 	 * Retrieves the bound parameters array when key is null and returns it by reference. If a key is provided then that item is returned.
