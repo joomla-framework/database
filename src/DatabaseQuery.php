@@ -1950,6 +1950,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  $this
 	 *
 	 * @since   1.5.0
+	 * @throws  \InvalidArgumentException
 	 */
 	public function bind($key, &$value, $dataType = ParameterType::STRING, $length = 0, $driverOptions = [])
 	{
