@@ -2028,18 +2028,12 @@ abstract class DatabaseQuery implements QueryInterface
 		{
 			foreach ($key as $k)
 			{
-				if (\array_key_exists($this->bounded[$k]))
-				{
-					unset($this->bounded[$k]);
-				}
+				unset($this->bounded[$k]);
 			}
 		}
 		else
 		{
-			if (\array_key_exists($this->bounded[$key]))
-			{
-				unset($this->bounded[$key]);
-			}
+			unset($this->bounded[$key]);
 		}
 
 		return $this;
