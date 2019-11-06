@@ -773,7 +773,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		if ($this->statement)
 		{
 			$this->statement->closeCursor();
-			$this->statement = null;
 		}
 	}
 
