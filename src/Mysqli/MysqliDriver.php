@@ -1031,7 +1031,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		if ($this->statement)
 		{
 			$this->statement->closeCursor();
-			$this->statement = null;
 		}
 	}
 
