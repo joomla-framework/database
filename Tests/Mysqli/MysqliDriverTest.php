@@ -1491,4 +1491,41 @@ class MysqliDriverTest extends DatabaseTestCase
 			$result
 		);
 	}
+
+	/**
+	 * @testdox  Select statements can be prepared once and executed repeateadly
+	 */
+	public function testRepeatedSelectStatement()
+	{
+		$this->loadExampleData();
+		$results = [];
+
+		$query = static::$connection->getQuery(true);
+		$query->select('id, title')
+			->from('#__dbtest')
+			->where('id = :id')
+			->bind(':id', $id, ParameterType::INTEGER);
+
+		// Test repeated statements.
+		static::$connection->setQuery($query);
+
+		$id        = 1;
+		$results[] = static::$connection->loadAssocList();
+		$id        = 4;
+		$results[] = static::$connection->loadAssocList();
+
+		// Also test that running a new query works.
+		static::$connection->setQuery($query);
+		$id        = 2;
+		$results[] = static::$connection->loadAssocList();
+
+		$this->assertEquals(
+			[
+				['id' => '1', 'title' => 'Testing1'],
+				['id' => '4', 'title' => 'Testing4'],
+				['id' => '2', 'title' => 'Testing2'],
+			],
+			$result
+		);
+	}
 }
