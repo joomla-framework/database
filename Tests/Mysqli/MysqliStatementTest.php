@@ -86,11 +86,11 @@ class MysqliStatementTest extends DatabaseTestCase
 		new MysqliStatement(static::$connection->getConnection(), $query);
 	}
 
-    /**
-     * Regression test to ensure that named values with matching named params are correctly prepared (part 2), this simulates a general use case.
-     *
+	/**
+	 * Regression test to ensure that named values with matching named params are correctly prepared (part 2), this simulates a general use case.
+	 *
 	 * @doesNotPerformAssertions
-     */
+	 */
     public function testStatementWithKeysMatching()
     {
         $query = 'SELECT * FROM dbtest WHERE `id` = :id AND `title` = :id_title';
