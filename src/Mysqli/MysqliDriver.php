@@ -1016,25 +1016,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	}
 
 	/**
-	 * Method to free up the memory used for the result set.
-	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	protected function freeResult($cursor = null)
-	{
-		$this->executed = false;
-
-		if ($this->statement)
-		{
-			$this->statement->closeCursor();
-		}
-	}
-
-	/**
 	 * Prepares a SQL statement for execution
 	 *
 	 * @param   string  $query  The SQL query to be prepared.
