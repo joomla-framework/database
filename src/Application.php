@@ -18,9 +18,11 @@ use Joomla\Console\Event\CommandErrorEvent;
 use Joomla\Console\Event\TerminateEvent;
 use Joomla\Console\Exception\NamespaceNotFoundException;
 use Joomla\Registry\Registry;
+use Joomla\String\StringHelper;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Exception\LogicException;
+use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Helper\DebugFormatterHelper;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -34,9 +36,11 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Terminal;
+use Symfony\Component\ErrorHandler\ErrorHandler;
 
 /**
  * Base application class for a Joomla! command line application.
@@ -308,8 +312,8 @@ class Application extends AbstractApplication
 	 */
 	protected function doExecute(): int
 	{
-		$input  = $this->getConsoleInput();
-		$output = $this->getConsoleOutput();
+		$input  = $this->consoleInput;
+		$output = $this->consoleOutput;
 
 		// If requesting the version, short circuit the application and send the version data
 		if ($input->hasParameterOption(['--version', '-V'], true))
@@ -407,6 +411,25 @@ class Application extends AbstractApplication
 
 		$this->configureIO();
 
+		$renderThrowable = function (\Throwable $e)
+		{
+			$this->renderThrowable($e);
+		};
+
+		if ($phpHandler = set_exception_handler($renderThrowable))
+		{
+			restore_exception_handler();
+
+			if (!\is_array($phpHandler) || !$phpHandler[0] instanceof ErrorHandler)
+			{
+				$errorHandler = true;
+			}
+			elseif ($errorHandler = $phpHandler[0]->setExceptionHandler($renderThrowable))
+			{
+				$phpHandler[0]->setExceptionHandler($errorHandler);
+			}
+		}
+
 		try
 		{
 			$this->dispatchEvent(ApplicationEvents::BEFORE_EXECUTE);
@@ -422,6 +445,8 @@ class Application extends AbstractApplication
 			{
 				throw $throwable;
 			}
+
+			$renderThrowable($throwable);
 
 			$event = new ApplicationErrorEvent($throwable, $this, $this->runningCommand);
 
@@ -445,6 +470,26 @@ class Application extends AbstractApplication
 		}
 		finally
 		{
+			// If the exception handler changed, keep it; otherwise, unregister $renderThrowable
+			if (!$phpHandler)
+			{
+				if (set_exception_handler($renderThrowable) === $renderThrowable)
+				{
+					restore_exception_handler();
+				}
+
+				restore_exception_handler();
+			}
+			elseif (!$errorHandler)
+			{
+				$finalHandler = $phpHandler[0]->setExceptionHandler(null);
+
+				if ($finalHandler !== $renderThrowable)
+				{
+					$phpHandler[0]->setExceptionHandler($finalHandler);
+				}
+			}
+
 			if ($this->shouldAutoExit() && isset($exitCode))
 			{
 				$exitCode = $exitCode > 255 ? 255 : $exitCode;
@@ -853,6 +898,212 @@ class Application extends AbstractApplication
 	{
 		// Set the current directory.
 		$this->set('cwd', getcwd());
+	}
+
+	/**
+	 * Renders an error message for a Throwable object
+	 *
+	 * @param   \Throwable  $throwable  The Throwable object to render the message for.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function renderThrowable(\Throwable $throwable): void
+	{
+		$output = $this->consoleOutput instanceof ConsoleOutputInterface ? $this->consoleOutput->getErrorOutput() : $this->consoleOutput;
+
+		$output->writeln('', OutputInterface::VERBOSITY_QUIET);
+
+		$this->doRenderThrowable($throwable, $output);
+
+		if (null !== $this->runningCommand)
+		{
+			$output->writeln(
+				sprintf(
+					'<info>%s</info>',
+					sprintf($this->runningCommand->getSynopsis(), $this->getName())
+				),
+				OutputInterface::VERBOSITY_QUIET
+			);
+
+			$output->writeln('', OutputInterface::VERBOSITY_QUIET);
+		}
+	}
+
+	/**
+	 * Handles recursively rendering error messages for a Throwable and all previous Throwables contained within.
+	 *
+	 * @param   \Throwable       $throwable  The Throwable object to render the message for.
+	 * @param   OutputInterface  $output     The output object to send the message to.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function doRenderThrowable(\Throwable $throwable, OutputInterface $output): void
+	{
+		do
+		{
+			$message = trim($throwable->getMessage());
+
+			if ($message === '' || OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity())
+			{
+				$class = \get_class($throwable);
+				$class = 'c' === $class[0] && 0 === strpos($class, "class@anonymous\0") ? get_parent_class($class) . '@anonymous' : $class;
+				$title = sprintf('  [%s%s]  ', $class, 0 !== ($code = $throwable->getCode()) ? ' (' . $code . ')' : '');
+				$len   = Helper::strlen($title);
+			}
+			else
+			{
+				$len = 0;
+			}
+
+			if (strpos($message, "class@anonymous\0") !== false)
+			{
+				$message = preg_replace_callback(
+					'/class@anonymous\x00.*?\.php0x?[0-9a-fA-F]++/',
+					function ($m)
+					{
+						return class_exists($m[0], false) ? get_parent_class($m[0]) . '@anonymous' : $m[0];
+					},
+					$message
+				);
+			}
+
+			$width = $this->terminal->getWidth() ? $this->terminal->getWidth() - 1 : PHP_INT_MAX;
+			$lines = [];
+
+			foreach ($message !== '' ? preg_split('/\r?\n/', $message) : [] as $line)
+			{
+				foreach ($this->splitStringByWidth($line, $width - 4) as $line)
+				{
+					// Pre-format lines to get the right string length
+					$lineLength = StringHelper::strlen($line) + 4;
+					$lines[]    = [$line, $lineLength];
+					$len        = max($lineLength, $len);
+				}
+			}
+
+			$messages = [];
+
+			if (!$throwable instanceof ExceptionInterface || OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity())
+			{
+				$messages[] = sprintf(
+					'<comment>%s</comment>',
+					OutputFormatter::escape(
+						sprintf(
+							'In %s line %s:', basename($throwable->getFile()) ?: 'n/a', $throwable->getLine() ?: 'n/a'
+						)
+					)
+				);
+			}
+
+			$messages[] = $emptyLine = sprintf('<error>%s</error>', str_repeat(' ', $len));
+
+			if ($message === '' || OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity())
+			{
+				$messages[] = sprintf('<error>%s%s</error>', $title, str_repeat(' ', max(0, $len - Helper::strlen($title))));
+			}
+
+			foreach ($lines as $line)
+			{
+				$messages[] = sprintf('<error>  %s  %s</error>', OutputFormatter::escape($line[0]), str_repeat(' ', $len - $line[1]));
+			}
+
+			$messages[] = $emptyLine;
+			$messages[] = '';
+
+			$output->writeln($messages, OutputInterface::VERBOSITY_QUIET);
+
+			if (OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity())
+			{
+				$output->writeln('<comment>Exception trace:</comment>', OutputInterface::VERBOSITY_QUIET);
+
+				// Exception related properties
+				$trace = $throwable->getTrace();
+				array_unshift(
+					$trace,
+					[
+						'function' => '',
+						'file'     => $throwable->getFile() ?: 'n/a',
+						'line'     => $throwable->getLine() ?: 'n/a',
+						'args'     => [],
+					]
+				);
+
+				for ($i = 0, $count = \count($trace); $i < $count; ++$i)
+				{
+					$class    = $trace[$i]['class'] ?? '';
+					$type     = $trace[$i]['type'] ?? '';
+					$function = $trace[$i]['function'] ?? '';
+					$file     = $trace[$i]['file'] ?? 'n/a';
+					$line     = $trace[$i]['line'] ?? 'n/a';
+
+					$output->writeln(
+						sprintf(
+							' %s%s at <info>%s:%s</info>', $class, $function ? $type . $function . '()' : '', $file, $line
+						),
+						OutputInterface::VERBOSITY_QUIET
+					);
+				}
+				$output->writeln('', OutputInterface::VERBOSITY_QUIET);
+			}
+		}
+		while ($throwable = $throwable->getPrevious());
+	}
+
+	/**
+	 * Splits a string for a specified width for use in an output.
+	 *
+	 * @param   string   $string  The string to split.
+	 * @param   integer  $width   The maximum width of the output.
+	 *
+	 * @return  string[]
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	private function splitStringByWidth(string $string, int $width): array
+	{
+		/*
+		 * The str_split function is not suitable for multi-byte characters, we should use preg_split to get char array properly.
+		 * Additionally, array_slice() is not enough as some character has doubled width.
+		 * We need a function to split string not by character count but by string width
+		 */
+		if (false === $encoding = mb_detect_encoding($string, null, true))
+		{
+			return str_split($string, $width);
+		}
+
+		$utf8String = mb_convert_encoding($string, 'utf8', $encoding);
+		$lines      = [];
+		$line       = '';
+		$offset     = 0;
+
+		while (preg_match('/.{1,10000}/u', $utf8String, $m, 0, $offset))
+		{
+			$offset += \strlen($m[0]);
+
+			foreach (preg_split('//u', $m[0]) as $char)
+			{
+				// Test if $char could be appended to current line
+				if (mb_strwidth($line . $char, 'utf8') <= $width)
+				{
+					$line .= $char;
+
+					continue;
+				}
+
+				// If not, push current line to array and make a new line
+				$lines[] = str_pad($line, $width);
+				$line    = $char;
+			}
+		}
+
+		$lines[] = \count($lines) ? str_pad($line, $width) : $line;
+		mb_convert_variables($encoding, 'utf8', $lines);
+
+		return $lines;
 	}
 
 	/**
