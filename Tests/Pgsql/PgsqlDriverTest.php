@@ -181,6 +181,36 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
 	 */
 
 	/**
+	 * @testdox  An object can be inserted into the database
+	 */
+	public function testInsertObject()
+	{
+		$this->loadExampleData();
+
+		static::$connection->setQuery(
+			\sprintf(
+				'ALTER SEQUENCE %s RESTART WITH 5',
+				static::$connection->replacePrefix('#__dbtest_id_seq')
+			)
+		)->execute();
+
+		$data = (object) [
+			'id'          => null,
+			'title'       => 'Testing insertObject',
+			'start_date'  => '2019-10-26 00:00:00',
+			'description' => 'test insertObject row',
+		];
+
+		static::$connection->insertObject(
+			'#__dbtest',
+			$data,
+			'id'
+		);
+
+		$this->assertNotNull($data->id, 'When given a key, the insertObject method should set the row ID');
+	}
+
+	/**
 	 * @testdox  A database table can be renamed
 	 */
 	public function testRenameTable()
