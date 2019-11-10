@@ -1509,14 +1509,14 @@ class MysqliDriverTest extends DatabaseTestCase
 		// Test repeated statements.
 		static::$connection->setQuery($query);
 		$id        = 1;
-		$results[] = static::$connection->loadAssocList();
+		$results[] = static::$connection->loadAssoc();
 		$id        = 4;
-		$results[] = static::$connection->loadAssocList();
+		$results[] = static::$connection->loadAssoc();
 
 		// Also test that running a new query works.
 		static::$connection->setQuery($query);
 		$id        = 2;
-		$results[] = static::$connection->loadAssocList();
+		$results[] = static::$connection->loadAssoc();
 
 		$this->assertEquals(
 			[
