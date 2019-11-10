@@ -277,7 +277,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 *
 	 * @param   string  $database  The name of the database to select for use.
 	 *
-	 * @return  $this
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -289,7 +289,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		$this->setQuery('USE ' . $this->quoteName($database))
 			->execute();
 
-		return $this;
+		return true;
 	}
 
 	/**
