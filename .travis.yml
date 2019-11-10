@@ -304,8 +304,6 @@ jobs:
       env: DB="sqlsrv" PHPUNIT_CONF=".travis/phpunit.sqlsrv.xml" SQL_SERVER_VERSION="5.6.1"
       before_script:
         - bash ./.travis/install-mssql.sh $SQL_SERVER_VERSION
-        - /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 -b -Q "CREATE DATABASE joomla_ut"
-        - /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 -i Tests/Stubs/sqlsrv.sql
     - stage: Test
       php: 7.3
       sudo: required
@@ -314,8 +312,6 @@ jobs:
       env: DB="sqlsrv" PHPUNIT_CONF=".travis/phpunit.sqlsrv.xml" SQL_SERVER_VERSION="5.6.1"
       before_script:
         - bash ./.travis/install-mssql.sh $SQL_SERVER_VERSION
-        - /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 -b -Q "CREATE DATABASE joomla_ut"
-        - /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 -i Tests/Stubs/sqlsrv.sql
     - stage: Test
       if: NOT type = pull_request
       php: 7.4snapshot
@@ -325,8 +321,6 @@ jobs:
       env: DB="sqlsrv" PHPUNIT_CONF=".travis/phpunit.sqlsrv.xml" SQL_SERVER_VERSION="5.6.1"
       before_script:
         - bash ./.travis/install-mssql.sh $SQL_SERVER_VERSION
-        - /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 -b -Q "CREATE DATABASE joomla_ut"
-        - /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 -i Tests/Stubs/sqlsrv.sql
 
     # PHPCS
     - stage: Coding standard
