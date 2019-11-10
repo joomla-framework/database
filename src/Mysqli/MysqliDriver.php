@@ -1012,7 +1012,10 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 
 		$this->freeResult();
 
-		$cursor->free_result();
+		if ($cursor instanceof \mysqli_result)
+		{
+			$cursor->free_result();
+		}
 
 		return true;
 	}
