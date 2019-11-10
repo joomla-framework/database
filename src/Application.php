@@ -1047,6 +1047,7 @@ class Application extends AbstractApplication
 						OutputInterface::VERBOSITY_QUIET
 					);
 				}
+
 				$output->writeln('', OutputInterface::VERBOSITY_QUIET);
 			}
 		}
