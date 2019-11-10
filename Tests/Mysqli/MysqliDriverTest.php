@@ -1508,7 +1508,6 @@ class MysqliDriverTest extends DatabaseTestCase
 
 		// Test repeated statements.
 		static::$connection->setQuery($query);
-
 		$id        = 1;
 		$results[] = static::$connection->loadAssocList();
 		$id        = 4;
@@ -1525,7 +1524,7 @@ class MysqliDriverTest extends DatabaseTestCase
 				['id' => '4', 'title' => 'Testing4'],
 				['id' => '2', 'title' => 'Testing2'],
 			],
-			$result
+			$results
 		);
 	}
 }
