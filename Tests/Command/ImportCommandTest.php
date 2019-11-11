@@ -94,7 +94,7 @@ class ImportCommandTest extends DatabaseTestCase
 		$this->assertSame(0, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('Import completed in', $screenOutput);
+		$this->assertStringContainsString('Import completed in', $screenOutput);
 	}
 
 	public function testTheDatabaseIsImportedWithASingleTable()
@@ -116,7 +116,7 @@ class ImportCommandTest extends DatabaseTestCase
 		$this->assertSame(0, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('Import completed in', $screenOutput);
+		$this->assertStringContainsString('Import completed in', $screenOutput);
 	}
 
 	public function testTheCommandFailsIfTheDatabaseDriverDoesNotSupportImports()
@@ -146,7 +146,7 @@ class ImportCommandTest extends DatabaseTestCase
 		$this->assertSame(1, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('The "test" database driver does not', $screenOutput);
+		$this->assertStringContainsString('The "test" database driver does not', $screenOutput);
 	}
 
 	public function testTheCommandFailsIfRequiredOptionsAreMissing()
@@ -167,7 +167,7 @@ class ImportCommandTest extends DatabaseTestCase
 		$this->assertSame(1, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('Either the --table or --all option', $screenOutput);
+		$this->assertStringContainsString('Either the --table or --all option', $screenOutput);
 	}
 
 	public function testTheCommandFailsIfTheRequestedTableDoesNotHaveAnImportFile()
@@ -189,6 +189,6 @@ class ImportCommandTest extends DatabaseTestCase
 		$this->assertSame(1, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('The unexisting_table.xml file does not exist.', $screenOutput);
+		$this->assertStringContainsString('The unexisting_table.xml file does not exist.', $screenOutput);
 	}
 }

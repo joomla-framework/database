@@ -172,7 +172,7 @@ class ExportCommandTest extends DatabaseTestCase
 		$this->assertSame(0, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('Export completed in', $screenOutput);
+		$this->assertStringContainsString('Export completed in', $screenOutput);
 	}
 
 	public function testTheDatabaseIsExportedWithAllTablesInZipFormat()
@@ -197,7 +197,7 @@ class ExportCommandTest extends DatabaseTestCase
 		$this->assertSame(0, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('Export completed in', $screenOutput);
+		$this->assertStringContainsString('Export completed in', $screenOutput);
 	}
 
 	public function testTheDatabaseIsExportedWithASingleTable()
@@ -221,7 +221,7 @@ class ExportCommandTest extends DatabaseTestCase
 		$this->assertSame(0, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('Export completed in', $screenOutput);
+		$this->assertStringContainsString('Export completed in', $screenOutput);
 	}
 
 	public function testTheCommandFailsIfTheDatabaseDriverDoesNotSupportExports()
@@ -251,7 +251,7 @@ class ExportCommandTest extends DatabaseTestCase
 		$this->assertSame(1, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('The "test" database driver does not', $screenOutput);
+		$this->assertStringContainsString('The "test" database driver does not', $screenOutput);
 	}
 
 	public function testTheCommandFailsIfRequiredOptionsAreMissing()
@@ -272,7 +272,7 @@ class ExportCommandTest extends DatabaseTestCase
 		$this->assertSame(1, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('Either the --table or --all option', $screenOutput);
+		$this->assertStringContainsString('Either the --table or --all option', $screenOutput);
 	}
 
 	public function testTheCommandFailsIfTheRequestedTableDoesNotExistInTheDatabase()
@@ -296,6 +296,6 @@ class ExportCommandTest extends DatabaseTestCase
 		$this->assertSame(1, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('The unexisting_table table does not exist', $screenOutput);
+		$this->assertStringContainsString('The unexisting_table table does not exist', $screenOutput);
 	}
 }
