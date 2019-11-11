@@ -8,13 +8,15 @@
 
 namespace Joomla\Database\Tests\Service;
 
+use Joomla\Database\DatabaseFactory;
+use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Service\DatabaseProvider;
 use Joomla\DI\Container;
 use Joomla\Registry\Registry;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for Joomla\Database\Service\DatabaseProvider.
+ * Test class for Joomla\Database\Service\DatabaseProvider
  */
 class DatabaseProviderTest extends TestCase
 {
@@ -45,18 +47,26 @@ class DatabaseProviderTest extends TestCase
 	}
 
 	/**
-	 * @testdox  Verify that the DatabaseProvider returns a DatabaseDriver object
-	 *
-	 * @covers   Joomla\Database\Service\DatabaseProvider::register
-	 * @uses     Joomla\Database\DatabaseDriver
-	 * @uses     Joomla\Database\Pdo\PdoDriver
+	 * @testdox  Verify that the DatabaseProvider returns a DatabaseInterface object
 	 */
-	public function testVerifyTheLanguageObjectIsRegisteredToTheContainer()
+	public function testVerifyTheDatabaseDriverIsRegisteredToTheContainer()
 	{
 		$this->container->registerServiceProvider(new DatabaseProvider);
 
 		$this->assertInstanceOf(
-			'\\Joomla\\Database\\DatabaseDriver', $this->container->get('Joomla\\Database\\DatabaseDriver')
+			DatabaseInterface::class, $this->container->get(DatabaseInterface::class)
+		);
+	}
+
+	/**
+	 * @testdox  Verify that the DatabaseProvider returns a DatabaseFactory object
+	 */
+	public function testVerifyTheDatabaseFactoryIsRegisteredToTheContainer()
+	{
+		$this->container->registerServiceProvider(new DatabaseProvider);
+
+		$this->assertInstanceOf(
+			DatabaseFactory::class, $this->container->get(DatabaseFactory::class)
 		);
 	}
 }
