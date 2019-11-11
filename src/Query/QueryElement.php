@@ -107,6 +107,18 @@ class QueryElement
 	}
 
 	/**
+	 * Gets the glue of this element.
+	 *
+	 * @return  string  Glue of the element.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getGlue()
+	{
+		return $this->glue;
+	}
+
+	/**
 	 * Gets the name of this element.
 	 *
 	 * @return  string  Name of the element.
