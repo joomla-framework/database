@@ -608,7 +608,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
 		$selectRow4 = static::$connection->getQuery(true)
 			->select('id')
 			->from('#__dbtest')
-			->where('data = '. static::$connection->quoteBinary("\x01\x01\x02\xff"));
+			->where('data = ' . static::$connection->quoteBinary("\x01\x01\x02\xff"));
 
 		$result = static::$connection->setQuery($selectRow3)->loadResult();
 		$this->assertEquals(3, $result);
