@@ -17,14 +17,14 @@
         "mustache/mustache": "~2.3",
         "phpunit/phpunit": "~8.2",
         "symfony/templating": "~3.4|~4.0",
-        "twig/twig": "~1.34|~2.4"
+        "twig/twig": "~1.34|~2.4|~3.0"
     },
     "suggest": {
         "illuminate/view": "Install 5.8.*|^6.0 if you are using Laravel's Blade template engine.",
         "league/plates": "Install ~3.0 if you are using the Plates template engine.",
         "mustache/mustache": "Install ~2.3 if you are using the Mustache template engine.",
         "symfony/templating": "Install ~3.4|~4.0 if you are using Symfony's PHP template component.",
-        "twig/twig": "Install ~1.34|~2.4 if you are using the Twig template engine."
+        "twig/twig": "Install ~1.34|~2.4|~3.0 if you are using the Twig template engine."
     },
     "autoload": {
         "psr-4": {
