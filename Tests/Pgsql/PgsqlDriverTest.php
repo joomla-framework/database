@@ -312,7 +312,15 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
 	 */
 	public function testGetConnectionEncryption()
 	{
-		$this->assertEmpty(
+		$expectedResult = '';
+
+		if (\getenv('TRAVIS') === 'true' && in_array(\getenv('PGSQL_VERSION'), ['9.5', '9.6', '10.0']))
+		{
+			$expectedResult = 'TLSv1.2 (ECDHE-RSA-AES256-GCM-SHA384)';
+		}
+
+		$this->assertSame(
+			$expectedResult,
 			static::$connection->getConnectionEncryption(),
 			'The database connection is not encrypted by default'
 		);
