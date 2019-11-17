@@ -114,3 +114,9 @@ Instead of `$query->from($subquery, 'alias')` use `$query->from($subquery->alias
 Several methods which defined a query type (i.e. INSERT, SELECT, UPDATE) contained doc blocks indicating the query type should not be changed, but
 this was not enforced in the code. As of 2.0, an exception will be thrown if trying to change a query type. If intending to change the query type,
 either call `DatabaseQuery::clear()` (optionally only clearing the type clause) or a new query object should be created instead.
+
+#### `castAsChar` deprecated. Replaced with `castAs`
+
+`castAsChar($value)` has been deprecated in favour using of the more generic `castAs('CHAR', $value)` method. This
+method has support for supplying the length of a string and also accepting other types of casts such as integers.
+The intent is to add more cast types in the subsequent versions.

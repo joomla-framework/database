@@ -9,6 +9,7 @@
 namespace Joomla\Database;
 
 use Joomla\Database\Exception\QueryTypeAlreadyDefinedException;
+use Joomla\Database\Exception\UnknownTypeException;
 
 /**
  * Joomla Framework Query Building Class.
@@ -561,17 +562,52 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Ensure that the value is properly quoted before passing to the method.
 	 *
 	 * Usage:
+	 * $query->select($query->castAs('CHAR', 'a'));
+	 *
+	 * @param   string  $type    The type of string to cast as.
+	 * @param   string  $value   The value to cast as a char.
+	 * @param   string  $length  Optionally specify the length of the field (if the type supports it otherwise
+	 *                           ignored).
+	 *
+	 * @return  string  SQL statement to cast the value as a char type.
+	 *
+	 * @since   1.0
+	 */
+	public function castAs(string $type, string $value, ?string $length = null)
+	{
+		switch (strtoupper($type))
+		{
+			case 'CHAR':
+				return $value;
+
+			default:
+				throw new UnknownTypeException(
+					sprintf(
+						'Type %s was not recognised by the database driver as valid for casting',
+						$type
+					)
+				);
+		}
+	}
+
+	/**
+	 * Casts a value to a char.
+	 *
+	 * Ensure that the value is properly quoted before passing to the method.
+	 *
+	 * Usage:
 	 * $query->select($query->castAsChar('a'));
 	 *
 	 * @param   string  $value  The value to cast as a char.
 	 *
-	 * @return  string  Returns the cast value.
+	 * @return  string  SQL statement to cast the value as a char type.
 	 *
-	 * @since   1.0
+	 * @since       1.0
+	 * @deprecated  3.0  Use $query->castAs('CHAR', $value)
 	 */
 	public function castAsChar($value)
 	{
-		return $value;
+		return $this->castAs('CHAR', $value);
 	}
 
 	/**

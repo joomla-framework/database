@@ -11,6 +11,7 @@ namespace Joomla\Database;
 use Joomla\Database\Exception\QueryTypeAlreadyDefinedException;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
+use Joomla\Database\Exception\UnknownTypeException;
 
 /**
  * Joomla Framework Query Building Interface.
@@ -45,20 +46,24 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	public function call($columns);
 
 	/**
-	 * Casts a value to a char.
+	 * Casts a value to a specified type.
 	 *
 	 * Ensure that the value is properly quoted before passing to the method.
 	 *
 	 * Usage:
-	 * $query->select($query->castAsChar('a'));
+	 * $query->select($query->castAs('CHAR', 'a'));
 	 *
-	 * @param   string  $value  The value to cast as a char.
+	 * @param   string  $type    The type of string to cast as.
+	 * @param   string  $value   The value to cast as a char.
+	 * @param   string  $length  Optionally specify the length of the field (if the type supports it otherwise
+	 *                           ignored).
 	 *
 	 * @return  string  SQL statement to cast the value as a char type.
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  UnknownTypeException  When unsupported cast for a database driver
 	 */
-	public function castAsChar($value);
+	public function castAs(string $type, string $value, ?string $length = null);
 
 	/**
 	 * Gets the number of characters in a string.

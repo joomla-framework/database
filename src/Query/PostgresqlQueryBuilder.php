@@ -308,23 +308,42 @@ trait PostgresqlQueryBuilder
 		return $this;
 	}
 
+
 	/**
 	 * Casts a value to a char.
 	 *
 	 * Ensure that the value is properly quoted before passing to the method.
 	 *
 	 * Usage:
-	 * $query->select($query->castAsChar('a'));
+	 * $query->select($query->castAs('CHAR', 'a'));
 	 *
-	 * @param   string  $value  The value to cast as a char.
+	 * @param   string  $type    The type of string to cast as.
+	 * @param   string  $value   The value to cast as a char.
+	 * @param   string  $length  The value to cast as a char.
 	 *
-	 * @return  string  Returns the cast value.
+	 * @return  string  SQL statement to cast the value as a char type.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.0
 	 */
-	public function castAsChar($value)
+	public function castAs(string $type, string $value, ?string $length = null)
 	{
-		return $value . '::text';
+		switch (strtoupper($type))
+		{
+			case 'CHAR':
+				if (!$length)
+				{
+					return $value . '::text';
+				}
+				else
+				{
+					return 'CAST(' . $value . ' AS CHAR(' . $length . '))';
+				}
+
+			case 'INT':
+				return 'CAST(' . $value . ' AS INTEGER)';
+		}
+
+		return parent::castAs($type, $value, $length);
 	}
 
 	/**
