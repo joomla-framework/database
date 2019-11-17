@@ -313,11 +313,8 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
 	public function testGetConnectionEncryption()
 	{
 		$expectedResult = '';
-		echo \getenv('TRAVIS');
-		echo \getenv('PGSQL_VERSION');
 
-
-		if (\getenv('TRAVIS') === true && in_array(\getenv('PGSQL_VERSION'), ['9.5', '9.6', '10.0']))
+		if (\getenv('TRAVIS') === 'true' && in_array(\getenv('PGSQL_VERSION'), ['9.5', '9.6', '10.0']))
 		{
 			$expectedResult = 'TLSv1.2 (ECDHE-RSA-AES256-GCM-SHA384)';
 		}
