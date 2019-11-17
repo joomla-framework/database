@@ -645,15 +645,15 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	{
 		$this->connect();
 
-		// Take a local copy so that we don't modify the original query and cause issues later
-		$sql = $this->replacePrefix((string) $this->sql);
-
 		// Increment the query counter.
 		$this->count++;
 
 		// If there is a monitor registered, let it know we are starting this query
 		if ($this->monitor)
 		{
+			// Take a local copy so that we don't modify the original query and cause issues later
+			$sql = $this->replacePrefix((string) $this->sql);
+
 			$this->monitor->startQuery($sql);
 		}
 
