@@ -319,7 +319,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
 
 		if (\getenv('TRAVIS') === true && in_array(\getenv('PGSQL_VERSION'), ['9.5', '9.6', '10.0']))
 		{
-			$expectedResult = 'FTLSv1.2 (ECDHE-RSA-AES256-GCM-SHA384)';
+			$expectedResult = 'TLSv1.2 (ECDHE-RSA-AES256-GCM-SHA384)';
 		}
 
 		$this->assertSame(
