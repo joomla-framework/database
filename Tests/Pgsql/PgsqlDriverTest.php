@@ -312,8 +312,11 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
 	 */
 	public function testGetConnectionEncryption()
 	{
+		$result = static::$connection->getConnectionEncryption();
+		echo $result;
+
 		$this->assertEmpty(
-			static::$connection->getConnectionEncryption(),
+			$result,
 			'The database connection is not encrypted by default'
 		);
 	}
