@@ -645,15 +645,15 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	{
 		$this->connect();
 
-		// Take a local copy so that we don't modify the original query and cause issues later
-		$sql = $this->replacePrefix((string) $this->sql);
-
 		// Increment the query counter.
 		$this->count++;
 
 		// If there is a monitor registered, let it know we are starting this query
 		if ($this->monitor)
 		{
+			// Take a local copy so that we don't modify the original query and cause issues later
+			$sql = $this->replacePrefix((string) $this->sql);
+
 			$this->monitor->startQuery($sql);
 		}
 
@@ -745,17 +745,17 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	/**
 	 * Method to fetch a row from the result set cursor as an object.
 	 *
-	 * @param   string  $class  The class name to use for the returned row object.
+	 * Note, the fetch mode should be configured before calling this method using `StatementInterface::setFetchMode()`.
 	 *
 	 * @return  mixed   Either the next row from the result set or false if there are no more rows.
 	 *
 	 * @since   1.0
 	 */
-	protected function fetchObject($class = '\\stdClass')
+	protected function fetchObject()
 	{
 		if ($this->statement)
 		{
-			return $this->statement->fetchObject($class);
+			return $this->statement->fetch();
 		}
 	}
 
@@ -773,7 +773,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		if ($this->statement)
 		{
 			$this->statement->closeCursor();
-			$this->statement = null;
 		}
 	}
 
@@ -1060,7 +1059,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @since   1.0
 	 */
-	public function getIterator($column = null, $class = '\\stdClass')
+	public function getIterator($column = null, $class = \stdClass::class)
 	{
 		if (!$this->executed)
 		{
@@ -1289,17 +1288,32 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public function loadObject($class = 'stdClass')
+	public function loadObject($class = \stdClass::class)
 	{
 		$this->connect();
 
 		$ret = null;
 
+		if ($this->statement)
+		{
+			$fetchMode = $class === \stdClass::class ? FetchMode::STANDARD_OBJECT : FetchMode::CUSTOM_OBJECT;
+
+			// PDO doesn't allow extra arguments for \PDO::FETCH_CLASS, so only forward the class for the custom object mode
+			if ($fetchMode === FetchMode::STANDARD_OBJECT)
+			{
+				$this->statement->setFetchMode($fetchMode);
+			}
+			else
+			{
+				$this->statement->setFetchMode($fetchMode, $class);
+			}
+		}
+
 		// Execute the query and get the result set cursor.
 		$this->execute();
 
 		// Get the first row from the result set as an object of type $class.
-		$object = $this->fetchObject($class);
+		$object = $this->fetchObject();
 
 		if ($object)
 		{
@@ -1326,17 +1340,32 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public function loadObjectList($key = '', $class = 'stdClass')
+	public function loadObjectList($key = '', $class = \stdClass::class)
 	{
 		$this->connect();
 
 		$array = [];
 
+		if ($this->statement)
+		{
+			$fetchMode = $class === \stdClass::class ? FetchMode::STANDARD_OBJECT : FetchMode::CUSTOM_OBJECT;
+
+			// PDO doesn't allow extra arguments for \PDO::FETCH_CLASS, so only forward the class for the custom object mode
+			if ($fetchMode === FetchMode::STANDARD_OBJECT)
+			{
+				$this->statement->setFetchMode($fetchMode);
+			}
+			else
+			{
+				$this->statement->setFetchMode($fetchMode, $class);
+			}
+		}
+
 		// Execute the query and get the result set cursor.
 		$this->execute();
 
 		// Get all of the rows from the result set as objects of type $class.
-		while ($row = $this->fetchObject($class))
+		while ($row = $this->fetchObject())
 		{
 			if ($key)
 			{
@@ -1512,23 +1541,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
-	 * Alias for quoteName method
-	 *
-	 * @param   array|string  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
-	 *                               Each type supports dot-notation name.
-	 * @param   array|string  $as    The AS query part associated to $name. It can be string or array, in latter case it has to be
-	 *                               same length of $name; if is null there will not be any AS part for string or array element.
-	 *
-	 * @return  array|string  The quote wrapped name, same type of $name.
-	 *
-	 * @since   1.0
-	 */
-	public function qn($name, $as = null)
-	{
-		return $this->quoteName($name, $as);
-	}
-
-	/**
 	 * Quotes a binary string to database requirements for use in database queries.
 	 *
 	 * @param   string  $data  A binary string to quote.
@@ -1555,6 +1567,23 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	public function decodeBinary($data)
 	{
 		return $data;
+	}
+
+	/**
+	 * Alias for quoteName method
+	 *
+	 * @param   array|string  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
+	 *                               Each type supports dot-notation name.
+	 * @param   array|string  $as    The AS query part associated to $name. It can be string or array, in latter case it has to be
+	 *                               same length of $name; if is null there will not be any AS part for string or array element.
+	 *
+	 * @return  array|string  The quote wrapped name, same type of $name.
+	 *
+	 * @since   1.0
+	 */
+	public function qn($name, $as = null)
+	{
+		return $this->quoteName($name, $as);
 	}
 
 	/**

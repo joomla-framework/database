@@ -8,6 +8,7 @@
 
 namespace Joomla\Database\Sqlite;
 
+use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Pdo\PdoQuery;
 use Joomla\Database\Query\QueryElement;
 
@@ -156,9 +157,9 @@ class SqliteQuery extends PdoQuery
 	 * Usage:
 	 * $query->select($query->charLength('a'));
 	 *
-	 * @param   string  $field      A value.
-	 * @param   string  $operator   Comparison operator between charLength integer value and $condition
-	 * @param   string  $condition  Integer value to compare charLength with.
+	 * @param   string       $field      A value.
+	 * @param   string|null  $operator   Comparison operator between charLength integer value and $condition
+	 * @param   string|null  $condition  Integer value to compare charLength with.
 	 *
 	 * @return  string  The required char length call.
 	 *
@@ -166,7 +167,14 @@ class SqliteQuery extends PdoQuery
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'length(' . $field . ')' . (isset($operator, $condition) ? ' ' . $operator . ' ' . $condition : '');
+		$statement = 'length(' . $field . ')';
+
+		if ($operator !== null && $condition !== null)
+		{
+			$statement .= ' ' . $operator . ' ' . $condition;
+		}
+
+		return $statement;
 	}
 
 	/**
@@ -175,8 +183,8 @@ class SqliteQuery extends PdoQuery
 	 * Usage:
 	 * $query->select($query->concatenate(array('a', 'b')));
 	 *
-	 * @param   array   $values     An array of values to concatenate.
-	 * @param   string  $separator  As separator to place between each value.
+	 * @param   string[]     $values     An array of values to concatenate.
+	 * @param   string|null  $separator  As separator to place between each value.
 	 *
 	 * @return  string  The concatenated values.
 	 *
@@ -184,7 +192,7 @@ class SqliteQuery extends PdoQuery
 	 */
 	public function concatenate($values, $separator = null)
 	{
-		if ($separator)
+		if ($separator !== null)
 		{
 			return implode(' || ' . $this->quote($separator) . ' || ', $values);
 		}
@@ -263,15 +271,15 @@ class SqliteQuery extends PdoQuery
 	 * Usage:
 	 * $query->groupConcat('id', ',');
 	 *
-	 * @param   string  $column      The name of the column to be concatenated.
+	 * @param   string  $expression  The expression to apply concatenation to, this may be a column name or complex SQL statement.
 	 * @param   string  $separator   The delimiter of each concatenated value
 	 *
 	 * @return  string  Input values concatenated into a string, separated by delimiter
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function groupConcat($column, $separator = ',')
+	public function groupConcat($expression, $separator = ',')
 	{
-		return 'group_concat(' . $column . ', ' . $this->quote($separator) . ')';
+		return 'group_concat(' . $expression . ', ' . $this->quote($separator) . ')';
 	}
 }

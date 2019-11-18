@@ -79,14 +79,6 @@ class MysqliStatement implements StatementInterface
 	protected $defaultFetchStyle = FetchMode::MIXED;
 
 	/**
-	 * The default class to use for building object result sets.
-	 *
-	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
-	 */
-	protected $defaultObjectClass = \stdClass::class;
-
-	/**
 	 * The query string being prepared.
 	 *
 	 * @var    string
@@ -299,7 +291,7 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function bindParam($parameter, &$variable, $dataType = ParameterType::STRING, $length = null, $driverOptions = null)
+	public function bindParam($parameter, &$variable, string $dataType = ParameterType::STRING, ?int $length = null, ?array $driverOptions = null)
 	{
 		$this->bindedValues[$parameter] =& $variable;
 
@@ -353,16 +345,14 @@ class MysqliStatement implements StatementInterface
 	/**
 	 * Closes the cursor, enabling the statement to be executed again.
 	 *
-	 * @return  boolean
+	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function closeCursor()
+	public function closeCursor(): void
 	{
 		$this->statement->free_result();
 		$this->result = false;
-
-		return true;
 	}
 
 	/**
@@ -392,13 +382,13 @@ class MysqliStatement implements StatementInterface
 	/**
 	 * Executes a prepared statement
 	 *
-	 * @param   array  $parameters  An array of values with as many elements as there are bound parameters in the SQL statement being executed.
+	 * @param   array|null  $parameters  An array of values with as many elements as there are bound parameters in the SQL statement being executed.
 	 *
 	 * @return  boolean
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function execute($parameters = null)
+	public function execute(?array $parameters = null)
 	{
 		if ($this->bindedValues !== null)
 		{
@@ -494,22 +484,22 @@ class MysqliStatement implements StatementInterface
 	/**
 	 * Fetches the next row from a result set
 	 *
-	 * @param   integer $fetchStyle          Controls how the next row will be returned to the caller. This value must be one of the
-	 *                                       FetchMode constants, defaulting to value of FetchMode::MIXED.
-	 * @param   integer $cursorOrientation   For a StatementInterface object representing a scrollable cursor, this value determines which row will
-	 *                                       be returned to the caller. This value must be one of the FetchOrientation constants, defaulting to
-	 *                                       FetchOrientation::NEXT.
-	 * @param   integer $cursorOffset        For a StatementInterface object representing a scrollable cursor for which the cursorOrientation
-	 *                                       parameter is set to FetchOrientation::ABS, this value specifies the absolute number of the row in the
-	 *                                       result set that shall be fetched. For a StatementInterface object representing a scrollable cursor for
-	 *                                       which the cursorOrientation parameter is set to FetchOrientation::REL, this value specifies the row to
-	 *                                       fetch relative to the cursor position before StatementInterface::fetch() was called.
+	 * @param   integer|null  $fetchStyle         Controls how the next row will be returned to the caller. This value must be one of the
+	 *                                            FetchMode constants, defaulting to value of FetchMode::MIXED.
+	 * @param   integer       $cursorOrientation  For a StatementInterface object representing a scrollable cursor, this value determines which row
+	 *                                            will be returned to the caller. This value must be one of the FetchOrientation constants,
+	 *                                            defaulting to FetchOrientation::NEXT.
+	 * @param   integer       $cursorOffset       For a StatementInterface object representing a scrollable cursor for which the cursorOrientation
+	 *                                            parameter is set to FetchOrientation::ABS, this value specifies the absolute number of the row in
+	 *                                            the result set that shall be fetched. For a StatementInterface object representing a scrollable
+	 *                                            cursor for which the cursorOrientation parameter is set to FetchOrientation::REL, this value
+	 *                                            specifies the row to fetch relative to the cursor position before `fetch()` was called.
 	 *
 	 * @return  mixed  The return value of this function on success depends on the fetch type. In all cases, boolean false is returned on failure.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function fetch($fetchStyle = null, $cursorOrientation = FetchOrientation::NEXT, $cursorOffset = 0)
+	public function fetch(?int $fetchStyle = null, int $cursorOrientation = FetchOrientation::NEXT, int $cursorOffset = 0)
 	{
 		if (!$this->result)
 		{
@@ -550,16 +540,7 @@ class MysqliStatement implements StatementInterface
 				return $ret;
 
 			case FetchMode::STANDARD_OBJECT:
-				$assoc = array_combine($this->columnNames, $values);
-				$class = $this->defaultObjectClass;
-				$ret   = new $class;
-
-				foreach ($assoc as $column => $value)
-				{
-					$ret->$column = $value;
-				}
-
-				return $ret;
+				return (object) array_combine($this->columnNames, $values);
 
 			default:
 				throw new \InvalidArgumentException("Unknown fetch type '{$fetchStyle}'");
@@ -615,30 +596,13 @@ class MysqliStatement implements StatementInterface
 	}
 
 	/**
-	 * Fetches the next row and returns it as an object.
-	 *
-	 * @param   string $className       Name of the created class.
-	 * @param   array  $constructorArgs Elements of this array are passed to the constructor.
-	 *
-	 * @return  mixed  An instance of the required class with property names that correspond to the column names or boolean false on failure.
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function fetchObject($className = null, $constructorArgs = null)
-	{
-		$this->defaultObjectClass = $className;
-
-		return $this->fetch(FetchMode::STANDARD_OBJECT);
-	}
-
-	/**
 	 * Returns the number of rows affected by the last SQL statement.
 	 *
 	 * @return  integer
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function rowCount()
+	public function rowCount(): int
 	{
 		if ($this->columnNames === false)
 		{
@@ -646,5 +610,20 @@ class MysqliStatement implements StatementInterface
 		}
 
 		return $this->statement->num_rows;
+	}
+
+	/**
+	 * Sets the fetch mode to use while iterating this statement.
+	 *
+	 * @param   integer  $fetchMode  The fetch mode, must be one of the FetchMode constants.
+	 * @param   mixed    ...$args    Optional mode-specific arguments.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setFetchMode(int $fetchMode, ...$args): void
+	{
+		$this->defaultFetchStyle = $fetchMode;
 	}
 }

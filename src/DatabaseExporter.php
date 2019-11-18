@@ -34,7 +34,7 @@ abstract class DatabaseExporter
 	/**
 	 * The database connector to use for exporting structure and/or data.
 	 *
-	 * @var    DatabaseDriver
+	 * @var    DatabaseInterface
 	 * @since  1.0
 	 */
 	protected $db;
@@ -42,7 +42,7 @@ abstract class DatabaseExporter
 	/**
 	 * An array input sources (table names).
 	 *
-	 * @var    array
+	 * @var    string[]
 	 * @since  1.0
 	 */
 	protected $from = [];
@@ -159,7 +159,7 @@ abstract class DatabaseExporter
 	/**
 	 * Specifies a list of table names to export.
 	 *
-	 * @param   mixed  $from  The name of a single table, or an array of the table names to export.
+	 * @param   string[]|string  $from  The name of a single table, or an array of the table names to export.
 	 *
 	 * @return  $this
 	 *
@@ -198,21 +198,19 @@ abstract class DatabaseExporter
 		$prefix = $this->db->getPrefix();
 
 		// Replace the magic prefix if found.
-		$table = preg_replace("|^$prefix|", '#__', $table);
-
-		return $table;
+		return preg_replace("|^$prefix|", '#__', $table);
 	}
 
 	/**
-	 * Sets the database connector to use for exporting structure and/or data from MySQL.
+	 * Sets the database connector to use for importing structure and/or data.
 	 *
-	 * @param   DatabaseDriver  $db  The database connector.
+	 * @param   DatabaseInterface  $db  The database connector.
 	 *
 	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
-	public function setDbo(DatabaseDriver $db)
+	public function setDbo(DatabaseInterface $db)
 	{
 		$this->db = $db;
 
@@ -261,7 +259,7 @@ abstract class DatabaseExporter
 	 */
 	protected function buildXmlData()
 	{
-		$buffer = array();
+		$buffer = [];
 
 		foreach ($this->from as $table)
 		{
@@ -270,7 +268,7 @@ abstract class DatabaseExporter
 
 			// Get the details columns information.
 			$fields  = $this->db->getTableColumns($table, false);
-			$colblob = array();
+			$colblob = [];
 
 			foreach ($fields as $field)
 			{
@@ -281,10 +279,11 @@ abstract class DatabaseExporter
 				}
 			}
 
-			$query = $this->db->getQuery(true);
-			$query->select($query->quoteName(array_keys($fields)))
-				->from($query->quoteName($table));
-			$this->db->setQuery($query);
+			$this->db->setQuery(
+				$this->db->getQuery(true)
+					->select($this->db->quoteName(array_keys($fields)))
+					->from($this->db->quoteName($table))
+			);
 
 			$rows = $this->db->loadObjectList();
 

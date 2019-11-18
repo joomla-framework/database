@@ -16,6 +16,47 @@ namespace Joomla\Database\Query;
 trait MysqlQueryBuilder
 {
 	/**
+	 * Magic function to convert the query to a string.
+	 *
+	 * @return  string  The completed query.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function __toString()
+	{
+		switch ($this->type)
+		{
+			case 'select':
+				if ($this->selectRowNumber)
+				{
+					$orderBy      = $this->selectRowNumber['orderBy'];
+					$tmpOffset    = $this->offset;
+					$tmpLimit     = $this->limit;
+					$this->offset = 0;
+					$this->limit  = 0;
+					$tmpOrder     = $this->order;
+					$this->order  = null;
+					$query        = parent::__toString();
+					$this->order  = $tmpOrder;
+					$this->offset = $tmpOffset;
+					$this->limit  = $tmpLimit;
+
+					// Add support for second order by, offset and limit
+					$query = PHP_EOL . 'SELECT * FROM (' . $query . PHP_EOL . "ORDER BY $orderBy" . PHP_EOL . ') w';
+
+					if ($this->order)
+					{
+						$query .= (string) $this->order;
+					}
+
+					return $this->processLimit($query, $this->limit, $this->offset);
+				}
+		}
+
+		return parent::__toString();
+	}
+
+	/**
 	 * Method to modify a query already in string format with the needed additions to make the query limited to a particular number of
 	 * results, or start at a particular offset.
 	 *
@@ -44,8 +85,8 @@ trait MysqlQueryBuilder
 	/**
 	 * Concatenates an array of column names or values.
 	 *
-	 * @param   array   $values     An array of values to concatenate.
-	 * @param   string  $separator  As separator to place between each value.
+	 * @param   string[]     $values     An array of values to concatenate.
+	 * @param   string|null  $separator  As separator to place between each value.
 	 *
 	 * @return  string  The concatenated values.
 	 *
@@ -53,19 +94,37 @@ trait MysqlQueryBuilder
 	 */
 	public function concatenate($values, $separator = null)
 	{
-		if ($separator)
+		if ($separator !== null)
 		{
-			$concat_string = 'CONCAT_WS(' . $this->quote($separator);
+			$statement = 'CONCAT_WS(' . $this->quote($separator);
 
 			foreach ($values as $value)
 			{
-				$concat_string .= ', ' . $value;
+				$statement .= ', ' . $value;
 			}
 
-			return $concat_string . ')';
+			return $statement . ')';
 		}
 
 		return 'CONCAT(' . implode(',', $values) . ')';
+	}
+
+	/**
+	 * Aggregate function to get input values concatenated into a string, separated by delimiter
+	 *
+	 * Usage:
+	 * $query->groupConcat('id', ',');
+	 *
+	 * @param   string  $expression  The expression to apply concatenation to, this may be a column name or complex SQL statement.
+	 * @param   string  $separator   The delimiter of each concatenated value
+	 *
+	 * @return  string  Input values concatenated into a string, separated by delimiter
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function groupConcat($expression, $separator = ',')
+	{
+		return 'GROUP_CONCAT(' . $expression . ' SEPARATOR ' . $this->quote($separator) . ')';
 	}
 
 	/**
@@ -164,5 +223,42 @@ trait MysqlQueryBuilder
 		$this->validateRowNumber($orderBy, $orderColumnAlias);
 
 		return $this->select("(SELECT @rownum := @rownum + 1 FROM (SELECT @rownum := 0) AS r) AS $orderColumnAlias");
+	}
+
+	/**
+	 * Casts a value to a char.
+	 *
+	 * Ensure that the value is properly quoted before passing to the method.
+	 *
+	 * Usage:
+	 * $query->select($query->castAs('CHAR', 'a'));
+	 *
+	 * @param   string  $type    The type of string to cast as.
+	 * @param   string  $value   The value to cast as a char.
+	 * @param   string  $length  The value to cast as a char.
+	 *
+	 * @return  string  SQL statement to cast the value as a char type.
+	 *
+	 * @since   1.0
+	 */
+	public function castAs(string $type, string $value, ?string $length = null)
+	{
+		switch (strtoupper($type))
+		{
+			case 'CHAR':
+				if (!$length)
+				{
+					return $value;
+				}
+				else
+				{
+					return 'CAST(' . $value . ' AS CHAR(' . $length . '))';
+				}
+
+			case 'INT':
+				return '(' . $value . ' + 0)';
+		}
+
+		return parent::castAs($type, $value, $length);
 	}
 }

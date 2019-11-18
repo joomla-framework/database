@@ -23,20 +23,20 @@ class PgsqlImporter extends DatabaseImporter
 	 * @return  $this
 	 *
 	 * @since   1.5.0
-	 * @throws  \Exception if an error is encountered.
+	 * @throws  \RuntimeException if an error is encountered.
 	 */
 	public function check()
 	{
 		// Check if the db connector has been set.
 		if (!($this->db instanceof PgsqlDriver))
 		{
-			throw new \Exception('Database connection wrong type.');
+			throw new \RuntimeException('Database connection wrong type.');
 		}
 
 		// Check if the tables have been specified.
 		if (empty($this->from))
 		{
-			throw new \Exception('ERROR: No Tables Specified');
+			throw new \RuntimeException('ERROR: No Tables Specified');
 		}
 
 		return $this;

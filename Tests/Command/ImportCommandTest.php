@@ -9,16 +9,15 @@ namespace Joomla\Database\Tests\Command;
 use Joomla\Console\Application;
 use Joomla\Database\Command\ImportCommand;
 use Joomla\Database\DatabaseDriver;
-use Joomla\Database\DatabaseImporter;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Joomla\Database\Tests\Cases\MysqlCase;
+use Joomla\Test\DatabaseTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 /**
- * Test class for \Joomla\Database\Command\ImportCommand
+ * Test class for Joomla\Database\Command\ImportCommand
  */
-class ImportCommandTest extends MysqlCase
+class ImportCommandTest extends DatabaseTestCase
 {
 	/**
 	 * Path to the database stubs
@@ -32,7 +31,7 @@ class ImportCommandTest extends MysqlCase
 	 *
 	 * @return  void
 	 */
-	public static function setUpBeforeClass()
+	public static function setUpBeforeClass(): void
 	{
 		if (!\defined('JPATH_ROOT'))
 		{
@@ -40,6 +39,11 @@ class ImportCommandTest extends MysqlCase
 		}
 
 		parent::setUpBeforeClass();
+
+		if (!static::$connection || static::$connection->getName() !== 'mysql')
+		{
+			self::markTestSkipped('MySQL database not configured.');
+		}
 	}
 
 	/**
@@ -48,11 +52,27 @@ class ImportCommandTest extends MysqlCase
 	 *
 	 * @return  void
 	 */
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
 		$this->stubPath = dirname(__DIR__) . '/Stubs/Importer';
+	}
+
+	/**
+	 * Tears down the fixture, for example, close a network connection.
+	 * This method is called after a test is executed.
+	 *
+	 * @return  void
+	 */
+	protected function tearDown(): void
+	{
+		foreach (static::$connection->getTableList() as $table)
+		{
+			static::$connection->dropTable($table);
+		}
+
+		parent::tearDown();
 	}
 
 	public function testTheDatabaseIsImportedWithAllTables()
@@ -68,13 +88,13 @@ class ImportCommandTest extends MysqlCase
 
 		$application = new Application($input, $output);
 
-		$command = new ImportCommand(static::$driver);
+		$command = new ImportCommand(static::$connection);
 		$command->setApplication($application);
 
 		$this->assertSame(0, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('Import completed in', $screenOutput);
+		$this->assertStringContainsString('Import completed in', $screenOutput);
 	}
 
 	public function testTheDatabaseIsImportedWithASingleTable()
@@ -90,13 +110,13 @@ class ImportCommandTest extends MysqlCase
 
 		$application = new Application($input, $output);
 
-		$command = new ImportCommand(static::$driver);
+		$command = new ImportCommand(static::$connection);
 		$command->setApplication($application);
 
 		$this->assertSame(0, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('Import completed in', $screenOutput);
+		$this->assertStringContainsString('Import completed in', $screenOutput);
 	}
 
 	public function testTheCommandFailsIfTheDatabaseDriverDoesNotSupportImports()
@@ -126,7 +146,7 @@ class ImportCommandTest extends MysqlCase
 		$this->assertSame(1, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('The "test" database driver does not', $screenOutput);
+		$this->assertStringContainsString('The "test" database driver does not', $screenOutput);
 	}
 
 	public function testTheCommandFailsIfRequiredOptionsAreMissing()
@@ -141,35 +161,21 @@ class ImportCommandTest extends MysqlCase
 
 		$application = new Application($input, $output);
 
-		$command = new ImportCommand(static::$driver);
+		$command = new ImportCommand(static::$connection);
 		$command->setApplication($application);
 
 		$this->assertSame(1, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('Either the --table or --all option', $screenOutput);
+		$this->assertStringContainsString('Either the --table or --all option', $screenOutput);
 	}
 
 	public function testTheCommandFailsIfTheRequestedTableDoesNotHaveAnImportFile()
 	{
-		$importer = $this->createMock(DatabaseImporter::class);
-		$importer->expects($this->once())
-			->method('withStructure')
-			->willReturnSelf();
-
-		$importer->expects($this->once())
-			->method('asXml')
-			->willReturnSelf();
-
-		$db = $this->createMock(DatabaseDriver::class);
-		$db->expects($this->once())
-			->method('getImporter')
-			->willReturn($importer);
-
 		$input  = new ArrayInput(
 			[
 				'command'  => 'database:import',
-				'--table'  => 'dbtest',
+				'--table'  => 'unexisting_table',
 				'--folder' => dirname($this->stubPath),
 			]
 		);
@@ -177,12 +183,12 @@ class ImportCommandTest extends MysqlCase
 
 		$application = new Application($input, $output);
 
-		$command = new ImportCommand($db);
+		$command = new ImportCommand(static::$connection);
 		$command->setApplication($application);
 
 		$this->assertSame(1, $command->execute($input, $output));
 
 		$screenOutput = $output->fetch();
-		$this->assertContains('The dbtest.xml file does not exist.', $screenOutput);
+		$this->assertStringContainsString('The unexisting_table.xml file does not exist.', $screenOutput);
 	}
 }

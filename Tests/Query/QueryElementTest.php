@@ -10,261 +10,245 @@ use Joomla\Database\Query\QueryElement;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for \Joomla\Database\Query\QueryElement.
- *
- * @since  1.0
+ * Test class for Joomla\Database\Query\QueryElement
  */
 class QueryElementTest extends TestCase
 {
 	/**
-	 * Test cases for append and __toString
+	 * Data provider for instantiation test cases
 	 *
 	 * Each test case provides
-	 * - array    element    the base element for the test, given as hash
-	 *                 name => element_name,
-	 *                 elements => element array,
-	 *                 glue => glue
-	 * - array    appendElement    the element to be appended (same format as above)
-	 * - array     expected    array of elements that should be the value of the elements attribute after the merge
-	 * - string    expected value of __toString() for element after append
+	 * - array   $element   the base element for the test, given as an array
+	 *                      name => element_name,
+	 *                      elements => array or string
+	 *                      glue => glue
+	 * - array   $expected  values in same array format
 	 *
-	 * @return  array
-	 *
-	 * @since   1.0
+	 * @return  \Generator
 	 */
-	public function dataTestAppend()
+	public function dataInstantiation(): \Generator
 	{
-		return array(
-			'array-element' => array(
-				array(
-					'name' => 'SELECT',
-					'elements' => array(),
-					'glue' => ','
-				),
-				array(
-					'name' => 'FROM',
-					'elements' => array('my_table_name'),
-					'glue' => ','
-				),
-				array(
-					'name' => 'FROM',
-					'elements' => array('my_table_name'),
-					'glue' => ','
-				),
-				PHP_EOL . 'SELECT ' . PHP_EOL . 'FROM my_table_name',
-			),
-			'non-array-element' => array(
-				array(
-					'name' => 'SELECT',
-					'elements' => array(),
-					'glue' => ','
-				),
-				array(
-					'name' => 'FROM',
-					'elements' => array('my_table_name'),
-					'glue' => ','
-				),
-				array(
-					'name' => 'FROM',
-					'elements' => array('my_table_name'),
-					'glue' => ','
-				),
-				PHP_EOL . 'SELECT ' . PHP_EOL . 'FROM my_table_name',
-			)
-		);
+		yield 'array-element' => [
+			[
+				'name'     => 'FROM',
+				'elements' => ['field1', 'field2'],
+				'glue'     => ',',
+			],
+			[
+				'name'     => 'FROM',
+				'elements' => ['field1', 'field2'],
+				'glue'     => ',',
+			],
+		];
+
+		yield 'non-array-element' => [
+			[
+				'name'     => 'TABLE',
+				'elements' => 'my_table_name',
+				'glue'     => ',',
+			],
+			[
+				'name'     => 'TABLE',
+				'elements' => ['my_table_name'],
+				'glue'     => ',',
+			],
+		];
 	}
 
 	/**
-	 * Test cases for constructor
-	 *
-	 * Each test case provides
-	 * - array    element    the base element for the test, given as hash
-	 *                 name => element_name,
-	 *                 elements => array or string
-	 *                 glue => glue
-	 * - array    expected values in same hash format
-	 *
-	 * @return array
-	 */
-	public function dataTestConstruct()
-	{
-		return array(
-			'array-element' => array(
-				array(
-					'name' => 'FROM',
-					'elements' => array('field1', 'field2'),
-					'glue' => ','
-				),
-				array(
-					'name' => 'FROM',
-					'elements' => array('field1', 'field2'),
-					'glue' => ','
-				)
-			),
-			'non-array-element' => array(
-				array(
-					'name' => 'TABLE',
-					'elements' => 'my_table_name',
-					'glue' => ','
-				),
-				array(
-					'name' => 'TABLE',
-					'elements' => array('my_table_name'),
-					'glue' => ','
-				)
-			)
-		);
-	}
-
-	/**
-	 * Test data for test__toString.
-	 *
-	 * @return  array
-	 *
-	 * @since   1.0
-	 */
-	public function dataTestToString()
-	{
-		return array(
-			// @todo name, elements, glue, expected.
-			array(
-				'FROM',
-				'table1',
-				',',
-				PHP_EOL . 'FROM table1'
-			),
-			array(
-				'SELECT',
-				array('column1', 'column2'),
-				',',
-				PHP_EOL . 'SELECT column1,column2'
-			),
-			array(
-				'()',
-				array('column1', 'column2'),
-				',',
-				PHP_EOL . '(column1,column2)'
-			),
-			array(
-				'CONCAT()',
-				array('column1', 'column2'),
-				',',
-				PHP_EOL . 'CONCAT(column1,column2)'
-			),
-		);
-	}
-
-	/**
-	 * Test the class constructor.
+	 * @testdox  The object is correctly configured when instantiated
 	 *
 	 * @param   array  $element   values for base element
 	 * @param   array  $expected  values for expected fields
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 * @dataProvider  dataTestConstruct
+	 * @dataProvider  dataInstantiation
 	 */
-	public function test__Construct($element, $expected)
+	public function testInstantiation(array $element, array $expected)
 	{
 		$baseElement = new QueryElement($element['name'], $element['elements'], $element['glue']);
 
-		$this->assertAttributeEquals(
-			$expected['name'], 'name', $baseElement, 'Line ' . __LINE__ . ' name should be set'
+		$this->assertEquals(
+			$expected['name'],
+			$baseElement->getName()
 		);
 
-		$this->assertAttributeEquals(
-			$expected['elements'], 'elements', $baseElement, 'Line ' . __LINE__ . ' elements should be set'
+		$this->assertEquals(
+			$expected['elements'],
+			$baseElement->getElements()
 		);
 
-		$this->assertAttributeEquals(
-			$expected['glue'], 'glue', $baseElement, 'Line ' . __LINE__ . ' glue should be set'
+		$this->assertEquals(
+			$expected['glue'],
+			$baseElement->getGlue()
 		);
 	}
 
 	/**
-	 * Test the __toString magic method.
+	 * Data provider for string casting test cases
+	 *
+	 * Each test case provides
+	 * - string        $name      the name of the element
+	 * - array|string  $elements  the element data
+	 * - string        $glue      the element glue
+	 * - string        $expected  expected result
+	 *
+	 * @return  \Generator
+	 */
+	public function dataCastingToString(): \Generator
+	{
+		yield [
+			'FROM',
+			'table1',
+			',',
+			PHP_EOL . 'FROM table1',
+		];
+
+		yield [
+			'SELECT',
+			['column1', 'column2'],
+			',',
+			PHP_EOL . 'SELECT column1,column2',
+		];
+
+		yield [
+			'()',
+			['column1', 'column2'],
+			',',
+			PHP_EOL . '(column1,column2)',
+		];
+
+		yield [
+			'CONCAT()',
+			['column1', 'column2'],
+			',',
+			PHP_EOL . 'CONCAT(column1,column2)',
+		];
+	}
+
+	/**
+	 * @testdox  A query element is converted to a string
 	 *
 	 * @param   string  $name      The name of the element.
 	 * @param   mixed   $elements  String or array.
 	 * @param   string  $glue      The glue for elements.
 	 * @param   string  $expected  The expected value.
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 * @dataProvider  dataTestToString
+	 * @dataProvider  dataCastingToString
 	 */
-	public function test__toString($name, $elements, $glue, $expected)
+	public function testCastingToString($name, $elements, $glue, $expected)
 	{
-		$e = new QueryElement($name, $elements, $glue);
-
 		$this->assertThat(
-			(string) $e,
+			(string) new QueryElement($name, $elements, $glue),
 			$this->equalTo($expected)
 		);
 	}
 
 	/**
-	 * Test the append method.
+	 * Data provider for append test cases
+	 *
+	 * Each test case provides
+	 * - array    $element    the base element for the test, given as an array
+	 *                        name => element_name,
+	 *                        elements => element array,
+	 *                        glue => glue
+	 * - array    $append     the element to be appended (same format as above)
+	 * - array    $expected   array of elements that should be the value of the elements attribute after the merge
+	 * - string   $string     value of __toString() for element after append
+	 *
+	 * @return  \Generator
+	 */
+	public function dataAppend(): \Generator
+	{
+		yield 'array-element' => [
+			[
+				'name'     => 'SELECT',
+				'elements' => [],
+				'glue'     => ',',
+			],
+			[
+				'name'     => 'FROM',
+				'elements' => ['my_table_name'],
+				'glue'     => ',',
+			],
+			[
+				'name'     => 'FROM',
+				'elements' => ['my_table_name'],
+				'glue'     => ',',
+			],
+			PHP_EOL . 'SELECT ' . PHP_EOL . 'FROM my_table_name',
+		];
+
+		yield 'non-array-element' => [
+			[
+				'name'     => 'SELECT',
+				'elements' => [],
+				'glue'     => ',',
+			],
+			[
+				'name'     => 'FROM',
+				'elements' => ['my_table_name'],
+				'glue'     => ',',
+			],
+			[
+				'name'     => 'FROM',
+				'elements' => ['my_table_name'],
+				'glue'     => ',',
+			],
+			PHP_EOL . 'SELECT ' . PHP_EOL . 'FROM my_table_name',
+		];
+	}
+
+	/**
+	 * @testdox  Data can be appended to a query element
 	 *
 	 * @param   array   $element   base element values
 	 * @param   array   $append    append element values
 	 * @param   array   $expected  expected element values for elements field after append
 	 * @param   string  $string    expected value of toString (not used in this test)
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 * @dataProvider dataTestAppend
+	 * @dataProvider  dataAppend
 	 */
-
 	public function testAppend($element, $append, $expected, $string)
 	{
-		$baseElement = new QueryElement($element['name'], $element['elements'], $element['glue']);
-		$appendElement = new QueryElement($append['name'], $append['elements'], $append['glue']);
+		$baseElement     = new QueryElement($element['name'], $element['elements'], $element['glue']);
+		$appendElement   = new QueryElement($append['name'], $append['elements'], $append['glue']);
 		$expectedElement = new QueryElement($expected['name'], $expected['elements'], $expected['glue']);
+
 		$baseElement->append($appendElement);
-		$this->assertAttributeEquals(array($expectedElement), 'elements', $baseElement);
+
+		$this->assertEquals(
+			[$expectedElement],
+			$baseElement->getElements()
+		);
 	}
 
 	/**
-	 * Tests the JDatabaseQueryElement::__clone method properly clones an array.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @testdox  A query element can be cloned with a custom array property
 	 */
-	public function test__clone_array()
+	public function testCloneWithCustomArrayProperty()
 	{
-		$baseElement = new QueryElement($name = null, $elements = null);
-
-		$baseElement->testArray = array();
+		$baseElement            = new QueryElement(null, null);
+		$baseElement->testArray = [];
 
 		$cloneElement = clone $baseElement;
 
 		$baseElement->testArray[] = 'a';
 
-		$this->assertFalse($baseElement === $cloneElement);
-		$this->assertEquals(\count($cloneElement->testArray), 0);
+		$this->assertNotSame($baseElement, $cloneElement);
+		$this->assertCount(0, $cloneElement->testArray);
 	}
 
 	/**
-	 * Tests the JDatabaseQueryElement::__clone method properly clones an object.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @testdox  A query element can be cloned with a custom object property
 	 */
-	public function test__clone_object()
+	public function testCloneWithCustomObjectProperty()
 	{
-		$baseElement = new QueryElement($name = null, $elements = null);
-
+		$baseElement             = new QueryElement(null, null);
 		$baseElement->testObject = new \stdClass;
 
 		$cloneElement = clone $baseElement;
 
-		$this->assertFalse($baseElement === $cloneElement);
-		$this->assertFalse($baseElement->testObject === $cloneElement->testObject);
+		$this->assertNotSame($baseElement, $cloneElement);
+		$this->assertNotSame($baseElement->testObject, $cloneElement->testObject);
 	}
 }

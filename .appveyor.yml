@@ -41,6 +41,7 @@ install:
     - ps: |
         # Check if installation is cached
         if (!(Test-Path c:\tools\php)) {
+          choco upgrade chocolatey -y --version 0.10.13 --allow-downgrade --force
           appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
           # install sqlite
           appveyor-retry cinst -y sqlite
@@ -102,8 +103,6 @@ before_test:
   - ps: $instanceName = $env:db_version.ToUpper()
   - ps: $sqlInstance = "(local)\$instanceName"
   - ps: net start "MSSQL`$$instanceName"
-  - ps: sqlcmd -b -E -S "$sqlInstance" -Q "CREATE DATABASE joomla_ut"
-  - ps: sqlcmd -S "$sqlInstance" -U "sa" -P "Password12!" -i $env:APPVEYOR_BUILD_FOLDER\Tests\Stubs\sqlsrv.sql
   - ps: $phpunitConfig = ".travis\phpunit.appveyor_$($env:db_version).xml"
 
 test_script:

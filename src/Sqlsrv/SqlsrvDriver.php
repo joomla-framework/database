@@ -950,7 +950,9 @@ class SqlsrvDriver extends DatabaseDriver
 
 		$this->setQuery("sp_rename '" . $oldTable . "', '" . $newTable . "'");
 
-		return $this->execute();
+		$this->execute();
+
+		return $this;
 	}
 
 	/**

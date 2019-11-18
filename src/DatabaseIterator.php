@@ -73,11 +73,26 @@ class DatabaseIterator implements \Countable, \Iterator
 	 * @since   1.0
 	 * @throws  \InvalidArgumentException
 	 */
-	public function __construct(StatementInterface $statement, $column = null, $class = '\\stdClass')
+	public function __construct(StatementInterface $statement, $column = null, $class = \stdClass::class)
 	{
 		if (!class_exists($class))
 		{
 			throw new \InvalidArgumentException(sprintf('new %s(*%s*, cursor)', \get_class($this), \gettype($class)));
+		}
+
+		if ($statement)
+		{
+			$fetchMode = $class === \stdClass::class ? FetchMode::STANDARD_OBJECT : FetchMode::CUSTOM_OBJECT;
+
+			// PDO doesn't allow extra arguments for \PDO::FETCH_CLASS, so only forward the class for the custom object mode
+			if ($fetchMode === FetchMode::STANDARD_OBJECT)
+			{
+				$statement->setFetchMode($fetchMode);
+			}
+			else
+			{
+				$statement->setFetchMode($fetchMode, $class);
+			}
 		}
 
 		$this->statement = $statement;
@@ -164,7 +179,7 @@ class DatabaseIterator implements \Countable, \Iterator
 		if ($this->current)
 		{
 			// Set the key as being the indexed column (if it exists)
-			if (isset($this->current->{$this->column}))
+			if ($this->column && isset($this->current->{$this->column}))
 			{
 				$this->key = $this->current->{$this->column};
 			}
@@ -212,7 +227,7 @@ class DatabaseIterator implements \Countable, \Iterator
 	{
 		if ($this->statement)
 		{
-			return $this->statement->fetchObject($this->class);
+			return $this->statement->fetch();
 		}
 
 		return false;

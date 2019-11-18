@@ -8,8 +8,10 @@
 
 namespace Joomla\Database;
 
+use Joomla\Database\Exception\QueryTypeAlreadyDefinedException;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
+use Joomla\Database\Exception\UnknownTypeException;
 
 /**
  * Joomla Framework Query Building Interface.
@@ -30,9 +32,6 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	/**
 	 * Add a single column, or array of columns to the CALL clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 * The call method can, however, be called multiple times in the same query.
-	 *
 	 * Usage:
 	 * $query->call('a.*')->call('b.id');
 	 * $query->call(array('a.*', 'b.id'));
@@ -42,24 +41,29 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function call($columns);
 
 	/**
-	 * Casts a value to a char.
+	 * Casts a value to a specified type.
 	 *
 	 * Ensure that the value is properly quoted before passing to the method.
 	 *
 	 * Usage:
-	 * $query->select($query->castAsChar('a'));
+	 * $query->select($query->castAs('CHAR', 'a'));
 	 *
-	 * @param   string  $value  The value to cast as a char.
+	 * @param   string  $type    The type of string to cast as.
+	 * @param   string  $value   The value to cast as a char.
+	 * @param   string  $length  Optionally specify the length of the field (if the type supports it otherwise
+	 *                           ignored).
 	 *
 	 * @return  string  SQL statement to cast the value as a char type.
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  UnknownTypeException  When unsupported cast for a database driver
 	 */
-	public function castAsChar($value);
+	public function castAs(string $type, string $value, ?string $length = null);
 
 	/**
 	 * Gets the number of characters in a string.
@@ -69,9 +73,9 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * Usage:
 	 * $query->select($query->charLength('a'));
 	 *
-	 * @param   string  $field      A value.
-	 * @param   string  $operator   Comparison operator between charLength integer value and $condition
-	 * @param   string  $condition  Integer value to compare charLength with.
+	 * @param   string       $field      A value.
+	 * @param   string|null  $operator   Comparison operator between charLength integer value and $condition
+	 * @param   string|null  $condition  Integer value to compare charLength with.
 	 *
 	 * @return  string  SQL statement to get the length of a character.
 	 *
@@ -107,8 +111,8 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * Usage:
 	 * $query->select($query->concatenate(array('a', 'b')));
 	 *
-	 * @param   array   $values     An array of values to concatenate.
-	 * @param   string  $separator  As separator to place between each value.
+	 * @param   string[]     $values     An array of values to concatenate.
+	 * @param   string|null  $separator  As separator to place between each value.
 	 *
 	 * @return  string  SQL statement representing the concatenated values.
 	 *
@@ -131,8 +135,6 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	/**
 	 * Add a table name to the DELETE clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 *
 	 * Usage:
 	 * $query->delete('#__a')->where('id = 1');
 	 *
@@ -141,14 +143,12 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function delete($table = null);
 
 	/**
 	 * Add a single column, or array of columns to the EXEC clause of the query.
-	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 * The exec method can, however, be called multiple times in the same query.
 	 *
 	 * Usage:
 	 * $query->exec('a.*')->exec('b.id');
@@ -159,6 +159,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function exec($columns);
 
@@ -312,14 +313,14 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * Usage:
 	 * $query->groupConcat('id', ',');
 	 *
-	 * @param   string  $column      The name of the column to be concatenated.
+	 * @param   string  $expression  The expression to apply concatenation to, this may be a column name or complex SQL statement.
 	 * @param   string  $separator   The delimiter of each concatenated value
 	 *
 	 * @return  string  Input values concatenated into a string, separated by delimiter
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function groupConcat($column, $separator = ',');
+	public function groupConcat($expression, $separator = ',');
 
 	/**
 	 * A conditions to the HAVING clause of the query.
@@ -339,8 +340,6 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	/**
 	 * Add a table name to the INSERT clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 *
 	 * Usage:
 	 * $query->insert('#__a')->set('id = 1');
 	 * $query->insert('#__a')->columns('id, title')->values('1,2')->values('3,4');
@@ -352,6 +351,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function insert($table, $incrementField = false);
 
@@ -463,9 +463,6 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	/**
 	 * Add a single column, or array of columns to the SELECT clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 * The select method can, however, be called multiple times in the same query.
-	 *
 	 * Usage:
 	 * $query->select('a.*')->select('b.id');
 	 * $query->select(array('a.*', 'b.id'));
@@ -475,6 +472,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function select($columns);
 
@@ -516,8 +514,6 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	/**
 	 * Add a table name to the UPDATE clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 *
 	 * Usage:
 	 * $query->update('#__foo')->set(...);
 	 *
@@ -526,6 +522,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 * @return  $this
 	 *
 	 * @since   __DEPLOY_VERSION__
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function update($table);
 

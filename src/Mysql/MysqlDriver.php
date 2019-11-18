@@ -103,7 +103,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	public function __construct(array $options)
 	{
 		/**
-		 * sql_mode to MySql 5.7.8+ default strict mode minus ONLY_FULL_GROUP_BY because it's inconvenient for some.
+		 * sql_mode to MySql 5.7.8+ default strict mode minus ONLY_FULL_GROUP_BY
 		 *
 		 * @link https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-8.html#mysqld-5-7-8-sql-mode
 		 */
@@ -277,7 +277,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 *
 	 * @param   string  $database  The name of the database to select for use.
 	 *
-	 * @return  $this
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -289,7 +289,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		$this->setQuery('USE ' . $this->quoteName($database))
 			->execute();
 
-		return $this;
+		return true;
 	}
 
 	/**
@@ -540,6 +540,24 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	}
 
 	/**
+	 * Get the null or zero representation of a timestamp for the database driver.
+	 *
+	 * @return  string
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getNullDate()
+	{
+		// Check the session sql mode;
+		if (\in_array('NO_ZERO_DATE', $this->options['sqlModes']) !== false)
+		{
+			$this->nullDate = '1000-01-01 00:00:00';
+		}
+
+		return $this->nullDate;
+	}
+
+	/**
 	 * Determine whether the database engine support the UTF-8 Multibyte (utf8mb4) character encoding.
 	 *
 	 * @return  boolean  True if the database engine supports UTF-8 Multibyte.
@@ -679,7 +697,6 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 
 		return true;
 	}
-
 
 	/**
 	 * Method to escape a string for usage in an SQL statement.

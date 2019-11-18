@@ -103,14 +103,13 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	public function __construct(array $options)
 	{
 		/**
-		 * sql_mode to MySql 5.7.8+ default strict mode minus ONLY_FULL_GROUP_BY because it's inconvenient for some.
+		 * sql_mode to MySql 5.7.8+ default strict mode minus ONLY_FULL_GROUP_BY
 		 *
 		 * @link https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-8.html#mysqld-5-7-8-sql-mode
 		 */
 		$sqlModes = [
 			'STRICT_TRANS_TABLES',
 			'ERROR_FOR_DIVISION_BY_ZERO',
-			'NO_AUTO_CREATE_USER',
 			'NO_ENGINE_SUBSTITUTION',
 		];
 
@@ -230,7 +229,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		{
 			$connectionFlags += MYSQLI_CLIENT_SSL;
 
-			// Verify server certificate is only availble in PHP 5.6.16+. See https://www.php.net/ChangeLog-5.php#5.6.16
+			// Verify server certificate is only available in PHP 5.6.16+. See https://www.php.net/ChangeLog-5.php#5.6.16
 			if (isset($this->options['ssl']['verify_server_cert']))
 			{
 				// New constants in PHP 5.6.16+. See https://www.php.net/ChangeLog-5.php#5.6.16
@@ -1017,29 +1016,14 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			throw new ExecutionFailureException($sql, $errorMsg, $errorNum);
 		}
 
-		$this->freeResult($cursor);
+		$this->freeResult();
+
+		if ($cursor instanceof \mysqli_result)
+		{
+			$cursor->free_result();
+		}
 
 		return true;
-	}
-
-	/**
-	 * Method to free up the memory used for the result set.
-	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	protected function freeResult($cursor = null)
-	{
-		$this->executed = false;
-
-		if ($this->statement)
-		{
-			$this->statement->closeCursor();
-			$this->statement = null;
-		}
 	}
 
 	/**

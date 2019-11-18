@@ -20,25 +20,6 @@ use Joomla\Database\Query\QueryElement;
 class SqlsrvQuery extends DatabaseQuery
 {
 	/**
-	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
-	 *
-	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
-	 * opening quote and the second for the closing quote.
-	 *
-	 * @var    string
-	 * @since  1.0
-	 */
-	protected $name_quotes = '`';
-
-	/**
-	 * The null or zero representation of a timestamp for the database driver.
-	 *
-	 * @var    string
-	 * @since  1.0
-	 */
-	protected $null_date = '1900-01-01 00:00:00';
-
-	/**
 	 * The list of zero or null representation of a datetime.
 	 *
 	 * @var    array
@@ -279,23 +260,42 @@ class SqlsrvQuery extends DatabaseQuery
 	 *
 	 * Ensure that the value is properly quoted before passing to the method.
 	 *
-	 * @param   string  $value  The value to cast as a char.
+	 * Usage:
+	 * $query->select($query->castAs('CHAR', 'a'));
 	 *
-	 * @return  string  Returns the cast value.
+	 * @param   string  $type    The type of string to cast as.
+	 * @param   string  $value   The value to cast as a char.
+	 * @param   string  $length  The value to cast as a char.
+	 *
+	 * @return  string  SQL statement to cast the value as a char type.
 	 *
 	 * @since   1.0
 	 */
-	public function castAsChar($value)
+	public function castAs(string $type, string $value, ?string $length = null)
 	{
-		return 'CAST(' . $value . ' as NVARCHAR(10))';
+		switch (strtoupper($type))
+		{
+			case 'CHAR':
+				if (!$length)
+				{
+					$length = '10';
+				}
+
+				return 'CAST(' . $value . ' as NVARCHAR(' . $length . '))';
+
+			case 'INT':
+				return 'CAST(' . $value . ' AS INT)';
+		}
+
+		return parent::castAs($type, $value, $length);
 	}
 
 	/**
 	 * Gets the function to determine the length of a character string.
 	 *
-	 * @param   string  $field      A value.
-	 * @param   string  $operator   Comparison operator between charLength integer value and $condition
-	 * @param   string  $condition  Integer value to compare charLength with.
+	 * @param   string       $field      A value.
+	 * @param   string|null  $operator   Comparison operator between charLength integer value and $condition
+	 * @param   string|null  $condition  Integer value to compare charLength with.
 	 *
 	 * @return  string  The required char length call.
 	 *
@@ -303,14 +303,21 @@ class SqlsrvQuery extends DatabaseQuery
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'DATALENGTH(' . $field . ')' . (isset($operator, $condition) ? ' ' . $operator . ' ' . $condition : '');
+		$statement = 'DATALENGTH(' . $field . ')';
+
+		if ($operator !== null && $condition !== null)
+		{
+			$statement .= ' ' . $operator . ' ' . $condition;
+		}
+
+		return $statement;
 	}
 
 	/**
 	 * Concatenates an array of column names or values.
 	 *
-	 * @param   array   $values     An array of values to concatenate.
-	 * @param   string  $separator  As separator to place between each value.
+	 * @param   string[]     $values     An array of values to concatenate.
+	 * @param   string|null  $separator  As separator to place between each value.
 	 *
 	 * @return  string  The concatenated values.
 	 *
@@ -318,7 +325,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 */
 	public function concatenate($values, $separator = null)
 	{
-		if ($separator)
+		if ($separator !== null)
 		{
 			return '(' . implode('+' . $this->quote($separator) . '+', $values) . ')';
 		}
@@ -462,16 +469,16 @@ class SqlsrvQuery extends DatabaseQuery
 	 * Usage:
 	 * $query->groupConcat('id', ',');
 	 *
-	 * @param   string  $column      The name of the column to be concatenated.
+	 * @param   string  $expression  The expression to apply concatenation to, this may be a column name or complex SQL statement.
 	 * @param   string  $separator   The delimiter of each concatenated value
 	 *
 	 * @return  string  Input values concatenated into a string, separated by delimiter
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function groupConcat($column, $separator = ',')
+	public function groupConcat($expression, $separator = ',')
 	{
-		return 'string_agg(' . $column . ', ' . $this->quote($separator) . ')';
+		return 'string_agg(' . $expression . ', ' . $this->quote($separator) . ')';
 	}
 
 	/**

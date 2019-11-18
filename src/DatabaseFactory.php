@@ -16,7 +16,7 @@ namespace Joomla\Database;
 class DatabaseFactory
 {
 	/**
-	 * Method to return a DatabaseDriver instance based on the given options.
+	 * Method to return a database driver based on the given options.
 	 *
 	 * There are three global options and then the rest are specific to the database driver. The 'database' option determines which database is to
 	 * be used for the connection. The 'select' option determines whether the connector should automatically select the chosen database.
@@ -24,17 +24,18 @@ class DatabaseFactory
 	 * @param   string  $name     Name of the database driver you'd like to instantiate
 	 * @param   array   $options  Parameters to be passed to the database driver.
 	 *
-	 * @return  DatabaseDriver
+	 * @return  DatabaseInterface
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  Exception\UnsupportedAdapterException if there is not a compatible database driver
 	 */
-	public function getDriver($name = 'mysqli', array $options = [])
+	public function getDriver(string $name = 'mysqli', array $options = []): DatabaseInterface
 	{
 		// Sanitize the database connector options.
 		$options['driver']   = preg_replace('/[^A-Z0-9_\.-]/i', '', $name);
 		$options['database'] = $options['database'] ?? null;
 		$options['select']   = $options['select'] ?? true;
+		$options['factory']  = $options['factory'] ?? $this;
 
 		// Derive the class name from the driver.
 		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($options['driver'])) . '\\' . ucfirst(strtolower($options['driver'])) . 'Driver';
@@ -45,29 +46,21 @@ class DatabaseFactory
 			throw new Exception\UnsupportedAdapterException(sprintf('Unable to load Database Driver: %s', $options['driver']));
 		}
 
-		// Create our new DatabaseDriver connector based on the options given.
-		try
-		{
-			return new $class($options);
-		}
-		catch (\RuntimeException $e)
-		{
-			throw new Exception\ConnectionFailureException(sprintf('Unable to connect to the Database: %s', $e->getMessage()), $e->getCode(), $e);
-		}
+		return new $class($options);
 	}
 
 	/**
 	 * Gets an exporter class object.
 	 *
-	 * @param   string          $name  Name of the driver you want an exporter for.
-	 * @param   DatabaseDriver  $db    Optional DatabaseDriver instance to inject into the exporter.
+	 * @param   string                  $name  Name of the driver you want an exporter for.
+	 * @param   DatabaseInterface|null  $db    Optional database driver to inject into the query object.
 	 *
 	 * @return  DatabaseExporter
 	 *
 	 * @since   1.0
-	 * @throws  Exception\UnsupportedAdapterException
+	 * @throws  Exception\UnsupportedAdapterException if there is not a compatible database exporter
 	 */
-	public function getExporter($name, DatabaseDriver $db = null)
+	public function getExporter(string $name, ?DatabaseInterface $db = null): DatabaseExporter
 	{
 		// Derive the class name from the driver.
 		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($name)) . '\\' . ucfirst(strtolower($name)) . 'Exporter';
@@ -82,7 +75,7 @@ class DatabaseFactory
 		/** @var $o DatabaseExporter */
 		$o = new $class;
 
-		if ($db instanceof DatabaseDriver)
+		if ($db)
 		{
 			$o->setDbo($db);
 		}
@@ -93,15 +86,15 @@ class DatabaseFactory
 	/**
 	 * Gets an importer class object.
 	 *
-	 * @param   string          $name  Name of the driver you want an importer for.
-	 * @param   DatabaseDriver  $db    Optional DatabaseDriver instance to inject into the importer.
+	 * @param   string                  $name  Name of the driver you want an importer for.
+	 * @param   DatabaseInterface|null  $db    Optional database driver to inject into the query object.
 	 *
 	 * @return  DatabaseImporter
 	 *
 	 * @since   1.0
-	 * @throws  Exception\UnsupportedAdapterException
+	 * @throws  Exception\UnsupportedAdapterException if there is not a compatible database importer
 	 */
-	public function getImporter($name, DatabaseDriver $db = null)
+	public function getImporter(string $name, ?DatabaseInterface $db = null)
 	{
 		// Derive the class name from the driver.
 		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($name)) . '\\' . ucfirst(strtolower($name)) . 'Importer';
@@ -116,7 +109,7 @@ class DatabaseFactory
 		/** @var $o DatabaseImporter */
 		$o = new $class;
 
-		if ($db instanceof DatabaseDriver)
+		if ($db)
 		{
 			$o->setDbo($db);
 		}
@@ -129,14 +122,19 @@ class DatabaseFactory
 	 *
 	 * @param   string              $name       Name of the driver you want an iterator for.
 	 * @param   StatementInterface  $statement  Statement holding the result set to be iterated.
-	 * @param   string              $column     An optional column to use as the iterator key.
+	 * @param   string|null         $column     An optional column to use as the iterator key.
 	 * @param   string              $class      The class of object that is returned.
 	 *
 	 * @return  DatabaseIterator
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getIterator(string $name, StatementInterface $statement, $column = null, string $class = '\\stdClass'): DatabaseIterator
+	public function getIterator(
+		string $name,
+		StatementInterface $statement,
+		?string $column = null,
+		string $class = \stdClass::class
+	): DatabaseIterator
 	{
 		// Derive the class name from the driver.
 		$iteratorClass = __NAMESPACE__ . '\\' . ucfirst($name) . '\\' . ucfirst($name) . 'Iterator';
@@ -155,15 +153,15 @@ class DatabaseFactory
 	/**
 	 * Get the current query object or a new Query object.
 	 *
-	 * @param   string             $name  Name of the driver you want an query object for.
-	 * @param   DatabaseInterface  $db    Optional Driver instance
+	 * @param   string                  $name  Name of the driver you want an query object for.
+	 * @param   DatabaseInterface|null  $db    Optional database driver to inject into the query object.
 	 *
-	 * @return  DatabaseQuery
+	 * @return  QueryInterface
 	 *
 	 * @since   1.0
-	 * @throws  Exception\UnsupportedAdapterException
+	 * @throws  Exception\UnsupportedAdapterException if there is not a compatible database query object
 	 */
-	public function getQuery($name, DatabaseInterface $db = null)
+	public function getQuery(string $name, ?DatabaseInterface $db = null): QueryInterface
 	{
 		// Derive the class name from the driver.
 		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($name)) . '\\' . ucfirst(strtolower($name)) . 'Query';

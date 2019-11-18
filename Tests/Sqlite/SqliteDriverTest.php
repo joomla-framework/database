@@ -6,1015 +6,666 @@
 
 namespace Joomla\Database\Tests\Sqlite;
 
-use Joomla\Database\Tests\Cases\SqliteCase;
+use Joomla\Database\DatabaseDriver;
+use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Database\Exception\UnsupportedAdapterException;
+use Joomla\Database\ParameterType;
+use Joomla\Database\Sqlite\SqliteDriver;
+use Joomla\Database\Sqlite\SqliteQuery;
+use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
 
 /**
- * Test class for Joomla\Database\Sqlite\SqliteDriver.
- *
- * @since  1.0
+ * Test class for Joomla\Database\Sqlite\SqliteDriver
  */
-class SqliteDriverTest extends SqliteCase
+class SqliteDriverTest extends AbstractDatabaseDriverTestCase
 {
 	/**
-	 * Data for the testEscape test.
-	 *
-	 * @return  array
-	 *
-	 * @since   1.0
-	 */
-	public function dataTestEscape()
-	{
-		return array(
-			array("'%_abc123", false, "''%_abc123"),
-			array("'%_abc123", true, "''%_abc123"),
-			array(3, false, 3),
-			array(3.14, false, '3.14'),
-		);
-	}
-
-	/**
-	 * Data for the testQuoteBinary test.
-	 *
-	 * @return  array
-	 *
-	 * @since   1.7.0
-	 */
-	public function dataTestQuoteBinary()
-	{
-		return array(
-			array('DATA', "X'" . bin2hex('DATA') . "'"),
-			array("\x00\x01\x02\xff", "X'000102ff'"),
-			array("\x01\x01\x02\xff", "X'010102ff'"),
-		);
-	}
-
-	/**
-	 * Data for the testQuoteName test.
-	 *
-	 * @return  array
-	 *
-	 * @since   1.7.0
-	 */
-	public function dataTestQuoteName()
-	{
-		return array(
-			array('protected`title', null, '`protected``title`'),
-			array('protected"title', null, '`protected"title`'),
-			array('protected]title', null, '`protected]title`'),
-		);
-	}
-
-	/**
-	 * Data for the testTransactionRollback test.
-	 *
-	 * @return  array
-	 *
-	 * @since   1.0
-	 */
-	public function dataTestTransactionRollback()
-	{
-		return array(array(null, 0), array('transactionSavepoint', 1));
-	}
-
-	/**
-	 * Test __destruct method.
+	 * This method is called before the first test of this test class is run.
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
-	public function test__destruct()
+	public static function setUpBeforeClass(): void
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		parent::setUpBeforeClass();
+
+		if (!static::$connection || static::$connection->getName() !== 'sqlite')
+		{
+			self::markTestSkipped('SQLite database not configured.');
+		}
 	}
 
 	/**
-	 * Test connected method.
+	 * Sets up the fixture.
+	 *
+	 * This method is called before a test is executed.
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
-	public function testConnected()
+	protected function setUp(): void
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
+		parent::setUp();
 
-	/**
-	 * Tests the dropTable method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testDropTable()
-	{
-		$this->assertThat(
-			self::$driver->dropTable('#__bar', true),
-			$this->isInstanceOf('\\Joomla\\Database\\Sqlite\\SqliteDriver'),
-			'The table is dropped if present.'
-		);
-	}
-
-	/**
-	 * Tests the escape method.
-	 *
-	 * @param   string   $text      The string to be escaped.
-	 * @param   boolean  $extra     Optional parameter to provide extra escaping.
-	 * @param   string   $expected  The expected result.
-	 *
-	 * @return  void
-	 *
-	 * @dataProvider  dataTestEscape
-	 * @since         1.0
-	 */
-	public function testEscape($text, $extra, $expected)
-	{
-		$this->assertThat(
-			self::$driver->escape($text, $extra),
-			$this->equalTo($expected),
-			'The string was not escaped properly'
-		);
-	}
-
-	/**
-	 * Tests the escape method 2.
-	 *
-	 * @return  void
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function testEscapeNonLocaleAware()
-	{
-		$origin = setLocale(LC_NUMERIC, 0);
-
-		// Test with decimal_point equals to comma
-		setLocale(LC_NUMERIC, 'pl_PL');
-
-		$this->assertThat(
-			self::$driver->escape(3.14),
-			$this->equalTo('3.14'),
-			'The string was not escaped properly'
-		);
-
-		// Test with C locale
-		setLocale(LC_NUMERIC, 'C');
-
-		$this->assertThat(
-			self::$driver->escape(3.14),
-			$this->equalTo('3.14'),
-			'The string was not escaped properly'
-		);
-
-		// Revert to origin locale
-		setLocale(LC_NUMERIC, $origin);
-	}
-
-	/**
-	 * Test the quoteBinary method.
-	 *
-	 * @param   string  $data  The binary quoted input string.
-	 *
-	 * @return  void
-	 *
-	 * @dataProvider  dataTestQuoteBinary
-	 * @since         1.7.0
-	 */
-	public function testQuoteBinary($data, $expected)
-	{
-		$this->assertThat(
-			self::$driver->quoteBinary($data),
-			$this->equalTo($expected),
-			'The binary data was not quoted properly'
-		);
-	}
-
-	/**
-	 * Test the quoteName method.
-	 *
-	 * @param   string  $text      The column name or alias to be quote.
-	 * @param   string  $asPart    String used for AS query part.
-	 * @param   string  $expected  The expected result.
-	 *
-	 * @return  void
-	 *
-	 * @dataProvider  dataTestQuoteName
-	 * @since         1.7.0
-	 */
-	public function testQuoteName($text, $asPart, $expected)
-	{
-		$this->assertThat(
-			self::$driver->quoteName($text, $asPart),
-			$this->equalTo($expected),
-			'The name was not quoted properly'
-		);
-	}
-
-	/**
-	 * Test the execute method
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testExecute()
-	{
-		self::$driver->setQuery("REPLACE INTO `dbtest` (`id`, `title`) VALUES (5, 'testTitle')");
-
-		$this->assertThat(self::$driver->execute(), $this->isTrue(), __LINE__);
-
-		$this->assertThat(self::$driver->insertid(), $this->equalTo(5), __LINE__);
-	}
-
-	/**
-	 * Test getAffectedRows method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetAffectedRows()
-	{
-		$query = self::$driver->getQuery(true);
-		$query->delete();
-		$query->from('dbtest');
-		self::$driver->setQuery($query);
-
-		self::$driver->execute();
-
-		$this->assertThat(self::$driver->getAffectedRows(), $this->equalTo(4), __LINE__);
-	}
-
-	/**
-	 * Test getExporter method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 * @todo    Implement testGetExporter().
-	 */
-	public function testGetExporter()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('Implement this test when the exporter is added.');
-	}
-
-	/**
-	 * Test getImporter method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 * @todo    Implement testGetImporter().
-	 */
-	public function testGetImporter()
-	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete('Implement this test when the importer is added.');
-	}
-
-	/**
-	 * Test getNumRows method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetNumRows()
-	{
-		$query = self::$driver->getQuery(true);
-		$query->select('*');
-		$query->from('dbtest');
-		$query->where('description = ' . self::$driver->quote('one'));
-		self::$driver->setQuery($query);
-
-		$res = self::$driver->execute();
-
-		$this->assertThat(self::$driver->getNumRows($res), $this->equalTo(0), __LINE__);
-	}
-
-	/**
-	 * Tests the getTableCreate method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetTableCreate()
-	{
-		$this->assertThat(
-			self::$driver->getTableCreate('#__dbtest'),
-			$this->isType('array'),
-			'The statement to create the table is returned in an array.'
-		);
-	}
-
-	/**
-	 * Test getTableColumns function.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetTableColumns()
-	{
-		$tableCol = array(
-			'id' => 'INTEGER',
-			'title' => 'TEXT',
-			'start_date' => 'TEXT',
-			'description' => 'TEXT',
-			'data' => 'BLOB',
-		);
-
-		$this->assertThat(
-			self::$driver->getTableColumns('dbtest'),
-			$this->equalTo($tableCol),
-			__LINE__
-		);
-
-		/* not only type field */
-		$id = new \stdClass;
-		$id->Default = null;
-		$id->Field   = 'id';
-		$id->Type    = 'INTEGER';
-		$id->Null    = 'YES';
-		$id->Key     = 'PRI';
-
-		$title = new \stdClass;
-		$title->Default = '\'\'';
-		$title->Field   = 'title';
-		$title->Type    = 'TEXT';
-		$title->Null    = 'NO';
-		$title->Key     = '';
-
-		$start_date = new \stdClass;
-		$start_date->Default = '\'\'';
-		$start_date->Field   = 'start_date';
-		$start_date->Type    = 'TEXT';
-		$start_date->Null    = 'NO';
-		$start_date->Key     = '';
-
-		$description = new \stdClass;
-		$description->Default = '\'\'';
-		$description->Field   = 'description';
-		$description->Type    = 'TEXT';
-		$description->Null    = 'NO';
-		$description->Key     = '';
-
-		$data = new \stdClass;
-		$data->Default = null;
-		$data->Field   = 'data';
-		$data->Type    = 'BLOB';
-		$data->Null    = 'YES';
-		$data->Key     = '';
-
-		$this->assertThat(
-			self::$driver->getTableColumns('dbtest', false),
-			$this->equalTo(
-				array(
-					'id' => $id,
-					'title' => $title,
-					'start_date' => $start_date,
-					'description' => $description,
-					'data' => $data,
+		try
+		{
+			foreach (DatabaseDriver::splitSql(file_get_contents(dirname(__DIR__) . '/Stubs/Schema/sqlite.sql')) as $query)
+			{
+				static::$connection->setQuery($query)
+					->execute();
+			}
+		}
+		catch (ExecutionFailureException $exception)
+		{
+			$this->markTestSkipped(
+				\sprintf(
+					'Could not load SQLite database: %s',
+					$exception->getMessage()
 				)
-			),
-			__LINE__
-		);
+			);
+		}
 	}
 
 	/**
-	 * Tests the getTableKeys method.
+	 * Tears down the fixture.
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * This method is called after a test is executed.
 	 */
-	public function testGetTableKeys()
+	protected function tearDown(): void
 	{
-		$this->assertThat(
-			self::$driver->getTableKeys('#__dbtest'),
-			$this->isType('array'),
-			'The list of keys for the table is returned in an array.'
+		$tables = array_filter(
+			static::$connection->getTableList(),
+			function (string $table): bool
+			{
+				return $table !== 'sqlite_sequence';
+			}
 		);
+
+		foreach ($tables as $table)
+		{
+			static::$connection->dropTable($table);
+		}
+	}
+
+	/*
+	 * Overrides for data providers from the parent test case
+	 */
+
+	/**
+	 * Data provider for escaping test cases
+	 *
+	 * @return  \Generator
+	 */
+	public function dataEscape(): \Generator
+	{
+		yield ["'%_abc123", false, "''%_abc123"];
+		yield ["'%_abc123", true, "''%_abc123"];
+		yield [3, false, 3];
+		yield [3.14, false, '3.14'];
 	}
 
 	/**
-	 * Tests the getTableList method.
+	 * Data provider for fetching table column test cases
 	 *
-	 * @return  void
+	 * @return  \Generator
+	 */
+	public function dataGetTableColumns(): \Generator
+	{
+		yield 'only column types' => [
+			'#__dbtest',
+			true,
+			[
+				'id'          => 'INTEGER',
+				'title'       => 'TEXT',
+				'start_date'  => 'TEXT',
+				'description' => 'TEXT',
+				'data'        => 'BLOB',
+			],
+		];
+
+		yield 'full column information' => [
+			'#__dbtest',
+			false,
+			[
+				'id'          => (object) [
+					'Field'   => 'id',
+					'Type'    => 'INTEGER',
+					'Null'    => 'YES',
+					'Default' => null,
+					'Key'     => 'PRI',
+				],
+				'title'       => (object) [
+					'Field'   => 'title',
+					'Type'    => 'TEXT',
+					'Null'    => 'NO',
+					'Default' => '\'\'',
+					'Key'     => '',
+				],
+				'start_date'  => (object) [
+					'Field'   => 'start_date',
+					'Type'    => 'TEXT',
+					'Null'    => 'NO',
+					'Default' => '\'\'',
+					'Key'     => '',
+				],
+				'description' => (object) [
+					'Field'   => 'description',
+					'Type'    => 'TEXT',
+					'Null'    => 'NO',
+					'Default' => '\'\'',
+					'Key'     => '',
+				],
+				'data'        => (object) [
+					'Field'   => 'data',
+					'Type'    => 'BLOB',
+					'Null'    => 'YES',
+					'Default' => null,
+					'Key'     => '',
+				],
+			],
+		];
+	}
+
+	/**
+	 * Data provider for table dropping test cases
 	 *
-	 * @since   1.0
+	 * @return  \Generator
+	 */
+	public function dataDropTable()
+	{
+		yield 'database exists before query' => ['#__dbtest', true];
+
+		yield 'database does not exist before query' => ['#__foo', false];
+	}
+
+	/**
+	 * Data provider for binary quoting test cases
+	 *
+	 * @return  \Generator
+	 */
+	public function dataQuoteBinary(): \Generator
+	{
+		yield ['DATA', "X'" . bin2hex('DATA') . "'"];
+		yield ["\x00\x01\x02\xff", "X'000102ff'"];
+		yield ["\x01\x01\x02\xff", "X'010102ff'"];
+	}
+
+	/**
+	 * Data provider for name quoting test cases
+	 *
+	 * @return  \Generator
+	 */
+	public function dataQuoteName(): \Generator
+	{
+		yield ['protected`title', null, '`protected``title`'];
+		yield ['protected"title', null, '`protected"title`'];
+		yield ['protected]title', null, '`protected]title`'];
+	}
+
+	/*
+	 * Overrides for parent class test cases
+	 */
+
+	/**
+	 * @testdox  The list of tables is returned
 	 */
 	public function testGetTableList()
 	{
-		$this->assertThat(
-			self::$driver->getTableList(),
-			$this->isType('array'),
-			'The list of tables for the database is returned in an array.'
+		$this->assertSame(
+			[
+				static::$connection->replacePrefix('#__dbtest'),
+				'sqlite_sequence',
+			],
+			static::$connection->getTableList()
 		);
 	}
 
 	/**
-	 * Test getVersion method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @testdox  The minimum supported database version is retrieved
 	 */
-	public function testGetVersion()
+	public function testGetMinimum()
 	{
-		$this->assertThat(
-			\strlen(self::$driver->getVersion()),
-			$this->greaterThan(0),
-			'Line:' . __LINE__ . ' The getVersion method should return something without error.'
+		$this->assertNull(
+			static::$connection->getMinimum(),
+			'A minimum version is not specified for SQLite'
 		);
 	}
 
 	/**
-	 * Test insertid method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @testdox  The number of rows returned by the query can be retrieved
 	 */
-	public function testInsertid()
+	public function testGetNumRows()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->loadExampleData();
+
+		static::$connection->setQuery(
+			static::$connection->getQuery(true)
+				->select('*')
+				->from('#__dbtest')
+				->where(static::$connection->quoteName('description') . ' = ' . static::$connection->quote('test row one'))
+		);
+
+		static::$connection->execute();
+
+		$this->assertSame(0, static::$connection->getNumRows());
 	}
 
-	/**
-	 * Test insertObject method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	/*
+	 * Test cases for this subclass
 	 */
-	public function testInsertObject()
-	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
 
 	/**
-	 * Test isSupported method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @testdox  The database character set can be changed
 	 */
-	public function testIsSupported()
+	public function testAlterDbCharacterSet()
 	{
-		$this->assertThat(\Joomla\Database\Sqlite\SqliteDriver::isSupported(), $this->isTrue(), __LINE__);
-	}
-
-	/**
-	 * Test loadAssoc method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testLoadAssoc()
-	{
-		$query = self::$driver->getQuery(true);
-		$query->select('title');
-		$query->from('dbtest');
-		self::$driver->setQuery($query);
-		$result = self::$driver->loadAssoc();
-
-		$this->assertThat($result, $this->equalTo(array('title' => 'Testing')), __LINE__);
-	}
-
-	/**
-	 * Test loadAssocList method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testLoadAssocList()
-	{
-		$query = self::$driver->getQuery(true);
-		$query->select('title');
-		$query->from('dbtest');
-		self::$driver->setQuery($query);
-		$result = self::$driver->loadAssocList();
-
-		$this->assertThat(
-			$result,
-			$this->equalTo(
-				array(
-					array('title' => 'Testing'),
-					array('title' => 'Testing2'),
-					array('title' => 'Testing3'),
-					array('title' => 'Testing4')
-				)
-			),
-			__LINE__
+		$this->assertFalse(
+			static::$connection->alterDbCharacterSet(static::$dbManager->getDbName()),
+			'Altering a database character set is not supported in SQLite'
 		);
 	}
 
 	/**
-	 * Test loadColumn method
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @testdox  A database can be created
 	 */
-	public function testLoadColumn()
+	public function testCreateDatabase()
 	{
-		$query = self::$driver->getQuery(true);
-		$query->select('title');
-		$query->from('dbtest');
-		self::$driver->setQuery($query);
-		$result = self::$driver->loadColumn();
-
-		$this->assertThat($result, $this->equalTo(array('Testing', 'Testing2', 'Testing3', 'Testing4')), __LINE__);
-	}
-
-	/**
-	 * Test loadObject method
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testLoadObject()
-	{
-		$query = self::$driver->getQuery(true);
-		$query->select('*');
-		$query->from('dbtest');
-		$query->where('description=' . self::$driver->quote('three'));
-		self::$driver->setQuery($query);
-		$result = self::$driver->loadObject();
-
-		$objCompare = new \stdClass;
-		$objCompare->id = 3;
-		$objCompare->title = 'Testing3';
-		$objCompare->start_date = '1980-04-18 00:00:00';
-		$objCompare->description = 'three';
-		$objCompare->data = null;
-
-		$this->assertThat($result, $this->equalTo($objCompare), __LINE__);
-	}
-
-	/**
-	 * Test loadObjectList method
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testLoadObjectList()
-	{
-		$query = self::$driver->getQuery(true);
-		$query->select('*');
-		$query->from('dbtest');
-		$query->order('id');
-		self::$driver->setQuery($query);
-		$result = self::$driver->loadObjectList();
-
-		$expected = array();
-
-		$objCompare = new \stdClass;
-		$objCompare->id = 1;
-		$objCompare->title = 'Testing';
-		$objCompare->start_date = '1980-04-18 00:00:00';
-		$objCompare->description = 'one';
-		$objCompare->data = null;
-
-		$expected[] = clone $objCompare;
-
-		$objCompare = new \stdClass;
-		$objCompare->id = 2;
-		$objCompare->title = 'Testing2';
-		$objCompare->start_date = '1980-04-18 00:00:00';
-		$objCompare->description = 'one';
-		$objCompare->data = null;
-
-		$expected[] = clone $objCompare;
-
-		$objCompare = new \stdClass;
-		$objCompare->id = 3;
-		$objCompare->title = 'Testing3';
-		$objCompare->start_date = '1980-04-18 00:00:00';
-		$objCompare->description = 'three';
-		$objCompare->data = null;
-
-		$expected[] = clone $objCompare;
-
-		$objCompare = new \stdClass;
-		$objCompare->id = 4;
-		$objCompare->title = 'Testing4';
-		$objCompare->start_date = '1980-04-18 00:00:00';
-		$objCompare->description = 'four';
-		$objCompare->data = null;
-
-		$expected[] = clone $objCompare;
-
-		$this->assertThat($result, $this->equalTo($expected), __LINE__);
-	}
-
-	/**
-	 * Test loadResult method
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testLoadResult()
-	{
-		$query = self::$driver->getQuery(true);
-		$query->select('id');
-		$query->from('dbtest');
-		$query->where('title=' . self::$driver->quote('Testing2'));
-
-		self::$driver->setQuery($query);
-		$result = self::$driver->loadResult();
-
-		$this->assertThat($result, $this->equalTo(2), __LINE__);
-	}
-
-	/**
-	 * Test loadRow method
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testLoadRow()
-	{
-		$query = self::$driver->getQuery(true);
-		$query->select('*');
-		$query->from('dbtest');
-		$query->where('description=' . self::$driver->quote('three'));
-		self::$driver->setQuery($query);
-		$result = self::$driver->loadRow();
-
-		$expected = array(3, 'Testing3', '1980-04-18 00:00:00', 'three', null);
-
-		$this->assertThat($result, $this->equalTo($expected), __LINE__);
-	}
-
-	/**
-	 * Test loadRowList method
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testLoadRowList()
-	{
-		$query = self::$driver->getQuery(true);
-		$query->select('*');
-		$query->from('dbtest');
-		$query->where('description=' . self::$driver->quote('one'));
-		self::$driver->setQuery($query);
-		$result = self::$driver->loadRowList();
-
-		$expected = array(
-			array(1, 'Testing', '1980-04-18 00:00:00', 'one', null),
-			array(2, 'Testing2', '1980-04-18 00:00:00', 'one', null)
-		);
-
-		$this->assertThat($result, $this->equalTo($expected), __LINE__);
-	}
-
-	/**
-	 * Test quoteBinary and decodeBinary methods
-	 *
-	 * @return  void
-	 *
-	 * @since   1.7.0
-	 */
-	public function testLoadBinary()
-	{
-		// Add binary data with null byte
-		$query = self::$driver->getQuery(true)
-			->update('dbtest')
-			->set('data = ' . self::$driver->quoteBinary("\x00\x01\x02\xff"))
-			->where('id = 3');
-
-		self::$driver->setQuery($query)->execute();
-
-		// Add binary data with invalid UTF-8
-		$query = self::$driver->getQuery(true)
-			->update('dbtest')
-			->set('data = ' . self::$driver->quoteBinary("\x01\x01\x02\xff"))
-			->where('id = 4');
-
-		self::$driver->setQuery($query)->execute();
-
-		$selectRow3 = self::$driver->getQuery(true)
-			->select('id')
-			->from('dbtest')
-			->where('data = ' . self::$driver->quoteBinary("\x00\x01\x02\xff"));
-
-		$selectRow4 = self::$driver->getQuery(true)
-			->select('id')
-			->from('dbtest')
-			->where('data = '. self::$driver->quoteBinary("\x01\x01\x02\xff"));
-
-		$result = self::$driver->setQuery($selectRow3)->loadResult();
-		$this->assertThat($result, $this->equalTo(3), __LINE__);
-
-		$result = self::$driver->setQuery($selectRow4)->loadResult();
-		$this->assertThat($result, $this->equalTo(4), __LINE__);
-
-		$selectRows = self::$driver->getQuery(true)
-			->select('data')
-			->from('dbtest')
-			->order('id');
-
-		// Test loadColumn
-		$result = self::$driver->setQuery($selectRows)->loadColumn();
-
-		foreach ($result as $i => $v)
-		{
-			$result[$i] = self::$driver->decodeBinary($v);
-		}
-
-		$expected = array(null, null, "\x00\x01\x02\xff", "\x01\x01\x02\xff");
-		$this->assertThat($result, $this->equalTo($expected), __LINE__);
-
-		// Test loadAssocList
-		$result = self::$driver->setQuery($selectRows)->loadAssocList();
-
-		foreach ($result as $i => $v)
-		{
-			$result[$i]['data'] = self::$driver->decodeBinary($v['data']);
-		}
-
-		$expected = array(
-			array('data' => null),
-			array('data' => null),
-			array('data' => "\x00\x01\x02\xff"),
-			array('data' => "\x01\x01\x02\xff"),
-		);
-		$this->assertThat($result, $this->equalTo($expected), __LINE__);
-
-		// Test loadObjectList
-		$result = self::$driver->setQuery($selectRows)->loadObjectList();
-
-		foreach ($result as $i => $v)
-		{
-			$result[$i]->data = self::$driver->decodeBinary($v->data);
-		}
-
-		$expected = array(
-			(object) array('data' => null),
-			(object) array('data' => null),
-			(object) array('data' => "\x00\x01\x02\xff"),
-			(object) array('data' => "\x01\x01\x02\xff"),
-		);
-		$this->assertThat($result, $this->equalTo($expected), __LINE__);
-	}
-
-	/**
-	 * Tests the lockTable method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testLockTable()
-	{
-		$this->assertThat(
-			self::$driver->lockTable('#__dbtest'),
-			$this->isInstanceOf('\\Joomla\\Database\\Sqlite\\SqliteDriver'),
-			'Method returns the current instance of the driver object.'
+		$this->assertTrue(
+			static::$connection->createDatabase(new \stdClass),
+			'Creating a database is not supported in SQLite'
 		);
 	}
 
 	/**
-	 * Tests the renameTable method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @testdox  The database collation can be retrieved
 	 */
-	public function testRenameTable()
+	public function testGetCollation()
 	{
-		$newTableName = 'bak_dbtest';
-
-		self::$driver->renameTable('dbtest', $newTableName);
-
-		// Check name change
-		$tableList = self::$driver->getTableList();
-		$this->assertThat(\in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
-
-		// Restore initial state
-		self::$driver->renameTable($newTableName, 'dbtest');
+		$this->assertFalse(
+			static::$connection->getCollation(),
+			'Retrieving the database collation is not supported in SQLite'
+		);
 	}
 
 	/**
-	 * Test select method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @testdox  The database connection collation can be retrieved
 	 */
-	public function testSelect()
+	public function testGetConnectionCollation()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertFalse(
+			static::$connection->getConnectionCollation(),
+			'Retrieving the database connection collation is not supported in SQLite'
+		);
 	}
 
 	/**
-	 * Test setUtf method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @testdox  The database connection encryption can be retrieved
+	 */
+	public function testGetConnectionEncryption()
+	{
+		$this->assertEmpty(
+			static::$connection->getConnectionEncryption(),
+			'Retrieving the database connection encryption is not supported in SQLite'
+		);
+	}
+
+	/**
+	 * @testdox  A list of queries to create the given tables is returned
+	 */
+	public function testGetTableCreate()
+	{
+		$this->assertSame(
+			['#__dbtest'],
+			static::$connection->getTableCreate('#__dbtest'),
+			'Retrieving the queries to create a list of tables is not supported in SQLite'
+		);
+	}
+
+	/**
+	 * @testdox  Information about the keys of a database table is returned
+	 */
+	public function testGetTableKeys()
+	{
+		$this->assertEquals(
+			[
+				'id' => (object) [
+					'CID' => '0',
+					'NAME' => 'id',
+					'TYPE' => 'INTEGER',
+					'NOTNULL' => '0',
+					'DFLT_VALUE' => null,
+					'PK' => '1',
+				],
+			],
+			static::$connection->getTableKeys('#__dbtest')
+		);
+	}
+
+	/**
+	 * @testdox  The connection can be set to use UTF-8 encoding
 	 */
 	public function testSetUtf()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertFalse(
+			static::$connection->setUtf()
+		);
 	}
 
 	/**
-	 * Tests the transactionCommit method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @testdox  A database table can be truncated
+	 */
+	public function testTruncateTable()
+	{
+		$this->loadExampleData();
+
+		static::$connection->truncateTable('#__dbtest');
+
+		$this->assertSame(4, static::$connection->getAffectedRows());
+	}
+
+	/**
+	 * @testdox  The database driver reports if it is supported in the present environment
+	 */
+	public function testIsSupported()
+	{
+		$this->assertTrue(
+			SqliteDriver::isSupported()
+		);
+	}
+
+	/**
+	 * @testdox  A transaction can be started and committed
 	 */
 	public function testTransactionCommit()
 	{
-		self::$driver->transactionStart();
-		$queryIns = self::$driver->getQuery(true);
-		$queryIns->insert('#__dbtest')
-			->columns('id, title, start_date, description')
-			->values("6, 'testTitle', '1970-01-01', 'testDescription'");
+		$this->loadExampleData();
 
-		self::$driver->setQuery($queryIns)->execute();
+		static::$connection->transactionStart();
 
-		self::$driver->transactionCommit();
+		$id          = 6;
+		$title       = 'Test Title';
+		$startDate   = '2019-10-26';
+		$description = 'Test Description';
 
-		/* check if value is present */
-		$queryCheck = self::$driver->getQuery(true);
-		$queryCheck->select('*')
-			->from('#__dbtest')
-			->where('id = 6');
-		self::$driver->setQuery($queryCheck);
-		$result = self::$driver->loadRow();
+		// Insert row
+		static::$connection->setQuery(
+			static::$connection->getQuery(true)
+				->insert('#__dbtest')
+				->columns(['id', 'title', 'start_date', 'description'])
+				->values(':id, :title, :start_date, :description')
+				->bind(':id', $id, ParameterType::INTEGER)
+				->bind(':title', $title)
+				->bind(':start_date', $startDate)
+				->bind(':description', $description)
+		)->execute();
 
-		$expected = array('6', 'testTitle', '1970-01-01', 'testDescription', null);
+		static::$connection->transactionCommit();
 
-		$this->assertThat($result, $this->equalTo($expected), __LINE__);
+		// Validate row is present
+		$this->assertSame(1, static::$connection->getAffectedRows());
+
+		$row = static::$connection->setQuery(
+			static::$connection->getQuery(true)
+				->select('*')
+				->from('#__dbtest')
+				->where('id = :id')
+				->bind(':id', $id, ParameterType::INTEGER)
+		)->loadObject();
+
+		$this->assertEquals($id, $row->id);
 	}
 
 	/**
-	 * Tests the transactionRollback method, with and without savepoint.
+	 * Data provider for transaction rollback test cases
 	 *
-	 * @param   string  $toSavepoint  Savepoint name to rollback transaction to
-	 * @param   int     $tupleCount   Number of tuple found after insertion and rollback
-	 *
-	 * @return  void
-	 *
-	 * @since        1.0
-	 * @dataProvider dataTestTransactionRollback
+	 * @return  \Generator
 	 */
-	public function testTransactionRollback($toSavepoint, $tupleCount)
+	public function dataTransactionRollback()
 	{
-		self::$driver->transactionStart();
+		yield 'rollback without savepoint' => [null, 0];
 
-		/* try to insert this tuple, inserted only when savepoint != null */
-		$queryIns = self::$driver->getQuery(true);
-		$queryIns->insert('#__dbtest')
-			->columns('id, title, start_date, description')
-			->values("7, 'testRollback', '1970-01-01', 'testRollbackSp'");
-		self::$driver->setQuery($queryIns)->execute();
+		yield 'rollback with savepoint' => ['transactionSavepoint', 1];
+	}
 
-		/* create savepoint only if is passed by data provider */
-		if (!\is_null($toSavepoint))
+	/**
+	 * @testdox  A transaction can be started and committed
+	 *
+	 * @param   string|null  $toSavepoint  Savepoint name to rollback transaction to
+	 * @param   integer      $tupleCount   Number of tuples found after insertion and rollback
+	 *
+	 * @dataProvider  dataTransactionRollback
+	 */
+	public function testTransactionRollback(?string $toSavepoint, int $tupleCount)
+	{
+		$this->loadExampleData();
+
+		static::$connection->transactionStart();
+
+		// Try to insert this tuple, inserted only when savepoint != null
+		$id          = 6;
+		$title       = 'testRollback';
+		$startDate   = '2019-10-26';
+		$description = 'testRollbackSp';
+
+		static::$connection->setQuery(
+			static::$connection->getQuery(true)
+				->insert('#__dbtest')
+				->columns(['id', 'title', 'start_date', 'description'])
+				->values(':id, :title, :start_date, :description')
+				->bind(':id', $id, ParameterType::INTEGER)
+				->bind(':title', $title)
+				->bind(':start_date', $startDate)
+				->bind(':description', $description)
+		)->execute();
+
+		// Create savepoint only if is passed by data provider
+		if ($toSavepoint !== null)
 		{
-			self::$driver->transactionStart((boolean) $toSavepoint);
+			static::$connection->transactionStart(true);
 		}
 
-		/* try to insert this tuple, always rolled back */
-		$queryIns = self::$driver->getQuery(true);
-		$queryIns->insert('#__dbtest')
-			->columns('id, title, start_date, description')
-			->values("8, 'testRollback', '1972-01-01', 'testRollbackSp'");
-		self::$driver->setQuery($queryIns)->execute();
+		// Try to insert this tuple, always rolled back
+		$id        = 7;
+		$startDate = '2019-10-27';
 
-		self::$driver->transactionRollback((boolean) $toSavepoint);
+		static::$connection->setQuery(
+			static::$connection->getQuery(true)
+				->insert('#__dbtest')
+				->columns(['id', 'title', 'start_date', 'description'])
+				->values(':id, :title, :start_date, :description')
+				->bind(':id', $id, ParameterType::INTEGER)
+				->bind(':title', $title)
+				->bind(':start_date', $startDate)
+				->bind(':description', $description)
+		)->execute();
 
-		/* release savepoint and commit only if a savepoint exists */
-		if (!\is_null($toSavepoint))
+		static::$connection->transactionRollback($toSavepoint !== null);
+
+		// Release savepoint and commit only if a savepoint exists
+		if ($toSavepoint !== null)
 		{
-			self::$driver->transactionCommit();
+			static::$connection->transactionCommit();
 		}
 
-		/* find how many rows have description='testRollbackSp' :
-		 *   - 0 if a savepoint doesn't exist
-		 *   - 1 if a savepoint exists
+		/*
+		 * Determine number of rows that should exist, dependent on if a savepoint was created
+		 *
+		 * - 0 if a savepoint doesn't exist
+		 * - 1 if a savepoint exists
 		 */
-		$queryCheck = self::$driver->getQuery(true);
-		$queryCheck->select('*')
+		$transactionRows = static::$connection->setQuery(
+			static::$connection->getQuery(true)
+				->select('*')
+				->from('#__dbtest')
+				->where('description = :description')
+				->bind(':description', $description)
+		)->loadRowList();
+
+		$this->assertCount($tupleCount, $transactionRows);
+	}
+
+	/**
+	 * @testdox  The database connection can be retrieved
+	 */
+	public function testGetConnection()
+	{
+		$this->assertInstanceOf(
+			\PDO::class,
+			static::$connection->getConnection()
+		);
+	}
+
+	/**
+	 * @testdox  The name of the database driver is retrieved
+	 */
+	public function testGetName()
+	{
+		$this->assertSame(
+			'sqlite',
+			static::$connection->getName()
+		);
+	}
+
+	/**
+	 * @testdox  The type of server for the database driver is retrieved
+	 */
+	public function testGetServerType()
+	{
+		$this->assertSame(
+			'sqlite',
+			static::$connection->getServerType()
+		);
+	}
+
+	/**
+	 * @testdox  The null date for the server type is retrieved
+	 */
+	public function testGetNullDate()
+	{
+		$this->assertSame(
+			'0000-00-00 00:00:00',
+			static::$connection->getNullDate()
+		);
+	}
+
+	/**
+	 * @testdox  An exporter for the database driver can be created
+	 */
+	public function testGetExporter()
+	{
+		$this->expectException(UnsupportedAdapterException::class);
+
+		static::$connection->getExporter();
+	}
+
+	/**
+	 * @testdox  An importer for the database driver can be created
+	 */
+	public function testGetImporter()
+	{
+		$this->expectException(UnsupportedAdapterException::class);
+
+		static::$connection->getImporter();
+	}
+
+	/**
+	 * @testdox  A new query instance can be created
+	 */
+	public function testGetQueryNewInstance()
+	{
+		$this->assertInstanceOf(
+			SqliteQuery::class,
+			static::$connection->getQuery(true)
+		);
+	}
+
+	/**
+	 * @testdox  Binary values are correctly supported
+	 */
+	public function testQuoteAndDecodeBinary()
+	{
+		$this->loadExampleData();
+
+		// Add binary data with null byte
+		$query = static::$connection->getQuery(true)
+			->update('#__dbtest')
+			->set('data = ' . static::$connection->quoteBinary("\x00\x01\x02\xff"))
+			->where('id = 3');
+
+		static::$connection->setQuery($query)->execute();
+
+		// Add binary data with invalid UTF-8
+		$query = static::$connection->getQuery(true)
+			->update('#__dbtest')
+			->set('data = ' . static::$connection->quoteBinary("\x01\x01\x02\xff"))
+			->where('id = 4');
+
+		static::$connection->setQuery($query)->execute();
+
+		$selectRow3 = static::$connection->getQuery(true)
+			->select('id')
 			->from('#__dbtest')
-			->where("description = 'testRollbackSp'");
-		self::$driver->setQuery($queryCheck);
-		$result = self::$driver->loadRowList();
+			->where('data = ' . static::$connection->quoteBinary("\x00\x01\x02\xff"));
 
-		$this->assertThat(\count($result), $this->equalTo($tupleCount), __LINE__);
-	}
+		$selectRow4 = static::$connection->getQuery(true)
+			->select('id')
+			->from('#__dbtest')
+			->where('data = ' . static::$connection->quoteBinary("\x01\x01\x02\xff"));
 
-	/**
-	 * Tests the unlockTables method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testUnlockTables()
-	{
-		$this->assertThat(
-			self::$driver->unlockTables(),
-			$this->isInstanceOf('\\Joomla\\Database\\Sqlite\\SqliteDriver'),
-			'Method returns the current instance of the driver object.'
+		$result = static::$connection->setQuery($selectRow3)->loadResult();
+		$this->assertEquals(3, $result);
+
+		$result = static::$connection->setQuery($selectRow4)->loadResult();
+		$this->assertEquals(4, $result);
+
+		$selectRows = static::$connection->getQuery(true)
+			->select('data')
+			->from('#__dbtest')
+			->order('id');
+
+		// Test loadColumn
+		$result = static::$connection->setQuery($selectRows)->loadColumn();
+
+		foreach ($result as $i => $v)
+		{
+			$result[$i] = static::$connection->decodeBinary($v);
+		}
+
+		$this->assertEquals(
+			[null, null, "\x00\x01\x02\xff", "\x01\x01\x02\xff"],
+			$result
 		);
-	}
 
-	/**
-	 * Test updateObject method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testUpdateObject()
-	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
+		// Test loadAssocList
+		$result = static::$connection->setQuery($selectRows)->loadAssocList();
 
-	/**
-	 * Test querySet method.
-	 *
-	 * @return  void
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function testQuerySetWithUnionAll()
-	{
-		$query  = self::$driver->getQuery(true);
-		$union1 = self::$driver->getQuery(true);
-		$union2 = self::$driver->getQuery(true);
+		foreach ($result as $i => $v)
+		{
+			$result[$i]['data'] = static::$connection->decodeBinary($v['data']);
+		}
 
-		$union1->select('id, title')->from('dbtest')->where('id = 4')->setLimit(1);
+		$expected = [
+			['data' => null],
+			['data' => null],
+			['data' => "\x00\x01\x02\xff"],
+			['data' => "\x01\x01\x02\xff"],
+		];
 
-		$union2->select('id, title')->from('dbtest')->where('id < 4')->order('id DESC');
-		$union2->setLimit(2, 1);
+		$this->assertEquals($expected, $result);
 
-		$query->querySet($union1)->unionAll($union2)->order('id');
+		// Test loadObjectList
+		$result = static::$connection->setQuery($selectRows)->loadObjectList();
 
-		$result = self::$driver->setQuery($query, 0, 3)->loadAssocList();
+		foreach ($result as $i => $v)
+		{
+			$result[$i]->data = static::$connection->decodeBinary($v->data);
+		}
 
-		$this->assertThat(
-			$result,
-			$this->equalTo(
-				array(
-					array('id' => '1', 'title' => 'Testing'),
-					array('id' => '2', 'title' => 'Testing2'),
-					array('id' => '4', 'title' => 'Testing4'),
-				)
-			),
-			__LINE__
-		);
-	}
+		$expected = [
+			(object) ['data' => null],
+			(object) ['data' => null],
+			(object) ['data' => "\x00\x01\x02\xff"],
+			(object) ['data' => "\x01\x01\x02\xff"],
+		];
 
-	/**
-	 * Test toQuerySet method.
-	 *
-	 * @return  void
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function testSelectToQuerySetWithUnionAll()
-	{
-		$query = self::$driver->getQuery(true);
-		$union = self::$driver->getQuery(true);
-
-		$query->select('id, title')->from('dbtest')->where('id = 4');
-		$query = $query->setLimit(1)->toQuerySet();
-
-		$union->select('id, title')->from('dbtest')->where('id < 4')->order('id DESC');
-		$union->setLimit(2, 1);
-
-		$query->unionAll($union)->order('id');
-
-		$result = self::$driver->setQuery($query)->loadAssocList();
-
-		$this->assertThat(
-			$result,
-			$this->equalTo(
-				array(
-					array('id' => '1', 'title' => 'Testing'),
-					array('id' => '2', 'title' => 'Testing2'),
-					array('id' => '4', 'title' => 'Testing4'),
-				)
-			),
-			__LINE__
-		);
+		$this->assertEquals($expected, $result);
 	}
 }

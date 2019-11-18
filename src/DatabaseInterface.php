@@ -159,6 +159,15 @@ interface DatabaseInterface
 	public function isConnectionEncryptionSupported(): bool;
 
 	/**
+	 * Method to check whether the installed database version is supported by the database driver
+	 *
+	 * @return  boolean  True if the database version is supported
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function isMinimumVersion();
+
+	/**
 	 * Get the total number of SQL statements executed by the database driver.
 	 *
 	 * @return  integer
@@ -368,7 +377,7 @@ interface DatabaseInterface
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \RuntimeException
 	 */
-	public function loadObject($class = 'stdClass');
+	public function loadObject($class = \stdClass::class);
 
 	/**
 	 * Method to get an array of the result set rows from the database query where each row is an object.  The array
@@ -384,7 +393,7 @@ interface DatabaseInterface
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \RuntimeException
 	 */
-	public function loadObjectList($key = '', $class = 'stdClass');
+	public function loadObjectList($key = '', $class = \stdClass::class);
 
 	/**
 	 * Method to get the first field of the first row of the result set from the database query.

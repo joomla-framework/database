@@ -26,7 +26,7 @@ abstract class DatabaseImporter
 	/**
 	 * The database connector to use for exporting structure and/or data.
 	 *
-	 * @var    DatabaseDriver
+	 * @var    DatabaseInterface
 	 * @since  1.0
 	 */
 	protected $db;
@@ -104,7 +104,7 @@ abstract class DatabaseImporter
 	/**
 	 * Specifies the data source to import.
 	 *
-	 * @param   mixed  $from  The data source to import.
+	 * @param   \SimpleXMLElement|string  $from  The data source to import, either as a SimpleXMLElement object or XML string.
 	 *
 	 * @return  $this
 	 *
@@ -131,6 +131,17 @@ abstract class DatabaseImporter
 	{
 		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD COLUMN ' . $this->getColumnSQL($field);
 	}
+
+	/**
+	 * Get alters for table if there is a difference.
+	 *
+	 * @param   \SimpleXMLElement  $structure  The XML structure of the table.
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	abstract protected function getAlterTableSql(\SimpleXMLElement $structure);
 
 	/**
 	 * Get the syntax to alter a column.
@@ -329,13 +340,13 @@ abstract class DatabaseImporter
 	/**
 	 * Sets the database connector to use for exporting structure and/or data.
 	 *
-	 * @param   DatabaseDriver  $db  The database connector.
+	 * @param   DatabaseInterface  $db  The database connector.
 	 *
 	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
-	public function setDbo(DatabaseDriver $db)
+	public function setDbo(DatabaseInterface $db)
 	{
 		$this->db = $db;
 

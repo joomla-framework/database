@@ -6,806 +6,401 @@
 
 namespace Joomla\Database\Tests\Mysql;
 
+use Joomla\Database\DatabaseInterface;
+use Joomla\Database\Mysql\MysqlDriver;
+use Joomla\Database\Mysql\MysqlImporter;
+use Joomla\Database\Mysql\MysqlQuery;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests the \Joomla\Database\Mysql\MysqlImporter class.
- *
- * @since  1.0
+ * Test class for Joomla\Database\Mysql\MysqlImporter.
  */
-class ImporterMySqlTest extends TestCase
+class MysqlImporterTest extends TestCase
 {
 	/**
-	 * @var    object  The mocked database object for use by test methods.
-	 * @since  1.0
+	 * Mock database driver
+	 *
+	 * @var  MockObject|MysqlDriver
 	 */
-	protected $dbo = null;
+	private $db;
 
 	/**
-	 * @var    string  The last query sent to the dbo setQuery method.
-	 * @since  1.0
+	 * A list of the executed inserted objects for a test case
+	 *
+	 * @var  string[]
 	 */
-	protected $lastQuery = '';
+	private $executedInsertObjects = [];
 
 	/**
-	 * @var    array  Selected sample data for tests.
-	 * @since  1.0
+	 * A list of the executed queries for a test case
+	 *
+	 * @var  string[]
 	 */
-	protected $sample = array(
-		'xml-id-field' =>
+	private $executedQueries = [];
+
+	/**
+	 * Selected sample data for tests.
+	 *
+	 * @var  string[]
+	 */
+	protected $sample = [
+		'xml-id-field'    =>
 			'<field Field="id" Type="int(11) unsigned" Null="NO" Key="PRI" Default="" Extra="auto_increment" />',
 		'xml-title-field' =>
 			'<field Field="title" Type="varchar(50)" Null="NO" Key="" Default="" Extra="" />',
-		'xml-body-field' =>
+		'xml-body-field'  =>
 			'<field Field="body" Type="mediumtext" Null="NO" Key="" Default="" Extra="" />',
 		'xml-primary-key' =>
-			'<key Table="#__test" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="id" Collation="A" Null="" Index_type="BTREE" Comment="" />',
-	);
+			'<key Table="#__dbtest" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="id" Collation="A" Null="" Index_type="BTREE" Comment="" />',
+	];
 
 	/**
-	 * Sets up the testing conditions
+	 * Sets up the fixture.
+	 *
+	 * This method is called before a test is executed.
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
-	public function setup()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
-		// Set up the database object mock.
-		$this->dbo = $this->getMockBuilder('Joomla\\Database\\Mysql\\MysqlDriver')
-			->disableOriginalConstructor()
-			->setMethods(
-				array(
-					'getErrorNum',
-					'getPrefix',
-					'getTableColumns',
-					'getTableKeys',
-					'quote',
-					'quoteName',
-					'loadObjectList',
-					'setQuery',
-				)
-			)
-			->getMock();
+		$this->db = $this->createMock(MysqlDriver::class);
 
-		$this->dbo->expects(
-			$this->any()
-		)
+		$this->db->expects($this->any())
 			->method('getPrefix')
-			->will(
-			$this->returnValue(
-				'jos_'
-			)
-		);
+			->willReturn('jos_');
 
-		$this->dbo->expects(
-			$this->any()
-		)
+		$this->db->expects($this->any())
+			->method('getQuery')
+			->willReturnCallback(function () {
+				return new MysqlQuery($this->db);
+			});
+
+		$this->db->expects($this->any())
 			->method('getTableColumns')
-			->will(
-			$this->returnValue(
-				array(
-					'id' => (object) array(
-						'Field' => 'id',
-						'Type' => 'int(11) unsigned',
-						'Collation' => null,
-						'Null' => 'NO',
-						'Key' => 'PRI',
-						'Default' => '',
-						'Extra' => 'auto_increment',
+			->willReturn(
+				[
+					'id'    => (object) [
+						'Field'      => 'id',
+						'Type'       => 'int(11) unsigned',
+						'Collation'  => null,
+						'Null'       => 'NO',
+						'Key'        => 'PRI',
+						'Default'    => '',
+						'Extra'      => 'auto_increment',
 						'Privileges' => 'select,insert,update,references',
-						'Comment' => '',
-					),
-					'title' => (object) array(
-						'Field' => 'title',
-						'Type' => 'varchar(255)',
-						'Collation' => 'utf8_general_ci',
-						'Null' => 'NO',
-						'Key' => '',
-						'Default' => '',
-						'Extra' => '',
+						'Comment'    => '',
+					],
+					'title' => (object) [
+						'Field'      => 'title',
+						'Type'       => 'varchar(255)',
+						'Collation'  => 'utf8_general_ci',
+						'Null'       => 'NO',
+						'Key'        => '',
+						'Default'    => '',
+						'Extra'      => '',
 						'Privileges' => 'select,insert,update,references',
-						'Comment' => '',
-					),
-				)
-			)
-		);
+						'Comment'    => '',
+					],
+				]
+			);
 
-		$this->dbo->expects(
-			$this->any()
-		)
+		$this->db->expects($this->any())
 			->method('getTableKeys')
-			->will(
-			$this->returnValue(
-				array(
-					(object) array(
-						'Table' => 'jos_test',
-						'Non_unique' => '0',
-						'Key_name' => 'PRIMARY',
+			->willReturn(
+				[
+					(object) [
+						'Table'        => 'jos_dbtest',
+						'Non_unique'   => '0',
+						'Key_name'     => 'PRIMARY',
 						'Seq_in_index' => '1',
-						'Column_name' => 'id',
-						'Collation' => 'A',
-						'Cardinality' => '2695',
-						'Sub_part' => '',
-						'Packed' => '',
-						'Null' => '',
-						'Index_type' => 'BTREE',
-						'Comment' => '',
-					)
-				)
-			)
-		);
+						'Column_name'  => 'id',
+						'Collation'    => 'A',
+						'Cardinality'  => '2695',
+						'Sub_part'     => '',
+						'Packed'       => '',
+						'Null'         => '',
+						'Index_type'   => 'BTREE',
+						'Comment'      => '',
+					],
+				]
+			);
 
-		$this->dbo->expects(
-			$this->any()
-		)
+		$this->db->expects($this->any())
+			->method('getTableList')
+			->willReturn(
+				[
+					'jos_dbtest',
+				]
+			);
+
+		$this->db->expects($this->any())
+			->method('insertObject')
+			->willReturnCallback(
+				function ($table, &$object, $key = null) {
+					if (!isset($this->executedInsertObjects[$table]))
+					{
+						$this->executedInsertObjects[$table] = [];
+					}
+
+					$this->executedInsertObjects[$table][] = $object;
+
+					return true;
+				}
+			);
+
+		$this->db->expects($this->any())
 			->method('quoteName')
-			->will(
-			$this->returnCallback(
-				array($this, 'callbackQuoteName')
-			)
-		);
+			->willReturnCallback(
+				function ($name, $as = null) {
+					if (is_string($name))
+					{
+						return "`$name`";
+					}
 
-		$this->dbo->expects(
-			$this->any()
-		)
+					$fields = [];
+
+					foreach ($name as $value)
+					{
+						$fields[] = "`$value`";
+					}
+
+					return $fields;
+				}
+			);
+
+		$this->db->expects($this->any())
 			->method('quote')
-			->will(
-			$this->returnCallback(
-				array($this, 'callbackQuote')
-			)
-		);
+			->willReturnCallback(
+				function ($text, $escape = true) {
+					if (is_string($text))
+					{
+						return "'$text'";
+					}
 
-		$this->dbo->expects(
-			$this->any()
-		)
+					$fields = [];
+
+					foreach ($text as $value)
+					{
+						$fields[] = "'$value'";
+					}
+
+					return $fields;
+				}
+			);
+
+		$this->db->expects($this->any())
 			->method('setQuery')
-			->will(
-			$this->returnCallback(
-				array($this, 'callbackSetQuery')
-			)
-		);
+			->willReturnCallback(
+				function ($query, $offset = 0, $limit = 0) {
+					$this->executedQueries[] = $query;
 
-		$this->dbo->expects(
-			$this->any()
-		)
-			->method('loadObjectList')
-			->will(
-			$this->returnCallback(
-				array($this, 'callbackLoadObjectList')
-			)
-		);
-	}
-
-	/**
-	 * Callback for the dbo loadObjectList method.
-	 *
-	 * @return array  An array of results based on the setting of the last query.
-	 *
-	 * @since  1.0
-	 */
-	public function callbackLoadObjectList()
-	{
-		return array();
-	}
-
-	/**
-	 * Callback for the dbo quote method.
-	 *
-	 * @param   string  $value  The value to be quoted.
-	 *
-	 * @return string  The value passed wrapped in MySQL quotes.
-	 *
-	 * @since  1.0
-	 */
-	public function callbackQuote($value)
-	{
-		return "'$value'";
-	}
-
-	/**
-	 * Callback for the dbo quoteName method.
-	 *
-	 * @param   string  $value  The value to be quoted.
-	 *
-	 * @return string  The value passed wrapped in MySQL quotes.
-	 *
-	 * @since  1.0
-	 */
-	public function callbackQuoteName($value)
-	{
-		return "`$value`";
-	}
-
-	/**
-	 * Callback for the dbo setQuery method.
-	 *
-	 * @param   string  $query  The query.
-	 *
-	 * @return void
-	 *
-	 * @since  1.0
-	 */
-	public function callbackSetQuery($query)
-	{
-		$this->lastQuery = $query;
-	}
-
-	/**
-	 * Data for the testGetAlterTableSQL test.
-	 *
-	 * @return  array  Each array element must be an array with 3 elements: SimpleXMLElement field, expected result, error message.
-	 *
-	 * @since   1.0
-	 */
-	public function dataGetAlterTableSql()
-	{
-		$f1 = '<field Field="id" Type="int(11) unsigned" Null="NO" Key="PRI" Default="" Extra="auto_increment" />';
-		$f2 = '<field Field="title" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />';
-		$f3 = '<field Field="alias" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />';
-
-		$k1 = '<key Table="#__test" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1"' .
-			' Column_name="id" Collation="A" Null="" Index_type="BTREE" Comment="" />';
-		$k2 = '<key Table="#__test" Non_unique="0" Key_name="idx_title" Seq_in_index="1"' .
-			' Column_name="title" Collation="A" Null="" Index_type="BTREE" Comment="" />';
-
-		return array(
-			array(
-				new \SimpleXmlElement('<table_structure name="#__test">' . $f1 . $f2 . $k1 . '</table_structure>'),
-				array(),
-				'getAlterTableSQL should not change anything.'
-			),
-			array(
-				new \SimpleXmlElement('<table_structure name="#__test">' . $f1 . $f2 . $f3 . $k1 . '</table_structure>'),
-				array(
-					"ALTER TABLE `jos_test` ADD COLUMN `alias` varchar(255) NOT NULL DEFAULT ''",
-				),
-				'getAlterTableSQL should add the new alias column.'
-			),
-			array(
-				new \SimpleXmlElement('<table_structure name="#__test">' . $f1 . $f2 . $k1 . $k2 . '</table_structure>'),
-				array(
-					'ALTER TABLE `jos_test` ADD UNIQUE KEY `idx_title` (`title`)',
-				),
-				'getAlterTableSQL should add the new key.'
-			),
-			array(
-				new \SimpleXmlElement('<table_structure name="#__test">' . $f1 . $k1 . '</table_structure>'),
-				array(
-					'ALTER TABLE `jos_test` DROP COLUMN `title`',
-				),
-				'getAlterTableSQL should remove the title column.'
-			),
-			array(
-				new \SimpleXmlElement('<table_structure name="#__test">' . $f1 . $f2 . '</table_structure>'),
-				array(
-					'ALTER TABLE `jos_test` DROP PRIMARY KEY',
-				),
-				'getAlterTableSQL should drop the old primary key.'
-			),
-		);
-	}
-
-	/**
-	 * Data for the testGetColumnSQL test.
-	 *
-	 * @return  array  Each array element must be an array with 3 elements: SimpleXMLElement field, expected result, error message.
-	 *
-	 * @since   1.0
-	 */
-	public function dataGetColumnSql()
-	{
-		return array(
-			array(
-				new \SimpleXmlElement(
-					$this->sample['xml-id-field']
-				),
-				"`id` int(11) unsigned NOT NULL DEFAULT '' AUTO_INCREMENT",
-				'Typical primary key field',
-			),
-			array(
-				new \SimpleXmlElement(
-					$this->sample['xml-title-field']
-				),
-				"`title` varchar(50) NOT NULL DEFAULT ''",
-				'Typical text field',
-			),
-			array(
-				new \SimpleXmlElement(
-					$this->sample['xml-body-field']
-				),
-				'`body` mediumtext NOT NULL',
-				'Typical blob field',
-			),
-		);
-	}
-
-	/**
-	 * Data for the testGetColumnSQL test.
-	 *
-	 * @return  array  Each array element must be an array with 3 elements: SimpleXMLElement field, expected result, error message.
-	 *
-	 * @since   1.0
-	 */
-	public function dataGetKeySql()
-	{
-		return array(
-			array(
-				// Keys come in arrays.
-				array(
-					new \SimpleXmlElement(
-						$this->sample['xml-primary-key']
-					),
-				),
-				'primary key  (`id`)',
-				'Typical primary key index',
-			),
-		);
-	}
-
-	/**
-	 * Tests the asXml method.
-	 *
-	 * @return void
-	 *
-	 * @since  1.0
-	 */
-	public function testAsXml()
-	{
-		$instance = new MysqlImporterInspector;
-
-		$result = $instance->asXml();
-
-		$this->assertThat(
-			$result,
-			$this->identicalTo($instance),
-			'asXml must return an object to support chaining.'
-		);
-
-		$this->assertThat(
-			$instance->asFormat,
-			$this->equalTo('xml'),
-			'The asXml method should set the protected asFormat property to "xml".'
-		);
-	}
-
-	/**
-	 * Tests the check method.
-	 *
-	 * @return void
-	 *
-	 * @since  1.0
-	 */
-	public function testCheckWithNoDbo()
-	{
-		$this->expectException(\RuntimeException::class);
-		$instance = new MysqlImporterInspector;
-		$instance->check();
-	}
-
-	/**
-	 * Tests the check method.
-	 *
-	 * @return void
-	 *
-	 * @since  1.0
-	 */
-	public function testCheckWithNoFrom()
-	{
-		$this->expectException(\RuntimeException::class);
-		$instance = new MysqlImporterInspector;
-		$instance->setDbo($this->dbo);
-		$instance->check();
-	}
-
-	/**
-	 * Tests the check method.
-	 *
-	 * @return void
-	 *
-	 * @since  1.0
-	 */
-	public function testCheckWithGoodInput()
-	{
-		$instance = new MysqlImporterInspector;
-		$instance->setDbo($this->dbo);
-		$instance->from('foobar');
-
-		$this->assertThat(
-			$instance->check(),
-			$this->identicalTo($instance),
-			'check must return an object to support chaining.'
-		);
-	}
-
-	/**
-	 * Tests the from method with expected good inputs.
-	 *
-	 * @return void
-	 *
-	 * @since  1.0
-	 */
-	public function testFromWithGoodInput()
-	{
-		$instance = new MysqlImporterInspector;
-
-		$result = $instance->from('foobar');
-
-		$this->assertThat(
-			$result,
-			$this->identicalTo($instance),
-			'from must return an object to support chaining.'
-		);
-
-		$this->assertThat(
-			$instance->from,
-			$this->equalTo('foobar'),
-			'The from method did not store the value as expected.'
-		);
-	}
-
-	/**
-	 * Tests the getAddColumnSQL method.
-	 *
-	 * Note that combinations of fields is tested in testGetColumnSQL.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetAddColumnSql()
-	{
-		$instance = new MysqlImporterInspector;
-		$instance->setDbo($this->dbo);
-
-		$this->assertThat(
-			$instance->getAddColumnSql(
-				'jos_test',
-				new \SimpleXmlElement($this->sample['xml-title-field'])
-			),
-			$this->equalTo(
-				"ALTER TABLE `jos_test` ADD COLUMN `title` varchar(50) NOT NULL DEFAULT ''"
-			),
-			'testGetAddColumnSQL did not yield the expected result.'
-		);
-	}
-
-	/**
-	 * Tests the getAddKeySQL method.
-	 *
-	 * Note that combinations of keys is tested in testGetKeySQL.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetAddKeySql()
-	{
-		$instance = new MysqlImporterInspector;
-		$instance->setDbo($this->dbo);
-
-		$this->assertThat(
-			$instance->getAddKeySql(
-				'jos_test',
-				array(
-					new \SimpleXmlElement($this->sample['xml-primary-key'])
-				)
-			),
-			$this->equalTo(
-				'ALTER TABLE `jos_test` ADD PRIMARY KEY  (`id`)'
-			),
-			'testGetAddKeySQL did not yield the expected result.'
-		);
-	}
-
-	/**
-	 * Tests the getAlterTableSQL method.
-	 *
-	 * @param   string  $structure  @todo
-	 * @param   string  $expected   @todo
-	 * @param   string  $message    @todo
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 *
-	 * @dataProvider dataGetAlterTableSQL
-	 */
-	public function testGetAlterTableSql($structure, $expected, $message)
-	{
-		$instance = new MysqlImporterInspector;
-		$instance->setDbo($this->dbo);
-
-		$this->assertThat(
-			$instance->getAlterTableSql($structure),
-			$this->equalTo(
-				$expected
-			),
-			$message
-		);
-	}
-
-	/**
-	 * Tests the getChangeColumnSQL method.
-	 *
-	 * Note that combinations of fields is tested in testGetColumnSQL.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetChangeColumnSql()
-	{
-		$instance = new MysqlImporterInspector;
-		$instance->setDbo($this->dbo);
-
-		$this->assertThat(
-			$instance->getChangeColumnSql(
-				'jos_test',
-				new \SimpleXmlElement($this->sample['xml-title-field'])
-			),
-			$this->equalTo(
-				"ALTER TABLE `jos_test` CHANGE COLUMN `title` `title` varchar(50) NOT NULL DEFAULT ''"
-			),
-			'getChangeColumnSQL did not yield the expected result.'
-		);
-	}
-
-	/**
-	 * Tests the getColumnSQL method.
-	 *
-	 * @param   string  $field     @todo
-	 * @param   string  $expected  The expected result from the getColumnSQL method.
-	 * @param   string  $message   The error message to display if the result does not match the expected value.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 *
-	 * @dataProvider dataGetColumnSQL
-	 */
-	public function testGetColumnSql($field, $expected, $message)
-	{
-		$instance = new MysqlImporterInspector;
-		$instance->setDbo($this->dbo);
-
-		$this->assertThat(
-			strtolower($instance->getColumnSql($field)),
-			$this->equalTo(strtolower($expected)),
-			$message
-		);
-	}
-
-	/**
-	 * Tests the getDropColumnSQL method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetDropColumnSql()
-	{
-		$instance = new MysqlImporterInspector;
-		$instance->setDbo($this->dbo);
-
-		$this->assertThat(
-			$instance->getDropColumnSql(
-				'jos_test',
-				'title'
-			),
-			$this->equalTo(
-				'ALTER TABLE `jos_test` DROP COLUMN `title`'
-			),
-			'getDropColumnSQL did not yield the expected result.'
-		);
-	}
-
-	/**
-	 * Tests the getDropKeySQL method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetDropKeySql()
-	{
-		$instance = new MysqlImporterInspector;
-		$instance->setDbo($this->dbo);
-
-		$this->assertThat(
-			$instance->getDropKeySql(
-				'jos_test',
-				'idx_title'
-			),
-			$this->equalTo(
-				'ALTER TABLE `jos_test` DROP KEY `idx_title`'
-			),
-			'getDropKeySQL did not yield the expected result.'
-		);
-	}
-
-	/**
-	 * Tests the getDropPrimaryKeySQL method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetDropPrimaryKeySql()
-	{
-		$instance = new MysqlImporterInspector;
-		$instance->setDbo($this->dbo);
-
-		$this->assertThat(
-			$instance->getDropPrimaryKeySql(
-				'jos_test'
-			),
-			$this->equalTo(
-				'ALTER TABLE `jos_test` DROP PRIMARY KEY'
-			),
-			'getDropPrimaryKeySQL did not yield the expected result.'
-		);
-	}
-
-	/**
-	 * Tests the getKeyLookup method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function testGetKeyLookup()
-	{
-		$instance = new MysqlImporterInspector;
-
-		$o1 = (object) array('Key_name' => 'id', 'foo' => 'bar1');
-		$o2 = (object) array('Key_name' => 'id', 'foo' => 'bar2');
-		$o3 = (object) array('Key_name' => 'title', 'foo' => 'bar3');
-
-		$this->assertThat(
-			$instance->getKeyLookup(
-				array($o1, $o2, $o3)
-			),
-			$this->equalTo(
-				array(
-					'id' => array($o1, $o2),
-					'title' => array($o3)
-				)
-			),
-			'getKeyLookup, using array input, did not yield the expected result.'
-		);
-
-		$o1 = new \SimpleXmlElement('<key Key_name="id" foo="bar1" />');
-		$o2 = new \SimpleXmlElement('<key Key_name="id" foo="bar2" />');
-		$o3 = new \SimpleXmlElement('<key Key_name="title" foo="bar3" />');
-
-		$this->assertThat(
-			$instance->getKeyLookup(
-				array($o1, $o2, $o3)
-			),
-			$this->equalTo(
-				array(
-					'id' => array($o1, $o2),
-					'title' => array($o3)
-				)
-			),
-			'getKeyLookup, using SimpleXmlElement input, did not yield the expected result.'
-		);
-	}
-
-	/**
-	 * Tests the getKeySQL method.
-	 *
-	 * @param   string  $field     @todo
-	 * @param   string  $expected  The expected result from the getKeySQL method.
-	 * @param   string  $message   The error message to display if the result does not match the expected value.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 *
-	 * @dataProvider dataGetKeySQL
-	 */
-	public function testGetKeySql($field, $expected, $message)
-	{
-		$instance = new MysqlImporterInspector;
-		$instance->setDbo($this->dbo);
-
-		$this->assertThat(
-			strtolower($instance->getKeySql($field)),
-			$this->equalTo(strtolower($expected)),
-			$message
-		);
-	}
-
-	/**
-	 * Tests the getRealTableName method with the wrong type of class.
-	 *
-	 * @return void
-	 *
-	 * @since  1.0
-	 */
-	public function testGetRealTableName()
-	{
-		$instance = new MysqlImporterInspector;
-		$instance->setDbo($this->dbo);
-
-		$this->assertThat(
-			$instance->getRealTableName('#__test'),
-			$this->equalTo('jos_test'),
-			'getRealTableName should return the name of the table with #__ converted to the database prefix.'
-		);
-	}
-
-	/**
-	 * Tests the setDbo method with the wrong type of class.
-	 *
-	 * @return void
-	 *
-	 * @since  1.0
-	 */
-	public function testSetDboWithGoodInput()
-	{
-		$instance = new MysqlImporterInspector;
-
-		try
-		{
-			$result = $instance->setDbo($this->dbo);
-
-			$this->assertThat(
-				$result,
-				$this->identicalTo($instance),
-				'setDbo must return an object to support chaining.'
+					return $this->db;
+				}
 			);
-		}
-		catch (\PHPUnit_Framework_Error $e)
-		{
-			// Unknown error has occurred.
-			$this->fail(
-				$e->getMessage()
-			);
-		}
 	}
 
 	/**
-	 * Tests the withStructure method.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * This method is called after each test.
 	 */
-	public function testWithStructure()
+	protected function tearDown(): void
 	{
-		$instance = new MysqlImporterInspector;
+		$this->expectedInsertObjects = [];
+		$this->executedQueries       = [];
+	}
 
-		$result = $instance->withStructure();
+	/**
+	 * Data provider for import test cases
+	 *
+	 * @return  \Generator
+	 */
+	public function dataImport(): \Generator
+	{
+		$idField    = '<field Field="id" Type="int(11) unsigned" Null="NO" Key="PRI" Default="" Extra="auto_increment" />';
+		$titleField = '<field Field="title" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />';
+		$aliasField = '<field Field="alias" Type="varchar(255)" Null="NO" Key="" Default="" Extra="" />';
 
-		$this->assertThat(
-			$result,
-			$this->identicalTo($instance),
-			'withStructure must return an object to support chaining.'
-		);
+		$idKey    = '<key Table="#__dbtest" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="id" Collation="A" Null="" Index_type="BTREE" Comment="" />';
+		$titleKey = '<key Table="#__dbtest" Non_unique="0" Key_name="idx_title" Seq_in_index="1" Column_name="title" Collation="A" Null="" Index_type="BTREE" Comment="" />';
 
-		$this->assertThat(
-			$instance->options->withStructure,
-			$this->isTrue(),
-			'The default use of withStructure should result in true.'
-		);
+		yield 'no changes in existing structure' => [
+			true,
+			false,
+			new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idField . $titleField . $idKey . '</table_structure></database></dump>'),
+			[],
+			[]
+		];
 
-		$instance->withStructure(true);
-		$this->assertThat(
-			$instance->options->withStructure,
-			$this->isTrue(),
-			'The explicit use of withStructure with true should result in true.'
-		);
+		yield 'inserts row into database' => [
+			true,
+			true,
+			new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idField . $titleField . $idKey . '</table_structure>  <table_data name="#__dbtest"><row><field name="id">1</field><field name="title">Testing</field></row></table_data></database></dump>'),
+			[],
+			[
+				'jos_dbtest' => [
+					(object) [
+						'id'    => '1',
+						'title' => 'Testing',
+					],
+				],
+			],
+		];
 
-		$instance->withStructure(false);
-		$this->assertThat(
-			$instance->options->withStructure,
-			$this->isFalse(),
-			'The explicit use of withStructure with false should result in false.'
-		);
+		yield 'adds alias column to the structure' => [
+			true,
+			false,
+			new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idField . $titleField . $aliasField . $idKey . '</table_structure></database></dump>'),
+			[
+				"ALTER TABLE `jos_dbtest` ADD COLUMN `alias` varchar(255) NOT NULL DEFAULT ''",
+			],
+			[],
+		];
+
+		yield 'adds key for the title column to the structure' => [
+			true,
+			false,
+			new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idField . $titleField . $idKey . $titleKey . '</table_structure></database></dump>'),
+			[
+				'ALTER TABLE `jos_dbtest` ADD UNIQUE KEY `idx_title` (`title`)',
+			],
+			[],
+		];
+
+		yield 'removes the title column from the structure' => [
+			true,
+			false,
+			new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idField . $idKey . '</table_structure></database></dump>'),
+			[
+				'ALTER TABLE `jos_dbtest` DROP COLUMN `title`',
+			],
+			[],
+		];
+
+		yield 'removes the primary key based on the id column from the structure' => [
+			true,
+			false,
+			new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idField . $titleField . '</table_structure></database></dump>'),
+			[
+				'ALTER TABLE `jos_dbtest` DROP PRIMARY KEY',
+			],
+			[],
+		];
+
+		yield 'adds a new database table' => [
+			true,
+			false,
+			new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idField . $titleField . $idKey . '</table_structure><table_structure name="#__newtest">' . $idField . $titleField . $idKey . '</table_structure></database></dump>'),
+			[
+				"CREATE TABLE `#__newtest` (`id` int(11) unsigned NOT NULL DEFAULT '' AUTO_INCREMENT, `title` varchar(255) NOT NULL DEFAULT '', PRIMARY KEY  (`id`))",
+			],
+			[],
+		];
+
+		yield 'changes the field type of the id field' => [
+			true,
+			false,
+			new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest"><field Field="id" Type="bigint() unsigned" Null="NO" Key="PRI" Default="" Extra="auto_increment" />' . $titleField . $idKey . '</table_structure></database></dump>'),
+			[
+				"ALTER TABLE `jos_dbtest` CHANGE COLUMN `id` `id` bigint() unsigned NOT NULL DEFAULT '' AUTO_INCREMENT",
+			],
+			[],
+		];
+	}
+
+	/**
+	 * @testdox  The importer processes a XML document
+	 *
+	 * @param   boolean            $mergeStructure         True to merge the structure.
+	 * @param   boolean            $importData             True to import the data.
+	 * @param   \SimpleXMLElement  $from                   XML document to import.
+	 * @param   string[]           $expectedQueries        The expected database queries to perform.
+	 * @param   string[]           $expectedInsertObjects  The expected objects to be given to the database's insertObject method.
+	 *
+	 * @dataProvider  dataImport
+	 */
+	public function testImport(bool $mergeStructure, bool $importData, \SimpleXMLElement $from, array $expectedQueries, array $expectedInsertObjects)
+	{
+		$importer = new MysqlImporter;
+		$importer->setDbo($this->db);
+		$importer->from($from);
+
+		if ($mergeStructure)
+		{
+			$importer->mergeStructure();
+		}
+
+		if ($importData)
+		{
+			$importer->importData();
+		}
+
+		$this->assertEquals($expectedQueries, $this->executedQueries);
+		$this->assertEquals($expectedInsertObjects, $this->executedInsertObjects);
+	}
+
+	/**
+	 * Data provider for check test cases
+	 *
+	 * @return  \Generator
+	 */
+	public function dataCheck(): \Generator
+	{
+		yield 'passes checks' => [
+			$this->createMock(MysqlDriver::class),
+			'#__dbtest',
+			null,
+		];
+
+		yield 'fails checks with incorrect database driver subclass' => [
+			$this->createMock(DatabaseInterface::class),
+			new \SimpleXMLElement('<table_structure name="#__dbtest" />'),
+			'Database connection wrong type.',
+		];
+
+		yield 'fails checks with no database driver' => [
+			null,
+			new \SimpleXMLElement('<table_structure name="#__dbtest" />'),
+			'Database connection wrong type.',
+		];
+
+		yield 'fails checks with no tables' => [
+			$this->createMock(MysqlDriver::class),
+			null,
+			'ERROR: No Tables Specified',
+		];
+	}
+
+	/**
+	 * @testdox  The importer checks for errors
+	 *
+	 * @param   DatabaseInterface|null  $db                Database driver to set in the importer.
+	 * @param   string[]|string|null    $from              Database structure to import.
+	 * @param   string|null             $exceptionMessage  If an Exception should be thrown, the expected message
+	 *
+	 * @dataProvider  dataCheck
+	 */
+	public function testCheck(?DatabaseInterface $db, $from, ?string $exceptionMessage)
+	{
+		if ($exceptionMessage)
+		{
+			$this->expectException(\RuntimeException::class);
+			$this->expectExceptionMessage($exceptionMessage);
+		}
+
+		$importer = new MysqlImporter;
+
+		if ($db)
+		{
+			$importer->setDbo($db);
+		}
+
+		if ($from)
+		{
+			$importer->from($from);
+		}
+
+		$this->assertSame($importer, $importer->check(), 'The importer supports method chaining');
 	}
 }

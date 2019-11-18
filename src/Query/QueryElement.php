@@ -11,10 +11,6 @@ namespace Joomla\Database\Query;
 /**
  * Query Element Class.
  *
- * @property-read  string  $name      The name of the element.
- * @property-read  array   $elements  An array of elements.
- * @property-read  string  $glue      Glue piece.
- *
  * @since  1.0
  */
 class QueryElement
@@ -30,7 +26,7 @@ class QueryElement
 	/**
 	 * An array of elements.
 	 *
-	 * @var    array
+	 * @var    string[]
 	 * @since  1.0
 	 */
 	protected $elements = [];
@@ -46,9 +42,9 @@ class QueryElement
 	/**
 	 * Constructor.
 	 *
-	 * @param   string  $name      The name of the element.
-	 * @param   mixed   $elements  String or array.
-	 * @param   string  $glue      The glue for elements.
+	 * @param   string           $name      The name of the element.
+	 * @param   string[]|string  $elements  String or array.
+	 * @param   string           $glue      The glue for elements.
 	 *
 	 * @since   1.0
 	 */
@@ -80,7 +76,7 @@ class QueryElement
 	/**
 	 * Appends element parts to the internal list.
 	 *
-	 * @param   mixed  $elements  String or array.
+	 * @param   string[]|string  $elements  String or array.
 	 *
 	 * @return  void
 	 *
@@ -101,13 +97,25 @@ class QueryElement
 	/**
 	 * Gets the elements of this element.
 	 *
-	 * @return  array
+	 * @return  string[]
 	 *
 	 * @since   1.0
 	 */
 	public function getElements()
 	{
 		return $this->elements;
+	}
+
+	/**
+	 * Gets the glue of this element.
+	 *
+	 * @return  string  Glue of the element.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getGlue()
+	{
+		return $this->glue;
 	}
 
 	/**

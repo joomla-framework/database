@@ -8,19 +8,51 @@
 
 namespace Joomla\Database;
 
-use stdClass;
+use Joomla\Database\Exception\QueryTypeAlreadyDefinedException;
+use Joomla\Database\Exception\UnknownTypeException;
 
 /**
  * Joomla Framework Query Building Class.
  *
  * @since  1.0
+ *
+ * @property-read  array                      $bounded             Holds key / value pair of bound objects.
+ * @property-read  array                      $parameterMapping    Mapping array for parameter types.
+ * @property-read  DatabaseInterface          $db                  The database driver.
+ * @property-read  string                     $sql                 The SQL query (if a direct query string was provided).
+ * @property-read  string                     $type                The query type.
+ * @property-read  string|null                $alias               The query alias.
+ * @property-read  Query\QueryElement         $element             The query element for a generic query (type = null).
+ * @property-read  Query\QueryElement         $select              The select element.
+ * @property-read  Query\QueryElement         $delete              The delete element.
+ * @property-read  Query\QueryElement         $update              The update element.
+ * @property-read  Query\QueryElement         $insert              The insert element.
+ * @property-read  Query\QueryElement         $from                The from element.
+ * @property-read  Query\QueryElement[]|null  $join                The join elements.
+ * @property-read  Query\QueryElement         $set                 The set element.
+ * @property-read  Query\QueryElement         $where               The where element.
+ * @property-read  Query\QueryElement         $group               The group element.
+ * @property-read  Query\QueryElement         $having              The having element.
+ * @property-read  Query\QueryElement         $columns             The column list for an INSERT statement.
+ * @property-read  Query\QueryElement         $values              The values list for an INSERT statement.
+ * @property-read  Query\QueryElement         $order               The order element.
+ * @property-read  boolean                    $autoIncrementField  The auto increment insert field element.
+ * @property-read  Query\QueryElement         $call                The call element.
+ * @property-read  Query\QueryElement         $exec                The exec element.
+ * @property-read  Query\QueryElement[]|null  $merge               The list of query elements.
+ * @property-read  DatabaseQuery|null         $querySet            The query object.
+ * @property-read  array|null                 $selectRowNumber     Details of window function.
+ * @property-read  string[]                   $nullDatetimeList    The list of zero or null representation of a datetime.
+ * @property-read  integer|null               $offset              The offset for the result set.
+ * @property-read  integer|null               $limit               The limit for the result set.
+ * @property-read  integer                    $preparedIndex       An internal index for the bindArray function for unique prepared parameters.
  */
 abstract class DatabaseQuery implements QueryInterface
 {
 	/**
 	 * Holds key / value pair of bound objects.
 	 *
-	 * @var    mixed
+	 * @var    array
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $bounded = [];
@@ -58,13 +90,15 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * The query type.
 	 *
-	 * @var    string
+	 * @var    string|null
 	 * @since  1.0
 	 */
 	protected $type = '';
 
 	/**
-	 * @var    string  The query alias.
+	 * The query alias.
+	 *
+	 * @var    string|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $alias = null;
@@ -118,7 +152,7 @@ abstract class DatabaseQuery implements QueryInterface
 	protected $from;
 
 	/**
-	 * The join element.
+	 * The join elements.
 	 *
 	 * @var    Query\QueryElement[]
 	 * @since  1.0
@@ -184,10 +218,10 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * The auto increment insert field element.
 	 *
-	 * @var    object
+	 * @var    boolean
 	 * @since  1.0
 	 */
-	protected $autoIncrementField;
+	protected $autoIncrementField = false;
 
 	/**
 	 * The call element.
@@ -224,7 +258,7 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * Details of window function.
 	 *
-	 * @var    array
+	 * @var    array|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $selectRowNumber;
@@ -232,7 +266,7 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * The list of zero or null representation of a datetime.
 	 *
-	 * @var    array
+	 * @var    string[]
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $nullDatetimeList = [];
@@ -240,7 +274,7 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * The offset for the result set.
 	 *
-	 * @var    integer
+	 * @var    integer|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $offset;
@@ -248,7 +282,7 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * The limit for the result set.
 	 *
-	 * @var    integer
+	 * @var    integer|null
 	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $limit;
@@ -484,9 +518,6 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * Add a single column, or array of columns to the CALL clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 * The call method can, however, be called multiple times in the same query.
-	 *
 	 * Usage:
 	 * $query->call('a.*')->call('b.id');
 	 * $query->call(array('a.*', 'b.id'));
@@ -496,9 +527,21 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function call($columns)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'call')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "call" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type = 'call';
 
 		if ($this->call === null)
@@ -519,17 +562,52 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Ensure that the value is properly quoted before passing to the method.
 	 *
 	 * Usage:
+	 * $query->select($query->castAs('CHAR', 'a'));
+	 *
+	 * @param   string  $type    The type of string to cast as.
+	 * @param   string  $value   The value to cast as a char.
+	 * @param   string  $length  Optionally specify the length of the field (if the type supports it otherwise
+	 *                           ignored).
+	 *
+	 * @return  string  SQL statement to cast the value as a char type.
+	 *
+	 * @since   1.0
+	 */
+	public function castAs(string $type, string $value, ?string $length = null)
+	{
+		switch (strtoupper($type))
+		{
+			case 'CHAR':
+				return $value;
+
+			default:
+				throw new UnknownTypeException(
+					sprintf(
+						'Type %s was not recognised by the database driver as valid for casting',
+						$type
+					)
+				);
+		}
+	}
+
+	/**
+	 * Casts a value to a char.
+	 *
+	 * Ensure that the value is properly quoted before passing to the method.
+	 *
+	 * Usage:
 	 * $query->select($query->castAsChar('a'));
 	 *
 	 * @param   string  $value  The value to cast as a char.
 	 *
-	 * @return  string  Returns the cast value.
+	 * @return  string  SQL statement to cast the value as a char type.
 	 *
-	 * @since   1.0
+	 * @since       1.0
+	 * @deprecated  3.0  Use $query->castAs('CHAR', $value)
 	 */
 	public function castAsChar($value)
 	{
-		return $value;
+		return $this->castAs('CHAR', $value);
 	}
 
 	/**
@@ -540,9 +618,9 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Usage:
 	 * $query->select($query->charLength('a'));
 	 *
-	 * @param   string  $field      A value.
-	 * @param   string  $operator   Comparison operator between charLength integer value and $condition
-	 * @param   string  $condition  Integer value to compare charLength with.
+	 * @param   string       $field      A value.
+	 * @param   string|null  $operator   Comparison operator between charLength integer value and $condition
+	 * @param   string|null  $condition  Integer value to compare charLength with.
 	 *
 	 * @return  string  The required char length call.
 	 *
@@ -550,7 +628,14 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'CHAR_LENGTH(' . $field . ')' . (isset($operator, $condition) ? ' ' . $operator . ' ' . $condition : '');
+		$statement = 'CHAR_LENGTH(' . $field . ')';
+
+		if ($operator !== null && $condition !== null)
+		{
+			$statement .= ' ' . $operator . ' ' . $condition;
+		}
+
+		return $statement;
 	}
 
 	/**
@@ -677,6 +762,11 @@ abstract class DatabaseQuery implements QueryInterface
 
 				break;
 
+			case 'bounded':
+				$this->bounded = [];
+
+				break;
+
 			default:
 				$this->type               = null;
 				$this->alias              = null;
@@ -738,8 +828,8 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Usage:
 	 * $query->select($query->concatenate(array('a', 'b')));
 	 *
-	 * @param   array   $values     An array of values to concatenate.
-	 * @param   string  $separator  As separator to place between each value.
+	 * @param   string[]     $values     An array of values to concatenate.
+	 * @param   string|null  $separator  As separator to place between each value.
 	 *
 	 * @return  string  The concatenated values.
 	 *
@@ -747,7 +837,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function concatenate($values, $separator = null)
 	{
-		if ($separator)
+		if ($separator !== null)
 		{
 			return 'CONCATENATE(' . implode(' || ' . $this->quote($separator) . ' || ', $values) . ')';
 		}
@@ -815,7 +905,7 @@ abstract class DatabaseQuery implements QueryInterface
 	}
 
 	/**
-	 * Creates a formatted dump of the query for debugging purposes.
+	 * Creates a HTML formatted dump of the query for debugging purposes.
 	 *
 	 * Usage:
 	 * echo $query->dump();
@@ -823,16 +913,23 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  string
 	 *
 	 * @since   1.0
+	 * @deprecated  3.0  Deprecated without replacement
 	 */
 	public function dump()
 	{
+		@trigger_error(
+			sprintf(
+				'%1$s() is deprecated and will be removed in 3.0.',
+				__METHOD__
+			),
+			E_USER_DEPRECATED
+		);
+
 		return '<pre class="jdatabasequery">' . str_replace('#__', $this->db->getPrefix(), $this) . '</pre>';
 	}
 
 	/**
 	 * Add a table name to the DELETE clause of the query.
-	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
 	 *
 	 * Usage:
 	 * $query->delete('#__a')->where('id = 1');
@@ -842,9 +939,21 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function delete($table = null)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'delete')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "delete" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type   = 'delete';
 		$this->delete = new Query\QueryElement('DELETE', null);
 
@@ -901,9 +1010,6 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * Add a single column, or array of columns to the EXEC clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 * The exec method can, however, be called multiple times in the same query.
-	 *
 	 * Usage:
 	 * $query->exec('a.*')->exec('b.id');
 	 * $query->exec(array('a.*', 'b.id'));
@@ -913,9 +1019,21 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function exec($columns)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'exec')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "exec" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type = 'exec';
 
 		if ($this->exec === null)
@@ -1161,8 +1279,6 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * Add a table name to the INSERT clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 *
 	 * Usage:
 	 * $query->insert('#__a')->set('id = 1');
 	 * $query->insert('#__a')->columns('id, title')->values('1,2')->values('3,4');
@@ -1174,9 +1290,21 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function insert($table, $incrementField = false)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'insert')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "insert" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type               = 'insert';
 		$this->insert             = new Query\QueryElement('INSERT INTO', $table);
 		$this->autoIncrementField = $incrementField;
@@ -1539,9 +1667,21 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function select($columns)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'select')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "select" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type = 'select';
 
 		if ($this->select === null)
@@ -1631,8 +1771,6 @@ abstract class DatabaseQuery implements QueryInterface
 	/**
 	 * Add a table name to the UPDATE clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 *
 	 * Usage:
 	 * $query->update('#__foo')->set(...);
 	 *
@@ -1641,9 +1779,21 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function update($table)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'update')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "update" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type   = 'update';
 		$this->update = new Query\QueryElement('UPDATE', $table);
 
@@ -1821,8 +1971,7 @@ abstract class DatabaseQuery implements QueryInterface
 	}
 
 	/**
-	 * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution. Also
-	 * removes a variable that has been bounded from the internal bounded array when the passed in value is null.
+	 * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution.
 	 *
 	 * @param   array|string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
 	 *                                                the form ':key', but can also be an integer.
@@ -1837,15 +1986,13 @@ abstract class DatabaseQuery implements QueryInterface
 	 * @return  $this
 	 *
 	 * @since   1.5.0
+	 * @throws  \InvalidArgumentException
 	 */
-	public function bind($key = null, &$value = null, $dataType = ParameterType::STRING, $length = 0, $driverOptions = [])
+	public function bind($key, &$value, $dataType = ParameterType::STRING, $length = 0, $driverOptions = [])
 	{
-		// Case 1: Empty Key (reset $bounded array)
-		if (empty($key))
+		if (!$key)
 		{
-			$this->bounded = [];
-
-			return $this;
+			throw new \InvalidArgumentException('A key is required');
 		}
 
 		$key   = (array) $key;
@@ -1881,17 +2028,6 @@ abstract class DatabaseQuery implements QueryInterface
 				$localDataType = $dataType;
 			}
 
-			// Case 2: Key Provided, null value (unset key from $bounded array)
-			if ($localValue === null)
-			{
-				if (isset($this->bounded[$key[$i]]))
-				{
-					unset($this->bounded[$key[$i]]);
-				}
-
-				continue;
-			}
-
 			// Validate parameter type
 			if (!isset($this->parameterMapping[$localDataType]))
 			{
@@ -1904,10 +2040,36 @@ abstract class DatabaseQuery implements QueryInterface
 			$obj->length        = $length;
 			$obj->driverOptions = $driverOptions;
 
-			// Case 3: Simply add the Key/Value into the bounded array
+			// Add the Key/Value into the bounded array
 			$this->bounded[$key[$i]] = $obj;
 
 			unset($localValue);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Method to unbind a bound variable.
+	 *
+	 * @param   array|string|integer  $key  The key or array of keys to unbind.
+	 *
+	 * @return  $this
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function unbind($key)
+	{
+		if (\is_array($key))
+		{
+			foreach ($key as $k)
+			{
+				unset($this->bounded[$k]);
+			}
+		}
+		else
+		{
+			unset($this->bounded[$key]);
 		}
 
 		return $this;

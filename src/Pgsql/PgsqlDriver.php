@@ -143,6 +143,12 @@ class PgsqlDriver extends PdoDriver
 	 */
 	public function getConnectionEncryption(): string
 	{
+		// Requires PostgreSQL 9.5 or newer
+		if (version_compare($this->getVersion(), '9.5', '<'))
+		{
+			return '';
+		}
+
 		$query = $this->getQuery(true)
 			->select($this->quoteName(['version', 'cipher']))
 			->from($this->quoteName('pg_stat_ssl'))
@@ -501,6 +507,9 @@ class PgsqlDriver extends PdoDriver
 	{
 		$this->connect();
 
+		$oldTable = $this->replacePrefix($oldTable);
+		$newTable = $this->replacePrefix($newTable);
+
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
@@ -607,7 +616,6 @@ class PgsqlDriver extends PdoDriver
 
 			case 'timestamp without time zone':
 			case 'date':
-			case 'timestamp without time zone':
 				if (empty($field_value))
 				{
 					$field_value = $this->getNullDate();

@@ -343,7 +343,6 @@ abstract class PdoDriver extends DatabaseDriver
 			throw new ConnectionFailureException('Could not connect to PDO: ' . $e->getMessage(), $e->getCode(), $e);
 		}
 
-		$this->setOption(\PDO::ATTR_STATEMENT_CLASS, [PdoStatement::class, []]);
 		$this->setOption(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
 		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_CONNECT, $this));
@@ -734,7 +733,7 @@ abstract class PdoDriver extends DatabaseDriver
 	{
 		try
 		{
-			return $this->connection->prepare($query, $this->options['driverOptions']);
+			return new PdoStatement($this->connection->prepare($query, $this->options['driverOptions']));
 		}
 		catch (\PDOException $exception)
 		{
