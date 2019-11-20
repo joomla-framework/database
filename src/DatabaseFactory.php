@@ -94,7 +94,7 @@ class DatabaseFactory
 	 * @since   1.0
 	 * @throws  Exception\UnsupportedAdapterException if there is not a compatible database importer
 	 */
-	public function getImporter(string $name, ?DatabaseInterface $db = null)
+	public function getImporter(string $name, ?DatabaseInterface $db = null): DatabaseImporter
 	{
 		// Derive the class name from the driver.
 		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($name)) . '\\' . ucfirst(strtolower($name)) . 'Importer';
