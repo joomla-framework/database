@@ -6,7 +6,7 @@
     "homepage": "https://github.com/joomla-framework/console",
     "license": "GPL-2.0-or-later",
     "require": {
-        "php": "~7.2",
+        "php": "^7.2.5",
         "joomla/application": "~2.0",
         "joomla/event": "~2.0",
         "joomla/string": "~2.0",
