@@ -32,7 +32,7 @@ class OutputFilter
 	 *
 	 * @since   1.0
 	 */
-	public static function objectHtmlSafe(&$mixed, $quoteStyle = ENT_QUOTES, $excludeKeys = '')
+	public static function objectHtmlSafe(&$mixed, $quoteStyle = \ENT_QUOTES, $excludeKeys = '')
 	{
 		if (\is_object($mixed))
 		{
@@ -180,7 +180,7 @@ class OutputFilter
 		$text = preg_replace('/&amp;/', ' ', $text);
 		$text = preg_replace('/&quot;/', ' ', $text);
 		$text = strip_tags($text);
-		$text = htmlspecialchars($text, ENT_COMPAT, 'UTF-8');
+		$text = htmlspecialchars($text, \ENT_COMPAT, 'UTF-8');
 
 		return $text;
 	}
