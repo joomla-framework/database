@@ -119,7 +119,7 @@ class ArchiveTest extends ArchiveTestCase
 	 * @testdox  Extracting an unknown archive type throws an Exception
 	 *
 	 * @covers   Joomla\Archive\Archive::extract
-	 * @expectedException  \InvalidArgumentException
+	 * @expectedException  \Joomla\Archive\Exception\UnsupportedArchiveException
 	 */
 	public function testExtractUnknown()
 	{
@@ -145,11 +145,11 @@ class ArchiveTest extends ArchiveTestCase
 			// expectException was added in PHPUnit 5.2 and setExpectedException removed in 6.0
 			if (method_exists($this, 'expectException'))
 			{
-				$this->expectException('InvalidArgumentException');
+				$this->expectException('Joomla\Archive\Exception\UnsupportedArchiveException');
 			}
 			else
 			{
-				$this->setExpectedException('InvalidArgumentException');
+				$this->setExpectedException('Joomla\Archive\Exception\UnsupportedArchiveException');
 			}
 		}
 
@@ -176,7 +176,7 @@ class ArchiveTest extends ArchiveTestCase
 	 * @testdox  Setting an unknown adapter throws an Exception
 	 *
 	 * @covers             Joomla\Archive\Archive::setAdapter
-	 * @expectedException  \InvalidArgumentException
+	 * @expectedException  \Joomla\Archive\Exception\UnsupportedArchiveException
 	 */
 	public function testSetAdapterUnknownException()
 	{
