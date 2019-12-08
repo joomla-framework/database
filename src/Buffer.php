@@ -147,7 +147,7 @@ class Buffer
 	{
 		switch ($whence)
 		{
-			case SEEK_SET:
+			case \SEEK_SET:
 				if ($offset < \strlen($this->buffers[$this->name]) && $offset >= 0)
 				{
 					$this->position = $offset;
@@ -157,7 +157,7 @@ class Buffer
 
 				return false;
 
-			case SEEK_CUR:
+			case \SEEK_CUR:
 				if ($offset >= 0)
 				{
 					$this->position += $offset;
@@ -167,7 +167,7 @@ class Buffer
 
 				return false;
 
-			case SEEK_END:
+			case \SEEK_END:
 				if (\strlen($this->buffers[$this->name]) + $offset >= 0)
 				{
 					$this->position = \strlen($this->buffers[$this->name]) + $offset;

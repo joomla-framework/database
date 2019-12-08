@@ -213,7 +213,7 @@ class Path
 	 * @since   1.0
 	 * @throws  \UnexpectedValueException If $path is not a string.
 	 */
-	public static function clean($path, $ds = DIRECTORY_SEPARATOR)
+	public static function clean($path, $ds = \DIRECTORY_SEPARATOR)
 	{
 		if (!\is_string($path))
 		{

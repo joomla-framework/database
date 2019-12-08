@@ -226,7 +226,7 @@ class File
 		// Set the required flag to only append to the file and not overwrite it
 		if ($appendToFile === true)
 		{
-			return \is_int(file_put_contents($file, $buffer, FILE_APPEND));
+			return \is_int(file_put_contents($file, $buffer, \FILE_APPEND));
 		}
 
 		return \is_int(file_put_contents($file, $buffer));

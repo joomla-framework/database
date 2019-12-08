@@ -42,8 +42,8 @@ abstract class Folder
 		}
 
 		// Eliminate trailing directory separators, if any
-		$src  = rtrim($src, DIRECTORY_SEPARATOR);
-		$dest = rtrim($dest, DIRECTORY_SEPARATOR);
+		$src  = rtrim($src, \DIRECTORY_SEPARATOR);
+		$dest = rtrim($dest, \DIRECTORY_SEPARATOR);
 
 		if (!is_dir(Path::clean($src)))
 		{
