@@ -281,10 +281,7 @@ class DataObject implements DumpableInterface, \IteratorAggregate, \JsonSerializ
 	 */
 	protected function getProperty($property)
 	{
-		// Get the raw value.
-		$value = array_key_exists($property, $this->properties) ? $this->properties[$property] : null;
-
-		return $value;
+		return \array_key_exists($property, $this->properties) ? $this->properties[$property] : null;
 	}
 
 	/**

@@ -215,7 +215,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 
 		foreach ($this->objects as $object)
 		{
-			if (version_compare(PHP_VERSION, '5.4.0', '<'))
+			if (version_compare(\PHP_VERSION, '5.4.0', '<'))
 			{
 				$objectVars = json_decode(json_encode($object->jsonSerialize()), true);
 			}
@@ -527,7 +527,7 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 				sprintf(
 					'The $object argument must be an instance of "%s", a %s was given.',
 					'Joomla\Data\DataObject',
-					\gettype($object) === 'object' ? get_class($object) : \gettype($object)
+					\gettype($object) === 'object' ? \get_class($object) : \gettype($object)
 				)
 			);
 		}
