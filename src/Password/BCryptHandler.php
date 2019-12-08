@@ -27,7 +27,7 @@ class BCryptHandler implements HandlerInterface
 	 */
 	public function hashPassword($plaintext, array $options = array())
 	{
-		return password_hash($plaintext, PASSWORD_BCRYPT, $options);
+		return password_hash($plaintext, \PASSWORD_BCRYPT, $options);
 	}
 
 	/**

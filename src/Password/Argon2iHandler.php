@@ -31,9 +31,9 @@ class Argon2iHandler implements HandlerInterface
 	public function hashPassword($plaintext, array $options = array())
 	{
 		// Use the password extension if able
-		if (version_compare(PHP_VERSION, '7.2', '>=') && \defined('PASSWORD_ARGON2I'))
+		if (version_compare(\PHP_VERSION, '7.2', '>=') && \defined('PASSWORD_ARGON2I'))
 		{
-			return password_hash($plaintext, PASSWORD_ARGON2I, $options);
+			return password_hash($plaintext, \PASSWORD_ARGON2I, $options);
 		}
 
 		// Use the sodium extension (PHP 7.2 native or PECL 2.x) if able
@@ -41,8 +41,8 @@ class Argon2iHandler implements HandlerInterface
 		{
 			$hash = sodium_crypto_pwhash_str(
 				$plaintext,
-				SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
-				SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
+				\SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
+				\SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
 			);
 			sodium_memzero($plaintext);
 
@@ -75,7 +75,7 @@ class Argon2iHandler implements HandlerInterface
 	public static function isSupported()
 	{
 		// Check for native PHP engine support in the password extension
-		if (version_compare(PHP_VERSION, '7.2', '>=') && \defined('PASSWORD_ARGON2I'))
+		if (version_compare(\PHP_VERSION, '7.2', '>=') && \defined('PASSWORD_ARGON2I'))
 		{
 			return true;
 		}
@@ -104,7 +104,7 @@ class Argon2iHandler implements HandlerInterface
 	public function validatePassword($plaintext, $hashed)
 	{
 		// Use the password extension if able
-		if (version_compare(PHP_VERSION, '7.2', '>=') && \defined('PASSWORD_ARGON2I'))
+		if (version_compare(\PHP_VERSION, '7.2', '>=') && \defined('PASSWORD_ARGON2I'))
 		{
 			return password_verify($plaintext, $hashed);
 		}
