@@ -523,7 +523,13 @@ class DataSet implements DumpableInterface, \ArrayAccess, \Countable, \Iterator
 	{
 		if (!($object instanceof DataObject))
 		{
-			throw new \InvalidArgumentException(sprintf('%s("%s", *%s*)', __METHOD__, $offset, \gettype($object)));
+			throw new \InvalidArgumentException(
+				sprintf(
+					'The $object argument must be an instance of "%s", a %s was given.',
+					'Joomla\Data\DataObject',
+					\gettype($object) === 'object' ? get_class($object) : \gettype($object)
+				)
+			);
 		}
 
 		// Set the offset.

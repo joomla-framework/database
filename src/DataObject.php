@@ -129,7 +129,9 @@ class DataObject implements DumpableInterface, \IteratorAggregate, \JsonSerializ
 		// Check the properties data type.
 		if (!\is_array($properties) && !\is_object($properties))
 		{
-			throw new \InvalidArgumentException(sprintf('%s(%s)', __METHOD__, \gettype($properties)));
+			throw new \InvalidArgumentException(
+				sprintf('The $properties argument must be an array or object, a %s was given.', \gettype($properties))
+			);
 		}
 
 		// Check if the object is traversable.
