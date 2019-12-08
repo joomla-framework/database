@@ -528,7 +528,7 @@ class SqlsrvDriver extends DatabaseDriver
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (! array_key_exists($k, $tableColumns))
+			if (!\array_key_exists($k, $tableColumns))
 			{
 				continue;
 			}
@@ -638,7 +638,7 @@ class SqlsrvDriver extends DatabaseDriver
 		// SQLSrv_num_rows requires a static or keyset cursor.
 		if (strncmp(strtoupper(ltrim($sql)), 'SELECT', \strlen('SELECT')) === 0)
 		{
-			$options = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
+			$options = array('Scrollable' => \SQLSRV_CURSOR_KEYSET);
 		}
 
 		$params = array();
@@ -836,7 +836,7 @@ class SqlsrvDriver extends DatabaseDriver
 			return false;
 		}
 
-		if (!sqlsrv_query($this->connection, 'USE ' . $database, null, array('scrollable' => SQLSRV_CURSOR_STATIC)))
+		if (!sqlsrv_query($this->connection, 'USE ' . $database, null, array('scrollable' => \SQLSRV_CURSOR_STATIC)))
 		{
 			throw new ConnectionFailureException('Could not connect to database');
 		}
@@ -992,7 +992,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	protected function fetchArray($cursor = null)
 	{
-		return sqlsrv_fetch_array($cursor ?: $this->cursor, SQLSRV_FETCH_NUMERIC);
+		return sqlsrv_fetch_array($cursor ?: $this->cursor, \SQLSRV_FETCH_NUMERIC);
 	}
 
 	/**
@@ -1006,7 +1006,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	protected function fetchAssoc($cursor = null)
 	{
-		return sqlsrv_fetch_array($cursor ?: $this->cursor, SQLSRV_FETCH_ASSOC);
+		return sqlsrv_fetch_array($cursor ?: $this->cursor, \SQLSRV_FETCH_ASSOC);
 	}
 
 	/**

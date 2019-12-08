@@ -199,7 +199,7 @@ class PostgresqlDriver extends DatabaseDriver
 			throw new ConnectionFailureException('Error connecting to PGSQL database.');
 		}
 
-		pg_set_error_verbosity($this->connection, PGSQL_ERRORS_DEFAULT);
+		pg_set_error_verbosity($this->connection, \PGSQL_ERRORS_DEFAULT);
 		pg_query($this->connection, 'SET standard_conforming_strings=off');
 		pg_query($this->connection, 'SET escape_string_warning=off');
 		pg_query($this->connection, 'SET bytea_output=escape');
@@ -793,7 +793,7 @@ class PostgresqlDriver extends DatabaseDriver
 					// Only get an error number if we have a non-boolean false cursor, otherwise use default 0
 					if ($this->cursor !== false)
 					{
-						$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
+						$this->errorNum = (int) pg_result_error_field($this->cursor, \PGSQL_DIAG_SQLSTATE);
 					}
 
 					// Throw the normal query exception.
@@ -811,7 +811,7 @@ class PostgresqlDriver extends DatabaseDriver
 			}
 
 			// The server was not disconnected.
-			$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
+			$this->errorNum = (int) pg_result_error_field($this->cursor, \PGSQL_DIAG_SQLSTATE);
 			$this->errorMsg = pg_last_error($this->connection);
 
 			// Throw the normal query exception.
@@ -1214,7 +1214,7 @@ class PostgresqlDriver extends DatabaseDriver
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (! array_key_exists($k, $columns))
+			if (!\array_key_exists($k, $columns))
 			{
 				continue;
 			}
@@ -1548,7 +1548,7 @@ class PostgresqlDriver extends DatabaseDriver
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (! array_key_exists($k, $columns))
+			if (!\array_key_exists($k, $columns))
 			{
 				continue;
 			}
@@ -1629,7 +1629,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	public function decodeBinary($data)
 	{
-		if (is_string($data))
+		if (\is_string($data))
 		{
 			return pg_unescape_bytea($data);
 		}
