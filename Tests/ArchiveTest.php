@@ -119,7 +119,7 @@ class ArchiveTest extends ArchiveTestCase
 	 * @testdox  Extracting an unknown archive type throws an Exception
 	 *
 	 * @covers   Joomla\Archive\Archive::extract
-	 * @expectedException  \Joomla\Archive\Exception\UnsupportedArchiveException
+	 * @expectedException  \Joomla\Archive\Exception\UnknownArchiveException
 	 */
 	public function testExtractUnknown()
 	{
