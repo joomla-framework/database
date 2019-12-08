@@ -8,6 +8,8 @@
 
 namespace Joomla\Authentication\Password;
 
+use Joomla\Authentication\Exception\UnsupportedPasswordHandlerException;
+
 /**
  * Password handler for Argon2i hashed passwords
  *
@@ -24,7 +26,7 @@ class Argon2iHandler implements HandlerInterface
 	 * @return  string
 	 *
 	 * @since   1.2.0
-	 * @throws  \LogicException
+	 * @throws  UnsupportedPasswordHandlerException if the password handler is not supported
 	 */
 	public function hashPassword($plaintext, array $options = array())
 	{
@@ -60,7 +62,7 @@ class Argon2iHandler implements HandlerInterface
 			return $hash;
 		}
 
-		throw new \LogicException('Argon2i algorithm is not supported.');
+		throw new UnsupportedPasswordHandlerException('Argon2i algorithm is not supported.');
 	}
 
 	/**
@@ -97,7 +99,7 @@ class Argon2iHandler implements HandlerInterface
 	 * @return  boolean
 	 *
 	 * @since   1.2.0
-	 * @throws  \LogicException
+	 * @throws  UnsupportedPasswordHandlerException if the password handler is not supported
 	 */
 	public function validatePassword($plaintext, $hashed)
 	{
@@ -125,6 +127,6 @@ class Argon2iHandler implements HandlerInterface
 			return $valid;
 		}
 
-		throw new \LogicException('Argon2i algorithm is not supported.');
+		throw new UnsupportedPasswordHandlerException('Argon2i algorithm is not supported.');
 	}
 }

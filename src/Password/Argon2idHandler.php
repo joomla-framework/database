@@ -8,6 +8,8 @@
 
 namespace Joomla\Authentication\Password;
 
+use Joomla\Authentication\Exception\UnsupportedPasswordHandlerException;
+
 /**
  * Password handler for Argon2id hashed passwords
  *
@@ -24,7 +26,7 @@ class Argon2idHandler implements HandlerInterface
 	 * @return  string
 	 *
 	 * @since   1.3.0
-	 * @throws  \LogicException
+	 * @throws  UnsupportedPasswordHandlerException if the password handler is not supported
 	 */
 	public function hashPassword($plaintext, array $options = array())
 	{
@@ -34,7 +36,7 @@ class Argon2idHandler implements HandlerInterface
 			return password_hash($plaintext, PASSWORD_ARGON2ID, $options);
 		}
 
-		throw new \LogicException('Argon2id algorithm is not supported.');
+		throw new UnsupportedPasswordHandlerException('Argon2id algorithm is not supported.');
 	}
 
 	/**
@@ -64,7 +66,7 @@ class Argon2idHandler implements HandlerInterface
 	 * @return  boolean
 	 *
 	 * @since   1.3.0
-	 * @throws  \LogicException
+	 * @throws  UnsupportedPasswordHandlerException if the password handler is not supported
 	 */
 	public function validatePassword($plaintext, $hashed)
 	{
@@ -74,6 +76,6 @@ class Argon2idHandler implements HandlerInterface
 			return password_verify($plaintext, $hashed);
 		}
 
-		throw new \LogicException('Argon2id algorithm is not supported.');
+		throw new UnsupportedPasswordHandlerException('Argon2id algorithm is not supported.');
 	}
 }
