@@ -85,23 +85,23 @@ class Curl implements TransportInterface
 		switch (strtoupper($method))
 		{
 			case 'GET':
-				$options[CURLOPT_HTTPGET] = true;
+				$options[\CURLOPT_HTTPGET] = true;
 
 				break;
 
 			case 'POST':
-				$options[CURLOPT_POST] = true;
+				$options[\CURLOPT_POST] = true;
 
 				break;
 
 			default:
-				$options[CURLOPT_CUSTOMREQUEST] = strtoupper($method);
+				$options[\CURLOPT_CUSTOMREQUEST] = strtoupper($method);
 
 				break;
 		}
 
 		// Don't wait for body when $method is HEAD
-		$options[CURLOPT_NOBODY] = ($method === 'HEAD');
+		$options[\CURLOPT_NOBODY] = ($method === 'HEAD');
 
 		// If data exists let's encode it and make sure our Content-type header is set.
 		if (isset($data))
@@ -109,12 +109,12 @@ class Curl implements TransportInterface
 			// If the data is a scalar value simply add it to the cURL post fields.
 			if (is_scalar($data) || (isset($headers['Content-Type']) && strpos($headers['Content-Type'], 'multipart/form-data') === 0))
 			{
-				$options[CURLOPT_POSTFIELDS] = $data;
+				$options[\CURLOPT_POSTFIELDS] = $data;
 			}
 			else
 			{
 				// Otherwise we need to encode the value first.
-				$options[CURLOPT_POSTFIELDS] = http_build_query($data);
+				$options[\CURLOPT_POSTFIELDS] = http_build_query($data);
 			}
 
 			if (!isset($headers['Content-Type']))
@@ -123,9 +123,9 @@ class Curl implements TransportInterface
 			}
 
 			// Add the relevant headers.
-			if (is_scalar($options[CURLOPT_POSTFIELDS]))
+			if (is_scalar($options[\CURLOPT_POSTFIELDS]))
 			{
-				$headers['Content-Length'] = \strlen($options[CURLOPT_POSTFIELDS]);
+				$headers['Content-Length'] = \strlen($options[\CURLOPT_POSTFIELDS]);
 			}
 		}
 
@@ -140,58 +140,58 @@ class Curl implements TransportInterface
 			}
 
 			// Add the headers string into the stream context options array.
-			$options[CURLOPT_HTTPHEADER] = $headerArray;
+			$options[\CURLOPT_HTTPHEADER] = $headerArray;
 		}
 
 		// Curl needs the accepted encoding header as option
 		if (isset($headers['Accept-Encoding']))
 		{
-			$options[CURLOPT_ENCODING] = $headers['Accept-Encoding'];
+			$options[\CURLOPT_ENCODING] = $headers['Accept-Encoding'];
 		}
 
 		// If an explicit timeout is given user it.
 		if (isset($timeout))
 		{
-			$options[CURLOPT_TIMEOUT]        = (int) $timeout;
-			$options[CURLOPT_CONNECTTIMEOUT] = (int) $timeout;
+			$options[\CURLOPT_TIMEOUT]        = (int) $timeout;
+			$options[\CURLOPT_CONNECTTIMEOUT] = (int) $timeout;
 		}
 
 		// If an explicit user agent is given use it.
 		if (isset($userAgent))
 		{
-			$options[CURLOPT_USERAGENT] = $userAgent;
+			$options[\CURLOPT_USERAGENT] = $userAgent;
 		}
 
 		// Set the request URL.
-		$options[CURLOPT_URL] = (string) $uri;
+		$options[\CURLOPT_URL] = (string) $uri;
 
 		// We want our headers. :-)
-		$options[CURLOPT_HEADER] = true;
+		$options[\CURLOPT_HEADER] = true;
 
 		// Return it... echoing it would be tacky.
-		$options[CURLOPT_RETURNTRANSFER] = true;
+		$options[\CURLOPT_RETURNTRANSFER] = true;
 
 		// Override the Expect header to prevent cURL from confusing itself in its own stupidity.
 		// Link: http://the-stickman.com/web-development/php-and-curl-disabling-100-continue-header/
-		$options[CURLOPT_HTTPHEADER][] = 'Expect:';
+		$options[\CURLOPT_HTTPHEADER][] = 'Expect:';
 
 		// Follow redirects if server config allows
 		if ($this->redirectsAllowed())
 		{
-			$options[CURLOPT_FOLLOWLOCATION] = (bool) isset($this->options['follow_location']) ? $this->options['follow_location'] : true;
+			$options[\CURLOPT_FOLLOWLOCATION] = (bool) isset($this->options['follow_location']) ? $this->options['follow_location'] : true;
 		}
 
 		// Authentication, if needed
 		if (isset($this->options['userauth'], $this->options['passwordauth']))
 		{
-			$options[CURLOPT_USERPWD]  = $this->options['userauth'] . ':' . $this->options['passwordauth'];
-			$options[CURLOPT_HTTPAUTH] = CURLAUTH_BASIC;
+			$options[\CURLOPT_USERPWD]  = $this->options['userauth'] . ':' . $this->options['passwordauth'];
+			$options[\CURLOPT_HTTPAUTH] = \CURLAUTH_BASIC;
 		}
 
 		// Configure protocol version
 		if (isset($this->options['protocolVersion']))
 		{
-			$options[CURLOPT_HTTP_VERSION] = $this->mapProtocolVersion($this->options['protocolVersion']);
+			$options[\CURLOPT_HTTP_VERSION] = $this->mapProtocolVersion($this->options['protocolVersion']);
 		}
 
 		// Set any custom transport options
@@ -246,7 +246,7 @@ class Curl implements TransportInterface
 		if (isset($this->options['curl.certpath']))
 		{
 			// Option is passed to a .PEM file.
-			curl_setopt($ch, CURLOPT_CAINFO, $this->options['curl.certpath']);
+			curl_setopt($ch, \CURLOPT_CAINFO, $this->options['curl.certpath']);
 
 			return;
 		}
@@ -255,12 +255,12 @@ class Curl implements TransportInterface
 
 		if (is_dir($caPathOrFile) || (is_link($caPathOrFile) && is_dir(readlink($caPathOrFile))))
 		{
-			curl_setopt($ch, CURLOPT_CAPATH, $caPathOrFile);
+			curl_setopt($ch, \CURLOPT_CAPATH, $caPathOrFile);
 
 			return;
 		}
 
-		curl_setopt($ch, CURLOPT_CAINFO, $caPathOrFile);
+		curl_setopt($ch, \CURLOPT_CAINFO, $caPathOrFile);
 	}
 
 	/**
@@ -364,20 +364,20 @@ class Curl implements TransportInterface
 		switch ($version)
 		{
 			case '1.0':
-				return CURL_HTTP_VERSION_1_0;
+				return \CURL_HTTP_VERSION_1_0;
 
 			case '1.1':
-				return CURL_HTTP_VERSION_1_1;
+				return \CURL_HTTP_VERSION_1_1;
 
 			case '2.0':
 			case '2':
 				if (\defined('CURL_HTTP_VERSION_2'))
 				{
-					return CURL_HTTP_VERSION_2;
+					return \CURL_HTTP_VERSION_2;
 				}
 		}
 
-		return CURL_HTTP_VERSION_NONE;
+		return \CURL_HTTP_VERSION_NONE;
 	}
 
 	/**
@@ -390,13 +390,13 @@ class Curl implements TransportInterface
 	private function redirectsAllowed()
 	{
 		// There are no issues on PHP 5.6 and later
-		if (version_compare(PHP_VERSION, '5.6', '>='))
+		if (version_compare(\PHP_VERSION, '5.6', '>='))
 		{
 			return true;
 		}
 
 		// For PHP 5.3, redirects are not allowed if safe_mode and open_basedir are enabled
-		if (PHP_MAJOR_VERSION === 5 && PHP_MINOR_VERSION === 3)
+		if (\PHP_MAJOR_VERSION === 5 && \PHP_MINOR_VERSION === 3)
 		{
 			if (!ini_get('safe_mode') && !ini_get('open_basedir'))
 			{
