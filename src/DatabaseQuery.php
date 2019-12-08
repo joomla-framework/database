@@ -1716,7 +1716,7 @@ abstract class DatabaseQuery implements QueryInterface
 		if ($this->set === null)
 		{
 			$glue      = strtoupper($glue);
-			$this->set = new Query\QueryElement('SET', $conditions, PHP_EOL . "\t$glue ");
+			$this->set = new Query\QueryElement('SET', $conditions, \PHP_EOL . "\t$glue ");
 		}
 		else
 		{

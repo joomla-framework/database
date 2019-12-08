@@ -481,7 +481,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 						$trace[0]['file'],
 						$trace[0]['line']
 					),
-					E_USER_NOTICE
+					\E_USER_NOTICE
 				);
 		}
 	}
@@ -1115,7 +1115,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (!array_key_exists($k, $tableColumns))
+			if (!\array_key_exists($k, $tableColumns))
 			{
 				continue;
 			}
@@ -1958,7 +1958,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (!array_key_exists($k, $tableColumns))
+			if (!\array_key_exists($k, $tableColumns))
 			{
 				continue;
 			}
