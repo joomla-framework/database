@@ -25,33 +25,29 @@ class ListenersPriorityQueue implements IteratorAggregate, Countable
 	 * The inner priority queue.
 	 *
 	 * @var    SplPriorityQueue
-	 *
 	 * @since  1.0
 	 */
 	protected $queue;
 
 	/**
-	 * A copy of the listeners contained in the queue
-	 * that is used when detaching them to
-	 * recreate the queue or to see if the queue contains
-	 * a given listener.
+	 * A copy of the listeners contained in the queue.
+	 *
+	 * This storage is used when detaching listeners to recreate the queue or to see if the queue contains a given listener.
 	 *
 	 * @var    SplObjectStorage
-	 *
 	 * @since  1.0
 	 */
 	protected $storage;
 
 	/**
-	 * A decreasing counter used to compute
-	 * the internal priority as an array because
-	 * SplPriorityQueue dequeues elements with the same priority.
+	 * A decreasing counter used to compute the internal priority as an array.
+	 *
+	 * This counter is used because SplPriorityQueue dequeues elements with the same priority.
 	 *
 	 * @var    integer
-	 *
 	 * @since  1.0
 	 */
-	private $counter = PHP_INT_MAX;
+	private $counter = \PHP_INT_MAX;
 
 	/**
 	 * Constructor.
