@@ -12,6 +12,7 @@
 * @see http://lxr.mozilla.org/seamonkey/source/intl/uconv/src/nsUnicodeToUTF8.cpp
 * @see http://hsivonen.iki.fi/php-utf8/
 * @package utf8
+* @note This file has been modified by the Joomla! Project and no longer reflects the original work of its author.
 */
 
 //--------------------------------------------------------------------
@@ -43,7 +44,7 @@ function utf8_to_unicode($str) {
 
     for($i = 0; $i < $len; $i++) {
 
-        $in = ord($str{$i});
+        $in = ord($str[$i]);
 
         if ( $mState == 0) {
 
