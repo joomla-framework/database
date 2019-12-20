@@ -12,7 +12,6 @@
 * @see http://lxr.mozilla.org/seamonkey/source/intl/uconv/src/nsUnicodeToUTF8.cpp
 * @see http://hsivonen.iki.fi/php-utf8/
 * @package utf8
-* @note This file has been modified by the Joomla! Project and no longer reflects the original work of its author.
 */
 
 //--------------------------------------------------------------------
@@ -25,6 +24,12 @@
 * and raises a PHP error at level E_USER_WARNING
 * Note: this function has been modified slightly in this library to
 * trigger errors on encountering bad bytes
+*
+* Joomla modification - As of PHP 7.4, curly brace access has been deprecated. As a result this function has been
+* modified to use square brace syntax
+* See https://github.com/php/php-src/commit/d574df63dc375f5fc9202ce5afde23f866b6450a
+* for additional references
+*
 * @author <hsivonen@iki.fi>
 * @param string UTF-8 encoded string
 * @return mixed array of unicode code points or FALSE if UTF-8 invalid
