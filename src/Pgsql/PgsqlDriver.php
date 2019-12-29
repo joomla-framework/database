@@ -742,7 +742,7 @@ class PgsqlDriver extends PdoDriver
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (!array_key_exists($k, $columns))
+			if (!\array_key_exists($k, $columns))
 			{
 				continue;
 			}
@@ -1020,7 +1020,7 @@ class PgsqlDriver extends PdoDriver
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (! array_key_exists($k, $columns))
+			if (!\array_key_exists($k, $columns))
 			{
 				continue;
 			}
@@ -1099,7 +1099,7 @@ class PgsqlDriver extends PdoDriver
 	 */
 	public function decodeBinary($data)
 	{
-		if (is_resource($data))
+		if (\is_resource($data))
 		{
 			return stream_get_contents($data);
 		}

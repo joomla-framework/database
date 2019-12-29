@@ -517,7 +517,7 @@ class SqlsrvDriver extends DatabaseDriver
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (!array_key_exists($k, $tableColumns))
+			if (!\array_key_exists($k, $tableColumns))
 			{
 				continue;
 			}
@@ -780,7 +780,7 @@ class SqlsrvDriver extends DatabaseDriver
 			return false;
 		}
 
-		if (!sqlsrv_query($this->connection, 'USE ' . $database, null, ['scrollable' => SQLSRV_CURSOR_STATIC]))
+		if (!sqlsrv_query($this->connection, 'USE ' . $database, null, ['scrollable' => \SQLSRV_CURSOR_STATIC]))
 		{
 			throw new ConnectionFailureException('Could not connect to database');
 		}
