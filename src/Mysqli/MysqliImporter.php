@@ -298,7 +298,7 @@ class MysqliImporter extends DatabaseImporter
 			else
 			{
 				// TODO Don't quote numeric values.
-				if (strpos($fDefault, 'CURRENT') !== false)
+				if (stristr($fDefault, 'CURRENT') !== false)
 				{
 					$sql .= ' NOT NULL DEFAULT CURRENT_TIMESTAMP()';
 				}
