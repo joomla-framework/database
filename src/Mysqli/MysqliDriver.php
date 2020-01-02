@@ -167,7 +167,14 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		 */
 		$port = isset($this->options['port']) ? $this->options['port'] : 3306;
 
-		if (preg_match(
+		if (preg_match('/^unix:(?P<socket>[^:]+)$/', $this->options['host'], $matches))
+		{
+			// UNIX socket URI, e.g. 'unix:/path/to/unix/socket.sock'
+			$this->options['host']   = null;
+			$this->options['socket'] = $matches['socket'];
+			$this->options['port']   = null;
+		}
+		elseif (preg_match(
 			'/^(?P<host>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(:(?P<port>.+))?$/',
 			$this->options['host'],
 			$matches

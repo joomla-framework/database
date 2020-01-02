@@ -79,6 +79,7 @@ abstract class PdoDriver extends DatabaseDriver
 		$options['password']      = $options['password'] ?? '';
 		$options['driverOptions'] = $options['driverOptions'] ?? [];
 		$options['ssl']           = isset($options['ssl']) ? $options['ssl'] : [];
+		$options['socket']        = \strpos($options['host'], 'unix:') !== false ? \str_replace('unix:', '', $options['host']) : null;
 
 		if ($options['ssl'] !== [])
 		{
@@ -219,10 +220,23 @@ abstract class PdoDriver extends DatabaseDriver
 			case 'mysql':
 				$this->options['port'] = $this->options['port'] ?? 3306;
 
-				$format = 'mysql:host=#HOST#;port=#PORT#;dbname=#DBNAME#;charset=#CHARSET#';
+				if ($this->options['socket'] !== null)
+				{
+					$format = 'mysql:unix_socket=#SOCKET#;dbname=#DBNAME#;charset=#CHARSET#';
+				}
+				else
+				{
+					$format = 'mysql:host=#HOST#;port=#PORT#;dbname=#DBNAME#;charset=#CHARSET#';
+				}
 
-				$replace = ['#HOST#', '#PORT#', '#DBNAME#', '#CHARSET#'];
-				$with    = [$this->options['host'], $this->options['port'], $this->options['database'], $this->options['charset']];
+				$replace = ['#HOST#', '#PORT#', '#SOCKET#', '#DBNAME#', '#CHARSET#'];
+				$with    = [
+					$this->options['host'],
+					$this->options['port'],
+					$this->options['socket'],
+					$this->options['database'],
+					$this->options['charset']
+				];
 
 				break;
 
@@ -260,10 +274,17 @@ abstract class PdoDriver extends DatabaseDriver
 			case 'pgsql':
 				$this->options['port'] = $this->options['port'] ?? 5432;
 
-				$format = 'pgsql:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
+				if ($this->options['socket'] !== null)
+				{
+					$format = 'pgsql:host=#SOCKET#;dbname=#DBNAME#';
+				}
+				else
+				{
+					$format = 'pgsql:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
+				}
 
-				$replace = ['#HOST#', '#PORT#', '#DBNAME#'];
-				$with    = [$this->options['host'], $this->options['port'], $this->options['database']];
+				$replace = ['#HOST#', '#PORT#', '#SOCKET#', '#DBNAME#'];
+				$with    = [$this->options['host'], $this->options['port'], $this->options['socket'], $this->options['database']];
 
 				// For data in transit TLS encryption.
 				if ($this->options['ssl'] !== [] && $this->options['ssl']['enable'] === true)
