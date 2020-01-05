@@ -98,9 +98,7 @@ class ExportCommand extends AbstractCommand
 			return 1;
 		}
 
-		$siteName = trim(strtolower($this->getApplication()->get('sitename')));
-		$siteName = preg_replace('/(\s|[^A-Za-z0-9\-])+/', '-', $siteName);
-		$zipFile = $folderPath . '/' . $siteName . '_' . date("Y-m-d\TH-i-s") . '.zip';
+		$zipFile = $folderPath . '/data_exported_' . date("Y-m-d\TH-i-s") . '.zip';
 		$tables = $this->db->getTableList();
 		$prefix = $this->db->getPrefix();
 
