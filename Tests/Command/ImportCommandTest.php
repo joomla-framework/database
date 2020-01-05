@@ -104,6 +104,7 @@ class ImportCommandTest extends DatabaseTestCase
 				'command'  => 'database:import',
 				'--table'  => 'dbtest',
 				'--folder' => $this->stubPath,
+				'--zip'    => 'dbtest.zip',
 			]
 		);
 		$output = new BufferedOutput;

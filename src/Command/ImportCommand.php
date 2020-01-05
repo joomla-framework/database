@@ -241,7 +241,11 @@ class ImportCommand extends AbstractCommand
 			$symfonyStyle->text(sprintf('Imported data for %s in %d seconds', $table, round(microtime(true) - $taskTime, 3)));
 		}
 
-		Folder::delete($folderPath);
+		if ($zipFile)
+		{
+			Folder::delete($folderPath);
+		}
+
 		$symfonyStyle->success(sprintf('Import completed in %d seconds', round(microtime(true) - $totalTime, 3)));
 
 		return 0;
