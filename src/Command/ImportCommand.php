@@ -138,7 +138,7 @@ class ImportCommand extends AbstractCommand
 
 		if ($zipFile)
 		{
-			$zipPath = $folderPath . $zipFile;
+			$zipPath = $folderPath . '/' . $zipFile;
 			try
 			{
 				$this->checkZipFile($zipPath);
