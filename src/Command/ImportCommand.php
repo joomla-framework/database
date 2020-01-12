@@ -61,7 +61,7 @@ class ImportCommand extends AbstractCommand
 	/**
 	 * Checks if the zip file contains database export files
 	 *
-	 * @param   string  $file  A zip archive to analyze
+	 * @param   string  $archive  A zip archive to analyze
 	 *
 	 * @return  void
 	 *
@@ -139,6 +139,7 @@ class ImportCommand extends AbstractCommand
 		if ($zipFile)
 		{
 			$zipPath = $folderPath . '/' . $zipFile;
+
 			try
 			{
 				$this->checkZipFile($zipPath);
@@ -151,6 +152,7 @@ class ImportCommand extends AbstractCommand
 			}
 
 			$folderPath .= File::stripExt($zipFile);
+
 			try
 			{
 				Folder::create($folderPath);
@@ -163,6 +165,7 @@ class ImportCommand extends AbstractCommand
 			}
 
 			$zipArchive = (new Archive)->getAdapter('zip');
+
 			try
 			{
 				$zipArchive->extract($zipPath, $folderPath);
