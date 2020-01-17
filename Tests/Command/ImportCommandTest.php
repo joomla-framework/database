@@ -97,29 +97,6 @@ class ImportCommandTest extends DatabaseTestCase
 		$this->assertStringContainsString('Import completed in', $screenOutput);
 	}
 
-	public function testTheDatabaseIsImportedWithAllTablesZip()
-	{
-		$input  = new ArrayInput(
-			[
-				'command'  => 'database:import',
-				'--all'    => true,
-				'--folder' => $this->stubPath,
-				'--zip'    => 'dbtest.zip',
-			]
-		);
-		$output = new BufferedOutput;
-
-		$application = new Application($input, $output);
-
-		$command = new ImportCommand(static::$connection);
-		$command->setApplication($application);
-
-		$this->assertSame(0, $command->execute($input, $output));
-
-		$screenOutput = $output->fetch();
-		$this->assertStringContainsString('Import completed in', $screenOutput);
-	}
-
 	public function testTheDatabaseIsImportedWithASingleTable()
 	{
 		$input  = new ArrayInput(
@@ -127,29 +104,6 @@ class ImportCommandTest extends DatabaseTestCase
 				'command'  => 'database:import',
 				'--table'  => 'dbtest',
 				'--folder' => $this->stubPath,
-			]
-		);
-		$output = new BufferedOutput;
-
-		$application = new Application($input, $output);
-
-		$command = new ImportCommand(static::$connection);
-		$command->setApplication($application);
-
-		$this->assertSame(0, $command->execute($input, $output));
-
-		$screenOutput = $output->fetch();
-		$this->assertStringContainsString('Import completed in', $screenOutput);
-	}
-
-	public function testTheDatabaseIsImportedWithASingleTableZip()
-	{
-		$input  = new ArrayInput(
-			[
-				'command'  => 'database:import',
-				'--table'  => 'dbtest',
-				'--folder' => $this->stubPath,
-				'--zip'    => 'dbtest.zip',
 			]
 		);
 		$output = new BufferedOutput;
