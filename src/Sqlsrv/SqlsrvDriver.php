@@ -780,7 +780,7 @@ class SqlsrvDriver extends DatabaseDriver
 			return false;
 		}
 
-		if (!sqlsrv_query($this->connection, 'USE ' . $database, null, ['scrollable' => \SQLSRV_CURSOR_STATIC]))
+		if (!sqlsrv_query($this->connection, 'USE [' . $database . ']', null, ['scrollable' => \SQLSRV_CURSOR_STATIC]))
 		{
 			throw new ConnectionFailureException('Could not connect to database');
 		}
