@@ -187,7 +187,6 @@ class ImportCommand extends AbstractCommand
 				return 1;
 			}
 
-
 			if (class_exists('\\Joomla\\Archive\\Archive'))
 			{
 				try
@@ -296,7 +295,7 @@ class ImportCommand extends AbstractCommand
 	{
 		$this->setDescription('Import the database');
 		$this->addOption('folder', null, InputOption::VALUE_OPTIONAL, 'Import from folder path', '.');
-		$this->addOption('zip', null, InputOption::VALUE_REQUIRED, 'Import ZIP file');
+		$this->addOption('zip', null, InputOption::VALUE_REQUIRED, 'Import ZIP file name');
 		$this->addOption('table', null, InputOption::VALUE_REQUIRED, 'Import table name');
 		$this->addOption('all', null, InputOption::VALUE_NONE, 'Import all files');
 	}
