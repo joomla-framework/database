@@ -70,6 +70,11 @@ class ImportCommand extends AbstractCommand
 	 */
 	private function checkZipFile($archive)
 	{
+		if (!extension_loaded('zip'))
+		{
+			throw new \RuntimeException('Zip extension is not loaded');
+		}
+
 		$zip = zip_open($archive);
 
 		if (!\is_resource($zip))
