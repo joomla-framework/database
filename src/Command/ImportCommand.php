@@ -156,29 +156,55 @@ class ImportCommand extends AbstractCommand
 				return 1;
 			}
 
-			$folderPath .= File::stripExt($zipFile);
-
-			try
+			if (class_exists('\\Joomla\\Filesystem\\File'))
 			{
-				Folder::create($folderPath);
+				$folderPath .= File::stripExt($zipFile);
 			}
-			catch (FilesystemException $e)
+			else
 			{
-				$symfonyStyle->error($e->getMessage());
+				$symfonyStyle->error('The Joomla Filesystem dependency is not loaded.');
 
 				return 1;
 			}
 
-			$zipArchive = (new Archive)->getAdapter('zip');
+			if (class_exists('\\Joomla\\Filesystem\\Folder'))
+			{
+				try
+				{
+					Folder::create($folderPath);
+				}
+				catch (FilesystemException $e)
+				{
+					$symfonyStyle->error($e->getMessage());
 
-			try
-			{
-				$zipArchive->extract($zipPath, $folderPath);
+					return 1;
+				}
 			}
-			catch (\RuntimeException $e)
+			else
 			{
-				$symfonyStyle->error($e->getMessage());
-				Folder::delete($folderPath);
+				$symfonyStyle->error('The Joomla Filesystem dependency is not loaded.');
+
+				return 1;
+			}
+
+
+			if (class_exists('\\Joomla\\Archive\\Archive'))
+			{
+				try
+				{
+					(new Archive)->extract($zipPath, $folderPath);
+				}
+				catch (\RuntimeException $e)
+				{
+					$symfonyStyle->error($e->getMessage());
+					Folder::delete($folderPath);
+
+					return 1;
+				}
+			}
+			else
+			{
+				$symfonyStyle->error('The Joomla Archive dependency is not loaded.');
 
 				return 1;
 			}
