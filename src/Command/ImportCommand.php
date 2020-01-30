@@ -8,10 +8,13 @@
 
 namespace Joomla\Database\Command;
 
+use Joomla\Archive\Archive;
 use Joomla\Console\Command\AbstractCommand;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
+use Joomla\Filesystem\Exception\FilesystemException;
+use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -56,6 +59,45 @@ class ImportCommand extends AbstractCommand
 	}
 
 	/**
+	 * Checks if the zip file contains database export files
+	 *
+	 * @param   string  $archive  A zip archive to analyze
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 * @throws  \RuntimeException
+	 */
+	private function checkZipFile($archive)
+	{
+		if (!extension_loaded('zip'))
+		{
+			throw new \RuntimeException('Zip extension is not loaded');
+		}
+
+		$zip = zip_open($archive);
+
+		if (!\is_resource($zip))
+		{
+			throw new \RuntimeException('Unable to open archive');
+		}
+
+		while ($file = @zip_read($zip))
+		{
+			if (strpos(zip_entry_name($file), $this->db->getPrefix()) === false)
+			{
+				zip_entry_close($file);
+				@zip_close($zip);
+				throw new \RuntimeException('Unable to find prefix');
+			}
+
+			zip_entry_close($file);
+		}
+
+		@zip_close($zip);
+	}
+
+	/**
 	 * Internal function to execute the command.
 	 *
 	 * @param   InputInterface   $input   The input to inject into the command.
@@ -90,12 +132,81 @@ class ImportCommand extends AbstractCommand
 		$folderPath = $input->getOption('folder');
 		$tableName  = $input->getOption('table');
 		$all        = $input->getOption('all');
+		$zipFile    = $input->getOption('zip');
 
 		if ($tableName === null && $all === false)
 		{
 			$symfonyStyle->warning('Either the --table or --all option must be specified');
 
 			return 1;
+		}
+
+		if ($zipFile)
+		{
+			$zipPath = $folderPath . '/' . $zipFile;
+
+			try
+			{
+				$this->checkZipFile($zipPath);
+			}
+			catch (\RuntimeException $e)
+			{
+				$symfonyStyle->error($e->getMessage());
+
+				return 1;
+			}
+
+			if (class_exists('\\Joomla\\Filesystem\\File'))
+			{
+				$folderPath .= File::stripExt($zipFile);
+			}
+			else
+			{
+				$symfonyStyle->error('The Joomla Filesystem dependency is not loaded.');
+
+				return 1;
+			}
+
+			if (class_exists('\\Joomla\\Filesystem\\Folder'))
+			{
+				try
+				{
+					Folder::create($folderPath);
+				}
+				catch (FilesystemException $e)
+				{
+					$symfonyStyle->error($e->getMessage());
+
+					return 1;
+				}
+			}
+			else
+			{
+				$symfonyStyle->error('The Joomla Filesystem dependency is not loaded.');
+
+				return 1;
+			}
+
+			if (class_exists('\\Joomla\\Archive\\Archive'))
+			{
+				try
+				{
+					(new Archive)->extract($zipPath, $folderPath);
+				}
+				catch (\RuntimeException $e)
+				{
+					$symfonyStyle->error($e->getMessage());
+					Folder::delete($folderPath);
+
+					return 1;
+				}
+			}
+			else
+			{
+				$symfonyStyle->error('The Joomla Archive dependency is not loaded.');
+
+				return 1;
+			}
 		}
 
 		if ($tableName)
@@ -163,6 +274,11 @@ class ImportCommand extends AbstractCommand
 			$symfonyStyle->text(sprintf('Imported data for %s in %d seconds', $table, round(microtime(true) - $taskTime, 3)));
 		}
 
+		if ($zipFile)
+		{
+			Folder::delete($folderPath);
+		}
+
 		$symfonyStyle->success(sprintf('Import completed in %d seconds', round(microtime(true) - $totalTime, 3)));
 
 		return 0;
@@ -179,6 +295,7 @@ class ImportCommand extends AbstractCommand
 	{
 		$this->setDescription('Import the database');
 		$this->addOption('folder', null, InputOption::VALUE_OPTIONAL, 'Import from folder path', '.');
+		$this->addOption('zip', null, InputOption::VALUE_REQUIRED, 'Import ZIP file name');
 		$this->addOption('table', null, InputOption::VALUE_REQUIRED, 'Import table name');
 		$this->addOption('all', null, InputOption::VALUE_NONE, 'Import all files');
 	}

@@ -98,11 +98,7 @@ class ExportCommand extends AbstractCommand
 			return 1;
 		}
 
-		$date       = getdate();
-		$dateFormat = sprintf("%s-%02s-%02s", $date['year'], $date['mon'], $date['mday']);
-
-		$zipFile = $folderPath . '/data_exported_' . $dateFormat . '.zip';
-
+		$zipFile = $folderPath . '/data_exported_' . date("Y-m-d\TH-i-s") . '.zip';
 		$tables = $this->db->getTableList();
 		$prefix = $this->db->getPrefix();
 
