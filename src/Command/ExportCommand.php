@@ -9,6 +9,7 @@
 namespace Joomla\Database\Command;
 
 use Joomla\Archive\Archive;
+use Joomla\Archive\Zip;
 use Joomla\Console\Command\AbstractCommand;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\UnsupportedAdapterException;
@@ -71,7 +72,14 @@ class ExportCommand extends AbstractCommand
 
 		$symfonyStyle->title('Exporting Database');
 
-		$totalTime  = microtime(true);
+		$totalTime = microtime(true);
+
+		if (!class_exists(File::class))
+		{
+			$symfonyStyle->error('The "joomla/filesystem" Composer package is not installed, cannot create an export.');
+
+			return 1;
+		}
 
 		// Make sure the database supports exports before we get going
 		try
@@ -108,6 +116,14 @@ class ExportCommand extends AbstractCommand
 
 		if ($zip)
 		{
+			if (!class_exists(Archive::class))
+			{
+				$symfonyStyle->error('The "joomla/archive" Composer package is not installed, cannot create ZIP files.');
+
+				return 1;
+			}
+
+			/** @var Zip $zipArchive */
 			$zipArchive = (new Archive)->getAdapter('zip');
 		}
 
@@ -156,8 +172,8 @@ class ExportCommand extends AbstractCommand
 	protected function configure(): void
 	{
 		$this->setDescription('Export the database');
-		$this->addOption('folder', null, InputOption::VALUE_OPTIONAL, 'Dump in folder path', '.');
-		$this->addOption('table', null, InputOption::VALUE_REQUIRED, 'Dump table name');
-		$this->addOption('zip', null, InputOption::VALUE_NONE, 'Dump in zip format');
+		$this->addOption('folder', null, InputOption::VALUE_OPTIONAL, 'Path to write the export files to', '.');
+		$this->addOption('table', null, InputOption::VALUE_REQUIRED, 'The name of the database table to export');
+		$this->addOption('zip', null, InputOption::VALUE_NONE, 'Flag indicating the export will be saved to a ZIP archive');
 	}
 }
