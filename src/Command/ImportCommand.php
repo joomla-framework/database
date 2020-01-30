@@ -17,9 +17,9 @@ use Joomla\Filesystem\Exception\FilesystemException;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Folder;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Console command for importing the database
@@ -68,11 +68,11 @@ class ImportCommand extends AbstractCommand
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \RuntimeException
 	 */
-	private function checkZipFile($archive)
+	private function checkZipFile(string $archive): void
 	{
 		if (!extension_loaded('zip'))
 		{
-			throw new \RuntimeException('Zip extension is not loaded');
+			throw new \RuntimeException('The PHP zip extension is not installed or is disabled');
 		}
 
 		$zip = zip_open($archive);
@@ -88,7 +88,8 @@ class ImportCommand extends AbstractCommand
 			{
 				zip_entry_close($file);
 				@zip_close($zip);
-				throw new \RuntimeException('Unable to find prefix');
+
+				throw new \RuntimeException('Unable to find table matching database prefix');
 			}
 
 			zip_entry_close($file);
@@ -143,6 +144,20 @@ class ImportCommand extends AbstractCommand
 
 		if ($zipFile)
 		{
+			if (!class_exists(File::class))
+			{
+				$symfonyStyle->error('The "joomla/filesystem" Composer package is not installed, cannot process ZIP files.');
+
+				return 1;
+			}
+
+			if (!class_exists(Archive::class))
+			{
+				$symfonyStyle->error('The "joomla/archive" Composer package is not installed, cannot process ZIP files.');
+
+				return 1;
+			}
+
 			$zipPath = $folderPath . '/' . $zipFile;
 
 			try
@@ -156,54 +171,27 @@ class ImportCommand extends AbstractCommand
 				return 1;
 			}
 
-			if (class_exists('\\Joomla\\Filesystem\\File'))
+			$folderPath .= File::stripExt($zipFile);
+
+			try
 			{
-				$folderPath .= File::stripExt($zipFile);
+				Folder::create($folderPath);
 			}
-			else
+			catch (FilesystemException $e)
 			{
-				$symfonyStyle->error('The Joomla Filesystem dependency is not loaded.');
+				$symfonyStyle->error($e->getMessage());
 
 				return 1;
 			}
 
-			if (class_exists('\\Joomla\\Filesystem\\Folder'))
+			try
 			{
-				try
-				{
-					Folder::create($folderPath);
-				}
-				catch (FilesystemException $e)
-				{
-					$symfonyStyle->error($e->getMessage());
-
-					return 1;
-				}
+				(new Archive)->extract($zipPath, $folderPath);
 			}
-			else
+			catch (\RuntimeException $e)
 			{
-				$symfonyStyle->error('The Joomla Filesystem dependency is not loaded.');
-
-				return 1;
-			}
-
-			if (class_exists('\\Joomla\\Archive\\Archive'))
-			{
-				try
-				{
-					(new Archive)->extract($zipPath, $folderPath);
-				}
-				catch (\RuntimeException $e)
-				{
-					$symfonyStyle->error($e->getMessage());
-					Folder::delete($folderPath);
-
-					return 1;
-				}
-			}
-			else
-			{
-				$symfonyStyle->error('The Joomla Archive dependency is not loaded.');
+				$symfonyStyle->error($e->getMessage());
+				Folder::delete($folderPath);
 
 				return 1;
 			}
