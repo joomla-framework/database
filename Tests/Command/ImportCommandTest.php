@@ -80,7 +80,6 @@ class ImportCommandTest extends DatabaseTestCase
 		$input  = new ArrayInput(
 			[
 				'command'  => 'database:import',
-				'--all'    => true,
 				'--folder' => $this->stubPath,
 			]
 		);
@@ -147,27 +146,6 @@ class ImportCommandTest extends DatabaseTestCase
 
 		$screenOutput = $output->fetch();
 		$this->assertStringContainsString('The "test" database driver does not', $screenOutput);
-	}
-
-	public function testTheCommandFailsIfRequiredOptionsAreMissing()
-	{
-		$input  = new ArrayInput(
-			[
-				'command'  => 'database:import',
-				'--folder' => $this->stubPath,
-			]
-		);
-		$output = new BufferedOutput;
-
-		$application = new Application($input, $output);
-
-		$command = new ImportCommand(static::$connection);
-		$command->setApplication($application);
-
-		$this->assertSame(1, $command->execute($input, $output));
-
-		$screenOutput = $output->fetch();
-		$this->assertStringContainsString('Either the --table or --all option', $screenOutput);
 	}
 
 	public function testTheCommandFailsIfTheRequestedTableDoesNotHaveAnImportFile()

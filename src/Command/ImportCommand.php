@@ -132,15 +132,7 @@ class ImportCommand extends AbstractCommand
 
 		$folderPath = $input->getOption('folder');
 		$tableName  = $input->getOption('table');
-		$all        = $input->getOption('all');
 		$zipFile    = $input->getOption('zip');
-
-		if ($tableName === null && $all === false)
-		{
-			$symfonyStyle->warning('Either the --table or --all option must be specified');
-
-			return 1;
-		}
 
 		if ($zipFile)
 		{
@@ -285,6 +277,5 @@ class ImportCommand extends AbstractCommand
 		$this->addOption('folder', null, InputOption::VALUE_OPTIONAL, 'Path to the folder containing files to import', '.');
 		$this->addOption('zip', null, InputOption::VALUE_REQUIRED, 'The name of a ZIP file to import');
 		$this->addOption('table', null, InputOption::VALUE_REQUIRED, 'The name of the database table to import');
-		$this->addOption('all', null, InputOption::VALUE_NONE, 'Flag indicating all database tables should be imported');
 	}
 }
