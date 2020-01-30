@@ -294,9 +294,9 @@ class ImportCommand extends AbstractCommand
 	protected function configure(): void
 	{
 		$this->setDescription('Import the database');
-		$this->addOption('folder', null, InputOption::VALUE_OPTIONAL, 'Import from folder path', '.');
-		$this->addOption('zip', null, InputOption::VALUE_REQUIRED, 'Import ZIP file name');
-		$this->addOption('table', null, InputOption::VALUE_REQUIRED, 'Import table name');
-		$this->addOption('all', null, InputOption::VALUE_NONE, 'Import all files');
+		$this->addOption('folder', null, InputOption::VALUE_OPTIONAL, 'Path to the folder containing files to import', '.');
+		$this->addOption('zip', null, InputOption::VALUE_REQUIRED, 'The name of a ZIP file to import');
+		$this->addOption('table', null, InputOption::VALUE_REQUIRED, 'The name of the database table to import');
+		$this->addOption('all', null, InputOption::VALUE_NONE, 'Flag indicating all database tables should be imported');
 	}
 }
