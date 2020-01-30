@@ -158,7 +158,6 @@ class ExportCommandTest extends DatabaseTestCase
 		$input  = new ArrayInput(
 			[
 				'command'  => 'database:export',
-				'--all'    => true,
 				'--folder' => $this->testPath,
 			]
 		);
@@ -182,7 +181,6 @@ class ExportCommandTest extends DatabaseTestCase
 		$input  = new ArrayInput(
 			[
 				'command'  => 'database:export',
-				'--all'    => true,
 				'--folder' => $this->testPath,
 				'--zip'    => true,
 			]
@@ -252,27 +250,6 @@ class ExportCommandTest extends DatabaseTestCase
 
 		$screenOutput = $output->fetch();
 		$this->assertStringContainsString('The "test" database driver does not', $screenOutput);
-	}
-
-	public function testTheCommandFailsIfRequiredOptionsAreMissing()
-	{
-		$input  = new ArrayInput(
-			[
-				'command'  => 'database:export',
-				'--folder' => $this->testPath,
-			]
-		);
-		$output = new BufferedOutput;
-
-		$application = new Application($input, $output);
-
-		$command = new ExportCommand(static::$connection);
-		$command->setApplication($application);
-
-		$this->assertSame(1, $command->execute($input, $output));
-
-		$screenOutput = $output->fetch();
-		$this->assertStringContainsString('Either the --table or --all option', $screenOutput);
 	}
 
 	public function testTheCommandFailsIfTheRequestedTableDoesNotExistInTheDatabase()

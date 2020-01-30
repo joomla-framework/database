@@ -88,15 +88,7 @@ class ExportCommand extends AbstractCommand
 
 		$folderPath = $input->getOption('folder');
 		$tableName  = $input->getOption('table');
-		$all        = $input->getOption('all');
 		$zip        = $input->getOption('zip');
-
-		if ($tableName === null && $all === false)
-		{
-			$symfonyStyle->warning('Either the --table or --all option must be specified');
-
-			return 1;
-		}
 
 		$zipFile = $folderPath . '/data_exported_' . date("Y-m-d\TH-i-s") . '.zip';
 		$tables = $this->db->getTableList();
@@ -166,7 +158,6 @@ class ExportCommand extends AbstractCommand
 		$this->setDescription('Export the database');
 		$this->addOption('folder', null, InputOption::VALUE_OPTIONAL, 'Dump in folder path', '.');
 		$this->addOption('table', null, InputOption::VALUE_REQUIRED, 'Dump table name');
-		$this->addOption('all', null, InputOption::VALUE_NONE, 'Dump all tables');
 		$this->addOption('zip', null, InputOption::VALUE_NONE, 'Dump in zip format');
 	}
 }
