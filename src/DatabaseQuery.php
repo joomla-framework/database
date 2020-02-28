@@ -2010,15 +2010,15 @@ abstract class DatabaseQuery implements QueryInterface
 
         if (\is_array($value))
         {
-            $array_keys = array_keys($value);
+            $value = array_values($value);
         }
 
 		for ($i = 0; $i < $count; $i++)
 		{
-            if (\is_array($value) && isset($array_keys))
-            {
-                $localValue = &$value[$array_keys[$i]];
-            }
+			if (\is_array($value))
+			{
+				$localValue = &$value[$i];
+			}
 			else
 			{
 				$localValue = &$value;
