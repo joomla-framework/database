@@ -18,6 +18,15 @@ use Symfony\Component\Console\Output\BufferedOutput;
  */
 class ListCommandTest extends TestCase
 {
+	/**
+	 * @covers  Joomla\Console\Command\ListCommand
+	 * @uses    Joomla\Console\Application
+	 * @uses    Joomla\Console\Command\AbstractCommand
+	 * @uses    Joomla\Console\Command\HelpCommand
+	 * @uses    Joomla\Console\Descriptor\ApplicationDescription
+	 * @uses    Joomla\Console\Descriptor\TextDescriptor
+	 * @uses    Joomla\Console\Helper\DescriptorHelper
+	 */
 	public function testTheCommandIsExecuted()
 	{
 		$input  = new ArrayInput(
@@ -46,6 +55,15 @@ class ListCommandTest extends TestCase
 		}
 	}
 
+	/**
+	 * @covers  Joomla\Console\Command\ListCommand
+	 * @uses    Joomla\Console\Application
+	 * @uses    Joomla\Console\Command\AbstractCommand
+	 * @uses    Joomla\Console\Command\HelpCommand
+	 * @uses    Joomla\Console\Descriptor\ApplicationDescription
+	 * @uses    Joomla\Console\Descriptor\TextDescriptor
+	 * @uses    Joomla\Console\Helper\DescriptorHelper
+	 */
 	public function testTheCommandIsExecutedForANamespace()
 	{
 		$input  = new ArrayInput(

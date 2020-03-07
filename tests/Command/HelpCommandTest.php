@@ -18,6 +18,14 @@ use Symfony\Component\Console\Output\BufferedOutput;
  */
 class HelpCommandTest extends TestCase
 {
+	/**
+	 * @covers  Joomla\Console\Command\HelpCommand
+	 * @uses    Joomla\Console\Application
+	 * @uses    Joomla\Console\Command\AbstractCommand
+	 * @uses    Joomla\Console\Command\ListCommand
+	 * @uses    Joomla\Console\Descriptor\TextDescriptor
+	 * @uses    Joomla\Console\Helper\DescriptorHelper
+	 */
 	public function testTheCommandIsExecutedWithACommandName()
 	{
 		$input  = new ArrayInput(
@@ -39,6 +47,14 @@ class HelpCommandTest extends TestCase
 		$this->assertStringContainsString('list [<namespace>]', $screenOutput);
 	}
 
+	/**
+	 * @covers  Joomla\Console\Command\HelpCommand
+	 * @uses    Joomla\Console\Application
+	 * @uses    Joomla\Console\Command\AbstractCommand
+	 * @uses    Joomla\Console\Command\ListCommand
+	 * @uses    Joomla\Console\Descriptor\TextDescriptor
+	 * @uses    Joomla\Console\Helper\DescriptorHelper
+	 */
 	public function testTheCommandIsExecutedWithACommandClass()
 	{
 		$input  = new ArrayInput(

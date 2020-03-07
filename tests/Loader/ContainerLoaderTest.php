@@ -34,6 +34,10 @@ class ContainerLoaderTest extends TestCase
 		$this->container = $this->createMock(ContainerInterface::class);
 	}
 
+	/**
+	 * @covers  Joomla\Console\Loader\ContainerLoader
+	 * @uses    Joomla\Console\Command\AbstractCommand
+	 */
 	public function testTheLoaderRetrievesACommand()
 	{
 		$command = new NamespacedCommand;
@@ -57,6 +61,9 @@ class ContainerLoaderTest extends TestCase
 		);
 	}
 
+	/**
+	 * @covers  Joomla\Console\Loader\ContainerLoader
+	 */
 	public function testTheLoaderDoesNotRetrieveAnUnknownCommand()
 	{
 		$this->expectException(CommandNotFoundException::class);
@@ -75,6 +82,9 @@ class ContainerLoaderTest extends TestCase
 		(new ContainerLoader($this->container, [$commandName => $serviceId]))->get($commandName);
 	}
 
+	/**
+	 * @covers  Joomla\Console\Loader\ContainerLoader
+	 */
 	public function testTheLoaderHasACommand()
 	{
 		$commandName = 'test:loader';
