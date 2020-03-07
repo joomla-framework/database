@@ -23,6 +23,7 @@ use Joomla\Console\Tests\Fixtures\Command\NamespacedCommand;
 use Joomla\Console\Tests\Fixtures\Command\SkipConfigurationCommand;
 use Joomla\Console\Tests\Fixtures\Command\TopNamespacedCommand;
 use Joomla\Event\Dispatcher;
+use Joomla\Test\TestHelper;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -187,10 +188,9 @@ class ApplicationTest extends TestCase
 		/** @var HelpCommand $helpCommand */
 		$helpCommand = $this->object->getCommand('test:namespaced');
 		$this->assertInstanceOf(HelpCommand::class, $helpCommand);
-		$this->assertAttributeSame(
+		$this->assertSame(
 			$command,
-			'command',
-			$helpCommand,
+			TestHelper::getValue($helpCommand, 'command'),
 			'The getCommand method should inject the command help is being requested for'
 		);
 	}
