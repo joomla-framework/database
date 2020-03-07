@@ -17,7 +17,7 @@ cache:
 
 ## Build matrix for lowest and highest possible targets
 environment:
-  DLLVersion: "5.6.1"
+  DLLVersion: "5.8.0"
   PHPBuild: "x64"
   VC: "vc15"
   matrix:
@@ -30,6 +30,10 @@ environment:
     driver: sqlsrv
     db_version: sql2017
     php: 7.3
+  - db: mssql
+    driver: sqlsrv
+    db_version: sql2017
+    php: 7.4
 
 init:
   - SET PATH=C:\Program Files\OpenSSL;c:\tools\php;C:\tools\composer;%PATH%
