@@ -37,6 +37,8 @@ matrix:
       env: INSTALL_APCU="yes"
     - php: 7.3
       env: INSTALL_APCU="yes"
+    - php: 7.4
+      env: INSTALL_APCU="yes"
     - php: nightly
   allow_failures:
     - php: nightly
