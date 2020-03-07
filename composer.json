@@ -30,7 +30,6 @@
         "psr/log": "To use the LoggingMonitor, install psr/log.",
         "ext-mysqli": "To connect to a MySQL database via MySQLi",
         "ext-pdo": "To connect to a MySQL, PostgreSQL, or SQLite database via PDO",
-        "ext-pgsql": "To connect to a PostgreSQL database",
         "ext-sqlsrv": "To connect to a SQL Server database"
     },
     "autoload": {
