@@ -10,7 +10,7 @@
         "joomla/event": "^2.0"
     },
     "require-dev": {
-        "joomla/archive": "^2.0",
+        "joomla/archive": "^1.0|^2.0",
         "joomla/coding-standards": "^2.0@alpha",
         "joomla/console": "^2.0",
         "joomla/di": "^1.0|^2.0",
@@ -20,9 +20,6 @@
         "phpunit/phpunit": "^8.5|^9.0",
         "psr/log": "^1.1",
         "symfony/phpunit-bridge": "^4.4|^5.0"
-    },
-    "conflict": {
-        "joomla/archive": "<2.0"
     },
     "suggest": {
         "joomla/archive": "To use the ExportCommand class, install joomla/archive",
