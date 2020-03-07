@@ -61,14 +61,41 @@ class ApplicationTest extends TestCase
 	 * @uses    Joomla\Console\Command\AbstractCommand
 	 * @uses    Joomla\Console\Command\HelpCommand
 	 * @uses    Joomla\Console\Command\ListCommand
-	 * @uses    Joomla\Console\Event\ApplicationErrorEvent
-	 * @uses    Joomla\Console\Event\ConsoleEvent
+	 * @uses    Joomla\Console\Descriptor\ApplicationDescription
+	 * @uses    Joomla\Console\Descriptor\TextDescriptor
+	 * @uses    Joomla\Console\Helper\DescriptorHelper
 	 */
-	public function testTheApplicationIsExecuted()
+	public function testTheApplicationIsExecutedWithTheDefaultCommand()
 	{
+		$input = new ArrayInput([]);
 		$output = new BufferedOutput;
 
-		$app = new Application(null, $output);
+		$app = new Application($input, $output);
+		$app->setAutoExit(false);
+		$app->execute();
+
+		$this->assertNotEmpty($output->fetch());
+	}
+
+	/**
+	 * @covers  Joomla\Console\Application
+	 * @uses    Joomla\Console\Command\AbstractCommand
+	 * @uses    Joomla\Console\Command\HelpCommand
+	 * @uses    Joomla\Console\Command\ListCommand
+	 * @uses    Joomla\Console\Descriptor\ApplicationDescription
+	 * @uses    Joomla\Console\Descriptor\TextDescriptor
+	 * @uses    Joomla\Console\Helper\DescriptorHelper
+	 */
+	public function testTheApplicationIsExecutedWithTheRequestedCommand()
+	{
+		$input = new ArrayInput(
+			[
+				'command' => 'list',
+			]
+		);
+		$output = new BufferedOutput;
+
+		$app = new Application($input, $output);
 		$app->setAutoExit(false);
 		$app->execute();
 
@@ -426,14 +453,20 @@ class ApplicationTest extends TestCase
 	 * @uses    Joomla\Console\Command\AbstractCommand
 	 * @uses    Joomla\Console\Command\HelpCommand
 	 * @uses    Joomla\Console\Command\ListCommand
-	 * @uses    Joomla\Console\Event\ApplicationErrorEvent
-	 * @uses    Joomla\Console\Event\ConsoleEvent
+	 * @uses    Joomla\Console\Descriptor\ApplicationDescription
+	 * @uses    Joomla\Console\Descriptor\TextDescriptor
+	 * @uses    Joomla\Console\Helper\DescriptorHelper
 	 */
 	public function testAppIsClosedWhenAutoExitIsEnabled()
 	{
+		$input = new ArrayInput(
+			[
+				'command' => 'list',
+			]
+		);
 		$output = new NullOutput;
 
-		$app = $this->buildMockClosingApplication(null, $output);
+		$app = $this->buildMockClosingApplication($input, $output);
 
 		$app->setAutoExit(true);
 		$app->execute();
