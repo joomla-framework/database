@@ -4,10 +4,10 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Application\Tests;
+namespace Joomla\Application\Tests\Web;
 
+use Joomla\Application\Tests\CompatTestCase;
 use Joomla\Application\Web\WebClient;
-use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/Stubs/JWebClientInspector.php';
 
@@ -16,7 +16,7 @@ require_once __DIR__ . '/Stubs/JWebClientInspector.php';
  *
  * @since  1.0
  */
-class WebClientTest extends TestCase
+class WebClientTest extends CompatTestCase
 {
 	/**
 	 * An instance of a JWebClient inspector.
@@ -202,9 +202,9 @@ class WebClientTest extends TestCase
 	 *
 	 * @since   1.0
 	 */
-	public function setUp()
+	public function doSetUp()
 	{
-		parent::setUp();
+		parent::doSetUp();
 
 		$_SERVER['HTTP_HOST'] = 'mydomain.com';
 		$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0';

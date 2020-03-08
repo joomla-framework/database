@@ -6,12 +6,10 @@
 
 namespace Joomla\Application\Tests;
 
-use PHPUnit\Framework\TestCase;
-
 /**
  * Test class for Joomla\Application\AbstractApplication.
  */
-class AbstractApplicationTest extends TestCase
+class AbstractApplicationTest extends CompatTestCase
 {
 	/**
 	 * @testdox  Tests the constructor creates default object instances

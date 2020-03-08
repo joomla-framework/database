@@ -7,14 +7,12 @@
 namespace Joomla\Application\Cli\Tests;
 
 use Joomla\Application\Cli\ColorStyle;
-use PHPUnit\Framework\TestCase;
+use Joomla\Application\Tests\CompatTestCase;
 
 /**
- * Test class.
- *
- * @since  1.0
+ * Test class for Joomla\Application\Cli\ColorStyle.
  */
-class ColorStyleTest extends TestCase
+class ColorStyleTest extends CompatTestCase
 {
 	/**
 	 * @var ColorStyle
@@ -27,103 +25,113 @@ class ColorStyleTest extends TestCase
 	 *
 	 * @return void
 	 */
-	protected function setUp()
+	protected function doSetUp()
 	{
 		$this->object = new ColorStyle('red', 'white', array('blink'));
+
+		parent::doSetUp();
 	}
 
 	/**
-	 * Test the GetStyle method.
-	 *
-	 * @covers Joomla\Application\Cli\ColorStyle::getStyle
-	 *
-	 * @return void
+	 * Test the getStyle method.
 	 */
 	public function testGetStyle()
 	{
-		$this->assertThat(
-			$this->object->getStyle(),
-			$this->equalTo('31;47;5')
+		$this->assertSame(
+			'31;47;5',
+			$this->object->getStyle()
 		);
 	}
 
 	/**
-	 * Test the ToString method.
+	 * Test the object can be converted to a string
 	 *
 	 * @return void
 	 */
 	public function testToString()
 	{
-		$this->assertThat(
-			$this->object->__toString(),
-			$this->equalTo('31;47;5')
+		$this->assertSame(
+			'31;47;5',
+			(string) $this->object
 		);
 	}
 
 	/**
-	 * Test the __construct method.
-	 *
-	 * @return void
+	 * Tests a ColorStyle can be created from a string
 	 */
 	public function fromString()
 	{
-		$style = new ColorStyle('white', 'red', array('blink', 'bold'));
-
-		$colorStyle = $this->object;
-
-		$this->assertThat(
-			$colorStyle::fromString('fg=white;bg=red;options=blink,bold'),
-			$this->equalTo($style)
+		$this->assertEquals(
+			new ColorStyle('white', 'red', array('blink', 'bold')),
+			ColorStyle::fromString('fg=white;bg=red;options=blink,bold')
 		);
 	}
 
 	/**
-	 * Test the fromString method.
-	 *
-	 * @expectedException \RuntimeException
-	 *
-	 * @return void
+	 * Tests a ColorStyle cannot be created from an invalid string
 	 */
 	public function testFromStringInvalid()
 	{
-		$colorStyle = $this->object;
+		if (method_exists($this, 'expectException'))
+		{
+			$this->expectException('\\RuntimeException');
+		}
+		else
+		{
+			$this->setExpectedException('\\RuntimeException');
+		}
 
-		$colorStyle::fromString('XXX;XX=YY');
+		ColorStyle::fromString('XXX;XX=YY');
 	}
 
 	/**
-	 * Test the __construct method.
-	 *
-	 * @expectedException \InvalidArgumentException
-	 *
-	 * @return void
+	 * Tests a ColorStyle cannot be created from an invalid string
 	 */
 	public function testConstructInvalid1()
 	{
+		if (method_exists($this, 'expectException'))
+		{
+			$this->expectException('\\InvalidArgumentException');
+		}
+		else
+		{
+			$this->setExpectedException('\\InvalidArgumentException');
+		}
+
 		new ColorStyle('INVALID');
 	}
 
 	/**
-	 * Test the __construct method.
-	 *
-	 * @expectedException \InvalidArgumentException
-	 *
-	 * @return void
+	 * Tests a ColorStyle cannot be created from an invalid string
 	 */
 	public function testConstructInvalid2()
 	{
+		if (method_exists($this, 'expectException'))
+		{
+			$this->expectException('\\InvalidArgumentException');
+		}
+		else
+		{
+			$this->setExpectedException('\\InvalidArgumentException');
+		}
+
 		new ColorStyle('', 'INVALID');
 	}
 
 	/**
-	 * Test the __construct method.
-	 *
-	 * @expectedException \InvalidArgumentException
-	 *
-	 * @return void
+	 * Tests a ColorStyle cannot be created from an invalid options array
 	 */
 	public function testConstructInvalid3()
 	{
+		if (method_exists($this, 'expectException'))
+		{
+			$this->expectException('\\InvalidArgumentException');
+		}
+		else
+		{
+			$this->setExpectedException('\\InvalidArgumentException');
+		}
+
 		new ColorStyle('', '', array('INVALID'));
 	}
 }

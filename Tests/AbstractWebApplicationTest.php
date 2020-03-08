@@ -9,12 +9,11 @@ namespace Joomla\Application\Tests;
 use Joomla\Application\Web\WebClient;
 use Joomla\Input\Input;
 use Joomla\Test\TestHelper;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Joomla\Application\AbstractWebApplication.
  */
-class AbstractWebApplicationTest extends TestCase
+class AbstractWebApplicationTest extends CompatTestCase
 {
 	/**
 	 * Value for test host.
@@ -43,6 +42,17 @@ class AbstractWebApplicationTest extends TestCase
 	 * @var  array
 	 */
 	private static $headers = array();
+
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function doTearDown()
+	{
+		// Reset the $headers array
+		self::$headers = array();
+
+		parent::doTearDown();
+	}
 
 	/**
 	 * Data for detectRequestUri method.
@@ -1715,16 +1725,5 @@ class AbstractWebApplicationTest extends TestCase
 		$this->assertFalse(
 			$object->isValidHttpStatus(460)
 		);
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function tearDown()
-	{
-		// Reset the $headers array
-		self::$headers = array();
-
-		parent::tearDown();
 	}
 }

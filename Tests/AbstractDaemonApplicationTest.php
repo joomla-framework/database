@@ -7,14 +7,13 @@
 namespace Joomla\Application\Tests;
 
 use Joomla\Application\Tests\Stubs\ConcreteDaemon;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Joomla\Application\AbstractDaemonApplication.
  *
  * @requires extension pcntl
  */
-class AbstractDaemonApplicationTest extends TestCase
+class AbstractDaemonApplicationTest extends CompatTestCase
 {
 	/**
 	 * An instance of a Daemon inspector.
@@ -28,9 +27,9 @@ class AbstractDaemonApplicationTest extends TestCase
 	 *
 	 * @return  void
 	 */
-	protected function setUp()
+	protected function doSetUp()
 	{
-		parent::setUp();
+		parent::doSetUp();
 
 		// Get a new ConcreteDaemon instance.
 		$this->inspector = new ConcreteDaemon;
@@ -41,7 +40,7 @@ class AbstractDaemonApplicationTest extends TestCase
 	 *
 	 * @return  void
 	 */
-	protected function tearDown()
+	protected function doTearDown()
 	{
 		// Reset some daemon inspector static settings.
 		ConcreteDaemon::$pcntlChildExitStatus = 0;
@@ -56,7 +55,7 @@ class AbstractDaemonApplicationTest extends TestCase
 			unlink($pidPath);
 		}
 
-		parent::tearDown();
+		parent::doTearDown();
 	}
 
 	/**
@@ -64,11 +63,11 @@ class AbstractDaemonApplicationTest extends TestCase
 	 *
 	 * @return  void
 	 */
-	public static function tearDownAfterClass()
+	public static function doTearDownAfterClass()
 	{
 		ini_restore('memory_limit');
 
-		parent::tearDownAfterClass();
+		parent::doTearDownAfterClass();
 	}
 
 	/**

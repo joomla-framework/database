@@ -8,12 +8,11 @@ namespace Joomla\Application\Tests;
 
 use Joomla\Application\Cli\ColorProcessor;
 use Joomla\Application\Cli\ColorStyle;
-use PHPUnit\Framework\TestCase;
 
 /**
- * Test class.
+ * Test class for Joomla\Application\Cli\ColorProcessor.
  */
-class ColorProcessorTest extends TestCase
+class ColorProcessorTest extends CompatTestCase
 {
 	/**
 	 * Object under test
@@ -35,10 +34,12 @@ class ColorProcessorTest extends TestCase
 	 *
 	 * @return  void
 	 */
-	protected function setUp()
+	protected function doSetUp()
 	{
 		$this->object = new ColorProcessor;
-		$this->winOs = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+		$this->winOs = PHP_OS_FAMILY === 'Windows';
+
+		parent::doSetUp();
 	}
 
 	/**
@@ -46,14 +47,13 @@ class ColorProcessorTest extends TestCase
 	 */
 	public function testAddStyle()
 	{
-		$style = new ColorStyle('red');
-		$this->object->addStyle('foo', $style);
+		$this->object->addStyle('foo', new ColorStyle('red'));
 
 		$check = $this->winOs ? 'foo' : '[31mfoo[0m';
 
-		$this->assertThat(
-			$this->object->process('<foo>foo</foo>'),
-			$this->equalTo($check)
+		$this->assertSame(
+			$check,
+			$this->object->process('<foo>foo</foo>')
 		);
 	}
 
@@ -62,11 +62,9 @@ class ColorProcessorTest extends TestCase
 	 */
 	public function testStripColors()
 	{
-		$colorProcessor = $this->object;
-
-		$this->assertThat(
-			$colorProcessor::stripColors('<foo>foo</foo>'),
-			$this->equalTo('foo')
+		$this->assertSame(
+			'foo',
+			ColorProcessor::stripColors('<foo>foo</foo>')
 		);
 	}
 
@@ -77,9 +75,9 @@ class ColorProcessorTest extends TestCase
 	{
 		$check = $this->winOs ? 'foo' : '[31mfoo[0m';
 
-		$this->assertThat(
-			$this->object->process('<fg=red>foo</fg=red>'),
-			$this->equalTo($check)
+		$this->assertSame(
+			$check,
+			$this->object->process('<fg=red>foo</fg=red>')
 		);
 	}
 
@@ -88,14 +86,13 @@ class ColorProcessorTest extends TestCase
 	 */
 	public function testProcessNamed()
 	{
-		$style = new ColorStyle('red');
-		$this->object->addStyle('foo', $style);
+		$this->object->addStyle('foo', new ColorStyle('red'));
 
 		$check = $this->winOs ? 'foo' : '[31mfoo[0m';
 
-		$this->assertThat(
-			$this->object->process('<foo>foo</foo>'),
-			$this->equalTo($check)
+		$this->assertSame(
+			$check,
+			$this->object->process('<foo>foo</foo>')
 		);
 	}
 
@@ -106,9 +103,9 @@ class ColorProcessorTest extends TestCase
 	{
 		$check = $this->winOs ? 'foo' : '[31mfoo[0m';
 
-		$this->assertThat(
-			$this->object->process('<fg=red>foo</fg=red>'),
-			$this->equalTo($check)
+		$this->assertSame(
+			$check,
+			$this->object->process('<fg=red>foo</fg=red>')
 		);
 	}
 }
