@@ -12,24 +12,20 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test class.
- *
- * @since  1.0
  */
 class ColorProcessorTest extends TestCase
 {
 	/**
 	 * Object under test
 	 *
-	 * @var    ColorProcessor
-	 * @since  1.0
+	 * @var  ColorProcessor
 	 */
 	protected $object;
 
 	/**
 	 * Windows OS flag
 	 *
-	 * @var    boolean
-	 * @since  1.0
+	 * @var  boolean
 	 */
 	protected $winOs = false;
 
@@ -38,8 +34,6 @@ class ColorProcessorTest extends TestCase
 	 * This method is called before a test is executed.
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	protected function setUp()
 	{
@@ -49,11 +43,6 @@ class ColorProcessorTest extends TestCase
 
 	/**
 	 * Tests the process method for adding a style
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\Application\Cli\ColorProcessor::addStyle
-	 * @since   1.0
 	 */
 	public function testAddStyle()
 	{
@@ -70,11 +59,6 @@ class ColorProcessorTest extends TestCase
 
 	/**
 	 * Tests the stripColors method
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\Application\Cli\ColorProcessor::stripColors
-	 * @since   1.0
 	 */
 	public function testStripColors()
 	{
@@ -88,11 +72,6 @@ class ColorProcessorTest extends TestCase
 
 	/**
 	 * Tests the process method for replacing colors
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\Application\Cli\ColorProcessor::process
-	 * @since   1.0
 	 */
 	public function testProcess()
 	{
@@ -106,11 +85,6 @@ class ColorProcessorTest extends TestCase
 
 	/**
 	 * Tests the process method for replacing colors
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\Application\Cli\ColorProcessor::process
-	 * @since   1.0
 	 */
 	public function testProcessNamed()
 	{
@@ -127,11 +101,6 @@ class ColorProcessorTest extends TestCase
 
 	/**
 	 * Tests the process method for replacing colors
-	 *
-	 * @return  void
-	 *
-	 * @covers  Joomla\Application\Cli\ColorProcessor::replaceColors
-	 * @since   1.0
 	 */
 	public function testProcessReplace()
 	{
