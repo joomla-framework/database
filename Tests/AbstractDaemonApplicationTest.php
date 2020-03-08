@@ -137,7 +137,7 @@ class AbstractDaemonApplicationTest extends CompatTestCase
 
 		// Check the permissions on the file.
 		$this->assertEquals(
-			'0644',
+			'00644',
 			substr(decoct(fileperms($this->inspector->getClassProperty('config')->get('application_pid_file'))), 1)
 		);
 	}
