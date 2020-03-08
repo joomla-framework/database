@@ -8,10 +8,11 @@ namespace Joomla\Application\Tests;
 
 use Joomla\Application\Tests\PhpUnit\PhpUnit6TestCase;
 use Joomla\Application\Tests\PhpUnit\PhpUnit7TestCase;
-use PHPUnit\Runner\Version;
+
+$versionClass = class_exists('\\PHPUnit\\Runner\\Version') ? '\\PHPUnit\\Runner\\Version' : '\\PHPUnit_Runner_Version';
 
 // Note, the compatibility classes MUST be in separate files so as to not introduce parse errors for older PHP versions
-if (version_compare(Version::id(), '7.0', '>='))
+if (version_compare($versionClass::id(), '7.0', '>='))
 {
 	/**
 	 * Compatibility test case used for PHPUnit 7.x and later
