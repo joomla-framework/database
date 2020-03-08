@@ -21,7 +21,7 @@ class Argon2idHandlerTest extends CompatTestCase
 	{
 		if (!Argon2idHandler::isSupported())
 		{
-			self::markTestSkipped('Argon2id algorithm is not supported.');
+			static::markTestSkipped('Argon2id algorithm is not supported.');
 		}
 
 		parent::doSetUpBeforeClass();

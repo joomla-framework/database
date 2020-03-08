@@ -21,7 +21,7 @@ class Argon2iHandlerTest extends CompatTestCase
 	{
 		if (!Argon2iHandler::isSupported())
 		{
-			self::markTestSkipped('Argon2i algorithm is not supported.');
+			static::markTestSkipped('Argon2i algorithm is not supported.');
 		}
 
 		parent::doSetUpBeforeClass();
