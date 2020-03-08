@@ -21,39 +21,25 @@ class TwigRendererTest extends TestCase
 	/**
 	 * @testdox  The Twig renderer is instantiated with default parameters
 	 *
-	 * @covers   \Joomla\Renderer\TwigRenderer::__construct
+	 * @covers   Joomla\Renderer\TwigRenderer
 	 */
 	public function testTheTwigRendererIsInstantiatedWithDefaultParameters()
 	{
 		$renderer = new TwigRenderer;
 
-		$this->assertAttributeInstanceOf(Environment::class, 'renderer', $renderer);
+		$this->assertInstanceOf(Environment::class, $renderer->getRenderer());
 
-		$this->assertAttributeInstanceOf(
+		$this->assertInstanceOf(
 			FilesystemLoader::class,
-			'loader',
-			$renderer->getRenderer(),
+			$renderer->getRenderer()->getLoader(),
 			'A default FilesystemLoader instance should be set as the loader for the environment.'
 		);
 	}
 
 	/**
-	 * @testdox  The Twig renderer is instantiated with injected parameters
-	 *
-	 * @covers   \Joomla\Renderer\TwigRenderer::__construct
-	 */
-	public function testTheTwigRendererIsInstantiatedWithInjectedParameters()
-	{
-		$environment = new Environment(new ArrayLoader([]));
-		$renderer    = new TwigRenderer($environment);
-
-		$this->assertAttributeSame($environment, 'renderer', $renderer);
-	}
-
-	/**
 	 * @testdox  A path is added to the environment's loader when it is a filesystem loader
 	 *
-	 * @covers   \Joomla\Renderer\TwigRenderer::addFolder
+	 * @covers   Joomla\Renderer\TwigRenderer
 	 */
 	public function testAPathIsAddedToTheEnvironmentsLoaderWhenItIsAFilesystemLoader()
 	{
@@ -67,7 +53,7 @@ class TwigRendererTest extends TestCase
 	/**
 	 * @testdox  The rendering engine is returned
 	 *
-	 * @covers   \Joomla\Renderer\TwigRenderer::getRenderer
+	 * @covers   Joomla\Renderer\TwigRenderer
 	 */
 	public function testTheRenderingEngineIsReturned()
 	{
@@ -80,20 +66,20 @@ class TwigRendererTest extends TestCase
 	/**
 	 * @testdox  Check that a path exists when the loader supports checking for existence
 	 *
-	 * @covers   \Joomla\Renderer\TwigRenderer::pathExists
+	 * @covers   Joomla\Renderer\TwigRenderer
 	 */
 	public function testCheckThatAPathExistsWhenTheLoaderSupportsCheckingForExistence()
 	{
 		$renderer = new TwigRenderer;
-		$renderer->addFolder(__DIR__ . '/stubs/twig');
 
+		$this->assertSame($renderer, $renderer->addFolder(__DIR__ . '/stubs/twig'), 'The addFolder method has a fluent interface');
 		$this->assertTrue($renderer->pathExists('index.twig'));
 	}
 
 	/**
 	 * @testdox  A path cannot be checked for existence when the loader does not support checking it
 	 *
-	 * @covers   \Joomla\Renderer\TwigRenderer::pathExists
+	 * @covers   Joomla\Renderer\TwigRenderer
 	 */
 	public function testAPathCannotBeCheckedForExistenceWhenTheLoaderDoesNotSupportCheckingIt()
 	{
@@ -103,25 +89,21 @@ class TwigRendererTest extends TestCase
 			$this->markTestSkipped('Test only applies for Twig 1.x');
 		}
 
-		$loader = $this->createMock(LoaderInterface::class);
-
-		$renderer = new TwigRenderer(new Environment($loader));
-
-		$this->assertTrue($renderer->pathExists('index.twig'));
+		$this->assertTrue((new TwigRenderer(new Environment($this->createMock(LoaderInterface::class))))->pathExists('index.twig'));
 	}
 
 	/**
 	 * @testdox  The template is rendered
 	 *
-	 * @covers   \Joomla\Renderer\TwigRenderer::render
+	 * @covers   Joomla\Renderer\TwigRenderer
 	 */
 	public function testTheTemplateIsRendered()
 	{
 		$path = __DIR__ . '/stubs/twig';
 
 		$renderer = new TwigRenderer;
-		$renderer->addFolder($path);
 
-		$this->assertSame(file_get_contents($path . '/index.twig'), $renderer->render('index.twig'));
+		$this->assertSame($renderer, $renderer->addFolder($path), 'The addFolder method has a fluent interface');
+		$this->assertStringEqualsFile($path . '/index.twig', $renderer->render('index.twig'));
 	}
 }

@@ -22,84 +22,93 @@ use PHPUnit\Framework\TestCase;
 class BladeRendererTest extends TestCase
 {
 	/**
+	 * Sets up the fixture, for example, opens a network connection.
+	 * This method is called before a test is executed.
+	 *
+	 * @return  void
+	 */
+	protected function setUp(): void
+	{
+		(new Filesystem)->makeDirectory(__DIR__ . '/stubs/blade/cache');
+	}
+
+	/**
+	 * Tears down the fixture, for example, close a network connection.
+	 * This method is called after a test is executed.
+	 *
+	 * @return  void
+	 */
+	protected function tearDown(): void
+	{
+		(new Filesystem)->deleteDirectory(__DIR__ . '/stubs/blade/cache');
+	}
+
+	/**
 	 * @testdox  The Blade renderer is instantiated with default parameters
 	 *
-	 * @covers   \Joomla\Renderer\BladeRenderer::__construct
+	 * @covers   Joomla\Renderer\BladeRenderer
 	 */
 	public function testTheBladeRendererIsInstantiatedWithDefaultParameters()
 	{
-		$renderer = new BladeRenderer;
-
-		$this->assertAttributeInstanceOf(Factory::class, 'renderer', $renderer);
+		$this->assertInstanceOf(Factory::class, (new BladeRenderer)->getRenderer());
 	}
 
 	/**
 	 * @testdox  The Blade renderer is instantiated with injected parameters
 	 *
-	 * @covers   \Joomla\Renderer\BladeRenderer::__construct
+	 * @covers   Joomla\Renderer\BladeRenderer
 	 */
 	public function testTheBladeRendererIsInstantiatedWithInjectedParameters()
 	{
-		$factory  = $this->makeFactory();
-		$renderer = new BladeRenderer($factory);
+		$factory = $this->makeFactory();
 
-		$this->assertAttributeSame($factory, 'renderer', $renderer);
+		$this->assertSame($factory, (new BladeRenderer($factory))->getRenderer());
 	}
 
 	/**
 	 * @testdox  An additional path is added to the renderer
 	 *
-	 * @covers   \Joomla\Renderer\BladeRenderer::addFolder()
+	 * @covers   Joomla\Renderer\BladeRenderer
 	 */
 	public function testAnAdditionalPathIsAddedToTheRenderer()
 	{
 		$path     = __DIR__ . '/stubs/templating';
-		$factory  = $this->makeFactory();
-		$renderer = new BladeRenderer($factory);
+		$renderer = new BladeRenderer($this->makeFactory());
 
-		$this->assertSame($renderer, $renderer->addFolder($path, 'test'), 'Validates $this is returned');
+		$this->assertSame($renderer, $renderer->addFolder($path, 'test'), 'The addFolder method has a fluent interface');
 		$this->assertTrue(\in_array($path, $renderer->getRenderer()->getFinder()->getPaths()));
 	}
 
 	/**
 	 * @testdox  The rendering engine is returned
 	 *
-	 * @covers   \Joomla\Renderer\BladeRenderer::getRenderer
+	 * @covers   Joomla\Renderer\BladeRenderer
 	 */
 	public function testTheRenderingEngineIsReturned()
 	{
-		$factory  = $this->makeFactory();
-		$renderer = new BladeRenderer($factory);
+		$factory = $this->makeFactory();
 
-		$this->assertSame($factory, $renderer->getRenderer());
+		$this->assertSame($factory, (new BladeRenderer($factory))->getRenderer());
 	}
 
 	/**
 	 * @testdox  Check that a path exists
 	 *
-	 * @covers   \Joomla\Renderer\BladeRenderer::pathExists
+	 * @covers   Joomla\Renderer\BladeRenderer
 	 */
 	public function testCheckThatAPathExists()
 	{
-		$factory  = $this->makeFactory();
-		$renderer = new BladeRenderer($factory);
-
-		$this->assertTrue($renderer->pathExists('index'));
+		$this->assertTrue((new BladeRenderer($this->makeFactory()))->pathExists('index'));
 	}
 
 	/**
 	 * @testdox  The template is rendered
 	 *
-	 * @covers   \Joomla\Renderer\BladeRenderer::render
+	 * @covers   Joomla\Renderer\BladeRenderer
 	 */
 	public function testTheTemplateIsRendered()
 	{
-		$path = __DIR__ . '/stubs/blade';
-
-		$factory  = $this->makeFactory();
-		$renderer = new BladeRenderer($factory);
-
-		$this->assertSame(file_get_contents($path . '/index.blade.php'), $renderer->render('index'));
+		$this->assertStringEqualsFile(__DIR__ . '/stubs/blade/index.blade.php', (new BladeRenderer($this->makeFactory()))->render('index'));
 	}
 
 	/**
@@ -107,14 +116,14 @@ class BladeRendererTest extends TestCase
 	 *
 	 * @return  Factory
 	 */
-	private function makeFactory()
+	private function makeFactory(): Factory
 	{
 		$filesystem = new Filesystem;
 
 		$resolver = new EngineResolver;
 		$resolver->register(
 			'blade',
-			function () use ($filesystem)
+			static function () use ($filesystem): CompilerEngine
 			{
 				return new CompilerEngine(new BladeCompiler($filesystem, __DIR__ . '/stubs/blade/cache'));
 			}

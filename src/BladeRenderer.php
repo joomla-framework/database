@@ -8,6 +8,7 @@
 
 namespace Joomla\Renderer;
 
+use Illuminate\Contracts\View\Engine;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\View\Compilers\BladeCompiler;
@@ -47,9 +48,9 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 			$resolver = new EngineResolver;
 			$resolver->register(
 				'blade',
-				function () use ($filesystem)
+				static function () use ($filesystem): Engine
 				{
-					return new CompilerEngine(new BladeCompiler($filesystem, getcwd() . '/cache'));
+					return new CompilerEngine(new BladeCompiler($filesystem));
 				}
 			);
 

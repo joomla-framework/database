@@ -7,6 +7,7 @@
 namespace Joomla\Renderer\Tests;
 
 use Joomla\Renderer\AbstractRenderer;
+use Joomla\Test\TestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +19,7 @@ class AbstractRendererTest extends TestCase
 	/**
 	 * @testdox  A data key is set to the renderer
 	 *
-	 * @covers   \Joomla\Renderer\AbstractRenderer::set
+	 * @covers   Joomla\Renderer\AbstractRenderer
 	 */
 	public function testADataKeyIsSetToTheRenderer()
 	{
@@ -27,13 +28,13 @@ class AbstractRendererTest extends TestCase
 
 		$renderer->set('foo', 'bar');
 
-		$this->assertAttributeSame(['foo' => 'bar'], 'data', $renderer);
+		$this->assertSame(['foo' => 'bar'], TestHelper::getValue($renderer, 'data'));
 	}
 
 	/**
 	 * @testdox  A data array is set to the renderer
 	 *
-	 * @covers   \Joomla\Renderer\AbstractRenderer::setData
+	 * @covers   Joomla\Renderer\AbstractRenderer
 	 */
 	public function testADataArrayIsSetToTheRenderer()
 	{
@@ -42,13 +43,13 @@ class AbstractRendererTest extends TestCase
 
 		$renderer->setData(['foo' => 'bar']);
 
-		$this->assertAttributeSame(['foo' => 'bar'], 'data', $renderer);
+		$this->assertSame(['foo' => 'bar'], TestHelper::getValue($renderer, 'data'));
 	}
 
 	/**
 	 * @testdox  The renderer's data array is reset
 	 *
-	 * @covers   \Joomla\Renderer\AbstractRenderer::unsetData()
+	 * @covers   Joomla\Renderer\AbstractRenderer
 	 */
 	public function testTheRenderersDataArrayIsReset()
 	{
@@ -58,6 +59,6 @@ class AbstractRendererTest extends TestCase
 		$renderer->setData(['foo' => 'bar']);
 		$renderer->unsetData();
 
-		$this->assertAttributeEmpty('data', $renderer);
+		$this->assertEmpty(TestHelper::getValue($renderer, 'data'));
 	}
 }

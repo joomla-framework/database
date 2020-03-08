@@ -18,92 +18,83 @@ class PlatesRendererTest extends TestCase
 	/**
 	 * @testdox  The Plates renderer is instantiated with default parameters
 	 *
-	 * @covers   \Joomla\Renderer\PlatesRenderer::__construct
+	 * @covers   Joomla\Renderer\PlatesRenderer
 	 */
 	public function testThePlatesRendererIsInstantiatedWithDefaultParameters()
 	{
-		$renderer = new PlatesRenderer;
-
-		$this->assertAttributeInstanceOf(Engine::class, 'renderer', $renderer);
+		$this->assertInstanceOf(Engine::class, (new PlatesRenderer)->getRenderer());
 	}
 
 	/**
 	 * @testdox  The Plates renderer is instantiated with injected parameters
 	 *
-	 * @covers   \Joomla\Renderer\PlatesRenderer::__construct
+	 * @covers   Joomla\Renderer\PlatesRenderer
 	 */
 	public function testThePlatesRendererIsInstantiatedWithInjectedParameters()
 	{
-		$engine   = new Engine;
-		$renderer = new PlatesRenderer($engine);
+		$engine = new Engine;
 
-		$this->assertAttributeSame($engine, 'renderer', $renderer);
+		$this->assertSame($engine, (new PlatesRenderer($engine))->getRenderer());
 	}
 
 	/**
 	 * @testdox  An additional path is added to the renderer
 	 *
-	 * @covers   \Joomla\Renderer\PlatesRenderer::addFolder()
+	 * @covers   Joomla\Renderer\PlatesRenderer
 	 */
 	public function testAnAdditionalPathIsAddedToTheRenderer()
 	{
 		$renderer = new PlatesRenderer;
 		$path     = __DIR__ . '/stubs/plates';
 
-		$this->assertSame($renderer, $renderer->addFolder($path, 'test'), 'Validates $this is returned');
+		$this->assertSame($renderer, $renderer->addFolder($path, 'test'), 'The addFolder method has a fluent interface');
 		$this->assertTrue($renderer->getRenderer()->getFolders()->exists('test'));
 	}
 
 	/**
 	 * @testdox  The rendering engine is returned
 	 *
-	 * @covers   \Joomla\Renderer\PlatesRenderer::getRenderer
+	 * @covers   Joomla\Renderer\PlatesRenderer
 	 */
 	public function testTheRenderingEngineIsReturned()
 	{
-		$engine   = new Engine;
-		$renderer = new PlatesRenderer($engine);
+		$engine = new Engine;
 
-		$this->assertSame($engine, $renderer->getRenderer());
+		$this->assertSame($engine, (new PlatesRenderer($engine))->getRenderer());
 	}
 
 	/**
 	 * @testdox  Check that a path exists
 	 *
-	 * @covers   \Joomla\Renderer\PlatesRenderer::pathExists
+	 * @covers   Joomla\Renderer\PlatesRenderer
 	 */
 	public function testCheckThatAPathExists()
 	{
-		$engine   = new Engine(__DIR__ . '/stubs/plates');
-		$renderer = new PlatesRenderer($engine);
-
-		$this->assertTrue($renderer->pathExists('index'));
+		$this->assertTrue((new PlatesRenderer(new Engine(__DIR__ . '/stubs/plates')))->pathExists('index'));
 	}
 
 	/**
 	 * @testdox  The template is rendered
 	 *
-	 * @covers   \Joomla\Renderer\PlatesRenderer::render
+	 * @covers   Joomla\Renderer\PlatesRenderer
 	 */
 	public function testTheTemplateIsRendered()
 	{
-		$path     = __DIR__ . '/stubs/plates';
-		$engine   = new Engine($path);
-		$renderer = new PlatesRenderer($engine);
+		$path = __DIR__ . '/stubs/plates';
 
-		$this->assertSame(file_get_contents($path . '/index.php'), $renderer->render('index'));
+		$this->assertStringEqualsFile($path . '/index.php', (new PlatesRenderer(new Engine($path)))->render('index'));
 	}
 
 	/**
 	 * @testdox  The file extension is set
 	 *
-	 * @covers   \Joomla\Renderer\PlatesRenderer::setFileExtension
+	 * @covers   Joomla\Renderer\PlatesRenderer
 	 */
 	public function testTheFileExtensionIsSet()
 	{
 		$renderer = new PlatesRenderer;
 
-		$this->assertSame($renderer, $renderer->setFileExtension('tpl'), 'Validates $this is returned');
+		$this->assertSame($renderer, $renderer->setFileExtension('tpl'), 'The setFileExtension has a fluent interface');
 		$this->assertSame('tpl', $renderer->getRenderer()->getFileExtension());
 	}
 }

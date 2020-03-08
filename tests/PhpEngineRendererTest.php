@@ -18,48 +18,31 @@ use Symfony\Component\Templating\TemplateNameParser;
 class PhpEngineRendererTest extends TestCase
 {
 	/**
-	 * @testdox  The PhpEngine renderer is instantiated with injected parameters
-	 *
-	 * @covers   \Joomla\Renderer\PhpEngineRenderer::__construct
-	 */
-	public function testThePhpEngineRendererIsInstantiatedWithInjectedParameters()
-	{
-		$engine   = $this->makeEngine();
-		$renderer = new PhpEngineRenderer($engine);
-
-		$this->assertAttributeSame($engine, 'renderer', $renderer);
-	}
-
-	/**
 	 * @testdox  The rendering engine is returned
 	 *
-	 * @covers   \Joomla\Renderer\PhpEngineRenderer::getRenderer
+	 * @covers   Joomla\Renderer\PhpEngineRenderer
 	 */
 	public function testTheRenderingEngineIsReturned()
 	{
-		$engine   = $this->makeEngine();
-		$renderer = new PhpEngineRenderer($engine);
+		$engine = $this->makeEngine();
 
-		$this->assertSame($engine, $renderer->getRenderer());
+		$this->assertSame($engine, (new PhpEngineRenderer($engine))->getRenderer());
 	}
 
 	/**
 	 * @testdox  Check that a path exists
 	 *
-	 * @covers   \Joomla\Renderer\PhpEngineRenderer::pathExists
+	 * @covers   Joomla\Renderer\PhpEngineRenderer
 	 */
 	public function testCheckThatAPathExists()
 	{
-		$engine   = $this->makeEngine();
-		$renderer = new PhpEngineRenderer($engine);
-
-		$this->assertTrue($renderer->pathExists('index.php'));
+		$this->assertTrue((new PhpEngineRenderer($this->makeEngine()))->pathExists('index.php'));
 	}
 
 	/**
 	 * @testdox  The template is rendered
 	 *
-	 * @covers   \Joomla\Renderer\PhpEngineRenderer::render
+	 * @covers   Joomla\Renderer\PhpEngineRenderer
 	 */
 	public function testTheTemplateIsRendered()
 	{
@@ -68,7 +51,7 @@ class PhpEngineRendererTest extends TestCase
 		$engine   = $this->makeEngine();
 		$renderer = new PhpEngineRenderer($engine);
 
-		$this->assertSame(file_get_contents($path . '/index.php'), $renderer->render('index.php'));
+		$this->assertStringEqualsFile($path . '/index.php', $renderer->render('index.php'));
 	}
 
 	/**

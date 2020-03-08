@@ -28,49 +28,33 @@ class MustacheRendererTest extends TestCase
 	/**
 	 * @testdox  The Mustache renderer is instantiated with default parameters
 	 *
-	 * @covers   \Joomla\Renderer\MustacheRenderer::__construct
+	 * @covers   Joomla\Renderer\MustacheRenderer
 	 */
 	public function testTheMustacheRendererIsInstantiatedWithDefaultParameters()
 	{
-		$renderer = new MustacheRenderer;
-
-		$this->assertAttributeInstanceOf('Mustache_Engine', 'renderer', $renderer);
-	}
-
-	/**
-	 * @testdox  The Mustache renderer is instantiated with injected parameters
-	 *
-	 * @covers   \Joomla\Renderer\MustacheRenderer::__construct
-	 */
-	public function testTheMustacheRendererIsInstantiatedWithInjectedParameters()
-	{
-		$engine   = new \Mustache_Engine;
-		$renderer = new MustacheRenderer($engine);
-
-		$this->assertAttributeSame($engine, 'renderer', $renderer);
+		$this->assertInstanceOf(\Mustache_Engine::class, (new MustacheRenderer)->getRenderer());
 	}
 
 	/**
 	 * @testdox  The rendering engine is returned
 	 *
-	 * @covers   \Joomla\Renderer\MustacheRenderer::getRenderer
+	 * @covers   Joomla\Renderer\MustacheRenderer
 	 */
 	public function testTheRenderingEngineIsReturned()
 	{
-		$engine   = new \Mustache_Engine;
-		$renderer = new MustacheRenderer($engine);
+		$engine = new \Mustache_Engine;
 
-		$this->assertSame($engine, $renderer->getRenderer());
+		$this->assertSame($engine, (new MustacheRenderer($engine))->getRenderer());
 	}
 
 	/**
 	 * @testdox  Check that a path exists
 	 *
-	 * @covers   \Joomla\Renderer\MustacheRenderer::pathExists
-	 * @dataProvider  dataPathExists
-	 *
 	 * @param   string   $file    File to test for existance
 	 * @param   boolean  $result  Expected result
+	 *
+	 * @covers   Joomla\Renderer\MustacheRenderer
+	 * @dataProvider  dataPathExists
 	 */
 	public function testCheckThatAPathExists($file, $result)
 	{
@@ -80,15 +64,13 @@ class MustacheRendererTest extends TestCase
 			]
 		);
 
-		$renderer = new MustacheRenderer($engine);
-
-		$this->assertSame($result, $renderer->pathExists($file));
+		$this->assertSame($result, (new MustacheRenderer($engine))->pathExists($file));
 	}
 
 	/**
 	 * @testdox  The template is rendered
 	 *
-	 * @covers   \Joomla\Renderer\MustacheRenderer::render
+	 * @covers   Joomla\Renderer\MustacheRenderer
 	 */
 	public function testTheTemplateIsRendered()
 	{
@@ -100,8 +82,6 @@ class MustacheRendererTest extends TestCase
 			]
 		);
 
-		$renderer = new MustacheRenderer($engine);
-
-		$this->assertSame(file_get_contents($path . '/index.mustache'), $renderer->render('index.mustache'));
+		$this->assertStringEqualsFile($path . '/index.mustache', (new MustacheRenderer($engine))->render('index.mustache'));
 	}
 }

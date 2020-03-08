@@ -13,3 +13,4 @@ composer.lock
 # Local PHPUnit configuration #
 .phpunit.result.cache
 phpunit.xml
+/tests/stubs/blade/cache
