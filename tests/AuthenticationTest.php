@@ -7,33 +7,24 @@
 namespace Joomla\Authentication\Tests;
 
 use Joomla\Authentication\Authentication;
-use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for Authentication
- *
- * @since  1.0
+ * Test class for Joomla\Authentication\Authentication
  */
-class AuthenticationTest extends TestCase
+class AuthenticationTest extends CompatTestCase
 {
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
-	protected function setUp()
+	protected function doSetUp()
 	{
 		$this->object = new Authentication;
 	}
 
 	/**
 	 * Tests the authenticate method, specifying the strategy by name.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testSingleStrategy()
 	{
@@ -51,10 +42,6 @@ class AuthenticationTest extends TestCase
 
 	/**
 	 * Tests the authenticate method, using all strategies
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testSingleStrategyEmptyArray()
 	{
@@ -72,10 +59,6 @@ class AuthenticationTest extends TestCase
 
 	/**
 	 * Tests the authenticate method, using some strategies.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testSomeStrategies()
 	{
@@ -103,24 +86,23 @@ class AuthenticationTest extends TestCase
 
 	/**
 	 * Tests the authenticate method, using a non registered strategy
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 *
-	 * @expectedException  RuntimeException
 	 */
 	public function testStrategiesException()
 	{
+		if (method_exists($this, 'expectException'))
+		{
+			$this->expectException('\\RuntimeException');
+		}
+		else
+		{
+			$this->setExpectedException('\\RuntimeException');
+		}
+
 		$this->assertEquals(false, $this->object->authenticate('mock1'));
 	}
 
 	/**
 	 * Tests getting the result back.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
 	 */
 	public function testGetResults()
 	{

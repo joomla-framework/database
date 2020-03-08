@@ -7,26 +7,24 @@
 namespace Joomla\Authentication\Tests\Password;
 
 use Joomla\Authentication\Password\Argon2iHandler;
-use PHPUnit\Framework\TestCase;
+use Joomla\Authentication\Tests\CompatTestCase;
 
 /**
  * Test class for \Joomla\Authentication\Password\Argon2iHandler
  */
-class Argon2iHandlerTest extends TestCase
+class Argon2iHandlerTest extends CompatTestCase
 {
 	/**
-	 * Sets up the fixture, for example, open a network connection.
-	 *
-	 * @return  void
+	 * This method is called before the first test of this test class is run.
 	 */
-	protected function setUp()
+	protected static function doSetUpBeforeClass()
 	{
 		if (!Argon2iHandler::isSupported())
 		{
-			$this->markTestSkipped('Argon2i algorithm is not supported.');
+			self::markTestSkipped('Argon2i algorithm is not supported.');
 		}
 
-		parent::setUp();
+		parent::doSetUpBeforeClass();
 	}
 
 	/**

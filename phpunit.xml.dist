@@ -5,4 +5,7 @@
 			<directory>tests</directory>
 		</testsuite>
 	</testsuites>
+	<php>
+		<env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
+	</php>
 </phpunit>

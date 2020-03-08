@@ -9,14 +9,14 @@ namespace Joomla\Authentication\Tests\Strategies;
 use Joomla\Authentication\Authentication;
 use Joomla\Authentication\Password\HandlerInterface;
 use Joomla\Authentication\Strategies\DatabaseStrategy;
+use Joomla\Authentication\Tests\CompatTestCase;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Input\Input;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Authentication\Strategies\DatabaseStrategy
  */
-class DatabaseStrategyTest extends TestCase
+class DatabaseStrategyTest extends CompatTestCase
 {
 	/**
 	 * @var  DatabaseDriver|\PHPUnit_Framework_MockObject_MockObject
@@ -34,32 +34,15 @@ class DatabaseStrategyTest extends TestCase
 	private $passwordHandler;
 
 	/**
-	 * Inserts a user into the test database
-	 *
-	 * @param   string  $username  Test username
-	 * @param   string  $password  Test hashed password
-	 */
-	private function addUser($username, $password)
-	{
-		// Insert the user into the table
-		$db = self::$driver;
-
-		$db->setQuery(
-			$db->getQuery(true)
-				->insert('#__users')
-				->columns(array('username', 'password'))
-				->values($db->quote($username) . ',' . $db->quote($password))
-		)->execute();
-	}
-
-	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 */
-	protected function setUp()
+	protected function doSetUp()
 	{
-		$this->db              = $this->getMockBuilder('Joomla\\Database\\DatabaseDriver')->getMock();
+		$this->db              = $this->getMockBuilder('Joomla\\Database\\DatabaseDriver')->disableOriginalConstructor()->getMock();
 		$this->input           = $this->getMockBuilder('Joomla\\Input\\Input')->getMock();
 		$this->passwordHandler = $this->getMockBuilder('Joomla\\Authentication\\Password\\HandlerInterface')->getMock();
+
+		parent::doSetUp();
 	}
 
 	/**
@@ -210,8 +193,6 @@ class DatabaseStrategyTest extends TestCase
 
 		$this->passwordHandler->expects($this->never())
 			->method('validatePassword');
-
-		$this->addUser('jimbob', '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH');
 
 		$strategy = new DatabaseStrategy($this->input, $this->db, array(), $this->passwordHandler);
 
