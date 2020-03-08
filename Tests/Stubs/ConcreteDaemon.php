@@ -4,7 +4,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
-namespace Joomla\Application\Tests;
+namespace Joomla\Application\Tests\Stubs;
 
 use Joomla\Application\AbstractDaemonApplication;
 
