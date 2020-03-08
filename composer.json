@@ -17,7 +17,8 @@
         "joomla/session": "^1.2.1|~2.0",
         "joomla/test": "~1.1",
         "joomla/uri": "~1.1",
-        "phpunit/phpunit": "^4.8.35|^5.4.3|~6.0"
+        "phpunit/phpunit": "^4.8.35|^5.4.3|~6.0",
+        "symfony/phpunit-bridge": "^3.4|^4.4|^5.0"
     },
     "suggest": {
         "joomla/session": "To use AbstractWebApplication with session support, install joomla/session",
