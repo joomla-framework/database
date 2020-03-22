@@ -86,7 +86,7 @@ class Client
 			$response = $this->http->post($this->getOption('tokenurl'), $data);
 
 			// Make sure all headers are lowercase
-			array_change_key_case($response->headers,CASE_LOWER);
+			array_change_key_case($response->headers, CASE_LOWER);
 
 			if ($response->code >= 200 && $response->code < 400)
 			{
