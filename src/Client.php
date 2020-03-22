@@ -85,9 +85,12 @@ class Client
 
 			$response = $this->http->post($this->getOption('tokenurl'), $data);
 
+			// Make sure all headers are lowercase
+			$response->headers = array_change_key_case($response->headers, CASE_LOWER);
+
 			if ($response->code >= 200 && $response->code < 400)
 			{
-				if (strpos($response->headers['Content-Type'], 'application/json') !== false)
+				if (strpos($response->headers['content-type'], 'application/json') !== false)
 				{
 					$token = array_merge(json_decode($response->body, true), array('created' => time()));
 				}
