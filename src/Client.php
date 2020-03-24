@@ -385,7 +385,7 @@ class Client
 		);
 
 		$response = $this->http->post($this->getOption('tokenurl'), $data);
-		
+
 		// Make sure all headers are lowercase
 		$response->headers = array_change_key_case($response->headers, CASE_LOWER);
 
