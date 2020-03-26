@@ -343,6 +343,7 @@ class Path
 
 	/**
 	 * Resolves /./, /../ and multiple / in a string and returns the resulting absolute path, inspired by Flysystem
+	 * Removes trailing slashes
 	 *
 	 * @param   mixed   $path   A path to resolve
 	 *
