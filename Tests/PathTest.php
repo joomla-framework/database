@@ -378,7 +378,7 @@ class PathTest extends FilesystemTestCase
 	 */
 	public function testResolve($path, $expectedResult)
 	{
-		$this->assertEquals($expectedResult, Path::resolve($path));
+		$this->assertEquals(str_replace("_DS_", DIRECTORY_SEPARATOR, $expectedResult), Path::resolve($path));
 	}
 
 	/**
@@ -410,25 +410,25 @@ class PathTest extends FilesystemTestCase
 	public function getResolveData()
 	{
 		return array(
-			array("/", "/"),
+			array("/", "_DS_"),
 			array("a", "a"),
-			array("/test/", "/test"),
+			array("/test/", "_DS_test"),
 			array("C:/", "C:"),
-			array("/var/www/joomla", "/var/www/joomla"),
-			array("C:/iis/www/joomla", "C:/iis/www/joomla"),
-			array("var/www/joomla", "var/www/joomla"),
-			array("./var/www/joomla", "var/www/joomla"),
-			array("/var/www/foo/../joomla", "/var/www/joomla"),
-			array("C:/var/www/foo/../joomla", "C:/var/www/joomla"),
-			array("/var/www/../foo/../joomla", "/var/joomla"),
-			array("C:/var/www/..foo../joomla", "C:/var/www/..foo../joomla"),
-			array("c:/var/www/..foo../joomla", "c:/var/www/..foo../joomla"),
-			array("/var/www///joomla", "/var/www/joomla"),
-			array("/var///www///joomla", "/var/www/joomla"),
-			array("C:/var///www///joomla", "C:/var/www/joomla"),
-			array("/var/\/../www///joomla", "/www/joomla"),
-			array("C:/var///www///joomla", "C:/var/www/joomla"),
-			array("/var\\www///joomla", "/var/www/joomla")
+			array("/var/www/joomla", "_DS_var_DS_www_DS_joomla"),
+			array("C:/iis/www/joomla", "C:_DS_iis_DS_www_DS_joomla"),
+			array("var/www/joomla", "var_DS_www_DS_joomla"),
+			array("./var/www/joomla", "var_DS_www_DS_joomla"),
+			array("/var/www/foo/../joomla", "_DS_var_DS_www_DS_joomla"),
+			array("C:/var/www/foo/../joomla", "C:_DS_var_DS_www_DS_joomla"),
+			array("/var/www/../foo/../joomla", "_DS_var_DS_joomla"),
+			array("C:/var/www/..foo../joomla", "C:_DS_var_DS_www_DS_..foo.._DS_joomla"),
+			array("c:/var/www/..foo../joomla", "c:_DS_var_DS_www_DS_..foo.._DS_joomla"),
+			array("/var/www///joomla", "_DS_var_DS_www_DS_joomla"),
+			array("/var///www///joomla", "_DS_var_DS_www_DS_joomla"),
+			array("C:/var///www///joomla", "C:_DS_var_DS_www_DS_joomla"),
+			array("/var/\/../www///joomla", "_DS_www_DS_joomla"),
+			array("C:/var///www///joomla", "C:_DS_var_DS_www_DS_joomla"),
+			array("/var\\www///joomla", "_DS_var_DS_www_DS_joomla")
 		);
 	}
 
