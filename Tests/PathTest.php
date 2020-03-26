@@ -419,7 +419,8 @@ class PathTest extends FilesystemTestCase
 			array("/var///www///joomla", "/var/www/joomla"),
 			array("C:/var///www///joomla", "C:/var/www/joomla"),
 			array("/var/\/../www///joomla", "/www/joomla"),
-			array("C:/var///www///joomla", "C:/var/www/joomla")
+			array("C:/var///www///joomla", "C:/var/www/joomla"),
+			array("/var\\www///joomla", "/var/www/joomla")
 		);
 	}
 }
