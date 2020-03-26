@@ -6,6 +6,7 @@
 
 namespace Joomla\Filesystem\Tests;
 
+use Joomla\Filesystem\Exception\FilesystemException;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Path;
 
@@ -360,6 +361,65 @@ class PathTest extends FilesystemTestCase
 		$this->assertEquals(
 			__FILE__,
 			Path::find(__DIR__, 'PathTest.php')
+		);
+	}
+
+	/**
+	 * Test resolve method
+	 *
+	 * @param   string  $path            test path
+	 * @param   string  $expectedResult  expected path
+	 *
+	 * @return  void
+	 *
+	 * @since   1.4.0
+	 *
+	 * @dataProvider  getResolveData
+	 */
+	public function testResolve($path, $expectedResult)
+	{
+		$this->assertEquals($expectedResult, Path::resolve($path));
+	}
+
+	/**
+	 * Description
+	 *
+	 * @expectedException         Joomla\Filesystem\Exception\FilesystemException
+	 * @expectedExceptionMessage  Path is outside of the defined root, path: [../var/www/joomla]
+	 *
+	 * @return void
+	 *
+	 * @since   1.4.0
+	 */
+	public function testResolveThrowsExceptionIfRootIsLeft()
+	{
+		Path::resolve("../var/www/joomla");
+	}
+
+	/**
+	 * Data provider for testResolve() method.
+	 *
+	 * @return  array
+	 *
+	 * @since   1.0
+	 */
+	public function getResolveData()
+	{
+		return array(
+			array("/var/www/joomla", "/var/www/joomla"),
+			array("C:/iis/www/joomla", "C:/iis/www/joomla"),
+			array("var/www/joomla", "var/www/joomla"),
+			array("./var/www/joomla", "var/www/joomla"),
+			array("/var/www/foo/../joomla", "/var/www/joomla"),
+			array("C:/var/www/foo/../joomla", "C:/var/www/joomla"),
+			array("/var/www/../foo/../joomla", "/var/joomla"),
+			array("C:/var/www/..foo../joomla", "C:/var/www/..foo../joomla"),
+			array("c:/var/www/..foo../joomla", "c:/var/www/..foo../joomla"),
+			array("/var/www///joomla", "/var/www/joomla"),
+			array("/var///www///joomla", "/var/www/joomla"),
+			array("C:/var///www///joomla", "C:/var/www/joomla"),
+			array("/var/\/../www///joomla", "/www/joomla"),
+			array("C:/var///www///joomla", "C:/var/www/joomla")
 		);
 	}
 }
