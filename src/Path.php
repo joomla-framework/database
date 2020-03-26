@@ -370,9 +370,7 @@ class Path
 				case '..':
 					if (empty($parts))
 					{
-						throw new FilesystemException(
-							'Path is outside of the defined root, path: [' . $path . ']'
-						);
+						throw new FilesystemException('Path is outside of the defined root');
 					}
 
 					array_pop($parts);

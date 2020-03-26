@@ -382,18 +382,22 @@ class PathTest extends FilesystemTestCase
 	}
 
 	/**
-	 * Description
+	 * Test resolve method
+
+	 * @param   string  $path            test path
 	 *
 	 * @expectedException         Joomla\Filesystem\Exception\FilesystemException
-	 * @expectedExceptionMessage  Path is outside of the defined root, path: [../var/www/joomla]
+	 * @expectedExceptionMessage  Path is outside of the defined root
 	 *
 	 * @return void
 	 *
 	 * @since   1.4.0
+	 *
+	 * @dataProvider  getResolveExceptionData
 	 */
-	public function testResolveThrowsExceptionIfRootIsLeft()
+	public function testResolveThrowsExceptionIfRootIsLeft($path)
 	{
-		Path::resolve("../var/www/joomla");
+		Path::resolve($path);
 	}
 
 	/**
@@ -421,6 +425,21 @@ class PathTest extends FilesystemTestCase
 			array("/var/\/../www///joomla", "/www/joomla"),
 			array("C:/var///www///joomla", "C:/var/www/joomla"),
 			array("/var\\www///joomla", "/var/www/joomla")
+		);
+	}
+
+	/**
+	 * Data provider for testResolve() method.
+	 *
+	 * @return  array
+	 *
+	 * @since   1.0
+	 */
+	public function getResolveExceptionData()
+	{
+		return array(
+			array("../var/www/joomla"),
+			array("/var/../../../www/joomla")
 		);
 	}
 }
