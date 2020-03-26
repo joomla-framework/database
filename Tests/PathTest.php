@@ -411,6 +411,7 @@ class PathTest extends FilesystemTestCase
 	{
 		return array(
 			array("/", "/"),
+			array("C:/", "C:"),
 			array("/var/www/joomla", "/var/www/joomla"),
 			array("C:/iis/www/joomla", "C:/iis/www/joomla"),
 			array("var/www/joomla", "var/www/joomla"),
