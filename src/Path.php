@@ -360,7 +360,7 @@ class Path
 
 		$parts = array();
 
-		foreach (explode('/', $path) as $part)
+		foreach (explode(DIRECTORY_SEPARATOR, $path) as $part)
 		{
 			switch ($part)
 			{
@@ -383,6 +383,6 @@ class Path
 			}
 		}
 
-		return $startCharacter . implode('/', $parts);
+		return $startCharacter . implode(DIRECTORY_SEPARATOR, $parts);
 	}
 }
