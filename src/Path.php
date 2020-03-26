@@ -346,7 +346,7 @@ class Path
 	 *
 	 * @param   mixed   $path   A path to resolve
 	 *
-	 * @return  string   The resolved path
+	 * @return  string  The resolved path
 	 *
 	 * @since   1.0
 	 */
