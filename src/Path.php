@@ -353,7 +353,7 @@ class Path
 	 */
 	public static function resolve($path)
 	{
-		$path = self::clean($path);
+		$path = static::clean($path);
 
 		// Save start character for absolute path
 		$startCharacter = ($path[0] === DIRECTORY_SEPARATOR) ? DIRECTORY_SEPARATOR : '';
