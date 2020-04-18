@@ -862,7 +862,7 @@ class Session implements \IteratorAggregate
 	/**
 	 * Create a token-string
 	 *
-	 * @param   integer  $length  Length of string
+	 * @param   integer  $length  Length of string {@deprecated As of 2.0 the session token will be a fixed length}
 	 *
 	 * @return  string  Generated token
 	 *
@@ -877,7 +877,7 @@ class Session implements \IteratorAggregate
 	/**
 	 * Create a token-string
 	 *
-	 * @param   integer  $length  Length of string
+	 * @param   integer  $length  Length of string {@deprecated As of 2.0 the session token will be a fixed length}
 	 *
 	 * @return  string  Generated token
 	 *
