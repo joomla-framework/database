@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Console Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * PSR-11 compatible command loader.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 final class ContainerLoader implements LoaderInterface
 {
@@ -23,7 +23,7 @@ final class ContainerLoader implements LoaderInterface
 	 * The service container.
 	 *
 	 * @var    ContainerInterface
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $container;
 
@@ -31,7 +31,7 @@ final class ContainerLoader implements LoaderInterface
 	 * The command name to service ID map.
 	 *
 	 * @var    string[]
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $commandMap;
 
@@ -41,7 +41,7 @@ final class ContainerLoader implements LoaderInterface
 	 * @param   ContainerInterface  $container   A container from which to load command services.
 	 * @param   array               $commandMap  An array with command names as keys and service IDs as values.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __construct(ContainerInterface $container, array $commandMap)
 	{
@@ -56,7 +56,7 @@ final class ContainerLoader implements LoaderInterface
 	 *
 	 * @return  AbstractCommand
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  CommandNotFoundException
 	 */
 	public function get(string $name): AbstractCommand
@@ -74,7 +74,7 @@ final class ContainerLoader implements LoaderInterface
 	 *
 	 * @return  string[]
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getNames(): array
 	{
@@ -88,7 +88,7 @@ final class ContainerLoader implements LoaderInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function has($name): bool
 	{

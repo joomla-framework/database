@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Console Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * Describes an application.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 final class ApplicationDescription
 {
@@ -23,7 +23,7 @@ final class ApplicationDescription
 	 * Placeholder for commands in the global namespace.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	public const GLOBAL_NAMESPACE = '_global';
 
@@ -31,7 +31,7 @@ final class ApplicationDescription
 	 * The application's aliased commands.
 	 *
 	 * @var    AbstractCommand[]
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $aliases;
 
@@ -39,7 +39,7 @@ final class ApplicationDescription
 	 * The application being described.
 	 *
 	 * @var    Application
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $application;
 
@@ -47,7 +47,7 @@ final class ApplicationDescription
 	 * The application's commands.
 	 *
 	 * @var    AbstractCommand[]
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $commands;
 
@@ -55,7 +55,7 @@ final class ApplicationDescription
 	 * The command namespace to process.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $namespace = '';
 
@@ -63,7 +63,7 @@ final class ApplicationDescription
 	 * The application's command namespaces.
 	 *
 	 * @var    array[]
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $namespaces;
 
@@ -71,7 +71,7 @@ final class ApplicationDescription
 	 * Flag indicating hidden commands should be displayed.
 	 *
 	 * @var    boolean
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $showHidden;
 
@@ -82,7 +82,7 @@ final class ApplicationDescription
 	 * @param   string       $namespace    The command namespace to process.
 	 * @param   boolean      $showHidden   Flag indicating hidden commands should be displayed.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __construct(Application $application, string $namespace = '', bool $showHidden = false)
 	{
@@ -96,7 +96,7 @@ final class ApplicationDescription
 	 *
 	 * @return  array[]
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getNamespaces(): array
 	{
@@ -113,7 +113,7 @@ final class ApplicationDescription
 	 *
 	 * @return  AbstractCommand[]
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getCommands(): array
 	{
@@ -132,7 +132,7 @@ final class ApplicationDescription
 	 *
 	 * @return  AbstractCommand
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  CommandNotFoundException
 	 */
 	public function getCommand(string $name): AbstractCommand
@@ -153,7 +153,7 @@ final class ApplicationDescription
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	private function extractNamespace(string $name, ?int $limit = null): string
 	{
@@ -168,7 +168,7 @@ final class ApplicationDescription
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	private function inspectApplication(): void
 	{
@@ -211,7 +211,7 @@ final class ApplicationDescription
 	 *
 	 * @return  AbstractCommand[][]
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	private function sortCommands(array $commands): array
 	{

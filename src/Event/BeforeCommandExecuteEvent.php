@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Console Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -15,7 +15,7 @@ use Joomla\Console\ConsoleEvents;
 /**
  * Event triggered before a command is executed.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class BeforeCommandExecuteEvent extends ConsoleEvent
 {
@@ -23,7 +23,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 * The return code for a command disabled by this event.
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	public const RETURN_CODE_DISABLED = 113;
 
@@ -31,7 +31,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 * Flag indicating the command is enabled
 	 *
 	 * @var    boolean
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $commandEnabled = true;
 
@@ -41,7 +41,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 * @param   Application           $application  The active application.
 	 * @param   AbstractCommand|null  $command      The command being executed.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __construct(Application $application, ?AbstractCommand $command = null)
 	{
@@ -58,7 +58,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function disableCommand(): void
 	{
@@ -70,7 +70,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function enableCommand(): void
 	{
@@ -82,7 +82,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 *
 	 * @return    boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function isCommandEnabled(): bool
 	{

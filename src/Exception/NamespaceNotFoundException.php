@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Console Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -13,7 +13,7 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * Exception indicating a missing command namespace.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class NamespaceNotFoundException extends CommandNotFoundException
 {

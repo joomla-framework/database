@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Console Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -15,7 +15,7 @@ use Joomla\Console\ConsoleEvents;
 /**
  * Event triggered immediately before the process is terminated.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class TerminateEvent extends ConsoleEvent
 {
@@ -23,7 +23,7 @@ class TerminateEvent extends ConsoleEvent
 	 * The exit code to use for the application.
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $exitCode;
 
@@ -34,7 +34,7 @@ class TerminateEvent extends ConsoleEvent
 	 * @param   Application           $application  The active application.
 	 * @param   AbstractCommand|null  $command      The command being executed.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __construct(int $exitCode, Application $application, ?AbstractCommand $command = null)
 	{
@@ -48,7 +48,7 @@ class TerminateEvent extends ConsoleEvent
 	 *
 	 * @return  integer
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getExitCode(): int
 	{
@@ -62,7 +62,7 @@ class TerminateEvent extends ConsoleEvent
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function setExitCode(int $exitCode): void
 	{

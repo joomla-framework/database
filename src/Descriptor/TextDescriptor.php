@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Console Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Text object descriptor.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 final class TextDescriptor extends SymfonyTextDescriptor
 {
@@ -31,7 +31,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function describe(OutputInterface $output, $object, array $options = [])
 	{
@@ -61,7 +61,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	private function getCommandAliasesText(AbstractCommand $command): string
 	{
@@ -84,7 +84,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	private function describeConsoleCommand(AbstractCommand $command, array $options): void
 	{
@@ -129,7 +129,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	private function describeJoomlaApplication(Application $app, array $options): void
 	{
@@ -234,7 +234,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @return  integer
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	private function getColumnWidth(array $commands): int
 	{
@@ -268,7 +268,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	private function writeText($content, array $options = []): void
 	{

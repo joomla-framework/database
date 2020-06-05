@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Console Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command listing all available commands.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class ListCommand extends AbstractCommand
 {
@@ -24,7 +24,7 @@ class ListCommand extends AbstractCommand
 	 * The default command name
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected static $defaultName = 'list';
 
@@ -33,7 +33,7 @@ class ListCommand extends AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	protected function configure(): void
 	{
@@ -55,7 +55,7 @@ EOF
 	 *
 	 * @return  integer  The command exit code
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	protected function doExecute(InputInterface $input, OutputInterface $output): int
 	{

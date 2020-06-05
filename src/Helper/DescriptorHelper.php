@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Console Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Describes an object.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class DescriptorHelper extends Helper
 {
@@ -28,7 +28,7 @@ class DescriptorHelper extends Helper
 	 *
 	 * @return  void
 	 *
-	 * @since   ___DEPLOY_VERSION__
+	 * @since   _2.0.0-beta
 	 */
 	public function describe(OutputInterface $output, $object, array $options = [])
 	{
@@ -40,7 +40,7 @@ class DescriptorHelper extends Helper
 	 *
 	 * @return  string  The canonical name
 	 *
-	 * @since   ___DEPLOY_VERSION__
+	 * @since   _2.0.0-beta
 	 */
 	public function getName()
 	{

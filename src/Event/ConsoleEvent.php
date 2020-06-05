@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Console Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -15,7 +15,7 @@ use Joomla\Event\Event;
 /**
  * Base event class for console events.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class ConsoleEvent extends Event
 {
@@ -23,7 +23,7 @@ class ConsoleEvent extends Event
 	 * The active application.
 	 *
 	 * @var    Application
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $application;
 
@@ -31,7 +31,7 @@ class ConsoleEvent extends Event
 	 * The command being executed.
 	 *
 	 * @var    AbstractCommand|null
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $command;
 
@@ -42,7 +42,7 @@ class ConsoleEvent extends Event
 	 * @param   Application           $application  The active application.
 	 * @param   AbstractCommand|null  $command      The command being executed.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __construct(string $name, Application $application, ?AbstractCommand $command = null)
 	{
@@ -57,7 +57,7 @@ class ConsoleEvent extends Event
 	 *
 	 * @return  Application
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getApplication(): Application
 	{
@@ -69,7 +69,7 @@ class ConsoleEvent extends Event
 	 *
 	 * @return  AbstractCommand|null
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getCommand(): ?AbstractCommand
 	{

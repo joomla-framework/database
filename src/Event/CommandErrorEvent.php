@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Console Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -15,7 +15,7 @@ use Joomla\Console\ConsoleEvents;
 /**
  * Event triggered when an uncaught Throwable is received by the application from a command.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class CommandErrorEvent extends ConsoleEvent
 {
@@ -23,7 +23,7 @@ class CommandErrorEvent extends ConsoleEvent
 	 * The Throwable object with the error data.
 	 *
 	 * @var    \Throwable
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $error;
 
@@ -31,7 +31,7 @@ class CommandErrorEvent extends ConsoleEvent
 	 * The exit code to use for the application.
 	 *
 	 * @var    integer|null
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $exitCode;
 
@@ -42,7 +42,7 @@ class CommandErrorEvent extends ConsoleEvent
 	 * @param   Application           $application  The active application.
 	 * @param   AbstractCommand|null  $command      The command being executed.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __construct(\Throwable $error, Application $application, ?AbstractCommand $command = null)
 	{
@@ -56,7 +56,7 @@ class CommandErrorEvent extends ConsoleEvent
 	 *
 	 * @return  \Throwable
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getError(): \Throwable
 	{
@@ -68,7 +68,7 @@ class CommandErrorEvent extends ConsoleEvent
 	 *
 	 * @return  integer
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getExitCode(): int
 	{
@@ -87,7 +87,7 @@ class CommandErrorEvent extends ConsoleEvent
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function setError(\Throwable $error): void
 	{
@@ -101,7 +101,7 @@ class CommandErrorEvent extends ConsoleEvent
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function setExitCode(int $exitCode): void
 	{

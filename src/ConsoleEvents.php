@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Console Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -11,7 +11,7 @@ namespace Joomla\Console;
 /**
  * Class defining the events available in the console application.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 final class ConsoleEvents
 {
@@ -21,7 +21,7 @@ final class ConsoleEvents
 	 * This event allows developers to handle the Throwable.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	public const APPLICATION_ERROR = 'console.application_error';
 
@@ -32,7 +32,7 @@ final class ConsoleEvents
 	 * dependencies prior to the command being executed.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	public const BEFORE_COMMAND_EXECUTE = 'console.before_command_execute';
 
@@ -42,7 +42,7 @@ final class ConsoleEvents
 	 * This event allows developers to handle the Throwable.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	public const COMMAND_ERROR = 'console.command_error';
 
@@ -53,7 +53,7 @@ final class ConsoleEvents
 	 * the process' exit code.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	public const TERMINATE = 'console.terminate';
 }

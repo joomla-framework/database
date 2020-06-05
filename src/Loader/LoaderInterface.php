@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Console Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -14,7 +14,7 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * Interface defining a command loader.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 interface LoaderInterface
 {
@@ -25,7 +25,7 @@ interface LoaderInterface
 	 *
 	 * @return  AbstractCommand
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  CommandNotFoundException
 	 */
 	public function get(string $name): AbstractCommand;
@@ -35,7 +35,7 @@ interface LoaderInterface
 	 *
 	 * @return  string[]
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getNames(): array;
 
@@ -46,7 +46,7 @@ interface LoaderInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function has($name): bool;
 }
