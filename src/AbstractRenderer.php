@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Renderer Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    http://www.gnu.org/licenses/lgpl-2.1.txt GNU Lesser General Public License Version 2.1 or Later
  */
 
@@ -11,7 +11,7 @@ namespace Joomla\Renderer;
 /**
  * Abstract class for templates renderer
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 abstract class AbstractRenderer implements RendererInterface
 {
@@ -19,7 +19,7 @@ abstract class AbstractRenderer implements RendererInterface
 	 * Data for output by the renderer
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $data = [];
 
@@ -31,7 +31,7 @@ abstract class AbstractRenderer implements RendererInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function set(string $key, $value)
 	{
@@ -47,7 +47,7 @@ abstract class AbstractRenderer implements RendererInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function setData(array $data)
 	{
@@ -61,7 +61,7 @@ abstract class AbstractRenderer implements RendererInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function unsetData()
 	{

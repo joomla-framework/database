@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Renderer Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    http://www.gnu.org/licenses/lgpl-2.1.txt GNU Lesser General Public License Version 2.1 or Later
  */
 
@@ -13,7 +13,7 @@ use League\Plates\Engine;
 /**
  * Plates class for rendering output.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterface, ConfigurableFileExtensionInterface
 {
@@ -21,7 +21,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 * Rendering engine
 	 *
 	 * @var    Engine
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $renderer;
 
@@ -30,7 +30,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @param   Engine  $renderer  Rendering engine
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __construct(Engine $renderer = null)
 	{
@@ -45,7 +45,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \InvalidArgumentException
 	 */
 	public function addFolder(string $directory, string $alias = '')
@@ -65,7 +65,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @return  Engine
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getRenderer()
 	{
@@ -79,7 +79,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function pathExists(string $path): bool
 	{
@@ -94,7 +94,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function render(string $template, array $data = []): string
 	{
@@ -110,7 +110,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function setFileExtension(string $extension)
 	{

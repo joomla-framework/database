@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Renderer Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    http://www.gnu.org/licenses/lgpl-2.1.txt GNU Lesser General Public License Version 2.1 or Later
  */
 
@@ -20,7 +20,7 @@ use Illuminate\View\FileViewFinder;
 /**
  * Blade class for rendering output.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterface
 {
@@ -28,7 +28,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 * Rendering engine
 	 *
 	 * @var    Factory
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $renderer;
 
@@ -37,7 +37,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 *
 	 * @param   Factory  $renderer  Rendering engine
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __construct(Factory $renderer = null)
 	{
@@ -72,7 +72,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function addFolder(string $directory, string $alias = '')
 	{
@@ -86,7 +86,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 *
 	 * @return  Factory
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getRenderer()
 	{
@@ -100,7 +100,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function pathExists(string $path): bool
 	{
@@ -115,7 +115,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function render(string $template, array $data = []): string
 	{

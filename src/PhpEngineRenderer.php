@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Renderer Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    http://www.gnu.org/licenses/lgpl-2.1.txt GNU Lesser General Public License Version 2.1 or Later
  */
 
@@ -14,7 +14,7 @@ use Symfony\Component\Templating\TemplateReferenceInterface;
 /**
  * PhpEngine template renderer
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class PhpEngineRenderer extends AbstractRenderer
 {
@@ -22,7 +22,7 @@ class PhpEngineRenderer extends AbstractRenderer
 	 * Rendering engine
 	 *
 	 * @var    PhpEngine
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $renderer;
 
@@ -31,7 +31,7 @@ class PhpEngineRenderer extends AbstractRenderer
 	 *
 	 * @param   PhpEngine  $renderer  Rendering engine
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __construct(PhpEngine $renderer)
 	{
@@ -43,7 +43,7 @@ class PhpEngineRenderer extends AbstractRenderer
 	 *
 	 * @return  PhpEngine
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getRenderer()
 	{
@@ -57,7 +57,7 @@ class PhpEngineRenderer extends AbstractRenderer
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function pathExists(string $path): bool
 	{
@@ -72,7 +72,7 @@ class PhpEngineRenderer extends AbstractRenderer
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function render(string $template, array $data = []): string
 	{

@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Renderer Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    http://www.gnu.org/licenses/lgpl-2.1.txt GNU Lesser General Public License Version 2.1 or Later
  */
 
@@ -11,7 +11,7 @@ namespace Joomla\Renderer;
 /**
  * Rendering interface.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 interface RendererInterface
 {
@@ -22,7 +22,7 @@ interface RendererInterface
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function pathExists(string $path): bool;
 
@@ -31,7 +31,7 @@ interface RendererInterface
 	 *
 	 * @return  mixed
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getRenderer();
 
@@ -43,7 +43,7 @@ interface RendererInterface
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function render(string $template, array $data = []): string;
 
@@ -55,7 +55,7 @@ interface RendererInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function set(string $key, $value);
 
@@ -66,7 +66,7 @@ interface RendererInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function setData(array $data);
 
@@ -75,7 +75,7 @@ interface RendererInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function unsetData();
 }

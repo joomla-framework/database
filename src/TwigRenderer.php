@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Renderer Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    http://www.gnu.org/licenses/lgpl-2.1.txt GNU Lesser General Public License Version 2.1 or Later
  */
 
@@ -16,7 +16,7 @@ use Twig\Loader\LoaderInterface;
 /**
  * Twig class for rendering output.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterface
 {
@@ -24,7 +24,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 * Rendering engine
 	 *
 	 * @var    Environment
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $renderer;
 
@@ -33,7 +33,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 *
 	 * @param   Environment  $renderer  Rendering engine
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __construct(Environment $renderer = null)
 	{
@@ -48,7 +48,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function addFolder(string $directory, string $alias = '')
 	{
@@ -73,7 +73,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 *
 	 * @return  Environment
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getRenderer()
 	{
@@ -87,7 +87,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function pathExists(string $path): bool
 	{
@@ -115,7 +115,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function render(string $template, array $data = []): string
 	{
