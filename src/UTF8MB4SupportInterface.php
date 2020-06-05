@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -11,7 +11,7 @@ namespace Joomla\Database;
 /**
  * Interface defining a driver which has support for the MySQL `utf8mb4` character set
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 interface UTF8MB4SupportInterface
 {
@@ -24,7 +24,7 @@ interface UTF8MB4SupportInterface
 	 *
 	 * @return  string  The converted query
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function convertUtf8mb4QueryToUtf8($query);
 
@@ -33,7 +33,7 @@ interface UTF8MB4SupportInterface
 	 *
 	 * @return  boolean  True if the database engine supports UTF-8 Multibyte.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function hasUtf8mb4Support();
 }

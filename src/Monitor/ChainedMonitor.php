@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -13,7 +13,7 @@ use Joomla\Database\QueryMonitorInterface;
 /**
  * Chained query monitor allowing multiple monitors to be executed.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class ChainedMonitor implements QueryMonitorInterface
 {
@@ -21,7 +21,7 @@ class ChainedMonitor implements QueryMonitorInterface
 	 * The query monitors stored to this chain
 	 *
 	 * @var    QueryMonitorInterface[]
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $monitors = [];
 
@@ -32,7 +32,7 @@ class ChainedMonitor implements QueryMonitorInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function addMonitor(QueryMonitorInterface $monitor): void
 	{
@@ -46,7 +46,7 @@ class ChainedMonitor implements QueryMonitorInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function startQuery(string $sql): void
 	{
@@ -61,7 +61,7 @@ class ChainedMonitor implements QueryMonitorInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function stopQuery(): void
 	{

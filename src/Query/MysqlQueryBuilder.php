@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -11,7 +11,7 @@ namespace Joomla\Database\Query;
 /**
  * Trait for MySQL Query Building.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 trait MysqlQueryBuilder
 {
@@ -20,7 +20,7 @@ trait MysqlQueryBuilder
 	 *
 	 * @return  string  The completed query.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __toString()
 	{
@@ -66,7 +66,7 @@ trait MysqlQueryBuilder
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function processLimit($query, $limit, $offset = 0)
 	{
@@ -90,7 +90,7 @@ trait MysqlQueryBuilder
 	 *
 	 * @return  string  The concatenated values.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function concatenate($values, $separator = null)
 	{
@@ -120,7 +120,7 @@ trait MysqlQueryBuilder
 	 *
 	 * @return  string  Input values concatenated into a string, separated by delimiter
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function groupConcat($expression, $separator = ',')
 	{
@@ -145,7 +145,7 @@ trait MysqlQueryBuilder
 	 *
 	 * @return  string  The quoted input string.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException if the internal db property is not a valid object.
 	 */
 	abstract public function quote($text, $escape = true);
@@ -160,7 +160,7 @@ trait MysqlQueryBuilder
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function regexp($value)
 	{
@@ -175,7 +175,7 @@ trait MysqlQueryBuilder
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function rand()
 	{
@@ -195,7 +195,7 @@ trait MysqlQueryBuilder
 	 *
 	 * @return  string  A representation of the MySQL find_in_set() function for the driver.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function findInSet($value, $set)
 	{
@@ -215,7 +215,7 @@ trait MysqlQueryBuilder
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function selectRowNumber($orderBy, $orderColumnAlias)

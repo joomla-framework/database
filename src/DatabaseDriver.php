@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -85,7 +85,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * Contains the current query execution status
 	 *
 	 * @var    boolean
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $executed = false;
 
@@ -144,7 +144,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * The prepared statement.
 	 *
 	 * @var    StatementInterface
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $statement;
 
@@ -209,7 +209,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * DatabaseFactory object
 	 *
 	 * @var    DatabaseFactory
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $factory;
 
@@ -217,7 +217,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * Query monitor object
 	 *
 	 * @var    QueryMonitorInterface
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $monitor;
 
@@ -514,7 +514,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	/**
 	 * Destructor.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __destruct()
 	{
@@ -528,7 +528,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  boolean|resource
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function alterDbCharacterSet($dbName)
@@ -551,7 +551,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  boolean|resource
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function createDatabase($options, $utf = true)
@@ -581,7 +581,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function disconnect()
 	{
@@ -598,7 +598,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	protected function dispatchEvent(EventInterface $event)
 	{
@@ -620,7 +620,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function dropTable($table, $ifExists = true)
@@ -638,7 +638,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function execute()
@@ -781,7 +781,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  integer  The number of affected rows in the previous operation
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getAffectedRows()
 	{
@@ -841,7 +841,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  string  The query that creates database
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	protected function getCreateDatabaseQuery($options, $utf)
 	{
@@ -910,7 +910,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  integer   The number of returned rows.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getNumRows()
 	{
@@ -1495,7 +1495,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  StatementInterface
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  PrepareStatementFailureException
 	 */
 	abstract protected function prepareStatement(string $query): StatementInterface;
@@ -1804,7 +1804,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  QueryMonitorInterface|null  The query monitor or null if not set.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getMonitor()
 	{
@@ -1818,7 +1818,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function setMonitor(QueryMonitorInterface $monitor = null)
 	{

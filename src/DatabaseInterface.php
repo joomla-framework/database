@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -20,7 +20,7 @@ interface DatabaseInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function connect();
@@ -30,7 +30,7 @@ interface DatabaseInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function connected();
 
@@ -42,7 +42,7 @@ interface DatabaseInterface
 	 *
 	 * @return  boolean|resource
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function createDatabase($options, $utf = true);
@@ -63,7 +63,7 @@ interface DatabaseInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function disconnect();
 
@@ -75,7 +75,7 @@ interface DatabaseInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function dropTable($table, $ifExists = true);
@@ -88,7 +88,7 @@ interface DatabaseInterface
 	 *
 	 * @return  string   The escaped string.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function escape($text, $extra = false);
 
@@ -97,7 +97,7 @@ interface DatabaseInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function execute();
@@ -107,7 +107,7 @@ interface DatabaseInterface
 	 *
 	 * @return  integer
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getAffectedRows();
 
@@ -116,7 +116,7 @@ interface DatabaseInterface
 	 *
 	 * @return  string|boolean  The collation in use by the database or boolean false if not supported.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getCollation();
 
@@ -125,7 +125,7 @@ interface DatabaseInterface
 	 *
 	 * @return  resource  The underlying database connection resource.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getConnection();
 
@@ -136,7 +136,7 @@ interface DatabaseInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getConnectionCollation();
 
@@ -145,7 +145,7 @@ interface DatabaseInterface
 	 *
 	 * @return  string  The database encryption details.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getConnectionEncryption(): string;
 
@@ -154,7 +154,7 @@ interface DatabaseInterface
 	 *
 	 * @return  boolean  Whether the databse supports TLS connections encryption.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function isConnectionEncryptionSupported(): bool;
 
@@ -163,7 +163,7 @@ interface DatabaseInterface
 	 *
 	 * @return  boolean  True if the database version is supported
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function isMinimumVersion();
 
@@ -172,7 +172,7 @@ interface DatabaseInterface
 	 *
 	 * @return  integer
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getCount();
 
@@ -181,7 +181,7 @@ interface DatabaseInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getDateFormat();
 
@@ -190,7 +190,7 @@ interface DatabaseInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getMinimum();
 
@@ -199,7 +199,7 @@ interface DatabaseInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getName();
 
@@ -208,7 +208,7 @@ interface DatabaseInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getNullDate();
 
@@ -217,7 +217,7 @@ interface DatabaseInterface
 	 *
 	 * @return  integer
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getNumRows();
 
@@ -228,7 +228,7 @@ interface DatabaseInterface
 	 *
 	 * @return  QueryInterface
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function getQuery($new = false);
@@ -238,7 +238,7 @@ interface DatabaseInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getServerType();
 
@@ -250,7 +250,7 @@ interface DatabaseInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function getTableColumns($table, $typeOnly = true);
@@ -262,7 +262,7 @@ interface DatabaseInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function getTableKeys($tables);
@@ -272,7 +272,7 @@ interface DatabaseInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function getTableList();
@@ -282,7 +282,7 @@ interface DatabaseInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getVersion();
 
@@ -291,7 +291,7 @@ interface DatabaseInterface
 	 *
 	 * @return  boolean  True if the database engine supports UTF-8 character encoding.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function hasUtfSupport();
 
@@ -300,7 +300,7 @@ interface DatabaseInterface
 	 *
 	 * @return  mixed  The value of the auto-increment field from the last inserted row.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function insertid();
 
@@ -313,7 +313,7 @@ interface DatabaseInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function insertObject($table, &$object, $key = null);
@@ -332,7 +332,7 @@ interface DatabaseInterface
 	 *
 	 * @return  mixed  The return value or null if the query failed.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function loadAssoc();
@@ -350,7 +350,7 @@ interface DatabaseInterface
 	 *
 	 * @return  mixed   The return value or null if the query failed.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function loadAssocList($key = null, $column = null);
@@ -362,7 +362,7 @@ interface DatabaseInterface
 	 *
 	 * @return  mixed  The return value or null if the query failed.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function loadColumn($offset = 0);
@@ -374,7 +374,7 @@ interface DatabaseInterface
 	 *
 	 * @return  mixed  The return value or null if the query failed.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function loadObject($class = \stdClass::class);
@@ -390,7 +390,7 @@ interface DatabaseInterface
 	 *
 	 * @return  mixed  The return value or null if the query failed.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function loadObjectList($key = '', $class = \stdClass::class);
@@ -400,7 +400,7 @@ interface DatabaseInterface
 	 *
 	 * @return  mixed  The return value or null if the query failed.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function loadResult();
@@ -412,7 +412,7 @@ interface DatabaseInterface
 	 *
 	 * @return  mixed  The return value or null if the query failed.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function loadRow();
@@ -427,7 +427,7 @@ interface DatabaseInterface
 	 *
 	 * @return  mixed   The return value or null if the query failed.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function loadRowList($key = null);
@@ -439,7 +439,7 @@ interface DatabaseInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function lockTable($tableName);
@@ -452,7 +452,7 @@ interface DatabaseInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function quote($text, $escape = true);
 
@@ -478,7 +478,7 @@ interface DatabaseInterface
 	 *
 	 * @return  array|string  The quote wrapped name, same type of $name.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function quoteName($name, $as = null);
 
@@ -492,7 +492,7 @@ interface DatabaseInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function renameTable($oldTable, $newTable, $backup = null, $prefix = null);
@@ -505,7 +505,7 @@ interface DatabaseInterface
 	 *
 	 * @return  string  The processed SQL statement.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function replacePrefix($sql, $prefix = '#__');
 
@@ -516,7 +516,7 @@ interface DatabaseInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function select($database);
@@ -530,7 +530,7 @@ interface DatabaseInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function setQuery($query, $offset = 0, $limit = 0);
 
@@ -541,7 +541,7 @@ interface DatabaseInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function transactionCommit($toSavepoint = false);
@@ -553,7 +553,7 @@ interface DatabaseInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function transactionRollback($toSavepoint = false);
@@ -565,7 +565,7 @@ interface DatabaseInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function transactionStart($asSavepoint = false);
@@ -577,7 +577,7 @@ interface DatabaseInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function truncateTable($table);
@@ -587,7 +587,7 @@ interface DatabaseInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function unlockTables();
@@ -602,7 +602,7 @@ interface DatabaseInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function updateObject($table, &$object, $key, $nulls = false);

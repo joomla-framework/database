@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -16,7 +16,7 @@ use Joomla\Database\Exception\UnknownTypeException;
 /**
  * Joomla Framework Query Building Interface.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 interface QueryInterface extends PreparableInterface, LimitableInterface
 {
@@ -25,7 +25,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __toString();
 
@@ -40,7 +40,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function call($columns);
@@ -60,7 +60,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string  SQL statement to cast the value as a char type.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  UnknownTypeException  When unsupported cast for a database driver
 	 */
 	public function castAs(string $type, string $value, ?string $length = null);
@@ -79,7 +79,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string  SQL statement to get the length of a character.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function charLength($field, $operator = null, $condition = null);
 
@@ -90,7 +90,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function clear($clause = null);
 
@@ -101,7 +101,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function columns($columns);
 
@@ -116,7 +116,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string  SQL statement representing the concatenated values.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function concatenate($values, $separator = null);
 
@@ -128,7 +128,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string  SQL statement to get the current timestamp.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function currentTimestamp();
 
@@ -142,7 +142,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function delete($table = null);
@@ -158,7 +158,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function exec($columns);
@@ -176,7 +176,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string  A representation of the MySQL find_in_set() function for the driver.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function findInSet($value, $set);
 
@@ -191,7 +191,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function from($table);
 
@@ -205,7 +205,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function alias($alias);
 
@@ -219,7 +219,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string  SQL statement to get the year from a date value.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function year($date);
 
@@ -233,7 +233,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string  SQL statement to get the month from a date value.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function month($date);
 
@@ -247,7 +247,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string  SQL statement to get the day from a date value.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function day($date);
 
@@ -261,7 +261,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string  SQL statement to get the hour from a date/time value.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function hour($date);
 
@@ -275,7 +275,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string  SQL statement to get the minute from a date/time value.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function minute($date);
 
@@ -289,7 +289,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string  SQL statement to get the second from a date/time value.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function second($date);
 
@@ -303,7 +303,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function group($columns);
 
@@ -318,7 +318,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string  Input values concatenated into a string, separated by delimiter
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function groupConcat($expression, $separator = ',');
 
@@ -333,7 +333,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function having($conditions, $glue = 'AND');
 
@@ -350,7 +350,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function insert($table, $incrementField = false);
@@ -367,7 +367,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function join($type, $table, $condition = null);
 
@@ -383,7 +383,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  integer
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function length($value);
 
@@ -400,7 +400,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string  Null or zero representation of a timestamp.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function nullDate($quoted = true);
@@ -415,7 +415,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function isNullDatetime($column);
 
@@ -430,7 +430,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function order($columns);
 
@@ -442,7 +442,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function rand();
 
@@ -456,7 +456,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function regexp($value);
 
@@ -471,7 +471,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function select($columns);
@@ -489,7 +489,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function selectRowNumber($orderBy, $orderColumnAlias);
@@ -507,7 +507,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function set($conditions, $glue = ',');
 
@@ -521,7 +521,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function update($table);
@@ -537,7 +537,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function values($values);
 
@@ -554,7 +554,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function where($conditions, $glue = 'AND');
 
@@ -573,7 +573,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since __DEPLOY_VERSION__
+	 * @since 2.0.0-beta
 	 */
 	public function whereIn(string $keyName, array $keyValues, $dataType = ParameterType::INTEGER);
 
@@ -592,7 +592,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since __DEPLOY_VERSION__
+	 * @since 2.0.0-beta
 	 */
 	public function whereNotIn(string $keyName, array $keyValues, $dataType = ParameterType::INTEGER);
 
@@ -610,7 +610,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function extendWhere($outerGlue, $conditions, $innerGlue = 'AND');
 
@@ -628,7 +628,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  array   An array with parameter names
 	 *
-	 * @since __DEPLOY_VERSION__
+	 * @since 2.0.0-beta
 	 */
 	public function bindArray(array $values, $dataType = ParameterType::INTEGER);
 
@@ -677,7 +677,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function querySet($query);
 
@@ -693,7 +693,7 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
 	 *
 	 * @return  DatabaseQuery  A new object of the DatabaseQuery.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function toQuerySet();
 }

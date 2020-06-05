@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -138,7 +138,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  string  The database encryption details.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function getConnectionEncryption(): string
@@ -169,7 +169,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  boolean  Whether the databse supports TLS connections encryption.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function isConnectionEncryptionSupported(): bool
 	{
@@ -333,7 +333,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  string  A list of the column names for the table.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function getNamesKey($table, $indKey)
@@ -433,7 +433,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  integer  The last value of the sequence.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function getSequenceLastValue($sequence)
@@ -456,7 +456,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  boolean  The is_called attribute of the sequence.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function getSequenceIsCalled($sequence)

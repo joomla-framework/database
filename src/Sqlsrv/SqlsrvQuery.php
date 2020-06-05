@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -23,7 +23,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 * The list of zero or null representation of a datetime.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $nullDatetimeList = ['1900-01-01 00:00:00'];
 
@@ -474,7 +474,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 *
 	 * @return  string  Input values concatenated into a string, separated by delimiter
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function groupConcat($expression, $separator = ',')
 	{
@@ -521,7 +521,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 *
 	 * @return  array[]  Array of columns with added missing aliases.
 	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected function fixSelectAliases()
 	{
@@ -643,7 +643,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 *
 	 * @return  $this
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	protected function fixGroupColumns($selectColumns)
 	{
@@ -923,7 +923,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 *
 	 * @return  array[]  The columns from the input string separated into an array.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	protected function splitSqlExpression($string)
 	{
@@ -1165,7 +1165,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function processLimit($query, $limit, $offset = 0)
 	{

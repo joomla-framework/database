@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -20,7 +20,7 @@ use Joomla\Database\StatementInterface;
  *
  * This class is modeled on \Doctrine\DBAL\Driver\SQLSrv\SQLSrvStatement
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class SqlsrvStatement implements StatementInterface
 {
@@ -28,7 +28,7 @@ class SqlsrvStatement implements StatementInterface
 	 * The database connection resource.
 	 *
 	 * @var    resource
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $connection;
 
@@ -36,7 +36,7 @@ class SqlsrvStatement implements StatementInterface
 	 * The default fetch mode for the statement.
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $defaultFetchStyle = FetchMode::MIXED;
 
@@ -44,7 +44,7 @@ class SqlsrvStatement implements StatementInterface
 	 * The default class to use for building object result sets.
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $defaultObjectClass = \stdClass::class;
 
@@ -52,7 +52,7 @@ class SqlsrvStatement implements StatementInterface
 	 * Mapping array converting fetch modes to the native engine type.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $fetchMap = [
 		FetchMode::MIXED       => SQLSRV_FETCH_BOTH,
@@ -64,7 +64,7 @@ class SqlsrvStatement implements StatementInterface
 	 * The query string being prepared.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $query;
 
@@ -72,7 +72,7 @@ class SqlsrvStatement implements StatementInterface
 	 * Internal tracking flag to set whether there is a result set available for processing
 	 *
 	 * @var    boolean
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $result = false;
 
@@ -80,7 +80,7 @@ class SqlsrvStatement implements StatementInterface
 	 * The prepared statement.
 	 *
 	 * @var    resource
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $statement;
 
@@ -88,7 +88,7 @@ class SqlsrvStatement implements StatementInterface
 	 * Bound parameter types.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $typesKeyMapping;
 
@@ -96,7 +96,7 @@ class SqlsrvStatement implements StatementInterface
 	 * References to the variables bound as statement parameters.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $bindedValues = [];
 
@@ -104,7 +104,7 @@ class SqlsrvStatement implements StatementInterface
 	 * Mapping between named parameters and position in query.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $parameterKeyMapping;
 
@@ -112,7 +112,7 @@ class SqlsrvStatement implements StatementInterface
 	 * Mapping array for parameter types.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $parameterTypeMapping = [
 		ParameterType::BOOLEAN      => ParameterType::BOOLEAN,
@@ -128,7 +128,7 @@ class SqlsrvStatement implements StatementInterface
 	 * @param   resource  $connection  The database connection resource
 	 * @param   string    $query       The query this statement will process
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  PrepareStatementFailureException
 	 */
 	public function __construct($connection, string $query)
@@ -153,7 +153,7 @@ class SqlsrvStatement implements StatementInterface
 	 *
 	 * @return  string  The processed SQL statement.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function prepareParameterKeyMapping($sql)
 	{
@@ -293,7 +293,7 @@ class SqlsrvStatement implements StatementInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function bindParam($parameter, &$variable, string $dataType = ParameterType::STRING, ?int $length = null, ?array $driverOptions = null)
 	{
@@ -323,7 +323,7 @@ class SqlsrvStatement implements StatementInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	private function bindValue($parameter, $variable, $dataType = ParameterType::STRING)
 	{
@@ -336,7 +336,7 @@ class SqlsrvStatement implements StatementInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function closeCursor(): void
 	{
@@ -359,7 +359,7 @@ class SqlsrvStatement implements StatementInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function errorCode()
 	{
@@ -378,7 +378,7 @@ class SqlsrvStatement implements StatementInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function errorInfo()
 	{
@@ -392,7 +392,7 @@ class SqlsrvStatement implements StatementInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function execute(?array $parameters = null)
 	{
@@ -440,7 +440,7 @@ class SqlsrvStatement implements StatementInterface
 	 *
 	 * @return  mixed  The return value of this function on success depends on the fetch type. In all cases, boolean false is returned on failure.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function fetch(?int $fetchStyle = null, int $cursorOrientation = FetchOrientation::NEXT, int $cursorOffset = 0)
 	{
@@ -477,7 +477,7 @@ class SqlsrvStatement implements StatementInterface
 	 *
 	 * @return  mixed  Returns a single column from the next row of a result set or boolean false if there are no more rows.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function fetchColumn($columnIndex = 0)
 	{
@@ -496,7 +496,7 @@ class SqlsrvStatement implements StatementInterface
 	 *
 	 * @return  resource
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	private function prepare()
 	{
@@ -552,7 +552,7 @@ class SqlsrvStatement implements StatementInterface
 	 *
 	 * @return  integer
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function rowCount(): int
 	{
@@ -572,7 +572,7 @@ class SqlsrvStatement implements StatementInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function setFetchMode(int $fetchMode, ...$args): void
 	{

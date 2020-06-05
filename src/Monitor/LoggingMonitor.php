@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -15,7 +15,7 @@ use Psr\Log\LoggerAwareTrait;
 /**
  * Query monitor handling logging of queries.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class LoggingMonitor implements QueryMonitorInterface, LoggerAwareInterface
 {
@@ -28,7 +28,7 @@ class LoggingMonitor implements QueryMonitorInterface, LoggerAwareInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function startQuery(string $sql): void
 	{
@@ -47,7 +47,7 @@ class LoggingMonitor implements QueryMonitorInterface, LoggerAwareInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function stopQuery(): void
 	{

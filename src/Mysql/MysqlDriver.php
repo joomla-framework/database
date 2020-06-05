@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -59,7 +59,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 * True if the database engine is MariaDB.
 	 *
 	 * @var    boolean
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $mariadb = false;
 
@@ -75,7 +75,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 * The minimum supported MariaDB database version.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected static $dbMinMariadb = '10.0';
 
@@ -83,7 +83,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 * The default cipher suite for TLS connections.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected static $defaultCipherSuite = [
 		'AES128-GCM-SHA256',
@@ -299,7 +299,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  string  The query that alter the database query string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getAlterDbCharacterSet($dbName)
 	{
@@ -343,7 +343,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  string  The database encryption details.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function getConnectionEncryption(): string
@@ -366,7 +366,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  boolean  Whether the databse supports TLS connections encryption.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function isConnectionEncryptionSupported(): bool
 	{
@@ -385,7 +385,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  string  The query that creates database
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	protected function getCreateDatabaseQuery($options, $utf)
 	{
@@ -510,7 +510,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  string  The database connector version.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getVersion()
 	{
@@ -532,7 +532,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getMinimum()
 	{
@@ -544,7 +544,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getNullDate()
 	{
@@ -562,7 +562,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  boolean  True if the database engine supports UTF-8 Multibyte.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function hasUTF8mb4Support()
 	{
@@ -574,7 +574,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function isMariaDb(): bool
 	{
@@ -631,7 +631,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  \RuntimeException
 	 */
 	public function insertObject($table, &$object, $key = null)

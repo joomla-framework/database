@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -13,7 +13,7 @@ use Joomla\Database\QueryMonitorInterface;
 /**
  * Query monitor handling logging of queries.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 final class DebugMonitor implements QueryMonitorInterface
 {
@@ -21,7 +21,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 * The log of executed SQL statements call stacks by the database driver.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $callStacks = [];
 
@@ -29,7 +29,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 * The log of executed SQL statements by the database driver.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $logs = [];
 
@@ -37,7 +37,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 * The log of executed SQL statements memory usage (start and stop memory_get_usage) by the database driver.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $memoryLogs = [];
 
@@ -45,7 +45,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 * The log of executed SQL statements timings (start and stop microtimes) by the database driver.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $timings = [];
 
@@ -56,7 +56,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function startQuery(string $sql): void
 	{
@@ -71,7 +71,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function stopQuery(): void
 	{
@@ -84,7 +84,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getCallStacks(): array
 	{
@@ -96,7 +96,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getLogs(): array
 	{
@@ -108,7 +108,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getMemoryLogs(): array
 	{
@@ -120,7 +120,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getTimings(): array
 	{

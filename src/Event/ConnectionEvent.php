@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -14,7 +14,7 @@ use Joomla\Event\Event;
 /**
  * Database connection event
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class ConnectionEvent extends Event
 {
@@ -22,7 +22,7 @@ class ConnectionEvent extends Event
 	 * DatabaseInterface object for this event
 	 *
 	 * @var    DatabaseInterface
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $driver;
 
@@ -32,7 +32,7 @@ class ConnectionEvent extends Event
 	 * @param   string             $name    The event name.
 	 * @param   DatabaseInterface  $driver  The DatabaseInterface object for this event.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __construct(string $name, DatabaseInterface $driver)
 	{
@@ -46,7 +46,7 @@ class ConnectionEvent extends Event
 	 *
 	 * @return  DatabaseInterface
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function getDriver(): DatabaseInterface
 	{

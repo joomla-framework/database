@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -20,7 +20,7 @@ use Joomla\Database\StatementInterface;
  *
  * This class is modeled on \Doctrine\DBAL\Driver\Mysqli\MysqliStatement
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class MysqliStatement implements StatementInterface
 {
@@ -28,7 +28,7 @@ class MysqliStatement implements StatementInterface
 	 * Values which have been bound to the statement.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $bindedValues;
 
@@ -36,7 +36,7 @@ class MysqliStatement implements StatementInterface
 	 * Mapping between named parameters and position in query.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $parameterKeyMapping;
 
@@ -44,7 +44,7 @@ class MysqliStatement implements StatementInterface
 	 * Mapping array for parameter types.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $parameterTypeMapping = [
 		ParameterType::BOOLEAN      => 'i',
@@ -58,7 +58,7 @@ class MysqliStatement implements StatementInterface
 	 * Column names from the executed statement.
 	 *
 	 * @var    array|boolean|null
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $columnNames;
 
@@ -66,7 +66,7 @@ class MysqliStatement implements StatementInterface
 	 * The database connection resource.
 	 *
 	 * @var    \mysqli
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $connection;
 
@@ -74,7 +74,7 @@ class MysqliStatement implements StatementInterface
 	 * The default fetch mode for the statement.
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $defaultFetchStyle = FetchMode::MIXED;
 
@@ -82,7 +82,7 @@ class MysqliStatement implements StatementInterface
 	 * The query string being prepared.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $query;
 
@@ -90,7 +90,7 @@ class MysqliStatement implements StatementInterface
 	 * Internal tracking flag to set whether there is a result set available for processing
 	 *
 	 * @var    boolean
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	private $result = false;
 
@@ -98,7 +98,7 @@ class MysqliStatement implements StatementInterface
 	 * Values which have been bound to the rows of each result set.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $rowBindedValues;
 
@@ -106,7 +106,7 @@ class MysqliStatement implements StatementInterface
 	 * The prepared statement.
 	 *
 	 * @var    \mysqli_stmt
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $statement;
 
@@ -114,7 +114,7 @@ class MysqliStatement implements StatementInterface
 	 * Bound parameter types.
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	protected $typesKeyMapping;
 
@@ -124,7 +124,7 @@ class MysqliStatement implements StatementInterface
 	 * @param   \mysqli  $connection  The database connection resource
 	 * @param   string   $query       The query this statement will process
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 * @throws  PrepareStatementFailureException
 	 */
 	public function __construct(\mysqli $connection, string $query)
@@ -149,7 +149,7 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @return  string  The processed SQL statement.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function prepareParameterKeyMapping($sql)
 	{
@@ -289,7 +289,7 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function bindParam($parameter, &$variable, string $dataType = ParameterType::STRING, ?int $length = null, ?array $driverOptions = null)
 	{
@@ -313,7 +313,7 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	private function bindValues(array $values)
 	{
@@ -347,7 +347,7 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function closeCursor(): void
 	{
@@ -360,7 +360,7 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function errorCode()
 	{
@@ -372,7 +372,7 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function errorInfo()
 	{
@@ -386,7 +386,7 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function execute(?array $parameters = null)
 	{
@@ -497,7 +497,7 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @return  mixed  The return value of this function on success depends on the fetch type. In all cases, boolean false is returned on failure.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function fetch(?int $fetchStyle = null, int $cursorOrientation = FetchOrientation::NEXT, int $cursorOffset = 0)
 	{
@@ -555,7 +555,7 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @return  mixed  Returns a single column from the next row of a result set or boolean false if there are no more rows.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function fetchColumn($columnIndex = 0)
 	{
@@ -574,7 +574,7 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @return  array|boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	private function fetchData()
 	{
@@ -600,7 +600,7 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @return  integer
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function rowCount(): int
 	{
@@ -620,7 +620,7 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function setFetchMode(int $fetchMode, ...$args): void
 	{

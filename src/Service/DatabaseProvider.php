@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -17,7 +17,7 @@ use Joomla\DI\ServiceProviderInterface;
 /**
  * Database service provider
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 class DatabaseProvider implements ServiceProviderInterface
 {
@@ -28,7 +28,7 @@ class DatabaseProvider implements ServiceProviderInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function register(Container $container)
 	{

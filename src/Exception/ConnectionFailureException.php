@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -22,7 +22,7 @@ class ConnectionFailureException extends \RuntimeException
 	 * @param   integer    $code      The Exception code. [optional]
 	 * @param   Exception  $previous  The previous exception used for the exception chaining. [optional]
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	public function __construct($message = '', $code = 0, \Exception $previous = null)
 	{

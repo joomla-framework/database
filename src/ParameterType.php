@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -11,7 +11,7 @@ namespace Joomla\Database;
 /**
  * Class defining the parameter types for prepared statements
  *
- * @since  __DEPLOY_VERSION__
+ * @since  2.0.0-beta
  */
 final class ParameterType
 {
@@ -19,7 +19,7 @@ final class ParameterType
 	 * Defines a boolean parameter
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	public const BOOLEAN = 'boolean';
 
@@ -27,7 +27,7 @@ final class ParameterType
 	 * Defines an integer parameter
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	public const INTEGER = 'int';
 
@@ -35,7 +35,7 @@ final class ParameterType
 	 * Defines a large object parameter
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	public const LARGE_OBJECT = 'lob';
 
@@ -43,7 +43,7 @@ final class ParameterType
 	 * Defines a null parameter
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	public const NULL = 'null';
 
@@ -51,14 +51,14 @@ final class ParameterType
 	 * Defines a string parameter
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  2.0.0-beta
 	 */
 	public const STRING = 'string';
 
 	/**
 	 * Private constructor to prevent instantiation of this class
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   2.0.0-beta
 	 */
 	private function __construct()
 	{
