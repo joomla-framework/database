@@ -23,34 +23,70 @@ class InputFilter
 	/**
 	 * Defines the InputFilter instance should use a whitelist method for sanitising tags.
 	 *
-	 * @var    integer
-	 * @since  1.3.0
+	 * @var         integer
+	 * @since       1.3.0
+	 * @deprecated  2.0
 	 */
 	const TAGS_WHITELIST = 0;
 
 	/**
 	 * Defines the InputFilter instance should use a blacklist method for sanitising tags.
 	 *
-	 * @var    integer
-	 * @since  1.3.0
+	 * @var         integer
+	 * @since       1.3.0
+	 * @deprecated  2.0
 	 */
 	const TAGS_BLACKLIST = 1;
 
 	/**
 	 * Defines the InputFilter instance should use a whitelist method for sanitising attributes.
 	 *
-	 * @var    integer
-	 * @since  1.3.0
+	 * @var         integer
+	 * @since       1.3.0
+	 * @deprecated  2.0
 	 */
 	const ATTR_WHITELIST = 0;
 
 	/**
 	 * Defines the InputFilter instance should use a blacklist method for sanitising attributes.
 	 *
+	 * @var         integer
+	 * @since       1.3.0
+	 * @deprecated  2.0
+	 */
+	const ATTR_BLACKLIST = 1;
+
+	/**
+	 * Defines the InputFilter instance should only allow the supplied list of HTML tags.
+	 *
 	 * @var    integer
 	 * @since  1.3.0
 	 */
-	const ATTR_BLACKLIST = 1;
+	const ONLY_ALLOW_DEFINED_TAGS = 0;
+
+	/**
+	 * Defines the InputFilter instance should block the defined list of tags and allow all others.
+	 *
+	 * @var    integer
+	 * @since  1.3.0
+	 */
+	const ONLY_BLOCK_DEFINED_TAGS = 1;
+
+	/**
+	 * Defines the InputFilter instance should only allow the supplied list of attributes.
+	 *
+	 * @var    integer
+	 * @since  1.3.0
+	 */
+	const ONLY_ALLOW_DEFINED_ATTRIBUTES = 0;
+
+	/**
+	 * Defines the InputFilter instance should use a block all attributes.
+	 *
+	 * @var    integer
+	 * @since  1.3.0
+	 */
+	const ONLY_BLOCK_DEFINED_ATTRIBUTES = 1;
 
 	/**
 	 * A container for InputFilter instances.
@@ -62,7 +98,7 @@ class InputFilter
 	protected static $instances = array();
 
 	/**
-	 * The array of permitted tags (whitelist).
+	 * The array of permitted tags.
 	 *
 	 * @var    array
 	 * @since  1.0
@@ -70,7 +106,7 @@ class InputFilter
 	public $tagsArray;
 
 	/**
-	 * The array of permitted tag attributes (whitelist).
+	 * The array of permitted tag attributes.
 	 *
 	 * @var    array
 	 * @since  1.0
@@ -94,7 +130,7 @@ class InputFilter
 	public $attrMethod;
 
 	/**
-	 * A flag for XSS checks. Only auto clean essentials = 0, Allow clean blacklisted tags/attr = 1
+	 * A flag for XSS checks. Only auto clean essentials = 0, Allow clean blocked tags/attr = 1
 	 *
 	 * @var    integer
 	 * @since  1.0
@@ -102,10 +138,11 @@ class InputFilter
 	public $xssAuto;
 
 	/**
-	 * The list of the default blacklisted tags.
+	 * The list of the default blocked tags.
 	 *
 	 * @var    array
 	 * @since  1.0
+	 * @notes  This property will be renamed to $blockedTags in version 2.0
 	 */
 	public $tagBlacklist = array(
 		'applet',
@@ -138,6 +175,7 @@ class InputFilter
 	 *
 	 * @var    array
 	 * @since  1.0
+	 * @notes  This property will be renamed to $blockedAttributes in version 2.0
 	 */
 	public $attrBlacklist = array(
 		'action',
@@ -149,12 +187,12 @@ class InputFilter
 	);
 
 	/**
-	 * A special list of blacklisted chars
+	 * A special list of blocked chars
 	 *
 	 * @var    array
 	 * @since  1.3.3
 	 */
-	private $blacklistedChars = array(
+	private $blockedChars = array(
 		'&tab;',
 		'&space;',
 		'&colon;',
@@ -166,9 +204,9 @@ class InputFilter
 	 *
 	 * @param   array    $tagsArray   List of user-defined tags
 	 * @param   array    $attrArray   List of user-defined attributes
-	 * @param   integer  $tagsMethod  WhiteList method = 0, BlackList method = 1
-	 * @param   integer  $attrMethod  WhiteList method = 0, BlackList method = 1
-	 * @param   integer  $xssAuto     Only auto clean essentials = 0, Allow clean blacklisted tags/attr = 1
+	 * @param   integer  $tagsMethod  The constant static::ONLY_ALLOW_DEFINED_TAGS or static::BLOCK_DEFINED_TAGS
+	 * @param   integer  $attrMethod  The constant static::ONLY_ALLOW_DEFINED_ATTRIBUTES or static::BLOCK_DEFINED_ATTRIBUTES
+	 * @param   integer  $xssAuto     Only auto clean essentials = 0, Allow clean blocked tags/attributes = 1
 	 *
 	 * @since   1.0
 	 */
@@ -671,7 +709,7 @@ class InputFilter
 			/*
 			 * Exclude all "non-regular" tagnames
 			 * OR no tagname
-			 * OR remove if xssauto is on and tag is blacklisted
+			 * OR remove if xssauto is on and tag is blocked
 			 */
 			if ((!preg_match('/^[a-z][a-z0-9]*$/i', $tagName))
 				|| (!$tagName)
@@ -862,17 +900,17 @@ class InputFilter
 			$attrSubSet[0] = preg_replace('/^[\pZ\pC]+|[\pZ\pC]+$/u', '', $attrSubSet[0]);
 			$attrSubSet[0] = preg_replace('/\s+/u', '', $attrSubSet[0]);
 
-			// Remove blacklisted chars from the attribute name
-			foreach ($this->blacklistedChars as $blacklistedChar)
+			// Remove blocked chars from the attribute name
+			foreach ($this->blockedChars as $blockedChar)
 			{
-				$attrSubSet[0] = str_ireplace($blacklistedChar, '', $attrSubSet[0]);
+				$attrSubSet[0] = str_ireplace($blockedChar, '', $attrSubSet[0]);
 			}
 
 			// Remove all symbols
 			$attrSubSet[0] = preg_replace('/[^\p{L}\p{N}\-\s]/u', '', $attrSubSet[0]);
 
 			// Remove all "non-regular" attribute names
-			// AND blacklisted attributes
+			// AND blocked attributes
 			if ((!preg_match('/[a-z]*$/i', $attrSubSet[0]))
 				|| (($this->xssAuto) && ((\in_array(strtolower($attrSubSet[0]), $this->attrBlacklist))
 				|| (substr($attrSubSet[0], 0, 2) == 'on'))))
@@ -886,10 +924,10 @@ class InputFilter
 				continue;
 			}
 
-			// Remove blacklisted chars from the attribute value
-			foreach ($this->blacklistedChars as $blacklistedChar)
+			// Remove blocked chars from the attribute value
+			foreach ($this->blockedChars as $blockedChar)
 			{
-				$attrSubSet[1] = str_ireplace($blacklistedChar, '', $attrSubSet[1]);
+				$attrSubSet[1] = str_ireplace($blockedChar, '', $attrSubSet[1]);
 			}
 
 			// Trim leading and trailing spaces
