@@ -60,7 +60,7 @@ class InputFilter
 	 * Defines the InputFilter instance should only allow the supplied list of HTML tags.
 	 *
 	 * @var    integer
-	 * @since  1.3.0
+	 * @since  1.4.0
 	 */
 	const ONLY_ALLOW_DEFINED_TAGS = 0;
 
@@ -68,7 +68,7 @@ class InputFilter
 	 * Defines the InputFilter instance should block the defined list of tags and allow all others.
 	 *
 	 * @var    integer
-	 * @since  1.3.0
+	 * @since  1.4.0
 	 */
 	const ONLY_BLOCK_DEFINED_TAGS = 1;
 
@@ -76,7 +76,7 @@ class InputFilter
 	 * Defines the InputFilter instance should only allow the supplied list of attributes.
 	 *
 	 * @var    integer
-	 * @since  1.3.0
+	 * @since  1.4.0
 	 */
 	const ONLY_ALLOW_DEFINED_ATTRIBUTES = 0;
 
@@ -84,7 +84,7 @@ class InputFilter
 	 * Defines the InputFilter instance should use a block all attributes.
 	 *
 	 * @var    integer
-	 * @since  1.3.0
+	 * @since  1.4.0
 	 */
 	const ONLY_BLOCK_DEFINED_ATTRIBUTES = 1;
 
