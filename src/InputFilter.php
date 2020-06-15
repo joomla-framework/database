@@ -34,7 +34,7 @@ class InputFilter
 	 *
 	 * @var         integer
 	 * @since       1.3.0
-	 * @deprecated  2.0  Use the `InputFilter::ONLY_ALLOW_DEFINED_ATTRIBUTES` constant instead
+	 * @deprecated  2.0  Use the `InputFilter::ONLY_BLOCK_DEFINED_TAGS` constant instead
 	 */
 	const TAGS_BLACKLIST = 1;
 
@@ -43,7 +43,7 @@ class InputFilter
 	 *
 	 * @var         integer
 	 * @since       1.3.0
-	 * @deprecated  2.0  Use the `InputFilter::ONLY_BLOCK_DEFINED_TAGS` constant instead
+	 * @deprecated  2.0  Use the `InputFilter::ONLY_ALLOW_DEFINED_ATTRIBUTES` constant instead
 	 */
 	const ATTR_WHITELIST = 0;
 
@@ -211,7 +211,7 @@ class InputFilter
 	 * @since   1.0
 	 */
 	public function __construct($tagsArray = array(), $attrArray = array(), $tagsMethod = self::ONLY_ALLOW_DEFINED_TAGS,
-		$attrMethod = self::ONLY_BLOCK_DEFINED_ATTRIBUTES, $xssAuto = 1
+		$attrMethod = self::ONLY_ALLOW_DEFINED_ATTRIBUTES, $xssAuto = 1
 	)
 	{
 		// Make sure user defined arrays are in lowercase
