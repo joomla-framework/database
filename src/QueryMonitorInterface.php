@@ -11,7 +11,7 @@ namespace Joomla\Database;
 /**
  * Interface defining a query monitor.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 interface QueryMonitorInterface
 {
@@ -22,7 +22,7 @@ interface QueryMonitorInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function startQuery(string $sql): void;
 
@@ -31,7 +31,7 @@ interface QueryMonitorInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function stopQuery(): void;
 }

@@ -11,7 +11,7 @@ namespace Joomla\Database\Exception;
 /**
  * Class representing an unknown type for a given database driver.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class UnknownTypeException extends \InvalidArgumentException
 {

@@ -404,7 +404,7 @@ class MysqlImporter extends DatabaseImporter
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	protected function xmlToCreate(\SimpleXMLElement $table)

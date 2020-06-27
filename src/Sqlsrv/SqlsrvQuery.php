@@ -23,7 +23,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 * The list of zero or null representation of a datetime.
 	 *
 	 * @var    array
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $nullDatetimeList = ['1900-01-01 00:00:00'];
 
@@ -474,7 +474,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 *
 	 * @return  string  Input values concatenated into a string, separated by delimiter
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function groupConcat($expression, $separator = ',')
 	{
@@ -521,7 +521,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 *
 	 * @return  array[]  Array of columns with added missing aliases.
 	 *
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected function fixSelectAliases()
 	{
@@ -643,7 +643,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function fixGroupColumns($selectColumns)
 	{
@@ -923,7 +923,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 *
 	 * @return  array[]  The columns from the input string separated into an array.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function splitSqlExpression($string)
 	{
@@ -1165,7 +1165,7 @@ class SqlsrvQuery extends DatabaseQuery
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function processLimit($query, $limit, $offset = 0)
 	{

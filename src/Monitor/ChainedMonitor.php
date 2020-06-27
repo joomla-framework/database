@@ -13,7 +13,7 @@ use Joomla\Database\QueryMonitorInterface;
 /**
  * Chained query monitor allowing multiple monitors to be executed.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class ChainedMonitor implements QueryMonitorInterface
 {
@@ -21,7 +21,7 @@ class ChainedMonitor implements QueryMonitorInterface
 	 * The query monitors stored to this chain
 	 *
 	 * @var    QueryMonitorInterface[]
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $monitors = [];
 
@@ -32,7 +32,7 @@ class ChainedMonitor implements QueryMonitorInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function addMonitor(QueryMonitorInterface $monitor): void
 	{
@@ -46,7 +46,7 @@ class ChainedMonitor implements QueryMonitorInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function startQuery(string $sql): void
 	{
@@ -61,7 +61,7 @@ class ChainedMonitor implements QueryMonitorInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function stopQuery(): void
 	{

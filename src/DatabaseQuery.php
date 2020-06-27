@@ -53,7 +53,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Holds key / value pair of bound objects.
 	 *
 	 * @var    array
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $bounded = [];
 
@@ -61,7 +61,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Mapping array for parameter types.
 	 *
 	 * @var    array
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $parameterMapping = [
 		ParameterType::BOOLEAN      => ParameterType::BOOLEAN,
@@ -99,7 +99,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * The query alias.
 	 *
 	 * @var    string|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $alias = null;
 
@@ -243,7 +243,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * The list of query elements, which may include UNION, UNION ALL, EXCEPT and INTERSECT.
 	 *
 	 * @var    Query\QueryElement[]
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $merge;
 
@@ -251,7 +251,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * The query object.
 	 *
 	 * @var    Query\DatabaseQuery
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $querySet;
 
@@ -259,7 +259,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * Details of window function.
 	 *
 	 * @var    array|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $selectRowNumber;
 
@@ -267,7 +267,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * The list of zero or null representation of a datetime.
 	 *
 	 * @var    string[]
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $nullDatetimeList = [];
 
@@ -275,7 +275,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * The offset for the result set.
 	 *
 	 * @var    integer|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $offset;
 
@@ -283,7 +283,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * The limit for the result set.
 	 *
 	 * @var    integer|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $limit;
 
@@ -291,7 +291,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 * An internal index for the bindArray function for unique prepared parameters.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $preparedIndex = 0;
 
@@ -1111,7 +1111,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function alias($alias)
 	{
@@ -1476,7 +1476,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function isNullDatetime($column)
 	{
@@ -1738,7 +1738,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setLimit($limit = 0, $offset = 0)
 	{
@@ -1872,7 +1872,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since 2.0.0-beta
+	 * @since 2.0.0
 	 */
 	public function whereIn(string $keyName, array $keyValues, $dataType = ParameterType::INTEGER)
 	{
@@ -1896,7 +1896,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since 2.0.0-beta
+	 * @since 2.0.0
 	 */
 	public function whereNotIn(string $keyName, array $keyValues, $dataType = ParameterType::INTEGER)
 	{
@@ -2056,7 +2056,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function unbind($key)
 	{
@@ -2089,7 +2089,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @return  array   An array with parameter names
 	 *
-	 * @since 2.0.0-beta
+	 * @since 2.0.0
 	 */
 	public function bindArray(array $values, $dataType = ParameterType::INTEGER)
 	{
@@ -2173,7 +2173,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function merge($name, $query)
 	{
@@ -2236,7 +2236,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function querySet($query)
 	{
@@ -2259,7 +2259,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @return  DatabaseQuery  A new object of the DatabaseQuery.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function toQuerySet()
 	{
@@ -2439,7 +2439,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	protected function validateRowNumber($orderBy, $orderColumnAlias)
@@ -2470,7 +2470,7 @@ abstract class DatabaseQuery implements QueryInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function selectRowNumber($orderBy, $orderColumnAlias)

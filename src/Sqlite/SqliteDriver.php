@@ -54,7 +54,7 @@ class SqliteDriver extends PdoDriver
 	 *
 	 * @return  boolean|resource
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function alterDbCharacterSet($dbName)
@@ -67,7 +67,7 @@ class SqliteDriver extends PdoDriver
 	 *
 	 * @return  void  Returns void if the database connected successfully.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  RuntimeException
 	 */
 	public function connect()
@@ -121,7 +121,7 @@ class SqliteDriver extends PdoDriver
 	 *
 	 * @return  boolean|resource
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function createDatabase($options, $utf = true)
@@ -188,7 +188,7 @@ class SqliteDriver extends PdoDriver
 	 *
 	 * @return  string  The database encryption details.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function getConnectionEncryption(): string
@@ -202,7 +202,7 @@ class SqliteDriver extends PdoDriver
 	 *
 	 * @return  boolean  Whether the databse supports TLS connections encryption.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function isConnectionEncryptionSupported(): bool
 	{

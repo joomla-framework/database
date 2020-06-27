@@ -15,7 +15,7 @@ use Psr\Log\LoggerAwareTrait;
 /**
  * Query monitor handling logging of queries.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class LoggingMonitor implements QueryMonitorInterface, LoggerAwareInterface
 {
@@ -28,7 +28,7 @@ class LoggingMonitor implements QueryMonitorInterface, LoggerAwareInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function startQuery(string $sql): void
 	{
@@ -47,7 +47,7 @@ class LoggingMonitor implements QueryMonitorInterface, LoggerAwareInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function stopQuery(): void
 	{

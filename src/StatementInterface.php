@@ -13,7 +13,7 @@ namespace Joomla\Database;
  *
  * This interface is a partial standalone implementation of PDOStatement.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 interface StatementInterface
 {
@@ -30,7 +30,7 @@ interface StatementInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function bindParam($parameter, &$variable, string $dataType = ParameterType::STRING, ?int $length = null, ?array $driverOptions = null);
 
@@ -39,7 +39,7 @@ interface StatementInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function closeCursor(): void;
 
@@ -48,7 +48,7 @@ interface StatementInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function errorCode();
 
@@ -57,7 +57,7 @@ interface StatementInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function errorInfo();
 
@@ -68,7 +68,7 @@ interface StatementInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function execute(?array $parameters = null);
 
@@ -88,7 +88,7 @@ interface StatementInterface
 	 *
 	 * @return  mixed  The return value of this function on success depends on the fetch type. In all cases, boolean false is returned on failure.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function fetch(?int $fetchStyle = null, int $cursorOrientation = FetchOrientation::NEXT, int $cursorOffset = 0);
 
@@ -97,7 +97,7 @@ interface StatementInterface
 	 *
 	 * @return  integer
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function rowCount(): int;
 
@@ -109,7 +109,7 @@ interface StatementInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setFetchMode(int $fetchMode, ...$args): void;
 }

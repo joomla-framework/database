@@ -127,7 +127,7 @@ class DatabaseFactory
 	 *
 	 * @return  DatabaseIterator
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getIterator(
 		string $name,

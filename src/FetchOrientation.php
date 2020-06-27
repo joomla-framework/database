@@ -13,7 +13,7 @@ namespace Joomla\Database;
  *
  * The values of the constants in this class match the `PDO::FETCH_ORI_*` constants.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 final class FetchOrientation
 {
@@ -21,7 +21,7 @@ final class FetchOrientation
 	 * Fetch the next row in the result set. Valid only for scrollable cursors.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const NEXT = 0;
 
@@ -29,7 +29,7 @@ final class FetchOrientation
 	 * Fetch the previous row in the result set. Valid only for scrollable cursors.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const PRIOR = 1;
 
@@ -37,7 +37,7 @@ final class FetchOrientation
 	 * Fetch the first row in the result set. Valid only for scrollable cursors.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const FIRST = 2;
 
@@ -45,7 +45,7 @@ final class FetchOrientation
 	 * Fetch the last row in the result set. Valid only for scrollable cursors.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const LAST = 3;
 
@@ -53,7 +53,7 @@ final class FetchOrientation
 	 * Fetch the requested row by row number from the result set. Valid only for scrollable cursors.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const ABS = 4;
 
@@ -61,14 +61,14 @@ final class FetchOrientation
 	 * Fetch the requested row by relative position from the current position of the cursor in the result set. Valid only for scrollable cursors.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const REL = 5;
 
 	/**
 	 * Private constructor to prevent instantiation of this class
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function __construct()
 	{

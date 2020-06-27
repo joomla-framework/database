@@ -359,7 +359,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 *
 	 * @return  string  The database encryption details.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function getConnectionEncryption(): string
@@ -373,7 +373,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 *
 	 * @return  boolean  Whether the databse supports TLS connections encryption.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function isConnectionEncryptionSupported(): bool
 	{
@@ -913,7 +913,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 *
 	 * @return  StatementInterface
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  PrepareStatementFailureException
 	 */
 	protected function prepareStatement(string $query): StatementInterface

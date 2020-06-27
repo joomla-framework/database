@@ -56,7 +56,7 @@ interface PreparableInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function unbind($key);
 

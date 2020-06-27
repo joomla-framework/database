@@ -73,7 +73,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 * True if the database engine is MariaDB.
 	 *
 	 * @var    boolean
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $mariadb = false;
 
@@ -89,7 +89,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 * The minimum supported MariaDB database version.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected static $dbMinMariadb = '10.0';
 
@@ -431,7 +431,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  string  The query that alter the database query string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getAlterDbCharacterSet($dbName)
 	{
@@ -475,7 +475,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  string  The database encryption details.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function getConnectionEncryption(): string
@@ -498,7 +498,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  boolean  Whether the databse supports TLS connections encryption.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function isConnectionEncryptionSupported(): bool
 	{
@@ -517,7 +517,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  string  The query that creates database
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function getCreateDatabaseQuery($options, $utf)
 	{
@@ -662,7 +662,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getMinimum()
 	{
@@ -674,7 +674,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  boolean  True if the database engine supports UTF-8 Multibyte.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function hasUTF8mb4Support()
 	{
@@ -686,7 +686,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function isMariaDb(): bool
 	{
@@ -719,7 +719,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function insertObject($table, &$object, $key = null)
@@ -1040,7 +1040,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  StatementInterface
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  PrepareStatementFailureException
 	 */
 	protected function prepareStatement(string $query): StatementInterface
@@ -1102,7 +1102,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getNullDate()
 	{

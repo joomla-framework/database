@@ -108,7 +108,7 @@ class PgsqlExporter extends DatabaseExporter
 	 *
 	 * @return  array  An array of XML lines (strings).
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \Exception if an error occurs.
 	 */
 	protected function buildXmlData()

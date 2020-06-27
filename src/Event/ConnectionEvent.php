@@ -14,7 +14,7 @@ use Joomla\Event\Event;
 /**
  * Database connection event
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class ConnectionEvent extends Event
 {
@@ -22,7 +22,7 @@ class ConnectionEvent extends Event
 	 * DatabaseInterface object for this event
 	 *
 	 * @var    DatabaseInterface
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $driver;
 
@@ -32,7 +32,7 @@ class ConnectionEvent extends Event
 	 * @param   string             $name    The event name.
 	 * @param   DatabaseInterface  $driver  The DatabaseInterface object for this event.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(string $name, DatabaseInterface $driver)
 	{
@@ -46,7 +46,7 @@ class ConnectionEvent extends Event
 	 *
 	 * @return  DatabaseInterface
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getDriver(): DatabaseInterface
 	{

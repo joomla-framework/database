@@ -11,7 +11,7 @@ namespace Joomla\Database\Exception;
 /**
  * Exception class defining an error preparing the SQL statement for execution
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class PrepareStatementFailureException extends \RuntimeException
 {
@@ -22,7 +22,7 @@ class PrepareStatementFailureException extends \RuntimeException
 	 * @param   integer    $code      The Exception code. [optional]
 	 * @param   Exception  $previous  The previous exception used for the exception chaining. [optional]
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct($message = '', $code = 0, \Exception $previous = null)
 	{

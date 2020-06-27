@@ -16,7 +16,7 @@ use Joomla\Database\StatementInterface;
 /**
  * PDO Database Statement.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class PdoStatement implements StatementInterface
 {
@@ -24,7 +24,7 @@ class PdoStatement implements StatementInterface
 	 * Mapping array for fetch modes.
 	 *
 	 * @var    array
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private const FETCH_MODE_MAP = [
 		FetchMode::ASSOCIATIVE     => \PDO::FETCH_ASSOC,
@@ -39,7 +39,7 @@ class PdoStatement implements StatementInterface
 	 * Mapping array for parameter types.
 	 *
 	 * @var    array
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private const PARAMETER_TYPE_MAP = [
 		ParameterType::BOOLEAN      => \PDO::PARAM_BOOL,
@@ -53,7 +53,7 @@ class PdoStatement implements StatementInterface
 	 * The decorated PDOStatement object.
 	 *
 	 * @var    \PDOStatement
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $pdoStatement;
 
@@ -62,7 +62,7 @@ class PdoStatement implements StatementInterface
 	 *
 	 * @param   \PDOStatement  $pdoStatement  The decorated PDOStatement object.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(\PDOStatement $pdoStatement)
 	{
@@ -82,7 +82,7 @@ class PdoStatement implements StatementInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function bindParam($parameter, &$variable, string $dataType = ParameterType::STRING, ?int $length = null, ?array $driverOptions = null)
 	{
@@ -104,7 +104,7 @@ class PdoStatement implements StatementInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function closeCursor(): void
 	{
@@ -116,7 +116,7 @@ class PdoStatement implements StatementInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function errorCode()
 	{
@@ -128,7 +128,7 @@ class PdoStatement implements StatementInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function errorInfo()
 	{
@@ -142,7 +142,7 @@ class PdoStatement implements StatementInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function execute(?array $parameters = null)
 	{
@@ -165,7 +165,7 @@ class PdoStatement implements StatementInterface
 	 *
 	 * @return  mixed  The return value of this function on success depends on the fetch type. In all cases, boolean false is returned on failure.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function fetch(?int $fetchStyle = null, int $cursorOrientation = FetchOrientation::NEXT, int $cursorOffset = 0)
 	{
@@ -182,7 +182,7 @@ class PdoStatement implements StatementInterface
 	 *
 	 * @return  integer
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function rowCount(): int
 	{
@@ -197,7 +197,7 @@ class PdoStatement implements StatementInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setFetchMode(int $fetchMode, ...$args): void
 	{
@@ -211,7 +211,7 @@ class PdoStatement implements StatementInterface
 	 *
 	 * @return  integer
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \InvalidArgumentException if the fetch mode is unsupported
 	 */
 	private function convertFetchMode(int $mode): int
@@ -231,7 +231,7 @@ class PdoStatement implements StatementInterface
 	 *
 	 * @return  integer
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \InvalidArgumentException if the parameter type is unsupported
 	 */
 	private function convertParameterType(string $type): int

@@ -11,7 +11,7 @@ namespace Joomla\Database;
 /**
  * Interface defining a driver which has support for the MySQL `utf8mb4` character set
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 interface UTF8MB4SupportInterface
 {
@@ -24,7 +24,7 @@ interface UTF8MB4SupportInterface
 	 *
 	 * @return  string  The converted query
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function convertUtf8mb4QueryToUtf8($query);
 
@@ -33,7 +33,7 @@ interface UTF8MB4SupportInterface
 	 *
 	 * @return  boolean  True if the database engine supports UTF-8 Multibyte.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function hasUtf8mb4Support();
 }

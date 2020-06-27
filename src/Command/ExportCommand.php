@@ -22,7 +22,7 @@ use Symfony\Component\Console\Input\InputOption;
 /**
  * Console command for exporting the database
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class ExportCommand extends AbstractCommand
 {
@@ -30,7 +30,7 @@ class ExportCommand extends AbstractCommand
 	 * The default command name
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected static $defaultName = 'database:export';
 
@@ -38,7 +38,7 @@ class ExportCommand extends AbstractCommand
 	 * Database connector
 	 *
 	 * @var    DatabaseDriver
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $db;
 
@@ -47,7 +47,7 @@ class ExportCommand extends AbstractCommand
 	 *
 	 * @param   DatabaseDriver  $db  Database connector
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(DatabaseDriver $db)
 	{
@@ -64,7 +64,7 @@ class ExportCommand extends AbstractCommand
 	 *
 	 * @return  integer  The command exit code
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function doExecute(InputInterface $input, OutputInterface $output): int
 	{
@@ -167,7 +167,7 @@ class ExportCommand extends AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function configure(): void
 	{

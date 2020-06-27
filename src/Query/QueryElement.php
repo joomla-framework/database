@@ -111,7 +111,7 @@ class QueryElement
 	 *
 	 * @return  string  Glue of the element.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getGlue()
 	{

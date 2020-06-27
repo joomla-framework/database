@@ -85,7 +85,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * Contains the current query execution status
 	 *
 	 * @var    boolean
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $executed = false;
 
@@ -144,7 +144,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * The prepared statement.
 	 *
 	 * @var    StatementInterface
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $statement;
 
@@ -209,7 +209,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * DatabaseFactory object
 	 *
 	 * @var    DatabaseFactory
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $factory;
 
@@ -217,7 +217,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * Query monitor object
 	 *
 	 * @var    QueryMonitorInterface
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $monitor;
 
@@ -514,7 +514,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	/**
 	 * Destructor.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __destruct()
 	{
@@ -528,7 +528,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  boolean|resource
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function alterDbCharacterSet($dbName)
@@ -551,7 +551,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  boolean|resource
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function createDatabase($options, $utf = true)
@@ -581,7 +581,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function disconnect()
 	{
@@ -598,7 +598,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function dispatchEvent(EventInterface $event)
 	{
@@ -620,7 +620,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function dropTable($table, $ifExists = true)
@@ -638,7 +638,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function execute()
@@ -781,7 +781,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  integer  The number of affected rows in the previous operation
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getAffectedRows()
 	{
@@ -841,7 +841,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  string  The query that creates database
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function getCreateDatabaseQuery($options, $utf)
 	{
@@ -910,7 +910,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  integer   The number of returned rows.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getNumRows()
 	{
@@ -1495,7 +1495,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  StatementInterface
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  PrepareStatementFailureException
 	 */
 	abstract protected function prepareStatement(string $query): StatementInterface;
@@ -1804,7 +1804,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  QueryMonitorInterface|null  The query monitor or null if not set.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getMonitor()
 	{
@@ -1818,7 +1818,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setMonitor(QueryMonitorInterface $monitor = null)
 	{

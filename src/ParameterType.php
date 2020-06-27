@@ -11,7 +11,7 @@ namespace Joomla\Database;
 /**
  * Class defining the parameter types for prepared statements
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 final class ParameterType
 {
@@ -19,7 +19,7 @@ final class ParameterType
 	 * Defines a boolean parameter
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const BOOLEAN = 'boolean';
 
@@ -27,7 +27,7 @@ final class ParameterType
 	 * Defines an integer parameter
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const INTEGER = 'int';
 
@@ -35,7 +35,7 @@ final class ParameterType
 	 * Defines a large object parameter
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const LARGE_OBJECT = 'lob';
 
@@ -43,7 +43,7 @@ final class ParameterType
 	 * Defines a null parameter
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const NULL = 'null';
 
@@ -51,14 +51,14 @@ final class ParameterType
 	 * Defines a string parameter
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const STRING = 'string';
 
 	/**
 	 * Private constructor to prevent instantiation of this class
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function __construct()
 	{

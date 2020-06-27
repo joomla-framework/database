@@ -17,7 +17,7 @@ use Joomla\DI\ServiceProviderInterface;
 /**
  * Database service provider
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class DatabaseProvider implements ServiceProviderInterface
 {
@@ -28,7 +28,7 @@ class DatabaseProvider implements ServiceProviderInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function register(Container $container)
 	{

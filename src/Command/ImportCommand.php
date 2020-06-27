@@ -24,7 +24,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Console command for importing the database
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class ImportCommand extends AbstractCommand
 {
@@ -32,7 +32,7 @@ class ImportCommand extends AbstractCommand
 	 * The default command name
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected static $defaultName = 'database:import';
 
@@ -40,7 +40,7 @@ class ImportCommand extends AbstractCommand
 	 * Database connector
 	 *
 	 * @var    DatabaseDriver
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $db;
 
@@ -49,7 +49,7 @@ class ImportCommand extends AbstractCommand
 	 *
 	 * @param   DatabaseDriver  $db  Database connector
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(DatabaseDriver $db)
 	{
@@ -65,7 +65,7 @@ class ImportCommand extends AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	private function checkZipFile(string $archive): void
@@ -106,7 +106,7 @@ class ImportCommand extends AbstractCommand
 	 *
 	 * @return  integer  The command exit code
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function doExecute(InputInterface $input, OutputInterface $output): int
 	{
@@ -269,7 +269,7 @@ class ImportCommand extends AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function configure(): void
 	{

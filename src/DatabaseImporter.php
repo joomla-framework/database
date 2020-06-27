@@ -139,7 +139,7 @@ abstract class DatabaseImporter
 	 *
 	 * @return  array
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	abstract protected function getAlterTableSql(\SimpleXMLElement $structure);
 
@@ -235,7 +235,7 @@ abstract class DatabaseImporter
 	 * @return  void
 	 *
 	 * @note    Currently only supports XML format.
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException on error.
 	 */
 	public function importData()
@@ -376,7 +376,7 @@ abstract class DatabaseImporter
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	abstract protected function xmlToCreate(\SimpleXMLElement $table);

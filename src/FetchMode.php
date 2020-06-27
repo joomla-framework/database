@@ -13,7 +13,7 @@ namespace Joomla\Database;
  *
  * The values of the constants in this class match the `PDO::FETCH_*` constants.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 final class FetchMode
 {
@@ -23,7 +23,7 @@ final class FetchMode
 	 * If the result set contains multiple columns with the same name, the statement returns only a single value per column name.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 * @see    \PDO::FETCH_ASSOC
 	 */
 	public const ASSOCIATIVE = 2;
@@ -33,7 +33,7 @@ final class FetchMode
 	 * starting at column 0.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 * @see    \PDO::FETCH_NUM
 	 */
 	public const NUMERIC = 3;
@@ -43,7 +43,7 @@ final class FetchMode
 	 * result set, starting at column 0.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 * @see    \PDO::FETCH_BOTH
 	 */
 	public const MIXED = 4;
@@ -53,7 +53,7 @@ final class FetchMode
 	 * result set.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 * @see    \PDO::FETCH_OBJ
 	 */
 	public const STANDARD_OBJECT = 5;
@@ -62,7 +62,7 @@ final class FetchMode
 	 * Specifies that the fetch method shall return only a single requested column from the next row in the result set.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 * @see    \PDO::FETCH_COLUMN
 	 */
 	public const COLUMN = 7;
@@ -71,7 +71,7 @@ final class FetchMode
 	 * Specifies that the fetch method shall return a new instance of the requested class, mapping the columns to named properties in the class.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 * @see    \PDO::FETCH_CLASS
 	 */
 	public const CUSTOM_OBJECT = 8;
@@ -79,7 +79,7 @@ final class FetchMode
 	/**
 	 * Private constructor to prevent instantiation of this class
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function __construct()
 	{

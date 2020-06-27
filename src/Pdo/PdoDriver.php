@@ -747,7 +747,7 @@ abstract class PdoDriver extends DatabaseDriver
 	 *
 	 * @return  StatementInterface
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  PrepareStatementFailureException
 	 */
 	protected function prepareStatement(string $query): StatementInterface

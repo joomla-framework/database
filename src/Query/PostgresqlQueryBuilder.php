@@ -11,7 +11,7 @@ namespace Joomla\Database\Query;
 /**
  * Trait for PostgreSQL Query Building.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 trait PostgresqlQueryBuilder
 {
@@ -19,7 +19,7 @@ trait PostgresqlQueryBuilder
 	 * The FOR UPDATE element used in "FOR UPDATE" lock
 	 *
 	 * @var    QueryElement
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $forUpdate;
 
@@ -27,7 +27,7 @@ trait PostgresqlQueryBuilder
 	 * The FOR SHARE element used in "FOR SHARE" lock
 	 *
 	 * @var    QueryElement
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $forShare;
 
@@ -35,7 +35,7 @@ trait PostgresqlQueryBuilder
 	 * The NOWAIT element used in "FOR SHARE" and "FOR UPDATE" lock
 	 *
 	 * @var    QueryElement
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $noWait;
 
@@ -43,7 +43,7 @@ trait PostgresqlQueryBuilder
 	 * The LIMIT element
 	 *
 	 * @var    QueryElement
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $limit;
 
@@ -51,7 +51,7 @@ trait PostgresqlQueryBuilder
 	 * The OFFSET element
 	 *
 	 * @var    QueryElement
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $offset;
 
@@ -59,7 +59,7 @@ trait PostgresqlQueryBuilder
 	 * The RETURNING element of INSERT INTO
 	 *
 	 * @var    QueryElement
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $returning;
 
@@ -68,7 +68,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string	The completed query.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __toString()
 	{
@@ -239,7 +239,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function clear($clause = null)
 	{
@@ -357,7 +357,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string  The concatenated values.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function concatenate($values, $separator = null)
 	{
@@ -374,7 +374,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string  Return string used in query to obtain
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function currentTimestamp()
 	{
@@ -389,7 +389,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function forUpdate($table_name, $glue = ',')
 	{
@@ -416,7 +416,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function forShare($table_name, $glue = ',')
 	{
@@ -446,7 +446,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string  Input values concatenated into a string, separated by delimiter
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function groupConcat($expression, $separator = ',')
 	{
@@ -463,7 +463,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string  Returns string to extract year from a date.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function year($date)
 	{
@@ -480,7 +480,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string  Returns string to extract month from a date.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function month($date)
 	{
@@ -497,7 +497,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string  Returns string to extract day from a date.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function day($date)
 	{
@@ -514,7 +514,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string  Returns string to extract hour from a date.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function hour($date)
 	{
@@ -531,7 +531,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string  Returns string to extract minute from a date.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function minute($date)
 	{
@@ -548,7 +548,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string  Returns string to extract second from a date.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function second($date)
 	{
@@ -560,7 +560,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function noWait()
 	{
@@ -581,7 +581,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function limit($limit = 0)
 	{
@@ -600,7 +600,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function offset($offset = 0)
 	{
@@ -619,7 +619,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function returning($pkCol)
 	{
@@ -641,7 +641,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function processLimit($query, $limit, $offset = 0)
 	{
@@ -672,7 +672,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string  The string with the appropriate sql for addition of dates
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @link    http://www.postgresql.org/docs/9.0/static/functions-datetime.html.
 	 */
 	public function dateAdd($date, $interval, $datePart)
@@ -695,7 +695,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function regexp($value)
 	{
@@ -710,7 +710,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function rand()
 	{
@@ -730,7 +730,7 @@ trait PostgresqlQueryBuilder
 	 *
 	 * @return  string  A representation of the MySQL find_in_set() function for the driver.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function findInSet($value, $set)
 	{

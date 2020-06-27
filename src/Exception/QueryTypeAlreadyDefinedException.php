@@ -11,7 +11,7 @@ namespace Joomla\Database\Exception;
 /**
  * Exception class defining an exception when attempting to change a query type
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class QueryTypeAlreadyDefinedException extends \RuntimeException
 {

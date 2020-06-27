@@ -11,14 +11,14 @@ namespace Joomla\Database;
 /**
  * Class defining the events dispatched by the database API
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 final class DatabaseEvents
 {
 	/**
 	 * Private constructor to prevent instantiation of this class
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function __construct()
 	{
@@ -30,7 +30,7 @@ final class DatabaseEvents
 	 * Listeners to this event receive a `Joomla\Database\Event\ConnectionEvent` object.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const POST_CONNECT = 'onAfterConnect';
 
@@ -40,7 +40,7 @@ final class DatabaseEvents
 	 * Listeners to this event receive a `Joomla\Database\Event\ConnectionEvent` object.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const POST_DISCONNECT = 'onAfterDisconnect';
 }

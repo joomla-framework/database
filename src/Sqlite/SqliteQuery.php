@@ -24,7 +24,7 @@ class SqliteQuery extends PdoQuery
 	 *
 	 * @return  string  The completed query.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __toString()
 	{
@@ -235,7 +235,7 @@ class SqliteQuery extends PdoQuery
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function selectRowNumber($orderBy, $orderColumnAlias)
@@ -276,7 +276,7 @@ class SqliteQuery extends PdoQuery
 	 *
 	 * @return  string  Input values concatenated into a string, separated by delimiter
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function groupConcat($expression, $separator = ',')
 	{

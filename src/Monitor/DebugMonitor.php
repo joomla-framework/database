@@ -13,7 +13,7 @@ use Joomla\Database\QueryMonitorInterface;
 /**
  * Query monitor handling logging of queries.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 final class DebugMonitor implements QueryMonitorInterface
 {
@@ -21,7 +21,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 * The log of executed SQL statements call stacks by the database driver.
 	 *
 	 * @var    array
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $callStacks = [];
 
@@ -29,7 +29,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 * The log of executed SQL statements by the database driver.
 	 *
 	 * @var    array
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $logs = [];
 
@@ -37,7 +37,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 * The log of executed SQL statements memory usage (start and stop memory_get_usage) by the database driver.
 	 *
 	 * @var    array
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $memoryLogs = [];
 
@@ -45,7 +45,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 * The log of executed SQL statements timings (start and stop microtimes) by the database driver.
 	 *
 	 * @var    array
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $timings = [];
 
@@ -56,7 +56,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function startQuery(string $sql): void
 	{
@@ -71,7 +71,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function stopQuery(): void
 	{
@@ -84,7 +84,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getCallStacks(): array
 	{
@@ -96,7 +96,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getLogs(): array
 	{
@@ -108,7 +108,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getMemoryLogs(): array
 	{
@@ -120,7 +120,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	 *
 	 * @return  array
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getTimings(): array
 	{

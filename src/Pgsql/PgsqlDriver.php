@@ -138,7 +138,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  string  The database encryption details.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function getConnectionEncryption(): string
@@ -169,7 +169,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  boolean  Whether the databse supports TLS connections encryption.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function isConnectionEncryptionSupported(): bool
 	{
@@ -333,7 +333,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  string  A list of the column names for the table.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function getNamesKey($table, $indKey)
@@ -433,7 +433,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  integer  The last value of the sequence.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function getSequenceLastValue($sequence)
@@ -456,7 +456,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  boolean  The is_called attribute of the sequence.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
 	public function getSequenceIsCalled($sequence)
