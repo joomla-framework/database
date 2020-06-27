@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Describes an object.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class DescriptorHelper extends Helper
 {
@@ -28,7 +28,7 @@ class DescriptorHelper extends Helper
 	 *
 	 * @return  void
 	 *
-	 * @since   _2.0.0-beta
+	 * @since   _2.0.0
 	 */
 	public function describe(OutputInterface $output, $object, array $options = [])
 	{
@@ -40,7 +40,7 @@ class DescriptorHelper extends Helper
 	 *
 	 * @return  string  The canonical name
 	 *
-	 * @since   _2.0.0-beta
+	 * @since   _2.0.0
 	 */
 	public function getName()
 	{

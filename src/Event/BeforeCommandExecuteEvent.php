@@ -15,7 +15,7 @@ use Joomla\Console\ConsoleEvents;
 /**
  * Event triggered before a command is executed.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class BeforeCommandExecuteEvent extends ConsoleEvent
 {
@@ -23,7 +23,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 * The return code for a command disabled by this event.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const RETURN_CODE_DISABLED = 113;
 
@@ -31,7 +31,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 * Flag indicating the command is enabled
 	 *
 	 * @var    boolean
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $commandEnabled = true;
 
@@ -41,7 +41,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 * @param   Application           $application  The active application.
 	 * @param   AbstractCommand|null  $command      The command being executed.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(Application $application, ?AbstractCommand $command = null)
 	{
@@ -58,7 +58,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function disableCommand(): void
 	{
@@ -70,7 +70,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function enableCommand(): void
 	{
@@ -82,7 +82,7 @@ class BeforeCommandExecuteEvent extends ConsoleEvent
 	 *
 	 * @return    boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function isCommandEnabled(): bool
 	{

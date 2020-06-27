@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Base command class for a Joomla! command line application.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 abstract class AbstractCommand
 {
@@ -27,7 +27,7 @@ abstract class AbstractCommand
 	 * The default command name
 	 *
 	 * @var    string|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected static $defaultName;
 
@@ -35,7 +35,7 @@ abstract class AbstractCommand
 	 * The command's aliases.
 	 *
 	 * @var    string[]
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $aliases = [];
 
@@ -43,7 +43,7 @@ abstract class AbstractCommand
 	 * The application running this command.
 	 *
 	 * @var    Application|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $application;
 
@@ -51,7 +51,7 @@ abstract class AbstractCommand
 	 * Flag tracking whether the application definition has been merged to this command.
 	 *
 	 * @var    boolean
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $applicationDefinitionMerged = false;
 
@@ -59,7 +59,7 @@ abstract class AbstractCommand
 	 * Flag tracking whether the application definition with arguments has been merged to this command.
 	 *
 	 * @var    boolean
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $applicationDefinitionMergedWithArgs = false;
 
@@ -67,7 +67,7 @@ abstract class AbstractCommand
 	 * The command's input definition.
 	 *
 	 * @var    InputDefinition
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $definition;
 
@@ -75,7 +75,7 @@ abstract class AbstractCommand
 	 * The command's description.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $description = '';
 
@@ -83,7 +83,7 @@ abstract class AbstractCommand
 	 * The command's help.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $help = '';
 
@@ -91,7 +91,7 @@ abstract class AbstractCommand
 	 * The command's input helper set.
 	 *
 	 * @var    HelperSet|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $helperSet;
 
@@ -99,7 +99,7 @@ abstract class AbstractCommand
 	 * Flag tracking whether the command is hidden from the command listing.
 	 *
 	 * @var    boolean
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $hidden = false;
 
@@ -107,7 +107,7 @@ abstract class AbstractCommand
 	 * The command's name.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $name;
 
@@ -115,7 +115,7 @@ abstract class AbstractCommand
 	 * The command's synopses.
 	 *
 	 * @var    string[]
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $synopsis = [];
 
@@ -124,7 +124,7 @@ abstract class AbstractCommand
 	 *
 	 * @param   string|null  $name  The name of the command; if the name is empty and no default is set, a name must be set in the configure() method
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(?string $name = null)
 	{
@@ -148,7 +148,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function addArgument(string $name, ?int $mode = null, string $description = '', $default = null): self
 	{
@@ -168,7 +168,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function addOption(string $name, $shortcut = null, ?int $mode = null, $description = '', $default = null): self
 	{
@@ -182,7 +182,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function configure(): void
 	{
@@ -196,7 +196,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  integer  The command exit code
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	abstract protected function doExecute(InputInterface $input, OutputInterface $output): int;
 
@@ -208,7 +208,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  integer  The command exit code
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function execute(InputInterface $input, OutputInterface $output): int
 	{
@@ -240,7 +240,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  string[]
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getAliases(): array
 	{
@@ -252,7 +252,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  Application  The application object.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \UnexpectedValueException if the application has not been set.
 	 */
 	public function getApplication(): Application
@@ -272,7 +272,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  string|null
 	 *
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public static function getDefaultName(): ?string
 	{
@@ -287,7 +287,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  InputDefinition
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getDefinition(): InputDefinition
 	{
@@ -299,7 +299,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getDescription(): string
 	{
@@ -311,7 +311,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getHelp(): string
 	{
@@ -323,7 +323,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  HelperSet|null
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getHelperSet(): ?HelperSet
 	{
@@ -335,7 +335,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  string|null
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getName(): ?string
 	{
@@ -350,7 +350,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getProcessedHelp(): string
 	{
@@ -376,7 +376,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getSynopsis(bool $short = false): string
 	{
@@ -398,7 +398,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function initialise(InputInterface $input, OutputInterface $output): void
 	{
@@ -409,7 +409,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function isEnabled(): bool
 	{
@@ -421,7 +421,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function isHidden(): bool
 	{
@@ -435,7 +435,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @internal  This method should not be relied on as part of the public API
 	 */
 	final public function mergeApplicationDefinition(bool $mergeArgs = true): void
@@ -466,7 +466,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setAliases(array $aliases): void
 	{
@@ -480,7 +480,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setApplication(?Application $application = null): void
 	{
@@ -503,7 +503,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setDefinition($definition): void
 	{
@@ -526,7 +526,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setDescription(string $description): void
 	{
@@ -540,7 +540,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setHelp(string $help): void
 	{
@@ -554,7 +554,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setHelperSet(HelperSet $helperSet): void
 	{
@@ -568,7 +568,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setHidden(bool $hidden): void
 	{
@@ -582,7 +582,7 @@ abstract class AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setName(string $name): void
 	{

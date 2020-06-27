@@ -15,7 +15,7 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * PSR-11 compatible command loader.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 final class ContainerLoader implements LoaderInterface
 {
@@ -23,7 +23,7 @@ final class ContainerLoader implements LoaderInterface
 	 * The service container.
 	 *
 	 * @var    ContainerInterface
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $container;
 
@@ -31,7 +31,7 @@ final class ContainerLoader implements LoaderInterface
 	 * The command name to service ID map.
 	 *
 	 * @var    string[]
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $commandMap;
 
@@ -41,7 +41,7 @@ final class ContainerLoader implements LoaderInterface
 	 * @param   ContainerInterface  $container   A container from which to load command services.
 	 * @param   array               $commandMap  An array with command names as keys and service IDs as values.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(ContainerInterface $container, array $commandMap)
 	{
@@ -56,7 +56,7 @@ final class ContainerLoader implements LoaderInterface
 	 *
 	 * @return  AbstractCommand
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  CommandNotFoundException
 	 */
 	public function get(string $name): AbstractCommand
@@ -74,7 +74,7 @@ final class ContainerLoader implements LoaderInterface
 	 *
 	 * @return  string[]
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getNames(): array
 	{
@@ -88,7 +88,7 @@ final class ContainerLoader implements LoaderInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function has($name): bool
 	{

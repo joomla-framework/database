@@ -15,7 +15,7 @@ use Joomla\Console\ConsoleEvents;
 /**
  * Event triggered immediately before the process is terminated.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class TerminateEvent extends ConsoleEvent
 {
@@ -23,7 +23,7 @@ class TerminateEvent extends ConsoleEvent
 	 * The exit code to use for the application.
 	 *
 	 * @var    integer
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $exitCode;
 
@@ -34,7 +34,7 @@ class TerminateEvent extends ConsoleEvent
 	 * @param   Application           $application  The active application.
 	 * @param   AbstractCommand|null  $command      The command being executed.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(int $exitCode, Application $application, ?AbstractCommand $command = null)
 	{
@@ -48,7 +48,7 @@ class TerminateEvent extends ConsoleEvent
 	 *
 	 * @return  integer
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getExitCode(): int
 	{
@@ -62,7 +62,7 @@ class TerminateEvent extends ConsoleEvent
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setExitCode(int $exitCode): void
 	{

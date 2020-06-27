@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command listing all available commands.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class ListCommand extends AbstractCommand
 {
@@ -24,7 +24,7 @@ class ListCommand extends AbstractCommand
 	 * The default command name
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected static $defaultName = 'list';
 
@@ -33,7 +33,7 @@ class ListCommand extends AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function configure(): void
 	{
@@ -55,7 +55,7 @@ EOF
 	 *
 	 * @return  integer  The command exit code
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function doExecute(InputInterface $input, OutputInterface $output): int
 	{

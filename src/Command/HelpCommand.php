@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command to render a command's help data.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class HelpCommand extends AbstractCommand
 {
@@ -24,7 +24,7 @@ class HelpCommand extends AbstractCommand
 	 * The default command name
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected static $defaultName = 'help';
 
@@ -32,7 +32,7 @@ class HelpCommand extends AbstractCommand
 	 * The command to process help for
 	 *
 	 * @var    AbstractCommand|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $command;
 
@@ -41,7 +41,7 @@ class HelpCommand extends AbstractCommand
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function configure(): void
 	{
@@ -66,7 +66,7 @@ EOF
 	 *
 	 * @return  integer  The command exit code
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function doExecute(InputInterface $input, OutputInterface $output): int
 	{
@@ -94,7 +94,7 @@ EOF
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setCommand(AbstractCommand $command): void
 	{

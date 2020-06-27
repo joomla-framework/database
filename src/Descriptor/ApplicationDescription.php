@@ -15,7 +15,7 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * Describes an application.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 final class ApplicationDescription
 {
@@ -23,7 +23,7 @@ final class ApplicationDescription
 	 * Placeholder for commands in the global namespace.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const GLOBAL_NAMESPACE = '_global';
 
@@ -31,7 +31,7 @@ final class ApplicationDescription
 	 * The application's aliased commands.
 	 *
 	 * @var    AbstractCommand[]
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $aliases;
 
@@ -39,7 +39,7 @@ final class ApplicationDescription
 	 * The application being described.
 	 *
 	 * @var    Application
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $application;
 
@@ -47,7 +47,7 @@ final class ApplicationDescription
 	 * The application's commands.
 	 *
 	 * @var    AbstractCommand[]
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $commands;
 
@@ -55,7 +55,7 @@ final class ApplicationDescription
 	 * The command namespace to process.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $namespace = '';
 
@@ -63,7 +63,7 @@ final class ApplicationDescription
 	 * The application's command namespaces.
 	 *
 	 * @var    array[]
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $namespaces;
 
@@ -71,7 +71,7 @@ final class ApplicationDescription
 	 * Flag indicating hidden commands should be displayed.
 	 *
 	 * @var    boolean
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $showHidden;
 
@@ -82,7 +82,7 @@ final class ApplicationDescription
 	 * @param   string       $namespace    The command namespace to process.
 	 * @param   boolean      $showHidden   Flag indicating hidden commands should be displayed.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(Application $application, string $namespace = '', bool $showHidden = false)
 	{
@@ -96,7 +96,7 @@ final class ApplicationDescription
 	 *
 	 * @return  array[]
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getNamespaces(): array
 	{
@@ -113,7 +113,7 @@ final class ApplicationDescription
 	 *
 	 * @return  AbstractCommand[]
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getCommands(): array
 	{
@@ -132,7 +132,7 @@ final class ApplicationDescription
 	 *
 	 * @return  AbstractCommand
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  CommandNotFoundException
 	 */
 	public function getCommand(string $name): AbstractCommand
@@ -153,7 +153,7 @@ final class ApplicationDescription
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function extractNamespace(string $name, ?int $limit = null): string
 	{
@@ -168,7 +168,7 @@ final class ApplicationDescription
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function inspectApplication(): void
 	{
@@ -211,7 +211,7 @@ final class ApplicationDescription
 	 *
 	 * @return  AbstractCommand[][]
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function sortCommands(array $commands): array
 	{

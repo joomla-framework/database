@@ -11,7 +11,7 @@ namespace Joomla\Console;
 /**
  * Class defining the events available in the console application.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 final class ConsoleEvents
 {
@@ -21,7 +21,7 @@ final class ConsoleEvents
 	 * This event allows developers to handle the Throwable.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const APPLICATION_ERROR = 'console.application_error';
 
@@ -32,7 +32,7 @@ final class ConsoleEvents
 	 * dependencies prior to the command being executed.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const BEFORE_COMMAND_EXECUTE = 'console.before_command_execute';
 
@@ -42,7 +42,7 @@ final class ConsoleEvents
 	 * This event allows developers to handle the Throwable.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const COMMAND_ERROR = 'console.command_error';
 
@@ -53,7 +53,7 @@ final class ConsoleEvents
 	 * the process' exit code.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	public const TERMINATE = 'console.terminate';
 }

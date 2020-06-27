@@ -14,7 +14,7 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * Interface defining a command loader.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 interface LoaderInterface
 {
@@ -25,7 +25,7 @@ interface LoaderInterface
 	 *
 	 * @return  AbstractCommand
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  CommandNotFoundException
 	 */
 	public function get(string $name): AbstractCommand;
@@ -35,7 +35,7 @@ interface LoaderInterface
 	 *
 	 * @return  string[]
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getNames(): array;
 
@@ -46,7 +46,7 @@ interface LoaderInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function has($name): bool;
 }

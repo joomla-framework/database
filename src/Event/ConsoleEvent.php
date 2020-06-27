@@ -15,7 +15,7 @@ use Joomla\Event\Event;
 /**
  * Base event class for console events.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class ConsoleEvent extends Event
 {
@@ -23,7 +23,7 @@ class ConsoleEvent extends Event
 	 * The active application.
 	 *
 	 * @var    Application
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $application;
 
@@ -31,7 +31,7 @@ class ConsoleEvent extends Event
 	 * The command being executed.
 	 *
 	 * @var    AbstractCommand|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $command;
 
@@ -42,7 +42,7 @@ class ConsoleEvent extends Event
 	 * @param   Application           $application  The active application.
 	 * @param   AbstractCommand|null  $command      The command being executed.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(string $name, Application $application, ?AbstractCommand $command = null)
 	{
@@ -57,7 +57,7 @@ class ConsoleEvent extends Event
 	 *
 	 * @return  Application
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getApplication(): Application
 	{
@@ -69,7 +69,7 @@ class ConsoleEvent extends Event
 	 *
 	 * @return  AbstractCommand|null
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getCommand(): ?AbstractCommand
 	{

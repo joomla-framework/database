@@ -15,7 +15,7 @@ use Joomla\Console\ConsoleEvents;
 /**
  * Event triggered when an uncaught Throwable is received by the application from a command.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class CommandErrorEvent extends ConsoleEvent
 {
@@ -23,7 +23,7 @@ class CommandErrorEvent extends ConsoleEvent
 	 * The Throwable object with the error data.
 	 *
 	 * @var    \Throwable
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $error;
 
@@ -31,7 +31,7 @@ class CommandErrorEvent extends ConsoleEvent
 	 * The exit code to use for the application.
 	 *
 	 * @var    integer|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $exitCode;
 
@@ -42,7 +42,7 @@ class CommandErrorEvent extends ConsoleEvent
 	 * @param   Application           $application  The active application.
 	 * @param   AbstractCommand|null  $command      The command being executed.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(\Throwable $error, Application $application, ?AbstractCommand $command = null)
 	{
@@ -56,7 +56,7 @@ class CommandErrorEvent extends ConsoleEvent
 	 *
 	 * @return  \Throwable
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getError(): \Throwable
 	{
@@ -68,7 +68,7 @@ class CommandErrorEvent extends ConsoleEvent
 	 *
 	 * @return  integer
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getExitCode(): int
 	{
@@ -87,7 +87,7 @@ class CommandErrorEvent extends ConsoleEvent
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setError(\Throwable $error): void
 	{
@@ -101,7 +101,7 @@ class CommandErrorEvent extends ConsoleEvent
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setExitCode(int $exitCode): void
 	{

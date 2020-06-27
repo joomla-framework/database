@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Text object descriptor.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 final class TextDescriptor extends SymfonyTextDescriptor
 {
@@ -31,7 +31,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function describe(OutputInterface $output, $object, array $options = [])
 	{
@@ -61,7 +61,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function getCommandAliasesText(AbstractCommand $command): string
 	{
@@ -84,7 +84,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function describeConsoleCommand(AbstractCommand $command, array $options): void
 	{
@@ -129,7 +129,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function describeJoomlaApplication(Application $app, array $options): void
 	{
@@ -234,7 +234,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @return  integer
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function getColumnWidth(array $commands): int
 	{
@@ -268,7 +268,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function writeText($content, array $options = []): void
 	{

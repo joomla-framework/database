@@ -13,7 +13,7 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * Exception indicating a missing command namespace.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class NamespaceNotFoundException extends CommandNotFoundException
 {

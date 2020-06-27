@@ -45,7 +45,7 @@ use Symfony\Component\ErrorHandler\ErrorHandler;
 /**
  * Base application class for a Joomla! command line application.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class Application extends AbstractApplication
 {
@@ -53,7 +53,7 @@ class Application extends AbstractApplication
 	 * Flag indicating the application should automatically exit after the command is run.
 	 *
 	 * @var    boolean
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $autoExit = true;
 
@@ -61,7 +61,7 @@ class Application extends AbstractApplication
 	 * Flag indicating the application should catch and handle Throwables.
 	 *
 	 * @var    boolean
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $catchThrowables = true;
 
@@ -69,7 +69,7 @@ class Application extends AbstractApplication
 	 * The available commands.
 	 *
 	 * @var    AbstractCommand[]
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $commands = [];
 
@@ -77,7 +77,7 @@ class Application extends AbstractApplication
 	 * The command loader.
 	 *
 	 * @var    Loader\LoaderInterface|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $commandLoader;
 
@@ -85,7 +85,7 @@ class Application extends AbstractApplication
 	 * Console input handler.
 	 *
 	 * @var    InputInterface
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $consoleInput;
 
@@ -93,7 +93,7 @@ class Application extends AbstractApplication
 	 * Console output handler.
 	 *
 	 * @var    OutputInterface
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $consoleOutput;
 
@@ -101,7 +101,7 @@ class Application extends AbstractApplication
 	 * The default command for the application.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $defaultCommand = 'list';
 
@@ -109,7 +109,7 @@ class Application extends AbstractApplication
 	 * The application input definition.
 	 *
 	 * @var    InputDefinition|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $definition;
 
@@ -117,7 +117,7 @@ class Application extends AbstractApplication
 	 * The application helper set.
 	 *
 	 * @var    HelperSet|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $helperSet;
 
@@ -125,7 +125,7 @@ class Application extends AbstractApplication
 	 * Internal flag tracking if the command store has been initialised.
 	 *
 	 * @var    boolean
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $initialised = false;
 
@@ -133,7 +133,7 @@ class Application extends AbstractApplication
 	 * The name of the application.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $name = '';
 
@@ -141,7 +141,7 @@ class Application extends AbstractApplication
 	 * Reference to the currently running command.
 	 *
 	 * @var    AbstractCommand|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $runningCommand;
 
@@ -149,7 +149,7 @@ class Application extends AbstractApplication
 	 * The console terminal helper.
 	 *
 	 * @var    Terminal
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $terminal;
 
@@ -157,7 +157,7 @@ class Application extends AbstractApplication
 	 * The version of the application.
 	 *
 	 * @var    string
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $version = '';
 
@@ -165,7 +165,7 @@ class Application extends AbstractApplication
 	 * Internal flag tracking if the user is seeking help for the given command.
 	 *
 	 * @var    boolean
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $wantsHelp = false;
 
@@ -182,7 +182,7 @@ class Application extends AbstractApplication
 	 *                                    is a Registry object that object will become the application's config object, otherwise a default config
 	 *                                    object is created.
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(?InputInterface $input = null, ?OutputInterface $output = null, ?Registry $config = null)
 	{
@@ -209,7 +209,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  AbstractCommand
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  LogicException
 	 */
 	public function addCommand(AbstractCommand $command): AbstractCommand
@@ -252,7 +252,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function configureIO(): void
 	{
@@ -307,7 +307,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  integer  The exit code for the application
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \Throwable
 	 */
 	protected function doExecute(): int
@@ -401,7 +401,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \Throwable
 	 */
 	public function execute()
@@ -505,7 +505,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  NamespaceNotFoundException When namespace is incorrect or ambiguous
 	 */
 	public function findNamespace(string $namespace): string
@@ -545,7 +545,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  AbstractCommand[]
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getAllCommands(string $namespace = ''): array
 	{
@@ -602,7 +602,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  AbstractCommand
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  CommandNotFoundException
 	 */
 	public function getCommand(string $name): AbstractCommand
@@ -644,7 +644,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  string|null
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function getCommandName(InputInterface $input): ?string
 	{
@@ -659,7 +659,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  AbstractCommand[]
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getCommands(): array
 	{
@@ -671,7 +671,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  InputInterface
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getConsoleInput(): InputInterface
 	{
@@ -683,7 +683,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  OutputInterface
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getConsoleOutput(): OutputInterface
 	{
@@ -695,7 +695,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  AbstractCommand[]
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function getDefaultCommands(): array
 	{
@@ -710,7 +710,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  InputDefinition
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function getDefaultInputDefinition(): InputDefinition
 	{
@@ -737,7 +737,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  HelperSet
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function getDefaultHelperSet(): HelperSet
 	{
@@ -756,7 +756,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  InputDefinition
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getDefinition(): InputDefinition
 	{
@@ -790,7 +790,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getLongVersion(): string
 	{
@@ -814,7 +814,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getName(): string
 	{
@@ -828,7 +828,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  string[]
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getNamespaces(): array
 	{
@@ -852,7 +852,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getVersion(): string
 	{
@@ -866,7 +866,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function hasCommand(string $name): bool
 	{
@@ -892,7 +892,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function initialise(): void
 	{
@@ -907,7 +907,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function renderThrowable(\Throwable $throwable): void
 	{
@@ -939,7 +939,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	protected function doRenderThrowable(\Throwable $throwable, OutputInterface $output): void
 	{
@@ -1062,7 +1062,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  string[]
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function splitStringByWidth(string $string, int $width): array
 	{
@@ -1116,7 +1116,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  integer
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \Throwable
 	 */
 	protected function runCommand(AbstractCommand $command, InputInterface $input, OutputInterface $output): int
@@ -1203,7 +1203,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setAutoExit(bool $autoExit): void
 	{
@@ -1217,7 +1217,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setCatchThrowables(bool $catchThrowables): void
 	{
@@ -1231,7 +1231,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setCommandLoader(Loader\LoaderInterface $loader): void
 	{
@@ -1245,7 +1245,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setHelperSet(HelperSet $helperSet): void
 	{
@@ -1259,7 +1259,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setName(string $name): void
 	{
@@ -1273,7 +1273,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setVersion(string $version): void
 	{
@@ -1285,7 +1285,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function shouldAutoExit(): bool
 	{
@@ -1297,7 +1297,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  boolean
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function shouldCatchThrowables(): bool
 	{
@@ -1311,7 +1311,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  string[]
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function extractAllNamespaces(string $name): array
 	{
@@ -1342,7 +1342,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  string
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function extractNamespace(string $name, ?int $limit = null): string
 	{
@@ -1357,7 +1357,7 @@ class Application extends AbstractApplication
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	private function initCommands(): void
 	{
