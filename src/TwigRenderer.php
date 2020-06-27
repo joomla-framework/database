@@ -16,7 +16,7 @@ use Twig\Loader\LoaderInterface;
 /**
  * Twig class for rendering output.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterface
 {
@@ -24,7 +24,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 * Rendering engine
 	 *
 	 * @var    Environment
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $renderer;
 
@@ -33,7 +33,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 *
 	 * @param   Environment  $renderer  Rendering engine
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(Environment $renderer = null)
 	{
@@ -48,7 +48,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function addFolder(string $directory, string $alias = '')
 	{
@@ -73,7 +73,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 *
 	 * @return  Environment
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getRenderer()
 	{
@@ -87,7 +87,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function pathExists(string $path): bool
 	{
@@ -115,7 +115,7 @@ class TwigRenderer extends AbstractRenderer implements AddTemplateFolderInterfac
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function render(string $template, array $data = []): string
 	{

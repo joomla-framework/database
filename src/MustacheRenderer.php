@@ -11,7 +11,7 @@ namespace Joomla\Renderer;
 /**
  * Mustache class for rendering output.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class MustacheRenderer extends AbstractRenderer
 {
@@ -19,7 +19,7 @@ class MustacheRenderer extends AbstractRenderer
 	 * Rendering engine
 	 *
 	 * @var    \Mustache_Engine
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $renderer;
 
@@ -28,7 +28,7 @@ class MustacheRenderer extends AbstractRenderer
 	 *
 	 * @param   \Mustache_Engine  $renderer  Rendering engine
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(\Mustache_Engine $renderer = null)
 	{
@@ -40,7 +40,7 @@ class MustacheRenderer extends AbstractRenderer
 	 *
 	 * @return  \Mustache_Engine
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getRenderer()
 	{
@@ -54,7 +54,7 @@ class MustacheRenderer extends AbstractRenderer
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function pathExists(string $path): bool
 	{
@@ -78,7 +78,7 @@ class MustacheRenderer extends AbstractRenderer
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function render(string $template, array $data = []): string
 	{

@@ -11,7 +11,7 @@ namespace Joomla\Renderer;
 /**
  * Abstract class for templates renderer
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 abstract class AbstractRenderer implements RendererInterface
 {
@@ -19,7 +19,7 @@ abstract class AbstractRenderer implements RendererInterface
 	 * Data for output by the renderer
 	 *
 	 * @var    array
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected $data = [];
 
@@ -31,7 +31,7 @@ abstract class AbstractRenderer implements RendererInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function set(string $key, $value)
 	{
@@ -47,7 +47,7 @@ abstract class AbstractRenderer implements RendererInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setData(array $data)
 	{
@@ -61,7 +61,7 @@ abstract class AbstractRenderer implements RendererInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function unsetData()
 	{

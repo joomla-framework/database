@@ -14,7 +14,7 @@ use Symfony\Component\Templating\TemplateReferenceInterface;
 /**
  * PhpEngine template renderer
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class PhpEngineRenderer extends AbstractRenderer
 {
@@ -22,7 +22,7 @@ class PhpEngineRenderer extends AbstractRenderer
 	 * Rendering engine
 	 *
 	 * @var    PhpEngine
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $renderer;
 
@@ -31,7 +31,7 @@ class PhpEngineRenderer extends AbstractRenderer
 	 *
 	 * @param   PhpEngine  $renderer  Rendering engine
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(PhpEngine $renderer)
 	{
@@ -43,7 +43,7 @@ class PhpEngineRenderer extends AbstractRenderer
 	 *
 	 * @return  PhpEngine
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getRenderer()
 	{
@@ -57,7 +57,7 @@ class PhpEngineRenderer extends AbstractRenderer
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function pathExists(string $path): bool
 	{
@@ -72,7 +72,7 @@ class PhpEngineRenderer extends AbstractRenderer
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function render(string $template, array $data = []): string
 	{

@@ -13,7 +13,7 @@ use League\Plates\Engine;
 /**
  * Plates class for rendering output.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterface, ConfigurableFileExtensionInterface
 {
@@ -21,7 +21,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 * Rendering engine
 	 *
 	 * @var    Engine
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $renderer;
 
@@ -30,7 +30,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @param   Engine  $renderer  Rendering engine
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(Engine $renderer = null)
 	{
@@ -45,7 +45,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 * @throws  \InvalidArgumentException
 	 */
 	public function addFolder(string $directory, string $alias = '')
@@ -65,7 +65,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @return  Engine
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getRenderer()
 	{
@@ -79,7 +79,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function pathExists(string $path): bool
 	{
@@ -94,7 +94,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function render(string $template, array $data = []): string
 	{
@@ -110,7 +110,7 @@ class PlatesRenderer extends AbstractRenderer implements AddTemplateFolderInterf
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setFileExtension(string $extension)
 	{

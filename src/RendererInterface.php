@@ -11,7 +11,7 @@ namespace Joomla\Renderer;
 /**
  * Rendering interface.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 interface RendererInterface
 {
@@ -22,7 +22,7 @@ interface RendererInterface
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function pathExists(string $path): bool;
 
@@ -31,7 +31,7 @@ interface RendererInterface
 	 *
 	 * @return  mixed
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getRenderer();
 
@@ -43,7 +43,7 @@ interface RendererInterface
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function render(string $template, array $data = []): string;
 
@@ -55,7 +55,7 @@ interface RendererInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function set(string $key, $value);
 
@@ -66,7 +66,7 @@ interface RendererInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setData(array $data);
 
@@ -75,7 +75,7 @@ interface RendererInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function unsetData();
 }

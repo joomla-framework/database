@@ -11,7 +11,7 @@ namespace Joomla\Renderer;
 /**
  * Interface defining a renderer with a configurable file extension.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 interface ConfigurableFileExtensionInterface
 {
@@ -22,7 +22,7 @@ interface ConfigurableFileExtensionInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function setFileExtension(string $extension);
 }

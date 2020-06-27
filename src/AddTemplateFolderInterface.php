@@ -11,7 +11,7 @@ namespace Joomla\Renderer;
 /**
  * Interface for a renderer which can have template paths added during runtime.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 interface AddTemplateFolderInterface
 {
@@ -23,7 +23,7 @@ interface AddTemplateFolderInterface
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function addFolder(string $directory, string $alias = '');
 }

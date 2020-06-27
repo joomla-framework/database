@@ -20,7 +20,7 @@ use Illuminate\View\FileViewFinder;
 /**
  * Blade class for rendering output.
  *
- * @since  2.0.0-beta
+ * @since  2.0.0
  */
 class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterface
 {
@@ -28,7 +28,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 * Rendering engine
 	 *
 	 * @var    Factory
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	private $renderer;
 
@@ -37,7 +37,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 *
 	 * @param   Factory  $renderer  Rendering engine
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function __construct(Factory $renderer = null)
 	{
@@ -72,7 +72,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 *
 	 * @return  $this
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function addFolder(string $directory, string $alias = '')
 	{
@@ -86,7 +86,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 *
 	 * @return  Factory
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function getRenderer()
 	{
@@ -100,7 +100,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 *
 	 * @return  boolean  True if the path exists
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function pathExists(string $path): bool
 	{
@@ -115,7 +115,7 @@ class BladeRenderer extends AbstractRenderer implements AddTemplateFolderInterfa
 	 *
 	 * @return  string  Compiled data
 	 *
-	 * @since   2.0.0-beta
+	 * @since   2.0.0
 	 */
 	public function render(string $template, array $data = []): string
 	{
