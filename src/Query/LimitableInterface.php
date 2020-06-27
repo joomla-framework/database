@@ -10,13 +10,12 @@ namespace Joomla\Database\Query;
 
 use Joomla\Database\QueryInterface;
 
-@trigger_error(
-	sprintf(
-		'%1$s is deprecated and will be removed in 3.0, all query objects should implement %2$s instead.',
-		LimitableInterface::class,
-		QueryInterface::class
-	),
-	E_USER_DEPRECATED
+trigger_deprecation(
+	'joomla/database',
+	'2.0.0',
+	'%s() is deprecated and will be removed in 3.0, all query objects should implement %s instead.',
+	LimitableInterface::class,
+	QueryInterface::class
 );
 
 /**

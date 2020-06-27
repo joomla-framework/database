@@ -291,13 +291,12 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 */
 	public static function getInstance(array $options = [])
 	{
-		@trigger_error(
-			sprintf(
-				'%1$s() is deprecated and will be removed in 3.0, use %2$s::getDriver() instead.',
-				__METHOD__,
-				DatabaseFactory::class
-			),
-			E_USER_DEPRECATED
+		trigger_deprecation(
+			'joomla/database',
+			'2.0.0',
+			'%s() is deprecated and will be removed in 3.0, use %s::getDriver() instead.',
+			__METHOD__,
+			DatabaseFactory::class
 		);
 
 		// Sanitize the database connector options.
@@ -465,9 +464,11 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		switch ($name)
 		{
 			case 'name':
-				@trigger_error(
-					'Accessing the name property of the database driver is deprecated, use the getName() method instead.',
-					E_USER_DEPRECATED
+				trigger_deprecation(
+					'joomla/database',
+					'1.4.0',
+					'Accessing the name property of %s is deprecated, use the getName() method instead.',
+					self::class
 				);
 
 				return $this->getName();
@@ -1863,13 +1864,12 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 
 		if ($offset > 0 || $limit > 0)
 		{
-			@trigger_error(
-				sprintf(
-					'The "$offset" and "$limit" arguments of %1$s() are deprecated and will be removed in 3.0, use %2$s::setLimit() instead.',
-					__METHOD__,
-					\get_class($query)
-				),
-				E_USER_DEPRECATED
+			trigger_deprecation(
+				'joomla/database',
+				'2.0.0',
+				'The "$offset" and "$limit" arguments of %s() are deprecated and will be removed in 3.0, use %s::setLimit() instead.',
+				__METHOD__,
+				QueryInterface::class
 			);
 		}
 

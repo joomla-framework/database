@@ -917,12 +917,11 @@ abstract class DatabaseQuery implements QueryInterface
 	 */
 	public function dump()
 	{
-		@trigger_error(
-			sprintf(
-				'%1$s() is deprecated and will be removed in 3.0.',
-				__METHOD__
-			),
-			E_USER_DEPRECATED
+		trigger_deprecation(
+			'joomla/database',
+			'2.0.0',
+			'%s() is deprecated and will be removed in 3.0.',
+			__METHOD__
 		);
 
 		return '<pre class="jdatabasequery">' . str_replace('#__', $this->db->getPrefix(), $this) . '</pre>';
