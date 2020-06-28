@@ -981,7 +981,7 @@ class Application extends AbstractApplication
 					'/class@anonymous\x00.*?\.php(?:0x?|:[0-9]++\$)[0-9a-fA-F]++/',
 					function ($m)
 					{
-						return class_exists($m[0], false) ? (get_parent_class($m[0]) ?: key(class_implements($m[0]))).'@anonymous' : $m[0];
+						return class_exists($m[0], false) ? (get_parent_class($m[0]) ?: key(class_implements($m[0]))) . '@anonymous' : $m[0];
 					},
 					$message
 				);
