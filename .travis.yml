@@ -24,16 +24,16 @@ matrix:
       # This empty flag removes the prefer-stable switch to cause dev dependencies to be installed
       env: COMPOSER_FLAGS=""
     - php: 7.4
-      env: SYMFONY_VERSION="5.0.*"
+      env: SYMFONY_VERSION="5.1.*"
     - php: 7.4
-      env: SYMFONY_VERSION="5.1.*@dev"
+      env: SYMFONY_VERSION="5.2.*@dev"
     - php: nightly
-      env: SYMFONY_VERSION="5.1.*@dev"
+      env: SYMFONY_VERSION="5.2.*@dev"
   allow_failures:
     - php: 7.4
-      env: SYMFONY_VERSION="5.1.*@dev"
+      env: SYMFONY_VERSION="5.2.*@dev"
     - php: nightly
-      env: SYMFONY_VERSION="5.1.*@dev"
+      env: SYMFONY_VERSION="5.2.*@dev"
 
 before_script:
   - composer self-update
