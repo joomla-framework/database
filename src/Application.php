@@ -961,8 +961,13 @@ class Application extends AbstractApplication
 			if ($message === '' || OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity())
 			{
 				$class = \get_class($throwable);
-				$class = 'c' === $class[0] && 0 === strpos($class, "class@anonymous\0") ? get_parent_class($class) . '@anonymous' : $class;
-				$title = sprintf('  [%s%s]  ', $class, 0 !== ($code = $throwable->getCode()) ? ' (' . $code . ')' : '');
+
+				if ($class[0] === 'c' && strpos($class, "class@anonymous\0") === 0)
+				{
+					$class = get_parent_class($class) ?: key(class_implements($class));
+				}
+
+				$title = sprintf('  [%s%s]  ', $class, ($code = $throwable->getCode()) !== 0 ? ' (' . $code . ')' : '');
 				$len   = Helper::strlen($title);
 			}
 			else
@@ -973,10 +978,10 @@ class Application extends AbstractApplication
 			if (strpos($message, "class@anonymous\0") !== false)
 			{
 				$message = preg_replace_callback(
-					'/class@anonymous\x00.*?\.php0x?[0-9a-fA-F]++/',
+					'/class@anonymous\x00.*?\.php(?:0x?|:[0-9]++\$)[0-9a-fA-F]++/',
 					function ($m)
 					{
-						return class_exists($m[0], false) ? get_parent_class($m[0]) . '@anonymous' : $m[0];
+						return class_exists($m[0], false) ? (get_parent_class($m[0]) ?: key(class_implements($m[0]))).'@anonymous' : $m[0];
 					},
 					$message
 				);
