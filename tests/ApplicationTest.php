@@ -104,6 +104,33 @@ class ApplicationTest extends TestCase
 
 	/**
 	 * @covers  Joomla\Console\Application
+	 * @uses    Joomla\Console\Command\AbstractCommand
+	 * @uses    Joomla\Console\Command\HelpCommand
+	 * @uses    Joomla\Console\Command\ListCommand
+	 * @uses    Joomla\Console\Descriptor\ApplicationDescription
+	 * @uses    Joomla\Console\Descriptor\TextDescriptor
+	 * @uses    Joomla\Console\Helper\DescriptorHelper
+	 */
+	public function testTheApplicationPrintsTheVersionInformation()
+	{
+		$input = new ArrayInput(
+			[
+				'--version' => true,
+			]
+		);
+		$output = new BufferedOutput;
+
+		$app = new Application($input, $output);
+		$app->setName('Console Tester');
+		$app->setVersion('1.0.0');
+		$app->setAutoExit(false);
+		$app->execute();
+
+		$this->assertSame('Console Tester 1.0.0', trim($output->fetch()));
+	}
+
+	/**
+	 * @covers  Joomla\Console\Application
 	 */
 	public function testSetGetName()
 	{
