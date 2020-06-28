@@ -968,7 +968,7 @@ class Application extends AbstractApplication
 				}
 
 				$title = sprintf('  [%s%s]  ', $class, ($code = $throwable->getCode()) !== 0 ? ' (' . $code . ')' : '');
-				$len   = Helper::strlen($title);
+				$len   = StringHelper::strlen($title);
 			}
 			else
 			{
@@ -1019,7 +1019,7 @@ class Application extends AbstractApplication
 
 			if ($message === '' || OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity())
 			{
-				$messages[] = sprintf('<error>%s%s</error>', $title, str_repeat(' ', max(0, $len - Helper::strlen($title))));
+				$messages[] = sprintf('<error>%s%s</error>', $title, str_repeat(' ', max(0, $len - StringHelper::strlen($title))));
 			}
 
 			foreach ($lines as $line)
