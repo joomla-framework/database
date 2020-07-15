@@ -6,6 +6,7 @@
 
 namespace Joomla\Filesystem\Tests;
 
+use Joomla\Filesystem\Exception\FilesystemException;
 use Joomla\Filesystem\File;
 use Joomla\Filesystem\Path;
 
@@ -360,6 +361,89 @@ class PathTest extends FilesystemTestCase
 		$this->assertEquals(
 			__FILE__,
 			Path::find(__DIR__, 'PathTest.php')
+		);
+	}
+
+	/**
+	 * Test resolve method
+	 *
+	 * @param   string  $path            test path
+	 * @param   string  $expectedResult  expected path
+	 *
+	 * @return  void
+	 *
+	 * @since   1.4.0
+	 *
+	 * @dataProvider  getResolveData
+	 */
+	public function testResolve($path, $expectedResult)
+	{
+		$this->assertEquals(str_replace("_DS_", DIRECTORY_SEPARATOR, $expectedResult), Path::resolve($path));
+	}
+
+	/**
+	 * Test resolve method
+
+	 * @param   string  $path            test path
+	 *
+	 * @expectedException         Joomla\Filesystem\Exception\FilesystemException
+	 * @expectedExceptionMessage  Path is outside of the defined root
+	 *
+	 * @return void
+	 *
+	 * @since   1.4.0
+	 *
+	 * @dataProvider  getResolveExceptionData
+	 */
+	public function testResolveThrowsExceptionIfRootIsLeft($path)
+	{
+		Path::resolve($path);
+	}
+
+	/**
+	 * Data provider for testResolve() method.
+	 *
+	 * @return  array
+	 *
+	 * @since   1.0
+	 */
+	public function getResolveData()
+	{
+		return array(
+			array("/", "_DS_"),
+			array("a", "a"),
+			array("/test/", "_DS_test"),
+			array("C:/", "C:"),
+			array("/var/www/joomla", "_DS_var_DS_www_DS_joomla"),
+			array("C:/iis/www/joomla", "C:_DS_iis_DS_www_DS_joomla"),
+			array("var/www/joomla", "var_DS_www_DS_joomla"),
+			array("./var/www/joomla", "var_DS_www_DS_joomla"),
+			array("/var/www/foo/../joomla", "_DS_var_DS_www_DS_joomla"),
+			array("C:/var/www/foo/../joomla", "C:_DS_var_DS_www_DS_joomla"),
+			array("/var/www/../foo/../joomla", "_DS_var_DS_joomla"),
+			array("C:/var/www/..foo../joomla", "C:_DS_var_DS_www_DS_..foo.._DS_joomla"),
+			array("c:/var/www/..foo../joomla", "c:_DS_var_DS_www_DS_..foo.._DS_joomla"),
+			array("/var/www///joomla", "_DS_var_DS_www_DS_joomla"),
+			array("/var///www///joomla", "_DS_var_DS_www_DS_joomla"),
+			array("C:/var///www///joomla", "C:_DS_var_DS_www_DS_joomla"),
+			array("/var/\/../www///joomla", "_DS_www_DS_joomla"),
+			array("C:/var///www///joomla", "C:_DS_var_DS_www_DS_joomla"),
+			array("/var\\www///joomla", "_DS_var_DS_www_DS_joomla")
+		);
+	}
+
+	/**
+	 * Data provider for testResolve() method.
+	 *
+	 * @return  array
+	 *
+	 * @since   1.0
+	 */
+	public function getResolveExceptionData()
+	{
+		return array(
+			array("../var/www/joomla"),
+			array("/var/../../../www/joomla")
 		);
 	}
 }
