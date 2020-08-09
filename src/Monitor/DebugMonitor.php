@@ -34,7 +34,7 @@ final class DebugMonitor implements QueryMonitorInterface
 	private $logs = [];
 
 	/**
-	 * List of bound params, used with the query. Each item is an object that holds: value, dataType.
+	 * List of bound params, used with the query.
 	 *
 	 * @var    array
 	 * @since  2.0.0
