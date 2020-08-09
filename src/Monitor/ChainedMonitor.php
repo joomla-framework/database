@@ -42,17 +42,19 @@ class ChainedMonitor implements QueryMonitorInterface
 	/**
 	 * Act on a query being started.
 	 *
-	 * @param   string  $sql  The SQL to be executed.
+	 * @param   string         $sql           The SQL to be executed.
+	 * @param   object[]|null  $boundParams   List of bound params, used with the query.
+	 *                                        Each item is an object that holds: value, dataType
 	 *
 	 * @return  void
 	 *
 	 * @since   2.0.0
 	 */
-	public function startQuery(string $sql): void
+	public function startQuery(string $sql, ?array $boundParams = null): void
 	{
 		foreach ($this->monitors as $monitor)
 		{
-			$monitor->startQuery($sql);
+			$monitor->startQuery($sql, $boundParams);
 		}
 	}
 
