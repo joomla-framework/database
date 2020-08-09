@@ -52,6 +52,7 @@ class DebugMonitorTest extends TestCase
 
 		$this->assertCount(3, $this->monitor->getCallStacks(), 'There should be a call stack for each query.');
 		$this->assertCount(3, $this->monitor->getLogs(), 'There should be a logged query for each query.');
+		$this->assertCount(3, $this->monitor->getBoundParams(), 'There should be a logged bounded parameters for each query.');
 		$this->assertCount(6, $this->monitor->getMemoryLogs(), 'There should be memory stamp for the start and stop of each query.');
 		$this->assertCount(6, $this->monitor->getTimings(), 'There should be timestamp for the start and stop of each query.');
 	}
