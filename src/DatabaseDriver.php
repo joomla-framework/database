@@ -649,21 +649,22 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		// Increment the query counter.
 		$this->count++;
 
+		// Get list of bounded parameters
+		$bounded =& $this->sql->getBounded();
+
 		// If there is a monitor registered, let it know we are starting this query
 		if ($this->monitor)
 		{
 			// Take a local copy so that we don't modify the original query and cause issues later
 			$sql = $this->replacePrefix((string) $this->sql);
 
-			$this->monitor->startQuery($sql);
+			$this->monitor->startQuery($sql, $bounded);
 		}
 
 		// Execute the query.
 		$this->executed = false;
 
 		// Bind the variables
-		$bounded =& $this->sql->getBounded();
-
 		foreach ($bounded as $key => $obj)
 		{
 			$this->statement->bindParam($key, $obj->value, $obj->dataType);
