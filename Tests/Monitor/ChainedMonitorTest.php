@@ -69,7 +69,7 @@ class ChainedMonitorTest extends TestCase
 			public $startCalled = false;
 			public $stopCalled = false;
 
-			public function startQuery(string $sql): void
+			public function startQuery(string $sql, ?array $boundParams = null): void
 			{
 				$this->startCalled = true;
 			}
