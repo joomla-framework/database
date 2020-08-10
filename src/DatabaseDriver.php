@@ -649,7 +649,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		// Increment the query counter.
 		$this->count++;
 
-		// Get list of bounded parameters
+		// Get list of bound parameters
 		$bounded =& $this->sql->getBounded();
 
 		// If there is a monitor registered, let it know we are starting this query
