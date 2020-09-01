@@ -426,18 +426,19 @@ abstract class PdoDriver extends DatabaseDriver
 		// Increment the query counter.
 		$this->count++;
 
+		// Get list of bounded parameters
+		$bounded =& $this->sql->getBounded();
+
 		// If there is a monitor registered, let it know we are starting this query
 		if ($this->monitor)
 		{
-			$this->monitor->startQuery($sql);
+			$this->monitor->startQuery($sql, $bounded);
 		}
 
 		// Execute the query.
 		$this->executed = false;
 
 		// Bind the variables
-		$bounded =& $this->sql->getBounded();
-
 		foreach ($bounded as $key => $obj)
 		{
 			$this->statement->bindParam($key, $obj->value, $obj->dataType, $obj->length, $obj->driverOptions);

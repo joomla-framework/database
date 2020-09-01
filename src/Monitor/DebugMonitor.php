@@ -34,6 +34,14 @@ final class DebugMonitor implements QueryMonitorInterface
 	private $logs = [];
 
 	/**
+	 * List of bound params, used with the query.
+	 *
+	 * @var    array
+	 * @since  2.0.0
+	 */
+	private $boundParams = [];
+
+	/**
 	 * The log of executed SQL statements memory usage (start and stop memory_get_usage) by the database driver.
 	 *
 	 * @var    array
@@ -52,18 +60,21 @@ final class DebugMonitor implements QueryMonitorInterface
 	/**
 	 * Act on a query being started.
 	 *
-	 * @param   string  $sql  The SQL to be executed.
+	 * @param   string         $sql           The SQL to be executed.
+	 * @param   object[]|null  $boundParams   List of bound params, used with the query.
+	 *                                        Each item is an object that holds: value, dataType
 	 *
 	 * @return  void
 	 *
 	 * @since   2.0.0
 	 */
-	public function startQuery(string $sql): void
+	public function startQuery(string $sql, ?array $boundParams = null): void
 	{
-		$this->logs[]       = $sql;
-		$this->callStacks[] = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-		$this->memoryLogs[] = memory_get_usage();
-		$this->timings[]    = microtime(true);
+		$this->logs[]        = $sql;
+		$this->boundParams[] = $boundParams;
+		$this->callStacks[]  = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+		$this->memoryLogs[]  = memory_get_usage();
+		$this->timings[]     = microtime(true);
 	}
 
 	/**
@@ -101,6 +112,18 @@ final class DebugMonitor implements QueryMonitorInterface
 	public function getLogs(): array
 	{
 		return $this->logs;
+	}
+
+	/**
+	 * Get the logged bound params.
+	 *
+	 * @return  array
+	 *
+	 * @since   2.0.0
+	 */
+	public function getBoundParams(): array
+	{
+		return $this->boundParams;
 	}
 
 	/**
