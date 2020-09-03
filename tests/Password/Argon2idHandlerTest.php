@@ -17,14 +17,14 @@ class Argon2idHandlerTest extends CompatTestCase
 	/**
 	 * This method is called before the first test of this test class is run.
 	 */
-	protected static function doSetUpBeforeClass()
+	protected function doSetUp()
 	{
 		if (!Argon2idHandler::isSupported())
 		{
 			static::markTestSkipped('Argon2id algorithm is not supported.');
 		}
 
-		parent::doSetUpBeforeClass();
+		parent::doSetUp();
 	}
 
 	/**
