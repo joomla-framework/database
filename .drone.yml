@@ -70,8 +70,7 @@ steps:
   commands:
   - php -v
   - composer update --prefer-stable --prefer-lowest
-  - ""
-  - ""
+  - composer update phpunit/phpunit-mock-objects
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
@@ -369,7 +368,7 @@ steps:
   image: joomlaprojects/docker-images:php8.0
   commands:
   - php -v
-  - composer update --ignore-platform-reqs
+  - composer update --ignore-platform-reqs --prefer-stable
   - wget https://ci.joomla.org/artifacts/phpunit8_php8_match.patch
   - patch -N -p0 < phpunit8_php8_match.patch
   volumes:
@@ -389,6 +388,6 @@ volumes:
 
 ---
 kind: signature
-hmac: 85b68eb7ddc10d3ec0a0ab5f19965f9b7e79f8f192172c93e472283744a033a8
+hmac: c10fb61bd7debe6cf406efe7959890f8856f9ed1237056ad098ba8eed9cfdebc
 
 ...
