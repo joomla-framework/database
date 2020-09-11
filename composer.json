@@ -7,7 +7,8 @@
     "license": "GPL-2.0-or-later",
     "require": {
         "php": "^7.2.5",
-        "joomla/event": "^2.0"
+        "joomla/event": "^2.0",
+        "symfony/deprecation-contracts": "^2.1"
     },
     "require-dev": {
         "joomla/archive": "^1.0|^2.0",
@@ -19,7 +20,6 @@
         "joomla/test": "^2.0",
         "phpunit/phpunit": "^8.5|^9.0",
         "psr/log": "^1.1",
-        "symfony/deprecation-contracts": "^2.1",
         "symfony/phpunit-bridge": "^4.4|^5.0"
     },
     "suggest": {
