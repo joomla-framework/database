@@ -155,7 +155,7 @@ class GithubObjectTest extends GitHubTestCase
 		self::assertEquals(
 			array('Authorization' => 'token MyTestToken'),
 			$this->client->getOption('headers'),
-			'Token should bhe propagated as a header.'
+			'Token should be propagated as a header.'
 		);
 	}
 }

@@ -9,7 +9,7 @@
 namespace Joomla\Github;
 
 use Joomla\Http\Exception\UnexpectedResponseException;
-use Joomla\Http\Http;
+use Joomla\Http\Http as BaseHttp;
 use Joomla\Http\Response;
 use Joomla\Registry\Registry;
 use Joomla\Uri\Uri;
@@ -32,7 +32,7 @@ abstract class AbstractGithubObject
 	/**
 	 * The HTTP client object to use in sending HTTP requests.
 	 *
-	 * @var    Http
+	 * @var    BaseHttp
 	 * @since  1.0
 	 */
 	protected $client;
@@ -82,14 +82,14 @@ abstract class AbstractGithubObject
 	 * Constructor.
 	 *
 	 * @param   Registry  $options  GitHub options object.
-	 * @param   Http      $client   The HTTP client object.
+	 * @param   BaseHttp  $client   The HTTP client object.
 	 *
 	 * @since   1.0
 	 */
-	public function __construct(Registry $options = null, Http $client = null)
+	public function __construct(Registry $options = null, BaseHttp $client = null)
 	{
 		$this->options = $options ?: new Registry;
-		$this->client  = $client ?: new Http($this->options);
+		$this->client  = $client ?: new BaseHttp($this->options);
 
 		// Make sure the user agent string is defined.
 		if (!isset($this->options['userAgent']))
