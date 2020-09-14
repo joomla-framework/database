@@ -10,6 +10,7 @@ use Joomla\Github\AbstractGithubObject;
 use Joomla\Github\Tests\Stub\GitHubTestCase;
 use Joomla\Github\Tests\Stub\ObjectMock;
 use Joomla\Http\Http;
+use Joomla\Http\Transport\Curl;
 
 /**
  * Test class for Joomla\Github\Object.
@@ -42,7 +43,7 @@ class GithubObjectTest extends GitHubTestCase
 	{
 		parent::setUp();
 
-		$transport    = $this->createMock('\Joomla\Http\TransportInterface');
+		$transport    = new Curl(array());
 		$this->client = new Http(array(), $transport);
 		$this->object = new ObjectMock($this->options, $this->client);
 	}
