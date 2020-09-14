@@ -131,16 +131,16 @@ abstract class AbstractGithubObject
 		// If we have a defined page number add it to the JUri object.
 		if ($page > 0)
 		{
-			$uri->setVar('page', (int)$page);
+			$uri->setVar('page', (int) $page);
 		}
 
 		// If we have a defined items per page add it to the JUri object.
 		if ($limit > 0)
 		{
-			$uri->setVar('per_page', (int)$limit);
+			$uri->setVar('per_page', (int) $limit);
 		}
 
-		return (string)$uri;
+		return (string) $uri;
 	}
 
 	/**
