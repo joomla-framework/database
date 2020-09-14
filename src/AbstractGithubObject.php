@@ -114,12 +114,7 @@ abstract class AbstractGithubObject
 		// Get a new Uri object focusing the api url and given path.
 		$uri = new Uri($this->options->get('api.url') . $path);
 
-		if ($this->options->get('gh.token', false))
-		{
-			// Use oAuth authentication - @todo set in request header ?
-			$uri->setVar('access_token', $this->options->get('gh.token'));
-		}
-		else
+		if (!$this->options->get('gh.token', false))
 		{
 			// Use basic authentication
 			if ($this->options->get('api.username', false))
@@ -136,16 +131,37 @@ abstract class AbstractGithubObject
 		// If we have a defined page number add it to the JUri object.
 		if ($page > 0)
 		{
-			$uri->setVar('page', (int) $page);
+			$uri->setVar('page', (int)$page);
 		}
 
 		// If we have a defined items per page add it to the JUri object.
 		if ($limit > 0)
 		{
-			$uri->setVar('per_page', (int) $limit);
+			$uri->setVar('per_page', (int)$limit);
 		}
 
-		return (string) $uri;
+		return (string)$uri;
+	}
+
+	/**
+	 * Returns the Authorization header, if required.
+	 *
+	 * If the options passed to the constructor contain a value for `gh.token`,
+	 * an array with a suitable Authorization header is returned, an empty array
+	 * otherwise.
+	 *
+	 * @return  array    Authorization header if set in options.
+	 *
+	 * @since   1.8.0
+	 */
+	protected function authHeader()
+	{
+		if ($this->options->get('gh.token', false))
+		{
+			return array('Authorization: ' . $this->options->get('gh.token'));
+		}
+
+		return array();
 	}
 
 	/**
@@ -156,8 +172,8 @@ abstract class AbstractGithubObject
 	 *
 	 * @return  mixed
 	 *
-	 * @since   1.0
 	 * @throws  UnexpectedResponseException
+	 * @since   1.0
 	 */
 	protected function processResponse(Response $response, $expectedCode = 200)
 	{

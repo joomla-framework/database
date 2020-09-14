@@ -32,4 +32,21 @@ class ObjectMock extends AbstractGithubObject
 	{
 		return parent::fetchUrl($path, $page, $limit);
 	}
+
+	/**
+	 * Returns the Authorization header, if required.
+	 *
+	 * If the options passed to the constructor contain a value for `gh.token`,
+	 * an array with a suitable Authorization header is returned, an empty array
+	 * otherwise.
+	 *
+	 * @return  array    Authorization header if set in options.
+	 *
+	 * @since   1.8.0
+	 */
+	public function authHeader()
+	{
+		return parent::authHeader();
+	}
+
 }

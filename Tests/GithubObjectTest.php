@@ -72,9 +72,14 @@ class GithubObjectTest extends GitHubTestCase
 	{
 		$this->options->set('api.url', $apiUrl);
 
-		$this->assertThat(
-			$this->object->fetchUrl($path, $page, $limit),
-			$this->equalTo($expected)
+		self::assertEquals(
+			$expected,
+			$this->object->fetchUrl($path, $page, $limit)
+		);
+
+		self::assertEquals(
+			array(),
+			$this->object->authHeader()
 		);
 	}
 
@@ -109,9 +114,14 @@ class GithubObjectTest extends GitHubTestCase
 
 		$this->options->set('gh.token', 'MyTestToken');
 
-		$this->assertThat(
-			$this->object->fetchUrl('/gists', 0, 0),
-			$this->equalTo('https://api.github.com/gists?access_token=MyTestToken')
+		self::assertEquals(
+			'https://api.github.com/gists',
+			$this->object->fetchUrl('/gists', 0, 0)
+		);
+
+		self::assertEquals(
+			array('Authorization: MyTestToken'),
+			$this->object->authHeader()
 		);
 	}
 }
