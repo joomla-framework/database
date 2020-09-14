@@ -9,7 +9,7 @@
 namespace Joomla\Github;
 
 use Joomla\Http\Exception\UnexpectedResponseException;
-use Joomla\Http\Http as BaseHttp;
+use Joomla\Http\Http;
 use Joomla\Http\Response;
 use Joomla\Registry\Registry;
 use Joomla\Uri\Uri;
@@ -82,14 +82,26 @@ abstract class AbstractGithubObject
 	 * Constructor.
 	 *
 	 * @param   Registry  $options  GitHub options object.
-	 * @param   BaseHttp  $client   The HTTP client object.
+	 * @param   Http      $client   The HTTP client object.
 	 *
 	 * @since   1.0
 	 */
-	public function __construct(Registry $options = null, BaseHttp $client = null)
+	public function __construct(Registry $options = null, Http $client = null)
 	{
 		$this->options = $options ?: new Registry;
 		$this->client  = $client ?: new Http($this->options);
+
+		// Make sure the user agent string is defined.
+		if (!isset($this->options['userAgent']))
+		{
+			$this->options['userAgent'] = 'JGitHub/2.0';
+		}
+
+		// Set the default timeout to 120 seconds.
+		if (!isset($this->options['timeout']))
+		{
+			$this->options['timeout'] = 120;
+		}
 
 		$this->package = \get_class($this);
 		$this->package = substr($this->package, strrpos($this->package, '\\') + 1);
@@ -114,7 +126,18 @@ abstract class AbstractGithubObject
 		// Get a new Uri object focusing the api url and given path.
 		$uri = new Uri($this->options->get('api.url') . $path);
 
-		if (!$this->options->get('gh.token', false))
+		if ($this->options->get('gh.token', false))
+		{
+			// Use oAuth authentication
+			$headers = $this->client->getOption('headers', array());
+
+			if (!isset($headers['Authorization']))
+			{
+				$headers['Authorization'] = 'token ' . $this->options->get('gh.token');
+				$this->client->setOption('headers', $headers);
+			}
+		}
+		else
 		{
 			// Use basic authentication
 			if ($this->options->get('api.username', false))
@@ -144,27 +167,6 @@ abstract class AbstractGithubObject
 	}
 
 	/**
-	 * Returns the Authorization header, if required.
-	 *
-	 * If the options passed to the constructor contain a value for `gh.token`,
-	 * an array with a suitable Authorization header is returned, an empty array
-	 * otherwise.
-	 *
-	 * @return  array    Authorization header if set in options.
-	 *
-	 * @since   1.8.0
-	 */
-	protected function authHeader()
-	{
-		if ($this->options->get('gh.token', false))
-		{
-			return array('Authorization: ' . $this->options->get('gh.token'));
-		}
-
-		return array();
-	}
-
-	/**
 	 * Process the response and decode it.
 	 *
 	 * @param   Response  $response      The response.
@@ -172,8 +174,8 @@ abstract class AbstractGithubObject
 	 *
 	 * @return  mixed
 	 *
-	 * @throws  UnexpectedResponseException
 	 * @since   1.0
+	 * @throws  UnexpectedResponseException
 	 */
 	protected function processResponse(Response $response, $expectedCode = 200)
 	{
