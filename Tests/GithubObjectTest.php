@@ -9,7 +9,6 @@ namespace Joomla\Github\Tests;
 use Joomla\Github\AbstractGithubObject;
 use Joomla\Github\Tests\Stub\GitHubTestCase;
 use Joomla\Github\Tests\Stub\ObjectMock;
-use Joomla\Github\Tests\Stub\TransportMock;
 use Joomla\Http\Http;
 
 /**
@@ -43,7 +42,8 @@ class GithubObjectTest extends GitHubTestCase
 	{
 		parent::setUp();
 
-		$this->client = new Http(array(), new TransportMock());
+		$transport    = $this->createMock('\Joomla\Http\TransportInterface');
+		$this->client = new Http(array(), $transport);
 		$this->object = new ObjectMock($this->options, $this->client);
 	}
 
@@ -57,10 +57,34 @@ class GithubObjectTest extends GitHubTestCase
 	public function fetchUrlData()
 	{
 		return array(
-			'Standard github - no pagination data' => array('https://api.github.com', '/gists', 0, 0, 'https://api.github.com/gists'),
-			'Enterprise github - no pagination data' => array('https://mygithub.com', '/gists', 0, 0, 'https://mygithub.com/gists'),
-			'Standard github - page 3' => array('https://api.github.com', '/gists', 3, 0, 'https://api.github.com/gists?page=3'),
-			'Enterprise github - page 3, 50 per page' => array('https://mygithub.com', '/gists', 3, 50, 'https://mygithub.com/gists?page=3&per_page=50'),
+			'Standard github - no pagination data'    => array(
+				'https://api.github.com',
+				'/gists',
+				0,
+				0,
+				'https://api.github.com/gists'
+			),
+			'Enterprise github - no pagination data'  => array(
+				'https://mygithub.com',
+				'/gists',
+				0,
+				0,
+				'https://mygithub.com/gists'
+			),
+			'Standard github - page 3'                => array(
+				'https://api.github.com',
+				'/gists',
+				3,
+				0,
+				'https://api.github.com/gists?page=3'
+			),
+			'Enterprise github - page 3, 50 per page' => array(
+				'https://mygithub.com',
+				'/gists',
+				3,
+				50,
+				'https://mygithub.com/gists?page=3&per_page=50'
+			),
 		);
 	}
 
@@ -121,14 +145,12 @@ class GithubObjectTest extends GitHubTestCase
 
 		$this->options->set('gh.token', 'MyTestToken');
 
-		$options = clone $this->options;
-
 		self::assertEquals(
 			'https://api.github.com/gists',
 			$this->object->fetchUrl('/gists', 0, 0),
 			'URL is not as expected.'
 		);
-		
+
 		self::assertEquals(
 			array('Authorization' => 'token MyTestToken'),
 			$this->client->getOption('headers'),
