@@ -1,4 +1,4 @@
-# The View Package [![Build Status](https://travis-ci.org/joomla-framework/view.png?branch=master)](https://travis-ci.org/joomla-framework/view) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/joomla-framework/view/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/joomla-framework/view/?branch=master)
+# The View Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/view/status.svg)](https://ci.joomla.org/joomla-framework/view)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/view/v/stable)](https://packagist.org/packages/joomla/view)
 [![Total Downloads](https://poser.pugx.org/joomla/view/downloads)](https://packagist.org/packages/joomla/view)
