@@ -1,4 +1,4 @@
-# The Utilities Package [![Build Status](https://travis-ci.org/joomla-framework/utilities.png?branch=master)](https://travis-ci.org/joomla-framework/utilities)
+# The Utilities Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/utilities/status.svg)](https://ci.joomla.org/joomla-framework/utilities)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/utilities/v/stable)](https://packagist.org/packages/joomla/utilities)
 [![Total Downloads](https://poser.pugx.org/joomla/utilities/downloads)](https://packagist.org/packages/joomla/utilities)
