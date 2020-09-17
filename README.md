@@ -1,4 +1,4 @@
-# The Controller Package [![Build Status](https://travis-ci.org/joomla-framework/controller.png?branch=master)](https://travis-ci.org/joomla-framework/controller)
+# The Controller Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/controller/status.svg)](https://ci.joomla.org/joomla-framework/controller)
 
 ## Interfaces
 
