@@ -1,4 +1,4 @@
-# The Router Package [![Build Status](https://travis-ci.org/joomla-framework/router.png?branch=master)](https://travis-ci.org/joomla-framework/router)
+# The Router Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/router/status.svg)](https://ci.joomla.org/joomla-framework/router)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/router/v/stable)](https://packagist.org/packages/joomla/router)
 [![Total Downloads](https://poser.pugx.org/joomla/router/downloads)](https://packagist.org/packages/joomla/router)
