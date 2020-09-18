@@ -20,7 +20,7 @@ local composer(phpversion, params) = {
         "php -v",
         "composer update " + params,
         if phpversion == "8.0" then "wget https://ci.joomla.org/artifacts/phpunit8_php8_match.patch",
-        if phpversion == "8.0" then "patch -N -p0 < phpunit8_php8_match.patch"
+        if phpversion == "8.0" then "patch -N -p0 < phpunit8_php8_match.patch || echo \"Ignore this error.\""
     ]
 };
 

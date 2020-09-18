@@ -370,7 +370,7 @@ steps:
   - php -v
   - composer update --ignore-platform-reqs --prefer-stable
   - wget https://ci.joomla.org/artifacts/phpunit8_php8_match.patch
-  - patch -N -p0 < phpunit8_php8_match.patch
+  - patch -N -p0 < phpunit8_php8_match.patch || echo "Ignore this error."
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
@@ -388,6 +388,6 @@ volumes:
 
 ---
 kind: signature
-hmac: 4416e00bb397a754bcfafc6ce0e98f57c36dee6d5cb1330ea552a3681d21d2e0
+hmac: 0ef8979f0ce19308ebeb3f779339d05aacb9bcf07fe3b802e6eb6ee6738eb518
 
 ...
