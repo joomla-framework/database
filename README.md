@@ -1,4 +1,4 @@
-## The Data Package [![Build Status](https://travis-ci.org/joomla-framework/data.png?branch=master)](https://travis-ci.org/joomla-framework/data)
+## The Data Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/data/status.svg)](https://ci.joomla.org/joomla-framework/data)
 
 ### `Data\DataObject`
 
