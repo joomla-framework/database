@@ -1,4 +1,4 @@
-# The Registry Package [![Build Status](https://travis-ci.org/joomla-framework/registry.png?branch=master)](https://travis-ci.org/joomla-framework/registry)
+# The Registry Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/registry/status.svg)](https://ci.joomla.org/joomla-framework/registry)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/registry/v/stable)](https://packagist.org/packages/joomla/registry)
 [![Total Downloads](https://poser.pugx.org/joomla/registry/downloads)](https://packagist.org/packages/joomla/registry)
