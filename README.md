@@ -1,4 +1,4 @@
-## The Profiler Package [![Build Status](https://travis-ci.org/joomla-framework/profiler.png?branch=master)](https://travis-ci.org/joomla-framework/profiler)
+## The Profiler Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/profiler/status.svg)](https://ci.joomla.org/joomla-framework/profiler)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/profiler/v/stable)](https://packagist.org/packages/joomla/profiler)
 [![Total Downloads](https://poser.pugx.org/joomla/profiler/downloads)](https://packagist.org/packages/joomla/profiler)
