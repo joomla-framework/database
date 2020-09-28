@@ -1,4 +1,4 @@
-# The String Package [![Build Status](https://travis-ci.org/joomla-framework/string.png?branch=master)](https://travis-ci.org/joomla-framework/string)
+# The String Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/string/status.svg)](https://ci.joomla.org/joomla-framework/string)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/string/v/stable)](https://packagist.org/packages/joomla/string)
 [![Total Downloads](https://poser.pugx.org/joomla/string/downloads)](https://packagist.org/packages/joomla/string)
