@@ -1,4 +1,4 @@
-# The Filter Package [![Build Status](https://travis-ci.org/joomla-framework/filter.png?branch=master)](https://travis-ci.org/joomla-framework/filter)
+# The Filter Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/filter/status.svg)](https://ci.joomla.org/joomla-framework/filter)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/filter/v/stable)](https://packagist.org/packages/joomla/filter)
 [![Total Downloads](https://poser.pugx.org/joomla/filter/downloads)](https://packagist.org/packages/joomla/filter)
