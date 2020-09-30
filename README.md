@@ -1,4 +1,4 @@
-# The Model Package [![Build Status](https://travis-ci.org/joomla-framework/model.png?branch=master)](https://travis-ci.org/joomla-framework/model)
+# The Model Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/model/status.svg)](https://ci.joomla.org/joomla-framework/model)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/model/v/stable)](https://packagist.org/packages/joomla/model)
 [![Total Downloads](https://poser.pugx.org/joomla/model/downloads)](https://packagist.org/packages/joomla/model)
