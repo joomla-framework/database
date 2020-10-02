@@ -1,4 +1,4 @@
-# The OAuth2 Package [![Build Status](https://travis-ci.org/joomla-framework/oauth2.png?branch=master)](https://travis-ci.org/joomla-framework/oauth2)
+# The OAuth2 Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/oauth2/status.svg)](https://ci.joomla.org/joomla-framework/oauth2)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/oauth2/v/stable)](https://packagist.org/packages/joomla/oauth2)
 [![Total Downloads](https://poser.pugx.org/joomla/oauth2/downloads)](https://packagist.org/packages/joomla/oauth2)
