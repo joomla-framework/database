@@ -1,4 +1,4 @@
-## The Keychain Package [![Build Status](https://travis-ci.org/joomla-framework/keychain.png?branch=master)](https://travis-ci.org/joomla-framework/keychain)
+## The Keychain Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/keychain/status.svg)](https://ci.joomla.org/joomla-framework/keychain)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/keychain/v/stable)](https://packagist.org/packages/joomla/keychain)
 [![Total Downloads](https://poser.pugx.org/joomla/keychain/downloads)](https://packagist.org/packages/joomla/keychain)
