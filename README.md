@@ -1,4 +1,4 @@
-# The Input Package [![Build Status](https://travis-ci.org/joomla-framework/input.png?branch=master)](https://travis-ci.org/joomla-framework/input)
+# The Input Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/input/status.svg)](https://ci.joomla.org/joomla-framework/input)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/input/v/stable)](https://packagist.org/packages/joomla/input) [![Total Downloads](https://poser.pugx.org/joomla/input/downloads)](https://packagist.org/packages/joomla/input) [![Latest Unstable Version](https://poser.pugx.org/joomla/input/v/unstable)](https://packagist.org/packages/joomla/input) [![License](https://poser.pugx.org/joomla/input/license)](https://packagist.org/packages/joomla/input)
 
