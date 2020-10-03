@@ -1,4 +1,4 @@
-# The Filesystem Package [![Build Status](https://travis-ci.org/joomla-framework/filesystem.png?branch=master)](https://travis-ci.org/joomla-framework/filesystem)
+# The Filesystem Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/filesystem/status.svg)](https://ci.joomla.org/joomla-framework/filesystem)
 
 ## File upload example
 
