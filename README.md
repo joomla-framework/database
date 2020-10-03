@@ -1,4 +1,4 @@
-# The Archive Package [![Build Status](https://travis-ci.org/joomla-framework/archive.png?branch=master)](https://travis-ci.org/joomla-framework/archive)
+# The Archive Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/archive/status.svg)](https://ci.joomla.org/joomla-framework/archive)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/archive/v/stable)](https://packagist.org/packages/joomla/archive)
 [![Total Downloads](https://poser.pugx.org/joomla/archive/downloads)](https://packagist.org/packages/joomla/archive)
