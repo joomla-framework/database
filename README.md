@@ -1,4 +1,4 @@
-# The DI Package [![Build Status](https://travis-ci.org/joomla-framework/di.png?branch=master)](https://travis-ci.org/joomla-framework/di)
+# The DI Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/di/status.svg)](https://ci.joomla.org/joomla-framework/di)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/di/v/stable)](https://packagist.org/packages/joomla/di)
 [![Total Downloads](https://poser.pugx.org/joomla/di/downloads)](https://packagist.org/packages/joomla/di)
