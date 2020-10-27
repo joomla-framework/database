@@ -438,7 +438,7 @@ class Zip implements ExtractableInterface
 	}
 
 	/**
-	 * Returns the file data for a file by offsest in the ZIP archive
+	 * Returns the file data for a file by offset in the ZIP archive
 	 *
 	 * @param   integer  $key  The position of the file in the archive.
 	 *
