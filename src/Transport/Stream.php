@@ -211,30 +211,35 @@ class Stream implements TransportInterface
 		$context = stream_context_create($streamOptions);
 
 		// Capture PHP errors
-		$php_errormsg = '';
-		$trackErrors  = ini_get('track_errors');
-		ini_set('track_errors', true);
+		if (PHP_VERSION_ID < 70000) {
+			// @Todo Remove this path, when PHP5 support is dropped. 
+			set_error_handler(
+				function () {
+					return false;
+				}
+			);
+			@trigger_error('');
+			restore_error_handler();
+		} else {
+			/** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
+			error_clear_last();
+		}
 
 		// Open the stream for reading.
 		$stream = @fopen((string) $uri, 'r', false, $context);
 
 		if (!$stream)
 		{
-			if (!$php_errormsg)
-			{
+			$error = error_get_last();
+			if ($error === null || $error['message'] === '') {
 				// Error but nothing from php? Create our own
-				// @todo $err and $errno are undefined variables.
-				$php_errormsg = sprintf('Could not connect to resource: %s', $uri, $err, $errno);
+				$error = array(
+					'message' => sprintf('Could not connect to resource %s', $uri)
+				);
 			}
 
-			// Restore error tracking to give control to the exception handler
-			ini_set('track_errors', $trackErrors);
-
-			throw new \RuntimeException($php_errormsg);
+			throw new \RuntimeException($error['message']);
 		}
-
-		// Restore error tracking to what it was before.
-		ini_set('track_errors', $trackErrors);
 
 		// Get the metadata for the stream, including response headers.
 		$metadata = stream_get_meta_data($stream);
