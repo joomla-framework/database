@@ -277,7 +277,7 @@ class Stream
 		// Capture PHP errors
 		if (PHP_VERSION_ID < 70000)
 		{
-			// @Todo Remove this path, when PHP5 support is dropped. 
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
@@ -332,6 +332,7 @@ class Stream
 		if (!$this->fh)
 		{
 			$error = error_get_last();
+
 			if ($error === null || $error['message'] === '')
 			{
 				// Error but nothing from php? Create our own
@@ -368,7 +369,7 @@ class Stream
 		// Capture PHP errors
 		if (PHP_VERSION_ID < 70000)
 		{
-			// @Todo Remove this path, when PHP5 support is dropped. 
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
@@ -448,7 +449,7 @@ class Stream
 		// Capture PHP errors
 		if (PHP_VERSION_ID < 70000)
 		{
-			// @Todo Remove this path, when PHP5 support is dropped. 
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
@@ -507,7 +508,7 @@ class Stream
 		// Capture PHP errors
 		if (PHP_VERSION_ID < 70000)
 		{
-			// @Todo Remove this path, when PHP5 support is dropped. 
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
@@ -570,7 +571,7 @@ class Stream
 		// Capture PHP errors
 		if (PHP_VERSION_ID < 70000)
 		{
-			// @Todo Remove this path, when PHP5 support is dropped. 
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
@@ -660,7 +661,7 @@ class Stream
 		// Capture PHP errors
 		if (PHP_VERSION_ID < 70000)
 		{
-			// @Todo Remove this path, when PHP5 support is dropped. 
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
@@ -763,7 +764,7 @@ class Stream
 		// Capture PHP errors
 		if (PHP_VERSION_ID < 70000)
 		{
-			// @Todo Remove this path, when PHP5 support is dropped. 
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
@@ -831,7 +832,7 @@ class Stream
 		// Capture PHP errors
 		if (PHP_VERSION_ID < 70000)
 		{
-			// @Todo Remove this path, when PHP5 support is dropped. 
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
@@ -931,7 +932,7 @@ class Stream
 		// Capture PHP errors
 		if (PHP_VERSION_ID < 70000)
 		{
-			// @Todo Remove this path, when PHP5 support is dropped. 
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
@@ -1019,7 +1020,7 @@ class Stream
 		// Capture PHP errors
 		if (PHP_VERSION_ID < 70000)
 		{
-			// @Todo Remove this path, when PHP5 support is dropped. 
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
@@ -1201,7 +1202,7 @@ class Stream
 			// Capture PHP errors
 			if (PHP_VERSION_ID < 70000)
 			{
-				// @Todo Remove this path, when PHP5 support is dropped. 
+				// @Todo Remove this path, when PHP5 support is dropped.
 				set_error_handler(
 					function () {
 						return false;
@@ -1260,7 +1261,7 @@ class Stream
 			// Capture PHP errors
 			if (PHP_VERSION_ID < 70000)
 			{
-				// @Todo Remove this path, when PHP5 support is dropped. 
+				// @Todo Remove this path, when PHP5 support is dropped.
 				set_error_handler(
 					function () {
 						return false;
@@ -1315,7 +1316,7 @@ class Stream
 			// Capture PHP errors
 			if (PHP_VERSION_ID < 70000)
 			{
-				// @Todo Remove this path, when PHP5 support is dropped. 
+				// @Todo Remove this path, when PHP5 support is dropped.
 				set_error_handler(
 					function () {
 						return false;
@@ -1366,7 +1367,7 @@ class Stream
 		// Capture PHP errors
 		if (PHP_VERSION_ID < 70000)
 		{
-			// @Todo Remove this path, when PHP5 support is dropped. 
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
@@ -1427,7 +1428,7 @@ class Stream
 		// Capture PHP errors
 		if (PHP_VERSION_ID < 70000)
 		{
-			// @Todo Remove this path, when PHP5 support is dropped. 
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
@@ -1500,7 +1501,7 @@ class Stream
 		// Capture PHP errors
 		if (PHP_VERSION_ID < 70000)
 		{
-			// @Todo Remove this path, when PHP5 support is dropped. 
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
@@ -1572,7 +1573,7 @@ class Stream
 		// Capture PHP errors
 		if (PHP_VERSION_ID < 70000)
 		{
-			// @Todo Remove this path, when PHP5 support is dropped. 
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
