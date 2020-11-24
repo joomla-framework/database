@@ -415,7 +415,7 @@ class PostgresqlDriver extends DatabaseDriver
 	/**
 	 * Retrieves field information about a given table.
 	 *
-	 * @param   string   $table     The name of the database table.
+	 * @param   string   $table     The name of the database table. For PostgreSQL may start with a schema.
 	 * @param   boolean  $typeOnly  True to only return field types.
 	 *
 	 * @return  array  An array of fields for the database table.
@@ -428,8 +428,18 @@ class PostgresqlDriver extends DatabaseDriver
 		$this->connect();
 
 		$result = array();
-
 		$tableSub = $this->replacePrefix($table);
+		$fn = explode('.', $tableSub);
+
+		if (count($fn) === 2)
+		{
+			$schema = $fn[0];
+			$tableSub = $fn[1];
+		}
+		else
+		{
+			$schema = $this->getDefaultSchema();
+		}
 
 		$this->setQuery('
 			SELECT a.attname AS "column_name",
@@ -451,7 +461,7 @@ class PostgresqlDriver extends DatabaseDriver
 			WHERE a.attrelid =
 				(SELECT oid FROM pg_catalog.pg_class WHERE relname=' . $this->quote($tableSub) . '
 					AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE
-					nspname = \'public\')
+					nspname = ' . $this->quote($schema) . ')
 				)
 			AND a.attnum > 0 AND NOT a.attisdropped
 			ORDER BY a.attnum'
