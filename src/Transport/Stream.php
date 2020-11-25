@@ -211,8 +211,9 @@ class Stream implements TransportInterface
 		$context = stream_context_create($streamOptions);
 
 		// Capture PHP errors
-		if (PHP_VERSION_ID < 70000) {
-			// @Todo Remove this path, when PHP5 support is dropped. 
+		if (PHP_VERSION_ID < 70000)
+		{
+			// @Todo Remove this path, when PHP5 support is dropped.
 			set_error_handler(
 				function () {
 					return false;
@@ -220,7 +221,9 @@ class Stream implements TransportInterface
 			);
 			@trigger_error('');
 			restore_error_handler();
-		} else {
+		}
+		else
+		{
 			/** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
 			error_clear_last();
 		}
@@ -231,7 +234,8 @@ class Stream implements TransportInterface
 		if (!$stream)
 		{
 			$error = error_get_last();
-			if ($error === null || $error['message'] === '') {
+			if ($error === null || $error['message'] === '')
+			{
 				// Error but nothing from php? Create our own
 				$error = array(
 					'message' => sprintf('Could not connect to resource %s', $uri)
