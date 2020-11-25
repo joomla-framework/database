@@ -21,3 +21,9 @@ Alternatively, you can simply run the following from the command line:
 ```sh
 composer require joomla/console "~2.0@dev"
 ```
+
+If you want to include the test sources and docs, use
+
+```sh
+composer require --prefer-source joomla/console "~2.0@dev"
+```
