@@ -438,3 +438,9 @@ Alternatively, you can simply run the following from the command line:
 ```sh
 composer require joomla/di "~1.3"
 ```
+
+If you want to include the test sources and docs, use
+
+```sh
+composer require --prefer-source joomla/di "~1.3"
+```
