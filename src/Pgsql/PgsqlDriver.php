@@ -161,11 +161,10 @@ class PgsqlDriver extends PdoDriver
 	 */
 	private function getDefaultSchema()
 	{
-
 		// Supported since PostgreSQL 7.3
 		$this->setQuery('SELECT (current_schemas(false))[1]');
-		return $this->loadResult();
 
+		return $this->loadResult();
 	}
 	
 	/**
