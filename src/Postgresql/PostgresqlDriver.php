@@ -1648,7 +1648,7 @@ class PostgresqlDriver extends DatabaseDriver
 	}
 
 	/**
-	 * Internal function to get the name of the default schema for the current PostgreSQL connexion.
+	 * Internal function to get the name of the default schema for the current PostgreSQL connection.
 	 * That is the schema where tables are created by Joomla.
 	 *
 	 * @return  string
