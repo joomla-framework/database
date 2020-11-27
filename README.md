@@ -76,3 +76,9 @@ Alternatively, you can simply run the following from the command line:
 ```sh
 composer require joomla/archive "~1.0"
 ```
+
+If you want to include the test sources, use
+
+```sh
+composer require --prefer-source joomla/archive "~1.0"
+```
