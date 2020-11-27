@@ -173,7 +173,7 @@ final class TextDescriptor extends SymfonyTextDescriptor
 					{
 						return array_intersect($namespace['commands'], array_keys($commands));
 					},
-					$namespaces
+					array_values($namespaces)
 				)
 			)
 		);
