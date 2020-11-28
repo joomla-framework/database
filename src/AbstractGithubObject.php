@@ -32,7 +32,7 @@ abstract class AbstractGithubObject
 	/**
 	 * The HTTP client object to use in sending HTTP requests.
 	 *
-	 * @var    Http
+	 * @var    BaseHttp
 	 * @since  1.0
 	 */
 	protected $client;
@@ -89,7 +89,19 @@ abstract class AbstractGithubObject
 	public function __construct(Registry $options = null, BaseHttp $client = null)
 	{
 		$this->options = $options ?: new Registry;
-		$this->client  = $client ?: new Http($this->options);
+		$this->client  = $client ?: new BaseHttp($this->options);
+
+		// Make sure the user agent string is defined.
+		if (!isset($this->options['userAgent']))
+		{
+			$this->options['userAgent'] = 'JGitHub/2.0';
+		}
+
+		// Set the default timeout to 120 seconds.
+		if (!isset($this->options['timeout']))
+		{
+			$this->options['timeout'] = 120;
+		}
 
 		$this->package = \get_class($this);
 		$this->package = substr($this->package, strrpos($this->package, '\\') + 1);
@@ -116,8 +128,14 @@ abstract class AbstractGithubObject
 
 		if ($this->options->get('gh.token', false))
 		{
-			// Use oAuth authentication - @todo set in request header ?
-			$uri->setVar('access_token', $this->options->get('gh.token'));
+			// Use oAuth authentication
+			$headers = $this->client->getOption('headers', array());
+
+			if (!isset($headers['Authorization']))
+			{
+				$headers['Authorization'] = 'token ' . $this->options->get('gh.token');
+				$this->client->setOption('headers', $headers);
+			}
 		}
 		else
 		{

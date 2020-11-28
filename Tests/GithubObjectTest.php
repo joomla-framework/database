@@ -6,8 +6,11 @@
 
 namespace Joomla\Github\Tests;
 
+use Joomla\Github\AbstractGithubObject;
 use Joomla\Github\Tests\Stub\GitHubTestCase;
 use Joomla\Github\Tests\Stub\ObjectMock;
+use Joomla\Http\Http;
+use Joomla\Http\Transport\Curl;
 
 /**
  * Test class for Joomla\Github\Object.
@@ -17,10 +20,16 @@ use Joomla\Github\Tests\Stub\ObjectMock;
 class GithubObjectTest extends GitHubTestCase
 {
 	/**
-	 * @var    ObjectMock  Object under test.
+	 * @var    AbstractGithubObject  Object under test.
 	 * @since  1.0
 	 */
 	protected $object;
+
+	/**
+	 * @var    Http  The HTTP client
+	 * @since  __DEPLOY_VERSION__
+	 */
+	protected $client;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
@@ -34,6 +43,8 @@ class GithubObjectTest extends GitHubTestCase
 	{
 		parent::setUp();
 
+		$transport    = new Curl(array());
+		$this->client = new Http(array(), $transport);
 		$this->object = new ObjectMock($this->options, $this->client);
 	}
 
@@ -47,10 +58,34 @@ class GithubObjectTest extends GitHubTestCase
 	public function fetchUrlData()
 	{
 		return array(
-			'Standard github - no pagination data' => array('https://api.github.com', '/gists', 0, 0, 'https://api.github.com/gists'),
-			'Enterprise github - no pagination data' => array('https://mygithub.com', '/gists', 0, 0, 'https://mygithub.com/gists'),
-			'Standard github - page 3' => array('https://api.github.com', '/gists', 3, 0, 'https://api.github.com/gists?page=3'),
-			'Enterprise github - page 3, 50 per page' => array('https://mygithub.com', '/gists', 3, 50, 'https://mygithub.com/gists?page=3&per_page=50'),
+			'Standard github - no pagination data'    => array(
+				'https://api.github.com',
+				'/gists',
+				0,
+				0,
+				'https://api.github.com/gists'
+			),
+			'Enterprise github - no pagination data'  => array(
+				'https://mygithub.com',
+				'/gists',
+				0,
+				0,
+				'https://mygithub.com/gists'
+			),
+			'Standard github - page 3'                => array(
+				'https://api.github.com',
+				'/gists',
+				3,
+				0,
+				'https://api.github.com/gists?page=3'
+			),
+			'Enterprise github - page 3, 50 per page' => array(
+				'https://mygithub.com',
+				'/gists',
+				3,
+				50,
+				'https://mygithub.com/gists?page=3&per_page=50'
+			),
 		);
 	}
 
@@ -72,9 +107,10 @@ class GithubObjectTest extends GitHubTestCase
 	{
 		$this->options->set('api.url', $apiUrl);
 
-		$this->assertThat(
+		self::assertEquals(
+			$expected,
 			$this->object->fetchUrl($path, $page, $limit),
-			$this->equalTo($expected)
+			'URL is not as expected.'
 		);
 	}
 
@@ -92,9 +128,10 @@ class GithubObjectTest extends GitHubTestCase
 		$this->options->set('api.username', 'MyTestUser');
 		$this->options->set('api.password', 'MyTestPass');
 
-		$this->assertThat(
+		self::assertEquals(
+			'https://MyTestUser:MyTestPass@api.github.com/gists',
 			$this->object->fetchUrl('/gists', 0, 0),
-			$this->equalTo('https://MyTestUser:MyTestPass@api.github.com/gists')
+			'URL is not as expected.'
 		);
 	}
 
@@ -109,9 +146,16 @@ class GithubObjectTest extends GitHubTestCase
 
 		$this->options->set('gh.token', 'MyTestToken');
 
-		$this->assertThat(
+		self::assertEquals(
+			'https://api.github.com/gists',
 			$this->object->fetchUrl('/gists', 0, 0),
-			$this->equalTo('https://api.github.com/gists?access_token=MyTestToken')
+			'URL is not as expected.'
+		);
+
+		self::assertEquals(
+			array('Authorization' => 'token MyTestToken'),
+			$this->client->getOption('headers'),
+			'Token should be propagated as a header.'
 		);
 	}
 }
