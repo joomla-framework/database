@@ -148,7 +148,7 @@ class GithubObjectTest extends GitHubTestCase
 
 		self::assertEquals(
 			'https://api.github.com/gists',
-			$this->object->fetchUrl('/gists', 0, 0),
+			(string) $this->object->fetchUrl('/gists', 0, 0),
 			'URL is not as expected.'
 		);
 
