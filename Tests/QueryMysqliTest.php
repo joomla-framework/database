@@ -347,6 +347,12 @@ class QueryMysqliTest extends TestCase
 			$this->equalTo('123'),
 			'The default castAsChar behaviour is quote the input.'
 		);
+
+		$this->assertThat(
+			$q->castAsChar('1234', 3),
+			$this->equalTo('CAST(1234 AS CHAR(3))'),
+			'With optional lenght parameter, castAsChar shall limit the output to that length.'
+		);
 	}
 
 	/**
