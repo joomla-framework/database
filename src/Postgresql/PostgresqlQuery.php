@@ -375,16 +375,25 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * Usage:
 	 * $query->select($query->castAsChar('a'));
+	 * $query->select($query->castAsChar('a', 40));
 	 *
 	 * @param   string  $value  The value to cast as a char.
+	 * @param   string  $len    The length of the char.
 	 *
 	 * @return  string  Returns the cast value.
 	 *
 	 * @since   1.0
 	 */
-	public function castAsChar($value)
+	public function castAsChar($value, $len = null)
 	{
-		return $value . '::text';
+		if (!$len)
+		{
+			return $value . '::text';
+		}
+		else
+		{
+			return 'CAST(' . $value . ' AS CHAR(' . $len . '))';
+		}
 	}
 
 	/**

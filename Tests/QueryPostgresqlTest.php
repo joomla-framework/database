@@ -399,6 +399,12 @@ class QueryPostgresqlTest extends TestCase
 			$this->equalTo('123::text'),
 			'The default castAsChar behaviour is quote the input.'
 		);
+
+		$this->assertThat(
+			$q->castAsChar('1234', 3),
+			$this->equalTo('CAST(1234 AS CHAR(3))'),
+			'With optional length parameter, castAsChar shall limit the output to that length.'
+		);
 	}
 
 	/**
