@@ -203,13 +203,22 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 	 *
 	 * @param   string  $value  The value to cast as a char.
 	 *
+	 * @param   string  $len    The lenght of the char.
+	 *
 	 * @return  string  Returns the cast value.
 	 *
 	 * @since   1.0
 	 */
-	public function castAsChar($value)
+	public function castAsChar($value, $len = null)
 	{
-		return 'CAST(' . $value . ' as NVARCHAR(10))';
+		if(!$len)
+		{			
+			return 'CAST(' . $value . ' as NVARCHAR(30))';
+		}
+		else
+		{
+			return 'CAST(' . $value . ' as NVARCHAR(' . $len . '))';
+		}
 	}
 
 	/**
