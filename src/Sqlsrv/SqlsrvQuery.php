@@ -212,7 +212,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 	{
 		if(!$len)
 		{
-			return 'CAST(' . $value . ' as NVARCHAR(10))';
+			return 'CAST(' . $value . ' as NVARCHAR(30))';
 		}
 		else
 		{

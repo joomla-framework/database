@@ -346,7 +346,7 @@ class QuerySqlsrvTest extends TestCase
 
 		$this->assertThat(
 			$q->castAsChar('123'),
-			$this->equalTo('CAST(123 as NVARCHAR(10))'),
+			$this->equalTo('CAST(123 as NVARCHAR(30))'),
 			'The default castAsChar behaviour is quote the input.'
 		);
 
