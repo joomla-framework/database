@@ -351,7 +351,7 @@ class QueryMysqliTest extends TestCase
 		$this->assertThat(
 			$q->castAsChar('1234', 3),
 			$this->equalTo('CAST(1234 AS CHAR(3))'),
-			'With optional lenght parameter, castAsChar shall limit the output to that length.'
+			'With optional length parameter, castAsChar shall limit the output to that length.'
 		);
 	}
 

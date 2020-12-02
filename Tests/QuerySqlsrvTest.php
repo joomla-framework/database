@@ -353,7 +353,7 @@ class QuerySqlsrvTest extends TestCase
 		$this->assertThat(
 			$q->castAsChar('1234', 3),
 			$this->equalTo('CAST(1234 as NVARCHAR(3))'),
-			'With optional lenght parameter, castAsChar shall limit the output to that length.'
+			'With optional length parameter, castAsChar shall limit the output to that length.'
 		);
 	}
 
