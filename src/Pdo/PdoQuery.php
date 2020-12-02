@@ -41,7 +41,7 @@ class PdoQuery extends DatabaseQuery
 		}
 		else
 		{
-			return ' CAST(' . $value . ' AS CHAR(' . $len . '))';
+			return 'CAST(' . $value . ' AS CHAR(' . $len . '))';
 		}
 	}
 }

@@ -287,7 +287,7 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 		}
 		else
 		{
-			return ' CAST(' . $value . ' AS CHAR(' . $len . '))';
+			return 'CAST(' . $value . ' AS CHAR(' . $len . '))';
 		}
 	}
 }

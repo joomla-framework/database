@@ -392,7 +392,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 		}
 		else
 		{
-			return ' CAST(' . $value . ' AS CHAR(' . $len . '))';
+			return 'CAST(' . $value . ' AS CHAR(' . $len . '))';
 		}
 	}
 
