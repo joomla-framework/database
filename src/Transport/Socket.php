@@ -42,8 +42,8 @@ class Socket implements TransportInterface
 	 *
 	 * @param   array|\ArrayAccess  $options  Client options array.
 	 *
-	 * @throws  \RuntimeException
 	 * @since   1.0
+	 * @throws  \RuntimeException
 	 */
 	public function __construct($options = array())
 	{
@@ -74,17 +74,11 @@ class Socket implements TransportInterface
 	 *
 	 * @return  Response
 	 *
-	 * @throws  \RuntimeException
 	 * @since   1.0
+	 * @throws  \RuntimeException
 	 */
-	public function request(
-		$method,
-		UriInterface $uri,
-		$data = null,
-		array $headers = null,
-		$timeout = null,
-		$userAgent = null
-	) {
+	public function request($method, UriInterface $uri, $data = null, array $headers = null, $timeout = null, $userAgent = null)
+	{
 		$connection = $this->connect($uri, $timeout);
 
 		// Make sure the connection is alive and valid.
@@ -161,9 +155,7 @@ class Socket implements TransportInterface
 		// Authentication, if needed
 		if (isset($this->options['userauth'], $this->options['passwordauth']))
 		{
-			$request[] = 'Authorization: Basic ' . base64_encode(
-					$this->options['userauth'] . ':' . $this->options['passwordauth']
-				);
+			$request[] = 'Authorization: Basic ' . base64_encode($this->options['userauth'] . ':' . $this->options['passwordauth']);
 		}
 
 		// Set any custom transport options
@@ -198,14 +190,7 @@ class Socket implements TransportInterface
 		// Follow Http redirects
 		if ($content->code >= 301 && $content->code < 400 && isset($content->headers['Location']))
 		{
-			return $this->request(
-				$method,
-				new Uri($content->headers['Location']),
-				$data,
-				$headers,
-				$timeout,
-				$userAgent
-			);
+			return $this->request($method, new Uri($content->headers['Location']), $data, $headers, $timeout, $userAgent);
 		}
 
 		return $content;
@@ -218,9 +203,9 @@ class Socket implements TransportInterface
 	 *
 	 * @return  Response
 	 *
+	 * @since   1.0
 	 * @throws  \UnexpectedValueException
 	 * @throws  InvalidResponseCodeException
-	 * @since   1.0
 	 */
 	protected function getResponse($content)
 	{
@@ -273,8 +258,8 @@ class Socket implements TransportInterface
 	 *
 	 * @return  resource  Socket connection resource.
 	 *
-	 * @throws  \RuntimeException
 	 * @since   1.0
+	 * @throws  \RuntimeException
 	 */
 	protected function connect(UriInterface $uri, $timeout = null)
 	{
@@ -288,7 +273,9 @@ class Socket implements TransportInterface
 		if (!$uri->getPort())
 		{
 			$port = ($uri->getScheme() == 'https') ? 443 : 80;
-		} // Use the set port.
+		}
+
+		// Use the set port.
 		else
 		{
 			$port = $uri->getPort();
@@ -309,7 +296,9 @@ class Socket implements TransportInterface
 				{
 					throw new \RuntimeException('Cannot close connection');
 				}
-			} // Make sure the connection has not timed out.
+			}
+
+			// Make sure the connection has not timed out.
 			elseif (!$meta['timed_out'])
 			{
 				return $this->connections[$key];
