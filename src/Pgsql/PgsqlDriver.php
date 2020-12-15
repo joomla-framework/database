@@ -166,7 +166,7 @@ class PgsqlDriver extends PdoDriver
 
 		return $this->loadResult();
 	}
-	
+
 	/**
 	 * Shows the table CREATE statement that creates the given tables.
 	 *
@@ -204,7 +204,7 @@ class PgsqlDriver extends PdoDriver
 		$tableSub = $this->replacePrefix($table);
 
 		$defaultSchema = $this->getDefaultSchema();
-		
+
 		$this->setQuery('
 			SELECT a.attname AS "column_name",
 				pg_catalog.format_type(a.atttypid, a.atttypmod) as "type",
@@ -492,26 +492,26 @@ class PgsqlDriver extends PdoDriver
 	/**
 	 * This function return a field value as a prepared string to be used in a SQL statement.
 	 *
-	 * @param   array   $columns      Array of table's column returned by ::getTableColumns.
-	 * @param   string  $field_name   The table field's name.
-	 * @param   string  $field_value  The variable value to quote and return.
+	 * @param   array   $columns     Array of table's column returned by ::getTableColumns.
+	 * @param   string  $fieldName   The table field's name.
+	 * @param   string  $fieldValue  The variable value to quote and return.
 	 *
 	 * @return  string  The quoted string.
 	 *
 	 * @since   1.5.0
 	 */
-	public function sqlValue($columns, $field_name, $field_value)
+	public function sqlValue($columns, $fieldName, $fieldValue)
 	{
-		switch ($columns[$field_name])
+		switch ($columns[$fieldName])
 		{
 			case 'boolean':
 				$val = 'NULL';
 
-				if ($field_value === 't' || $field_value === true || $field_value === 1 || $field_value === '1')
+				if ($fieldValue === 't' || $fieldValue === true || $fieldValue === 1 || $fieldValue === '1')
 				{
 					$val = 'TRUE';
 				}
-				elseif ($field_value === 'f' || $field_value === false || $field_value === 0 || $field_value === '0')
+				elseif ($fieldValue === 'f' || $fieldValue === false || $fieldValue === 0 || $fieldValue === '0')
 				{
 					$val = 'FALSE';
 				}
@@ -527,23 +527,23 @@ class PgsqlDriver extends PdoDriver
 			case 'smallint':
 			case 'serial':
 			case 'numeric,':
-				$val = $field_value === '' ? 'NULL' : $field_value;
+				$val = $fieldValue === '' ? 'NULL' : $fieldValue;
 
 				break;
 
 			case 'date':
 			case 'timestamp without time zone':
-				if (empty($field_value))
+				if (empty($fieldValue))
 				{
-					$field_value = $this->getNullDate();
+					$fieldValue = $this->getNullDate();
 				}
 
-				$val = $this->quote($field_value);
+				$val = $this->quote($fieldValue);
 
 				break;
 
 			default:
-				$val = $this->quote($field_value);
+				$val = $this->quote($fieldValue);
 
 				break;
 		}

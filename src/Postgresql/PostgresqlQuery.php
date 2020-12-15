@@ -434,25 +434,25 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	/**
 	 * Sets the FOR UPDATE lock on select's output row
 	 *
-	 * @param   string  $table_name  The table to lock
-	 * @param   string  $glue        The glue by which to join the conditions. Defaults to ',' .
+	 * @param   string  $tableName  The table to lock
+	 * @param   string  $glue       The glue by which to join the conditions. Defaults to ',' .
 	 *
 	 * @return  PostgresqlQuery  FOR UPDATE query element
 	 *
 	 * @since   1.0
 	 */
-	public function forUpdate($table_name, $glue = ',')
+	public function forUpdate($tableName, $glue = ',')
 	{
 		$this->type = 'forUpdate';
 
 		if ($this->forUpdate === null)
 		{
 			$glue            = strtoupper($glue);
-			$this->forUpdate = new QueryElement('FOR UPDATE', 'OF ' . $table_name, "$glue ");
+			$this->forUpdate = new QueryElement('FOR UPDATE', 'OF ' . $tableName, "$glue ");
 		}
 		else
 		{
-			$this->forUpdate->append($table_name);
+			$this->forUpdate->append($tableName);
 		}
 
 		return $this;
@@ -461,25 +461,25 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	/**
 	 * Sets the FOR SHARE lock on select's output row
 	 *
-	 * @param   string  $table_name  The table to lock
-	 * @param   string  $glue        The glue by which to join the conditions. Defaults to ',' .
+	 * @param   string  $tableName  The table to lock
+	 * @param   string  $glue       The glue by which to join the conditions. Defaults to ',' .
 	 *
 	 * @return  PostgresqlQuery  FOR SHARE query element
 	 *
 	 * @since   1.0
 	 */
-	public function forShare($table_name, $glue = ',')
+	public function forShare($tableName, $glue = ',')
 	{
 		$this->type = 'forShare';
 
 		if ($this->forShare === null)
 		{
 			$glue           = strtoupper($glue);
-			$this->forShare = new QueryElement('FOR SHARE', 'OF ' . $table_name, "$glue ");
+			$this->forShare = new QueryElement('FOR SHARE', 'OF ' . $tableName, "$glue ");
 		}
 		else
 		{
-			$this->forShare->append($table_name);
+			$this->forShare->append($tableName);
 		}
 
 		return $this;
