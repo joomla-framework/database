@@ -6,6 +6,6 @@
 		</testsuite>
 	</testsuites>
     <php>
-        <const name="JPATH_ROOT" value="__DIR__" />
+        <const name="JPATH_ROOT" value="." />
     </php>
 </phpunit>
