@@ -37,7 +37,7 @@ class TransliterateTest extends TestCase
 	 *
 	 * @return array
 	 */
-	public function testData()
+	public function utf8Data()
 	{
 		return array(
 			array('Weiß', 'Weiss', 0),
@@ -65,7 +65,7 @@ class TransliterateTest extends TestCase
 	 * @param   string  $case    @todo
 	 *
 	 * @covers Joomla\Language\Transliterate::utf8_latin_to_ascii
-	 * @dataProvider testData
+	 * @dataProvider utf8Data
 	 *
 	 * @return void
 	 */
