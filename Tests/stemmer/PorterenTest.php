@@ -37,7 +37,7 @@ class PorterenTest extends TestCase
 	 *
 	 * @return array
 	 */
-	public function testData()
+	public function sampleData()
 	{
 		return array(
 			array('Car', 'Car', 'en'),
@@ -163,7 +163,7 @@ class PorterenTest extends TestCase
 	 *
 	 * @covers  Joomla\Language\Stemmer\Porteren::stem
 	 * @covers  Joomla\Language\Stemmer\Porteren::<!public>
-	 * @dataProvider testData
+	 * @dataProvider sampleData
 	 *
 	 * @return void
 	 */
