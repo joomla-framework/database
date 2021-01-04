@@ -3,8 +3,7 @@
 ## Using the Github Package
 
 The Github package is designed to be a straightforward interface for working with Github. It is based on version 3 of
-the Github API. You can find documentation on the API at [http://developer.github.com/v3/.]
-(http://developer.github.com/v3/)
+the Github API. You can find documentation on the API at [http://developer.github.com/v3/](http://developer.github.com/v3/).
 
 Github is built upon the Http package which provides an easy way to consume URLs and web services in a transport
 independent way. `Joomla\Http` currently supports streams, sockets and cURL. It is possible to create a custom
@@ -20,13 +19,11 @@ use Joomla\Github\Github;
 $github = new Github;
 ```
 
-This creates a basic Github object that can be used to access publicly available resources on [github.com]
-(https://github.com).
+This creates a basic Github object that can be used to access publicly available resources on [github.com](https://github.com).
 
 Sometimes it is necessary to specify additional options. This can be done by injecting in a Registry object with your
 preferred options. Support is available for optionally providing a custom Github account username and password,
-as well as a custom URL for the Github server (as would be the case for using a local instance of [Github Enterprise]
-(https://enterprise.github.com)).
+as well as a custom URL for the Github server (as would be the case for using a local instance of [Github Enterprise](https://enterprise.github.com)).
 
 ```php
 use Joomla\Github\Github;
@@ -765,4 +762,10 @@ Alternatively, you can simply run the following from the command line:
 
 ```sh
 composer require joomla/github "~1.0"
+```
+
+If you want to include the test sources, use
+
+```sh
+composer require --prefer-source joomla/github "~1.0"
 ```
