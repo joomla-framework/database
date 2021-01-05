@@ -33,4 +33,30 @@ class PgsqlQuery extends PdoQuery
 	 * @since  2.0.0
 	 */
 	protected $nullDatetimeList = ['1970-01-01 00:00:00'];
+
+	/**
+	 * Casts a value to a char.
+	 *
+	 * Ensure that the value is properly quoted before passing to the method.
+	 *
+	 * Usage:
+	 * $query->select($query->castAsChar('a'));
+	 * $query->select($query->castAsChar('a', 40));
+	 *
+	 * @param   string  $value   The value to cast as a char.
+	 * @param   string  $length  The length of the char.
+	 *
+	 * @return  string  Returns the cast value.
+	 *
+	 * @since   1.8.0
+	 */
+	public function castAsChar($value, $length = null)
+	{
+		if ((int) $length < 1)
+		{
+			return $value . '::text';
+		}
+
+		return 'CAST(' . $value . ' AS CHAR(' . $length . '))';
+	}
 }
