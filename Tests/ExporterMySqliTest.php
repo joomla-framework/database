@@ -7,7 +7,6 @@
 namespace Joomla\Database\Tests;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_Generator;
 
 /**
  * Tests the \Joomla\Database\Exporter\Mysqli class.
@@ -34,19 +33,9 @@ class ExporterMysqliTest extends TestCase
 		parent::setUp();
 
 		// Set up the database object mock.
-		$generator = new PHPUnit_Framework_MockObject_Generator;
-		$this->dbo = $generator->getMock(
-			'Joomla\\Database\\Mysqli\MysqliDriver',
-			array(),
-			array(),
-			'',
-			false
-		);
-
-        $this->registerMockObject($this->dbo);
-        #= $this->getMockBuilder('Joomla\\Database\\Mysqli\MysqliDriver')
-		#	->disableOriginalConstructor()
-		#	->getMock();
+		$this->dbo = $this->getMockBuilder('Joomla\\Database\\Mysqli\MysqliDriver')
+			->disableOriginalConstructor()
+			->getMock();
 	}
 
 	/**
