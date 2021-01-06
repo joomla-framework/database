@@ -810,7 +810,6 @@ before_install:
 install:
   - rm -f composer.lock
   - travis_retry composer -n update $COMPOSER_FLAGS
-  - travis_retry composer -n update phpunit/phpunit-mock-objects
 
 script:
   - vendor/bin/phpunit --configuration $PHPUNIT_CONF
