@@ -34,7 +34,7 @@ class ImporterMySQLiTest extends TestCase
 
 		// Set up the database object mock.
 		$errorLevel = error_reporting();
-		error_reporting($errorLevel ^ E_DEPRECATED);
+		error_reporting($errorLevel & ~E_DEPRECATED);
 		$this->dbo = $this->getMockBuilder('Joomla\\Database\\Mysqli\MysqliDriver')
 			->disableOriginalConstructor()
 			->getMock();
