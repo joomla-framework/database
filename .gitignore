@@ -1,6 +1,6 @@
-/.idea/
 build/
 vendor/
 composer.phar
 composer.lock
 phpunit.xml
+/.phpunit.result.cache
