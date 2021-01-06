@@ -303,7 +303,7 @@ class DriverMysqliTest extends DatabaseMysqliCase
 		$id = new \stdClass;
 		$id->Default    = null;
 		$id->Field      = 'id';
-		$id->Type       = 'int(10) unsigned';
+		$id->Type       = (float) getenv('MYSQL_VERSION') < 8.0 ? 'int(10) unsigned' : 'int unsigned';
 		$id->Null       = 'NO';
 		$id->Key        = 'PRI';
 		$id->Collation  = null;
