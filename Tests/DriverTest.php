@@ -385,8 +385,11 @@ SQL
 	{
 		$this->logs = array();
 
+		$errorLevel = error_reporting();
+		error_reporting($errorLevel ^ E_DEPRECATED);
 		$mockLogger = $this->getMockBuilder('Psr\Log\LoggerInterface')
 			->getMock();
+		error_reporting($errorLevel);
 
 		$mockLogger->expects($this->any())
 			->method('log')
