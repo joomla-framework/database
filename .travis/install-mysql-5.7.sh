@@ -2,6 +2,8 @@
 
 set -ex
 
+sudo docker version
+
 echo "Installing MySQL 5.7..."
 
 sudo docker pull mysql:5.7
