@@ -108,10 +108,10 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 				'id'          => (object) [
 					'Field'      => 'id',
 					'Type'       => (float) getenv('MYSQL_VERSION') < 8.0 ? 'int(10) unsigned' : 'int unsigned',
-					'Collation'  => (float)getenv('MYSQL_VERSION') < 8.0 ? '' : null,
+					'Collation'  => (float) getenv('MYSQL_VERSION') < 8.0 ? '' : null,
 					'Null'       => 'NO',
 					'Key'        => 'PRI',
-					'Default'    => (float)getenv('MYSQL_VERSION') < 8.0 ? '' : null,
+					'Default'    => (float) getenv('MYSQL_VERSION') < 8.0 ? '' : null,
 					'Extra'      => 'auto_increment',
 					'Privileges' => 'select,insert,update,references',
 					'Comment'    => '',
