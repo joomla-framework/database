@@ -2,6 +2,8 @@
 
 set -ex
 
+sudo docker version
+
 echo "Installing Postgres 10"
 sudo service postgresql stop
 sudo apt-get remove -q 'postgresql-*'
