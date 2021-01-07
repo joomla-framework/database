@@ -61,7 +61,7 @@ jobs:
     - stage: Test
       if: NOT type = pull_request
       php: nightly
-      env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS="--prefer-stable"
+      env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
 
@@ -80,7 +80,7 @@ jobs:
     - stage: Test
       if: NOT type = pull_request
       php: nightly
-      env: DB="mysql.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS="--prefer-stable"
+      env: DB="mysql.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
       before_script:
         - bash ./.travis/install-mysql-8.0.sh
 
@@ -114,7 +114,7 @@ jobs:
     - stage: Test
       if: NOT type = pull_request
       php: nightly
-      env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS="--prefer-stable"
+      env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
 
@@ -133,7 +133,7 @@ jobs:
     - stage: Test
       if: NOT type = pull_request
       php: nightly
-      env: DB="mysqli.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS="--prefer-stable"
+      env: DB="mysqli.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
       before_script:
         - bash ./.travis/install-mysql-8.0.sh
 
@@ -176,7 +176,7 @@ jobs:
       php: nightly
       addons:
         mariadb: 10.2
-      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable"
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
 
     # MariaDB 10.0 (PDO MySQL)
     - stage: Test
@@ -216,7 +216,7 @@ jobs:
       php: nightly
       addons:
         mariadb: 10.2
-      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable"
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
 
     # PDO PostgreSQL 9.4
     - stage: Test
@@ -355,7 +355,7 @@ jobs:
       sudo: required
       services:
         - docker
-      env: DB="sqlsrv" SQL_SERVER_VERSION="5.8.0" PHPUNIT_CONF=".travis/phpunit.sqlsrv.xml" COMPOSER_FLAGS="--prefer-stable"
+      env: DB="sqlsrv" SQL_SERVER_VERSION="5.8.0" PHPUNIT_CONF=".travis/phpunit.sqlsrv.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
       before_script:
         - bash ./.travis/install-mssql.sh $SQL_SERVER_VERSION
 
