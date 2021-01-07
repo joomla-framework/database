@@ -28,21 +28,24 @@ class DatabaseIteratorTest extends TestCase
 		$i = 0;
 
 		$statement->expects($this->any())
-			->method('fetch')
-			->willReturnCallback(function () use ($i) {
-				$i++;
+				  ->method('fetch')
+				  ->willReturnCallback(
+					  function () use ($i) {
+						  $i++;
 
-				$object = new \stdClass;
-				$object->id = $i;
-				$object->title = 'Row ' . $i;
+						  $object        = new \stdClass;
+						  $object->id    = $i;
+						  $object->title = 'Row ' . $i;
 
-				return $object;
-			});
+						  return $object;
+					  }
+				  )
+		;
 
 		$iterator = new DatabaseIterator($statement);
 
-		$expected = new \stdClass;
-		$expected->id = 1;
+		$expected        = new \stdClass;
+		$expected->id    = 1;
 		$expected->title = 'Row 1';
 
 		$this->assertEquals($expected, $iterator->current());
@@ -56,29 +59,23 @@ class DatabaseIteratorTest extends TestCase
 		/** @var StatementInterface|MockObject $statement */
 		$statement = $this->createMock(StatementInterface::class);
 
-		$statement->expects($this->at(0))
+		$statement
+			->expects($this->once())
 			->method('setFetchMode')
-			->with(FetchMode::STANDARD_OBJECT);
+			->with(FetchMode::STANDARD_OBJECT)
+		;
 
-		for ($i = 1; $i < 6; $i++)
-		{
-			$statement->expects($this->at($i))
-				->method('fetch')
-				->willReturnCallback(function () use ($i) {
-					$object = new \stdClass;
-					$object->id = $i;
-					$object->title = 'Row ' . $i;
-
-					return $object;
-				});
-		}
-
-		// This mock will stop the iterator from looping forever
-		$statement->expects($this->at($i))
+		$statement
 			->method('fetch')
-			->willReturn(false);
-
-		$iterator = new DatabaseIterator($statement);
+			->willReturnOnConsecutiveCalls(
+				(object) ['id' => 1, 'title' => 'Row 1'],
+				(object) ['id' => 2, 'title' => 'Row 2'],
+				(object) ['id' => 3, 'title' => 'Row 3'],
+				(object) ['id' => 4, 'title' => 'Row 4'],
+				(object) ['id' => 5, 'title' => 'Row 5'],
+				false
+			)
+		;
 
 		$expected = [
 			(object) [
@@ -103,6 +100,8 @@ class DatabaseIteratorTest extends TestCase
 			],
 		];
 
+		$iterator = new DatabaseIterator($statement);
+
 		$this->assertEquals($expected, iterator_to_array($iterator));
 	}
 
@@ -114,53 +113,48 @@ class DatabaseIteratorTest extends TestCase
 		/** @var StatementInterface|MockObject $statement */
 		$statement = $this->createMock(StatementInterface::class);
 
-		$statement->expects($this->at(0))
+		$statement
+			->expects($this->once())
 			->method('setFetchMode')
-			->with(FetchMode::STANDARD_OBJECT);
+			->with(FetchMode::STANDARD_OBJECT)
+		;
 
-		for ($i = 1; $i < 6; $i++)
-		{
-			$statement->expects($this->at($i))
-				->method('fetch')
-				->willReturnCallback(function () use ($i) {
-					$object = new \stdClass;
-					$object->id = $i;
-					$object->key = 'Key ' . $i;
-					$object->title = 'Row ' . $i;
-
-					return $object;
-				});
-		}
-
-		// This mock will stop the iterator from looping forever
-		$statement->expects($this->at($i))
+		$statement
 			->method('fetch')
-			->willReturn(false);
+			->willReturnOnConsecutiveCalls(
+				(object) ['id' => 1, 'key' => 'Key 1', 'title' => 'Row 1'],
+				(object) ['id' => 2, 'key' => 'Key 2', 'title' => 'Row 2'],
+				(object) ['id' => 3, 'key' => 'Key 3', 'title' => 'Row 3'],
+				(object) ['id' => 4, 'key' => 'Key 4', 'title' => 'Row 4'],
+				(object) ['id' => 5, 'key' => 'Key 5', 'title' => 'Row 5'],
+				false
+			)
+		;
 
 		$iterator = new DatabaseIterator($statement, 'key');
 
 		$expected = [
-			'Key 1' => (object) [
+			'Key 1' => (object)[
 				'id'    => 1,
 				'key'   => 'Key 1',
 				'title' => 'Row 1',
 			],
-			'Key 2' => (object) [
+			'Key 2' => (object)[
 				'id'    => 2,
 				'key'   => 'Key 2',
 				'title' => 'Row 2',
 			],
-			'Key 3' => (object) [
+			'Key 3' => (object)[
 				'id'    => 3,
 				'key'   => 'Key 3',
 				'title' => 'Row 3',
 			],
-			'Key 4' => (object) [
+			'Key 4' => (object)[
 				'id'    => 4,
 				'key'   => 'Key 4',
 				'title' => 'Row 4',
 			],
-			'Key 5' => (object) [
+			'Key 5' => (object)[
 				'id'    => 5,
 				'key'   => 'Key 5',
 				'title' => 'Row 5',
@@ -178,7 +172,8 @@ class DatabaseIteratorTest extends TestCase
 		/** @var StatementInterface|MockObject $statement */
 		$statement = $this->createMock(StatementInterface::class);
 
-		$statement->expects($this->at(0))
+		$statement
+			->expects($this->once())
 			->method('setFetchMode')
 			->with(FetchMode::CUSTOM_OBJECT, TestEntity::class);
 
@@ -186,23 +181,24 @@ class DatabaseIteratorTest extends TestCase
 
 		for ($i = 1; $i < 6; $i++)
 		{
-			$object = new TestEntity;
-			$object->id = $i;
+			$object        = new TestEntity;
+			$object->id    = $i;
 			$object->title = 'Row ' . $i;
 
 			$expected[] = $object;
-
-			$statement->expects($this->at($i))
-				->method('fetch')
-				->willReturnCallback(function () use ($object) {
-					return $object;
-				});
 		}
 
-		// This mock will stop the iterator from looping forever
-		$statement->expects($this->at($i))
+		$statement
 			->method('fetch')
-			->willReturn(false);
+			->willReturnOnConsecutiveCalls(
+				$expected[0],
+				$expected[1],
+				$expected[2],
+				$expected[3],
+				$expected[4],
+				false
+			)
+		;
 
 		$iterator = new DatabaseIterator($statement, null, TestEntity::class);
 
@@ -218,8 +214,9 @@ class DatabaseIteratorTest extends TestCase
 		$statement = $this->createMock(StatementInterface::class);
 
 		$statement->expects($this->once())
-			->method('rowCount')
-			->willReturn(42);
+				  ->method('rowCount')
+				  ->willReturn(42)
+		;
 
 		$iterator = new DatabaseIterator($statement);
 
@@ -240,7 +237,8 @@ class DatabaseIteratorTest extends TestCase
 	}
 }
 
-class TestEntity {
+class TestEntity
+{
 	public $id;
 	public $title;
 }
