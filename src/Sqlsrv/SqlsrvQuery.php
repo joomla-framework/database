@@ -210,7 +210,7 @@ class SqlsrvQuery extends DatabaseQuery implements PreparableInterface
 	 */
 	public function castAsChar($value, $len = null)
 	{
-		if(!$len)
+		if (!$len)
 		{
 			return 'CAST(' . $value . ' as NVARCHAR(30))';
 		}
