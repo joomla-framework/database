@@ -35,9 +35,9 @@ install:
         # Check if installation is cached
         if (!(Test-Path c:\tools\php)) {
           If ($env:php -eq "5.6") {
-            appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y --limit-output --forcex86 php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
+            appveyor-retry cinst php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','') --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y --limit-output --forcex86
           } Else {
-            appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y --limit-output php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
+            appveyor-retry cinst php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','') --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y --limit-output
           }
 
           Get-ChildItem -Path c:\tools\php
