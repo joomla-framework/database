@@ -192,5 +192,5 @@ composer require joomla/database "2.0.*@dev"
 If you want to include the test sources, use
 
 ```sh
-composer require --prefer-source joomla/database "~1.0"
+composer require --prefer-source joomla/database "2.0.*@dev"
 ```
