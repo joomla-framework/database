@@ -360,7 +360,7 @@ abstract class AbstractUri implements UriInterface
 		$retval = ($parts) ? true : false;
 
 		// We need to replace &amp; with & for parse_str to work right...
-		if (isset($parts['query']) && strpos($parts['query'], '&amp;'))
+		if (isset($parts['query']) && strpos($parts['query'], '&amp;') !== false)
 		{
 			$parts['query'] = str_replace('&amp;', '&', $parts['query']);
 		}
