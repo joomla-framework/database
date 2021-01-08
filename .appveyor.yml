@@ -17,11 +17,12 @@ cache:
 ## Build matrix for lowest and highest possible targets
 environment:
   matrix:
-  - php: 5.6
-  - php: 7.0
-  - php: 7.1
-  - php: 7.2
-  - php: 7.3
+  - php: 5.6.40
+  - php: 7.0.33
+  - php: 7.1.33
+  - php: 7.2.34
+  - php: 7.3.26
+  - php: 7.4.14
 
 init:
   - SET PATH=C:\Program Files\OpenSSL;c:\tools\php;C:\tools\composer;%PATH%
@@ -33,10 +34,10 @@ install:
     - ps: |
         # Check if installation is cached
         if (!(Test-Path c:\tools\php)) {
-          If ($env:php -eq "5.6") {
-            appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y --forcex86 php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
+          If ($env:php -eq "5.6.40") {
+            appveyor-retry cinst php --version=$env:php --package-parameters='""/InstallDir:C:\tools\php""' --ignore-checksums -y --limit-output --forcex86
           } Else {
-            appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
+            appveyor-retry cinst php --version=$env:php --package-parameters='""/InstallDir:C:\tools\php""' --ignore-checksums -y --limit-output
           }
 
           Get-ChildItem -Path c:\tools\php
@@ -79,7 +80,7 @@ install:
     # install composer dependencies
     - cd C:\projects\filesystem
     - appveyor-retry composer self-update
-    - appveyor-retry composer install --no-progress --prefer-dist
+    - appveyor-retry composer update --prefer-stable
 
 test_script:
   - cd C:\projects\filesystem
