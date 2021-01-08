@@ -99,8 +99,6 @@ steps:
   commands:
   - php -v
   - composer update --prefer-stable
-  - ""
-  - ""
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
@@ -129,8 +127,6 @@ steps:
   commands:
   - php -v
   - composer update --prefer-stable
-  - ""
-  - ""
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
@@ -159,8 +155,6 @@ steps:
   commands:
   - php -v
   - composer update --prefer-stable
-  - ""
-  - ""
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
@@ -189,8 +183,6 @@ steps:
   commands:
   - php -v
   - composer update --prefer-stable
-  - ""
-  - ""
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
@@ -219,8 +211,6 @@ steps:
   commands:
   - php -v
   - composer update --prefer-stable
-  - ""
-  - ""
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
@@ -249,8 +239,6 @@ steps:
   commands:
   - php -v
   - composer update --prefer-stable
-  - ""
-  - ""
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
@@ -279,8 +267,6 @@ steps:
   commands:
   - php -v
   - composer update --prefer-stable
-  - ""
-  - ""
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
@@ -309,8 +295,6 @@ steps:
   commands:
   - php -v
   - composer update --prefer-stable
-  - ""
-  - ""
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
@@ -339,8 +323,6 @@ steps:
   commands:
   - php -v
   - composer update --prefer-stable
-  - ""
-  - ""
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
@@ -368,9 +350,7 @@ steps:
   image: joomlaprojects/docker-images:php8.0
   commands:
   - php -v
-  - composer update --ignore-platform-reqs --prefer-stable
-  - wget https://ci.joomla.org/artifacts/phpunit8_php8_match.patch
-  - patch -N -p0 < phpunit8_php8_match.patch
+  - composer update --prefer-stable --ignore-platform-req=php
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
@@ -388,6 +368,6 @@ volumes:
 
 ---
 kind: signature
-hmac: c10fb61bd7debe6cf406efe7959890f8856f9ed1237056ad098ba8eed9cfdebc
+hmac: cb23afe30964a344daa5fd9ce20f08c8ef1ae57c6734bf5659151039d1c18bde
 
 ...
