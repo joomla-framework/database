@@ -102,6 +102,8 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
 	 */
 	public function dataGetTableColumns(): \Generator
 	{
+		$isMySQL8 = !static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '8.0', '>=');
+
 		yield 'only column types' => [
 			'#__dbtest',
 			true,
@@ -120,11 +122,11 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
 			[
 				'id'          => (object) [
 					'Field'      => 'id',
-					'Type'      => (float) getenv('MYSQL_VERSION') < 8.0 ? 'int(10) unsigned' : 'int unsigned',
-					'Collation' => (float) getenv('MYSQL_VERSION') < 8.0 ? '' : null,
-					'Null'      => 'NO',
-					'Key'       => 'PRI',
-					'Default'   => (float) getenv('MYSQL_VERSION') < 8.0 ? '' : null,
+					'Type'       => $isMySQL8 ? 'int unsigned' : 'int(10) unsigned',
+					'Collation'  => $isMySQL8 ? null : '',
+					'Null'       => 'NO',
+					'Key'        => 'PRI',
+					'Default'    => $isMySQL8 ? null : '',
 					'Extra'      => 'auto_increment',
 					'Privileges' => 'select,insert,update,references',
 					'Comment'    => '',
