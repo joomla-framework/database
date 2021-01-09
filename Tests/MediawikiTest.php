@@ -59,7 +59,13 @@ class MediawikiTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		$this->options = new Registry;
+
+		$errorLevel = error_reporting();
+		error_reporting($errorLevel & ~E_DEPRECATED);
+
 		$this->client = $this->getMock('\\Joomla\\Mediawiki\\Http', array('get', 'post', 'delete', 'patch', 'put'));
+
+		error_reporting($errorLevel);
 
 		$this->object = new Mediawiki($this->options, $this->client);
 	}

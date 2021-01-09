@@ -65,8 +65,14 @@ class SearchTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		$this->options = new Registry;
+
+		$errorLevel = error_reporting();
+		error_reporting($errorLevel & ~E_DEPRECATED);
+
 		$this->client = $this->getMock('\\Joomla\\Mediawiki\\Http', array('get', 'post', 'delete', 'patch', 'put'));
 		$this->response = $this->getMock('\\Joomla\\Http\\Response');
+
+		error_reporting($errorLevel);
 
 		$this->object = new Search($this->options, $this->client);
 	}

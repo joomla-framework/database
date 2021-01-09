@@ -63,7 +63,13 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		$this->options = new Registry;
+
+		$errorLevel = error_reporting();
+		error_reporting($errorLevel & ~E_DEPRECATED);
+
 		$this->transport = $this->getMock('Joomla\\Http\\Transport\\Stream', array('request'), array($this->options), 'CustomTransport', false);
+
+		error_reporting($errorLevel);
 
 		$this->object = new Http($this->options, $this->transport);
 	}
