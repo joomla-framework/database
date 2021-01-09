@@ -28,6 +28,7 @@ matrix:
     - php: 7.3
     - php: 7.4
     - php: nightly
+      env: COMPOSER_FLAGS="--prefer-stable --ignore_platform_req=php"
   allow_failures:
     - php: nightly
 
