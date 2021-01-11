@@ -420,6 +420,12 @@ class InputFilterTest extends TestCase
 				'/var/www/html/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf',
 				'From generic cases'
 			),
+			'path_07' => array(
+				'path',
+				'C:\Documents\Newsletters\Summer2018.pdf',
+				'C:\Documents\Newsletters\Summer2018.pdf',
+				'From generic cases'
+			),
 			'user_01' => array(
 				'username',
 				'&<f>r%e\'d',
