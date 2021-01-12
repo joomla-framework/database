@@ -867,6 +867,7 @@ class InputFilter
 		$pattern = '/[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?/';
 
 		preg_match($pattern, $source, $matches);
+
 		return isset($matches[0]) ? (float) $matches[0] : 0;
 	}
 
@@ -887,7 +888,7 @@ class InputFilter
 	 *
 	 * @param   string  $source  The string to be filtered
 	 *
-	 * @return  bool  The filtered value
+	 * @return  boolean  The filtered value
 	 */
 	private function cleanBool($source)
 	{
@@ -899,7 +900,7 @@ class InputFilter
 	 *
 	 * @param   string  $source  The string to be filtered
 	 *
-	 * @return  bool  The filtered value
+	 * @return  boolean  The filtered value
 	 */
 	private function cleanBoolean($source)
 	{
@@ -931,7 +932,7 @@ class InputFilter
 	{
 		$pattern = '/[^A-Z0-9]/i';
 
-		return (string)preg_replace($pattern, '', $source);
+		return preg_replace($pattern, '', $source);
 	}
 
 	/**
