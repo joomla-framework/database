@@ -812,9 +812,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Integer filter
 	 *
-	 * @return  int
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  integer  The filtered value
 	 */
 	private function cleanInt($source)
 	{
@@ -826,9 +828,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Alias for cleanInt()
 	 *
-	 * @return  int
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  integer  The filtered value
 	 */
 	private function cleanInteger($source)
 	{
@@ -836,9 +840,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Unsigned integer filter
 	 *
-	 * @return  int
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  integer  The filtered value
 	 */
 	private function cleanUint($source)
 	{
@@ -850,9 +856,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Float filter
 	 *
-	 * @return  float
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  float  The filtered value
 	 */
 	private function cleanFloat($source)
 	{
@@ -863,9 +871,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Alias for cleanFloat()
 	 *
-	 * @return  float
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  float  The filtered value
 	 */
 	private function cleanDouble($source)
 	{
@@ -873,9 +883,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Boolean filter
 	 *
-	 * @return  bool
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  bool  The filtered value
 	 */
 	private function cleanBool($source)
 	{
@@ -883,9 +895,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Alias for cleanBool()
 	 *
-	 * @return  bool
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  bool  The filtered value
 	 */
 	private function cleanBoolean($source)
 	{
@@ -893,9 +907,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Word filter
 	 *
-	 * @return  string
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
 	 */
 	private function cleanWord($source)
 	{
@@ -905,9 +921,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Alphanumerical filter
 	 *
-	 * @return  string
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
 	 */
 	private function cleanAlnum($source)
 	{
@@ -917,9 +935,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Command filter
 	 *
-	 * @return  string
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
 	 */
 	private function cleanCmd($source)
 	{
@@ -932,9 +952,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Base64 filter
 	 *
-	 * @return  string
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
 	 */
 	private function cleanBase64($source)
 	{
@@ -944,9 +966,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * String filter
 	 *
-	 * @return  string
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
 	 */
 	private function cleanString($source)
 	{
@@ -954,9 +978,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * HTML filter
 	 *
-	 * @return  string
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
 	 */
 	private function cleanHtml($source)
 	{
@@ -964,9 +990,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Path filter
 	 *
-	 * @return  string
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
 	 */
 	private function cleanPath($source)
 	{
@@ -988,9 +1016,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Trim filter
 	 *
-	 * @return  string
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
 	 */
 	private function cleanTrim($source)
 	{
@@ -1002,9 +1032,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Username filter
 	 *
-	 * @return  string
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
 	 */
 	private function cleanUsername($source)
 	{
@@ -1014,9 +1046,11 @@ class InputFilter
 	}
 
 	/**
-	 * @param   string  $source
+	 * Raw filter
 	 *
-	 * @return  string
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
 	 */
 	private function cleanRaw($source)
 	{
