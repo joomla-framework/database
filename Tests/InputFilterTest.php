@@ -384,40 +384,58 @@ class InputFilterTest extends TestCase
 				array(1, 3, 6),
 				'From generic cases'
 			),
-			'path_01' => array(
+			'relative path' => array(
 				'path',
 				'images/system',
 				'images/system',
 				'From generic cases'
 			),
-			'path_02' => array(
+			'path with double separator' => array(
+				'path',
+				'images//system',
+				'images/system',
+				'From generic cases'
+			),
+			'url as path' => array(
 				'path',
 				'http://www.fred.com/josephus',
 				'',
 				'From generic cases'
 			),
-			'path_03' => array(
+			'empty path' => array(
 				'path',
 				'',
 				'',
 				'From generic cases'
 			),
-			'path_04' => array(
+			'absolute path' => array(
 				'path',
 				'/images/system',
 				'/images/system',
 				'From generic cases'
 			),
-			'path_05' => array(
+			'path array' => array(
 				'path',
 				array('images/system', '/var/www/html/index.html'),
 				array('images/system', '/var/www/html/index.html'),
 				'From generic cases'
 			),
-			'path_06' => array(
+			'long path' => array(
 				'path',
 				'/var/www/html/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf',
 				'/var/www/html/pub/diplom_labors/2016/2016_Elfimova_O_rpz.pdf',
+				'From generic cases'
+			),
+			'windows path' => array(
+				'path',
+				'C:\Documents\Newsletters\Summer2018.pdf',
+				'C:\Documents\Newsletters\Summer2018.pdf',
+				'From generic cases'
+			),
+			'windows path with double separator' => array(
+				'path',
+				'C:\Documents\Newsletters\\Summer2018.pdf',
+				'C:\Documents\Newsletters\Summer2018.pdf',
 				'From generic cases'
 			),
 			'user_01' => array(
@@ -679,25 +697,6 @@ class InputFilterTest extends TestCase
 		$tests = $cases;
 
 		return $tests;
-	}
-
-	/**
-	 * Execute a cleanText test case.
-	 *
-	 * @param   string  $data    The original output
-	 * @param   string  $expect  The expected result for this test.
-	 *
-	 * @return  void
-	 *
-	 * @dataProvider casesCleanText
-	 */
-	public function testCleanText($data, $expect)
-	{
-		$this->markTestSkipped('Why are we calling JFilterOutput in JFilterInputTest?');
-		$this->assertThat(
-			$expect,
-			$this->equalTo(Output::cleanText($data))
-		);
 	}
 
 	/**

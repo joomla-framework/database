@@ -255,322 +255,41 @@ class InputFilter
 	 */
 	public function clean($source, $type = 'string')
 	{
-		// Handle the type constraint cases
-		switch (strtoupper($type))
+		$type = ucfirst(strtolower($type));
+
+		if ($type === 'Array')
 		{
-			case 'INT':
-			case 'INTEGER':
-				$pattern = '/[-+]?[0-9]+/';
-
-				if (\is_array($source))
-				{
-					$result = array();
-
-					// Iterate through the array
-					foreach ($source as $eachString)
-					{
-						preg_match($pattern, (string) $eachString, $matches);
-						$result[] = isset($matches[0]) ? (int) $matches[0] : 0;
-					}
-				}
-				else
-				{
-					preg_match($pattern, (string) $source, $matches);
-					$result = isset($matches[0]) ? (int) $matches[0] : 0;
-				}
-
-				break;
-
-			case 'UINT':
-				$pattern = '/[-+]?[0-9]+/';
-
-				if (\is_array($source))
-				{
-					$result = array();
-
-					// Iterate through the array
-					foreach ($source as $eachString)
-					{
-						preg_match($pattern, (string) $eachString, $matches);
-						$result[] = isset($matches[0]) ? abs((int) $matches[0]) : 0;
-					}
-				}
-				else
-				{
-					preg_match($pattern, (string) $source, $matches);
-					$result = isset($matches[0]) ? abs((int) $matches[0]) : 0;
-				}
-
-				break;
-
-			case 'FLOAT':
-			case 'DOUBLE':
-				$pattern = '/[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?/';
-
-				if (\is_array($source))
-				{
-					$result = array();
-
-					// Iterate through the array
-					foreach ($source as $eachString)
-					{
-						preg_match($pattern, (string) $eachString, $matches);
-						$result[] = isset($matches[0]) ? (float) $matches[0] : 0;
-					}
-				}
-				else
-				{
-					preg_match($pattern, (string) $source, $matches);
-					$result = isset($matches[0]) ? (float) $matches[0] : 0;
-				}
-
-				break;
-
-			case 'BOOL':
-			case 'BOOLEAN':
-				if (\is_array($source))
-				{
-					$result = array();
-
-					// Iterate through the array
-					foreach ($source as $eachString)
-					{
-						$result[] = (bool) $eachString;
-					}
-				}
-				else
-				{
-					$result = (bool) $source;
-				}
-
-				break;
-
-			case 'WORD':
-				$pattern = '/[^A-Z_]/i';
-
-				if (\is_array($source))
-				{
-					$result = array();
-
-					// Iterate through the array
-					foreach ($source as $eachString)
-					{
-						$result[] = (string) preg_replace($pattern, '', $eachString);
-					}
-				}
-				else
-				{
-					$result = (string) preg_replace($pattern, '', $source);
-				}
-
-				break;
-
-			case 'ALNUM':
-				$pattern = '/[^A-Z0-9]/i';
-
-				if (\is_array($source))
-				{
-					$result = array();
-
-					// Iterate through the array
-					foreach ($source as $eachString)
-					{
-						$result[] = (string) preg_replace($pattern, '', $eachString);
-					}
-				}
-				else
-				{
-					$result = (string) preg_replace($pattern, '', $source);
-				}
-
-				break;
-
-			case 'CMD':
-				$pattern = '/[^A-Z0-9_\.-]/i';
-
-				if (\is_array($source))
-				{
-					$result = array();
-
-					// Iterate through the array
-					foreach ($source as $eachString)
-					{
-						$cleaned  = (string) preg_replace($pattern, '', $eachString);
-						$result[] = ltrim($cleaned, '.');
-					}
-				}
-				else
-				{
-					$result = (string) preg_replace($pattern, '', $source);
-					$result = ltrim($result, '.');
-				}
-
-				break;
-
-			case 'BASE64':
-				$pattern = '/[^A-Z0-9\/+=]/i';
-
-				if (\is_array($source))
-				{
-					$result = array();
-
-					// Iterate through the array
-					foreach ($source as $eachString)
-					{
-						$result[] = (string) preg_replace($pattern, '', $eachString);
-					}
-				}
-				else
-				{
-					$result = (string) preg_replace($pattern, '', $source);
-				}
-
-				break;
-
-			case 'STRING':
-				if (\is_array($source))
-				{
-					$result = array();
-
-					// Iterate through the array
-					foreach ($source as $eachString)
-					{
-						$result[] = (string) $this->remove($this->decode((string) $eachString));
-					}
-				}
-				else
-				{
-					$result = (string) $this->remove($this->decode((string) $source));
-				}
-
-				break;
-
-			case 'HTML':
-				if (\is_array($source))
-				{
-					$result = array();
-
-					// Iterate through the array
-					foreach ($source as $eachString)
-					{
-						$result[] = (string) $this->remove((string) $eachString);
-					}
-				}
-				else
-				{
-					$result = (string) $this->remove((string) $source);
-				}
-
-				break;
-
-			case 'ARRAY':
-				$result = (array) $source;
-
-				break;
-
-			case 'PATH':
-				$pattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
-
-				if (\is_array($source))
-				{
-					$result = array();
-
-					// Iterate through the array
-					foreach ($source as $eachString)
-					{
-						preg_match($pattern, (string) $eachString, $matches);
-						$result[] = isset($matches[0]) ? (string) $matches[0] : '';
-					}
-				}
-				else
-				{
-					preg_match($pattern, $source, $matches);
-					$result = isset($matches[0]) ? (string) $matches[0] : '';
-				}
-
-				break;
-
-			case 'TRIM':
-				if (\is_array($source))
-				{
-					$result = array();
-
-					// Iterate through the array
-					foreach ($source as $eachString)
-					{
-						$cleaned  = (string) trim($eachString);
-						$cleaned  = StringHelper::trim($cleaned, \chr(0xE3) . \chr(0x80) . \chr(0x80));
-						$result[] = StringHelper::trim($cleaned, \chr(0xC2) . \chr(0xA0));
-					}
-				}
-				else
-				{
-					$result = (string) trim($source);
-					$result = StringHelper::trim($result, \chr(0xE3) . \chr(0x80) . \chr(0x80));
-					$result = StringHelper::trim($result, \chr(0xC2) . \chr(0xA0));
-				}
-
-				break;
-
-			case 'USERNAME':
-				$pattern = '/[\x00-\x1F\x7F<>"\'%&]/';
-
-				if (\is_array($source))
-				{
-					$result = array();
-
-					// Iterate through the array
-					foreach ($source as $eachString)
-					{
-						$result[] = (string) preg_replace($pattern, '', $eachString);
-					}
-				}
-				else
-				{
-					$result = (string) preg_replace($pattern, '', $source);
-				}
-
-				break;
-
-			case 'RAW':
-				$result = $source;
-
-				break;
-
-			default:
-				// Are we dealing with an array?
-				if (\is_array($source))
-				{
-					foreach ($source as $key => $value)
-					{
-						// Filter element for XSS and other 'bad' code etc.
-						if (\is_string($value))
-						{
-							$source[$key] = $this->remove($this->decode($value));
-						}
-					}
-
-					$result = $source;
-				}
-				else
-				{
-					// Or a string?
-					if (\is_string($source) && !empty($source))
-					{
-						// Filter source for XSS and other 'bad' code etc.
-						$result = $this->remove($this->decode($source));
-					}
-					else
-					{
-						// Not an array or string... return the passed parameter
-						$result = $source;
-					}
-				}
-
-				break;
+			return (array) $source;
 		}
 
-		return $result;
+		if (\is_array($source))
+		{
+			$result = array();
+
+			foreach ($source as $key => $value)
+			{
+				$result[$key] = $this->clean($value, $type);
+			}
+
+			return $result;
+		}
+
+		$method = 'clean' . $type;
+
+		if (method_exists($this, $method))
+		{
+			return $this->$method((string) $source);
+		}
+
+		// Unknown filter method
+		if (\is_string($source) && !empty($source))
+		{
+			// Filter source for XSS and other 'bad' code etc.
+			return $this->cleanString($source);
+		}
+
+		// Not an array or string... return the passed parameter
+		return $source;
 	}
 
 	/**
@@ -1089,6 +808,253 @@ class InputFilter
 			return str_ireplace(':expression', '', $test);
 		}
 
+		return $source;
+	}
+
+	/**
+	 * Integer filter
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  integer  The filtered value
+	 */
+	private function cleanInt($source)
+	{
+		$pattern = '/[-+]?[0-9]+/';
+
+		preg_match($pattern, $source, $matches);
+
+		return isset($matches[0]) ? (int) $matches[0] : 0;
+	}
+
+	/**
+	 * Alias for cleanInt()
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  integer  The filtered value
+	 */
+	private function cleanInteger($source)
+	{
+		return $this->cleanInt($source);
+	}
+
+	/**
+	 * Unsigned integer filter
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  integer  The filtered value
+	 */
+	private function cleanUint($source)
+	{
+		$pattern = '/[-+]?[0-9]+/';
+
+		preg_match($pattern, $source, $matches);
+
+		return isset($matches[0]) ? abs((int) $matches[0]) : 0;
+	}
+
+	/**
+	 * Float filter
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  float  The filtered value
+	 */
+	private function cleanFloat($source)
+	{
+		$pattern = '/[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?/';
+
+		preg_match($pattern, $source, $matches);
+
+		return isset($matches[0]) ? (float) $matches[0] : 0;
+	}
+
+	/**
+	 * Alias for cleanFloat()
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  float  The filtered value
+	 */
+	private function cleanDouble($source)
+	{
+		return $this->cleanFloat($source);
+	}
+
+	/**
+	 * Boolean filter
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  boolean  The filtered value
+	 */
+	private function cleanBool($source)
+	{
+		return (bool) $source;
+	}
+
+	/**
+	 * Alias for cleanBool()
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  boolean  The filtered value
+	 */
+	private function cleanBoolean($source)
+	{
+		return $this->cleanBool($source);
+	}
+
+	/**
+	 * Word filter
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
+	 */
+	private function cleanWord($source)
+	{
+		$pattern = '/[^A-Z_]/i';
+
+		return preg_replace($pattern, '', $source);
+	}
+
+	/**
+	 * Alphanumerical filter
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
+	 */
+	private function cleanAlnum($source)
+	{
+		$pattern = '/[^A-Z0-9]/i';
+
+		return preg_replace($pattern, '', $source);
+	}
+
+	/**
+	 * Command filter
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
+	 */
+	private function cleanCmd($source)
+	{
+		$pattern = '/[^A-Z0-9_\.-]/i';
+
+		$result = preg_replace($pattern, '', $source);
+		$result = ltrim($result, '.');
+
+		return $result;
+	}
+
+	/**
+	 * Base64 filter
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
+	 */
+	private function cleanBase64($source)
+	{
+		$pattern = '/[^A-Z0-9\/+=]/i';
+
+		return preg_replace($pattern, '', $source);
+	}
+
+	/**
+	 * String filter
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
+	 */
+	private function cleanString($source)
+	{
+		return $this->remove($this->decode($source));
+	}
+
+	/**
+	 * HTML filter
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
+	 */
+	private function cleanHtml($source)
+	{
+		return $this->remove($source);
+	}
+
+	/**
+	 * Path filter
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
+	 */
+	private function cleanPath($source)
+	{
+		$linuxPattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/]+[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
+
+		if (preg_match($linuxPattern, $source))
+		{
+			return preg_replace('~/+~', '/', $source);
+		}
+
+		$windowsPattern = '/^([A-Z]:\\\\)?[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*(\\\\+[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
+
+		if (preg_match($windowsPattern, $source))
+		{
+			return preg_replace('~\\\\+~', '\\', $source);
+		}
+
+		return '';
+	}
+
+	/**
+	 * Trim filter
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
+	 */
+	private function cleanTrim($source)
+	{
+		$result = trim($source);
+		$result = StringHelper::trim($result, \chr(0xE3) . \chr(0x80) . \chr(0x80));
+		$result = StringHelper::trim($result, \chr(0xC2) . \chr(0xA0));
+
+		return $result;
+	}
+
+	/**
+	 * Username filter
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
+	 */
+	private function cleanUsername($source)
+	{
+		$pattern = '/[\x00-\x1F\x7F<>"\'%&]/';
+
+		return preg_replace($pattern, '', $source);
+	}
+
+	/**
+	 * Raw filter
+	 *
+	 * @param   string  $source  The string to be filtered
+	 *
+	 * @return  string  The filtered string
+	 */
+	private function cleanRaw($source)
+	{
 		return $source;
 	}
 }
