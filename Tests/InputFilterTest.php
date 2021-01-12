@@ -700,25 +700,6 @@ class InputFilterTest extends TestCase
 	}
 
 	/**
-	 * Execute a cleanText test case.
-	 *
-	 * @param   string  $data    The original output
-	 * @param   string  $expect  The expected result for this test.
-	 *
-	 * @return  void
-	 *
-	 * @dataProvider casesCleanText
-	 */
-	public function testCleanText($data, $expect)
-	{
-		$this->markTestSkipped('Why are we calling JFilterOutput in JFilterInputTest?');
-		$this->assertThat(
-			$expect,
-			$this->equalTo(Output::cleanText($data))
-		);
-	}
-
-	/**
 	 * Produces the array of test cases for plain Whitelist test run.
 	 *
 	 * @return  array  Two dimensional array of test cases. Each row consists of three values
