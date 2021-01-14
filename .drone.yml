@@ -98,6 +98,7 @@ steps:
   image: joomlaprojects/docker-images:php5.3
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -126,6 +127,7 @@ steps:
   image: joomlaprojects/docker-images:php5.4
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -154,6 +156,7 @@ steps:
   image: joomlaprojects/docker-images:php5.5
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -182,6 +185,7 @@ steps:
   image: joomlaprojects/docker-images:php5.6
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -210,6 +214,7 @@ steps:
   image: joomlaprojects/docker-images:php7.0
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -238,6 +243,7 @@ steps:
   image: joomlaprojects/docker-images:php7.1
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -266,6 +272,7 @@ steps:
   image: joomlaprojects/docker-images:php7.2
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -294,6 +301,7 @@ steps:
   image: joomlaprojects/docker-images:php7.3
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -322,6 +330,7 @@ steps:
   image: joomlaprojects/docker-images:php7.4
   commands:
   - php -v
+  - composer --version
   - composer update --prefer-stable
   volumes:
   - name: composer-cache
@@ -350,6 +359,7 @@ steps:
   image: joomlaprojects/docker-images:php8.0
   commands:
   - php -v
+  - composer --version
   - composer update --ignore-platform-reqs --prefer-stable
   volumes:
   - name: composer-cache
@@ -368,6 +378,6 @@ volumes:
 
 ---
 kind: signature
-hmac: bcd686cd053fd91aff1bb22c260e9f2f41efef8a869cbc0db2deae0894bb2fd9
+hmac: b33ff1875a669dbf7ce59daaab139a1c7c46ecb03f9e03790046649bf39c44f5
 
 ...
