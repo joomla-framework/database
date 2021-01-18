@@ -432,6 +432,18 @@ class InputFilterTest extends TestCase
 				'C:\Documents\Newsletters\Summer2018.pdf',
 				'From generic cases'
 			),
+			'windows path lowercase drive letter' => array(
+				'path',
+				'c:\Documents\Newsletters\Summer2018.pdf',
+				'c:\Documents\Newsletters\Summer2018.pdf',
+				'From generic cases'
+			),
+			'windows path folder' => array(
+				'path',
+				'C:\Documents\Newsletters',
+				'C:\Documents\Newsletters',
+				'From generic cases'
+			),
 			'windows path with double separator' => array(
 				'path',
 				'C:\Documents\Newsletters\\Summer2018.pdf',
