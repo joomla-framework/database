@@ -44,7 +44,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.2.0
-	 * @covers  Joomla\Uri\UriImmutable::__set
 	 * @expectedException \BadMethodCallException
 	 */
 	public function test__set()
@@ -58,7 +57,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\UriImmutable::__toString
 	 */
 	public function test__toString()
 	{
@@ -74,7 +72,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\UriImmutable::toString
 	 */
 	public function testToString()
 	{
@@ -118,7 +115,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.2.0
-	 * @covers  Joomla\Uri\UriImmutable::render
 	 */
 	public function testRender()
 	{
@@ -156,7 +152,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\UriImmutable::hasVar
 	 */
 	public function testHasVar()
 	{
@@ -177,7 +172,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\UriImmutable::getVar
 	 */
 	public function testGetVar()
 	{
@@ -203,7 +197,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\UriImmutable::getQuery
 	 */
 	public function testGetQuery()
 	{
@@ -224,7 +217,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\UriImmutable::getScheme
 	 */
 	public function testGetScheme()
 	{
@@ -240,7 +232,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\UriImmutable::getUser
 	 */
 	public function testGetUser()
 	{
@@ -256,7 +247,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\UriImmutable::getPass
 	 */
 	public function testGetPass()
 	{
@@ -272,7 +262,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\UriImmutable::getHost
 	 */
 	public function testGetHost()
 	{
@@ -288,7 +277,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\UriImmutable::getPort
 	 */
 	public function testGetPort()
 	{
@@ -304,7 +292,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\UriImmutable::getPath
 	 */
 	public function testGetPath()
 	{
@@ -320,7 +307,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\UriImmutable::getFragment
 	 */
 	public function testGetFragment()
 	{
@@ -336,7 +322,6 @@ class UriImmuteableTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\UriImmutable::isSsl
 	 */
 	public function testisSsl()
 	{

@@ -21,7 +21,6 @@ class UriHelperTest extends TestCase
 	 *
 	 * @return  array
 	 *
-	 * @covers  Joomla\Uri\UriHelper::parse_url
 	 * @since   1.0
 	 */
 	public function testParse_Url()

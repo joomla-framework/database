@@ -44,7 +44,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::__toString
 	 */
 	public function test__toString()
 	{
@@ -60,7 +59,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.2.0
-	 * @covers  Joomla\Uri\Uri::buildQuery
 	 */
 	public function testBuildQuery()
 	{
@@ -83,7 +81,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.2.0
-	 * @covers  Joomla\Uri\Uri::cleanPath
 	 */
 	public function testcleanPath()
 	{
@@ -121,8 +118,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::parse
-	 * @covers  Joomla\Uri\Uri::__construct
 	 */
 	public function testConstruct()
 	{
@@ -150,7 +145,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::toString
 	 */
 	public function testToString()
 	{
@@ -181,7 +175,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::setVar
 	 */
 	public function testSetVar()
 	{
@@ -199,7 +192,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::hasVar
 	 */
 	public function testHasVar()
 	{
@@ -220,7 +212,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::getVar
 	 */
 	public function testGetVar()
 	{
@@ -246,7 +237,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::delVar
 	 */
 	public function testDelVar()
 	{
@@ -269,7 +259,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::setQuery
 	 */
 	public function testSetQuery()
 	{
@@ -301,7 +290,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::getQuery
 	 */
 	public function testGetQuery()
 	{
@@ -331,7 +319,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::getScheme
 	 */
 	public function testGetScheme()
 	{
@@ -347,7 +334,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::setScheme
 	 */
 	public function testSetScheme()
 	{
@@ -365,7 +351,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::getUser
 	 */
 	public function testGetUser()
 	{
@@ -381,7 +366,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::setUser
 	 */
 	public function testSetUser()
 	{
@@ -399,7 +383,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::getPass
 	 */
 	public function testGetPass()
 	{
@@ -415,7 +398,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::setPass
 	 */
 	public function testSetPass()
 	{
@@ -433,7 +415,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::getHost
 	 */
 	public function testGetHost()
 	{
@@ -449,7 +430,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::setHost
 	 */
 	public function testSetHost()
 	{
@@ -467,7 +447,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::getPort
 	 */
 	public function testGetPort()
 	{
@@ -483,7 +462,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::setPort
 	 */
 	public function testSetPort()
 	{
@@ -501,7 +479,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::getPath
 	 */
 	public function testGetPath()
 	{
@@ -517,7 +494,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::setPath
 	 */
 	public function testSetPath()
 	{
@@ -535,7 +511,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::getFragment
 	 */
 	public function testGetFragment()
 	{
@@ -551,7 +526,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::setFragment
 	 */
 	public function testSetFragment()
 	{
@@ -569,7 +543,6 @@ class UriTest extends TestCase
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @covers  Joomla\Uri\Uri::isSsl
 	 */
 	public function testisSsl()
 	{
