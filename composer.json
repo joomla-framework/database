@@ -6,12 +6,12 @@
     "homepage": "https://github.com/joomla-framework/uri",
     "license": "GPL-2.0-or-later",
     "require": {
-        "php": "^5.3.10|~7.0"
+        "php": "^5.3.10|^7.0|^8.0"
     },
     "require-dev": {
         "joomla/coding-standards": "~2.0@alpha",
-	    "joomla/test": "~1.0",
-        "phpunit/phpunit": "^4.8.35|^5.4.3|~6.0"
+        "joomla/test": "~1.0",
+        "phpunit/phpunit": "^4.8.35|^5.4.3|^6.0|^7.0|^8.0"
     },
     "autoload": {
         "psr-4": {

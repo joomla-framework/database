@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @since  1.0
  */
-class UriImmuteableTest extends TestCase
+class UriImmutableTest extends TestCase
 {
 	/**
 	 * Object under test
