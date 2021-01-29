@@ -480,6 +480,12 @@ class InputFilterTest extends TestCase
 				'C:\Documents\Newsletters/tmp',
 				'From generic cases'
 			),
+			'windows path with 2 times /'                                   => array(
+				'path',
+				'C:\\Documents/Newsletters/tmp',
+				'C:\Documents\Newsletters/tmp',
+				'From generic cases'
+			),
 			'user_01'                                                       => array(
 				'username',
 				'&<f>r%e\'d',
