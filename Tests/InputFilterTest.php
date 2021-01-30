@@ -477,13 +477,13 @@ class InputFilterTest extends TestCase
 			'windows path with /'                                           => array(
 				'path',
 				'C:\\Documents\\Newsletters/tmp',
-				'C:\Documents\Newsletters/tmp',
+				'C:\Documents\Newsletters\tmp',
 				'From generic cases'
 			),
 			'windows path with 2 times /'                                   => array(
 				'path',
 				'C:\\Documents/Newsletters/tmp',
-				'C:\Documents/Newsletters/tmp',
+				'C:\Documents\Newsletters\tmp',
 				'From generic cases'
 			),
 			'user_01'                                                       => array(
