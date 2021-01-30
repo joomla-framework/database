@@ -474,6 +474,36 @@ class InputFilterTest extends TestCase
 				'C:\Documents\Newsletters\Summer2018.pdf',
 				'From generic cases'
 			),
+			'windows path with 2 times double separator'                    => array(
+				'path',
+				'C:\Documents\\Newsletters\\Summer2018.pdf',
+				'C:\Documents\Newsletters\Summer2018.pdf',
+				'From generic cases'
+			),
+			'windows path with 3 times double separator'                    => array(
+				'path',
+				'C:\\Documents\\Newsletters\\Summer2018.pdf',
+				'C:\Documents\Newsletters\Summer2018.pdf',
+				'From generic cases'
+			),
+			'windows path with /'                                           => array(
+				'path',
+				'C:\\Documents\\Newsletters/tmp',
+				'C:\Documents\Newsletters\tmp',
+				'From generic cases'
+			),
+			'windows path with 2 times /'                                   => array(
+				'path',
+				'C:\\Documents/Newsletters/tmp',
+				'C:\Documents\Newsletters\tmp',
+				'From generic cases'
+			),
+			'windows path with 3 times /'                                   => array(
+				'path',
+				'C:/Documents/Newsletters/tmp',
+				'C:\Documents\Newsletters\tmp',
+				'From generic cases'
+			),
 			'user_01'                                                       => array(
 				'username',
 				'&<f>r%e\'d',
