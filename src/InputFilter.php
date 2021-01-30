@@ -1004,7 +1004,7 @@ class InputFilter
 	 */
 	private function cleanPath($source)
 	{
-		$linuxPattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/]+[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
+		$linuxPattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*((\\\\\/)+[A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
 
 		if (preg_match($linuxPattern, $source))
 		{
