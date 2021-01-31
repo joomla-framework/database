@@ -9,7 +9,6 @@
 namespace Joomla\Filter;
 
 use Joomla\String\StringHelper;
-use stdClass;
 
 /**
  * InputFilter is a class for filtering input from any data source
