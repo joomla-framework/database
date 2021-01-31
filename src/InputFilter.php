@@ -229,7 +229,7 @@ class InputFilter
 	/**
 	 * Cleans the given input source based on the instance configuration and specified data type
 	 *
-	 * @param   string|string[]|object|object[]  $source  Input string/array-of-string to be 'cleaned'
+	 * @param   string|string[]|object|object[]  $source  Input string/array-of-string/object/array-of-object to be 'cleaned'
 	 * @param   string                           $type    The return type for the variable:
 	 *                                                    INT:       An integer
 	 *                                                    UINT:      An unsigned integer
