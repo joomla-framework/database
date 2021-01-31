@@ -9,6 +9,7 @@
 namespace Joomla\Filter;
 
 use Joomla\String\StringHelper;
+use stdClass;
 
 /**
  * InputFilter is a class for filtering input from any data source
@@ -283,7 +284,14 @@ class InputFilter
 
 		if (\is_object($source))
 		{
-			return (object) $this->clean((array) $source, $type);
+			$result = new stdClass;
+
+			foreach ($source as $key => $value)
+			{
+				$result->$key = $this->clean($value, $type);
+			}
+
+			return $result;
 		}
 
 		$method = 'clean' . $type;
