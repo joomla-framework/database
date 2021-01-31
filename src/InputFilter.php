@@ -283,7 +283,7 @@ class InputFilter
 
 		if (\is_object($source))
 		{
-			foreach ($source as $key => $value)
+			foreach (get_object_vars($source) as $key => $value)
 			{
 				$source->$key = $this->clean($value, $type);
 			}
