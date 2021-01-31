@@ -279,6 +279,11 @@ class InputFilter
 			return $result;
 		}
 
+		if (\is_object($source))
+		{
+			return (object) $this->clean((array) $source, $type);
+		}
+
 		$method = 'clean' . $type;
 
 		if (method_exists($this, $method))
