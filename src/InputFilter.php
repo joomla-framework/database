@@ -284,14 +284,12 @@ class InputFilter
 
 		if (\is_object($source))
 		{
-			$result = new stdClass;
-
 			foreach ($source as $key => $value)
 			{
-				$result->$key = $this->clean($value, $type);
+				$source->$key = $this->clean($value, $type);
 			}
 
-			return $result;
+			return $source;
 		}
 
 		$method = 'clean' . $type;
