@@ -213,7 +213,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 
 		if (!strpos($path, $this->separator))
 		{
-			return (isset($this->data->$path) && $this->data->$path !== null && $this->data->$path !== '') ? $this->data->$path : $default;
+			return (isset($this->data->$path) && $this->data->$path !== '') ? $this->data->$path : $default;
 		}
 
 		// Explode the registry path into an array
@@ -646,7 +646,7 @@ class Registry implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \
 		// Cheap optimisation to direct remove the node if there is no separator
 		if (!strpos($path, $this->separator))
 		{
-			$result = (isset($this->data->$path) && $this->data->$path !== null && $this->data->$path !== '') ? $this->data->$path : null;
+			$result = (isset($this->data->$path) && $this->data->$path !== '') ? $this->data->$path : null;
 
 			unset($this->data->$path);
 
