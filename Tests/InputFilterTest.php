@@ -1910,7 +1910,7 @@ class InputFilterTest extends TestCase
 	public function testCleanObject()
 	{
 		$rawInput   = '<img src="javascript:alert();" />';
-		$cleanInput = '<img />';
+		$cleanInput = '';
 
 		$object   = new ArbitraryObject($rawInput, $rawInput, $rawInput);
 		$expected = new ArbitraryObject($cleanInput, $rawInput, $rawInput);
