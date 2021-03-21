@@ -195,7 +195,7 @@ class Dispatcher implements DispatcherInterface
 	/**
 	 * Count the number of registered event.
 	 *
-	 * @return  integer  The numer of registered events.
+	 * @return  integer  The number of registered events.
 	 *
 	 * @since   1.0
 	 */
