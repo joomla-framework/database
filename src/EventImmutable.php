@@ -12,7 +12,7 @@ use BadMethodCallException;
 
 /**
  * Implementation of an immutable Event.
- * An immutable event cannot be modified after instanciation :
+ * An immutable event cannot be modified after instantiation :
  *
  * - its propagation cannot be stopped
  * - its arguments cannot be modified
