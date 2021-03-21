@@ -904,7 +904,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 	}
 
 	/**
-	 * @testdox  Select statements can be prepared once and executed repeateadly
+	 * @testdox  Select statements can be prepared once and executed repeatedly
 	 */
 	public function testRepeatedSelectStatement()
 	{
