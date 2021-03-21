@@ -57,7 +57,7 @@ class Pages extends AbstractMediawikiObject
 	 *
 	 * @param   string  $title      Title of the page you want to delete.
 	 * @param   string  $reason     Reason for the deletion.
-	 * @param   string  $watchlist  Unconditionally add or remove the page from your watchlis.
+	 * @param   string  $watchlist  Unconditionally add or remove the page from your watchlist.
 	 * @param   string  $oldimage   The name of the old image to delete.
 	 *
 	 * @return  object
@@ -92,7 +92,7 @@ class Pages extends AbstractMediawikiObject
 	 *
 	 * @param   string  $pageid     Page ID of the page you want to delete.
 	 * @param   string  $reason     Reason for the deletion.
-	 * @param   string  $watchlist  Unconditionally add or remove the page from your watchlis.
+	 * @param   string  $watchlist  Unconditionally add or remove the page from your watchlist.
 	 * @param   string  $oldimage   The name of the old image to delete.
 	 *
 	 * @return  object
