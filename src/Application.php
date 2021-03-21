@@ -716,7 +716,7 @@ class Application extends AbstractApplication
 	}
 
 	/**
-	 * Builds the defauilt input definition.
+	 * Builds the default input definition.
 	 *
 	 * @return  InputDefinition
 	 *
