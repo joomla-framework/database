@@ -364,7 +364,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	/**
 	 * Method to test if the database TLS connections encryption are supported.
 	 *
-	 * @return  boolean  Whether the databse supports TLS connections encryption.
+	 * @return  boolean  Whether the database supports TLS connections encryption.
 	 *
 	 * @since   2.0.0
 	 */
