@@ -369,7 +369,7 @@ class Container implements ContainerInterface
 	 * Method to set the key and callback to the dataStore array.
 	 *
 	 * @param   string   $key        Name of dataStore key to set.
-	 * @param   mixed    $value      Callable function to run or string to retrive when requesting the specified $key.
+	 * @param   mixed    $value      Callable function to run or string to retrieve when requesting the specified $key.
 	 * @param   boolean  $shared     True to create and store a shared instance.
 	 * @param   boolean  $protected  True to protect this item from being overwritten. Useful for services.
 	 *
@@ -407,7 +407,7 @@ class Container implements ContainerInterface
 	 * Convenience method for creating protected keys.
 	 *
 	 * @param   string   $key     Name of dataStore key to set.
-	 * @param   mixed    $value   Callable function to run or string to retrive when requesting the specified $key.
+	 * @param   mixed    $value   Callable function to run or string to retrieve when requesting the specified $key.
 	 * @param   boolean  $shared  True to create and store a shared instance.
 	 *
 	 * @return  Container  This object for chaining.
@@ -423,7 +423,7 @@ class Container implements ContainerInterface
 	 * Convenience method for creating shared keys.
 	 *
 	 * @param   string   $key        Name of dataStore key to set.
-	 * @param   mixed    $value      Callable function to run or string to retrive when requesting the specified $key.
+	 * @param   mixed    $value      Callable function to run or string to retrieve when requesting the specified $key.
 	 * @param   boolean  $protected  True to protect this item from being overwritten. Useful for services.
 	 *
 	 * @return  Container  This object for chaining.
