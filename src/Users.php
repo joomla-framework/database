@@ -145,7 +145,7 @@ class Users extends AbstractMediawikiObject
 	 * Method to get user contributions.
 	 *
 	 * @param   string   $ucuser        The users to retrieve contributions for.
-	 * @param   string   $ucuserprefix  Retrieve contibutions for all users whose names begin with this value.
+	 * @param   string   $ucuserprefix  Retrieve contributions for all users whose names begin with this value.
 	 * @param   integer  $uclimit       The users to retrieve contributions for.
 	 * @param   string   $ucstart       The start timestamp to return from.
 	 * @param   string   $ucend         The end timestamp to return to.
