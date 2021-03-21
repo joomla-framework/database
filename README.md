@@ -333,7 +333,7 @@ class ContentModel implements DispatcherAwareInterface
 
 ## Immutable Events
 
-An immutable event cannot be modified after its instanciation:
+An immutable event cannot be modified after its instantiation:
 
 - its arguments cannot be modified
 - its propagation can't be stopped
