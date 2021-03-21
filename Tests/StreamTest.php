@@ -46,7 +46,7 @@ class StreamTest extends FilesystemTestCase
 	}
 
 	/**
-	 * Test counstructor method.
+	 * Test constructor method.
 	 *
 	 * @return  void
 	 *
@@ -468,7 +468,7 @@ class StreamTest extends FilesystemTestCase
 	/**
 	 * Test seek method.
 	 *
-	 * @param   int  $initial  Intial position of the pointer
+	 * @param   int  $initial  Initial position of the pointer
 	 * @param   int  $offset   Offset to seek
 	 * @param   int  $whence   Seek type
 	 * @param   int  $expPos   Expected pointer position
@@ -527,7 +527,7 @@ class StreamTest extends FilesystemTestCase
 	}
 
 	/**
-	 * Test write method with readonly mode excepton.
+	 * Test write method with readonly mode exception.
 	 *
 	 * @return  void
 	 *
@@ -988,7 +988,7 @@ class StreamTest extends FilesystemTestCase
 	}
 
 	/**
-	 * Test move mthod.
+	 * Test move method.
 	 *
 	 * @return  void
 	 *
