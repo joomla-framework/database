@@ -49,7 +49,7 @@ final class ConsoleEvents
 	/**
 	 * The TERMINATE event is an event triggered immediately before the application is exited.
 	 *
-	 * This event allows developers to perform any post-process actions and to maniuplate
+	 * This event allows developers to perform any post-process actions and to manipulate
 	 * the process' exit code.
 	 *
 	 * @var    string
