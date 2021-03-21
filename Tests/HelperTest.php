@@ -145,7 +145,7 @@ class HelperTest extends TestCase
 	}
 
 	/**
-	 * Test getJStreams mthod.
+	 * Test getJStreams method.
 	 *
 	 * @return  void
 	 *
