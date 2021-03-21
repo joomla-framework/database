@@ -666,7 +666,7 @@ abstract class DatabaseDriver implements DatabaseInterface, Log\LoggerAwareInter
 	}
 
 	/**
-	 * Gets the name of the database used by this conneciton.
+	 * Gets the name of the database used by this connection.
 	 *
 	 * @return  string
 	 *
