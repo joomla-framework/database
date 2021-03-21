@@ -117,7 +117,7 @@ class Patcher
 	}
 
 	/**
-	 * Reset the pacher
+	 * Reset the patcher
 	 *
 	 * @return  Patcher  This object for chaining
 	 *
