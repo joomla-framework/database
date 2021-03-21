@@ -272,7 +272,7 @@ abstract class DatabaseExporter
 
 			foreach ($fields as $field)
 			{
-				// Cacth blob for conversion xml
+				// Catch blob for conversion xml
 				if ($field->Type == 'mediumblob')
 				{
 					$colblob[] = $field->Field;
