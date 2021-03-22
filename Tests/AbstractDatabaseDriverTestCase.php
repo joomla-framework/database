@@ -8,6 +8,7 @@ namespace Joomla\Database\Tests;
 
 use Joomla\Database\DatabaseIterator;
 use Joomla\Database\Monitor\ChainedMonitor;
+use Joomla\Database\Monitor\DebugMonitor;
 use Joomla\Database\ParameterType;
 use Joomla\Database\QueryInterface;
 use Joomla\Test\DatabaseTestCase;
@@ -936,6 +937,86 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 				['id' => '2', 'title' => 'Testing2'],
 			],
 			$results
+		);
+	}
+
+	/**
+	 * @testdox  DebugMonitor reports correct parameters with reusable query
+	 */
+	public function testMonitorWithReusableQuery()
+	{
+		static::$connection->setMonitor(new DebugMonitor);
+
+		$title = 'test';
+		$query = static::$connection->getQuery(true)
+			->select('id')
+			->from('#__dbtest')
+			->where('title = :title')
+			->bind(':title', $title);
+		static::$connection->setQuery($query);
+		static::$connection->loadResult();
+
+		$id = 2;
+		$query->clear()
+			->select('id')
+			->from('#__dbtest')
+			->where('id = :id')
+			->bind(':id', $id, ParameterType::INTEGER);
+		static::$connection->setQuery($query);
+		static::$connection->loadResult();
+
+		$params = [];
+
+		foreach (static::$connection->getMonitor()->getBoundParams() as $queryParams)
+		{
+			foreach ($queryParams as $queryParam)
+			{
+				$params[] = [$queryParam->value, $queryParam->dataType];
+			}
+		}
+
+		$this->assertSame(
+			[
+				['test', 'string'],
+				[2, 'int'],
+			],
+			$params
+		);
+	}
+
+	/**
+	 * @testdox  DebugMonitor reports correct parameters with repeated statement
+	 */
+	public function testMonitorWithRepeatedStatement()
+	{
+		static::$connection->setMonitor(new DebugMonitor);
+
+		$query = static::$connection->getQuery(true)
+			->select('id')
+			->from('#__dbtest')
+			->where('id = :id')
+			->bind(':id', $i, ParameterType::INTEGER);
+		static::$connection->setQuery($query);
+
+		for ($i = 1; $i <= 3; $i++)
+		{
+			static::$connection->loadResult();
+		}
+
+		$params = [];
+
+		foreach (static::$connection->getMonitor()->getBoundParams() as $queryParams)
+		{
+			$params[] = array_column($queryParams, 'value');
+		}
+
+		$this->assertSame(
+			[
+				[1],
+				[2],
+				[3],
+			],
+			$params
 		);
 	}
 }
