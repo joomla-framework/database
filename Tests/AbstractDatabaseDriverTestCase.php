@@ -982,8 +982,6 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 			],
 			$params
 		);
-
-		static::$connection->setMonitor(null);
 	}
 
 	/**
@@ -1020,7 +1018,5 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 			],
 			$params
 		);
-
-		static::$connection->setMonitor(null);
 	}
 }
