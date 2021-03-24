@@ -91,6 +91,8 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 	{
 		$isMySQL8 = !static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '8.0', '>=');
 
+		$useDisplayWidth = static::$connection->isMariaDb() || version_compare(static::$connection->getVersion(), '8.0.17', '<');
+
 		yield 'only column types' => [
 			'#__dbtest',
 			true,
@@ -109,7 +111,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 			[
 				'id'          => (object) [
 					'Field'      => 'id',
-					'Type'       => $isMySQL8 ? 'int unsigned' : 'int(10) unsigned',
+					'Type'       => $useDisplayWidth ? 'int(10) unsigned' : 'int unsigned',
 					'Collation'  => $isMySQL8 ? null : '',
 					'Null'       => 'NO',
 					'Key'        => 'PRI',
