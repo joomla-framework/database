@@ -31,6 +31,7 @@ final class IpHelper
 	 *
 	 * @var    boolean
 	 * @since  1.6.0
+	 * @note   The default value is false in version 2.0+
 	 */
 	private static $allowIpOverrides = true;
 
