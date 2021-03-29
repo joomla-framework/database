@@ -300,10 +300,12 @@ class DriverMysqliTest extends DatabaseMysqliCase
 		);
 
 		/* not only type field */
+		$version = self::$driver->getVersion();
+
 		$id = new \stdClass;
 		$id->Default    = null;
 		$id->Field      = 'id';
-		$id->Type       = (float) self::$driver->getVersion() < 8.0 ? 'int(10) unsigned' : 'int unsigned';
+		$id->Type       = stripos($version, 'mariadb') !== false || version_compare($version, '8.0.17') < 0 ? 'int(10) unsigned' : 'int unsigned';
 		$id->Null       = 'NO';
 		$id->Key        = 'PRI';
 		$id->Collation  = null;
