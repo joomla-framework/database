@@ -2098,6 +2098,9 @@ abstract class DatabaseQuery implements QueryInterface
 		{
 			$parameterNames[] = ':preparedArray' . (++$this->preparedIndex);
 		}
+		
+		// In the bind method, we expect $values in a zero-index array, so array_values is needed here
+		$values = array_values($values);
 
 		$this->bind($parameterNames, $values, $dataType);
 
