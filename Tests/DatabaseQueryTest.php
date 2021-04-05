@@ -936,10 +936,24 @@ class DatabaseQueryTest extends TestCase
 	 */
 	public function dataBind(): \Generator
 	{
-		yield 'string field' => ['foo', 'bar', ParameterType::STRING];
-		yield 'numeric field' => ['foo', 42, ParameterType::INTEGER];
-		yield 'numeric key' => [1, 'bar', ParameterType::STRING];
-		yield 'array of data' => [[1, 'foo'], [42, 'bar'], [ParameterType::INTEGER, ParameterType::STRING]];
+		yield 'string field' => ['foo', 'bar', ParameterType::STRING, [
+			'foo' => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+		]];
+		yield 'numeric field' => ['foo', 42, ParameterType::INTEGER, [
+			'foo' => (object) ['value' => 42, 'dataType' => 'int', 'length' => 0, 'driverOptions' => []],
+		]];
+		yield 'numeric key' => [1, 'bar', ParameterType::STRING, [
+			1 => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+		]];
+		yield 'array of data' => [[1, 'foo'], [42, 'bar'], [ParameterType::INTEGER, ParameterType::STRING], [
+			1 => (object) ['value' => 42, 'dataType' => 'int', 'length' => 0, 'driverOptions' => []],
+			'foo' => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+		]];
+		yield 'key array, single data value' => [[1, 2, 3], 'bar', ParameterType::STRING, [
+			1 => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+			2 => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+			3 => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+		]];
 	}
 
 	/**
@@ -952,15 +966,16 @@ class DatabaseQueryTest extends TestCase
 	 *                                                parameters such as those possible with stored procedures.
 	 * @param   array|string          $dataType       Constant corresponding to a SQL datatype. It can be an array, in this case it
 	 *                                                has to be same length of $key
+	 * @param   array                 $expected       The expected structure of `$bounded`
 	 *
 	 * @dataProvider  dataBind
 	 */
-	public function testBind($key, $value, $dataType)
+	public function testBind($key, $value, $dataType, $expected)
 	{
 		$this->assertSame($this->query, $this->query->bind($key, $value, $dataType), 'The query builder supports method chaining');
 
-		$this->assertCount(
-			is_array($key) ? count($key) : 1,
+		$this->assertEquals(
+			$expected,
 			$this->query->bounded
 		);
 	}
@@ -993,6 +1008,24 @@ class DatabaseQueryTest extends TestCase
 		$dataTypes = [ParameterType::STRING];
 
 		$this->query->bind($keys, $values, $dataTypes);
+	}
+
+	/**
+	 * @testdox Values are stored by reference
+	 */
+	public function testBindByReference()
+	{
+		$key = 1;
+		$value = 'foo';
+
+		$this->query->bind($key, $value, ParameterType::STRING);
+
+		$value = 'bar';
+
+		$this->assertEquals(
+			[1 => (object)['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []]],
+			$this->query->bounded
+		);
 	}
 
 	/**
