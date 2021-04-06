@@ -21,6 +21,14 @@ use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
 class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 {
 	/**
+	 * The database connection for the test case
+	 *
+	 * @var    MysqlDriver|null
+	 * @since  2.0.0-beta
+	 */
+	protected static $connection;
+
+	/**
 	 * This method is called before the first test of this test class is run.
 	 *
 	 * @return  void
@@ -41,6 +49,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 	 * This method is called before a test is executed.
 	 *
 	 * @return  void
+	 * @throws \Exception
 	 */
 	protected function setUp(): void
 	{
@@ -89,8 +98,13 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 	 */
 	public function dataGetTableColumns(): \Generator
 	{
-		$isMySQL8 = !static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '8.0', '>=');
+		// For unknown reasons, the connection gets lost on Travis. re-establish, if that happens
+		if (static::$connection === null)
+		{
+			self::setUpBeforeClass();
+		}
 
+		$isMySQL8 = !static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '8.0', '>=');
 		$useDisplayWidth = static::$connection->isMariaDb() || version_compare(static::$connection->getVersion(), '8.0.17', '<');
 
 		yield 'only column types' => [
