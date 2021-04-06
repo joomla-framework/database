@@ -1997,9 +1997,14 @@ abstract class DatabaseQuery implements QueryInterface
 		$key   = (array) $key;
 		$count = \count($key);
 
-		if (\is_array($value) && $count != \count($value))
+		if (\is_array($value))
 		{
-			throw new \InvalidArgumentException('Array length of $key and $value are not equal');
+			if ($count != \count($value))
+			{
+				throw new \InvalidArgumentException('Array length of $key and $value are not equal');
+			}
+
+			reset($value);
 		}
 
 		if (\is_array($dataType) && $count != \count($dataType))
@@ -2007,11 +2012,12 @@ abstract class DatabaseQuery implements QueryInterface
 			throw new \InvalidArgumentException('Array length of $key and $dataType are not equal');
 		}
 
-		for ($i = 0; $i < $count; $i++)
+		foreach ($key as $index)
 		{
 			if (\is_array($value))
 			{
-				$localValue = &$value[$i];
+				$localValue = &$value[key($value)];
+				next($value);
 			}
 			else
 			{
@@ -2020,7 +2026,7 @@ abstract class DatabaseQuery implements QueryInterface
 
 			if (\is_array($dataType))
 			{
-				$localDataType = $dataType[$i];
+				$localDataType = array_shift($dataType);
 			}
 			else
 			{
@@ -2040,7 +2046,7 @@ abstract class DatabaseQuery implements QueryInterface
 			$obj->driverOptions = $driverOptions;
 
 			// Add the Key/Value into the bounded array
-			$this->bounded[$key[$i]] = $obj;
+			$this->bounded[$index] = $obj;
 
 			unset($localValue);
 		}
