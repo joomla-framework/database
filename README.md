@@ -4,6 +4,8 @@
 
 The Console package provides the infrastructure for building command line applications with the Joomla! Framework.
 
+This package is introduced with Joomla! Framework 2.0, please see branch 2.0-dev.
+
 ## Installation via Composer
 
 Add `"joomla/console": "~2.0@dev"` to the require block in your composer.json and then run `composer install`.
