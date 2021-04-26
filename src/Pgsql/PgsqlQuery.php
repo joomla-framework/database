@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -22,7 +22,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 	 * Holds key / value pair of bound objects.
 	 *
 	 * @var    mixed
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $bounded = array();
 
@@ -32,7 +32,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 	 *
 	 * @param   string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
 	 *                                          the form ':key', but can also be an integer.
-	 * @param   mixed           &$value         The value that will be bound. The value is passed by reference to support output
+	 * @param   mixed           $value          The value that will be bound. The value is passed by reference to support output
 	 *                                          parameters such as those possible with stored procedures.
 	 * @param   integer         $dataType       Constant corresponding to a SQL datatype.
 	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters.
@@ -40,7 +40,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 	 *
 	 * @return  PgsqlQuery
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function bind($key = null, &$value = null, $dataType = \PDO::PARAM_STR, $length = 0, $driverOptions = array())
 	{
@@ -53,7 +53,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 		}
 
 		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if (is_null($value))
+		if ($value === null)
 		{
 			if (isset($this->bounded[$key]))
 			{
@@ -65,9 +65,9 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 
 		$obj = new \stdClass;
 
-		$obj->value = &$value;
-		$obj->dataType = $dataType;
-		$obj->length = $length;
+		$obj->value         = &$value;
+		$obj->dataType      = $dataType;
+		$obj->length        = $length;
 		$obj->driverOptions = $driverOptions;
 
 		// Case 3: Simply add the Key/Value into the bounded array
@@ -84,7 +84,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 	 *
 	 * @return  mixed
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function &getBounded($key = null)
 	{
@@ -106,7 +106,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 	 *
 	 * @return  PgsqlQuery  Returns this object to allow chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function clear($clause = null)
 	{
@@ -114,6 +114,7 @@ class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
 		{
 			case null:
 				$this->bounded = array();
+
 				break;
 		}
 

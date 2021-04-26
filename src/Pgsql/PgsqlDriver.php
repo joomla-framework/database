@@ -2,19 +2,18 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Pgsql;
 
 use Joomla\Database\Pdo\PdoDriver;
-use Psr\Log;
 
 /**
  * PostgreSQL PDO Database Driver
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.5.0
  */
 class PgsqlDriver extends PdoDriver
 {
@@ -22,7 +21,7 @@ class PgsqlDriver extends PdoDriver
 	 * The database driver name
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	public $name = 'pgsql';
 
@@ -33,7 +32,7 @@ class PgsqlDriver extends PdoDriver
 	 * used for the opening quote and the second for the closing quote.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $nameQuote = '"';
 
@@ -42,7 +41,7 @@ class PgsqlDriver extends PdoDriver
 	 * defined in child classes to hold the appropriate value for the engine.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $nullDate = '1970-01-01 00:00:00';
 
@@ -50,7 +49,7 @@ class PgsqlDriver extends PdoDriver
 	 * The minimum supported database version.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected static $dbMinimum = '8.3.18';
 
@@ -58,7 +57,7 @@ class PgsqlDriver extends PdoDriver
 	 * Operator used for concatenation
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $concat_operator = '||';
 
@@ -67,16 +66,16 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @param   array  $options  List of options used to configure the connection
 	 *
-	 * @since	__DEPLOY_VERSION__
+	 * @since	1.5.0
 	 */
 	public function __construct($options)
 	{
 		$options['driver']   = 'pgsql';
-		$options['host']     = (isset($options['host'])) ? $options['host'] : 'localhost';
-		$options['user']     = (isset($options['user'])) ? $options['user'] : '';
-		$options['password'] = (isset($options['password'])) ? $options['password'] : '';
-		$options['database'] = (isset($options['database'])) ? $options['database'] : '';
-		$options['port']     = (isset($options['port'])) ? $options['port'] : null;
+		$options['host']     = isset($options['host']) ? $options['host'] : 'localhost';
+		$options['user']     = isset($options['user']) ? $options['user'] : '';
+		$options['password'] = isset($options['password']) ? $options['password'] : '';
+		$options['database'] = isset($options['database']) ? $options['database'] : '';
+		$options['port']     = isset($options['port']) ? $options['port'] : null;
 
 		// Finalize initialization
 		parent::__construct($options);
@@ -87,7 +86,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  void  Returns void if the database connected successfully.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \RuntimeException
 	 */
 	public function connect()
@@ -110,7 +109,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  boolean	true
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \RuntimeException
 	 */
 	public function dropTable($tableName, $ifExists = true)
@@ -123,9 +122,9 @@ class PgsqlDriver extends PdoDriver
 	/**
 	 * Method to get the database collation in use by sampling a text field of a table in the database.
 	 *
-	 * @return  mixed  The collation in use by the database or boolean false if not supported.
+	 * @return  string|boolean  The collation in use by the database or boolean false if not supported.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \RuntimeException
 	 */
 	public function getCollation()
@@ -137,15 +136,47 @@ class PgsqlDriver extends PdoDriver
 	}
 
 	/**
+	 * Method to get the database connection collation in use by sampling a text field of a table in the database.
+	 *
+	 * @return  string|boolean  The collation in use by the database connection (string) or boolean false if not supported.
+	 *
+	 * @since   1.6.0
+	 * @throws  \RuntimeException
+	 */
+	public function getConnectionCollation()
+	{
+		$this->setQuery('SHOW LC_COLLATE');
+		$array = $this->loadAssocList();
+
+		return $array[0]['lc_collate'];
+	}
+
+	/**
+	 * Internal function to get the name of the default schema for the current PostgreSQL connection.
+	 * That is the schema where tables are created by Joomla.
+	 *
+	 * @return  string
+	 *
+	 * @since   1.8.0
+	 */
+	private function getDefaultSchema()
+	{
+		// Supported since PostgreSQL 7.3
+		$this->setQuery('SELECT (current_schemas(false))[1]');
+
+		return $this->loadResult();
+	}
+
+	/**
 	 * Shows the table CREATE statement that creates the given tables.
 	 *
-	 * This is unsuported by PostgreSQL.
+	 * This is unsupported by PostgreSQL.
 	 *
 	 * @param   mixed  $tables  A table name or a list of table names.
 	 *
 	 * @return  string  An empty string because this function is not supported by PostgreSQL.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \RuntimeException
 	 */
 	public function getTableCreate($tables)
@@ -161,7 +192,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  array  An array of fields for the database table.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \RuntimeException
 	 */
 	public function getTableColumns($table, $typeOnly = true)
@@ -171,6 +202,8 @@ class PgsqlDriver extends PdoDriver
 		$result = array();
 
 		$tableSub = $this->replacePrefix($table);
+
+		$defaultSchema = $this->getDefaultSchema();
 
 		$this->setQuery('
 			SELECT a.attname AS "column_name",
@@ -192,7 +225,7 @@ class PgsqlDriver extends PdoDriver
 			WHERE a.attrelid =
 				(SELECT oid FROM pg_catalog.pg_class WHERE relname=' . $this->quote($tableSub) . '
 					AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE
-					nspname = \'public\')
+					nspname = ' . $this->quote($defaultSchema) . ')
 				)
 			AND a.attnum > 0 AND NOT a.attisdropped
 			ORDER BY a.attnum'
@@ -204,34 +237,34 @@ class PgsqlDriver extends PdoDriver
 		{
 			foreach ($fields as $field)
 			{
-				$result[$field->column_name] = preg_replace("/[(0-9)]/", '', $field->type);
+				$result[$field->column_name] = preg_replace('/[(0-9)]/', '', $field->type);
 			}
 		}
 		else
 		{
 			foreach ($fields as $field)
 			{
-				if (stristr(strtolower($field->type), "character varying"))
+				if (stristr(strtolower($field->type), 'character varying'))
 				{
-					$field->Default = "";
+					$field->Default = '';
 				}
 
-				if (stristr(strtolower($field->type), "text"))
+				if (stristr(strtolower($field->type), 'text'))
 				{
-					$field->Default = "";
+					$field->Default = '';
 				}
 
 				// Do some dirty translation to MySQL output.
 				// @todo: Come up with and implement a standard across databases.
 				$result[$field->column_name] = (object) array(
 					'column_name' => $field->column_name,
-					'type' => $field->type,
-					'null' => $field->null,
-					'Default' => $field->Default,
-					'comments' => '',
-					'Field' => $field->column_name,
-					'Type' => $field->type,
-					'Null' => $field->null,
+					'type'        => $field->type,
+					'null'        => $field->null,
+					'Default'     => $field->Default,
+					'comments'    => '',
+					'Field'       => $field->column_name,
+					'Type'        => $field->type,
+					'Null'        => $field->null,
 					// @todo: Improve query above to return primary key info as well
 					// 'Key' => ($field->PK == '1' ? 'PRI' : '')
 				);
@@ -241,7 +274,7 @@ class PgsqlDriver extends PdoDriver
 		// Change Postgresql's NULL::* type with PHP's null one
 		foreach ($fields as $field)
 		{
-			if (preg_match("/^NULL::*/", $field->Default))
+			if (preg_match('/^NULL::*/', $field->Default))
 			{
 				$field->Default = null;
 			}
@@ -257,7 +290,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  array  An array of the column specification for the table.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \RuntimeException
 	 */
 	public function getTableKeys($table)
@@ -267,7 +300,7 @@ class PgsqlDriver extends PdoDriver
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
-		if (in_array($table, $tableList))
+		if (\in_array($table, $tableList, true))
 		{
 			// Get the details columns information.
 			$this->setQuery('
@@ -294,7 +327,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  array  An array of all the tables in the database.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \RuntimeException
 	 */
 	public function getTableList()
@@ -318,7 +351,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  array  An array of sequences specification for the table.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \RuntimeException
 	 */
 	public function getTableSequences($table)
@@ -326,11 +359,11 @@ class PgsqlDriver extends PdoDriver
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
-		if (in_array($table, $tableList))
+		if (\in_array($table, $tableList, true))
 		{
 			$name = array(
 				's.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
-				'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option'
+				'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option',
 			);
 
 			$as = array('sequence', 'schema', 'table', 'column', 'data_type', 'minimum_value', 'maximum_value', 'increment', 'cycle_option');
@@ -366,7 +399,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  PgsqlDriver  Returns this object to support chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \RuntimeException
 	 */
 	public function lockTable($tableName)
@@ -387,7 +420,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  PgsqlDriver  Returns this object to support chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \RuntimeException
 	 */
 	public function renameTable($oldTable, $newTable, $backup = null, $prefix = null)
@@ -398,7 +431,7 @@ class PgsqlDriver extends PdoDriver
 		$tableList = $this->getTableList();
 
 		// Origin Table does not exist
-		if (!in_array($oldTable, $tableList))
+		if (!\in_array($oldTable, $tableList, true))
 		{
 			// Origin Table not found
 			throw new \RuntimeException('Table not found in Postgresql database.');
@@ -459,29 +492,30 @@ class PgsqlDriver extends PdoDriver
 	/**
 	 * This function return a field value as a prepared string to be used in a SQL statement.
 	 *
-	 * @param   array   $columns      Array of table's column returned by ::getTableColumns.
-	 * @param   string  $field_name   The table field's name.
-	 * @param   string  $field_value  The variable value to quote and return.
+	 * @param   array   $columns     Array of table's column returned by ::getTableColumns.
+	 * @param   string  $fieldName   The table field's name.
+	 * @param   string  $fieldValue  The variable value to quote and return.
 	 *
 	 * @return  string  The quoted string.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
-	public function sqlValue($columns, $field_name, $field_value)
+	public function sqlValue($columns, $fieldName, $fieldValue)
 	{
-		switch ($columns[$field_name])
+		switch ($columns[$fieldName])
 		{
 			case 'boolean':
 				$val = 'NULL';
 
-				if ($field_value == 't')
+				if ($fieldValue === 't' || $fieldValue === true || $fieldValue === 1 || $fieldValue === '1')
 				{
 					$val = 'TRUE';
 				}
-				elseif ($field_value == 'f')
+				elseif ($fieldValue === 'f' || $fieldValue === false || $fieldValue === 0 || $fieldValue === '0')
 				{
 					$val = 'FALSE';
 				}
+
 				break;
 
 			case 'bigint':
@@ -493,22 +527,24 @@ class PgsqlDriver extends PdoDriver
 			case 'smallint':
 			case 'serial':
 			case 'numeric,':
-				$val = strlen($field_value) == 0 ? 'NULL' : $field_value;
+				$val = $fieldValue === '' ? 'NULL' : $fieldValue;
+
 				break;
 
 			case 'date':
 			case 'timestamp without time zone':
-				if (empty($field_value))
+				if (empty($fieldValue))
 				{
-					$field_value = $this->getNullDate();
+					$fieldValue = $this->getNullDate();
 				}
 
-				$val = $this->quote($field_value);
+				$val = $this->quote($fieldValue);
 
 				break;
 
 			default:
-				$val = $this->quote($field_value);
+				$val = $this->quote($fieldValue);
+
 				break;
 		}
 
@@ -603,13 +639,13 @@ class PgsqlDriver extends PdoDriver
 	/**
 	 * Inserts a row into a table based on an object's properties.
 	 *
-	 * @param   string  $table    The name of the database table to insert into.
-	 * @param   object  &$object  A reference to an object whose public properties match the table fields.
-	 * @param   string  $key      The name of the primary key. If provided the object property is updated.
+	 * @param   string  $table   The name of the database table to insert into.
+	 * @param   object  $object  A reference to an object whose public properties match the table fields.
+	 * @param   string  $key     The name of the primary key. If provided the object property is updated.
 	 *
 	 * @return  boolean    True on success.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \RuntimeException
 	 */
 	public function insertObject($table, &$object, $key = null)
@@ -623,19 +659,19 @@ class PgsqlDriver extends PdoDriver
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (! array_key_exists($k, $columns))
+			if (!\array_key_exists($k, $columns))
 			{
 				continue;
 			}
 
 			// Only process non-null scalars.
-			if (is_array($v) or is_object($v) or $v === null)
+			if (\is_array($v) || \is_object($v) || $v === null)
 			{
 				continue;
 			}
 
 			// Ignore any internal fields or primary keys with value 0.
-			if (($k[0] == "_") || ($k == $key && (($v === 0) || ($v === '0'))))
+			if (($k[0] === '_') || ($k == $key && (($v === 0) || ($v === '0'))))
 			{
 				continue;
 			}
@@ -666,7 +702,7 @@ class PgsqlDriver extends PdoDriver
 			if ($id)
 			{
 				$object->$key = $id;
-				$retVal = true;
+				$retVal       = true;
 			}
 		}
 		else
@@ -688,11 +724,11 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  boolean  True on success, false otherwise.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public static function isSupported()
 	{
-		return class_exists('\\PDO') && in_array('pgsql', \PDO::getAvailableDrivers());
+		return class_exists('\\PDO') && \in_array('pgsql', \PDO::getAvailableDrivers(), true);
 	}
 
 	/**
@@ -700,7 +736,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  array  The database's table list.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function showTables()
 	{
@@ -723,7 +759,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  integer  The position of $substring in $string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function getStringPositionSql($substring, $string)
 	{
@@ -738,7 +774,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  float  The random generated number
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function getRandom()
 	{
@@ -755,7 +791,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  string  The query that alter the database query string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function getAlterDbCharacterSet($dbName)
 	{
@@ -770,7 +806,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  string	The query that creates database, owned by $options['user']
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function getCreateDbQuery($options, $utf)
 	{
@@ -792,7 +828,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  string  The processed SQL statement.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function replacePrefix($sql, $prefix = '#__')
 	{
@@ -805,7 +841,7 @@ class PgsqlDriver extends PdoDriver
 			{
 				$sql = explode('currval', $sql);
 
-				for ($nIndex = 1; $nIndex < count($sql); $nIndex = $nIndex + 2)
+				for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -818,7 +854,7 @@ class PgsqlDriver extends PdoDriver
 			{
 				$sql = explode('nextval', $sql);
 
-				for ($nIndex = 1; $nIndex < count($sql); $nIndex = $nIndex + 2)
+				for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -831,7 +867,7 @@ class PgsqlDriver extends PdoDriver
 			{
 				$sql = explode('setval', $sql);
 
-				for ($nIndex = 1; $nIndex < count($sql); $nIndex = $nIndex + 2)
+				for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -841,7 +877,7 @@ class PgsqlDriver extends PdoDriver
 
 			$explodedQuery = explode('\'', $sql);
 
-			for ($nIndex = 0; $nIndex < count($explodedQuery); $nIndex = $nIndex + 2)
+			for ($nIndex = 0, $nIndexMax = \count($explodedQuery); $nIndex < $nIndexMax; $nIndex += 2)
 			{
 				if (strpos($explodedQuery[$nIndex], $prefix))
 				{
@@ -864,7 +900,7 @@ class PgsqlDriver extends PdoDriver
 	 *
 	 * @return  PgsqlDriver  Returns this object to support chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \RuntimeException
 	 */
 	public function unlockTables()
@@ -877,14 +913,14 @@ class PgsqlDriver extends PdoDriver
 	/**
 	 * Updates a row in a table based on an object's properties.
 	 *
-	 * @param   string   $table    The name of the database table to update.
-	 * @param   object   &$object  A reference to an object whose public properties match the table fields.
-	 * @param   array    $key      The name of the primary key.
-	 * @param   boolean  $nulls    True to update null fields or false to ignore them.
+	 * @param   string   $table   The name of the database table to update.
+	 * @param   object   $object  A reference to an object whose public properties match the table fields.
+	 * @param   array    $key     The name of the primary key.
+	 * @param   boolean  $nulls   True to update null fields or false to ignore them.
 	 *
-	 * @return  boolean  True on success.
+	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @throws  \RuntimeException
 	 */
 	public function updateObject($table, &$object, $key, $nulls = false)
@@ -893,12 +929,12 @@ class PgsqlDriver extends PdoDriver
 		$fields  = array();
 		$where   = array();
 
-		if (is_string($key))
+		if (\is_string($key))
 		{
 			$key = array($key);
 		}
 
-		if (is_object($key))
+		if (\is_object($key))
 		{
 			$key = (array) $key;
 		}
@@ -910,22 +946,23 @@ class PgsqlDriver extends PdoDriver
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (! array_key_exists($k, $columns))
+			if (!\array_key_exists($k, $columns))
 			{
 				continue;
 			}
 
 			// Only process scalars that are not internal fields.
-			if (is_array($v) or is_object($v) or $k[0] == '_')
+			if (\is_array($v) || \is_object($v) || $k[0] === '_')
 			{
 				continue;
 			}
 
 			// Set the primary key to the WHERE clause instead of a field to update.
-			if (in_array($k, $key))
+			if (\in_array($k, $key, true))
 			{
 				$key_val = $this->sqlValue($columns, $k, $v);
 				$where[] = $this->quoteName($k) . '=' . $key_val;
+
 				continue;
 			}
 
@@ -942,8 +979,8 @@ class PgsqlDriver extends PdoDriver
 				$val = 'NULL';
 			}
 			else
-			// The field is not null so we prep it for update.
 			{
+				// The field is not null so we prep it for update.
 				$val = $this->sqlValue($columns, $k, $v);
 			}
 
@@ -958,8 +995,41 @@ class PgsqlDriver extends PdoDriver
 		}
 
 		// Set the query and execute the update.
-		$this->setQuery(sprintf($statement, implode(",", $fields), implode(' AND ', $where)));
+		$this->setQuery(sprintf($statement, implode(',', $fields), implode(' AND ', $where)));
 
 		return $this->execute();
+	}
+
+	/**
+	 * Quotes a binary string to database requirements for use in database queries.
+	 *
+	 * @param   string  $data  A binary string to quote.
+	 *
+	 * @return  string  The binary quoted input string.
+	 *
+	 * @since   1.7.0
+	 */
+	public function quoteBinary($data)
+	{
+		return "decode('" . bin2hex($data) . "', 'hex')";
+	}
+
+	/**
+	 * Replace special placeholder representing binary field with the original string.
+	 *
+	 * @param   string|resource  $data  Encoded string or resource.
+	 *
+	 * @return  string  The original string.
+	 *
+	 * @since   1.7.0
+	 */
+	public function decodeBinary($data)
+	{
+		if (\is_resource($data))
+		{
+			return stream_get_contents($data);
+		}
+
+		return $data;
 	}
 }

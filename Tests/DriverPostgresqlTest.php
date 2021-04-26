@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -100,6 +100,22 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	}
 
 	/**
+	 * Data for the testQuoteBinary test.
+	 *
+	 * @return  array
+	 *
+	 * @since   1.7.0
+	 */
+	public function dataTestQuoteBinary()
+	{
+		return array(
+			array('DATA', "decode('" . bin2hex('DATA') . "', 'hex')"),
+			array("\x00\x01\x02\xff", "decode('000102ff', 'hex')"),
+			array("\x01\x01\x02\xff", "decode('010102ff', 'hex')"),
+		);
+	}
+
+	/**
 	 * Data for testQuoteName test.
 	 *
 	 * @return  array
@@ -194,6 +210,25 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	}
 
 	/**
+	 * Test the quoteBinary method.
+	 *
+	 * @param   string  $data  The binary quoted input string.
+	 *
+	 * @return  void
+	 *
+	 * @dataProvider  dataTestQuoteBinary
+	 * @since         1.7.0
+	 */
+	public function testQuoteBinary($data, $expected)
+	{
+		$this->assertThat(
+			self::$driver->quoteBinary($data),
+			$this->equalTo($expected),
+			'The binary data was not quoted properly'
+		);
+	}
+
+	/**
 	 * Test getAffectedRows method.
 	 *
 	 * @return  void
@@ -221,7 +256,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	 */
 	public function testGetCollation()
 	{
-		$this->assertContains('UTF-8', self::$driver->getCollation(), __LINE__);
+		$this->assertNotEmpty(self::$driver->getCollation(), __LINE__);
 	}
 
 	/**
@@ -269,7 +304,13 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	 */
 	public function testGetTableColumns()
 	{
-		$tableCol = array('id' => 'integer', 'title' => 'character varying', 'start_date' => 'timestamp without time zone', 'description' => 'text');
+		$tableCol = array(
+			'id' => 'integer',
+			'title' => 'character varying',
+			'start_date' => 'timestamp without time zone',
+			'description' => 'text',
+			'data' => 'bytea',
+		);
 
 		$this->assertThat(self::$driver->getTableColumns('jos_dbtest'), $this->equalTo($tableCol), __LINE__);
 
@@ -314,9 +355,27 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		$description->Default = null;
 		$description->comments = '';
 
+		$data = new \stdClass;
+		$data->column_name = 'data';
+		$data->Field = 'data';
+		$data->type = 'bytea';
+		$data->Type = 'bytea';
+		$data->null = 'YES';
+		$data->Null = 'YES';
+		$data->Default = null;
+		$data->comments = '';
+
 		$this->assertThat(
 			self::$driver->getTableColumns('jos_dbtest', false),
-			$this->equalTo(array('id' => $id, 'title' => $title, 'start_date' => $start_date, 'description' => $description)),
+			$this->equalTo(
+				array(
+					'id' => $id,
+					'title' => $title,
+					'start_date' => $start_date,
+					'description' => $description,
+					'data' => $data,
+				)
+			),
 			__LINE__
 		);
 	}
@@ -373,13 +432,19 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		$seq->column = 'id';
 		$seq->data_type = 'bigint';
 
-		if (version_compare(self::$driver->getVersion(), '9.1.0') >= 0)
+		if (version_compare(self::$driver->getVersion(), '9.1.0', 'ge'))
 		{
 			$seq->start_value = '1';
 			$seq->minimum_value = '1';
 			$seq->maximum_value = '9223372036854775807';
 			$seq->increment = '1';
 			$seq->cycle_option = 'NO';
+
+			if (version_compare(self::$driver->getVersion(), '10', 'ge'))
+			{
+				$seq->data_type = 'integer';
+				$seq->maximum_value = '2147483647';
+			}
 		}
 		else
 		{
@@ -402,39 +467,40 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	public function testGetTableList()
 	{
 		$expected = array(
-			"0" => "jos_assets",
-			"1" => "jos_categories",
-			"2" => "jos_content",
-			"3" => "jos_core_log_searches",
-			"4" => "jos_dbtest",
-			"5" => "jos_extensions",
-			"6" => "jos_languages",
-			"7" => "jos_log_entries",
-			"8" => "jos_menu",
-			"9" => "jos_menu_types",
-			"10" => "jos_modules",
-			"11" => "jos_modules_menu",
-			"12" => "jos_schemas",
-			"13" => "jos_session",
-			"14" => "jos_update_categories",
-			"15" => "jos_update_sites",
-			"16" => "jos_update_sites_extensions",
-			"17" => "jos_updates",
-			"18" => "jos_user_profiles",
-			"19" => "jos_user_usergroup_map",
-			"20" => "jos_usergroups",
-			"21" => "jos_users",
-			"22" => "jos_viewlevels");
+			'0'  => 'jos_assets',
+			'1'  => 'jos_categories',
+			'2'  => 'jos_content',
+			'3'  => 'jos_core_log_searches',
+			'4'  => 'jos_dbtest',
+			'5'  => 'jos_extensions',
+			'6'  => 'jos_languages',
+			'7'  => 'jos_log_entries',
+			'8'  => 'jos_menu',
+			'9'  => 'jos_menu_types',
+			'10' => 'jos_modules',
+			'11' => 'jos_modules_menu',
+			'12' => 'jos_schemas',
+			'13' => 'jos_session',
+			'14' => 'jos_update_categories',
+			'15' => 'jos_update_sites',
+			'16' => 'jos_update_sites_extensions',
+			'17' => 'jos_updates',
+			'18' => 'jos_user_profiles',
+			'19' => 'jos_user_usergroup_map',
+			'20' => 'jos_usergroups',
+			'21' => 'jos_users',
+			'22' => 'jos_viewlevels'
+		);
 
 		$result = self::$driver->getTableList();
 
 		// Assert array size
-		$this->assertThat(count($result), $this->equalTo(count($expected)), __LINE__);
+		$this->assertThat(\count($result), $this->equalTo(count($expected)), __LINE__);
 
 		// Clear found element to check if all elements are present in any order
 		foreach ($result as $k => $v)
 		{
-			if (in_array($v, $expected))
+			if (\in_array($v, $expected))
 			{
 				// Ok case, value found so set value to zero
 				$result[$k] = '0';
@@ -447,7 +513,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		}
 
 		// If there's a one it will return true and test fails
-		$this->assertThat(in_array('1', $result), $this->equalTo(false), __LINE__);
+		$this->assertThat(\in_array('1', $result), $this->equalTo(false), __LINE__);
 	}
 
 	/**
@@ -460,11 +526,9 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 	public function testGetVersion()
 	{
 		$versionRow = self::$driver->setQuery('SELECT version();')->loadRow();
-		$versionArray = explode(' ', $versionRow[0]);
+		preg_match('/\d+(?:\.\d+)+/', $versionRow[0], $versionArray);
 
-		$version = rtrim($versionArray[1], ',');
-
-		$this->assertGreaterThanOrEqual($version, self::$driver->getVersion(), __LINE__);
+		$this->assertGreaterThanOrEqual($versionArray[0], self::$driver->getVersion(), __LINE__);
 	}
 
 	/**
@@ -523,9 +587,9 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		self::$driver->setQuery('TRUNCATE TABLE "jos_dbtest"')->execute();
 
 		$tst = new \stdClass;
-		$tst->title = "PostgreSQL test insertObject";
+		$tst->title = 'PostgreSQL test insertObject';
 		$tst->start_date = '2012-04-07 15:00:00';
-		$tst->description = "Test insertObject";
+		$tst->description = 'Test insertObject';
 
 		// Insert object without retrieving key
 		$ret = self::$driver->insertObject('#__dbtest', $tst);
@@ -543,9 +607,9 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 
 		// Insert object retrieving the key
 		$tstK = new \stdClass;
-		$tstK->title = "PostgreSQL test insertObject with key";
+		$tstK->title = 'PostgreSQL test insertObject with key';
 		$tstK->start_date = '2012-04-07 15:00:00';
-		$tstK->description = "Test insertObject with key";
+		$tstK->description = 'Test insertObject with key';
 		$retK = self::$driver->insertObject('#__dbtest', $tstK, 'id');
 
 		$this->assertThat($tstK->id, $this->equalTo(2), __LINE__);
@@ -650,6 +714,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		$objCompare->title = 'Testing3';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'three';
+		$objCompare->data = null;
 
 		$this->assertThat($result, $this->equalTo($objCompare), __LINE__);
 	}
@@ -677,6 +742,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		$objCompare->title = 'Testing';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'one';
+		$objCompare->data = null;
 
 		$expected[] = clone $objCompare;
 
@@ -685,6 +751,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		$objCompare->title = 'Testing2';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'one';
+		$objCompare->data = null;
 
 		$expected[] = clone $objCompare;
 
@@ -693,6 +760,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		$objCompare->title = 'Testing3';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'three';
+		$objCompare->data = null;
 
 		$expected[] = clone $objCompare;
 
@@ -701,6 +769,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		$objCompare->title = 'Testing4';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'four';
+		$objCompare->data = null;
 
 		$expected[] = clone $objCompare;
 
@@ -743,7 +812,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadRow();
 
-		$expected = array(3, 'Testing3', '1980-04-18 00:00:00', 'three');
+		$expected = array(3, 'Testing3', '1980-04-18 00:00:00', 'three', null);
 
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
 	}
@@ -764,8 +833,101 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadRowList();
 
-		$expected = array(array(1, 'Testing', '1980-04-18 00:00:00', 'one'), array(2, 'Testing2', '1980-04-18 00:00:00', 'one'));
+		$expected = array(
+			array(1, 'Testing', '1980-04-18 00:00:00', 'one', null),
+			array(2, 'Testing2', '1980-04-18 00:00:00', 'one', null)
+		);
 
+		$this->assertThat($result, $this->equalTo($expected), __LINE__);
+	}
+
+	/**
+	 * Test quoteBinary and decodeBinary methods
+	 *
+	 * @return  void
+	 *
+	 * @since   1.7.0
+	 */
+	public function testLoadBinary()
+	{
+		// Add binary data with null byte
+		$query = self::$driver->getQuery(true)
+			->update('jos_dbtest')
+			->set('data = ' . self::$driver->quoteBinary("\x00\x01\x02\xff"))
+			->where('id = 3');
+
+		self::$driver->setQuery($query)->execute();
+
+		// Add binary data with invalid UTF-8
+		$query = self::$driver->getQuery(true)
+			->update('jos_dbtest')
+			->set('data = ' . self::$driver->quoteBinary("\x01\x01\x02\xff"))
+			->where('id = 4');
+
+		self::$driver->setQuery($query)->execute();
+
+		$selectRow3 = self::$driver->getQuery(true)
+			->select('id')
+			->from('jos_dbtest')
+			->where('data = ' . self::$driver->quoteBinary("\x00\x01\x02\xff"));
+
+		$selectRow4 = self::$driver->getQuery(true)
+			->select('id')
+			->from('jos_dbtest')
+			->where('data = '. self::$driver->quoteBinary("\x01\x01\x02\xff"));
+
+		$result = self::$driver->setQuery($selectRow3)->loadResult();
+		$this->assertThat($result, $this->equalTo(3), __LINE__);
+
+		$result = self::$driver->setQuery($selectRow4)->loadResult();
+		$this->assertThat($result, $this->equalTo(4), __LINE__);
+
+		$selectRows = self::$driver->getQuery(true)
+			->select('data')
+			->from('jos_dbtest')
+			->order('id');
+
+		// Test loadColumn
+		$result = self::$driver->setQuery($selectRows)->loadColumn();
+
+		foreach ($result as $i => $v)
+		{
+			$result[$i] = self::$driver->decodeBinary($v);
+		}
+
+		$expected = array(null, null, "\x00\x01\x02\xff", "\x01\x01\x02\xff");
+		$this->assertThat($result, $this->equalTo($expected), __LINE__);
+
+		// Test loadAssocList
+		$result = self::$driver->setQuery($selectRows)->loadAssocList();
+
+		foreach ($result as $i => $v)
+		{
+			$result[$i]['data'] = self::$driver->decodeBinary($v['data']);
+		}
+
+		$expected = array(
+			array('data' => null),
+			array('data' => null),
+			array('data' => "\x00\x01\x02\xff"),
+			array('data' => "\x01\x01\x02\xff"),
+		);
+		$this->assertThat($result, $this->equalTo($expected), __LINE__);
+
+		// Test loadObjectList
+		$result = self::$driver->setQuery($selectRows)->loadObjectList();
+
+		foreach ($result as $i => $v)
+		{
+			$result[$i]->data = self::$driver->decodeBinary($v->data);
+		}
+
+		$expected = array(
+			(object) array('data' => null),
+			(object) array('data' => null),
+			(object) array('data' => "\x00\x01\x02\xff"),
+			(object) array('data' => "\x01\x01\x02\xff"),
+		);
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
 	}
 
@@ -853,10 +1015,10 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		// Object containing fields of integer, character varying, timestamp and text type
 		$tst = new \stdClass;
 		$tst->id = '5';
-		$tst->charVar = "PostgreSQL test insertObject";
+		$tst->charVar = 'PostgreSQL test insertObject';
 		$tst->timeStamp = '2012-04-07 15:00:00';
 		$tst->nullDate = null;
-		$tst->txt = "Test insertObject";
+		$tst->txt = 'Test insertObject';
 		$tst->boolTrue = 't';
 		$tst->boolFalse = 'f';
 		$tst->num = '43.2';
@@ -948,7 +1110,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		self::$driver->setQuery($queryCheck);
 		$result = self::$driver->loadRow();
 
-		$expected = array(6, 'testTitle', '1970-01-01 00:00:00', 'testDescription');
+		$expected = array(6, 'testTitle', '1970-01-01 00:00:00', 'testDescription', null);
 
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
 	}
@@ -976,7 +1138,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		self::$driver->setQuery($queryIns)->execute();
 
 		/* create savepoint only if is passed by data provider */
-		if (!is_null($toSavepoint))
+		if (!\is_null($toSavepoint))
 		{
 			self::$driver->transactionStart((boolean) $toSavepoint);
 		}
@@ -991,7 +1153,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		self::$driver->transactionRollback((boolean) $toSavepoint);
 
 		/* release savepoint and commit only if a savepoint exists */
-		if (!is_null($toSavepoint))
+		if (!\is_null($toSavepoint))
 		{
 			self::$driver->transactionCommit();
 		}
@@ -1007,7 +1169,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		self::$driver->setQuery($queryCheck);
 		$result = self::$driver->loadRowList();
 
-		$this->assertThat(count($result), $this->equalTo($tupleCount), __LINE__);
+		$this->assertThat(\count($result), $this->equalTo($tupleCount), __LINE__);
 	}
 
 	/**
@@ -1036,7 +1198,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 		self::$driver->setQuery($queryCheck);
 		$result = self::$driver->loadAssocList();
 
-		$this->assertThat(count($result), $this->equalTo(1), __LINE__);
+		$this->assertThat(\count($result), $this->equalTo(1), __LINE__);
 	}
 
 	/**
@@ -1081,7 +1243,7 @@ class DriverPostgresqlTest extends DatabasePostgresqlCase
 
 		/* check name change */
 		$tableList = self::$driver->getTableList();
-		$this->assertThat(in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
+		$this->assertThat(\in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
 
 		/* check index change */
 		self::$driver->setQuery(

@@ -2,20 +2,21 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Oracle;
 
 use Joomla\Database\Pdo\PdoQuery;
-use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\Query\LimitableInterface;
+use Joomla\Database\Query\PreparableInterface;
 
 /**
  * Oracle Query Building Class.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Oracle support will be removed.
  */
 class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInterface
 {
@@ -49,7 +50,7 @@ class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	 *
 	 * @param   string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
 	 *                                          the form ':key', but can also be an integer.
-	 * @param   mixed           &$value         The value that will be bound. The value is passed by reference to support output
+	 * @param   mixed           $value          The value that will be bound. The value is passed by reference to support output
 	 *                                          parameters such as those possible with stored procedures.
 	 * @param   integer         $dataType       Constant corresponding to a SQL datatype.
 	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters.
@@ -70,7 +71,7 @@ class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		}
 
 		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if (is_null($value))
+		if ($value === null)
 		{
 			if (isset($this->bounded[$key]))
 			{
@@ -82,9 +83,9 @@ class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInte
 
 		$obj = new \stdClass;
 
-		$obj->value = &$value;
-		$obj->dataType = $dataType;
-		$obj->length = $length;
+		$obj->value         = &$value;
+		$obj->dataType      = $dataType;
+		$obj->length        = $length;
 		$obj->driverOptions = $driverOptions;
 
 		// Case 3: Simply add the Key/Value into the bounded array
@@ -109,12 +110,10 @@ class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		{
 			return $this->bounded;
 		}
-		else
+
+		if (isset($this->bounded[$key]))
 		{
-			if (isset($this->bounded[$key]))
-			{
-				return $this->bounded[$key];
-			}
+			return $this->bounded[$key];
 		}
 	}
 
@@ -133,6 +132,7 @@ class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		{
 			case null:
 				$this->bounded = array();
+
 				break;
 		}
 
@@ -159,13 +159,13 @@ class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		// Check if we need to mangle the query.
 		if ($limit || $offset)
 		{
-			$query = "SELECT joomla2.*
+			$query = 'SELECT joomla2.*
 		              FROM (
 		                  SELECT joomla1.*, ROWNUM AS joomla_db_rownum
 		                  FROM (
-		                      " . $query . "
+		                      ' . $query . '
 		                  ) joomla1
-		              ) joomla2";
+		              ) joomla2';
 
 			// Check if the limit value is greater than zero.
 			if ($limit > 0)
@@ -201,7 +201,7 @@ class OracleQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	 */
 	public function setLimit($limit = 0, $offset = 0)
 	{
-		$this->limit = (int) $limit;
+		$this->limit  = (int) $limit;
 		$this->offset = (int) $offset;
 
 		return $this;

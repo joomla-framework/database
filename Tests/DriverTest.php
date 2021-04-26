@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -385,8 +385,11 @@ SQL
 	{
 		$this->logs = array();
 
+		$errorLevel = error_reporting();
+		error_reporting($errorLevel & ~E_DEPRECATED);
 		$mockLogger = $this->getMockBuilder('Psr\Log\LoggerInterface')
 			->getMock();
+		error_reporting($errorLevel);
 
 		$mockLogger->expects($this->any())
 			->method('log')
@@ -581,6 +584,28 @@ SQL
 	}
 
 	/**
+	 * Tests the Joomla\Database\DatabaseDriver::quoteBinary method.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.7.0
+	 */
+	public function testQuoteBinary()
+	{
+		$this->assertThat(
+			$this->instance->quoteBinary('DATA'),
+			$this->equalTo("X'" . bin2hex('DATA') . "'"),
+			'Tests the binary data 1.'
+		);
+
+		$this->assertThat(
+			$this->instance->quoteBinary("\x00\x01\x02\xff"),
+			$this->equalTo("X'000102ff'"),
+			'Tests the binary data 2.'
+		);
+	}
+
+	/**
 	 * Tests the Joomla\Database\DatabaseDriver::quoteName method.
 	 *
 	 * @return  void
@@ -599,6 +624,18 @@ SQL
 			$this->instance->quoteName('a.test'),
 			$this->equalTo('[a].[test]'),
 			'Tests the left-right quotes on a dotted string.'
+		);
+
+		$this->assertThat(
+			$this->instance->quoteName('a.test', 'a.test'),
+			$this->equalTo('[a].[test] AS [a.test]'),
+			'Tests the left-right quotes on a dotted string for column alias.'
+		);
+
+		$this->assertThat(
+			$this->instance->quoteName('a.te]st'),
+			$this->equalTo('[a].[te]]st]'),
+			'Tests the left-right quotes on a dotted string with reserved keyword.'
 		);
 
 		$this->assertThat(
@@ -642,6 +679,12 @@ SQL
 			$this->instance->quoteName('test'),
 			$this->equalTo('/test/'),
 			'Tests the uni-quotes on a string.'
+		);
+
+		$this->assertThat(
+			$this->instance->quoteName('te/st'),
+			$this->equalTo('/te//st/'),
+			'Tests the uni-quotes on a string with reserved keyword.'
 		);
 	}
 

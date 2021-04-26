@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -25,6 +25,38 @@ class DriverMysqlTest extends DatabaseMysqlCase
 		return array(
 			array("'%_abc123", false, '\\\'%_abc123'),
 			array("'%_abc123", true, '\\\'\\%\_abc123')
+		);
+	}
+
+	/**
+	 * Data for the testQuoteBinary test.
+	 *
+	 * @return  array
+	 *
+	 * @since   1.7.0
+	 */
+	public function dataTestQuoteBinary()
+	{
+		return array(
+			array('DATA', "X'" . bin2hex('DATA') . "'"),
+			array("\x00\x01\x02\xff", "X'000102ff'"),
+			array("\x01\x01\x02\xff", "X'010102ff'"),
+		);
+	}
+
+	/**
+	 * Data for the testQuoteName test.
+	 *
+	 * @return  array
+	 *
+	 * @since   1.7.0
+	 */
+	public function dataTestQuoteName()
+	{
+		return array(
+			array('protected`title', null, '`protected``title`'),
+			array('protected"title', null, '`protected"title`'),
+			array('protected]title', null, '`protected]title`'),
 		);
 	}
 
@@ -109,6 +141,46 @@ class DriverMysqlTest extends DatabaseMysqlCase
 			self::$driver->escape($text, $extra),
 			$this->equalTo($expected),
 			'The string was not escaped properly'
+		);
+	}
+
+	/**
+	 * Test the quoteBinary method.
+	 *
+	 * @param   string  $data  The binary quoted input string.
+	 *
+	 * @return  void
+	 *
+	 * @dataProvider  dataTestQuoteBinary
+	 * @since         1.7.0
+	 */
+	public function testQuoteBinary($data, $expected)
+	{
+		$this->assertThat(
+			self::$driver->quoteBinary($data),
+			$this->equalTo($expected),
+			'The binary data was not quoted properly'
+		);
+	}
+
+	/**
+	 * Test the quoteName method.
+	 *
+	 * @param   string  $text      The column name or alias to be quote.
+	 * @param   string  $asPart    String used for AS query part.
+	 * @param   string  $expected  The expected result.
+	 *
+	 * @return  void
+	 *
+	 * @dataProvider  dataTestQuoteName
+	 * @since         1.7.0
+	 */
+	public function testQuoteName($text, $asPart, $expected)
+	{
+		$this->assertThat(
+			self::$driver->quoteName($text, $asPart),
+			$this->equalTo($expected),
+			'The name was not quoted properly'
 		);
 	}
 
@@ -224,7 +296,13 @@ class DriverMysqlTest extends DatabaseMysqlCase
 	 */
 	public function testGetTableColumns()
 	{
-		$tableCol = array('id' => 'int unsigned', 'title' => 'varchar', 'start_date' => 'datetime', 'description' => 'text');
+		$tableCol = array(
+			'id' => 'int unsigned',
+			'title' => 'varchar',
+			'start_date' => 'datetime',
+			'description' => 'text',
+			'data' => 'blob',
+		);
 
 		$this->assertThat(
 			self::$driver->getTableColumns('jos_dbtest'),
@@ -233,10 +311,12 @@ class DriverMysqlTest extends DatabaseMysqlCase
 		);
 
 		/* not only type field */
+		$version = self::$driver->getVersion();
+
 		$id = new \stdClass;
 		$id->Default    = null;
 		$id->Field      = 'id';
-		$id->Type       = 'int(10) unsigned';
+		$id->Type       = stripos($version, 'mariadb') !== false || version_compare($version, '8.0.17') < 0 ? 'int(10) unsigned' : 'int unsigned';
 		$id->Null       = 'NO';
 		$id->Key        = 'PRI';
 		$id->Collation  = null;
@@ -277,6 +357,17 @@ class DriverMysqlTest extends DatabaseMysqlCase
 		$description->Privileges = 'select,insert,update,references';
 		$description->Comment    = '';
 
+		$data = new \stdClass;
+		$data->Default    = null;
+		$data->Field      = 'data';
+		$data->Type       = 'blob';
+		$data->Null       = 'YES';
+		$data->Key        = '';
+		$data->Collation  = null;
+		$data->Extra      = '';
+		$data->Privileges = 'select,insert,update,references';
+		$data->Comment    = '';
+
 		$this->assertThat(
 			self::$driver->getTableColumns('jos_dbtest', false),
 			$this->equalTo(
@@ -284,7 +375,8 @@ class DriverMysqlTest extends DatabaseMysqlCase
 					'id' => $id,
 					'title' => $title,
 					'start_date' => $start_date,
-					'description' => $description
+					'description' => $description,
+					'data' => $data,
 				)
 			),
 			__LINE__
@@ -333,7 +425,7 @@ class DriverMysqlTest extends DatabaseMysqlCase
 	public function testGetVersion()
 	{
 		$this->assertThat(
-			strlen(self::$driver->getVersion()),
+			\strlen(self::$driver->getVersion()),
 			$this->greaterThan(0),
 			'Line:' . __LINE__ . ' The getVersion method should return something without error.'
 		);
@@ -437,6 +529,7 @@ class DriverMysqlTest extends DatabaseMysqlCase
 		$objCompare->title = 'Testing3';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'three';
+		$objCompare->data = null;
 
 		$this->assertThat($result, $this->equalTo($objCompare), __LINE__);
 	}
@@ -464,6 +557,7 @@ class DriverMysqlTest extends DatabaseMysqlCase
 		$objCompare->title = 'Testing';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'one';
+		$objCompare->data = null;
 
 		$expected[] = clone $objCompare;
 
@@ -472,6 +566,7 @@ class DriverMysqlTest extends DatabaseMysqlCase
 		$objCompare->title = 'Testing2';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'one';
+		$objCompare->data = null;
 
 		$expected[] = clone $objCompare;
 
@@ -480,6 +575,7 @@ class DriverMysqlTest extends DatabaseMysqlCase
 		$objCompare->title = 'Testing3';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'three';
+		$objCompare->data = null;
 
 		$expected[] = clone $objCompare;
 
@@ -488,6 +584,7 @@ class DriverMysqlTest extends DatabaseMysqlCase
 		$objCompare->title = 'Testing4';
 		$objCompare->start_date = '1980-04-18 00:00:00';
 		$objCompare->description = 'four';
+		$objCompare->data = null;
 
 		$expected[] = clone $objCompare;
 
@@ -530,7 +627,7 @@ class DriverMysqlTest extends DatabaseMysqlCase
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadRow();
 
-		$expected = array(3, 'Testing3', '1980-04-18 00:00:00', 'three');
+		$expected = array(3, 'Testing3', '1980-04-18 00:00:00', 'three', null);
 
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
 	}
@@ -551,8 +648,101 @@ class DriverMysqlTest extends DatabaseMysqlCase
 		self::$driver->setQuery($query);
 		$result = self::$driver->loadRowList();
 
-		$expected = array(array(1, 'Testing', '1980-04-18 00:00:00', 'one'), array(2, 'Testing2', '1980-04-18 00:00:00', 'one'));
+		$expected = array(
+			array(1, 'Testing', '1980-04-18 00:00:00', 'one', null),
+			array(2, 'Testing2', '1980-04-18 00:00:00', 'one', null)
+		);
 
+		$this->assertThat($result, $this->equalTo($expected), __LINE__);
+	}
+
+	/**
+	 * Test quoteBinary and decodeBinary methods
+	 *
+	 * @return  void
+	 *
+	 * @since   1.7.0
+	 */
+	public function testLoadBinary()
+	{
+		// Add binary data with null byte
+		$query = self::$driver->getQuery(true)
+			->update('jos_dbtest')
+			->set('data = ' . self::$driver->quoteBinary("\x00\x01\x02\xff"))
+			->where('id = 3');
+
+		self::$driver->setQuery($query)->execute();
+
+		// Add binary data with invalid UTF-8
+		$query = self::$driver->getQuery(true)
+			->update('jos_dbtest')
+			->set('data = ' . self::$driver->quoteBinary("\x01\x01\x02\xff"))
+			->where('id = 4');
+
+		self::$driver->setQuery($query)->execute();
+
+		$selectRow3 = self::$driver->getQuery(true)
+			->select('id')
+			->from('jos_dbtest')
+			->where('data = ' . self::$driver->quoteBinary("\x00\x01\x02\xff"));
+
+		$selectRow4 = self::$driver->getQuery(true)
+			->select('id')
+			->from('jos_dbtest')
+			->where('data = '. self::$driver->quoteBinary("\x01\x01\x02\xff"));
+
+		$result = self::$driver->setQuery($selectRow3)->loadResult();
+		$this->assertThat($result, $this->equalTo(3), __LINE__);
+
+		$result = self::$driver->setQuery($selectRow4)->loadResult();
+		$this->assertThat($result, $this->equalTo(4), __LINE__);
+
+		$selectRows = self::$driver->getQuery(true)
+			->select('data')
+			->from('jos_dbtest')
+			->order('id');
+
+		// Test loadColumn
+		$result = self::$driver->setQuery($selectRows)->loadColumn();
+
+		foreach ($result as $i => $v)
+		{
+			$result[$i] = self::$driver->decodeBinary($v);
+		}
+
+		$expected = array(null, null, "\x00\x01\x02\xff", "\x01\x01\x02\xff");
+		$this->assertThat($result, $this->equalTo($expected), __LINE__);
+
+		// Test loadAssocList
+		$result = self::$driver->setQuery($selectRows)->loadAssocList();
+
+		foreach ($result as $i => $v)
+		{
+			$result[$i]['data'] = self::$driver->decodeBinary($v['data']);
+		}
+
+		$expected = array(
+			array('data' => null),
+			array('data' => null),
+			array('data' => "\x00\x01\x02\xff"),
+			array('data' => "\x01\x01\x02\xff"),
+		);
+		$this->assertThat($result, $this->equalTo($expected), __LINE__);
+
+		// Test loadObjectList
+		$result = self::$driver->setQuery($selectRows)->loadObjectList();
+
+		foreach ($result as $i => $v)
+		{
+			$result[$i]->data = self::$driver->decodeBinary($v->data);
+		}
+
+		$expected = array(
+			(object) array('data' => null),
+			(object) array('data' => null),
+			(object) array('data' => "\x00\x01\x02\xff"),
+			(object) array('data' => "\x01\x01\x02\xff"),
+		);
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
 	}
 
@@ -589,7 +779,7 @@ class DriverMysqlTest extends DatabaseMysqlCase
 
 		// Check name change
 		$tableList = self::$driver->getTableList();
-		$this->assertThat(in_array($newTableName, $tableList), $this->isTrue(), __LINE__);
+		$this->assertThat(\in_array($newTableName, $tableList, true), $this->isTrue(), __LINE__);
 
 		// Restore initial state
 		self::$driver->renameTable($newTableName, 'jos_dbtest');
@@ -646,7 +836,7 @@ class DriverMysqlTest extends DatabaseMysqlCase
 		self::$driver->setQuery($queryCheck);
 		$result = self::$driver->loadRow();
 
-		$expected = array('6', 'testTitle', '1970-01-01 00:00:00', 'testDescription');
+		$expected = array('6', 'testTitle', '1970-01-01 00:00:00', 'testDescription', null);
 
 		$this->assertThat($result, $this->equalTo($expected), __LINE__);
 	}
@@ -674,7 +864,7 @@ class DriverMysqlTest extends DatabaseMysqlCase
 		self::$driver->setQuery($queryIns)->execute();
 
 		/* create savepoint only if is passed by data provider */
-		if (!is_null($toSavepoint))
+		if (!\is_null($toSavepoint))
 		{
 			self::$driver->transactionStart((boolean) $toSavepoint);
 		}
@@ -689,7 +879,7 @@ class DriverMysqlTest extends DatabaseMysqlCase
 		self::$driver->transactionRollback((boolean) $toSavepoint);
 
 		/* release savepoint and commit only if a savepoint exists */
-		if (!is_null($toSavepoint))
+		if (!\is_null($toSavepoint))
 		{
 			self::$driver->transactionCommit();
 		}
@@ -705,7 +895,7 @@ class DriverMysqlTest extends DatabaseMysqlCase
 		self::$driver->setQuery($queryCheck);
 		$result = self::$driver->loadRowList();
 
-		$this->assertThat(count($result), $this->equalTo($tupleCount), __LINE__);
+		$this->assertThat(\count($result), $this->equalTo($tupleCount), __LINE__);
 	}
 
 	/**

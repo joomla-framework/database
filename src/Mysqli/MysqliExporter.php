@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -60,23 +60,23 @@ class MysqliExporter extends DatabaseExporter
 
 			// Get the details columns information.
 			$fields = $this->db->getTableColumns($table, false);
-			$keys = $this->db->getTableKeys($table);
+			$keys   = $this->db->getTableKeys($table);
 
 			$buffer[] = '  <table_structure name="' . $table . '">';
 
 			foreach ($fields as $field)
 			{
-				$buffer[] = '   <field Field="' . $field->Field . '"' . ' Type="' . $field->Type . '"' . ' Null="' . $field->Null . '"' . ' Key="' .
+				$buffer[] = '   <field Field="' . $field->Field . '" Type="' . $field->Type . '" Null="' . $field->Null . '" Key="' .
 					$field->Key . '"' . (isset($field->Default) ? ' Default="' . $field->Default . '"' : '') . ' Extra="' . $field->Extra . '"' .
 					' />';
 			}
 
 			foreach ($keys as $key)
 			{
-				$buffer[] = '   <key Table="' . $table . '"' . ' Non_unique="' . $key->Non_unique . '"' . ' Key_name="' . $key->Key_name . '"' .
-					' Seq_in_index="' . $key->Seq_in_index . '"' . ' Column_name="' . $key->Column_name . '"' . ' Collation="' . $key->Collation . '"' .
-					' Null="' . $key->Null . '"' . ' Index_type="' . $key->Index_type . '"' .
-					' Comment="' . htmlspecialchars($key->Comment, ENT_COMPAT, 'UTF-8') . '"' .
+				$buffer[] = '   <key Table="' . $table . '" Non_unique="' . $key->Non_unique . '" Key_name="' . $key->Key_name . '"' .
+					' Seq_in_index="' . $key->Seq_in_index . '" Column_name="' . $key->Column_name . '" Collation="' . $key->Collation . '"' .
+					' Null="' . $key->Null . '" Index_type="' . $key->Index_type . '"' .
+					' Comment="' . htmlspecialchars($key->Comment, \ENT_COMPAT, 'UTF-8') . '"' .
 					' />';
 			}
 

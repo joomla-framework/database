@@ -2,24 +2,24 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Pdo;
 
+use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Psr\Log;
-use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
+use Psr\Log;
 
 /**
  * Joomla Framework PDO Database Driver Class
  *
- * @see    http://php.net/pdo
+ * @link   https://www.php.net/pdo
  * @since  1.0
  */
 abstract class PdoDriver extends DatabaseDriver
@@ -31,6 +31,14 @@ abstract class PdoDriver extends DatabaseDriver
 	 * @since  1.0
 	 */
 	public $name = 'pdo';
+
+	/**
+	 * The database connection resource.
+	 *
+	 * @var    \PDO
+	 * @since  1.0
+	 */
+	protected $connection;
 
 	/**
 	 * The character(s) used to quote SQL statement names such as table names or field names,
@@ -55,7 +63,7 @@ abstract class PdoDriver extends DatabaseDriver
 	/**
 	 * The prepared statement.
 	 *
-	 * @var    resource
+	 * @var    \PDOStatement|boolean
 	 * @since  1.0
 	 */
 	protected $prepared;
@@ -78,14 +86,14 @@ abstract class PdoDriver extends DatabaseDriver
 	public function __construct($options)
 	{
 		// Get some basic values from the options.
-		$options['driver']        = (isset($options['driver'])) ? $options['driver'] : 'odbc';
-		$options['dsn']           = (isset($options['dsn'])) ? $options['dsn'] : '';
-		$options['host']          = (isset($options['host'])) ? $options['host'] : 'localhost';
-		$options['database']      = (isset($options['database'])) ? $options['database'] : '';
-		$options['user']          = (isset($options['user'])) ? $options['user'] : '';
-		$options['port']          = (isset($options['port'])) ? (int) $options['port'] : null;
-		$options['password']      = (isset($options['password'])) ? $options['password'] : '';
-		$options['driverOptions'] = (isset($options['driverOptions'])) ? $options['driverOptions'] : array();
+		$options['driver']        = isset($options['driver']) ? $options['driver'] : 'odbc';
+		$options['dsn']           = isset($options['dsn']) ? $options['dsn'] : '';
+		$options['host']          = isset($options['host']) ? $options['host'] : 'localhost';
+		$options['database']      = isset($options['database']) ? $options['database'] : '';
+		$options['user']          = isset($options['user']) ? $options['user'] : '';
+		$options['port']          = isset($options['port']) ? (int) $options['port'] : null;
+		$options['password']      = isset($options['password']) ? $options['password'] : '';
+		$options['driverOptions'] = isset($options['driverOptions']) ? $options['driverOptions'] : array();
 
 		// Finalize initialisation
 		parent::__construct($options);
@@ -126,113 +134,119 @@ abstract class PdoDriver extends DatabaseDriver
 		switch ($this->options['driver'])
 		{
 			case 'cubrid':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 33000;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 33000;
 
 				$format = 'cubrid:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
 
 				$replace = array('#HOST#', '#PORT#', '#DBNAME#');
-				$with = array($this->options['host'], $this->options['port'], $this->options['database']);
+				$with    = array($this->options['host'], $this->options['port'], $this->options['database']);
 
 				break;
 
 			case 'dblib':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 1433;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 1433;
 
 				$format = 'dblib:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
 
 				$replace = array('#HOST#', '#PORT#', '#DBNAME#');
-				$with = array($this->options['host'], $this->options['port'], $this->options['database']);
+				$with    = array($this->options['host'], $this->options['port'], $this->options['database']);
 
 				break;
 
 			case 'firebird':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 3050;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 3050;
 
 				$format = 'firebird:dbname=#DBNAME#';
 
 				$replace = array('#DBNAME#');
-				$with = array($this->options['database']);
+				$with    = array($this->options['database']);
 
 				break;
 
 			case 'ibm':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 56789;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 56789;
 
 				if (!empty($this->options['dsn']))
 				{
 					$format = 'ibm:DSN=#DSN#';
 
 					$replace = array('#DSN#');
-					$with = array($this->options['dsn']);
+					$with    = array($this->options['dsn']);
 				}
 				else
 				{
 					$format = 'ibm:hostname=#HOST#;port=#PORT#;database=#DBNAME#';
 
 					$replace = array('#HOST#', '#PORT#', '#DBNAME#');
-					$with = array($this->options['host'], $this->options['port'], $this->options['database']);
+					$with    = array($this->options['host'], $this->options['port'], $this->options['database']);
 				}
 
 				break;
 
 			case 'informix':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 1526;
-				$this->options['protocol'] = (isset($this->options['protocol'])) ? $this->options['protocol'] : 'onsoctcp';
+				$this->options['port']     = isset($this->options['port']) ? $this->options['port'] : 1526;
+				$this->options['protocol'] = isset($this->options['protocol']) ? $this->options['protocol'] : 'onsoctcp';
 
 				if (!empty($this->options['dsn']))
 				{
 					$format = 'informix:DSN=#DSN#';
 
 					$replace = array('#DSN#');
-					$with = array($this->options['dsn']);
+					$with    = array($this->options['dsn']);
 				}
 				else
 				{
 					$format = 'informix:host=#HOST#;service=#PORT#;database=#DBNAME#;server=#SERVER#;protocol=#PROTOCOL#';
 
 					$replace = array('#HOST#', '#PORT#', '#DBNAME#', '#SERVER#', '#PROTOCOL#');
-					$with = array($this->options['host'], $this->options['port'], $this->options['database'], $this->options['server'], $this->options['protocol']);
+					$with    = array(
+						$this->options['host'],
+						$this->options['port'],
+						$this->options['database'],
+						$this->options['server'],
+						$this->options['protocol'],
+					);
 				}
 
 				break;
 
 			case 'mssql':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 1433;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 1433;
 
 				$format = 'mssql:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
 
 				$replace = array('#HOST#', '#PORT#', '#DBNAME#');
-				$with = array($this->options['host'], $this->options['port'], $this->options['database']);
+				$with    = array($this->options['host'], $this->options['port'], $this->options['database']);
 
 				break;
 
 			case 'mysql':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 3306;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 3306;
 
 				$format = 'mysql:host=#HOST#;port=#PORT#;dbname=#DBNAME#;charset=#CHARSET#';
 
 				$replace = array('#HOST#', '#PORT#', '#DBNAME#', '#CHARSET#');
-				$with = array($this->options['host'], $this->options['port'], $this->options['database'], $this->options['charset']);
+				$with    = array($this->options['host'], $this->options['port'], $this->options['database'], $this->options['charset']);
 
 				break;
 
 			case 'oci':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 1521;
-				$this->options['charset'] = (isset($this->options['charset'])) ? $this->options['charset'] : 'AL32UTF8';
+				$this->options['port']    = isset($this->options['port']) ? $this->options['port'] : 1521;
+				$this->options['charset'] = isset($this->options['charset']) ? $this->options['charset'] : 'AL32UTF8';
 
 				if (!empty($this->options['dsn']))
 				{
 					$format = 'oci:dbname=#DSN#';
 
 					$replace = array('#DSN#');
-					$with = array($this->options['dsn']);
+					$with    = array($this->options['dsn']);
 				}
 				else
 				{
 					$format = 'oci:dbname=//#HOST#:#PORT#/#DBNAME#';
 
 					$replace = array('#HOST#', '#PORT#', '#DBNAME#');
-					$with = array($this->options['host'], $this->options['port'], $this->options['database']);
+					$with    = array($this->options['host'], $this->options['port'], $this->options['database']);
 				}
 
 				$format .= ';charset=' . $this->options['charset'];
@@ -243,17 +257,17 @@ abstract class PdoDriver extends DatabaseDriver
 				$format = 'odbc:DSN=#DSN#;UID:#USER#;PWD=#PASSWORD#';
 
 				$replace = array('#DSN#', '#USER#', '#PASSWORD#');
-				$with = array($this->options['dsn'], $this->options['user'], $this->options['password']);
+				$with    = array($this->options['dsn'], $this->options['user'], $this->options['password']);
 
 				break;
 
 			case 'pgsql':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 5432;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 5432;
 
 				$format = 'pgsql:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
 
 				$replace = array('#HOST#', '#PORT#', '#DBNAME#');
-				$with = array($this->options['host'], $this->options['port'], $this->options['database']);
+				$with    = array($this->options['host'], $this->options['port'], $this->options['database']);
 
 				break;
 
@@ -268,17 +282,17 @@ abstract class PdoDriver extends DatabaseDriver
 				}
 
 				$replace = array('#DBNAME#');
-				$with = array($this->options['database']);
+				$with    = array($this->options['database']);
 
 				break;
 
 			case 'sybase':
-				$this->options['port'] = (isset($this->options['port'])) ? $this->options['port'] : 1433;
+				$this->options['port'] = isset($this->options['port']) ? $this->options['port'] : 1433;
 
 				$format = 'mssql:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
 
 				$replace = array('#HOST#', '#PORT#', '#DBNAME#');
-				$with = array($this->options['host'], $this->options['port'], $this->options['database']);
+				$with    = array($this->options['host'], $this->options['port'], $this->options['database']);
 
 				break;
 
@@ -345,7 +359,7 @@ abstract class PdoDriver extends DatabaseDriver
 	 */
 	public function escape($text, $extra = false)
 	{
-		if (is_int($text) || is_float($text))
+		if (\is_int($text) || \is_float($text))
 		{
 			return $text;
 		}
@@ -358,7 +372,7 @@ abstract class PdoDriver extends DatabaseDriver
 	/**
 	 * Execute the SQL statement.
 	 *
-	 * @return  mixed  A database cursor resource on success, boolean false on failure.
+	 * @return  \PDOStatement|boolean  A database cursor resource on success, boolean false on failure.
 	 *
 	 * @since   1.0
 	 * @throws  \Exception
@@ -413,7 +427,7 @@ abstract class PdoDriver extends DatabaseDriver
 		{
 			// Get the error number and message before we execute any more queries.
 			$errorNum = (int) $this->connection->errorCode();
-			$errorMsg = (string) 'SQL: ' . implode(", ", $this->connection->errorInfo());
+			$errorMsg = (string) 'SQL: ' . implode(', ', $this->connection->errorInfo());
 
 			// Check if the server was disconnected.
 			if (!$this->connected())
@@ -425,11 +439,10 @@ abstract class PdoDriver extends DatabaseDriver
 					$this->connect();
 				}
 				catch (ConnectionFailureException $e)
-				// If connect fails, ignore that exception and throw the normal exception.
 				{
-					// Get the error number and message.
+					// If connect fails, ignore that exception and throw the normal exception.
 					$this->errorNum = (int) $this->connection->errorCode();
-					$this->errorMsg = (string) 'SQL: ' . implode(", ", $this->connection->errorInfo());
+					$this->errorMsg = (string) 'SQL: ' . implode(', ', $this->connection->errorInfo());
 
 					$this->log(
 						Log\LogLevel::ERROR,
@@ -443,22 +456,19 @@ abstract class PdoDriver extends DatabaseDriver
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
-			else
-			// The server was not disconnected.
-			{
-				// Get the error number and message from before we tried to reconnect.
-				$this->errorNum = $errorNum;
-				$this->errorMsg = $errorMsg;
 
-				// Throw the normal query exception.
-				$this->log(
-					Log\LogLevel::ERROR,
-					'Database query failed (error #{code}): {message}; Failed query: {sql}',
-					array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
-				);
+			// Get the error number and message from before we tried to reconnect.
+			$this->errorNum = $errorNum;
+			$this->errorMsg = $errorMsg;
 
-				throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
-			}
+			// Throw the normal query exception.
+			$this->log(
+				Log\LogLevel::ERROR,
+				'Database query failed (error #{code}): {message}; Failed query: {sql}',
+				array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
+			);
+
+			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
 		return $this->prepared;
@@ -466,7 +476,7 @@ abstract class PdoDriver extends DatabaseDriver
 
 	/**
 	 * Retrieve a PDO database connection attribute
-	 * http://www.php.net/manual/en/pdo.getattribute.php
+	 * https://www.php.net/manual/en/pdo.getattribute.php
 	 *
 	 * Usage: $db->getOption(PDO::ATTR_CASE);
 	 *
@@ -488,7 +498,7 @@ abstract class PdoDriver extends DatabaseDriver
 	 *
 	 * @return  string  The database connector version.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function getVersion()
 	{
@@ -511,7 +521,7 @@ abstract class PdoDriver extends DatabaseDriver
 
 	/**
 	 * Sets an attribute on the PDO database handle.
-	 * http://www.php.net/manual/en/pdo.setattribute.php
+	 * https://www.php.net/manual/en/pdo.setattribute.php
 	 *
 	 * Usage: $db->setOption(PDO::ATTR_CASE, PDO::CASE_UPPER);
 	 *
@@ -541,7 +551,7 @@ abstract class PdoDriver extends DatabaseDriver
 	 */
 	public static function isSupported()
 	{
-		return defined('\\PDO::ATTR_DRIVER_NAME');
+		return \defined('\\PDO::ATTR_DRIVER_NAME');
 	}
 
 	/**
@@ -564,9 +574,9 @@ abstract class PdoDriver extends DatabaseDriver
 		}
 
 		// Backup the query state.
-		$sql = $this->sql;
-		$limit = $this->limit;
-		$offset = $this->offset;
+		$sql      = $this->sql;
+		$limit    = $this->limit;
+		$offset   = $this->offset;
 		$prepared = $this->prepared;
 
 		try
@@ -579,16 +589,16 @@ abstract class PdoDriver extends DatabaseDriver
 			$status = (bool) $this->loadResult();
 		}
 		catch (\Exception $e)
-		// If we catch an exception here, we must not be connected.
 		{
+			// If we catch an exception here, we must not be connected.
 			$status = false;
 		}
 
 		// Restore the query state.
-		$this->sql = $sql;
-		$this->limit = $limit;
-		$this->offset = $offset;
-		$this->prepared = $prepared;
+		$this->sql         = $sql;
+		$this->limit       = $limit;
+		$this->offset      = $offset;
+		$this->prepared    = $prepared;
 		$checkingConnected = false;
 
 		return $status;
@@ -690,13 +700,13 @@ abstract class PdoDriver extends DatabaseDriver
 
 		$this->freeResult();
 
-		if (is_string($query))
+		if (\is_string($query))
 		{
 			// Allows taking advantage of bound variables in a direct query:
 			$query = $this->getQuery(true)->setQuery($query);
 		}
 
-		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
+		if ($query instanceof LimitableInterface && $offset !== null && $limit !== null)
 		{
 			$query->setLimit($limit, $offset);
 		}
@@ -737,7 +747,7 @@ abstract class PdoDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		if (!$toSavepoint || $this->transactionDepth == 1)
+		if (!$toSavepoint || $this->transactionDepth === 1)
 		{
 			$this->connection->commit();
 		}
@@ -759,7 +769,7 @@ abstract class PdoDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		if (!$toSavepoint || $this->transactionDepth == 1)
+		if (!$toSavepoint || $this->transactionDepth === 1)
 		{
 			$this->connection->rollBack();
 		}
@@ -897,7 +907,7 @@ abstract class PdoDriver extends DatabaseDriver
 		// Execute the query and get the result set cursor.
 		if (!$this->executed)
 		{
-			if (!($this->execute()))
+			if (!$this->execute())
 			{
 				return $this->errorNum ? null : false;
 			}
@@ -936,9 +946,9 @@ abstract class PdoDriver extends DatabaseDriver
 		foreach ($properties as $property)
 		{
 			// Do not serialize properties that are PDO
-			if ($property->isStatic() == false && !($this->{$property->name} instanceof \PDO))
+			if ($property->isStatic() === false && !($this->{$property->name} instanceof \PDO))
 			{
-				array_push($serializedProperties, $property->name);
+				$serializedProperties[] = $property->name;
 			}
 		}
 
@@ -948,7 +958,7 @@ abstract class PdoDriver extends DatabaseDriver
 	/**
 	 * Wake up after serialization
 	 *
-	 * @return  array
+	 * @return  void
 	 *
 	 * @since   1.0
 	 */

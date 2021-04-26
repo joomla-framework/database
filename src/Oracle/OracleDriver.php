@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -13,8 +13,9 @@ use Joomla\Database\Pdo\PdoDriver;
 /**
  * Oracle Database Driver supporting PDO based connections
  *
- * @see    http://php.net/manual/en/ref.pdo-oci.php
- * @since  1.0
+ * @link        https://www.php.net/manual/en/ref.pdo-oci.php
+ * @since       1.0
+ * @deprecated  2.0  Oracle support will be removed.
  */
 class OracleDriver extends PdoDriver
 {
@@ -62,11 +63,11 @@ class OracleDriver extends PdoDriver
 	 */
 	public function __construct($options)
 	{
-		$options['driver'] = 'oci';
-		$options['charset']    = (isset($options['charset'])) ? $options['charset']   : 'AL32UTF8';
-		$options['dateformat'] = (isset($options['dateformat'])) ? $options['dateformat'] : 'RRRR-MM-DD HH24:MI:SS';
+		$options['driver']     = 'oci';
+		$options['charset']    = isset($options['charset']) ? $options['charset'] : 'AL32UTF8';
+		$options['dateformat'] = isset($options['dateformat']) ? $options['dateformat'] : 'RRRR-MM-DD HH24:MI:SS';
 
-		$this->charset = $options['charset'];
+		$this->charset    = $options['charset'];
 		$this->dateformat = $options['dateformat'];
 
 		// Finalize initialisation
@@ -139,7 +140,7 @@ class OracleDriver extends PdoDriver
 	{
 		$this->connect();
 
-		/* @type  OracleQuery  $query */
+		/** @var OracleQuery $query */
 		$query = $this->getQuery(true);
 
 		$query->setQuery('DROP TABLE :tableName');
@@ -155,7 +156,7 @@ class OracleDriver extends PdoDriver
 	/**
 	 * Method to get the database collation in use by sampling a text field of a table in the database.
 	 *
-	 * @return  mixed  The collation in use by the database or boolean false if not supported.
+	 * @return  string|boolean  The collation in use by the database or boolean false if not supported.
 	 *
 	 * @since   1.0
 	 */
@@ -174,6 +175,19 @@ class OracleDriver extends PdoDriver
 	public function getConnectedQuery()
 	{
 		return 'SELECT 1 FROM dual';
+	}
+
+	/**
+	 * Method to get the database connection collation in use by sampling a text field of a table in the database.
+	 *
+	 * @return  string|boolean  The collation in use by the database connection (string) or boolean false if not supported.
+	 *
+	 * @since   1.6.0
+	 * @throws  \RuntimeException
+	 */
+	public function getConnectionCollation()
+	{
+		return $this->charset;
 	}
 
 	/**
@@ -211,22 +225,24 @@ class OracleDriver extends PdoDriver
 
 		$result = array();
 
-		/* @type  OracleQuery  $query */
+		/** @var OracleQuery $query */
 		$query = $this->getQuery(true);
 
 		$query->select('dbms_metadata.get_ddl(:type, :tableName)');
 		$query->from('dual');
 
-		$query->bind(':type', 'TABLE');
+		$type = 'TABLE';
+		$query->bind(':type', $type);
 
 		// Sanitize input to an array and iterate over the list.
-		settype($tables, 'array');
+		$tables = (array) $tables;
 
 		foreach ($tables as $table)
 		{
 			$query->bind(':tableName', $table);
 			$this->setQuery($query);
-			$statement = (string) $this->loadResult();
+
+			$statement      = (string) $this->loadResult();
 			$result[$table] = $statement;
 		}
 
@@ -250,7 +266,7 @@ class OracleDriver extends PdoDriver
 
 		$columns = array();
 
-		/* @type  OracleQuery  $query */
+		/** @var OracleQuery $query */
 		$query = $this->getQuery(true);
 
 		$fieldCasing = $this->getOption(\PDO::ATTR_CASE);
@@ -279,7 +295,7 @@ class OracleDriver extends PdoDriver
 		{
 			foreach ($fields as $field)
 			{
-				$columns[$field->COLUMN_NAME] = $field;
+				$columns[$field->COLUMN_NAME]          = $field;
 				$columns[$field->COLUMN_NAME]->Default = null;
 			}
 		}
@@ -303,7 +319,7 @@ class OracleDriver extends PdoDriver
 	{
 		$this->connect();
 
-		/* @type  OracleQuery  $query */
+		/** @var OracleQuery $query */
 		$query = $this->getQuery(true);
 
 		$fieldCasing = $this->getOption(\PDO::ATTR_CASE);
@@ -340,7 +356,7 @@ class OracleDriver extends PdoDriver
 	{
 		$this->connect();
 
-		/* @type  OracleQuery  $query */
+		/** @var OracleQuery $query */
 		$query = $this->getQuery(true);
 
 		if ($includeDatabaseName)
@@ -523,7 +539,7 @@ class OracleDriver extends PdoDriver
 	 */
 	public static function isSupported()
 	{
-		return class_exists('\\PDO') && in_array('oci', \PDO::getAvailableDrivers());
+		return class_exists('\\PDO') && \in_array('oci', \PDO::getAvailableDrivers(), true);
 	}
 
 	/**
@@ -539,13 +555,13 @@ class OracleDriver extends PdoDriver
 	 */
 	public function replacePrefix($sql, $prefix = '#__')
 	{
-		$escaped = false;
-		$startPos = 0;
+		$escaped   = false;
+		$startPos  = 0;
 		$quoteChar = "'";
-		$literal = '';
+		$literal   = '';
 
 		$sql = trim($sql);
-		$n = strlen($sql);
+		$n   = \strlen($sql);
 
 		while ($startPos < $n)
 		{
@@ -576,7 +592,7 @@ class OracleDriver extends PdoDriver
 			// Quote comes first, find end of quote
 			while (true)
 			{
-				$k = strpos($sql, $quoteChar, $j);
+				$k       = strpos($sql, $quoteChar, $j);
 				$escaped = false;
 
 				if ($k === false)
@@ -586,7 +602,7 @@ class OracleDriver extends PdoDriver
 
 				$l = $k - 1;
 
-				while ($l >= 0 && $sql{$l} == '\\')
+				while ($l >= 0 && $sql[$l] === '\\')
 				{
 					$l--;
 					$escaped = !$escaped;
@@ -595,6 +611,7 @@ class OracleDriver extends PdoDriver
 				if ($escaped)
 				{
 					$j = $k + 1;
+
 					continue;
 				}
 

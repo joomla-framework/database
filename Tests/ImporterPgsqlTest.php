@@ -1,10 +1,12 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Tests;
+
+use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/ImporterPgsqlInspector.php';
 
@@ -13,7 +15,7 @@ require_once __DIR__ . '/ImporterPgsqlInspector.php';
  *
  * @since  1.0
  */
-class ImporterPgsqlTest extends \PHPUnit_Framework_TestCase
+class ImporterPgsqlTest extends TestCase
 {
 	/**
 	 * @var    object  The mocked database object for use by test methods.
@@ -286,10 +288,10 @@ class ImporterPgsqlTest extends \PHPUnit_Framework_TestCase
 
 		$addSequence = 'CREATE SEQUENCE jos_dbtest_title_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 ' .
 			'NO CYCLE OWNED BY "public.jos_dbtest.title"';
-		$changeCol = "ALTER TABLE \"jos_test\" ALTER COLUMN \"title\"  TYPE character " .
+		$changeCol = 'ALTER TABLE "jos_test" ALTER COLUMN "title"  TYPE character ' .
 			"varying(50),\nALTER COLUMN \"title\" SET NOT NULL,\nALTER COLUMN \"title\" SET DEFAULT 'add default'";
-		$changeSeq = "CREATE SEQUENCE jos_dbtest_title_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 " .
-			"START 1 NO CYCLE OWNED BY \"public.jos_dbtest.title\"";
+		$changeSeq = 'CREATE SEQUENCE jos_dbtest_title_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 ' .
+			'START 1 NO CYCLE OWNED BY "public.jos_dbtest.title"';
 
 		return array(
 			array(
@@ -348,7 +350,7 @@ class ImporterPgsqlTest extends \PHPUnit_Framework_TestCase
 				// Drop idx
 				new \SimpleXmlElement('<table_structure name="#__test">' . $s1 . $f1 . $f2 . $k1 . '</table_structure>'),
 				array(
-					"DROP INDEX \"jos_dbtest_idx_name\""
+					'DROP INDEX "jos_dbtest_idx_name"'
 				),
 				'getAlterTableSQL should change sequence.'
 			),
@@ -379,14 +381,14 @@ class ImporterPgsqlTest extends \PHPUnit_Framework_TestCase
 				new \SimpleXmlElement('<table_structure name="#__test">' . $s2 . $f1 . $f2 . $k1 . $k2 . '</table_structure>'),
 				array(
 					$changeSeq,
-					"DROP SEQUENCE \"jos_dbtest_id_seq\"",),
+					'DROP SEQUENCE "jos_dbtest_id_seq"',),
 				'getAlterTableSQL should change sequence.'
 			),
 			array(
 				// Change idx
 				new \SimpleXmlElement('<table_structure name="#__test">' . $s1 . $f1 . $f2 . $k1 . $k3 . '</table_structure>'),
 				array(
-					"CREATE INDEX jos_dbtest_idx_title ON jos_dbtest USING btree (title)",
+					'CREATE INDEX jos_dbtest_idx_title ON jos_dbtest USING btree (title)',
 					'DROP INDEX "jos_dbtest_idx_name"'
 				),
 				'getAlterTableSQL should change index.'
@@ -698,7 +700,7 @@ class ImporterPgsqlTest extends \PHPUnit_Framework_TestCase
 					new \SimpleXmlElement($xmlIndex)
 			),
 			$this->equalTo(
-				"CREATE INDEX jos_dbtest_idx_name ON jos_dbtest USING btree (name)"
+				'CREATE INDEX jos_dbtest_idx_name ON jos_dbtest USING btree (name)'
 			),
 			'testGetAddIndexSQL did not yield the expected result.'
 		);
@@ -708,7 +710,7 @@ class ImporterPgsqlTest extends \PHPUnit_Framework_TestCase
 					new \SimpleXmlElement($xmlPrimaryKey)
 			),
 			$this->equalTo(
-				"ALTER TABLE jos_dbtest ADD PRIMARY KEY (id)"
+				'ALTER TABLE jos_dbtest ADD PRIMARY KEY (id)'
 			),
 			'testGetAddIndexSQL did not yield the expected result.'
 		);

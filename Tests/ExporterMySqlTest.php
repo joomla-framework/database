@@ -1,10 +1,12 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Tests;
+
+use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/ExporterMySqlInspector.php';
 
@@ -13,7 +15,7 @@ require_once __DIR__ . '/ExporterMySqlInspector.php';
  *
  * @since  1.0
  */
-class ExporterMySqlTest extends \PHPUnit_Framework_TestCase
+class ExporterMySqlTest extends TestCase
 {
 	/**
 	 * @var    object  The mocked database object for use by test methods.

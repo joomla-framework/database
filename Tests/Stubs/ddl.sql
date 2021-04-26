@@ -177,7 +177,7 @@ CREATE TABLE `jos_languages` (
   `metadesc` TEXT NOT NULL DEFAULT '',
   `sitename` varchar(1024) NOT NULL default '',
   `published` INTEGER NOT NULL DEFAULT '0',
-  `ordering` int(11) NOT NULL default '0',
+  `ordering` INTEGER NOT NULL default '0',
   CONSTRAINT `idx_languages_sef` UNIQUE (`sef`)
   CONSTRAINT `idx_languages_image` UNIQUE (`image`)
   CONSTRAINT `idx_languages_lang_code` UNIQUE (`lang_code`)
@@ -484,7 +484,8 @@ CREATE TABLE `jos_dbtest` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `title` TEXT NOT NULL DEFAULT '',
   `start_date` TEXT NOT NULL DEFAULT '',
-  `description` TEXT NOT NULL DEFAULT ''
+  `description` TEXT NOT NULL DEFAULT '',
+  `data` BLOB
 );
 
 

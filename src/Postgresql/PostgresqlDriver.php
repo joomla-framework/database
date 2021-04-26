@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -20,7 +20,8 @@ use Psr\Log;
 /**
  * PostgreSQL Database Driver
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Use the PDO PostgreSQL driver instead
  */
 class PostgresqlDriver extends DatabaseDriver
 {
@@ -56,7 +57,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 * The prepared statement.
 	 *
 	 * @var    resource
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $prepared;
 
@@ -64,7 +65,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 * Contains the current query execution status
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $executed = false;
 
@@ -72,7 +73,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 * Contains the name of the prepared query
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $queryName = 'query';
 
@@ -98,7 +99,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 * @var    PostgresqlQuery
 	 * @since  1.0
 	 */
-	protected $queryObject = null;
+	protected $queryObject;
 
 	/**
 	 * Database object constructor
@@ -107,13 +108,13 @@ class PostgresqlDriver extends DatabaseDriver
 	 *
 	 * @since	1.0
 	 */
-	public function __construct( $options )
+	public function __construct($options)
 	{
-		$options['host'] = (isset($options['host'])) ? $options['host'] : 'localhost';
-		$options['user'] = (isset($options['user'])) ? $options['user'] : '';
-		$options['password'] = (isset($options['password'])) ? $options['password'] : '';
-		$options['database'] = (isset($options['database'])) ? $options['database'] : '';
-		$options['port'] = (isset($options['port'])) ? $options['port'] : null;
+		$options['host']     = isset($options['host']) ? $options['host'] : 'localhost';
+		$options['user']     = isset($options['user']) ? $options['user'] : '';
+		$options['password'] = isset($options['password']) ? $options['password'] : '';
+		$options['database'] = isset($options['database']) ? $options['database'] : '';
+		$options['port']     = isset($options['port']) ? $options['port'] : null;
 
 		// Finalize initialization
 		parent::__construct($options);
@@ -151,12 +152,12 @@ class PostgresqlDriver extends DatabaseDriver
 		}
 
 		/*
-		 * pg_connect() takes the port as separate argument. Therefore, we
+		 * The pg_connect() function takes the port as separate argument. Therefore, we
 		 * have to extract it from the host string (if povided).
 		 */
 
 		// Check for empty port
-		if (!($this->options['port']))
+		if (!$this->options['port'])
 		{
 			// Port is empty or not set via options, check for port annotation (:) in the host string
 			$tmp = substr(strstr($this->options['host'], ':'), 1);
@@ -170,10 +171,10 @@ class PostgresqlDriver extends DatabaseDriver
 				}
 
 				// Extract the host name
-				$this->options['host'] = substr($this->options['host'], 0, strlen($this->options['host']) - (strlen($tmp) + 1));
+				$this->options['host'] = substr($this->options['host'], 0, \strlen($this->options['host']) - (\strlen($tmp) + 1));
 
 				// This will take care of the following notation: ":5432"
-				if ($this->options['host'] == '')
+				if ($this->options['host'] === '')
 				{
 					$this->options['host'] = 'localhost';
 				}
@@ -198,9 +199,10 @@ class PostgresqlDriver extends DatabaseDriver
 			throw new ConnectionFailureException('Error connecting to PGSQL database.');
 		}
 
-		pg_set_error_verbosity($this->connection, PGSQL_ERRORS_DEFAULT);
+		pg_set_error_verbosity($this->connection, \PGSQL_ERRORS_DEFAULT);
 		pg_query($this->connection, 'SET standard_conforming_strings=off');
 		pg_query($this->connection, 'SET escape_string_warning=off');
+		pg_query($this->connection, 'SET bytea_output=escape');
 	}
 
 	/**
@@ -213,7 +215,7 @@ class PostgresqlDriver extends DatabaseDriver
 	public function disconnect()
 	{
 		// Close the connection.
-		if (is_resource($this->connection))
+		if (\is_resource($this->connection))
 		{
 			pg_close($this->connection);
 		}
@@ -269,7 +271,7 @@ class PostgresqlDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		if (is_resource($this->connection))
+		if (\is_resource($this->connection))
 		{
 			return pg_ping($this->connection);
 		}
@@ -315,7 +317,7 @@ class PostgresqlDriver extends DatabaseDriver
 	/**
 	 * Method to get the database collation in use by sampling a text field of a table in the database.
 	 *
-	 * @return  mixed  The collation in use by the database or boolean false if not supported.
+	 * @return  string|boolean  The collation in use by the database or boolean false if not supported.
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -334,9 +336,9 @@ class PostgresqlDriver extends DatabaseDriver
 	 * Method to get the database connection collation, as reported by the driver. If the connector doesn't support
 	 * reporting this value please return an empty string.
 	 *
-	 * @return  string
+	 * @return  string|boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function getConnectionCollation()
 	{
@@ -384,17 +386,13 @@ class PostgresqlDriver extends DatabaseDriver
 
 			return $this->queryObject;
 		}
-		else
+
+		if ($asObj)
 		{
-			if ($asObj)
-			{
-				return $this->queryObject;
-			}
-			else
-			{
-				return $this->sql;
-			}
+			return $this->queryObject;
 		}
+
+		return $this->sql;
 	}
 
 	/**
@@ -417,7 +415,7 @@ class PostgresqlDriver extends DatabaseDriver
 	/**
 	 * Retrieves field information about a given table.
 	 *
-	 * @param   string   $table     The name of the database table.
+	 * @param   string   $table     The name of the database table. For PostgreSQL may start with a schema.
 	 * @param   boolean  $typeOnly  True to only return field types.
 	 *
 	 * @return  array  An array of fields for the database table.
@@ -430,8 +428,18 @@ class PostgresqlDriver extends DatabaseDriver
 		$this->connect();
 
 		$result = array();
-
 		$tableSub = $this->replacePrefix($table);
+		$fn = explode('.', $tableSub);
+
+		if (count($fn) === 2)
+		{
+			$schema = $fn[0];
+			$tableSub = $fn[1];
+		}
+		else
+		{
+			$schema = $this->getDefaultSchema();
+		}
 
 		$this->setQuery('
 			SELECT a.attname AS "column_name",
@@ -453,7 +461,7 @@ class PostgresqlDriver extends DatabaseDriver
 			WHERE a.attrelid =
 				(SELECT oid FROM pg_catalog.pg_class WHERE relname=' . $this->quote($tableSub) . '
 					AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE
-					nspname = \'public\')
+					nspname = ' . $this->quote($schema) . ')
 				)
 			AND a.attnum > 0 AND NOT a.attisdropped
 			ORDER BY a.attnum'
@@ -465,44 +473,44 @@ class PostgresqlDriver extends DatabaseDriver
 		{
 			foreach ($fields as $field)
 			{
-				$result[$field->column_name] = preg_replace("/[(0-9)]/", '', $field->type);
+				$result[$field->column_name] = preg_replace('/[(0-9)]/', '', $field->type);
 			}
 		}
 		else
 		{
 			foreach ($fields as $field)
 			{
-				if (stristr(strtolower($field->type), "character varying"))
+				if (stristr(strtolower($field->type), 'character varying'))
 				{
-					$field->Default = "";
+					$field->Default = '';
 				}
 
-				if (stristr(strtolower($field->type), "text"))
+				if (stristr(strtolower($field->type), 'text'))
 				{
-					$field->Default = "";
+					$field->Default = '';
 				}
 
 				// Do some dirty translation to MySQL output.
 				// @todo: Come up with and implement a standard across databases.
 				$result[$field->column_name] = (object) array(
 					'column_name' => $field->column_name,
-					'type' => $field->type,
-					'null' => $field->null,
-					'Default' => $field->Default,
-					'comments' => '',
-					'Field' => $field->column_name,
-					'Type' => $field->type,
-					'Null' => $field->null,
+					'type'        => $field->type,
+					'null'        => $field->null,
+					'Default'     => $field->Default,
+					'comments'    => '',
+					'Field'       => $field->column_name,
+					'Type'        => $field->type,
+					'Null'        => $field->null,
 					// @todo: Improve query above to return primary key info as well
 					// 'Key' => ($field->PK == '1' ? 'PRI' : '')
 				);
 			}
 		}
 
-		/* Change Postgresql's NULL::* type with PHP's null one */
+		// Change Postgresql's NULL::* type with PHP's null one
 		foreach ($fields as $field)
 		{
-			if (preg_match("/^NULL::*/", $field->Default))
+			if (preg_match('/^NULL::*/', $field->Default))
 			{
 				$field->Default = null;
 			}
@@ -528,7 +536,7 @@ class PostgresqlDriver extends DatabaseDriver
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
-		if ( in_array($table, $tableList) )
+		if (\in_array($table, $tableList, true))
 		{
 			// Get the details columns information.
 			$this->setQuery('
@@ -543,9 +551,8 @@ class PostgresqlDriver extends DatabaseDriver
 				LEFT JOIN pg_index AS pgIndex ON pgClassFirst.oid=pgIndex.indexrelid
 				WHERE tablename=' . $this->quote($table) . ' ORDER BY indkey'
 			);
-			$keys = $this->loadObjectList();
 
-			return $keys;
+			return $this->loadObjectList();
 		}
 
 		return false;
@@ -573,9 +580,8 @@ class PostgresqlDriver extends DatabaseDriver
 			->order('table_name ASC');
 
 		$this->setQuery($query);
-		$tables = $this->loadColumn();
 
-		return $tables;
+		return $this->loadColumn();
 	}
 
 	/**
@@ -595,12 +601,14 @@ class PostgresqlDriver extends DatabaseDriver
 		// To check if table exists and prevent SQL injection
 		$tableList = $this->getTableList();
 
-		if ( in_array($table, $tableList) )
+		if (\in_array($table, $tableList, true))
 		{
 			$name = array('s.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
-							'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option');
+				'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option',
+			);
 			$as = array('sequence', 'schema', 'table', 'column', 'data_type',
-							'minimum_value', 'maximum_value', 'increment', 'cycle_option');
+				'minimum_value', 'maximum_value', 'increment', 'cycle_option',
+			);
 
 			if (version_compare($this->getVersion(), '9.1.0') >= 0)
 			{
@@ -619,9 +627,8 @@ class PostgresqlDriver extends DatabaseDriver
 				->leftJoin('information_schema.sequences AS info ON info.sequence_name=s.relname')
 				->where("s.relkind='S' AND d.deptype='a' AND t.relname=" . $this->quote($table));
 			$this->setQuery($query);
-			$seq = $this->loadObjectList();
 
-			return $seq;
+			return $this->loadObjectList();
 		}
 
 		return false;
@@ -676,21 +683,21 @@ class PostgresqlDriver extends DatabaseDriver
 	{
 		$this->connect();
 		$insertQuery = $this->getQuery(false, true);
-		$table = $insertQuery->insert->getElements();
+		$table       = $insertQuery->insert->getElements();
 
-		/* find sequence column name */
+		// Find sequence column name
 		$colNameQuery = $this->getQuery(true);
 		$colNameQuery->select('column_default')
 			->from('information_schema.columns')
 			->where(
-				"table_name=" . $this->quote(
+				'table_name=' . $this->quote(
 					$this->replacePrefix(str_replace('"', '', $table[0]))
 				), 'AND'
 			)
 			->where("column_default LIKE '%nextval%'");
 
 		$this->setQuery($colNameQuery);
-		$colName = $this->loadRow();
+		$colName        = $this->loadRow();
 		$changedColName = str_replace('nextval', 'currval', $colName);
 
 		$insertidQuery = $this->getQuery(true);
@@ -722,7 +729,7 @@ class PostgresqlDriver extends DatabaseDriver
 	/**
 	 * Execute the SQL statement.
 	 *
-	 * @return  mixed  A database cursor resource on success, boolean false on failure.
+	 * @return  resource|boolean  A database cursor resource on success, boolean false on failure.
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -759,7 +766,7 @@ class PostgresqlDriver extends DatabaseDriver
 		{
 			$bounded =& $this->sql->getBounded();
 
-			if (count($bounded))
+			if (\count($bounded))
 			{
 				// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
 				$this->cursor = @pg_execute($this->connection, $this->queryName . $count, array_values($bounded));
@@ -789,15 +796,14 @@ class PostgresqlDriver extends DatabaseDriver
 					$this->connect();
 				}
 				catch (ConnectionFailureException $e)
-				// If connect fails, ignore that exception and throw the normal exception.
 				{
-					// Get the error number and message.
+					// If connect fails, ignore that exception and throw the normal exception.
 					$this->errorMsg = pg_last_error($this->connection);
 
 					// Only get an error number if we have a non-boolean false cursor, otherwise use default 0
 					if ($this->cursor !== false)
 					{
-						$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
+						$this->errorNum = (int) pg_result_error_field($this->cursor, \PGSQL_DIAG_SQLSTATE);
 					}
 
 					// Throw the normal query exception.
@@ -813,22 +819,19 @@ class PostgresqlDriver extends DatabaseDriver
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
-			else
+
 			// The server was not disconnected.
-			{
-				// Get the error number and message.
-				$this->errorNum = (int) pg_result_error_field($this->cursor, PGSQL_DIAG_SQLSTATE);
-				$this->errorMsg = pg_last_error($this->connection);
+			$this->errorNum = (int) pg_result_error_field($this->cursor, \PGSQL_DIAG_SQLSTATE);
+			$this->errorMsg = pg_last_error($this->connection);
 
-				// Throw the normal query exception.
-				$this->log(
-					Log\LogLevel::ERROR,
-					'Database query failed (error #{code}): {message}; Failed query: {sql}',
-					array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
-				);
+			// Throw the normal query exception.
+			$this->log(
+				Log\LogLevel::ERROR,
+				'Database query failed (error #{code}): {message}; Failed query: {sql}',
+				array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
+			);
 
-				throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
-			}
+			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
 		return $this->cursor;
@@ -855,60 +858,58 @@ class PostgresqlDriver extends DatabaseDriver
 		$tableList = $this->getTableList();
 
 		// Origin Table does not exist
-		if ( !in_array($oldTable, $tableList) )
+		if (!\in_array($oldTable, $tableList, true))
 		{
 			// Origin Table not found
 			throw new \RuntimeException('Table not found in Postgresql database.');
 		}
-		else
+
+		// Rename indexes
+		$this->setQuery(
+			'SELECT relname
+				FROM pg_class
+				WHERE oid IN (
+					SELECT indexrelid
+					FROM pg_index, pg_class
+					WHERE pg_class.relname=' . $this->quote($oldTable, true) . '
+					AND pg_class.oid=pg_index.indrelid );'
+		);
+
+		$oldIndexes = $this->loadColumn();
+
+		foreach ($oldIndexes as $oldIndex)
 		{
-			/* Rename indexes */
-			$this->setQuery(
-				'SELECT relname
-					FROM pg_class
-					WHERE oid IN (
-						SELECT indexrelid
-						FROM pg_index, pg_class
-						WHERE pg_class.relname=' . $this->quote($oldTable, true) . '
-						AND pg_class.oid=pg_index.indrelid );'
-			);
-
-			$oldIndexes = $this->loadColumn();
-
-			foreach ($oldIndexes as $oldIndex)
-			{
-				$changedIdxName = str_replace($oldTable, $newTable, $oldIndex);
-				$this->setQuery('ALTER INDEX ' . $this->escape($oldIndex) . ' RENAME TO ' . $this->escape($changedIdxName));
-				$this->execute();
-			}
-
-			/* Rename sequence */
-			$this->setQuery(
-				'SELECT relname
-					FROM pg_class
-					WHERE relkind = \'S\'
-					AND relnamespace IN (
-						SELECT oid
-						FROM pg_namespace
-						WHERE nspname NOT LIKE \'pg_%\'
-						AND nspname != \'information_schema\'
-					)
-					AND relname LIKE \'%' . $oldTable . '%\' ;'
-			);
-
-			$oldSequences = $this->loadColumn();
-
-			foreach ($oldSequences as $oldSequence)
-			{
-				$changedSequenceName = str_replace($oldTable, $newTable, $oldSequence);
-				$this->setQuery('ALTER SEQUENCE ' . $this->escape($oldSequence) . ' RENAME TO ' . $this->escape($changedSequenceName));
-				$this->execute();
-			}
-
-			/* Rename table */
-			$this->setQuery('ALTER TABLE ' . $this->escape($oldTable) . ' RENAME TO ' . $this->escape($newTable));
+			$changedIdxName = str_replace($oldTable, $newTable, $oldIndex);
+			$this->setQuery('ALTER INDEX ' . $this->escape($oldIndex) . ' RENAME TO ' . $this->escape($changedIdxName));
 			$this->execute();
 		}
+
+		// Rename sequence
+		$this->setQuery(
+			'SELECT relname
+				FROM pg_class
+				WHERE relkind = \'S\'
+				AND relnamespace IN (
+					SELECT oid
+					FROM pg_namespace
+					WHERE nspname NOT LIKE \'pg_%\'
+					AND nspname != \'information_schema\'
+				)
+				AND relname LIKE \'%' . $oldTable . '%\' ;'
+		);
+
+		$oldSequences = $this->loadColumn();
+
+		foreach ($oldSequences as $oldSequence)
+		{
+			$changedSequenceName = str_replace($oldTable, $newTable, $oldSequence);
+			$this->setQuery('ALTER SEQUENCE ' . $this->escape($oldSequence) . ' RENAME TO ' . $this->escape($changedSequenceName));
+			$this->execute();
+		}
+
+		// Rename table
+		$this->setQuery('ALTER TABLE ' . $this->escape($oldTable) . ' RENAME TO ' . $this->escape($newTable));
+		$this->execute();
 
 		return true;
 	}
@@ -936,7 +937,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 *
 	 * @return  PostgresqlDriver  This object to support method chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function setQuery($query, $offset = null, $limit = null)
 	{
@@ -944,13 +945,13 @@ class PostgresqlDriver extends DatabaseDriver
 
 		$this->freeResult();
 
-		if (is_string($query))
+		if (\is_string($query))
 		{
 			// Allows taking advantage of bound variables in a direct query:
 			$query = $this->getQuery(true)->setQuery($query);
 		}
 
-		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
+		if ($query instanceof LimitableInterface && $offset !== null && $limit !== null)
 		{
 			$query->setLimit($limit, $offset);
 		}
@@ -974,7 +975,7 @@ class PostgresqlDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		if (!function_exists('pg_set_client_encoding'))
+		if (!\function_exists('pg_set_client_encoding'))
 		{
 			return -1;
 		}
@@ -985,29 +986,30 @@ class PostgresqlDriver extends DatabaseDriver
 	/**
 	 * This function return a field value as a prepared string to be used in a SQL statement.
 	 *
-	 * @param   array   $columns      Array of table's column returned by ::getTableColumns.
-	 * @param   string  $field_name   The table field's name.
-	 * @param   string  $field_value  The variable value to quote and return.
+	 * @param   array   $columns     Array of table's column returned by ::getTableColumns.
+	 * @param   string  $fieldName   The table field's name.
+	 * @param   string  $fieldValue  The variable value to quote and return.
 	 *
 	 * @return  string  The quoted string.
 	 *
 	 * @since   1.0
 	 */
-	public function sqlValue($columns, $field_name, $field_value)
+	public function sqlValue($columns, $fieldName, $fieldValue)
 	{
-		switch ($columns[$field_name])
+		switch ($columns[$fieldName])
 		{
 			case 'boolean':
 				$val = 'NULL';
 
-				if ($field_value == 't')
+				if ($fieldValue === 't' || $fieldValue === true || $fieldValue === 1 || $fieldValue === '1')
 				{
 					$val = 'TRUE';
 				}
-				elseif ($field_value == 'f')
+				elseif ($fieldValue === 'f' || $fieldValue === false || $fieldValue === 0 || $fieldValue === '0')
 				{
 					$val = 'FALSE';
 				}
+
 				break;
 
 			case 'bigint':
@@ -1019,22 +1021,24 @@ class PostgresqlDriver extends DatabaseDriver
 			case 'smallint':
 			case 'serial':
 			case 'numeric,':
-				$val = strlen($field_value) == 0 ? 'NULL' : $field_value;
+				$val = $fieldValue === '' ? 'NULL' : $fieldValue;
+
 				break;
 
 			case 'date':
 			case 'timestamp without time zone':
-				if (empty($field_value))
+				if (empty($fieldValue))
 				{
-					$field_value = $this->getNullDate();
+					$fieldValue = $this->getNullDate();
 				}
 
-				$val = $this->quote($field_value);
+				$val = $this->quote($fieldValue);
 
 				break;
 
 			default:
-				$val = $this->quote($field_value);
+				$val = $this->quote($fieldValue);
+
 				break;
 		}
 
@@ -1146,7 +1150,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	protected function fetchArray($cursor = null)
 	{
-		return pg_fetch_row($cursor ? $cursor : $this->cursor);
+		return pg_fetch_row($cursor ?: $this->cursor);
 	}
 
 	/**
@@ -1160,7 +1164,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	protected function fetchAssoc($cursor = null)
 	{
-		return pg_fetch_assoc($cursor ? $cursor : $this->cursor);
+		return pg_fetch_assoc($cursor ?: $this->cursor);
 	}
 
 	/**
@@ -1175,7 +1179,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	protected function fetchObject($cursor = null, $class = 'stdClass')
 	{
-		return pg_fetch_object(is_null($cursor) ? $this->cursor : $cursor, null, $class);
+		return pg_fetch_object($cursor === null ? $this->cursor : $cursor, null, $class);
 	}
 
 	/**
@@ -1191,7 +1195,7 @@ class PostgresqlDriver extends DatabaseDriver
 	{
 		$useCursor = $cursor ?: $this->cursor;
 
-		if (is_resource($useCursor))
+		if (\is_resource($useCursor))
 		{
 			pg_free_result($useCursor);
 		}
@@ -1200,11 +1204,11 @@ class PostgresqlDriver extends DatabaseDriver
 	/**
 	 * Inserts a row into a table based on an object's properties.
 	 *
-	 * @param   string  $table    The name of the database table to insert into.
-	 * @param   object  &$object  A reference to an object whose public properties match the table fields.
-	 * @param   string  $key      The name of the primary key. If provided the object property is updated.
+	 * @param   string  $table   The name of the database table to insert into.
+	 * @param   object  $object  A reference to an object whose public properties match the table fields.
+	 * @param   string  $key     The name of the primary key. If provided the object property is updated.
 	 *
-	 * @return  boolean    True on success.
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -1220,19 +1224,19 @@ class PostgresqlDriver extends DatabaseDriver
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (! array_key_exists($k, $columns))
+			if (!\array_key_exists($k, $columns))
 			{
 				continue;
 			}
 
 			// Only process non-null scalars.
-			if (is_array($v) or is_object($v) or $v === null)
+			if (\is_array($v) || \is_object($v) || $v === null)
 			{
 				continue;
 			}
 
 			// Ignore any internal fields or primary keys with value 0.
-			if (($k[0] == "_") || ($k == $key && (($v === 0) || ($v === '0'))))
+			if (($k[0] === '_') || ($k == $key && (($v === 0) || ($v === '0'))))
 			{
 				continue;
 			}
@@ -1263,7 +1267,7 @@ class PostgresqlDriver extends DatabaseDriver
 			if ($id)
 			{
 				$object->$key = $id;
-				$retVal = true;
+				$retVal       = true;
 			}
 		}
 		else
@@ -1289,7 +1293,7 @@ class PostgresqlDriver extends DatabaseDriver
 	 */
 	public static function isSupported()
 	{
-		return (function_exists('pg_connect'));
+		return \function_exists('pg_connect');
 	}
 
 	/**
@@ -1312,9 +1316,8 @@ class PostgresqlDriver extends DatabaseDriver
 			);
 
 		$this->setQuery($query);
-		$tableList = $this->loadColumn();
 
-		return $tableList;
+		return $this->loadColumn();
 	}
 
 	/**
@@ -1417,7 +1420,7 @@ class PostgresqlDriver extends DatabaseDriver
 			{
 				$sql = explode('currval', $sql);
 
-				for ($nIndex = 1; $nIndex < count($sql); $nIndex = $nIndex + 2)
+				for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -1430,7 +1433,7 @@ class PostgresqlDriver extends DatabaseDriver
 			{
 				$sql = explode('nextval', $sql);
 
-				for ($nIndex = 1; $nIndex < count($sql); $nIndex = $nIndex + 2)
+				for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -1443,7 +1446,7 @@ class PostgresqlDriver extends DatabaseDriver
 			{
 				$sql = explode('setval', $sql);
 
-				for ($nIndex = 1; $nIndex < count($sql); $nIndex = $nIndex + 2)
+				for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2)
 				{
 					$sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
 				}
@@ -1453,7 +1456,7 @@ class PostgresqlDriver extends DatabaseDriver
 
 			$explodedQuery = explode('\'', $sql);
 
-			for ($nIndex = 0; $nIndex < count($explodedQuery); $nIndex = $nIndex + 2)
+			for ($nIndex = 0, $nIndexMax = \count($explodedQuery); $nIndex < $nIndexMax; $nIndex += 2)
 			{
 				if (strpos($explodedQuery[$nIndex], $prefix))
 				{
@@ -1522,10 +1525,10 @@ class PostgresqlDriver extends DatabaseDriver
 	/**
 	 * Updates a row in a table based on an object's properties.
 	 *
-	 * @param   string   $table    The name of the database table to update.
-	 * @param   object   &$object  A reference to an object whose public properties match the table fields.
-	 * @param   array    $key      The name of the primary key.
-	 * @param   boolean  $nulls    True to update null fields or false to ignore them.
+	 * @param   string   $table   The name of the database table to update.
+	 * @param   object   $object  A reference to an object whose public properties match the table fields.
+	 * @param   array    $key     The name of the primary key.
+	 * @param   boolean  $nulls   True to update null fields or false to ignore them.
 	 *
 	 * @return  boolean  True on success.
 	 *
@@ -1538,12 +1541,12 @@ class PostgresqlDriver extends DatabaseDriver
 		$fields  = array();
 		$where   = array();
 
-		if (is_string($key))
+		if (\is_string($key))
 		{
 			$key = array($key);
 		}
 
-		if (is_object($key))
+		if (\is_object($key))
 		{
 			$key = (array) $key;
 		}
@@ -1555,22 +1558,23 @@ class PostgresqlDriver extends DatabaseDriver
 		foreach (get_object_vars($object) as $k => $v)
 		{
 			// Skip columns that don't exist in the table.
-			if (! array_key_exists($k, $columns))
+			if (!\array_key_exists($k, $columns))
 			{
 				continue;
 			}
 
 			// Only process scalars that are not internal fields.
-			if (is_array($v) or is_object($v) or $k[0] == '_')
+			if (\is_array($v) || \is_object($v) || $k[0] === '_')
 			{
 				continue;
 			}
 
 			// Set the primary key to the WHERE clause instead of a field to update.
-			if (in_array($k, $key))
+			if (\in_array($k, $key, true))
 			{
 				$key_val = $this->sqlValue($columns, $k, $v);
 				$where[] = $this->quoteName($k) . '=' . $key_val;
+
 				continue;
 			}
 
@@ -1583,14 +1587,14 @@ class PostgresqlDriver extends DatabaseDriver
 					$val = 'NULL';
 				}
 				else
-				// If the value is null and we do not want to update nulls then ignore this field.
 				{
+					// If the value is null and we do not want to update nulls then ignore this field.
 					continue;
 				}
 			}
 			else
-			// The field is not null so we prep it for update.
 			{
+				// The field is not null so we prep it for update.
 				$val = $this->sqlValue($columns, $k, $v);
 			}
 
@@ -1605,8 +1609,57 @@ class PostgresqlDriver extends DatabaseDriver
 		}
 
 		// Set the query and execute the update.
-		$this->setQuery(sprintf($statement, implode(",", $fields), implode(' AND ', $where)));
+		$this->setQuery(sprintf($statement, implode(',', $fields), implode(' AND ', $where)));
 
 		return $this->execute();
+	}
+
+	/**
+	 * Quotes a binary string to database requirements for use in database queries.
+	 *
+	 * @param   string  $data  A binary string to quote.
+	 *
+	 * @return  string  The binary quoted input string.
+	 *
+	 * @since   1.7.0
+	 */
+	public function quoteBinary($data)
+	{
+		return "decode('" . bin2hex($data) . "', 'hex')";
+	}
+
+	/**
+	 * Replace special placeholder representing binary field with the original string.
+	 *
+	 * @param   string|resource  $data  Encoded string or resource.
+	 *
+	 * @return  string  The original string.
+	 *
+	 * @since   1.7.0
+	 */
+	public function decodeBinary($data)
+	{
+		if (\is_string($data))
+		{
+			return pg_unescape_bytea($data);
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Internal function to get the name of the default schema for the current PostgreSQL connection.
+	 * That is the schema where tables are created by Joomla.
+	 *
+	 * @return  string
+	 *
+	 * @since   1.8.0
+	 */
+	private function getDefaultSchema()
+	{
+		// Supported since PostgreSQL 7.3
+		$this->setQuery('SELECT (current_schemas(false))[1]');
+
+		return $this->loadResult();
 	}
 }

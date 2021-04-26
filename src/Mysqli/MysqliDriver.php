@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -13,14 +13,14 @@ use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\Query\LimitableInterface;
+use Joomla\Database\Query\PreparableInterface;
 use Psr\Log;
 
 /**
  * MySQLi Database Driver
  *
- * @see    http://php.net/manual/en/book.mysqli.php
+ * @link   https://www.php.net/manual/en/book.mysqli.php
  * @since  1.0
  */
 class MysqliDriver extends DatabaseDriver
@@ -40,6 +40,14 @@ class MysqliDriver extends DatabaseDriver
 	 * @since  1.0
 	 */
 	protected $connection;
+
+	/**
+	 * The database connection cursor from the last query.
+	 *
+	 * @var    \mysqli_result|boolean
+	 * @since  1.0
+	 */
+	protected $cursor;
 
 	/**
 	 * The character(s) used to quote SQL statement names such as table names or field names,
@@ -73,7 +81,7 @@ class MysqliDriver extends DatabaseDriver
 	 * The prepared statement.
 	 *
 	 * @var    \mysqli_stmt
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $prepared;
 
@@ -81,7 +89,7 @@ class MysqliDriver extends DatabaseDriver
 	 * Contains the current query execution status
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $executed = false;
 
@@ -103,14 +111,14 @@ class MysqliDriver extends DatabaseDriver
 	public function __construct($options)
 	{
 		// Get some basic values from the options.
-		$options['host']     = (isset($options['host'])) ? $options['host'] : 'localhost';
-		$options['user']     = (isset($options['user'])) ? $options['user'] : 'root';
-		$options['password'] = (isset($options['password'])) ? $options['password'] : '';
-		$options['database'] = (isset($options['database'])) ? $options['database'] : '';
-		$options['select']   = (isset($options['select'])) ? (bool) $options['select'] : true;
-		$options['port']     = (isset($options['port'])) ? (int) $options['port'] : null;
-		$options['socket']   = (isset($options['socket'])) ? $options['socket'] : null;
-		$options['utf8mb4']  = (isset($options['utf8mb4'])) ? (bool) $options['utf8mb4'] : false;
+		$options['host']     = isset($options['host']) ? $options['host'] : 'localhost';
+		$options['user']     = isset($options['user']) ? $options['user'] : 'root';
+		$options['password'] = isset($options['password']) ? $options['password'] : '';
+		$options['database'] = isset($options['database']) ? $options['database'] : '';
+		$options['select']   = isset($options['select']) ? (bool) $options['select'] : true;
+		$options['port']     = isset($options['port']) ? (int) $options['port'] : null;
+		$options['socket']   = isset($options['socket']) ? $options['socket'] : null;
+		$options['utf8mb4']  = isset($options['utf8mb4']) ? (bool) $options['utf8mb4'] : false;
 
 		// Finalize initialisation.
 		parent::__construct($options);
@@ -123,7 +131,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function __destruct()
 	{
-		if (is_resource($this->connection))
+		if (\is_resource($this->connection))
 		{
 			$this->connection->close();
 		}
@@ -154,7 +162,7 @@ class MysqliDriver extends DatabaseDriver
 			'/^(?P<host>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(:(?P<port>.+))?$/',
 			$this->options['host'],
 			$matches
-			))
+		))
 		{
 			// It's an IPv4 address with or without port
 			$this->options['host'] = $matches['host'];
@@ -188,7 +196,7 @@ class MysqliDriver extends DatabaseDriver
 		{
 			// Empty host, just port, e.g. ':3306'
 			$this->options['host'] = 'localhost';
-			$port = $matches['port'];
+			$port                  = $matches['port'];
 		}
 
 		// ... else we assume normal (naked) IPv6 address, so host and port stay as they are or default
@@ -257,7 +265,7 @@ class MysqliDriver extends DatabaseDriver
 		$beginningOfQuery = substr($query, 0, 12);
 		$beginningOfQuery = strtoupper($beginningOfQuery);
 
-		if (!in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE')))
+		if (!\in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE'), true))
 		{
 			return $query;
 		}
@@ -276,7 +284,7 @@ class MysqliDriver extends DatabaseDriver
 	public function disconnect()
 	{
 		// Close the connection.
-		if (is_callable($this->connection, 'close'))
+		if (\is_callable($this->connection, 'close'))
 		{
 			$this->connection->close();
 		}
@@ -317,7 +325,8 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public static function isSupported()
 	{
-		return function_exists('mysqli_connect');
+		// At the moment we depend on mysqlnd extension, so we additionally test for mysqli_stmt_get_result
+		return \function_exists('mysqli_connect') && \function_exists('mysqli_stmt_get_result');
 	}
 
 	/**
@@ -329,7 +338,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function connected()
 	{
-		if (is_object($this->connection))
+		if (\is_object($this->connection))
 		{
 			return $this->connection->ping();
 		}
@@ -376,7 +385,7 @@ class MysqliDriver extends DatabaseDriver
 	/**
 	 * Method to get the database collation in use by sampling a text field of a table in the database.
 	 *
-	 * @return  mixed  The collation in use by the database (string) or boolean false if not supported.
+	 * @return  string|boolean  The collation in use by the database (string) or boolean false if not supported.
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -386,6 +395,21 @@ class MysqliDriver extends DatabaseDriver
 		$this->connect();
 
 		return $this->setQuery('SELECT @@collation_database;')->loadResult();
+	}
+
+	/**
+	 * Method to get the database connection collation in use by sampling a text field of a table in the database.
+	 *
+	 * @return  string|boolean  The collation in use by the database connection (string) or boolean false if not supported.
+	 *
+	 * @since   1.6.0
+	 * @throws  \RuntimeException
+	 */
+	public function getConnectionCollation()
+	{
+		$this->connect();
+
+		return $this->setQuery('SELECT @@collation_connection;')->loadResult();
 	}
 
 	/**
@@ -399,7 +423,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	public function getNumRows($cursor = null)
 	{
-		return mysqli_num_rows($cursor ? $cursor : $this->cursor);
+		return mysqli_num_rows($cursor ?: $this->cursor);
 	}
 
 	/**
@@ -419,7 +443,7 @@ class MysqliDriver extends DatabaseDriver
 		$result = array();
 
 		// Sanitize input to an array and iterate over the list.
-		settype($tables, 'array');
+		$tables = (array) $tables;
 
 		foreach ($tables as $table)
 		{
@@ -460,12 +484,12 @@ class MysqliDriver extends DatabaseDriver
 		{
 			foreach ($fields as $field)
 			{
-				$result[$field->Field] = preg_replace("/[(0-9)]/", '', $field->Type);
+				$result[$field->Field] = preg_replace('/[(0-9)]/', '', $field->Type);
 			}
 		}
 		else
-		// If we want the whole field data object add that to the list.
 		{
+			// If we want the whole field data object add that to the list.
 			foreach ($fields as $field)
 			{
 				$result[$field->Field] = $field;
@@ -491,9 +515,8 @@ class MysqliDriver extends DatabaseDriver
 
 		// Get the details columns information.
 		$this->setQuery('SHOW KEYS FROM ' . $this->quoteName($table));
-		$keys = $this->loadObjectList();
 
-		return $keys;
+		return $this->loadObjectList();
 	}
 
 	/**
@@ -510,9 +533,8 @@ class MysqliDriver extends DatabaseDriver
 
 		// Set the query to get the tables statement.
 		$this->setQuery('SHOW TABLES');
-		$tables = $this->loadColumn();
 
-		return $tables;
+		return $this->loadColumn();
 	}
 
 	/**
@@ -564,7 +586,7 @@ class MysqliDriver extends DatabaseDriver
 	/**
 	 * Execute the SQL statement.
 	 *
-	 * @return  mixed  A database cursor resource on success, boolean false on failure.
+	 * @return  resource|boolean  A database cursor resource on success, boolean false on failure.
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -604,7 +626,7 @@ class MysqliDriver extends DatabaseDriver
 			{
 				$bounded =& $this->sql->getBounded();
 
-				if (count($bounded))
+				if (\count($bounded))
 				{
 					$params     = array();
 					$typeString = '';
@@ -619,15 +641,15 @@ class MysqliDriver extends DatabaseDriver
 					}
 
 					// Make everything references for call_user_func_array()
-					$bindParams = array();
+					$bindParams   = array();
 					$bindParams[] = &$typeString;
 
-					for ($i = 0; $i < count($params); $i++)
+					for ($i = 0, $iMax = \count($params); $i < $iMax; $i++)
 					{
 						$bindParams[] = &$params[$i];
 					}
 
-					call_user_func_array(array($this->prepared, 'bind_param'), $bindParams);
+					\call_user_func_array(array($this->prepared, 'bind_param'), $bindParams);
 				}
 			}
 
@@ -657,8 +679,8 @@ class MysqliDriver extends DatabaseDriver
 					$this->connect();
 				}
 				catch (ConnectionFailureException $e)
-				// If connect fails, ignore that exception and throw the normal exception.
 				{
+					// If connect fails, ignore that exception and throw the normal exception.
 					$this->log(
 						Log\LogLevel::ERROR,
 						'Database query failed (error #{code}): {message}; Failed query: {sql}',
@@ -671,17 +693,15 @@ class MysqliDriver extends DatabaseDriver
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
-			else
-			// The server was not disconnected.
-			{
-				$this->log(
-					Log\LogLevel::ERROR,
-					'Database query failed (error #{code}): {message}; Failed query: {sql}',
-					array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
-				);
 
-				throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
-			}
+			// The server was not disconnected.
+			$this->log(
+				Log\LogLevel::ERROR,
+				'Database query failed (error #{code}): {message}; Failed query: {sql}',
+				array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
+			);
+
+			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
 		}
 
 		return $this->cursor;
@@ -743,7 +763,7 @@ class MysqliDriver extends DatabaseDriver
 	 *
 	 * @return  MysqliDriver  This object to support method chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function setQuery($query, $offset = null, $limit = null)
 	{
@@ -751,13 +771,13 @@ class MysqliDriver extends DatabaseDriver
 
 		$this->freeResult();
 
-		if (is_string($query))
+		if (\is_string($query))
 		{
 			// Allows taking advantage of bound variables in a direct query:
 			$query = $this->getQuery(true)->setQuery($query);
 		}
 
-		if ($query instanceof LimitableInterface && !is_null($offset) && !is_null($limit))
+		if ($query instanceof LimitableInterface && $offset !== null && $limit !== null)
 		{
 			$query->setLimit($limit, $offset);
 		}
@@ -906,7 +926,7 @@ class MysqliDriver extends DatabaseDriver
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	protected function executeUnpreparedQuery($sql)
 	{
@@ -930,8 +950,8 @@ class MysqliDriver extends DatabaseDriver
 					$this->connect();
 				}
 				catch (ConnectionFailureException $e)
-				// If connect fails, ignore that exception and throw the normal exception.
 				{
+					// If connect fails, ignore that exception and throw the normal exception.
 					$this->log(
 						Log\LogLevel::ERROR,
 						'Database query failed (error #{code}): {message}; Failed query: {sql}',
@@ -971,7 +991,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	protected function fetchArray($cursor = null)
 	{
-		return mysqli_fetch_row($cursor ? $cursor : $this->cursor);
+		return mysqli_fetch_row($cursor ?: $this->cursor);
 	}
 
 	/**
@@ -985,7 +1005,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	protected function fetchAssoc($cursor = null)
 	{
-		return mysqli_fetch_assoc($cursor ? $cursor : $this->cursor);
+		return mysqli_fetch_assoc($cursor ?: $this->cursor);
 	}
 
 	/**
@@ -1000,7 +1020,7 @@ class MysqliDriver extends DatabaseDriver
 	 */
 	protected function fetchObject($cursor = null, $class = '\\stdClass')
 	{
-		return mysqli_fetch_object($cursor ? $cursor : $this->cursor, $class);
+		return mysqli_fetch_object($cursor ?: $this->cursor, $class);
 	}
 
 	/**

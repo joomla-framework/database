@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -8,13 +8,14 @@ namespace Joomla\Database\Tests;
 
 use Joomla\Database\Sqlite\SqliteQuery;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Database\Sqlite\SqliteQuery.
  *
  * @since  1.1
  */
-class QuerySqliteTest extends \PHPUnit_Framework_TestCase
+class QuerySqliteTest extends TestCase
 {
 	/**
 	 * @var    \Joomla\Database\DatabaseDriver  A mock of the DatabaseDriver object for testing purposes.
@@ -34,7 +35,7 @@ class QuerySqliteTest extends \PHPUnit_Framework_TestCase
 		return array(
 			// Quoted, expected
 			array(true, "'_0000-00-00 00:00:00_'"),
-			array(false, "0000-00-00 00:00:00"),
+			array(false, '0000-00-00 00:00:00'),
 		);
 	}
 
@@ -148,13 +149,13 @@ class QuerySqliteTest extends \PHPUnit_Framework_TestCase
 		$this->assertThat(
 			(string) $q,
 			$this->equalTo(
-				PHP_EOL . "SELECT a.id" .
-				PHP_EOL . "FROM a" .
-				PHP_EOL . "INNER JOIN b ON b.id = a.id" .
-				PHP_EOL . "WHERE b.id = 1" .
-				PHP_EOL . "GROUP BY a.id" .
-				PHP_EOL . "HAVING COUNT(a.id) > 3" .
-				PHP_EOL . "ORDER BY a.id"
+				PHP_EOL . 'SELECT a.id' .
+				PHP_EOL . 'FROM a' .
+				PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+				PHP_EOL . 'WHERE b.id = 1' .
+				PHP_EOL . 'GROUP BY a.id' .
+				PHP_EOL . 'HAVING COUNT(a.id) > 3' .
+				PHP_EOL . 'ORDER BY a.id'
 			),
 			'Tests for correct rendering.'
 		);
@@ -179,10 +180,10 @@ class QuerySqliteTest extends \PHPUnit_Framework_TestCase
 		$this->assertThat(
 			(string) $q,
 			$this->equalTo(
-				PHP_EOL . "UPDATE #__foo AS a" .
-				PHP_EOL . "INNER JOIN b ON b.id = a.id" .
-				PHP_EOL . "SET a.id = 2" .
-				PHP_EOL . "WHERE b.id = 1"
+				PHP_EOL . 'UPDATE #__foo AS a' .
+				PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+				PHP_EOL . 'SET a.id = 2' .
+				PHP_EOL . 'WHERE b.id = 1'
 			),
 			'Tests for correct rendering.'
 		);
@@ -319,14 +320,14 @@ class QuerySqliteTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "INSERT INTO table" . PHP_EOL . "(col)" . PHP_EOL . "(" . PHP_EOL . "SELECT col2" . PHP_EOL . "WHERE a=1)")
+			$this->equalTo(PHP_EOL . 'INSERT INTO table' . PHP_EOL . '(col)' . PHP_EOL . '(' . PHP_EOL . 'SELECT col2' . PHP_EOL . 'WHERE a=1)')
 		);
 
 		$q->clear();
 		$q->insert('table')->columns('col')->values('3');
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "INSERT INTO table" . PHP_EOL . "(col) VALUES " . PHP_EOL . "(3)")
+			$this->equalTo(PHP_EOL . 'INSERT INTO table' . PHP_EOL . '(col) VALUES ' . PHP_EOL . '(3)')
 		);
 	}
 
@@ -481,7 +482,7 @@ class QuerySqliteTest extends \PHPUnit_Framework_TestCase
 			// Check the state of the other clauses.
 			foreach ($clauses as $clause2)
 			{
-				if ($clause != $clause2)
+				if ($clause !== $clause2)
 				{
 					$this->assertThat(
 						$q->$clause2,

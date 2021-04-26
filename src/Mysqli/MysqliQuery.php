@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -39,7 +39,7 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 	 * Holds key / value pair of bound objects.
 	 *
 	 * @var    mixed
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $bounded = array();
 
@@ -49,7 +49,7 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 	 *
 	 * @param   string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
 	 *                                          the form ':key', but can also be an integer.
-	 * @param   mixed           &$value         The value that will be bound. The value is passed by reference to support output
+	 * @param   mixed           $value          The value that will be bound. The value is passed by reference to support output
 	 *                                          parameters such as those possible with stored procedures.
 	 * @param   string          $dataType       The corresponding bind type.
 	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters. (Unused)
@@ -57,7 +57,7 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 	 *
 	 * @return  MysqliQuery
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function bind($key = null, &$value = null, $dataType = 's', $length = 0, $driverOptions = array())
 	{
@@ -70,7 +70,7 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 		}
 
 		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if (is_null($value))
+		if ($value === null)
 		{
 			if (isset($this->bounded[$key]))
 			{
@@ -98,7 +98,7 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 	 *
 	 * @return  mixed
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function &getBounded($key = null)
 	{
@@ -120,7 +120,7 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 	 *
 	 * @return  MysqliQuery  Returns this object to allow chaining.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function clear($clause = null)
 	{
@@ -128,6 +128,7 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 		{
 			case null:
 				$this->bounded = array();
+
 				break;
 		}
 
@@ -184,10 +185,8 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 
 			return $concat_string . ')';
 		}
-		else
-		{
-			return 'CONCAT(' . implode(',', $values) . ')';
-		}
+
+		return 'CONCAT(' . implode(',', $values) . ')';
 	}
 
 	/**
@@ -222,7 +221,7 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function regexp($value)
 	{
@@ -237,7 +236,7 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function rand()
 	{
@@ -257,10 +256,38 @@ class MysqliQuery extends DatabaseQuery implements LimitableInterface, Preparabl
 	 *
 	 * @return  string  A representation of the MySQL find_in_set() function for the driver.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function findInSet($value, $set)
 	{
 		return ' find_in_set(' . $value . ', ' . $set . ')';
+	}
+
+	/**
+	 * Casts a value to a char.
+	 *
+	 * Ensure that the value is properly quoted before passing to the method.
+	 *
+	 * Usage:
+	 * $query->select($query->castAsChar('a'));
+	 * $query->select($query->castAsChar('a', 40));
+	 *
+	 * @param   string  $value  The value to cast as a char.
+	 * @param   string  $len    The length of the char.
+	 *
+	 * @return  string  Returns the cast value.
+	 *
+	 * @since   1.8.0
+	 */
+	public function castAsChar($value, $len = null)
+	{
+		if (!$len)
+		{
+			return $value;
+		}
+		else
+		{
+			return 'CAST(' . $value . ' AS CHAR(' . $len . '))';
+		}
 	}
 }

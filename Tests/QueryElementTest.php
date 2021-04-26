@@ -1,19 +1,20 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Tests;
 
 use Joomla\Database\Query\QueryElement;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for JDatabaseQueryElement.
  *
  * @since  1.0
  */
-class DatabaseQueryElementTest extends \PHPUnit_Framework_TestCase
+class DatabaseQueryElementTest extends TestCase
 {
 	/**
 	 * Test cases for append and __toString
@@ -130,25 +131,25 @@ class DatabaseQueryElementTest extends \PHPUnit_Framework_TestCase
 				'FROM',
 				'table1',
 				',',
-				PHP_EOL . "FROM table1"
+				PHP_EOL . 'FROM table1'
 			),
 			array(
 				'SELECT',
 				array('column1', 'column2'),
 				',',
-				PHP_EOL . "SELECT column1,column2"
+				PHP_EOL . 'SELECT column1,column2'
 			),
 			array(
 				'()',
 				array('column1', 'column2'),
 				',',
-				PHP_EOL . "(column1,column2)"
+				PHP_EOL . '(column1,column2)'
 			),
 			array(
 				'CONCAT()',
 				array('column1', 'column2'),
 				',',
-				PHP_EOL . "CONCAT(column1,column2)"
+				PHP_EOL . 'CONCAT(column1,column2)'
 			),
 		);
 	}
@@ -240,12 +241,12 @@ class DatabaseQueryElementTest extends \PHPUnit_Framework_TestCase
 
 		$baseElement->testArray = array();
 
-		$cloneElement = clone($baseElement);
+		$cloneElement = clone $baseElement;
 
 		$baseElement->testArray[] = 'a';
 
 		$this->assertFalse($baseElement === $cloneElement);
-		$this->assertEquals(count($cloneElement->testArray), 0);
+		$this->assertEquals(\count($cloneElement->testArray), 0);
 	}
 
 	/**
@@ -261,7 +262,7 @@ class DatabaseQueryElementTest extends \PHPUnit_Framework_TestCase
 
 		$baseElement->testObject = new \stdClass;
 
-		$cloneElement = clone($baseElement);
+		$cloneElement = clone $baseElement;
 
 		$this->assertFalse($baseElement === $cloneElement);
 		$this->assertFalse($baseElement->testObject === $cloneElement->testObject);

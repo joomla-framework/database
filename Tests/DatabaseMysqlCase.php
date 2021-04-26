@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -35,9 +35,9 @@ abstract class DatabaseMysqlCase extends TestDatabase
 	public static function setUpBeforeClass()
 	{
 		// First let's look to see if we have a DSN defined or in the environment variables.
-		if (defined('JTEST_DATABASE_MYSQL_DSN') || getenv('JTEST_DATABASE_MYSQL_DSN'))
+		if (\defined('JTEST_DATABASE_MYSQL_DSN') || getenv('JTEST_DATABASE_MYSQL_DSN'))
 		{
-			$dsn = defined('JTEST_DATABASE_MYSQL_DSN') ? JTEST_DATABASE_MYSQL_DSN : getenv('JTEST_DATABASE_MYSQL_DSN');
+			$dsn = \defined('JTEST_DATABASE_MYSQL_DSN') ? JTEST_DATABASE_MYSQL_DSN : getenv('JTEST_DATABASE_MYSQL_DSN');
 		}
 		else
 		{
@@ -68,6 +68,9 @@ abstract class DatabaseMysqlCase extends TestDatabase
 			{
 				case 'host':
 					self::$options['host'] = $v;
+					break;
+				case 'port':
+					self::$options['port'] = $v;
 					break;
 				case 'dbname':
 					self::$options['database'] = $v;

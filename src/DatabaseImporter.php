@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -31,7 +31,7 @@ abstract class DatabaseImporter
 	 * @var    DatabaseDriver
 	 * @since  1.0
 	 */
-	protected $db = null;
+	protected $db;
 
 	/**
 	 * The input source.
@@ -55,7 +55,7 @@ abstract class DatabaseImporter
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $options = null;
+	protected $options;
 
 	/**
 	 * Constructor.
@@ -258,10 +258,10 @@ abstract class DatabaseImporter
 			// Convert the magic prefix into the real table name.
 			$tableName = $this->getRealTableName((string) $table['name']);
 
-			if (in_array($tableName, $tables))
+			if (\in_array($tableName, $tables, true))
 			{
 				// The table already exists. Now check if there is any difference.
-				if ($queries = $this->getAlterTableql($xml->database->table_structure))
+				if ($queries = $this->getAlterTableSql($table))
 				{
 					// Run the queries to upgrade the data structure.
 					foreach ($queries as $query)
@@ -275,6 +275,7 @@ abstract class DatabaseImporter
 						catch (\RuntimeException $e)
 						{
 							$this->db->log(LogLevel::DEBUG, 'Fail: ' . $this->db->getQuery());
+
 							throw $e;
 						}
 
@@ -296,6 +297,7 @@ abstract class DatabaseImporter
 				catch (\RuntimeException $e)
 				{
 					$this->db->log(LogLevel::DEBUG, 'Fail: ' . $this->db->getQuery());
+
 					throw $e;
 				}
 

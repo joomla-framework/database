@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -10,12 +10,11 @@ namespace Joomla\Database\Mysql;
 
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Pdo\PdoDriver;
-use Psr\Log;
 
 /**
  * MySQL database driver supporting PDO based connections
  *
- * @see    http://php.net/manual/en/ref.pdo-mysql.php
+ * @link   https://www.php.net/manual/en/ref.pdo-mysql.php
  * @since  1.0
  */
 class MysqlDriver extends PdoDriver
@@ -74,8 +73,8 @@ class MysqlDriver extends PdoDriver
 	public function __construct($options)
 	{
 		// Get some basic values from the options.
-		$options['driver']	= 'mysql';
-		$options['charset'] = (isset($options['charset'])) ? $options['charset'] : 'utf8';
+		$options['driver']  = 'mysql';
+		$options['charset'] = isset($options['charset']) ? $options['charset'] : 'utf8';
 
 		$this->charset = $options['charset'];
 
@@ -84,7 +83,7 @@ class MysqlDriver extends PdoDriver
 		 * and we cannot connect to it unless we know if it supports utf8mb4, which requires us knowing the server version. Because of this
 		 * chicken and egg issue, we _assume_ it's supported and we'll just catch any problems at connection time.
 		 */
-		$this->utf8mb4 = $options['charset'] == 'utf8mb4';
+		$this->utf8mb4 = $options['charset'] === 'utf8mb4';
 
 		// Finalize initialisation.
 		parent::__construct($options);
@@ -122,7 +121,7 @@ class MysqlDriver extends PdoDriver
 			 * Otherwise, try connecting again without using utf8mb4 and see if maybe that was the problem. If the connection succeeds, then we
 			 * will have learned that the client end of the connection does not support utf8mb4.
   			 */
-			$this->utf8mb4 = false;
+			$this->utf8mb4            = false;
 			$this->options['charset'] = 'utf8';
 
 			parent::connect();
@@ -169,7 +168,7 @@ class MysqlDriver extends PdoDriver
 		$beginningOfQuery = substr($query, 0, 12);
 		$beginningOfQuery = strtoupper($beginningOfQuery);
 
-		if (!in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE')))
+		if (!\in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE'), true))
 		{
 			return $query;
 		}
@@ -187,7 +186,7 @@ class MysqlDriver extends PdoDriver
 	 */
 	public static function isSupported()
 	{
-		return class_exists('\\PDO') && in_array('mysql', \PDO::getAvailableDrivers());
+		return class_exists('\\PDO') && \in_array('mysql', \PDO::getAvailableDrivers(), true);
 	}
 
 	/**
@@ -236,7 +235,7 @@ class MysqlDriver extends PdoDriver
 	/**
 	 * Method to get the database collation in use by sampling a text field of a table in the database.
 	 *
-	 * @return  mixed  The collation in use by the database (string) or boolean false if not supported.
+	 * @return  string|boolean  The collation in use by the database (string) or boolean false if not supported.
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -246,6 +245,21 @@ class MysqlDriver extends PdoDriver
 		$this->connect();
 
 		return $this->setQuery('SELECT @@collation_database;')->loadResult();
+	}
+
+	/**
+	 * Method to get the database connection collation in use by sampling a text field of a table in the database.
+	 *
+	 * @return  string|boolean  The collation in use by the database connection (string) or boolean false if not supported.
+	 *
+	 * @since   1.6.0
+	 * @throws  \RuntimeException
+	 */
+	public function getConnectionCollation()
+	{
+		$this->connect();
+
+		return $this->setQuery('SELECT @@collation_connection;')->loadResult();
 	}
 
 	/**
@@ -266,7 +280,7 @@ class MysqlDriver extends PdoDriver
 		$result = array();
 
 		// Sanitize input to an array and iterate over the list.
-		settype($tables, 'array');
+		$tables = (array) $tables;
 
 		foreach ($tables as $table)
 		{
@@ -308,7 +322,7 @@ class MysqlDriver extends PdoDriver
 		{
 			foreach ($fields as $field)
 			{
-				$result[$field->Field] = preg_replace("/[(0-9)]/", '', $field->Type);
+				$result[$field->Field] = preg_replace('/[(0-9)]/', '', $field->Type);
 			}
 		}
 		// If we want the whole field data object add that to the list.
@@ -340,9 +354,7 @@ class MysqlDriver extends PdoDriver
 		// Get the details columns information.
 		$this->setQuery('SHOW KEYS FROM ' . $this->quoteName($table));
 
-		$keys = $this->loadObjectList();
-
-		return $keys;
+		return $this->loadObjectList();
 	}
 
 	/**
@@ -359,9 +371,8 @@ class MysqlDriver extends PdoDriver
 
 		// Set the query to get the tables statement.
 		$this->setQuery('SHOW TABLES');
-		$tables = $this->loadColumn();
 
-		return $tables;
+		return $this->loadColumn();
 	}
 
 	/**
@@ -428,7 +439,7 @@ class MysqlDriver extends PdoDriver
 	{
 		$this->connect();
 
-		if (is_int($text) || is_float($text))
+		if (\is_int($text) || \is_float($text))
 		{
 			return $text;
 		}

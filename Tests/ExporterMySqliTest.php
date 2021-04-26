@@ -1,17 +1,19 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Tests;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the \Joomla\Database\Exporter\Mysqli class.
  *
  * @since  1.0
  */
-class ExporterMysqliTest extends \PHPUnit_Framework_TestCase
+class ExporterMysqliTest extends TestCase
 {
 	/**
 	 * @var    object  The mocked database object for use by test methods.
@@ -31,9 +33,12 @@ class ExporterMysqliTest extends \PHPUnit_Framework_TestCase
 		parent::setUp();
 
 		// Set up the database object mock.
+		$errorLevel = error_reporting();
+		error_reporting($errorLevel & ~E_DEPRECATED);
 		$this->dbo = $this->getMockBuilder('Joomla\\Database\\Mysqli\MysqliDriver')
 			->disableOriginalConstructor()
 			->getMock();
+		error_reporting($errorLevel);
 	}
 
 	/**

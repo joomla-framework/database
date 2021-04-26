@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -13,7 +13,8 @@ use Joomla\Database\Pdo\PdoIterator;
 /**
  * Oracle Database Iterator.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Oracle support will be removed.
  */
 class OracleIterator extends PdoIterator
 {

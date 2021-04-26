@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -77,12 +77,12 @@ abstract class DatabaseIterator implements \Countable, \Iterator
 	{
 		if (!class_exists($class))
 		{
-			throw new \InvalidArgumentException(sprintf('new %s(*%s*, cursor)', get_class($this), gettype($class)));
+			throw new \InvalidArgumentException(sprintf('new %s(*%s*, cursor)', \get_class($this), \gettype($class)));
 		}
 
-		$this->cursor = $cursor;
-		$this->class = $class;
-		$this->column = $column;
+		$this->cursor  = $cursor;
+		$this->class   = $class;
+		$this->column  = $column;
 		$this->fetched = 0;
 		$this->next();
 	}

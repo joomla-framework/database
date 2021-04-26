@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -8,13 +8,14 @@ namespace Joomla\Database\Tests;
 
 use Joomla\Database\Pgsql\PgsqlQuery;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Database\Pgsql\PgsqlQuery.
  *
  * @since  1.0
  */
-class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
+class QueryPgsqlTest extends TestCase
 {
 	/**
 	 * @var    \Joomla\Database\DatabaseDriver  A mock of the DatabaseDriver object for testing purposes.
@@ -34,7 +35,7 @@ class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
 		return array(
 			// Quoted, expected
 			array(true, "'_1970-01-01 00:00:00_'"),
-			array(false, "1970-01-01 00:00:00"),
+			array(false, '1970-01-01 00:00:00'),
 		);
 	}
 
@@ -148,13 +149,13 @@ class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
 		$this->assertThat(
 			(string) $q,
 			$this->equalTo(
-				PHP_EOL . "SELECT a.id" .
-				PHP_EOL . "FROM a" .
-				PHP_EOL . "INNER JOIN b ON b.id = a.id" .
-				PHP_EOL . "WHERE b.id = 1" .
-				PHP_EOL . "GROUP BY a.id" .
-				PHP_EOL . "HAVING COUNT(a.id) > 3" .
-				PHP_EOL . "ORDER BY a.id"
+				PHP_EOL . 'SELECT a.id' .
+				PHP_EOL . 'FROM a' .
+				PHP_EOL . 'INNER JOIN b ON b.id = a.id' .
+				PHP_EOL . 'WHERE b.id = 1' .
+				PHP_EOL . 'GROUP BY a.id' .
+				PHP_EOL . 'HAVING COUNT(a.id) > 3' .
+				PHP_EOL . 'ORDER BY a.id'
 			),
 			'Tests for correct rendering.'
 		);
@@ -179,10 +180,10 @@ class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
 		$this->assertThat(
 			(string) $q,
 			$this->equalTo(
-				PHP_EOL . "UPDATE #__foo AS a" .
-				PHP_EOL . "SET a.id = 2" .
-				PHP_EOL . "FROM b" .
-				PHP_EOL . "WHERE b.id = 1 AND b.id = a.id"
+				PHP_EOL . 'UPDATE #__foo AS a' .
+				PHP_EOL . 'SET a.id = 2' .
+				PHP_EOL . 'FROM b' .
+				PHP_EOL . 'WHERE b.id = 1 AND b.id = a.id'
 			),
 			'Tests for correct rendering.'
 		);
@@ -203,7 +204,7 @@ class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "SELECT EXTRACT (YEAR FROM \"col\")" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT EXTRACT (YEAR FROM "col")' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -222,7 +223,7 @@ class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "SELECT EXTRACT (MONTH FROM \"col\")" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT EXTRACT (MONTH FROM "col")' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -241,7 +242,7 @@ class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "SELECT EXTRACT (DAY FROM \"col\")" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT EXTRACT (DAY FROM "col")' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -260,7 +261,7 @@ class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "SELECT EXTRACT (HOUR FROM \"col\")" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT EXTRACT (HOUR FROM "col")' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -279,7 +280,7 @@ class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "SELECT EXTRACT (MINUTE FROM \"col\")" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT EXTRACT (MINUTE FROM "col")' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -298,7 +299,7 @@ class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "SELECT EXTRACT (SECOND FROM \"col\")" . PHP_EOL . "FROM table")
+			$this->equalTo(PHP_EOL . 'SELECT EXTRACT (SECOND FROM "col")' . PHP_EOL . 'FROM table')
 		);
 	}
 
@@ -319,14 +320,14 @@ class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "INSERT INTO table" . PHP_EOL . "(col)" . PHP_EOL . "(" . PHP_EOL . "SELECT col2" . PHP_EOL . "WHERE a=1)")
+			$this->equalTo(PHP_EOL . 'INSERT INTO table' . PHP_EOL . '(col)' . PHP_EOL . '(' . PHP_EOL . 'SELECT col2' . PHP_EOL . 'WHERE a=1)')
 		);
 
 		$q->clear();
 		$q->insert('table')->columns('col')->values('3');
 		$this->assertThat(
 			(string) $q,
-			$this->equalTo(PHP_EOL . "INSERT INTO table" . PHP_EOL . "(col) VALUES " . PHP_EOL . "(3)")
+			$this->equalTo(PHP_EOL . 'INSERT INTO table' . PHP_EOL . '(col) VALUES ' . PHP_EOL . '(3)')
 		);
 	}
 
@@ -345,6 +346,12 @@ class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
 			$q->castAsChar('123'),
 			$this->equalTo('123::text'),
 			'The default castAsChar behaviour is quote the input.'
+		);
+
+		$this->assertThat(
+			$q->castAsChar('1234', 3),
+			$this->equalTo('CAST(1234 AS CHAR(3))'),
+			'With optional length parameter, castAsChar shall limit the output to that length.'
 		);
 	}
 
@@ -490,7 +497,7 @@ class QueryPgsqlTest extends \PHPUnit_Framework_TestCase
 			// Check the state of the other clauses.
 			foreach ($clauses as $clause2)
 			{
-				if ($clause != $clause2)
+				if ($clause !== $clause2)
 				{
 					$this->assertThat(
 						$q->$clause2,

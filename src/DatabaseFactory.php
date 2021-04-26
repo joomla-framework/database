@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -42,8 +42,8 @@ class DatabaseFactory
 	{
 		// Sanitize the database connector options.
 		$options['driver']   = preg_replace('/[^A-Z0-9_\.-]/i', '', $name);
-		$options['database'] = (isset($options['database'])) ? $options['database'] : null;
-		$options['select']   = (isset($options['select'])) ? $options['select'] : true;
+		$options['database'] = isset($options['database']) ? $options['database'] : null;
+		$options['select']   = isset($options['select']) ? $options['select'] : true;
 
 		// Derive the class name from the driver.
 		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($options['driver'])) . '\\' . ucfirst(strtolower($options['driver'])) . 'Driver';

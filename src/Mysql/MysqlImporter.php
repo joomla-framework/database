@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -46,14 +46,14 @@ class MysqlImporter extends DatabaseImporter
 	protected function getAlterTableSql(\SimpleXMLElement $structure)
 	{
 		// Initialise variables.
-		$table = $this->getRealTableName($structure['name']);
+		$table     = $this->getRealTableName($structure['name']);
 		$oldFields = $this->db->getTableColumns($table);
-		$oldKeys = $this->db->getTableKeys($table);
-		$alters = array();
+		$oldKeys   = $this->db->getTableKeys($table);
+		$alters    = array();
 
 		// Get the fields and keys from the XML that we are aiming for.
 		$newFields = $structure->xpath('field');
-		$newKeys = $structure->xpath('key');
+		$newKeys   = $structure->xpath('key');
 
 		// Loop through each field in the new structure.
 		foreach ($newFields as $field)
@@ -66,8 +66,8 @@ class MysqlImporter extends DatabaseImporter
 				$column = $oldFields[$fName];
 
 				// Test whether there is a change.
-				$change = ((string) $field['Type'] != $column->Type) || ((string) $field['Null'] != $column->Null)
-					|| ((string) $field['Default'] != $column->Default) || ((string) $field['Extra'] != $column->Extra);
+				$change = ((string) $field['Type'] !== $column->Type) || ((string) $field['Null'] !== $column->Null)
+					|| ((string) $field['Default'] !== $column->Default) || ((string) $field['Extra'] !== $column->Extra);
 
 				if ($change)
 				{
@@ -101,41 +101,41 @@ class MysqlImporter extends DatabaseImporter
 			// Check if there are keys on this field in the existing table.
 			if (isset($oldLookup[$name]))
 			{
-				$same = true;
-				$newCount = count($newLookup[$name]);
-				$oldCount = count($oldLookup[$name]);
+				$same     = true;
+				$newCount = \count($newLookup[$name]);
+				$oldCount = \count($oldLookup[$name]);
 
 				// There is a key on this field in the old and new tables. Are they the same?
-				if ($newCount == $oldCount)
+				if ($newCount === $oldCount)
 				{
 					// Need to loop through each key and do a fine grained check.
 					for ($i = 0; $i < $newCount; $i++)
 					{
-						$same = (((string) $newLookup[$name][$i]['Non_unique'] == $oldLookup[$name][$i]->Non_unique)
-							&& ((string) $newLookup[$name][$i]['Column_name'] == $oldLookup[$name][$i]->Column_name)
-							&& ((string) $newLookup[$name][$i]['Seq_in_index'] == $oldLookup[$name][$i]->Seq_in_index)
-							&& ((string) $newLookup[$name][$i]['Collation'] == $oldLookup[$name][$i]->Collation)
-							&& ((string) $newLookup[$name][$i]['Index_type'] == $oldLookup[$name][$i]->Index_type));
+						$same = (((string) $newLookup[$name][$i]['Non_unique'] === $oldLookup[$name][$i]->Non_unique)
+							&& ((string) $newLookup[$name][$i]['Column_name'] === $oldLookup[$name][$i]->Column_name)
+							&& ((string) $newLookup[$name][$i]['Seq_in_index'] === $oldLookup[$name][$i]->Seq_in_index)
+							&& ((string) $newLookup[$name][$i]['Collation'] === $oldLookup[$name][$i]->Collation)
+							&& ((string) $newLookup[$name][$i]['Index_type'] === $oldLookup[$name][$i]->Index_type));
 
 						/*
 						Debug.
 						echo '<pre>';
-						echo '<br />Non_unique:   '.
+						echo '<br>Non_unique:   '.
 							((string) $newLookup[$name][$i]['Non_unique'] == $oldLookup[$name][$i]->Non_unique ? 'Pass' : 'Fail').' '.
 							(string) $newLookup[$name][$i]['Non_unique'].' vs '.$oldLookup[$name][$i]->Non_unique;
-						echo '<br />Column_name:  '.
+						echo '<br>Column_name:  '.
 							((string) $newLookup[$name][$i]['Column_name'] == $oldLookup[$name][$i]->Column_name ? 'Pass' : 'Fail').' '.
 							(string) $newLookup[$name][$i]['Column_name'].' vs '.$oldLookup[$name][$i]->Column_name;
-						echo '<br />Seq_in_index: '.
+						echo '<br>Seq_in_index: '.
 							((string) $newLookup[$name][$i]['Seq_in_index'] == $oldLookup[$name][$i]->Seq_in_index ? 'Pass' : 'Fail').' '.
 							(string) $newLookup[$name][$i]['Seq_in_index'].' vs '.$oldLookup[$name][$i]->Seq_in_index;
-						echo '<br />Collation:    '.
+						echo '<br>Collation:    '.
 							((string) $newLookup[$name][$i]['Collation'] == $oldLookup[$name][$i]->Collation ? 'Pass' : 'Fail').' '.
 							(string) $newLookup[$name][$i]['Collation'].' vs '.$oldLookup[$name][$i]->Collation;
-						echo '<br />Index_type:   '.
+						echo '<br>Index_type:   '.
 							((string) $newLookup[$name][$i]['Index_type'] == $oldLookup[$name][$i]->Index_type ? 'Pass' : 'Fail').' '.
 							(string) $newLookup[$name][$i]['Index_type'].' vs '.$oldLookup[$name][$i]->Index_type;
-						echo '<br />Same = '.($same ? 'true' : 'false');
+						echo '<br>Same = '.($same ? 'true' : 'false');
 						echo '</pre>';
 						 */
 
@@ -171,7 +171,7 @@ class MysqlImporter extends DatabaseImporter
 		// Any keys left are orphans.
 		foreach ($oldLookup as $name => $keys)
 		{
-			if (strtoupper($name) == 'PRIMARY')
+			if (strtoupper($name) === 'PRIMARY')
 			{
 				$alters[] = $this->getDropPrimaryKeySql($table);
 			}
@@ -217,17 +217,17 @@ class MysqlImporter extends DatabaseImporter
 		// TODO Incorporate into parent class and use $this.
 		$blobs = array('text', 'smalltext', 'mediumtext', 'largetext');
 
-		$fName = (string) $field['Field'];
-		$fType = (string) $field['Type'];
-		$fNull = (string) $field['Null'];
+		$fName    = (string) $field['Field'];
+		$fType    = (string) $field['Type'];
+		$fNull    = (string) $field['Null'];
 		$fDefault = isset($field['Default']) ? (string) $field['Default'] : null;
-		$fExtra = (string) $field['Extra'];
+		$fExtra   = (string) $field['Extra'];
 
 		$sql = $this->db->quoteName($fName) . ' ' . $fType;
 
-		if ($fNull == 'NO')
+		if ($fNull === 'NO')
 		{
-			if (in_array($fType, $blobs) || $fDefault === null)
+			if ($fDefault === null || \in_array($fType, $blobs, true))
 			{
 				$sql .= ' NOT NULL';
 			}
@@ -286,9 +286,7 @@ class MysqlImporter extends DatabaseImporter
 	 */
 	protected function getDropPrimaryKeySql($table)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP PRIMARY KEY';
-
-		return $sql;
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP PRIMARY KEY';
 	}
 
 	/**
@@ -342,12 +340,12 @@ class MysqlImporter extends DatabaseImporter
 		// TODO Error checking on array and element types.
 
 		$kNonUnique = (string) $columns[0]['Non_unique'];
-		$kName = (string) $columns[0]['Key_name'];
-		$kColumn = (string) $columns[0]['Column_name'];
+		$kName      = (string) $columns[0]['Key_name'];
+		$kColumn    = (string) $columns[0]['Column_name'];
 
 		$prefix = '';
 
-		if ($kName == 'PRIMARY')
+		if ($kName === 'PRIMARY')
 		{
 			$prefix = 'PRIMARY ';
 		}
@@ -356,10 +354,10 @@ class MysqlImporter extends DatabaseImporter
 			$prefix = 'UNIQUE ';
 		}
 
-		$nColumns = count($columns);
+		$nColumns = \count($columns);
 		$kColumns = array();
 
-		if ($nColumns == 1)
+		if ($nColumns === 1)
 		{
 			$kColumns[] = $this->db->quoteName($kColumn);
 		}
@@ -371,7 +369,7 @@ class MysqlImporter extends DatabaseImporter
 			}
 		}
 
-		$sql = $prefix . 'KEY ' . ($kName != 'PRIMARY' ? $this->db->quoteName($kName) : '') . ' (' . implode(',', $kColumns) . ')';
+		$sql = $prefix . 'KEY ' . ($kName !== 'PRIMARY' ? $this->db->quoteName($kName) : '') . ' (' . implode(',', $kColumns) . ')';
 
 		return $sql;
 	}

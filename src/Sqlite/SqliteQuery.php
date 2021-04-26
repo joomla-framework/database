@@ -2,15 +2,15 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Sqlite;
 
 use Joomla\Database\Pdo\PdoQuery;
-use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\Query\LimitableInterface;
+use Joomla\Database\Query\PreparableInterface;
 
 /**
  * SQLite Query Building Class.
@@ -49,7 +49,7 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	 *
 	 * @param   string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
 	 *                                          the form ':key', but can also be an integer.
-	 * @param   mixed           &$value         The value that will be bound. The value is passed by reference to support output
+	 * @param   mixed           $value          The value that will be bound. The value is passed by reference to support output
 	 *                                          parameters such as those possible with stored procedures.
 	 * @param   integer         $dataType       Constant corresponding to a SQL datatype.
 	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters.
@@ -70,7 +70,7 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		}
 
 		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if (is_null($value))
+		if ($value === null)
 		{
 			if (isset($this->bounded[$key]))
 			{
@@ -82,9 +82,9 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 
 		$obj = new \stdClass;
 
-		$obj->value = &$value;
-		$obj->dataType = $dataType;
-		$obj->length = $length;
+		$obj->value         = &$value;
+		$obj->dataType      = $dataType;
+		$obj->length        = $length;
 		$obj->driverOptions = $driverOptions;
 
 		// Case 3: Simply add the Key/Value into the bounded array
@@ -109,12 +109,10 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		{
 			return $this->bounded;
 		}
-		else
+
+		if (isset($this->bounded[$key]))
 		{
-			if (isset($this->bounded[$key]))
-			{
-				return $this->bounded[$key];
-			}
+			return $this->bounded[$key];
 		}
 	}
 
@@ -136,7 +134,7 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'length(' . $field . ')' . (isset($operator) && isset($condition) ? ' ' . $operator . ' ' . $condition : '');
+		return 'length(' . $field . ')' . (isset($operator, $condition) ? ' ' . $operator . ' ' . $condition : '');
 	}
 
 	/**
@@ -154,6 +152,7 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		{
 			case null:
 				$this->bounded = array();
+
 				break;
 		}
 
@@ -179,10 +178,8 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 		{
 			return implode(' || ' . $this->quote($separator) . ' || ', $values);
 		}
-		else
-		{
-			return implode(' || ', $values);
-		}
+
+		return implode(' || ', $values);
 	}
 
 	/**
@@ -226,7 +223,7 @@ class SqliteQuery extends PdoQuery implements PreparableInterface, LimitableInte
 	 */
 	public function setLimit($limit = 0, $offset = 0)
 	{
-		$this->limit = (int) $limit;
+		$this->limit  = (int) $limit;
 		$this->offset = (int) $offset;
 
 		return $this;

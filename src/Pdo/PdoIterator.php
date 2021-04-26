@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -31,10 +31,8 @@ class PdoIterator extends DatabaseIterator
 		{
 			return $this->cursor->rowCount();
 		}
-		else
-		{
-			return 0;
-		}
+
+		return 0;
 	}
 
 	/**
@@ -50,10 +48,8 @@ class PdoIterator extends DatabaseIterator
 		{
 			return $this->cursor->fetchObject($this->class);
 		}
-		else
-		{
-			return false;
-		}
+
+		return false;
 	}
 
 	/**

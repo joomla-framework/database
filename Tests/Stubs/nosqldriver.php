@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -83,7 +83,6 @@ class NosqlDriver extends DatabaseDriver
 	 */
 	public function disconnect()
 	{
-		return;
 	}
 
 	/**
@@ -189,7 +188,7 @@ class NosqlDriver extends DatabaseDriver
 	/**
 	 * Method to get the database collation in use by sampling a text field of a table in the database.
 	 *
-	 * @return  mixed  The collation in use by the database or boolean false if not supported.
+	 * @return  string|boolean  The collation in use by the database or boolean false if not supported.
 	 *
 	 * @since   1.0
 	 */
@@ -328,7 +327,7 @@ class NosqlDriver extends DatabaseDriver
 	/**
 	 * Execute the SQL statement.
 	 *
-	 * @return  mixed  A database cursor resource on success, boolean false on failure.
+	 * @return  resource|boolean  A database cursor resource on success, boolean false on failure.
 	 *
 	 * @since   1.0
 	 * @throws  RuntimeException

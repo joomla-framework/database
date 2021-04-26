@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -37,7 +37,7 @@ abstract class DatabaseExporter
 	 * @var    DatabaseDriver
 	 * @since  1.0
 	 */
-	protected $db = null;
+	protected $db;
 
 	/**
 	 * An array input sources (table names).
@@ -53,7 +53,7 @@ abstract class DatabaseExporter
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $options = null;
+	protected $options;
 
 	/**
 	 * Constructor.
@@ -101,6 +101,7 @@ abstract class DatabaseExporter
 				case 'xml':
 				default:
 					$buffer = $this->buildXml();
+
 					break;
 			}
 		}
@@ -168,11 +169,11 @@ abstract class DatabaseExporter
 	 */
 	public function from($from)
 	{
-		if (is_string($from))
+		if (\is_string($from))
 		{
 			$this->from = array($from);
 		}
-		elseif (is_array($from))
+		elseif (\is_array($from))
 		{
 			$this->from = $from;
 		}

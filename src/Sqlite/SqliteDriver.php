@@ -2,19 +2,19 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Sqlite;
 
-use SQLite3;
 use Joomla\Database\Pdo\PdoDriver;
+use SQLite3;
 
 /**
  * SQLite database driver supporting PDO based connections
  *
- * @see    http://php.net/manual/en/ref.pdo-sqlite.php
+ * @link   https://www.php.net/manual/en/ref.pdo-sqlite.php
  * @since  1.0
  */
 class SqliteDriver extends PdoDriver
@@ -99,7 +99,7 @@ class SqliteDriver extends PdoDriver
 	 */
 	public function escape($text, $extra = false)
 	{
-		if (is_int($text) || is_float($text))
+		if (\is_int($text) || \is_float($text))
 		{
 			return $text;
 		}
@@ -110,11 +110,24 @@ class SqliteDriver extends PdoDriver
 	/**
 	 * Method to get the database collation in use by sampling a text field of a table in the database.
 	 *
-	 * @return  mixed  The collation in use by the database or boolean false if not supported.
+	 * @return  string|boolean  The collation in use by the database or boolean false if not supported.
 	 *
 	 * @since   1.0
 	 */
 	public function getCollation()
+	{
+		return $this->charset;
+	}
+
+	/**
+	 * Method to get the database connection collation in use by sampling a text field of a table in the database.
+	 *
+	 * @return  string|boolean  The collation in use by the database connection (string) or boolean false if not supported.
+	 *
+	 * @since   1.6.0
+	 * @throws  \RuntimeException
+	 */
+	public function getConnectionCollation()
 	{
 		return $this->charset;
 	}
@@ -136,7 +149,7 @@ class SqliteDriver extends PdoDriver
 		$this->connect();
 
 		// Sanitize input to an array and iterate over the list.
-		settype($tables, 'array');
+		$tables = (array) $tables;
 
 		return $tables;
 	}
@@ -157,7 +170,7 @@ class SqliteDriver extends PdoDriver
 		$this->connect();
 
 		$columns = array();
-		$query = $this->getQuery(true);
+		$query   = $this->getQuery(true);
 
 		$fieldCasing = $this->getOption(\PDO::ATTR_CASE);
 
@@ -184,11 +197,11 @@ class SqliteDriver extends PdoDriver
 				// Do some dirty translation to MySQL output.
 				// TODO: Come up with and implement a standard across databases.
 				$columns[$field->NAME] = (object) array(
-					'Field' => $field->NAME,
-					'Type' => $field->TYPE,
-					'Null' => ($field->NOTNULL == '1' ? 'NO' : 'YES'),
+					'Field'   => $field->NAME,
+					'Type'    => $field->TYPE,
+					'Null'    => $field->NOTNULL == '1' ? 'NO' : 'YES',
 					'Default' => $field->DFLT_VALUE,
-					'Key' => ($field->PK == '1' ? 'PRI' : '')
+					'Key'     => $field->PK != '0' ? 'PRI' : '',
 				);
 			}
 		}
@@ -212,7 +225,7 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$keys = array();
+		$keys  = array();
 		$query = $this->getQuery(true);
 
 		$fieldCasing = $this->getOption(\PDO::ATTR_CASE);
@@ -252,7 +265,7 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		/* @type  SqliteQuery  $query */
+		/** @var SqliteQuery $query */
 		$query = $this->getQuery(true);
 
 		$type = 'table';
@@ -265,9 +278,7 @@ class SqliteDriver extends PdoDriver
 
 		$this->setQuery($query);
 
-		$tables = $this->loadColumn();
-
-		return $tables;
+		return $this->loadColumn();
 	}
 
 	/**
@@ -281,7 +292,7 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$this->setQuery("SELECT sqlite_version()");
+		$this->setQuery('SELECT sqlite_version()');
 
 		return $this->loadResult();
 	}
@@ -394,7 +405,7 @@ class SqliteDriver extends PdoDriver
 	 */
 	public static function isSupported()
 	{
-		return class_exists('\\PDO') && class_exists('\\SQLite3') && in_array('sqlite', \PDO::getAvailableDrivers());
+		return class_exists('\\PDO') && class_exists('\\SQLite3') && \in_array('sqlite', \PDO::getAvailableDrivers(), true);
 	}
 
 	/**

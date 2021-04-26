@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -13,7 +13,8 @@ use Joomla\Database\DatabaseImporter;
 /**
  * PostgreSQL Database Importer.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Use the PDO PostgreSQL driver instead
  */
 class PostgresqlImporter extends DatabaseImporter
 {
@@ -67,19 +68,22 @@ class PostgresqlImporter extends DatabaseImporter
 	 */
 	protected function getAlterTableSql(\SimpleXMLElement $structure)
 	{
-		$table = $this->getRealTableName($structure['name']);
-		$oldFields = $this->db->getTableColumns($table);
-		$oldKeys = $this->db->getTableKeys($table);
+		$table       = $this->getRealTableName($structure['name']);
+		$oldFields   = $this->db->getTableColumns($table);
+		$oldKeys     = $this->db->getTableKeys($table);
 		$oldSequence = $this->db->getTableSequences($table);
-		$alters = array();
+		$alters      = array();
 
 		// Get the fields and keys from the XML that we are aiming for.
-		$newFields = $structure->xpath('field');
-		$newKeys = $structure->xpath('key');
+		$newFields   = $structure->xpath('field');
+		$newKeys     = $structure->xpath('key');
 		$newSequence = $structure->xpath('sequence');
 
-		/* Sequence section */
-		$oldSeq = $this->getSeqLookup($oldSequence);
+		/*
+		 * Sequence section
+		 */
+
+		$oldSeq          = $this->getSeqLookup($oldSequence);
 		$newSequenceLook = $this->getSeqLookup($newSequence);
 
 		foreach ($newSequenceLook as $kSeqName => $vSeq)
@@ -92,19 +96,19 @@ class PostgresqlImporter extends DatabaseImporter
 				// For older database version that doesn't support these fields use default values
 				if (version_compare($this->db->getVersion(), '9.1.0') < 0)
 				{
-					$column->Min_Value = '1';
-					$column->Max_Value = '9223372036854775807';
-					$column->Increment = '1';
+					$column->Min_Value    = '1';
+					$column->Max_Value    = '9223372036854775807';
+					$column->Increment    = '1';
 					$column->Cycle_option = 'NO';
-					$column->Start_Value = '1';
+					$column->Start_Value  = '1';
 				}
 
 				// Test whether there is a change.
-				$change = ((string) $vSeq[0]['Type'] != $column->Type) || ((string) $vSeq[0]['Start_Value'] != $column->Start_Value)
-					|| ((string) $vSeq[0]['Min_Value'] != $column->Min_Value) || ((string) $vSeq[0]['Max_Value'] != $column->Max_Value)
-					|| ((string) $vSeq[0]['Increment'] != $column->Increment) || ((string) $vSeq[0]['Cycle_option'] != $column->Cycle_option)
-					|| ((string) $vSeq[0]['Table'] != $column->Table) || ((string) $vSeq[0]['Column'] != $column->Column)
-					|| ((string) $vSeq[0]['Schema'] != $column->Schema) || ((string) $vSeq[0]['Name'] != $column->Name);
+				$change = ((string) $vSeq[0]['Type'] !== $column->Type) || ((string) $vSeq[0]['Start_Value'] !== $column->Start_Value)
+					|| ((string) $vSeq[0]['Min_Value'] !== $column->Min_Value) || ((string) $vSeq[0]['Max_Value'] !== $column->Max_Value)
+					|| ((string) $vSeq[0]['Increment'] !== $column->Increment) || ((string) $vSeq[0]['Cycle_option'] !== $column->Cycle_option)
+					|| ((string) $vSeq[0]['Table'] !== $column->Table) || ((string) $vSeq[0]['Column'] !== $column->Column)
+					|| ((string) $vSeq[0]['Schema'] !== $column->Schema) || ((string) $vSeq[0]['Name'] !== $column->Name);
 
 				if ($change)
 				{
@@ -128,7 +132,10 @@ class PostgresqlImporter extends DatabaseImporter
 			$alters[] = $this->getDropSequenceSql($name);
 		}
 
-		/* Field section */
+		/*
+		 * Field section
+		 */
+
 		// Loop through each field in the new structure.
 		foreach ($newFields as $field)
 		{
@@ -140,8 +147,8 @@ class PostgresqlImporter extends DatabaseImporter
 				$column = $oldFields[$fName];
 
 				// Test whether there is a change.
-				$change = ((string) $field['Type'] != $column->Type) || ((string) $field['Null'] != $column->Null)
-					|| ((string) $field['Default'] != $column->Default);
+				$change = ((string) $field['Type'] !== $column->Type) || ((string) $field['Null'] !== $column->Null)
+					|| ((string) $field['Default'] !== $column->Default);
 
 				if ($change)
 				{
@@ -165,7 +172,10 @@ class PostgresqlImporter extends DatabaseImporter
 			$alters[] = $this->getDropColumnSql($table, $name);
 		}
 
-		/* Index section */
+		/*
+		 * Index section
+		 */
+
 		// Get the lookups for the old and new keys
 		$oldLookup = $this->getKeyLookup($oldKeys);
 		$newLookup = $this->getKeyLookup($newKeys);
@@ -176,17 +186,17 @@ class PostgresqlImporter extends DatabaseImporter
 			// Check if there are keys on this field in the existing table.
 			if (isset($oldLookup[$name]))
 			{
-				$same = true;
-				$newCount = count($newLookup[$name]);
-				$oldCount = count($oldLookup[$name]);
+				$same     = true;
+				$newCount = \count($newLookup[$name]);
+				$oldCount = \count($oldLookup[$name]);
 
 				// There is a key on this field in the old and new tables. Are they the same?
-				if ($newCount == $oldCount)
+				if ($newCount === $oldCount)
 				{
 					for ($i = 0; $i < $newCount; $i++)
 					{
 						// Check only query field -> different query means different index
-						$same = ((string) $newLookup[$name][$i]['Query'] == $oldLookup[$name][$i]->Query);
+						$same = ((string) $newLookup[$name][$i]['Query'] === $oldLookup[$name][$i]->Query);
 
 						if (!$same)
 						{
@@ -203,7 +213,7 @@ class PostgresqlImporter extends DatabaseImporter
 
 				if (!$same)
 				{
-					$alters[] = $this->getDropIndexSql($name);
+					$alters[]  = $this->getDropIndexSql($name);
 					$alters[]  = (string) $newLookup[$name][0]['Query'];
 				}
 
@@ -220,7 +230,7 @@ class PostgresqlImporter extends DatabaseImporter
 		// Any keys left are orphans.
 		foreach ($oldLookup as $name => $keys)
 		{
-			if ($oldLookup[$name][0]->is_primary == 'TRUE')
+			if ($oldLookup[$name][0]->is_primary === 'TRUE')
 			{
 				$alters[] = $this->getDropPrimaryKeySql($table, $oldLookup[$name][0]->Index);
 			}
@@ -244,9 +254,7 @@ class PostgresqlImporter extends DatabaseImporter
 	 */
 	protected function getDropSequenceSql($name)
 	{
-		$sql = 'DROP SEQUENCE ' . $this->db->quoteName($name);
-
-		return $sql;
+		return 'DROP SEQUENCE ' . $this->db->quoteName($name);
 	}
 
 	/**
@@ -260,20 +268,20 @@ class PostgresqlImporter extends DatabaseImporter
 	 */
 	protected function getAddSequenceSql(\SimpleXMLElement $field)
 	{
-		/* For older database version that doesn't support these fields use default values */
+		// For older database version that doesn't support these fields use default values
 		if (version_compare($this->db->getVersion(), '9.1.0') < 0)
 		{
-			$field['Min_Value'] = '1';
-			$field['Max_Value'] = '9223372036854775807';
-			$field['Increment'] = '1';
+			$field['Min_Value']    = '1';
+			$field['Max_Value']    = '9223372036854775807';
+			$field['Increment']    = '1';
 			$field['Cycle_option'] = 'NO';
-			$field['Start_Value'] = '1';
+			$field['Start_Value']  = '1';
 		}
 
 		$sql = 'CREATE SEQUENCE ' . (string) $field['Name']
 			. ' INCREMENT BY ' . (string) $field['Increment'] . ' MINVALUE ' . $field['Min_Value']
 			. ' MAXVALUE ' . (string) $field['Max_Value'] . ' START ' . (string) $field['Start_Value']
-			. (((string) $field['Cycle_option'] == 'NO' ) ? ' NO' : '' ) . ' CYCLE'
+			. (((string) $field['Cycle_option'] === 'NO') ? ' NO' : '') . ' CYCLE'
 			. ' OWNED BY ' . $this->db->quoteName((string) $field['Schema'] . '.' . (string) $field['Table'] . '.' . (string) $field['Column']);
 
 		return $sql;
@@ -290,14 +298,14 @@ class PostgresqlImporter extends DatabaseImporter
 	 */
 	protected function getChangeSequenceSql(\SimpleXMLElement $field)
 	{
-		/* For older database version that doesn't support these fields use default values */
+		// For older database version that doesn't support these fields use default values
 		if (version_compare($this->db->getVersion(), '9.1.0') < 0)
 		{
-			$field['Min_Value'] = '1';
-			$field['Max_Value'] = '9223372036854775807';
-			$field['Increment'] = '1';
+			$field['Min_Value']    = '1';
+			$field['Max_Value']    = '9223372036854775807';
+			$field['Increment']    = '1';
 			$field['Cycle_option'] = 'NO';
-			$field['Start_Value'] = '1';
+			$field['Start_Value']  = '1';
 		}
 
 		$sql = 'ALTER SEQUENCE ' . (string) $field['Name']
@@ -339,20 +347,19 @@ class PostgresqlImporter extends DatabaseImporter
 	protected function getAlterColumnSql($table, \SimpleXMLElement $field)
 	{
 		// TODO Incorporate into parent class and use $this.
-		$blobs = array('text', 'smalltext', 'mediumtext', 'largetext');
-
-		$fName = (string) $field['Field'];
-		$fType = (string) $field['Type'];
-		$fNull = (string) $field['Null'];
-		$fDefault = (isset($field['Default']) && $field['Default'] != 'NULL' ) ?
+		$blobs    = array('text', 'smalltext', 'mediumtext', 'largetext');
+		$fName    = (string) $field['Field'];
+		$fType    = (string) $field['Type'];
+		$fNull    = (string) $field['Null'];
+		$fDefault = (isset($field['Default']) && $field['Default'] != 'NULL') ?
 					preg_match('/^[0-9]$/', $field['Default']) ? $field['Default'] : $this->db->quote((string) $field['Default'])
 					: null;
 
 		$sql = ' TYPE ' . $fType;
 
-		if ($fNull == 'NO')
+		if ($fNull === 'NO')
 		{
-			if (in_array($fType, $blobs) || $fDefault === null)
+			if ($fDefault === null || \in_array($fType, $blobs, true))
 			{
 				$sql .= ",\nALTER COLUMN " . $this->db->quoteName($fName) . ' SET NOT NULL'
 					. ",\nALTER COLUMN " . $this->db->quoteName($fName) . ' DROP DEFAULT';
@@ -375,7 +382,10 @@ class PostgresqlImporter extends DatabaseImporter
 		// Sequence was created in other function, here is associated a default value but not yet owner
 		if (strpos($fDefault, 'nextval') !== false)
 		{
-			$sql .= ";\nALTER SEQUENCE " . $this->db->quoteName($table . '_' . $fName . '_seq') . ' OWNED BY ' . $this->db->quoteName($table . '.' . $fName);
+			$sequence = $table . '_' . $fName . '_seq';
+			$owner    = $table . '.' . $fName;
+
+			$sql .= ";\nALTER SEQUENCE " . $this->db->quoteName($sequence) . ' OWNED BY ' . $this->db->quoteName($owner);
 		}
 
 		return $sql;
@@ -393,12 +403,11 @@ class PostgresqlImporter extends DatabaseImporter
 	protected function getColumnSql(\SimpleXMLElement $field)
 	{
 		// TODO Incorporate into parent class and use $this.
-		$blobs = array('text', 'smalltext', 'mediumtext', 'largetext');
-
-		$fName = (string) $field['Field'];
-		$fType = (string) $field['Type'];
-		$fNull = (string) $field['Null'];
-		$fDefault = (isset($field['Default']) && $field['Default'] != 'NULL' ) ?
+		$blobs    = array('text', 'smalltext', 'mediumtext', 'largetext');
+		$fName    = (string) $field['Field'];
+		$fType    = (string) $field['Type'];
+		$fNull    = (string) $field['Null'];
+		$fDefault = (isset($field['Default']) && $field['Default'] != 'NULL') ?
 					preg_match('/^[0-9]$/', $field['Default']) ? $field['Default'] : $this->db->quote((string) $field['Default'])
 					: null;
 
@@ -411,9 +420,9 @@ class PostgresqlImporter extends DatabaseImporter
 		{
 			$sql = $this->db->quoteName($fName) . ' ' . $fType;
 
-			if ($fNull == 'NO')
+			if ($fNull === 'NO')
 			{
-				if (in_array($fType, $blobs) || $fDefault === null)
+				if ($fDefault === null || \in_array($fType, $blobs, true))
 				{
 					$sql .= ' NOT NULL';
 				}
@@ -445,9 +454,7 @@ class PostgresqlImporter extends DatabaseImporter
 	 */
 	protected function getDropIndexSql($name)
 	{
-		$sql = 'DROP INDEX ' . $this->db->quoteName($name);
-
-		return $sql;
+		return 'DROP INDEX ' . $this->db->quoteName($name);
 	}
 
 	/**

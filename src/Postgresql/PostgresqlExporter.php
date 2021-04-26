@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -13,7 +13,8 @@ use Joomla\Database\DatabaseExporter;
 /**
  * PostgreSQL Database Exporter.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Use the PDO PostgreSQL driver instead
  */
 class PostgresqlExporter extends DatabaseExporter
 {
@@ -59,8 +60,8 @@ class PostgresqlExporter extends DatabaseExporter
 			$table = $this->getGenericTableName($table);
 
 			// Get the details columns information.
-			$fields = $this->db->getTableColumns($table, false);
-			$keys = $this->db->getTableKeys($table);
+			$fields    = $this->db->getTableColumns($table, false);
+			$keys      = $this->db->getTableKeys($table);
 			$sequences = $this->db->getTableSequences($table);
 
 			$buffer[] = '  <table_structure name="' . $table . '">';
@@ -72,24 +73,24 @@ class PostgresqlExporter extends DatabaseExporter
 					$sequence->start_value = null;
 				}
 
-				$buffer[] = '   <sequence Name="' . $sequence->sequence . '"' . ' Schema="' . $sequence->schema . '"' .
-					' Table="' . $sequence->table . '"' . ' Column="' . $sequence->column . '"' . ' Type="' . $sequence->data_type . '"' .
-					' Start_Value="' . $sequence->start_value . '"' . ' Min_Value="' . $sequence->minimum_value . '"' .
-					' Max_Value="' . $sequence->maximum_value . '"' . ' Increment="' . $sequence->increment . '"' .
+				$buffer[] = '   <sequence Name="' . $sequence->sequence . '" Schema="' . $sequence->schema . '"' .
+					' Table="' . $sequence->table . '" Column="' . $sequence->column . '" Type="' . $sequence->data_type . '"' .
+					' Start_Value="' . $sequence->start_value . '" Min_Value="' . $sequence->minimum_value . '"' .
+					' Max_Value="' . $sequence->maximum_value . '" Increment="' . $sequence->increment . '"' .
 					' Cycle_option="' . $sequence->cycle_option . '"' .
 					' />';
 			}
 
 			foreach ($fields as $field)
 			{
-				$buffer[] = '   <field Field="' . $field->column_name . '"' . ' Type="' . $field->type . '"' . ' Null="' . $field->null . '"' .
+				$buffer[] = '   <field Field="' . $field->column_name . '" Type="' . $field->type . '" Null="' . $field->null . '"' .
 							(isset($field->default) ? ' Default="' . $field->default . '"' : '') . ' Comments="' . $field->comments . '"' .
 					' />';
 			}
 
 			foreach ($keys as $key)
 			{
-				$buffer[] = '   <key Index="' . $key->idxName . '"' . ' is_primary="' . $key->isPrimary . '"' . ' is_unique="' . $key->isUnique . '"' .
+				$buffer[] = '   <key Index="' . $key->idxName . '" is_primary="' . $key->isPrimary . '" is_unique="' . $key->isUnique . '"' .
 					' Query="' . $key->Query . '" />';
 			}
 

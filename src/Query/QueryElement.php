@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -23,19 +23,19 @@ class QueryElement
 	 * @var    string  The name of the element.
 	 * @since  1.0
 	 */
-	protected $name = null;
+	protected $name;
 
 	/**
 	 * @var    array  An array of elements.
 	 * @since  1.0
 	 */
-	protected $elements = null;
+	protected $elements;
 
 	/**
 	 * @var    string  Glue piece.
 	 * @since  1.0
 	 */
-	protected $glue = null;
+	protected $glue;
 
 	/**
 	 * Constructor.
@@ -49,8 +49,8 @@ class QueryElement
 	public function __construct($name, $elements, $glue = ',')
 	{
 		$this->elements = array();
-		$this->name = $name;
-		$this->glue = $glue;
+		$this->name     = $name;
+		$this->glue     = $glue;
 
 		$this->append($elements);
 	}
@@ -64,14 +64,12 @@ class QueryElement
 	 */
 	public function __toString()
 	{
-		if (substr($this->name, -2) == '()')
+		if (substr($this->name, -2) === '()')
 		{
-			return PHP_EOL . substr($this->name, 0, -2) . '(' . implode($this->glue, $this->elements) . ')';
+			return \PHP_EOL . substr($this->name, 0, -2) . '(' . implode($this->glue, $this->elements) . ')';
 		}
-		else
-		{
-			return PHP_EOL . $this->name . ' ' . implode($this->glue, $this->elements);
-		}
+
+		return \PHP_EOL . $this->name . ' ' . implode($this->glue, $this->elements);
 	}
 
 	/**
@@ -85,7 +83,7 @@ class QueryElement
 	 */
 	public function append($elements)
 	{
-		if (is_array($elements))
+		if (\is_array($elements))
 		{
 			$this->elements = array_merge($this->elements, $elements);
 		}
@@ -105,6 +103,18 @@ class QueryElement
 	public function getElements()
 	{
 		return $this->elements;
+	}
+
+	/**
+	 * Gets the name of this element.
+	 *
+	 * @return  string  Name of the element.
+	 *
+	 * @since   1.7.0
+	 */
+	public function getName()
+	{
+		return $this->name;
 	}
 
 	/**
@@ -135,7 +145,7 @@ class QueryElement
 	{
 		foreach ($this as $k => $v)
 		{
-			if (is_object($v) || is_array($v))
+			if (\is_object($v) || \is_array($v))
 			{
 				$this->{$k} = unserialize(serialize($v));
 			}

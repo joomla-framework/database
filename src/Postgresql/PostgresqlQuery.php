@@ -2,21 +2,22 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Postgresql;
 
 use Joomla\Database\DatabaseQuery;
+use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
 use Joomla\Database\Query\QueryElement;
-use Joomla\Database\Query\LimitableInterface;
 
 /**
  * PostgreSQL Query Building Class.
  *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  2.0  Use the PDO PostgreSQL driver instead
  */
 class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, PreparableInterface
 {
@@ -26,7 +27,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $forUpdate = null;
+	protected $forUpdate;
 
 	/**
 	 * The FOR SHARE element used in "FOR SHARE" lock
@@ -34,7 +35,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $forShare = null;
+	protected $forShare;
 
 	/**
 	 * The NOWAIT element used in "FOR SHARE" and "FOR UPDATE" lock
@@ -42,7 +43,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $noWait = null;
+	protected $noWait;
 
 	/**
 	 * The LIMIT element
@@ -50,7 +51,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $limit = null;
+	protected $limit;
 
 	/**
 	 * The OFFSET element
@@ -58,7 +59,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $offset = null;
+	protected $offset;
 
 	/**
 	 * The RETURNING element of INSERT INTO
@@ -66,13 +67,13 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 * @var    object
 	 * @since  1.0
 	 */
-	protected $returning = null;
+	protected $returning;
 
 	/**
 	 * Holds key / value pair of bound objects.
 	 *
 	 * @var    mixed
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.5.0
 	 */
 	protected $bounded = array();
 
@@ -82,7 +83,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * @param   string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
 	 *                                          the form ':key', but can also be an integer.
-	 * @param   mixed           &$value         The value that will be bound. The value is passed by reference to support output
+	 * @param   mixed           $value          The value that will be bound. The value is passed by reference to support output
 	 *                                          parameters such as those possible with stored procedures.
 	 * @param   string          $dataType       The corresponding bind type. (Unused)
 	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters. (Unused)
@@ -90,7 +91,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * @return  PostgresqlQuery
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function bind($key = null, &$value = null, $dataType = '', $length = 0, $driverOptions = array())
 	{
@@ -103,7 +104,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 		}
 
 		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if (is_null($value))
+		if ($value === null)
 		{
 			if (isset($this->bounded[$key]))
 			{
@@ -127,7 +128,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * @return  mixed
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function &getBounded($key = null)
 	{
@@ -278,6 +279,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 
 			default:
 				$query = parent::__toString();
+
 				break;
 		}
 
@@ -304,26 +306,32 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 		{
 			case 'limit':
 				$this->limit = null;
+
 				break;
 
 			case 'offset':
 				$this->offset = null;
+
 				break;
 
 			case 'forUpdate':
 				$this->forUpdate = null;
+
 				break;
 
 			case 'forShare':
 				$this->forShare = null;
+
 				break;
 
 			case 'noWait':
 				$this->noWait = null;
+
 				break;
 
 			case 'returning':
 				$this->returning = null;
+
 				break;
 
 			case 'select':
@@ -340,18 +348,20 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 			case 'columns':
 			case 'values':
 				parent::clear($clause);
+
 				break;
 
 			default:
-				$this->bounded = array();
-				$this->type = null;
-				$this->limit = null;
-				$this->offset = null;
+				$this->bounded   = array();
+				$this->type      = null;
+				$this->limit     = null;
+				$this->offset    = null;
 				$this->forUpdate = null;
-				$this->forShare = null;
-				$this->noWait = null;
+				$this->forShare  = null;
+				$this->noWait    = null;
 				$this->returning = null;
 				parent::clear($clause);
+
 				break;
 		}
 
@@ -365,16 +375,25 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * Usage:
 	 * $query->select($query->castAsChar('a'));
+	 * $query->select($query->castAsChar('a', 40));
 	 *
 	 * @param   string  $value  The value to cast as a char.
+	 * @param   string  $len    The length of the char.
 	 *
 	 * @return  string  Returns the cast value.
 	 *
 	 * @since   1.0
 	 */
-	public function castAsChar($value)
+	public function castAsChar($value, $len = null)
 	{
-		return $value . '::text';
+		if (!$len)
+		{
+			return $value . '::text';
+		}
+		else
+		{
+			return 'CAST(' . $value . ' AS CHAR(' . $len . '))';
+		}
 	}
 
 	/**
@@ -396,10 +415,8 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 		{
 			return implode(' || ' . $this->quote($separator) . ' || ', $values);
 		}
-		else
-		{
-			return implode(' || ', $values);
-		}
+
+		return implode(' || ', $values);
 	}
 
 	/**
@@ -417,25 +434,25 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	/**
 	 * Sets the FOR UPDATE lock on select's output row
 	 *
-	 * @param   string  $table_name  The table to lock
-	 * @param   string  $glue        The glue by which to join the conditions. Defaults to ',' .
+	 * @param   string  $tableName  The table to lock
+	 * @param   string  $glue       The glue by which to join the conditions. Defaults to ',' .
 	 *
 	 * @return  PostgresqlQuery  FOR UPDATE query element
 	 *
 	 * @since   1.0
 	 */
-	public function forUpdate($table_name, $glue = ',')
+	public function forUpdate($tableName, $glue = ',')
 	{
 		$this->type = 'forUpdate';
 
-		if (is_null($this->forUpdate))
+		if ($this->forUpdate === null)
 		{
-			$glue = strtoupper($glue);
-			$this->forUpdate = new QueryElement('FOR UPDATE', 'OF ' . $table_name, "$glue ");
+			$glue            = strtoupper($glue);
+			$this->forUpdate = new QueryElement('FOR UPDATE', 'OF ' . $tableName, "$glue ");
 		}
 		else
 		{
-			$this->forUpdate->append($table_name);
+			$this->forUpdate->append($tableName);
 		}
 
 		return $this;
@@ -444,25 +461,25 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	/**
 	 * Sets the FOR SHARE lock on select's output row
 	 *
-	 * @param   string  $table_name  The table to lock
-	 * @param   string  $glue        The glue by which to join the conditions. Defaults to ',' .
+	 * @param   string  $tableName  The table to lock
+	 * @param   string  $glue       The glue by which to join the conditions. Defaults to ',' .
 	 *
 	 * @return  PostgresqlQuery  FOR SHARE query element
 	 *
 	 * @since   1.0
 	 */
-	public function forShare($table_name, $glue = ',')
+	public function forShare($tableName, $glue = ',')
 	{
 		$this->type = 'forShare';
 
-		if (is_null($this->forShare))
+		if ($this->forShare === null)
 		{
-			$glue = strtoupper($glue);
-			$this->forShare = new QueryElement('FOR SHARE', 'OF ' . $table_name, "$glue ");
+			$glue           = strtoupper($glue);
+			$this->forShare = new QueryElement('FOR SHARE', 'OF ' . $tableName, "$glue ");
 		}
 		else
 		{
-			$this->forShare->append($table_name);
+			$this->forShare->append($tableName);
 		}
 
 		return $this;
@@ -581,7 +598,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	{
 		$this->type = 'noWait';
 
-		if ( is_null($this->noWait) )
+		if ($this->noWait === null)
 		{
 			$this->noWait = new QueryElement('NOWAIT', null);
 		}
@@ -600,7 +617,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 */
 	public function limit($limit = 0)
 	{
-		if (is_null($this->limit))
+		if ($this->limit === null)
 		{
 			$this->limit = new QueryElement('LIMIT', (int) $limit);
 		}
@@ -619,7 +636,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 */
 	public function offset($offset = 0)
 	{
-		if (is_null($this->offset))
+		if ($this->offset === null)
 		{
 			$this->offset = new QueryElement('OFFSET', (int) $offset);
 		}
@@ -638,7 +655,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 */
 	public function returning($pkCol)
 	{
-		if (is_null($this->returning))
+		if ($this->returning === null)
 		{
 			$this->returning = new QueryElement('RETURNING', $pkCol);
 		}
@@ -704,25 +721,23 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * Prefixing the interval with a - (negative sign) will cause subtraction to be used.
 	 *
-	 * @param   datetime  $date      The date to add to
-	 * @param   string    $interval  The string representation of the appropriate number of units
-	 * @param   string    $datePart  The part of the date to perform the addition on
+	 * @param   string  $date      The db quoted string representation of the date to add to
+	 * @param   string  $interval  The string representation of the appropriate number of units
+	 * @param   string  $datePart  The part of the date to perform the addition on
 	 *
 	 * @return  string  The string with the appropriate sql for addition of dates
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 * @link    http://www.postgresql.org/docs/9.0/static/functions-datetime.html.
 	 */
 	public function dateAdd($date, $interval, $datePart)
 	{
-		if (substr($interval, 0, 1) != '-')
+		if (substr($interval, 0, 1) !== '-')
 		{
-			return "timestamp '" . $date . "' + interval '" . $interval . " " . $datePart . "'";
+			return 'timestamp ' . $date . " + interval '" . $interval . ' ' . $datePart . "'";
 		}
-		else
-		{
-			return "timestamp '" . $date . "' - interval '" . ltrim($interval, '-') . " " . $datePart . "'";
-		}
+
+		return 'timestamp ' . $date . " - interval '" . ltrim($interval, '-') . ' ' . $datePart . "'";
 	}
 
 	/**
@@ -735,7 +750,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function regexp($value)
 	{
@@ -750,7 +765,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function rand()
 	{
@@ -770,7 +785,7 @@ class PostgresqlQuery extends DatabaseQuery implements LimitableInterface, Prepa
 	 *
 	 * @return  string  A representation of the MySQL find_in_set() function for the driver.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.5.0
 	 */
 	public function findInSet($value, $set)
 	{
