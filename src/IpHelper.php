@@ -1,18 +1,16 @@
 <?php
 /**
- * Part of the Joomla Framework Utilities Package
- *
- * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE
+ * @package     FrameworkOnFramework
+ * @subpackage  utils
+ * @copyright   Copyright (C) 2010-2016 Nicholas K. Dionysopoulos / Akeeba Ltd. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @note	This file has been modified by the Joomla! Project and no longer reflects the original work of its author.
  */
 
 namespace Joomla\Utilities;
 
 /**
  * IpHelper is a utility class for processing IP addresses
- *
- * This class is adapted from the `FOFUtilsIp` class distributed with the Joomla! CMS as part of the FOF library by Akeeba Ltd.
- * The original class is copyright of Nicholas K. Dionysopoulos / Akeeba Ltd.
  *
  * @since  1.6.0
  */
