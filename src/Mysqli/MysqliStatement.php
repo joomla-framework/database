@@ -540,6 +540,7 @@ class MysqliStatement implements StatementInterface
 				return $ret;
 
 			case FetchMode::STANDARD_OBJECT:
+			case FetchMode::CUSTOM_OBJECT:
 				return (object) array_combine($this->columnNames, $values);
 
 			default:
