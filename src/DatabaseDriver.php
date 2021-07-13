@@ -1068,7 +1068,15 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 			$this->execute();
 		}
 
-		return $this->factory->getIterator($this->name, $this->statement, $column, $class);
+		/**
+		 * Calling setQuery free's the statement from the iterator which will break the iterator.
+		 * So we set statement to null so that freeResult on the statement here has no affect.
+		 * If you unset the iterator object then that will close the cursor and free the result.
+		 */
+		$iterator = $this->factory->getIterator($this->name, $this->statement, $column, $class);
+		$this->statement = null;
+
+		return $iterator;
 	}
 
 	/**
