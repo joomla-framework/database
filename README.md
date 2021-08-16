@@ -391,5 +391,5 @@ class DashboardHtmlView extends AbstractHtmlView
 You can simply run the following from the command line:
 
 ```sh
-composer require joomla/renderer
+composer require joomla/renderer "~2.0"
 ```
