@@ -284,7 +284,15 @@ class MysqlImporter extends DatabaseImporter
 
 		if ($fExtra)
 		{
-			$sql .= ' ' . strtoupper($fExtra);
+			// MySql 8.0 introduces DEFAULT_GENERATED in the extra column and should be replaced with the default value
+			if (stristr($fExtra, 'DEFAULT_GENERATED') !== false)
+			{
+				$sql .= ' ' . strtoupper(str_ireplace('DEFAULT_GENERATED', 'DEFAULT ' . $fDefault, $fExtra));
+			}
+			else
+			{
+				$sql .= ' ' . strtoupper($fExtra);
+			}
 		}
 
 		return $sql;
