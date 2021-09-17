@@ -2,4 +2,4 @@ vendor/
 composer.phar
 composer.lock
 phpunit.xml
-.idea/
+/.phpunit.result.cache
