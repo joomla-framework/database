@@ -1029,6 +1029,49 @@ class DatabaseQueryTest extends TestCase
 	}
 
 	/**
+	 * @testdox bind() does not rely on index sequence
+	 */
+	public function testBindIndexSequence()
+	{
+		$keys = [1, 2];
+
+		$values = ['foo', 'bar', 'baz'];
+		unset($values[1]);
+
+		$this->assertEquals([0, 2], array_keys($values));
+
+		$this->query->bind($keys, $values, ParameterType::STRING);
+
+		$this->assertEquals(
+			[
+				1 => (object)['value' => 'foo', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+				2 => (object)['value' => 'baz', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+			],
+			$this->query->bounded
+		);
+	}
+
+	/**
+	 * @testdox bind() accepts associated value arrays
+	 */
+	public function testBindAssoc()
+	{
+		$keys = [1, 2];
+
+		$values = ['a' => 'foo', 'b' => 'bar'];
+
+		$this->query->bind($keys, $values, ParameterType::STRING);
+
+		$this->assertEquals(
+			[
+				1 => (object)['value' => 'foo', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+				2 => (object)['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+			],
+			$this->query->bounded
+		);
+	}
+
+	/**
 	 * @testdox  The bindArray method creates bound parameters for an array and returns the parameter names
 	 */
 	public function testBindArray()
