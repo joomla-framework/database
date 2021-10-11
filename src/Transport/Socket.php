@@ -119,7 +119,7 @@ class Socket implements TransportInterface
 		}
 
 		// Configure protocol version, use transport's default if not set otherwise.
-		$protocolVersion = isset($this->options['protocolVersion']) ? $this->options['protocolVersion'] : '1.0';
+		$protocolVersion = isset($this->options['protocolVersion']) ? $this->options['protocolVersion'] : '1.1';
 
 		// Build the request payload.
 		$request   = array();
