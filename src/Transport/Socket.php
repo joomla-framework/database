@@ -232,7 +232,7 @@ class Socket implements TransportInterface
 
 		if (is_numeric($code))
 		{
-			$return->code = (int) $code;
+			$return->code = (int)$code;
 		}
 		else
 		{
@@ -311,9 +311,22 @@ class Socket implements TransportInterface
 		}
 
 		// Capture PHP errors
-		$php_errormsg = '';
-		$trackErrors  = ini_get('track_errors');
-		ini_set('track_errors', true);
+		if (PHP_VERSION_ID < 70000)
+		{
+			// @Todo Remove this path, when PHP5 support is dropped.
+			set_error_handler(
+				function () {
+					return false;
+				}
+			);
+			@trigger_error('');
+			restore_error_handler();
+		}
+		else
+		{
+			/** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
+			error_clear_last();
+		}
 
 		// PHP sends a warning if the uri does not exists; we silence it and throw an exception instead.
 		// Attempt to connect to the server
@@ -321,20 +334,17 @@ class Socket implements TransportInterface
 
 		if (!$connection)
 		{
-			if (!$php_errormsg)
+			$error = error_get_last();
+			if ($error === null || $error['message'] === '')
 			{
 				// Error but nothing from php? Create our own
-				$php_errormsg = sprintf('Could not connect to resource: %s', $uri, $err, $errno);
+				$error = array(
+					'message' => sprintf('Could not connect to resource %s: %s (%d)', $uri, $err, $errno)
+				);
 			}
 
-			// Restore error tracking to give control to the exception handler
-			ini_set('track_errors', $trackErrors);
-
-			throw new \RuntimeException($php_errormsg);
+			throw new \RuntimeException($error['message']);
 		}
-
-		// Restore error tracking to what it was before.
-		ini_set('track_errors', $trackErrors);
 
 		// Since the connection was successful let's store it in case we need to use it later.
 		$this->connections[$key] = $connection;
@@ -342,7 +352,7 @@ class Socket implements TransportInterface
 		// If an explicit timeout is set, set it.
 		if (isset($timeout))
 		{
-			stream_set_timeout($this->connections[$key], (int) $timeout);
+			stream_set_timeout($this->connections[$key], (int)$timeout);
 		}
 
 		return $this->connections[$key];
