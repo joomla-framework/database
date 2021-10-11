@@ -1,4 +1,4 @@
-## The HTTP Package [![Build Status](https://travis-ci.org/joomla-framework/http.png?branch=master)](https://travis-ci.org/joomla-framework/http)
+## The HTTP Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/http/status.svg)](https://ci.joomla.org/joomla-framework/http)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/http/v/stable)](https://packagist.org/packages/joomla/http)
 [![Total Downloads](https://poser.pugx.org/joomla/http/downloads)](https://packagist.org/packages/joomla/http)
