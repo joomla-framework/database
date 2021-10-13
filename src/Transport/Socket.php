@@ -232,7 +232,7 @@ class Socket implements TransportInterface
 
 		if (is_numeric($code))
 		{
-			$return->code = (int)$code;
+			$return->code = (int) $code;
 		}
 		else
 		{
@@ -335,6 +335,7 @@ class Socket implements TransportInterface
 		if (!$connection)
 		{
 			$error = error_get_last();
+
 			if ($error === null || $error['message'] === '')
 			{
 				// Error but nothing from php? Create our own
@@ -352,7 +353,7 @@ class Socket implements TransportInterface
 		// If an explicit timeout is set, set it.
 		if (isset($timeout))
 		{
-			stream_set_timeout($this->connections[$key], (int)$timeout);
+			stream_set_timeout($this->connections[$key], (int) $timeout);
 		}
 
 		return $this->connections[$key];

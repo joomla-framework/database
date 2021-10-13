@@ -234,6 +234,7 @@ class Stream implements TransportInterface
 		if (!$stream)
 		{
 			$error = error_get_last();
+
 			if ($error === null || $error['message'] === '')
 			{
 				// Error but nothing from php? Create our own
