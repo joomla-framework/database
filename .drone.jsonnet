@@ -17,7 +17,6 @@ local composer(phpversion, params) = {
     image: "joomlaprojects/docker-images:php" + phpversion,
     volumes: volumes,
     commands: [
-        "pwd",
         "php -v",
         "composer update " + params
     ]
@@ -27,7 +26,10 @@ local phpunit(phpversion) = {
     name: "PHPUnit",
     image: "joomlaprojects/docker-images:php" + phpversion,
     [if phpversion == "8.0" then "failure"]: "ignore",
-    commands: ["vendor/bin/phpunit"]
+    commands: [
+        "cp Tests/stubs/jhttp_stub.php /var/www/html",
+        "vendor/bin/phpunit"
+    ]
 };
 
 local pipeline(name, phpversion, params) = {

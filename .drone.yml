@@ -68,7 +68,6 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php5.3
   commands:
-  - pwd
   - php -v
   - composer update --prefer-stable --prefer-lowest
   volumes:
@@ -78,6 +77,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.3
   commands:
+  - cp Tests/stubs/jhttp_stub.php /var/www/html
   - vendor/bin/phpunit
 
 volumes:
@@ -97,7 +97,6 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php5.3
   commands:
-  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -107,6 +106,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.3
   commands:
+  - cp Tests/stubs/jhttp_stub.php /var/www/html
   - vendor/bin/phpunit
 
 volumes:
@@ -126,7 +126,6 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php5.4
   commands:
-  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -136,6 +135,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.4
   commands:
+  - cp Tests/stubs/jhttp_stub.php /var/www/html
   - vendor/bin/phpunit
 
 volumes:
@@ -155,7 +155,6 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php5.5
   commands:
-  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -165,6 +164,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.5
   commands:
+  - cp Tests/stubs/jhttp_stub.php /var/www/html
   - vendor/bin/phpunit
 
 volumes:
@@ -184,7 +184,6 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php5.6
   commands:
-  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -194,6 +193,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php5.6
   commands:
+  - cp Tests/stubs/jhttp_stub.php /var/www/html
   - vendor/bin/phpunit
 
 volumes:
@@ -213,7 +213,6 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php7.0
   commands:
-  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -223,6 +222,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.0
   commands:
+  - cp Tests/stubs/jhttp_stub.php /var/www/html
   - vendor/bin/phpunit
 
 volumes:
@@ -242,7 +242,6 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php7.1
   commands:
-  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -252,6 +251,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.1
   commands:
+  - cp Tests/stubs/jhttp_stub.php /var/www/html
   - vendor/bin/phpunit
 
 volumes:
@@ -271,7 +271,6 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php7.2
   commands:
-  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -281,6 +280,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.2
   commands:
+  - cp Tests/stubs/jhttp_stub.php /var/www/html
   - vendor/bin/phpunit
 
 volumes:
@@ -300,7 +300,6 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php7.3
   commands:
-  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -310,6 +309,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.3
   commands:
+  - cp Tests/stubs/jhttp_stub.php /var/www/html
   - vendor/bin/phpunit
 
 volumes:
@@ -329,7 +329,6 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php7.4
   commands:
-  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -339,6 +338,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php7.4
   commands:
+  - cp Tests/stubs/jhttp_stub.php /var/www/html
   - vendor/bin/phpunit
 
 volumes:
@@ -358,7 +358,6 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php8.0
   commands:
-  - pwd
   - php -v
   - composer update --ignore-platform-reqs
   volumes:
@@ -368,6 +367,7 @@ steps:
 - name: PHPUnit
   image: joomlaprojects/docker-images:php8.0
   commands:
+  - cp Tests/stubs/jhttp_stub.php /var/www/html
   - vendor/bin/phpunit
   failure: ignore
 
@@ -378,6 +378,6 @@ volumes:
 
 ---
 kind: signature
-hmac: 26385a4ed2222d5e5f2560aa9b7ee36317dca1d8927f7bab5853d63ec2fe0cc0
+hmac: 2e1dac0816b103131ff99e57a2fabbf5a00547b842cab0bbc63656bcfa707fe5
 
 ...
