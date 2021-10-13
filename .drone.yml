@@ -68,6 +68,7 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php5.3
   commands:
+  - pwd
   - php -v
   - composer update --prefer-stable --prefer-lowest
   volumes:
@@ -96,6 +97,7 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php5.3
   commands:
+  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -124,6 +126,7 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php5.4
   commands:
+  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -152,6 +155,7 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php5.5
   commands:
+  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -180,6 +184,7 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php5.6
   commands:
+  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -208,6 +213,7 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php7.0
   commands:
+  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -236,6 +242,7 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php7.1
   commands:
+  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -264,6 +271,7 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php7.2
   commands:
+  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -292,6 +300,7 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php7.3
   commands:
+  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -320,6 +329,7 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php7.4
   commands:
+  - pwd
   - php -v
   - composer update --prefer-stable
   volumes:
@@ -348,6 +358,7 @@ steps:
 - name: composer
   image: joomlaprojects/docker-images:php8.0
   commands:
+  - pwd
   - php -v
   - composer update --ignore-platform-reqs
   volumes:
@@ -367,6 +378,6 @@ volumes:
 
 ---
 kind: signature
-hmac: 46730a3d745d0c33fda55a002d2a85da8efb2778acdbb79deb57f9fbbcee8ae3
+hmac: 26385a4ed2222d5e5f2560aa9b7ee36317dca1d8927f7bab5853d63ec2fe0cc0
 
 ...

@@ -17,6 +17,7 @@ local composer(phpversion, params) = {
     image: "joomlaprojects/docker-images:php" + phpversion,
     volumes: volumes,
     commands: [
+        "pwd",
         "php -v",
         "composer update " + params
     ]
