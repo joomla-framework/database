@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="vendor/autoload.php" colors="false">
 	<php>
-		<const name="JTEST_HTTP_STUB" value="http://localhost/http/Tests/stubs/jhttp_stub.php" />
+		<const name="JTEST_HTTP_STUB" value="http://localhost/html/Tests/stubs/jhttp_stub.php" />
 	</php>
 	<testsuites>
 		<testsuite name="Unit">
