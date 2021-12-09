@@ -123,6 +123,7 @@ class DatabaseIterator implements \Countable, \Iterator
 	 * @see     Countable::count()
 	 * @since   1.0
 	 */
+	#[\ReturnTypeWillChange]
 	public function count()
 	{
 		if ($this->statement)
@@ -141,6 +142,7 @@ class DatabaseIterator implements \Countable, \Iterator
 	 * @see     Iterator::current()
 	 * @since   1.0
 	 */
+	#[\ReturnTypeWillChange]
 	public function current()
 	{
 		return $this->current;
@@ -154,6 +156,7 @@ class DatabaseIterator implements \Countable, \Iterator
 	 * @see     Iterator::key()
 	 * @since   1.0
 	 */
+	#[\ReturnTypeWillChange]
 	public function key()
 	{
 		return $this->key;
@@ -167,6 +170,7 @@ class DatabaseIterator implements \Countable, \Iterator
 	 * @see     Iterator::next()
 	 * @since   1.0
 	 */
+	#[\ReturnTypeWillChange]
 	public function next()
 	{
 		// Set the default key as being the number of fetched object
@@ -199,6 +203,7 @@ class DatabaseIterator implements \Countable, \Iterator
 	 * @see     Iterator::rewind()
 	 * @since   1.0
 	 */
+	#[\ReturnTypeWillChange]
 	public function rewind()
 	{
 	}
@@ -211,6 +216,7 @@ class DatabaseIterator implements \Countable, \Iterator
 	 * @see     Iterator::valid()
 	 * @since   1.0
 	 */
+	#[\ReturnTypeWillChange]
 	public function valid()
 	{
 		return (boolean) $this->current;
