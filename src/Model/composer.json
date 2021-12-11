@@ -1,0 +1,37 @@
+{
+    "name": "joomla/model",
+    "type": "joomla-package",
+    "description": "Joomla Model Package",
+    "keywords": ["joomla", "framework", "model"],
+    "homepage": "https://github.com/joomla-framework/model",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": "^5.3.10|~7.0",
+        "joomla/registry": "^1.4.5|~2.0"
+    },
+    "require-dev": {
+        "joomla/coding-standards": "~2.0@alpha",
+        "joomla/database": "~1.0|~2.0",
+        "joomla/test": "~1.0",
+        "phpunit/phpunit": "^4.8.35|^5.4.3|~6.0"
+    },
+    "suggest": {
+        "joomla/database": "Allows using database models"
+    },
+    "autoload": {
+        "psr-4": {
+            "Joomla\\Model\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Joomla\\Model\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}
