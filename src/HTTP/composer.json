@@ -1,0 +1,38 @@
+{
+    "name": "joomla/http",
+    "type": "joomla-package",
+    "description": "Joomla HTTP Package",
+    "keywords": ["joomla", "framework", "http"],
+    "homepage": "https://github.com/joomla-framework/http",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": "^5.3.10|~7.0",
+        "joomla/uri": "~1.0|~2.0",
+        "composer/ca-bundle": "~1.0"
+    },
+    "require-dev": {
+        "joomla/test": "~1.0",
+        "joomla/coding-standards": "~2.0@alpha",
+        "phpunit/phpunit": "^4.8.35|^5.4.3|~6.0"
+    },
+    "suggest": {
+        "joomla/registry": "Registry can be used as an alternative to using an array for the package options.",
+        "ext-curl": "To use cURL for HTTP connections"
+    },
+    "autoload": {
+    	"psr-4": {
+            "Joomla\\Http\\": "src/"
+    	}
+    },
+    "autoload-dev": {
+    	"psr-4": {
+            "Joomla\\Http\\Tests\\": "Tests/"
+    	}
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}
