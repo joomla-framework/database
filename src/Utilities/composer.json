@@ -1,0 +1,32 @@
+{
+    "name": "joomla/utilities",
+    "type": "joomla-package",
+    "description": "Joomla Utilities Package",
+    "keywords": ["joomla", "framework", "utilities"],
+    "homepage": "https://github.com/joomla-framework/utilities",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": "^5.3.10|~7.0|^8.0",
+        "joomla/string": "~1.3|~2.0"
+    },
+    "require-dev": {
+        "joomla/coding-standards": "~2.0@alpha",
+        "phpunit/phpunit": "^4.8.35|^5.4.3|~6.0|^7.0|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Joomla\\Utilities\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Joomla\\Utilities\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}
