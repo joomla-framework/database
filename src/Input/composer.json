@@ -1,0 +1,32 @@
+{
+    "name": "joomla/input",
+    "type": "joomla-package",
+    "description": "Joomla Input Package",
+    "keywords": ["joomla", "framework", "input"],
+    "homepage": "https://github.com/joomla-framework/input",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": "^5.3.10|~7.0",
+        "joomla/filter": "~1.0"
+    },
+    "require-dev": {
+        "joomla/coding-standards": "~2.0@alpha",
+        "joomla/test": "~1.0",
+        "phpunit/phpunit": "^4.8.35|^5.4.3|~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Joomla\\Input\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Joomla\\Input\\Tests\\": "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}
