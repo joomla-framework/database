@@ -1,0 +1,2 @@
+<?xml version="1.0"?>
+<registry><node name="foo" type="string">bar</node><node name="nested" type="object"><node name="foo" type="string">bar</node></node></registry>
