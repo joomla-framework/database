@@ -1,0 +1,30 @@
+{
+    "name": "joomla/profiler",
+    "type": "joomla-package",
+    "description": "Joomla Profiler Package",
+    "keywords": ["joomla", "framework", "profiler"],
+    "homepage": "https://github.com/joomla-framework/profiler",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": "^5.3.10|~7.0"
+    },
+    "require-dev": {
+        "joomla/coding-standards": "~2.0@alpha",
+        "phpunit/phpunit": "^4.8.35|^5.4.3|~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Joomla\\Profiler\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Joomla\\Profiler\\Tests\\": "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}
