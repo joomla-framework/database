@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -10,6 +10,7 @@ namespace Joomla\Database\Mysql;
 
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Pdo\PdoDriver;
+use Joomla\Database\UTF8MB4SupportInterface;
 
 /**
  * MySQL database driver supporting PDO based connections
@@ -17,7 +18,7 @@ use Joomla\Database\Pdo\PdoDriver;
  * @link   https://www.php.net/manual/en/ref.pdo-mysql.php
  * @since  1.0
  */
-class MysqlDriver extends PdoDriver
+class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 {
 	/**
 	 * The name of the database driver.
@@ -28,10 +29,10 @@ class MysqlDriver extends PdoDriver
 	public $name = 'mysql';
 
 	/**
-	 * The character(s) used to quote SQL statement names such as table names or field names,
-	 * etc. The child classes should define this as necessary.  If a single character string the
-	 * same character is used for both sides of the quoted name, else the first character will be
-	 * used for the opening quote and the second for the closing quote.
+	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
+	 *
+	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
+	 * opening quote and the second for the closing quote.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -39,8 +40,7 @@ class MysqlDriver extends PdoDriver
 	protected $nameQuote = '`';
 
 	/**
-	 * The null or zero representation of a timestamp for the database driver.  This should be
-	 * defined in child classes to hold the appropriate value for the engine.
+	 * The null or zero representation of a timestamp for the database driver.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -56,12 +56,42 @@ class MysqlDriver extends PdoDriver
 	protected $utf8mb4 = false;
 
 	/**
+	 * True if the database engine is MariaDB.
+	 *
+	 * @var    boolean
+	 * @since  2.0.0
+	 */
+	protected $mariadb = false;
+
+	/**
 	 * The minimum supported database version.
 	 *
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected static $dbMinimum = '5.0.4';
+	protected static $dbMinimum = '5.6';
+
+	/**
+	 * The minimum supported MariaDB database version.
+	 *
+	 * @var    string
+	 * @since  2.0.0
+	 */
+	protected static $dbMinMariadb = '10.0';
+
+	/**
+	 * The default cipher suite for TLS connections.
+	 *
+	 * @var    array
+	 * @since  2.0.0
+	 */
+	protected static $defaultCipherSuite = [
+		'AES128-GCM-SHA256',
+		'AES256-GCM-SHA384',
+		'AES128-CBC-SHA256',
+		'AES256-CBC-SHA384',
+		'DES-CBC3-SHA',
+	];
 
 	/**
 	 * Constructor.
@@ -70,11 +100,23 @@ class MysqlDriver extends PdoDriver
 	 *
 	 * @since   1.0
 	 */
-	public function __construct($options)
+	public function __construct(array $options)
 	{
+		/**
+		 * sql_mode to MySql 5.7.8+ default strict mode minus ONLY_FULL_GROUP_BY
+		 *
+		 * @link https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-8.html#mysqld-5-7-8-sql-mode
+		 */
+		$sqlModes = [
+			'STRICT_TRANS_TABLES',
+			'ERROR_FOR_DIVISION_BY_ZERO',
+			'NO_ENGINE_SUBSTITUTION',
+		];
+
 		// Get some basic values from the options.
-		$options['driver']  = 'mysql';
-		$options['charset'] = isset($options['charset']) ? $options['charset'] : 'utf8';
+		$options['driver']   = 'mysql';
+		$options['charset']  = $options['charset'] ?? 'utf8';
+		$options['sqlModes'] = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
 
 		$this->charset = $options['charset'];
 
@@ -104,6 +146,34 @@ class MysqlDriver extends PdoDriver
 			return;
 		}
 
+		// For SSL/TLS connection encryption.
+		if ($this->options['ssl'] !== [] && $this->options['ssl']['enable'] === true)
+		{
+			$sslContextIsNull = true;
+
+			// If customised, add cipher suite, ca file path, ca path, private key file path and certificate file path to PDO driver options.
+			foreach (['cipher', 'ca', 'capath', 'key', 'cert'] as $key => $value)
+			{
+				if ($this->options['ssl'][$value] !== null)
+				{
+					$this->options['driverOptions'][constant('\PDO::MYSQL_ATTR_SSL_' . strtoupper($value))] = $this->options['ssl'][$value];
+					$sslContextIsNull                                                                       = false;
+				}
+			}
+
+			// PDO, if no cipher, ca, capath, cert and key are set, can't start TLS one-way connection, set a common ciphers suite to force it.
+			if ($sslContextIsNull === true)
+			{
+				$this->options['driverOptions'][\PDO::MYSQL_ATTR_SSL_CIPHER] = implode(':', static::$defaultCipherSuite);
+			}
+
+			// If customised, for capable systems (PHP 7.0.14+ and 7.1.4+) verify certificate chain and Common Name to driver options.
+			if ($this->options['ssl']['verify_server_cert'] !== null && defined('\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT'))
+			{
+				$this->options['driverOptions'][\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = $this->options['ssl']['verify_server_cert'];
+			}
+		}
+
 		try
 		{
 			// Try to connect to MySQL
@@ -127,11 +197,19 @@ class MysqlDriver extends PdoDriver
 			parent::connect();
 		}
 
+		$serverVersion = $this->getVersion();
+
+		$this->mariadb = stripos($serverVersion, 'mariadb') !== false;
+
 		if ($this->utf8mb4)
 		{
 			// At this point we know the client supports utf8mb4.  Now we must check if the server supports utf8mb4 as well.
-			$serverVersion = $this->connection->getAttribute(\PDO::ATTR_SERVER_VERSION);
 			$this->utf8mb4 = version_compare($serverVersion, '5.5.3', '>=');
+
+			if ($this->mariadb && version_compare($serverVersion, '10.0.0', '<'))
+			{
+				$this->utf8mb4 = false;
+			}
 
 			if (!$this->utf8mb4)
 			{
@@ -142,8 +220,13 @@ class MysqlDriver extends PdoDriver
 			}
 		}
 
-		$this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-		$this->connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
+		// If needed, set the sql modes.
+		if ($this->options['sqlModes'] !== [])
+		{
+			$this->connection->query('SET @@SESSION.sql_mode = \'' . implode(',', $this->options['sqlModes']) . '\';');
+		}
+
+		$this->setOption(\PDO::ATTR_EMULATE_PREPARES, true);
 	}
 
 	/**
@@ -168,7 +251,7 @@ class MysqlDriver extends PdoDriver
 		$beginningOfQuery = substr($query, 0, 12);
 		$beginningOfQuery = strtoupper($beginningOfQuery);
 
-		if (!\in_array($beginningOfQuery, array('ALTER TABLE ', 'CREATE TABLE'), true))
+		if (!\in_array($beginningOfQuery, ['ALTER TABLE ', 'CREATE TABLE'], true))
 		{
 			return $query;
 		}
@@ -190,33 +273,11 @@ class MysqlDriver extends PdoDriver
 	}
 
 	/**
-	 * Drops a table from the database.
-	 *
-	 * @param   string   $tableName  The name of the database table to drop.
-	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
-	 *
-	 * @return  MysqlDriver  Returns this object to support chaining.
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	public function dropTable($tableName, $ifExists = true)
-	{
-		$this->connect();
-
-		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $this->quoteName($tableName));
-
-		$this->execute();
-
-		return $this;
-	}
-
-	/**
 	 * Select a database for use.
 	 *
 	 * @param   string  $database  The name of the database to select for use.
 	 *
-	 * @return  boolean  True if the database was successfully selected.
+	 * @return  boolean
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -225,11 +286,26 @@ class MysqlDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$this->setQuery('USE ' . $this->quoteName($database));
+		$this->setQuery('USE ' . $this->quoteName($database))
+			->execute();
 
-		$this->execute();
+		return true;
+	}
 
-		return $this;
+	/**
+	 * Return the query string to alter the database character set.
+	 *
+	 * @param   string  $dbName  The database name
+	 *
+	 * @return  string  The query that alter the database query string
+	 *
+	 * @since   2.0.0
+	 */
+	public function getAlterDbCharacterSet($dbName)
+	{
+		$charset = $this->utf8mb4 ? 'utf8mb4' : 'utf8';
+
+		return 'ALTER DATABASE ' . $this->quoteName($dbName) . ' CHARACTER SET `' . $charset . '`';
 	}
 
 	/**
@@ -263,9 +339,71 @@ class MysqlDriver extends PdoDriver
 	}
 
 	/**
+	 * Method to get the database encryption details (cipher and protocol) in use.
+	 *
+	 * @return  string  The database encryption details.
+	 *
+	 * @since   2.0.0
+	 * @throws  \RuntimeException
+	 */
+	public function getConnectionEncryption(): string
+	{
+		$this->connect();
+
+		$variables = $this->setQuery('SHOW SESSION STATUS WHERE `Variable_name` IN (\'Ssl_version\', \'Ssl_cipher\')')
+			->loadObjectList('Variable_name');
+
+		if (!empty($variables['Ssl_cipher']->Value))
+		{
+			return $variables['Ssl_version']->Value . ' (' . $variables['Ssl_cipher']->Value . ')';
+		}
+
+		return '';
+	}
+
+	/**
+	 * Method to test if the database TLS connections encryption are supported.
+	 *
+	 * @return  boolean  Whether the database supports TLS connections encryption.
+	 *
+	 * @since   2.0.0
+	 */
+	public function isConnectionEncryptionSupported(): bool
+	{
+		$this->connect();
+
+		$variables = $this->setQuery('SHOW SESSION VARIABLES WHERE `Variable_name` IN (\'have_ssl\')')->loadObjectList('Variable_name');
+
+		return !empty($variables['have_ssl']->Value) && $variables['have_ssl']->Value === 'YES';
+	}
+
+	/**
+	 * Return the query string to create new Database.
+	 *
+	 * @param   stdClass  $options  Object used to pass user and database name to database driver. This object must have "db_name" and "db_user" set.
+	 * @param   boolean   $utf      True if the database supports the UTF-8 character set.
+	 *
+	 * @return  string  The query that creates database
+	 *
+	 * @since   2.0.0
+	 */
+	protected function getCreateDatabaseQuery($options, $utf)
+	{
+		if ($utf)
+		{
+			$charset   = $this->utf8mb4 ? 'utf8mb4' : 'utf8';
+			$collation = $charset . '_unicode_ci';
+
+			return 'CREATE DATABASE ' . $this->quoteName($options->db_name) . ' CHARACTER SET `' . $charset . '` COLLATE `' . $collation . '`';
+		}
+
+		return 'CREATE DATABASE ' . $this->quoteName($options->db_name);
+	}
+
+	/**
 	 * Shows the table CREATE statement that creates the given tables.
 	 *
-	 * @param   mixed  $tables  A table name or a list of table names.
+	 * @param   array|string  $tables  A table name or a list of table names.
 	 *
 	 * @return  array  A list of the create SQL for the tables.
 	 *
@@ -277,16 +415,14 @@ class MysqlDriver extends PdoDriver
 		$this->connect();
 
 		// Initialise variables.
-		$result = array();
+		$result = [];
 
 		// Sanitize input to an array and iterate over the list.
 		$tables = (array) $tables;
 
 		foreach ($tables as $table)
 		{
-			$this->setQuery('SHOW CREATE TABLE ' . $this->quoteName($table));
-
-			$row = $this->loadRow();
+			$row = $this->setQuery('SHOW CREATE TABLE ' . $this->quoteName($table))->loadRow();
 
 			// Populate the result array based on the create statements.
 			$result[$table] = $row[1];
@@ -310,12 +446,10 @@ class MysqlDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$result = array();
+		$result = [];
 
 		// Set the query to get the table fields statement.
-		$this->setQuery('SHOW FULL COLUMNS FROM ' . $this->quoteName($table));
-
-		$fields = $this->loadObjectList();
+		$fields = $this->setQuery('SHOW FULL COLUMNS FROM ' . $this->quoteName($table))->loadObjectList();
 
 		// If we only want the type as the value add just that to the list.
 		if ($typeOnly)
@@ -352,9 +486,7 @@ class MysqlDriver extends PdoDriver
 		$this->connect();
 
 		// Get the details columns information.
-		$this->setQuery('SHOW KEYS FROM ' . $this->quoteName($table));
-
-		return $this->loadObjectList();
+		return $this->setQuery('SHOW KEYS FROM ' . $this->quoteName($table))->loadObjectList();
 	}
 
 	/**
@@ -370,9 +502,85 @@ class MysqlDriver extends PdoDriver
 		$this->connect();
 
 		// Set the query to get the tables statement.
-		$this->setQuery('SHOW TABLES');
+		return $this->setQuery('SHOW TABLES')->loadColumn();
+	}
 
-		return $this->loadColumn();
+	/**
+	 * Get the version of the database connector.
+	 *
+	 * @return  string  The database connector version.
+	 *
+	 * @since   2.0.0
+	 */
+	public function getVersion()
+	{
+		$this->connect();
+
+		$version = $this->getOption(\PDO::ATTR_SERVER_VERSION);
+
+		if (stripos($version, 'mariadb') !== false)
+		{
+			// MariaDB: Strip off any leading '5.5.5-', if present
+			return preg_replace('/^5\.5\.5-/', '', $version);
+		}
+
+		return $version;
+	}
+
+	/**
+	 * Get the minimum supported database version.
+	 *
+	 * @return  string
+	 *
+	 * @since   2.0.0
+	 */
+	public function getMinimum()
+	{
+		return $this->mariadb ? static::$dbMinMariadb : static::$dbMinimum;
+	}
+
+	/**
+	 * Get the null or zero representation of a timestamp for the database driver.
+	 *
+	 * @return  string
+	 *
+	 * @since   2.0.0
+	 */
+	public function getNullDate()
+	{
+		// Check the session sql mode;
+		if (\in_array('NO_ZERO_DATE', $this->options['sqlModes']) !== false)
+		{
+			$this->nullDate = '1000-01-01 00:00:00';
+		}
+
+		return $this->nullDate;
+	}
+
+	/**
+	 * Determine whether the database engine support the UTF-8 Multibyte (utf8mb4) character encoding.
+	 *
+	 * @return  boolean  True if the database engine supports UTF-8 Multibyte.
+	 *
+	 * @since   2.0.0
+	 */
+	public function hasUTF8mb4Support()
+	{
+		return $this->utf8mb4;
+	}
+
+	/**
+	 * Determine if the database engine is MariaDB.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   2.0.0
+	 */
+	public function isMariaDb(): bool
+	{
+		$this->connect();
+
+		return $this->mariadb;
 	}
 
 	/**
@@ -380,14 +588,15 @@ class MysqlDriver extends PdoDriver
 	 *
 	 * @param   string  $table  The name of the table to unlock.
 	 *
-	 * @return  MysqlDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
 	public function lockTable($table)
 	{
-		$this->setQuery('LOCK TABLES ' . $this->quoteName($table) . ' WRITE')->execute();
+		$this->setQuery('LOCK TABLES ' . $this->quoteName($table) . ' WRITE')
+			->execute();
 
 		return $this;
 	}
@@ -400,18 +609,93 @@ class MysqlDriver extends PdoDriver
 	 * @param   string  $backup    Not used by MySQL.
 	 * @param   string  $prefix    Not used by MySQL.
 	 *
-	 * @return  MysqlDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
 	public function renameTable($oldTable, $newTable, $backup = null, $prefix = null)
 	{
-		$this->setQuery('RENAME TABLE ' . $this->quoteName($oldTable) . ' TO ' . $this->quoteName($newTable));
-
-		$this->execute();
+		$this->setQuery('RENAME TABLE ' . $this->quoteName($oldTable) . ' TO ' . $this->quoteName($newTable))
+			->execute();
 
 		return $this;
+	}
+
+	/**
+	 * Inserts a row into a table based on an object's properties.
+	 *
+	 * @param   string  $table   The name of the database table to insert into.
+	 * @param   object  $object  A reference to an object whose public properties match the table fields.
+	 * @param   string  $key     The name of the primary key. If provided the object property is updated.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   2.0.0
+	 * @throws  \RuntimeException
+	 */
+	public function insertObject($table, &$object, $key = null)
+	{
+		$fields       = [];
+		$values       = [];
+		$tableColumns = $this->getTableColumns($table);
+
+		// Iterate over the object variables to build the query fields and values.
+		foreach (get_object_vars($object) as $k => $v)
+		{
+			// Skip columns that don't exist in the table.
+			if (!array_key_exists($k, $tableColumns))
+			{
+				continue;
+			}
+
+			// Only process non-null scalars.
+			if (\is_array($v) || \is_object($v) || $v === null)
+			{
+				continue;
+			}
+
+			// Ignore any internal fields.
+			if ($k[0] === '_')
+			{
+				continue;
+			}
+
+			// Ignore null datetime fields.
+			if ($tableColumns[$k] === 'datetime' && empty($v))
+			{
+				continue;
+			}
+
+			// Ignore null integer fields.
+			if (stristr($tableColumns[$k], 'int') !== false && $v === '')
+			{
+				continue;
+			}
+
+			// Prepare and sanitize the fields and values for the database query.
+			$fields[] = $this->quoteName($k);
+			$values[] = $this->quote($v);
+		}
+
+		// Create the base insert statement.
+		$query = $this->getQuery(true)
+			->insert($this->quoteName($table))
+			->columns($fields)
+			->values(implode(',', $values));
+
+		// Set the query and execute the insert.
+		$this->setQuery($query)->execute();
+
+		// Update the primary key if it exists.
+		$id = $this->insertid();
+
+		if ($key && $id && \is_string($key))
+		{
+			$object->$key = $id;
+		}
+
+		return true;
 	}
 
 	/**
@@ -425,8 +709,7 @@ class MysqlDriver extends PdoDriver
 	 *
 	 * Method body is as implemented by the Zend Framework
 	 *
-	 * Note: Using query objects with bound variables is
-	 * preferable to the below.
+	 * Note: Using query objects with bound variables is preferable to the below.
 	 *
 	 * @param   string   $text   The string to be escaped.
 	 * @param   boolean  $extra  Unused optional parameter to provide extra escaping.
@@ -437,12 +720,18 @@ class MysqlDriver extends PdoDriver
 	 */
 	public function escape($text, $extra = false)
 	{
-		$this->connect();
-
-		if (\is_int($text) || \is_float($text))
+		if (\is_int($text))
 		{
 			return $text;
 		}
+
+		if (\is_float($text))
+		{
+			// Force the dot as a decimal point.
+			return str_replace(',', '.', $text);
+		}
+
+		$this->connect();
 
 		$result = substr($this->connection->quote($text), 1, -1);
 
@@ -457,14 +746,15 @@ class MysqlDriver extends PdoDriver
 	/**
 	 * Unlocks tables in the database.
 	 *
-	 * @return  MysqlDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
 	public function unlockTables()
 	{
-		$this->setQuery('UNLOCK TABLES')->execute();
+		$this->setQuery('UNLOCK TABLES')
+			->execute();
 
 		return $this;
 	}

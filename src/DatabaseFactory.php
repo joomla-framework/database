@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -16,16 +16,7 @@ namespace Joomla\Database;
 class DatabaseFactory
 {
 	/**
-	 * Contains the current Factory instance
-	 *
-	 * @var    DatabaseFactory
-	 * @since  1.0
-	 * @deprecated  1.4.0  Instantiate a new factory object as needed
-	 */
-	private static $instance = null;
-
-	/**
-	 * Method to return a DatabaseDriver instance based on the given options.
+	 * Method to return a database driver based on the given options.
 	 *
 	 * There are three global options and then the rest are specific to the database driver. The 'database' option determines which database is to
 	 * be used for the connection. The 'select' option determines whether the connector should automatically select the chosen database.
@@ -33,17 +24,18 @@ class DatabaseFactory
 	 * @param   string  $name     Name of the database driver you'd like to instantiate
 	 * @param   array   $options  Parameters to be passed to the database driver.
 	 *
-	 * @return  DatabaseDriver
+	 * @return  DatabaseInterface
 	 *
 	 * @since   1.0
-	 * @throws  \RuntimeException
+	 * @throws  Exception\UnsupportedAdapterException if there is not a compatible database driver
 	 */
-	public function getDriver($name = 'mysqli', $options = array())
+	public function getDriver(string $name = 'mysqli', array $options = []): DatabaseInterface
 	{
 		// Sanitize the database connector options.
 		$options['driver']   = preg_replace('/[^A-Z0-9_\.-]/i', '', $name);
-		$options['database'] = isset($options['database']) ? $options['database'] : null;
-		$options['select']   = isset($options['select']) ? $options['select'] : true;
+		$options['database'] = $options['database'] ?? null;
+		$options['select']   = $options['select'] ?? true;
+		$options['factory']  = $options['factory'] ?? $this;
 
 		// Derive the class name from the driver.
 		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($options['driver'])) . '\\' . ucfirst(strtolower($options['driver'])) . 'Driver';
@@ -54,29 +46,21 @@ class DatabaseFactory
 			throw new Exception\UnsupportedAdapterException(sprintf('Unable to load Database Driver: %s', $options['driver']));
 		}
 
-		// Create our new Driver connector based on the options given.
-		try
-		{
-			return new $class($options);
-		}
-		catch (\RuntimeException $e)
-		{
-			throw new Exception\ConnectionFailureException(sprintf('Unable to connect to the Database: %s', $e->getMessage()), $e->getCode(), $e);
-		}
+		return new $class($options);
 	}
 
 	/**
 	 * Gets an exporter class object.
 	 *
-	 * @param   string          $name  Name of the driver you want an exporter for.
-	 * @param   DatabaseDriver  $db    Optional DatabaseDriver instance to inject into the exporter.
+	 * @param   string                  $name  Name of the driver you want an exporter for.
+	 * @param   DatabaseInterface|null  $db    Optional database driver to inject into the query object.
 	 *
 	 * @return  DatabaseExporter
 	 *
 	 * @since   1.0
-	 * @throws  Exception\UnsupportedAdapterException
+	 * @throws  Exception\UnsupportedAdapterException if there is not a compatible database exporter
 	 */
-	public function getExporter($name, DatabaseDriver $db = null)
+	public function getExporter(string $name, ?DatabaseInterface $db = null): DatabaseExporter
 	{
 		// Derive the class name from the driver.
 		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($name)) . '\\' . ucfirst(strtolower($name)) . 'Exporter';
@@ -91,7 +75,7 @@ class DatabaseFactory
 		/** @var $o DatabaseExporter */
 		$o = new $class;
 
-		if ($db instanceof DatabaseDriver)
+		if ($db)
 		{
 			$o->setDbo($db);
 		}
@@ -102,15 +86,15 @@ class DatabaseFactory
 	/**
 	 * Gets an importer class object.
 	 *
-	 * @param   string          $name  Name of the driver you want an importer for.
-	 * @param   DatabaseDriver  $db    Optional DatabaseDriver instance to inject into the importer.
+	 * @param   string                  $name  Name of the driver you want an importer for.
+	 * @param   DatabaseInterface|null  $db    Optional database driver to inject into the query object.
 	 *
 	 * @return  DatabaseImporter
 	 *
 	 * @since   1.0
-	 * @throws  Exception\UnsupportedAdapterException
+	 * @throws  Exception\UnsupportedAdapterException if there is not a compatible database importer
 	 */
-	public function getImporter($name, DatabaseDriver $db = null)
+	public function getImporter(string $name, ?DatabaseInterface $db = null): DatabaseImporter
 	{
 		// Derive the class name from the driver.
 		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($name)) . '\\' . ucfirst(strtolower($name)) . 'Importer';
@@ -125,7 +109,7 @@ class DatabaseFactory
 		/** @var $o DatabaseImporter */
 		$o = new $class;
 
-		if ($db instanceof DatabaseDriver)
+		if ($db)
 		{
 			$o->setDbo($db);
 		}
@@ -134,35 +118,50 @@ class DatabaseFactory
 	}
 
 	/**
-	 * Gets an instance of the factory object.
+	 * Get a new iterator on the current query.
 	 *
-	 * @return  DatabaseFactory
+	 * @param   string              $name       Name of the driver you want an iterator for.
+	 * @param   StatementInterface  $statement  Statement holding the result set to be iterated.
+	 * @param   string|null         $column     An optional column to use as the iterator key.
+	 * @param   string              $class      The class of object that is returned.
 	 *
-	 * @since   1.0
-	 * @deprecated  1.4.0  Instantiate a new factory object as needed
+	 * @return  DatabaseIterator
+	 *
+	 * @since   2.0.0
 	 */
-	public static function getInstance()
+	public function getIterator(
+		string $name,
+		StatementInterface $statement,
+		?string $column = null,
+		string $class = \stdClass::class
+	): DatabaseIterator
 	{
-		if (!self::$instance)
+		// Derive the class name from the driver.
+		$iteratorClass = __NAMESPACE__ . '\\' . ucfirst($name) . '\\' . ucfirst($name) . 'Iterator';
+
+		// Make sure we have an iterator class for this driver.
+		if (!class_exists($iteratorClass))
 		{
-			self::setInstance(new static);
+			// We can work with the base iterator class so use that
+			$iteratorClass = DatabaseIterator::class;
 		}
 
-		return self::$instance;
+		// Return a new iterator
+		return new $iteratorClass($statement, $column, $class);
 	}
 
 	/**
 	 * Get the current query object or a new Query object.
 	 *
-	 * @param   string          $name  Name of the driver you want an query object for.
-	 * @param   DatabaseDriver  $db    Optional Driver instance
+	 * @param   string                  $name  Name of the driver you want an query object for.
+	 * @param   DatabaseInterface|null  $db    Optional database driver to inject into the query object.
 	 *
-	 * @return  DatabaseQuery
+	 * @return  QueryInterface
 	 *
 	 * @since   1.0
-	 * @throws  Exception\UnsupportedAdapterException
+	 * @throws  Exception\UnsupportedAdapterException if there is not a compatible database query object
 	 */
-	public function getQuery($name, DatabaseDriver $db = null)
+	public function getQuery(string $name, ?DatabaseInterface $db = null): QueryInterface
 	{
 		// Derive the class name from the driver.
 		$class = __NAMESPACE__ . '\\' . ucfirst(strtolower($name)) . '\\' . ucfirst(strtolower($name)) . 'Query';
@@ -175,20 +174,5 @@ class DatabaseFactory
 		}
 
 		return new $class($db);
-	}
-
-	/**
-	 * Gets an instance of a factory object to return on subsequent calls of getInstance.
-	 *
-	 * @param   DatabaseFactory  $instance  A Factory object.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 * @deprecated  1.4.0  Instantiate a new factory object as needed
-	 */
-	public static function setInstance(DatabaseFactory $instance = null)
-	{
-		self::$instance = $instance;
 	}
 }

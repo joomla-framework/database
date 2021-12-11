@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <database name="">
+  <table_structure name="#__dbtest">
+   <field Field="id" Type="int(10) unsigned" Null="NO" Key="PRI" Extra="auto_increment" />
+   <field Field="title" Type="varchar(50)" Null="NO" Key="" Extra="" />
+   <field Field="start_date" Type="datetime" Null="NO" Key="" Extra="" />
+   <field Field="description" Type="text" Null="NO" Key="" Extra="" />
+   <field Field="data" Type="blob" Null="YES" Key="" Extra="" />
+   <key Table="#__dbtest" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="id" Collation="A" Null="" Index_type="BTREE" Sub_part="" Comment="" />
+  </table_structure>
+  <table_data name="#__dbtest">
+   <row>
+    <field name="id">1</field>
+    <field name="title">Testing</field>
+    <field name="start_date">1980-04-18 00:00:00</field>
+    <field name="description">one</field>
+    <field name="data"></field>
+   </row>
+   <row>
+    <field name="id">2</field>
+    <field name="title">Testing2</field>
+    <field name="start_date">1980-04-18 00:00:00</field>
+    <field name="description">one</field>
+    <field name="data"></field>
+   </row>
+   <row>
+    <field name="id">3</field>
+    <field name="title">Testing3</field>
+    <field name="start_date">1980-04-18 00:00:00</field>
+    <field name="description">three</field>
+    <field name="data"></field>
+   </row>
+   <row>
+    <field name="id">4</field>
+    <field name="title">Testing4</field>
+    <field name="start_date">1980-04-18 00:00:00</field>
+    <field name="description">four</field>
+    <field name="data"></field>
+   </row>
+  </table_data>
+ </database>
+</mysqldump>

@@ -2,20 +2,20 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Sqlsrv;
 
 use Joomla\Database\DatabaseDriver;
-use Joomla\Database\DatabaseQuery;
+use Joomla\Database\DatabaseEvents;
+use Joomla\Database\Event\ConnectionEvent;
 use Joomla\Database\Exception\ConnectionFailureException;
 use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Joomla\Database\Query\LimitableInterface;
-use Joomla\Database\Query\PreparableInterface;
-use Psr\Log;
+use Joomla\Database\StatementInterface;
 
 /**
  * SQL Server Database Driver
@@ -34,10 +34,10 @@ class SqlsrvDriver extends DatabaseDriver
 	public $name = 'sqlsrv';
 
 	/**
-	 * The character(s) used to quote SQL statement names such as table names or field names,
-	 * etc.  The child classes should define this as necessary.  If a single character string the
-	 * same character is used for both sides of the quoted name, else the first character will be
-	 * used for the opening quote and the second for the closing quote.
+	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
+	 *
+	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
+	 * opening quote and the second for the closing quote.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -45,8 +45,7 @@ class SqlsrvDriver extends DatabaseDriver
 	protected $nameQuote = '[]';
 
 	/**
-	 * The null or zero representation of a timestamp for the database driver.  This should be
-	 * defined in child classes to hold the appropriate value for the engine.
+	 * The null or zero representation of a timestamp for the database driver.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -59,7 +58,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 * @var    string
 	 * @since  1.0
 	 */
-	protected static $dbMinimum = '10.50.1600.1';
+	protected static $dbMinimum = '11.0.2100.60';
 
 	/**
 	 * Test to see if the SQLSRV connector is available.
@@ -80,30 +79,17 @@ class SqlsrvDriver extends DatabaseDriver
 	 *
 	 * @since   1.0
 	 */
-	public function __construct($options)
+	public function __construct(array $options)
 	{
 		// Get some basic values from the options.
-		$options['host']     = isset($options['host']) ? $options['host'] : 'localhost';
-		$options['user']     = isset($options['user']) ? $options['user'] : '';
-		$options['password'] = isset($options['password']) ? $options['password'] : '';
-		$options['database'] = isset($options['database']) ? $options['database'] : '';
+		$options['host']     = $options['host'] ?? 'localhost';
+		$options['user']     = $options['user'] ?? '';
+		$options['password'] = $options['password'] ?? '';
+		$options['database'] = $options['database'] ?? '';
 		$options['select']   = isset($options['select']) ? (bool) $options['select'] : true;
 
 		// Finalize initialisation
 		parent::__construct($options);
-	}
-
-	/**
-	 * Destructor.
-	 *
-	 * @since   1.0
-	 */
-	public function __destruct()
-	{
-		if (\is_resource($this->connection))
-		{
-			sqlsrv_close($this->connection);
-		}
 	}
 
 	/**
@@ -121,26 +107,24 @@ class SqlsrvDriver extends DatabaseDriver
 			return;
 		}
 
-		// Build the connection configuration array.
-		$config = array(
-			'Database'             => $this->options['database'],
-			'uid'                  => $this->options['user'],
-			'pwd'                  => $this->options['password'],
-			'CharacterSet'         => 'UTF-8',
-			'ReturnDatesAsStrings' => true,
-		);
-
 		// Make sure the SQLSRV extension for PHP is installed and enabled.
 		if (!static::isSupported())
 		{
 			throw new UnsupportedAdapterException('PHP extension sqlsrv_connect is not available.');
 		}
 
+		// Build the connection configuration array.
+		$config = [
+			'Database'             => $this->options['database'],
+			'uid'                  => $this->options['user'],
+			'pwd'                  => $this->options['password'],
+			'CharacterSet'         => 'UTF-8',
+			'ReturnDatesAsStrings' => true,
+		];
+
 		// Attempt to connect to the server.
 		if (!($this->connection = @ sqlsrv_connect($this->options['host'], $config)))
 		{
-			$this->log(Log\LogLevel::ERROR, 'Could not connect to SQL Server', array('errors' => sqlsrv_errors()));
-
 			throw new ConnectionFailureException('Could not connect to SQL Server');
 		}
 
@@ -152,6 +136,8 @@ class SqlsrvDriver extends DatabaseDriver
 		{
 			$this->select($this->options['database']);
 		}
+
+		$this->dispatchEvent(new ConnectionEvent(DatabaseEvents::POST_CONNECT, $this));
 	}
 
 	/**
@@ -169,7 +155,7 @@ class SqlsrvDriver extends DatabaseDriver
 			sqlsrv_close($this->connection);
 		}
 
-		$this->connection = null;
+		parent::disconnect();
 	}
 
 	/**
@@ -185,11 +171,8 @@ class SqlsrvDriver extends DatabaseDriver
 	{
 		$this->connect();
 
-		$this->setQuery(
-			'SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_NAME = ' . $this->quote($tableName)
-		);
-
-		return $this->loadColumn();
+		return $this->setQuery('SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_NAME = ' . $this->quote($tableName))
+			->loadColumn();
 	}
 
 	/**
@@ -203,22 +186,21 @@ class SqlsrvDriver extends DatabaseDriver
 	 *
 	 * @since   1.0
 	 */
-	protected function renameConstraints($constraints = array(), $prefix = null, $backup = null)
+	protected function renameConstraints($constraints = [], $prefix = null, $backup = null)
 	{
 		$this->connect();
 
 		foreach ($constraints as $constraint)
 		{
-			$this->setQuery('sp_rename ' . $constraint . ',' . str_replace($prefix, $backup, $constraint));
-			$this->execute();
+			$this->setQuery('sp_rename ' . $constraint . ',' . str_replace($prefix, $backup, $constraint))
+				->execute();
 		}
 	}
 
 	/**
 	 * Method to escape a string for usage in an SQL statement.
 	 *
-	 * The escaping for MSSQL isn't handled in the driver though that would be nice.  Because of this we need
-	 * to handle the escaping ourselves.
+	 * The escaping for MSSQL isn't handled in the driver though that would be nice.  Because of this we need to handle the escaping ourselves.
 	 *
 	 * @param   string   $text   The string to be escaped.
 	 * @param   boolean  $extra  Optional parameter to provide extra escaping.
@@ -229,12 +211,26 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public function escape($text, $extra = false)
 	{
+		if (\is_int($text))
+		{
+			return $text;
+		}
+
+		if (\is_float($text))
+		{
+			// Force the dot as a decimal point.
+			return str_replace(',', '.', $text);
+		}
+
 		$result = str_replace("'", "''", $text);
+
+		// SQL Server does not accept NULL byte in query string
+		$result = str_replace("\0", "' + CHAR(0) + N'", $result);
 
 		// Fix for SQL Sever escape sequence, see https://support.microsoft.com/en-us/kb/164291
 		$result = str_replace(
-			array("\\\n",     "\\\r",     "\\\\\r\r\n"),
-			array("\\\\\n\n", "\\\\\r\r", "\\\\\r\n\r\n"),
+			["\\\n",     "\\\r",     "\\\\\r\r\n"],
+			["\\\\\n\n", "\\\\\r\r", "\\\\\r\n\r\n"],
 			$result
 		);
 
@@ -242,8 +238,8 @@ class SqlsrvDriver extends DatabaseDriver
 		{
 			// Escape special chars
 			$result = str_replace(
-				array('[',   '_',   '%'),
-				array('[[]', '[_]', '[%]'),
+				['[',   '_',   '%'],
+				['[[]', '[_]', '[%]'],
 				$result
 			);
 		}
@@ -303,48 +299,32 @@ class SqlsrvDriver extends DatabaseDriver
 	/**
 	 * Drops a table from the database.
 	 *
-	 * @param   string   $tableName  The name of the database table to drop.
-	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
+	 * @param   string   $table     The name of the database table to drop.
+	 * @param   boolean  $ifExists  Optionally specify that the table must exist before it is dropped.
 	 *
-	 * @return  SqlsrvDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
-	public function dropTable($tableName, $ifExists = true)
+	public function dropTable($table, $ifExists = true)
 	{
 		$this->connect();
-
-		$query = $this->getQuery(true);
 
 		if ($ifExists)
 		{
 			$this->setQuery(
 				'IF EXISTS(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '
-					. $query->quote($tableName) . ') DROP TABLE ' . $tableName
+					. $this->quote($table) . ') DROP TABLE ' . $table
 			);
 		}
 		else
 		{
-			$this->setQuery('DROP TABLE ' . $tableName);
+			$this->setQuery('DROP TABLE ' . $table);
 		}
 
 		$this->execute();
 
 		return $this;
-	}
-
-	/**
-	 * Get the number of affected rows for the previous executed SQL statement.
-	 *
-	 * @return  integer  The number of affected rows.
-	 *
-	 * @since   1.0
-	 */
-	public function getAffectedRows()
-	{
-		$this->connect();
-
-		return sqlsrv_rows_affected($this->cursor);
 	}
 
 	/**
@@ -375,19 +355,30 @@ class SqlsrvDriver extends DatabaseDriver
 	}
 
 	/**
-	 * Get the number of returned rows for the previous executed SQL statement.
+	 * Method to get the database encryption details (cipher and protocol) in use.
 	 *
-	 * @param   resource  $cursor  An optional database cursor resource to extract the row count from.
+	 * @return  string  The database encryption details.
 	 *
-	 * @return  integer   The number of returned rows.
-	 *
-	 * @since   1.0
+	 * @since   2.0.0
+	 * @throws  \RuntimeException
 	 */
-	public function getNumRows($cursor = null)
+	public function getConnectionEncryption(): string
 	{
-		$this->connect();
+		// TODO: Not fake this
+		return '';
+	}
 
-		return sqlsrv_num_rows($cursor ?: $this->cursor);
+	/**
+	 * Method to test if the database TLS connections encryption are supported.
+	 *
+	 * @return  boolean  Whether the database supports TLS connections encryption.
+	 *
+	 * @since   2.0.0
+	 */
+	public function isConnectionEncryptionSupported(): bool
+	{
+		// TODO: Not fake this
+		return false;
 	}
 
 	/**
@@ -403,7 +394,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public function getTableColumns($table, $typeOnly = true)
 	{
-		$result = array();
+		$result = [];
 
 		$table_temp = $this->replacePrefix((string) $table);
 
@@ -469,7 +460,7 @@ class SqlsrvDriver extends DatabaseDriver
 		$this->connect();
 
 		// TODO To implement.
-		return array();
+		return [];
 	}
 
 	/**
@@ -485,9 +476,7 @@ class SqlsrvDriver extends DatabaseDriver
 		$this->connect();
 
 		// Set the query to get the tables statement.
-		$this->setQuery('SELECT name FROM ' . $this->getDatabase() . '.sys.Tables WHERE type = \'U\';');
-
-		return $this->loadColumn();
+		return $this->setQuery('SELECT name FROM ' . $this->getDatabase() . '.sys.Tables WHERE type = \'U\';')->loadColumn();
 	}
 
 	/**
@@ -520,8 +509,8 @@ class SqlsrvDriver extends DatabaseDriver
 	 */
 	public function insertObject($table, &$object, $key = null)
 	{
-		$fields       = array();
-		$values       = array();
+		$fields       = [];
+		$values       = [];
 		$tableColumns = $this->getTableColumns($table);
 		$statement    = 'INSERT INTO ' . $this->quoteName($table) . ' (%s) VALUES (%s)';
 
@@ -556,16 +545,11 @@ class SqlsrvDriver extends DatabaseDriver
 			}
 
 			$fields[] = $this->quoteName($k);
-			$values[] = $this->Quote($v);
+			$values[] = $this->quote($v);
 		}
 
 		// Set the query and execute the insert.
-		$this->setQuery(sprintf($statement, implode(',', $fields), implode(',', $values)));
-
-		if (!$this->execute())
-		{
-			return false;
-		}
+		$this->setQuery(sprintf($statement, implode(',', $fields), implode(',', $values)))->execute();
 
 		$id = $this->insertid();
 
@@ -597,10 +581,9 @@ class SqlsrvDriver extends DatabaseDriver
 	/**
 	 * Execute the SQL statement.
 	 *
-	 * @return  resource|boolean  A database cursor resource on success, boolean false on failure.
+	 * @return  boolean
 	 *
 	 * @since   1.0
-	 * @throws  \Exception
 	 * @throws  \RuntimeException
 	 */
 	public function execute()
@@ -610,60 +593,47 @@ class SqlsrvDriver extends DatabaseDriver
 		// Take a local copy so that we don't modify the original query and cause issues later
 		$sql = $this->replacePrefix((string) $this->sql);
 
-		if ($this->limit > 0 || $this->offset > 0)
-		{
-			$sql = $this->limit($sql, $this->limit, $this->offset);
-		}
-
 		// Increment the query counter.
 		$this->count++;
 
-		// If debugging is enabled then let's log the query.
-		if ($this->debug)
+		// Get list of bounded parameters
+		$bounded =& $this->sql->getBounded();
+
+		// If there is a monitor registered, let it know we are starting this query
+		if ($this->monitor)
 		{
-			// Add the query to the object queue.
-			$this->log(
-				Log\LogLevel::DEBUG,
-				'{sql}',
-				array('sql' => $sql, 'category' => 'databasequery', 'trace' => debug_backtrace())
-			);
+			$this->monitor->startQuery($sql, $bounded);
 		}
 
-		// Reset the error values.
-		$this->errorNum = 0;
-		$this->errorMsg = '';
+		// Execute the query.
+		$this->executed = false;
 
-		$options = array();
-
-		// SQLSrv_num_rows requires a static or keyset cursor.
-		if (strncmp(strtoupper(ltrim($sql)), 'SELECT', \strlen('SELECT')) === 0)
+		// Bind the variables
+		foreach ($bounded as $key => $obj)
 		{
-			$options = array('Scrollable' => \SQLSRV_CURSOR_KEYSET);
+			$this->statement->bindParam($key, $obj->value, $obj->dataType);
 		}
 
-		$params = array();
-
-		// Bind the variables:
-		if ($this->sql instanceof PreparableInterface)
+		try
 		{
-			$bounded =& $this->sql->getBounded();
+			$this->executed = $this->statement->execute();
 
-			if (\count($bounded))
+			// If there is a monitor registered, let it know we have finished this query
+			if ($this->monitor)
 			{
-				foreach ($bounded as $key => $obj)
-				{
-					// And add the value as an additional param
-					$params[] = $obj->value;
-				}
+				$this->monitor->stopQuery();
 			}
+
+			return true;
 		}
-
-		// Execute the query. Error suppression is used here to prevent warnings/notices that the connection has been lost.
-		$this->cursor = @sqlsrv_query($this->connection, $sql, $params, $options);
-
-		// If an error occurred handle it.
-		if (!$this->cursor)
+		catch (ExecutionFailureException $exception)
 		{
+			// If there is a monitor registered, let it know we have finished this query
+			if ($this->monitor)
+			{
+				$this->monitor->stopQuery();
+			}
+
 			// Check if the server was disconnected.
 			if (!$this->connected())
 			{
@@ -676,48 +646,23 @@ class SqlsrvDriver extends DatabaseDriver
 				catch (ConnectionFailureException $e)
 				{
 					// If connect fails, ignore that exception and throw the normal exception.
-					$errors         = sqlsrv_errors();
-					$this->errorNum = $errors[0]['code'];
-					$this->errorMsg = $errors[0]['message'];
-
-					// Throw the normal query exception.
-					$this->log(
-						Log\LogLevel::ERROR,
-						'Database query failed (error #{code}): {message}; Failed query: {sql}',
-						array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
-					);
-
-					throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
+					throw $exception;
 				}
 
 				// Since we were able to reconnect, run the query again.
 				return $this->execute();
 			}
 
-			// The server was not disconnected.
-			$errors         = sqlsrv_errors();
-			$this->errorNum = $errors[0]['code'];
-			$this->errorMsg = $errors[0]['message'];
-
 			// Throw the normal query exception.
-			$this->log(
-				Log\LogLevel::ERROR,
-				'Database query failed (error #{code}): {message}; Failed query: {sql}',
-				array('code' => $this->errorNum, 'message' => $this->errorMsg, 'sql' => $sql)
-			);
-
-			throw new ExecutionFailureException($sql, $this->errorMsg, $this->errorNum);
+			throw $exception;
 		}
-
-		return $this->cursor;
 	}
 
 	/**
-	 * This function replaces a string identifier <var>$prefix</var> with the string held is the
-	 * <var>tablePrefix</var> class variable.
+	 * This function replaces a string identifier with the configured table prefix.
 	 *
 	 * @param   string  $sql     The SQL statement to prepare.
-	 * @param   string  $prefix  The common table prefix.
+	 * @param   string  $prefix  The table prefix.
 	 *
 	 * @return  string  The processed SQL statement.
 	 *
@@ -836,44 +781,12 @@ class SqlsrvDriver extends DatabaseDriver
 			return false;
 		}
 
-		if (!sqlsrv_query($this->connection, 'USE ' . $database, null, array('scrollable' => \SQLSRV_CURSOR_STATIC)))
+		if (!sqlsrv_query($this->connection, 'USE [' . $database . ']', null, ['scrollable' => \SQLSRV_CURSOR_STATIC]))
 		{
 			throw new ConnectionFailureException('Could not connect to database');
 		}
 
 		return true;
-	}
-
-	/**
-	 * Sets the SQL statement string for later execution.
-	 *
-	 * @param   DatabaseQuery|string  $query   The SQL statement to set either as a DatabaseQuery object or a string.
-	 * @param   integer               $offset  The affected row offset to set.
-	 * @param   integer               $limit   The maximum affected rows to set.
-	 *
-	 * @return  SqlsrvDriver  This object to support method chaining.
-	 *
-	 * @since   1.5.0
-	 */
-	public function setQuery($query, $offset = null, $limit = null)
-	{
-		$this->connect();
-
-		$this->freeResult();
-
-		if (\is_string($query))
-		{
-			// Allows taking advantage of bound variables in a direct query:
-			$query = $this->getQuery(true)->setQuery($query);
-		}
-
-		if ($query instanceof LimitableInterface && $offset !== null && $limit !== null)
-		{
-			$query->setLimit($limit, $offset);
-		}
-
-		// Store reference to the DatabaseQuery instance
-		return parent::setQuery($query, $offset, $limit);
 	}
 
 	/**
@@ -904,10 +817,9 @@ class SqlsrvDriver extends DatabaseDriver
 
 		if (!$toSavepoint || $this->transactionDepth <= 1)
 		{
-			if ($this->setQuery('COMMIT TRANSACTION')->execute())
-			{
-				$this->transactionDepth = 0;
-			}
+			$this->setQuery('COMMIT TRANSACTION')->execute();
+
+			$this->transactionDepth = 0;
 
 			return;
 		}
@@ -931,21 +843,17 @@ class SqlsrvDriver extends DatabaseDriver
 
 		if (!$toSavepoint || $this->transactionDepth <= 1)
 		{
-			if ($this->setQuery('ROLLBACK TRANSACTION')->execute())
-			{
-				$this->transactionDepth = 0;
-			}
+			$this->setQuery('ROLLBACK TRANSACTION')->execute();
+
+			$this->transactionDepth = 0;
 
 			return;
 		}
 
 		$savepoint = 'SP_' . ($this->transactionDepth - 1);
-		$this->setQuery('ROLLBACK TRANSACTION ' . $this->quoteName($savepoint));
+		$this->setQuery('ROLLBACK TRANSACTION ' . $this->quoteName($savepoint))->execute();
 
-		if ($this->execute())
-		{
-			$this->transactionDepth--;
-		}
+		$this->transactionDepth--;
 	}
 
 	/**
@@ -964,83 +872,17 @@ class SqlsrvDriver extends DatabaseDriver
 
 		if (!$asSavepoint || !$this->transactionDepth)
 		{
-			if ($this->setQuery('BEGIN TRANSACTION')->execute())
-			{
-				$this->transactionDepth = 1;
-			}
+			$this->setQuery('BEGIN TRANSACTION')->execute();
+
+			$this->transactionDepth = 1;
 
 			return;
 		}
 
 		$savepoint = 'SP_' . $this->transactionDepth;
-		$this->setQuery('BEGIN TRANSACTION ' . $this->quoteName($savepoint));
+		$this->setQuery('BEGIN TRANSACTION ' . $this->quoteName($savepoint))->execute();
 
-		if ($this->execute())
-		{
-			$this->transactionDepth++;
-		}
-	}
-
-	/**
-	 * Method to fetch a row from the result set cursor as an array.
-	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
-	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
-	 *
-	 * @since   1.0
-	 */
-	protected function fetchArray($cursor = null)
-	{
-		return sqlsrv_fetch_array($cursor ?: $this->cursor, \SQLSRV_FETCH_NUMERIC);
-	}
-
-	/**
-	 * Method to fetch a row from the result set cursor as an associative array.
-	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
-	 * @return  mixed  Either the next row from the result set or false if there are no more rows.
-	 *
-	 * @since   1.0
-	 */
-	protected function fetchAssoc($cursor = null)
-	{
-		return sqlsrv_fetch_array($cursor ?: $this->cursor, \SQLSRV_FETCH_ASSOC);
-	}
-
-	/**
-	 * Method to fetch a row from the result set cursor as an object.
-	 *
-	 * @param   mixed   $cursor  The optional result set cursor from which to fetch the row.
-	 * @param   string  $class   The class name to use for the returned row object.
-	 *
-	 * @return  mixed   Either the next row from the result set or false if there are no more rows.
-	 *
-	 * @since   1.0
-	 */
-	protected function fetchObject($cursor = null, $class = 'stdClass')
-	{
-		return sqlsrv_fetch_object($cursor ?: $this->cursor, $class);
-	}
-
-	/**
-	 * Method to free up the memory used for the result set.
-	 *
-	 * @param   mixed  $cursor  The optional result set cursor from which to fetch the row.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	protected function freeResult($cursor = null)
-	{
-		$useCursor = $cursor ?: $this->cursor;
-
-		if (\is_resource($useCursor))
-		{
-			sqlsrv_free_stmt($useCursor);
-		}
+		$this->transactionDepth++;
 	}
 
 	/**
@@ -1062,42 +904,22 @@ class SqlsrvDriver extends DatabaseDriver
 			"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table' AND COLUMN_NAME = '$field' ORDER BY ORDINAL_POSITION"
 		);
 
-		if ($this->loadResult())
-		{
-			return true;
-		}
-
-		return false;
+		return (bool) $this->loadResult();
 	}
 
 	/**
-	 * Method to wrap an SQL statement to provide a LIMIT and OFFSET behavior for scrolling through a result set.
+	 * Prepares a SQL statement for execution
 	 *
-	 * @param   string   $sql     The SQL statement to process.
-	 * @param   integer  $limit   The maximum affected rows to set.
-	 * @param   integer  $offset  The affected row offset to set.
+	 * @param   string  $query  The SQL query to be prepared.
 	 *
-	 * @return  string   The processed SQL statement.
+	 * @return  StatementInterface
 	 *
-	 * @since   1.0
+	 * @since   2.0.0
+	 * @throws  PrepareStatementFailureException
 	 */
-	protected function limit($sql, $limit, $offset)
+	protected function prepareStatement(string $query): StatementInterface
 	{
-		$orderBy = stristr($sql, 'ORDER BY');
-
-		if ($orderBy === null || empty($orderBy))
-		{
-			$orderBy = 'ORDER BY (select 0)';
-		}
-
-		$sql = str_ireplace($orderBy, '', $sql);
-
-		$rowNumberText = ',ROW_NUMBER() OVER (' . $orderBy . ') AS RowNumber FROM ';
-
-		$sql = preg_replace('/\\s+FROM/', '\\1 ' . $rowNumberText . ' ', $sql, 1);
-		$sql = 'SELECT TOP ' . $this->limit . ' * FROM (' . $sql . ') _myResults WHERE RowNumber > ' . $this->offset;
-
-		return $sql;
+		return new SqlsrvStatement($this->connection, $query);
 	}
 
 	/**
@@ -1108,14 +930,14 @@ class SqlsrvDriver extends DatabaseDriver
 	 * @param   string  $backup    Table prefix
 	 * @param   string  $prefix    For the table - used to rename constraints in non-mysql databases
 	 *
-	 * @return  SqlsrvDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
 	public function renameTable($oldTable, $newTable, $backup = null, $prefix = null)
 	{
-		$constraints = array();
+		$constraints = [];
 
 		if ($prefix !== null && $backup !== null)
 		{
@@ -1129,7 +951,9 @@ class SqlsrvDriver extends DatabaseDriver
 
 		$this->setQuery("sp_rename '" . $oldTable . "', '" . $newTable . "'");
 
-		return $this->execute();
+		$this->execute();
+
+		return $this;
 	}
 
 	/**
@@ -1137,7 +961,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 *
 	 * @param   string  $tableName  The name of the table to lock.
 	 *
-	 * @return  SqlsrvDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -1150,7 +974,7 @@ class SqlsrvDriver extends DatabaseDriver
 	/**
 	 * Unlocks tables in the database.
 	 *
-	 * @return  SqlsrvDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException

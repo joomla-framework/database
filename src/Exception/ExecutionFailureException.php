@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -35,8 +35,10 @@ class ExecutionFailureException extends \RuntimeException
 	 */
 	public function __construct($query, $message = '', $code = 0, \Exception $previous = null)
 	{
-		parent::__construct($message, $code, $previous);
+		// PDO uses strings for exception codes, PHP forces numeric codes, so "force" the string code to be used
+		parent::__construct($message, 0, $previous);
 
+		$this->code  = $code;
 		$this->query = $query;
 	}
 

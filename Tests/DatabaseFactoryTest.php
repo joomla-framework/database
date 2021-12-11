@@ -1,29 +1,35 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Tests;
 
+use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseExporter;
 use Joomla\Database\DatabaseFactory;
+use Joomla\Database\DatabaseImporter;
+use Joomla\Database\DatabaseInterface;
+use Joomla\Database\DatabaseIterator;
+use Joomla\Database\Exception\UnsupportedAdapterException;
+use Joomla\Database\Mysqli\MysqliDriver;
+use Joomla\Database\QueryInterface;
+use Joomla\Database\StatementInterface;
 use Joomla\Test\TestHelper;
-use Joomla\Test\TestDatabase;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for Joomla\Database\DatabaseFactory.
- *
- * @since  1.0
+ * Test class for Joomla\Database\DatabaseFactory
  */
-class DatabaseFactoryTest extends TestDatabase
+class DatabaseFactoryTest extends TestCase
 {
 	/**
 	 * Object being tested
 	 *
-	 * @var    DatabaseFactory
-	 * @since  1.0
+	 * @var  DatabaseFactory
 	 */
-	protected static $instance;
+	private $factory;
 
 	/**
 	 * Sets up the fixture.
@@ -31,138 +37,237 @@ class DatabaseFactoryTest extends TestDatabase
 	 * This method is called before a test is executed.
 	 *
 	 * @return  void
-	 *
-	 * @since   1.0
 	 */
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
-		static::$instance = DatabaseFactory::getInstance();
+		$this->factory = new DatabaseFactory;
 	}
 
 	/**
-	 * Test for the Joomla\Database\DatabaseFactory::getInstance method.
+	 * Data provider for driver test cases
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @return  \Generator
 	 */
-	public function testGetInstance()
+	public function dataGetDriver(): \Generator
 	{
-		$this->assertThat(
-			DatabaseFactory::getInstance(),
-			$this->isInstanceOf('\\Joomla\\Database\\DatabaseFactory'),
-			'Tests that getInstance returns an instance of DatabaseFactory.'
-		);
+		yield 'supported driver' => [
+			'mysqli',
+			false,
+		];
+
+		yield 'unsupported exporter' => [
+			'mariadb',
+			true,
+		];
 	}
 
 	/**
-	 * Test for the Joomla\Database\DatabaseFactory::getExporter method.
+	 * @testdox  The factory builds a database driver correctly
 	 *
-	 * @return  void
+	 * @param   string   $adapter               The type of adapter to create
+	 * @param   boolean  $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
 	 *
-	 * @since   1.0
+	 * @dataProvider  dataGetDriver
 	 */
-	public function testGetExporter()
+	public function testGetDriver(string $adapter, bool $shouldRaiseException)
 	{
-		$object = static::$instance;
-
-		$this->assertThat(
-			$object->getExporter('mysqli'),
-			$this->isInstanceOf('\\Joomla\\Database\\Mysqli\\MysqliExporter'),
-			'Tests that getExporter with "mysqli" param returns an instance of MysqliExporter.'
-		);
-
-		try
+		if ($shouldRaiseException)
 		{
-			$object->getExporter('mariadb');
+			$this->expectException(UnsupportedAdapterException::class);
 		}
-		catch (\RuntimeException $e)
+
+		$this->assertInstanceOf(
+			DatabaseInterface::class,
+			$this->factory->getDriver($adapter)
+		);
+	}
+
+	/**
+	 * Data provider for exporter test cases
+	 *
+	 * @return  \Generator
+	 */
+	public function dataGetExporter(): \Generator
+	{
+		yield 'exporter without database driver' => [
+			'mysqli',
+			false,
+			null,
+		];
+
+		yield 'exporter with database driver' => [
+			'mysqli',
+			false,
+			$this->createMock(MysqliDriver::class),
+		];
+
+		yield 'unsupported exporter' => [
+			'mariadb',
+			true,
+			null,
+		];
+	}
+
+	/**
+	 * @testdox  The factory builds a database exporter correctly
+	 *
+	 * @param   string               $adapter               The type of adapter to create
+	 * @param   boolean              $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
+	 * @param   DatabaseDriver|null  $databaseDriver        The optional database driver to be injected into the exporter
+	 *
+	 * @dataProvider  dataGetExporter
+	 */
+	public function testGetExporter(string $adapter, bool $shouldRaiseException, ?DatabaseDriver $databaseDriver)
+	{
+		if ($shouldRaiseException)
 		{
-			$this->assertThat(
-				$e->getMessage(),
-				$this->equalTo('Database Exporter not found.'),
-				'Tests that getExporter with "mariadb" param throws an exception due to a class not existing.'
+			$this->expectException(UnsupportedAdapterException::class);
+		}
+
+		$exporter = $this->factory->getExporter($adapter, $databaseDriver);
+
+		$this->assertInstanceOf(
+			DatabaseExporter::class,
+			$exporter
+		);
+
+		if ($databaseDriver)
+		{
+			$this->assertSame(
+				TestHelper::getValue($exporter, 'db'),
+				$databaseDriver
 			);
 		}
+	}
 
-		$exporter = $object->getExporter('mysqli', static::$driver);
+	/**
+	 * Data provider for importer test cases
+	 *
+	 * @return  \Generator
+	 */
+	public function dataGetImporter(): \Generator
+	{
+		yield 'importer without database driver' => [
+			'mysqli',
+			false,
+			null,
+		];
 
-		$this->assertThat(
-			TestHelper::getValue($exporter, 'db'),
-			$this->isInstanceOf('\\Joomla\\Database\\Sqlite\\SqliteDriver'),
-			'Tests that getExporter with the test database driver returns an instance of SqliteDriver.'
+		yield 'importer with database driver' => [
+			'mysqli',
+			false,
+			$this->createMock(MysqliDriver::class),
+		];
+
+		yield 'unsupported importer' => [
+			'mariadb',
+			true,
+			null,
+		];
+	}
+
+	/**
+	 * @testdox  The factory builds a database importer correctly
+	 *
+	 * @param   string               $adapter               The type of adapter to create
+	 * @param   boolean              $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
+	 * @param   DatabaseDriver|null  $databaseDriver        The optional database driver to be injected into the importer
+	 *
+	 * @dataProvider  dataGetImporter
+	 */
+	public function testGetImporter(string $adapter, bool $shouldRaiseException, ?DatabaseDriver $databaseDriver)
+	{
+		if ($shouldRaiseException)
+		{
+			$this->expectException(UnsupportedAdapterException::class);
+		}
+
+		$importer = $this->factory->getImporter($adapter, $databaseDriver);
+
+		$this->assertInstanceOf(
+			DatabaseImporter::class,
+			$importer
+		);
+
+		if ($databaseDriver)
+		{
+			$this->assertSame(
+				TestHelper::getValue($importer, 'db'),
+				$databaseDriver
+			);
+		}
+	}
+
+	/**
+	 * Data provider for iterator test cases
+	 *
+	 * @return  \Generator
+	 */
+	public function dataGetIterator(): \Generator
+	{
+		yield 'driver without custom iterator' => [
+			'mysqli',
+			$this->createMock(StatementInterface::class),
+		];
+	}
+
+	/**
+	 * @testdox  The factory builds a database iterator correctly
+	 *
+	 * @param   string              $adapter    The type of adapter to create
+	 * @param   StatementInterface  $statement  Statement holding the result set to be iterated.
+	 *
+	 * @dataProvider  dataGetIterator
+	 */
+	public function testGetIterator(string $adapter, StatementInterface $statement)
+	{
+		$this->assertInstanceOf(
+			DatabaseIterator::class,
+			$this->factory->getIterator($adapter, $statement)
 		);
 	}
 
 	/**
-	 * Test for the Joomla\Database\DatabaseFactory::getImporter method.
+	 * Data provider for query test cases
 	 *
-	 * @return  void
-	 *
-	 * @since   1.0
+	 * @return  \Generator
 	 */
-	public function testGetImporter()
+	public function dataGetQuery(): \Generator
 	{
-		$object = static::$instance;
+		yield 'supported query' => [
+			'mysqli',
+			false,
+			$this->createMock(MysqliDriver::class),
+		];
 
-		$this->assertThat(
-			$object->getImporter('mysqli'),
-			$this->isInstanceOf('\\Joomla\\Database\\Mysqli\\MysqliImporter'),
-			'Tests that getImporter with "mysqli" param returns an instance of MysqliImporter.'
-		);
-
-		try
-		{
-			$object->getImporter('mariadb');
-		}
-		catch (\RuntimeException $e)
-		{
-			$this->assertThat(
-				$e->getMessage(),
-				$this->equalTo('Database importer not found.'),
-				'Tests that getImporter with "mariadb" param throws an exception due to a class not existing.'
-			);
-		}
-
-		$importer = $object->getImporter('mysqli', static::$driver);
-
-		$this->assertThat(
-			TestHelper::getValue($importer, 'db'),
-			$this->isInstanceOf('\\Joomla\\Database\\Sqlite\\SqliteDriver'),
-			'Tests that getImporter with the test database driver returns an instance of SqliteDriver.'
-		);
+		yield 'unsupported query' => [
+			'mariadb',
+			true,
+			null,
+		];
 	}
 
 	/**
-	 * Test for the Joomla\Database\DatabaseFactory::getQuery method.
+	 * @testdox  The factory builds a database query object correctly
 	 *
-	 * @return  void
+	 * @param   string               $adapter               The type of adapter to create
+	 * @param   boolean              $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
+	 * @param   DatabaseDriver|null  $databaseDriver        The optional database driver to be injected into the importer
 	 *
-	 * @since   1.0
+	 * @dataProvider  dataGetQuery
 	 */
-	public function testGetQuery()
+	public function testGetQuery(string $adapter, bool $shouldRaiseException, ?DatabaseDriver $databaseDriver)
 	{
-		$object = static::$instance;
+		if ($shouldRaiseException)
+		{
+			$this->expectException(UnsupportedAdapterException::class);
+		}
 
-		$this->assertThat(
-			$object->getQuery('sqlite', static::$driver),
-			$this->isInstanceOf('\\Joomla\\Database\\Sqlite\\SqliteQuery'),
-			'Tests that getQuery with the test database driver and "sqlite" name returns an instance of SqliteQuery.'
+		$this->assertInstanceOf(
+			QueryInterface::class,
+			$this->factory->getQuery($adapter, $databaseDriver)
 		);
-
-		try
-		{
-			$object->getQuery('mariadb', static::$driver);
-		}
-		catch (\RuntimeException $e)
-		{
-			$this->assertThat(
-				$e->getMessage(),
-				$this->equalTo('Database Query class not found'),
-				'Tests that getQuery with "mariadb" param throws an exception due to a class not existing.'
-			);
-		}
 	}
 }

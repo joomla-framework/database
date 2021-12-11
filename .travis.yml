@@ -17,460 +17,210 @@ jobs:
   include:
     # SQLite
     - stage: Test
-      if: NOT type = pull_request
-      php: 5.3
-      dist: precise
-      env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS="--prefer-stable"
-    - stage: Test
-      php: 5.3
-      dist: precise
-      env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
-    - stage: Test
-      if: NOT type = pull_request
-      php: 5.4
-      env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS="--prefer-stable"
-    - stage: Test
-      if: NOT type = pull_request
-      php: 5.5
-      env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS="--prefer-stable"
-    - stage: Test
-      php: 5.6
-      env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS="--prefer-stable"
-    - stage: Test
-      if: NOT type = pull_request
-      php: 7.0
-      env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS="--prefer-stable"
-    - stage: Test
-      if: NOT type = pull_request
-      php: 7.1
-      env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS="--prefer-stable"
-    - stage: Test
       php: 7.2
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS="--prefer-stable"
     - stage: Test
-      php: 7.3
-      env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS="--prefer-stable"
-    - stage: Test
+      if: NOT type = pull_request
       php: 7.3
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS="--prefer-stable"
     - stage: Test
       php: 7.4
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS="--prefer-stable"
     - stage: Test
+      if: NOT type = pull_request
       php: nightly
       env: DB="sqlite" PHPUNIT_CONF=".travis/phpunit.sqlite.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
 
-    # PDO MySQL 5.5
-    - stage: Test
-      php: 5.3
-      dist: precise
-      env: DB="mysql" MYSQL_VERSION=5.5 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
-    - stage: Test
-      php: 5.3
-      dist: precise
-      env: DB="mysql" MYSQL_VERSION=5.5 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
-
     # PDO MySQL 5.6
     - stage: Test
-      php: 5.4
-      env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
+      php: 7.2
+      env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
     - stage: Test
       if: NOT type = pull_request
-      php: 5.5
+      php: 7.3
       env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
-    - stage: Test
-      php: 5.6
-      env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
-    - stage: Test
-      if: NOT type = pull_request
-      php: 7.0
-      env: DB="mysql" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # PDO MySQL 5.7
     - stage: Test
       if: NOT type = pull_request
-      php: 7.1
-      sudo: required
-      services:
-        - docker
-      env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
-    - stage: Test
-      if: NOT type = pull_request
       php: 7.2
-      sudo: required
-      services:
-        - docker
       env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       if: NOT type = pull_request
       php: 7.3
-      sudo: required
-      services:
-        - docker
       env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
-    - stage: Test
-      php: 7.3
-      sudo: required
-      services:
-        - docker
-      env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       php: 7.4
-      sudo: required
-      services:
-        - docker
       env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       if: NOT type = pull_request
       php: nightly
-      sudo: required
-      services:
-        - docker
       env: DB="mysql.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # PDO MySQL 8.0
     - stage: Test
       if: NOT type = pull_request
       php: 7.3
-      sudo: required
-      services:
-        - docker
       env: DB="mysql.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - bash ./.travis/install-mysql-8.0.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       php: 7.4
-      sudo: required
-      services:
-        - docker
       env: DB="mysql.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - bash ./.travis/install-mysql-8.0.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       if: NOT type = pull_request
       php: nightly
-      sudo: required
-      services:
-        - docker
       env: DB="mysql.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysql.docker.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
       before_script:
         - bash ./.travis/install-mysql-8.0.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
-
-    # MySQLi 5.5
-    - stage: Test
-      php: 5.3
-      dist: precise
-      env: DB="mysqli" MYSQL_VERSION=5.5 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
-    - stage: Test
-      php: 5.3
-      dist: precise
-      env: DB="mysqli" MYSQL_VERSION=5.5 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # MySQLi 5.6
     - stage: Test
-      php: 5.4
-      env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
+      php: 7.2
+      env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
     - stage: Test
       if: NOT type = pull_request
-      php: 5.5
+      php: 7.3
       env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
-    - stage: Test
-      if: NOT type = pull_request
-      php: 5.6
-      env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
-    - stage: Test
-      if: NOT type = pull_request
-      php: 7.0
-      env: DB="mysqli" MYSQL_VERSION=5.6 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # MySQLi 5.7
     - stage: Test
       if: NOT type = pull_request
-      php: 7.1
-      sudo: required
-      services:
-        - docker
-      env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
-    - stage: Test
-      if: NOT type = pull_request
       php: 7.2
-      sudo: required
-      services:
-        - docker
       env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       if: NOT type = pull_request
       php: 7.3
-      sudo: required
-      services:
-        - docker
       env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
-    - stage: Test
-      php: 7.3
-      sudo: required
-      services:
-        - docker
-      env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       php: 7.4
-      sudo: required
-      services:
-        - docker
       env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       if: NOT type = pull_request
       php: nightly
-      sudo: required
-      services:
-        - docker
       env: DB="mysqli.docker" MYSQL_VERSION=5.7 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
       before_script:
         - bash ./.travis/install-mysql-5.7.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # MySQLi 8.0
     - stage: Test
       if: NOT type = pull_request
       php: 7.3
-      sudo: required
-      services:
-        - docker
       env: DB="mysqli.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - bash ./.travis/install-mysql-8.0.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       php: 7.4
-      sudo: required
-      services:
-        - docker
       env: DB="mysqli.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - bash ./.travis/install-mysql-8.0.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       if: NOT type = pull_request
       php: nightly
-      sudo: required
-      services:
-        - docker
       env: DB="mysqli.docker" MYSQL_VERSION=8.0 PHPUNIT_CONF=".travis/phpunit.mysqli.docker.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
       before_script:
         - bash ./.travis/install-mysql-8.0.sh
-        - mysql -h 127.0.0.1 -P 33306 -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # MariaDB 10.0 (MySQLi)
     - stage: Test
-      php: 7.1
+      php: 7.2
       dist: precise
       addons:
         mariadb: 10.0
       env: DB="mariadb" MARIADB_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # MariaDB 10.1 (MySQLi)
     - stage: Test
+      if: NOT type = pull_request
       php: 7.2
       addons:
         mariadb: 10.1
       env: DB="mariadb" MARIADB_VERSION=10.1 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # MariaDB 10.2 (MySQLi)
+    - stage: Test
+      if: NOT type = pull_request
+      php: 7.2
+      addons:
+        mariadb: 10.2
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable"
     - stage: Test
       if: NOT type = pull_request
       php: 7.3
       addons:
         mariadb: 10.2
       env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       php: 7.4
       addons:
         mariadb: 10.2
       env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       if: NOT type = pull_request
       php: nightly
       addons:
         mariadb: 10.2
       env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysqli.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # MariaDB 10.0 (PDO MySQL)
     - stage: Test
-      php: 7.1
+      php: 7.2
       addons:
         mariadb: 10.0
       env: DB="mariadb" MARIADB_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # MariaDB 10.1 (PDO MySQL)
     - stage: Test
+      if: NOT type = pull_request
       php: 7.2
       addons:
         mariadb: 10.1
       env: DB="mariadb" MARIADB_VERSION=10.1 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
 
     # MariaDB 10.2 (PDO MySQL)
+    - stage: Test
+      if: NOT type = pull_request
+      php: 7.2
+      addons:
+        mariadb: 10.2
+      env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable"
     - stage: Test
       if: NOT type = pull_request
       php: 7.3
       addons:
         mariadb: 10.2
       env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       php: 7.4
       addons:
         mariadb: 10.2
       env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
     - stage: Test
       if: NOT type = pull_request
       php: nightly
       addons:
         mariadb: 10.2
       env: DB="mariadb" MARIADB_VERSION=10.2 PHPUNIT_CONF=".travis/phpunit.mysql.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
-      before_script:
-        - mysql -u root -e 'create database joomla_ut;'
-        - mysql -u root joomla_ut < Tests/Stubs/mysql.sql
-
-    # PDO PostgreSQL 9.1
-    - stage: Test
-      php: 5.3
-      dist: precise
-      addons:
-        postgresql: "9.1"
-      services:
-        - postgresql
-      env: DB="pgsql" PGSQL_VERSION=9.1 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-
-    # PDO PostgreSQL 9.2
-    - stage: Test
-      if: NOT type = pull_request
-      php: 5.4
-      addons:
-        postgresql: "9.2"
-      services:
-        - postgresql
-      env: DB="pgsql" PGSQL_VERSION=9.2 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-
-    # PDO PostgreSQL 9.3
-    - stage: Test
-      if: NOT type = pull_request
-      php: 5.5
-      addons:
-        postgresql: "9.3"
-      services:
-        - postgresql
-      env: DB="pgsql" PGSQL_VERSION=9.3 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
 
     # PDO PostgreSQL 9.4
     - stage: Test
-      if: NOT type = pull_request
-      php: 5.6
+      php: 7.2
       addons:
         postgresql: "9.4"
       services:
@@ -478,12 +228,12 @@ jobs:
       env: DB="pgsql" PGSQL_VERSION=9.4 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
 
     # PDO PostgreSQL 9.5
     - stage: Test
       if: NOT type = pull_request
-      php: 7.0
+      php: 7.2
       addons:
         postgresql: "9.5"
       services:
@@ -491,12 +241,11 @@ jobs:
       env: DB="pgsql" PGSQL_VERSION=9.5 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
 
     # PDO PostgreSQL 9.6
     - stage: Test
-      if: NOT type = pull_request
-      php: 7.1
+      php: 7.3
       addons:
         postgresql: "9.6"
       services:
@@ -504,26 +253,12 @@ jobs:
       env: DB="pgsql" PGSQL_VERSION=9.6 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
 
     # PDO PostgreSQL 10.0
     - stage: Test
       if: NOT type = pull_request
-      php: 7.2
-      sudo: required
-      addons:
-        postgresql: "9.6"
-      services:
-        - postgresql
-      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - bash ./.travis/install-postgres-10.sh
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-    - stage: Test
-      if: NOT type = pull_request
       php: 7.3
-      sudo: required
       addons:
         postgresql: "9.6"
       services:
@@ -532,22 +267,9 @@ jobs:
       before_script:
         - bash ./.travis/install-postgres-10.sh
         - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-    - stage: Test
-      php: 7.3
-      sudo: required
-      addons:
-        postgresql: "9.6"
-      services:
-        - postgresql
-      env: DB="pgsql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - bash ./.travis/install-postgres-10.sh
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
     - stage: Test
       php: 7.4
-      sudo: required
       addons:
         postgresql: "9.6"
       services:
@@ -556,11 +278,10 @@ jobs:
       before_script:
         - bash ./.travis/install-postgres-10.sh
         - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
     - stage: Test
       if: NOT type = pull_request
       php: nightly
-      sudo: required
       addons:
         postgresql: "9.6"
       services:
@@ -569,238 +290,80 @@ jobs:
       before_script:
         - bash ./.travis/install-postgres-10.sh
         - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
 
     # PDO PostgreSQL 11.0
     - stage: Test
       if: NOT type = pull_request
       php: 7.3
-      sudo: required
       services:
         - docker
       env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - bash ./.travis/install-postgres-11.sh
         - psql -U postgres -h localhost -c 'create database joomla_ut;'
-        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
     - stage: Test
       php: 7.4
-      sudo: required
       services:
         - docker
       env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
         - bash ./.travis/install-postgres-11.sh
         - psql -U postgres -h localhost -c 'create database joomla_ut;'
-        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
     - stage: Test
       if: NOT type = pull_request
       php: nightly
-      sudo: required
       services:
         - docker
       env: DB="pgsql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.pgsql.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
       before_script:
         - bash ./.travis/install-postgres-11.sh
         - psql -U postgres -h localhost -c 'create database joomla_ut;'
-        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
 
-    # PostgreSQL 9.1
+    # SQL Server
     - stage: Test
-      php: 5.3
-      dist: precise
-      addons:
-        postgresql: "9.1"
-      services:
-        - postgresql
-      env: DB="postgresql" PGSQL_VERSION=9.1 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-    - stage: Test
-      php: 5.3
-      dist: precise
-      addons:
-        postgresql: "9.1"
-      services:
-        - postgresql
-      env: DB="postgresql" PGSQL_VERSION=9.1 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
-      before_script:
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-
-    # PostgreSQL 9.2
-    - stage: Test
-      if: NOT type = pull_request
-      php: 5.4
-      addons:
-        postgresql: "9.2"
-      services:
-        - postgresql
-      env: DB="postgresql" PGSQL_VERSION=9.2 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-
-    # PostgreSQL 9.3
-    - stage: Test
-      if: NOT type = pull_request
-      php: 5.5
-      addons:
-        postgresql: "9.3"
-      services:
-        - postgresql
-      env: DB="postgresql" PGSQL_VERSION=9.3 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-
-    # PostgreSQL 9.4
-    - stage: Test
-      if: NOT type = pull_request
-      php: 5.6
-      addons:
-        postgresql: "9.4"
-      services:
-        - postgresql
-      env: DB="postgresql" PGSQL_VERSION=9.4 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-
-    # PostgreSQL 9.5
-    - stage: Test
-      if: NOT type = pull_request
-      php: 7.0
-      addons:
-        postgresql: "9.5"
-      services:
-        - postgresql
-      env: DB="postgresql" PGSQL_VERSION=9.5 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-
-    # PostgreSQL 9.6
-    - stage: Test
-      if: NOT type = pull_request
-      php: 7.1
-      addons:
-        postgresql: "9.6"
-      services:
-        - postgresql
-      env: DB="postgresql" PGSQL_VERSION=9.6 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-
-    # PostgreSQL 10.0
-    - stage: Test
-      if: NOT type = pull_request
       php: 7.2
       sudo: required
-      addons:
-        postgresql: "9.6"
       services:
-        - postgresql
-      env: DB="postgresql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable"
+        - docker
+      env: DB="sqlsrv" SQL_SERVER_VERSION="5.8.0" PHPUNIT_CONF=".travis/phpunit.sqlsrv.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
-        - bash ./.travis/install-postgres-10.sh
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-    - stage: Test
-      if: NOT type = pull_request
-      php: 7.3
-      sudo: required
-      addons:
-        postgresql: "9.6"
-      services:
-        - postgresql
-      env: DB="postgresql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - bash ./.travis/install-postgres-10.sh
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-    - stage: Test
-      php: 7.3
-      sudo: required
-      addons:
-        postgresql: "9.6"
-      services:
-        - postgresql
-      env: DB="postgresql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - bash ./.travis/install-postgres-10.sh
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-    - stage: Test
-      php: 7.4
-      sudo: required
-      addons:
-        postgresql: "9.6"
-      services:
-        - postgresql
-      env: DB="postgresql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable"
-      before_script:
-        - bash ./.travis/install-postgres-10.sh
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-    - stage: Test
-      if: NOT type = pull_request
-      php: nightly
-      sudo: required
-      addons:
-        postgresql: "9.6"
-      services:
-        - postgresql
-      env: DB="postgresql" PGSQL_VERSION=10.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
-      before_script:
-        - bash ./.travis/install-postgres-10.sh
-        - psql -U postgres -c 'create database joomla_ut;'
-        - psql -U postgres -d joomla_ut -a -f Tests/Stubs/postgresql.sql
-
-    # PostgreSQL 11.0
+        - bash ./.travis/install-mssql.sh $SQL_SERVER_VERSION
     - stage: Test
       if: NOT type = pull_request
       php: 7.3
       sudo: required
       services:
         - docker
-      env: DB="postgresql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable"
+      env: DB="sqlsrv" SQL_SERVER_VERSION="5.8.0" PHPUNIT_CONF=".travis/phpunit.sqlsrv.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
-        - bash ./.travis/install-postgres-11.sh
-        - psql -U postgres -h localhost -c 'create database joomla_ut;'
-        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - bash ./.travis/install-mssql.sh $SQL_SERVER_VERSION
     - stage: Test
       php: 7.4
       sudo: required
       services:
         - docker
-      env: DB="postgresql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable"
+      env: DB="sqlsrv" SQL_SERVER_VERSION="5.8.0" PHPUNIT_CONF=".travis/phpunit.sqlsrv.xml" COMPOSER_FLAGS="--prefer-stable"
       before_script:
-        - bash ./.travis/install-postgres-11.sh
-        - psql -U postgres -h localhost -c 'create database joomla_ut;'
-        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - bash ./.travis/install-mssql.sh $SQL_SERVER_VERSION
     - stage: Test
       if: NOT type = pull_request
       php: nightly
       sudo: required
       services:
         - docker
-      env: DB="postgresql" PGSQL_VERSION=11.0 PHPUNIT_CONF=".travis/phpunit.postgresql.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
+      env: DB="sqlsrv" SQL_SERVER_VERSION="5.8.0" PHPUNIT_CONF=".travis/phpunit.sqlsrv.xml" COMPOSER_FLAGS="--prefer-stable --ignore-platform-req=php"
       before_script:
-        - bash ./.travis/install-postgres-11.sh
-        - psql -U postgres -h localhost -c 'create database joomla_ut;'
-        - psql -U postgres -h localhost -d joomla_ut -a -f Tests/Stubs/postgresql.sql
+        - bash ./.travis/install-mssql.sh $SQL_SERVER_VERSION
 
     # PHPCS
     - stage: Coding standard
-      php: 5.6
+      php: 7.2
       script:
         - vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards && vendor/bin/phpcs -p --report=full --extensions=php --standard=ruleset.xml src/
-
-before_install:
-  - phpenv config-rm xdebug.ini || true
 
 install:
   - rm -f composer.lock

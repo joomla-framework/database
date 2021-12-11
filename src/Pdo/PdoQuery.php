@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -15,8 +15,16 @@ use Joomla\Database\DatabaseQuery;
  *
  * @since  1.0
  */
-class PdoQuery extends DatabaseQuery
+abstract class PdoQuery extends DatabaseQuery
 {
+	/**
+	 * The list of zero or null representation of a datetime.
+	 *
+	 * @var    array
+	 * @since  2.0.0
+	 */
+	protected $nullDatetimeList = ['0000-00-00 00:00:00'];
+
 	/**
 	 * Casts a value to a char.
 	 *

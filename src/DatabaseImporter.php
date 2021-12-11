@@ -2,13 +2,11 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database;
-
-use Psr\Log\LogLevel;
 
 /**
  * Joomla Framework Database Importer Class
@@ -23,12 +21,12 @@ abstract class DatabaseImporter
 	 * @var    array
 	 * @since  1.0
 	 */
-	protected $cache = array();
+	protected $cache = ['columns' => [], 'keys' => []];
 
 	/**
 	 * The database connector to use for exporting structure and/or data.
 	 *
-	 * @var    DatabaseDriver
+	 * @var    DatabaseInterface
 	 * @since  1.0
 	 */
 	protected $db;
@@ -39,7 +37,7 @@ abstract class DatabaseImporter
 	 * @var    mixed
 	 * @since  1.0
 	 */
-	protected $from = array();
+	protected $from = [];
 
 	/**
 	 * The type of input format.
@@ -52,7 +50,7 @@ abstract class DatabaseImporter
 	/**
 	 * An array of options for the exporter.
 	 *
-	 * @var    object
+	 * @var    \stdClass
 	 * @since  1.0
 	 */
 	protected $options;
@@ -60,15 +58,13 @@ abstract class DatabaseImporter
 	/**
 	 * Constructor.
 	 *
-	 * Sets up the default options for the exporter.
+	 * Sets up the default options for the importer.
 	 *
 	 * @since   1.0
 	 */
 	public function __construct()
 	{
 		$this->options = new \stdClass;
-
-		$this->cache = array('columns' => array(), 'keys' => array());
 
 		// Set up the class defaults:
 
@@ -78,13 +74,13 @@ abstract class DatabaseImporter
 		// Export as XML.
 		$this->asXml();
 
-		// Default destination is a string using $output = (string) $exporter;
+		// Default destination is a string using $output = (string) $importer;
 	}
 
 	/**
-	 * Set the output option for the exporter to XML format.
+	 * Set the output option for the importer to XML format.
 	 *
-	 * @return  DatabaseImporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -96,21 +92,21 @@ abstract class DatabaseImporter
 	}
 
 	/**
-	 * Checks if all data and options are in order prior to exporting.
+	 * Checks if all data and options are in order prior to importer.
 	 *
-	 * @return  DatabaseImporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
-	 * @throws  \Exception if an error is encountered.
+	 * @throws  \RuntimeException
 	 */
 	abstract public function check();
 
 	/**
 	 * Specifies the data source to import.
 	 *
-	 * @param   mixed  $from  The data source to import.
+	 * @param   \SimpleXMLElement|string  $from  The data source to import, either as a SimpleXMLElement object or XML string.
 	 *
-	 * @return  DatabaseImporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -131,12 +127,21 @@ abstract class DatabaseImporter
 	 *
 	 * @since   1.0
 	 */
-	protected function getAddColumnSQL($table, \SimpleXMLElement $field)
+	protected function getAddColumnSql($table, \SimpleXMLElement $field)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD COLUMN ' . $this->getColumnSQL($field);
-
-		return $sql;
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD COLUMN ' . $this->getColumnSQL($field);
 	}
+
+	/**
+	 * Get alters for table if there is a difference.
+	 *
+	 * @param   \SimpleXMLElement  $structure  The XML structure of the table.
+	 *
+	 * @return  array
+	 *
+	 * @since   2.0.0
+	 */
+	abstract protected function getAlterTableSql(\SimpleXMLElement $structure);
 
 	/**
 	 * Get the syntax to alter a column.
@@ -148,12 +153,10 @@ abstract class DatabaseImporter
 	 *
 	 * @since   1.0
 	 */
-	protected function getChangeColumnSQL($table, \SimpleXMLElement $field)
+	protected function getChangeColumnSql($table, \SimpleXMLElement $field)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
 			. $this->getColumnSQL($field);
-
-		return $sql;
 	}
 
 	/**
@@ -168,9 +171,7 @@ abstract class DatabaseImporter
 	 */
 	protected function getDropColumnSql($table, $name)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP COLUMN ' . $this->db->quoteName($name);
-
-		return $sql;
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP COLUMN ' . $this->db->quoteName($name);
 	}
 
 	/**
@@ -185,7 +186,7 @@ abstract class DatabaseImporter
 	protected function getKeyLookup($keys)
 	{
 		// First pass, create a lookup of the keys.
-		$lookup = array();
+		$lookup = [];
 
 		foreach ($keys as $key)
 		{
@@ -200,7 +201,7 @@ abstract class DatabaseImporter
 
 			if (empty($lookup[$kName]))
 			{
-				$lookup[$kName] = array();
+				$lookup[$kName] = [];
 			}
 
 			$lookup[$kName][] = $key;
@@ -226,6 +227,53 @@ abstract class DatabaseImporter
 		$table = preg_replace('|^#__|', $prefix, $table);
 
 		return $table;
+	}
+
+	/**
+	 * Import the data from the source into the existing tables.
+	 *
+	 * @return  void
+	 *
+	 * @note    Currently only supports XML format.
+	 * @since   2.0.0
+	 * @throws  \RuntimeException on error.
+	 */
+	public function importData()
+	{
+		if ($this->from instanceof \SimpleXMLElement)
+		{
+			$xml = $this->from;
+		}
+		else
+		{
+			$xml = new \SimpleXMLElement($this->from);
+		}
+
+		// Get all the table definitions.
+		$xmlTables = $xml->xpath('database/table_data');
+
+		foreach ($xmlTables as $table)
+		{
+			// Convert the magic prefix into the real table name.
+			$tableName = $this->getRealTableName((string) $table['name']);
+
+			$rows = $table->children();
+
+			foreach ($rows as $row)
+			{
+				if ($row->getName() == 'row')
+				{
+					$entry = new \stdClass;
+
+					foreach ($row->children() as $data)
+					{
+						$entry->{(string) $data['name']} = (string) $data;
+					}
+
+					$this->db->insertObject($tableName, $entry);
+				}
+			}
+		}
 	}
 
 	/**
@@ -267,19 +315,7 @@ abstract class DatabaseImporter
 					foreach ($queries as $query)
 					{
 						$this->db->setQuery((string) $query);
-
-						try
-						{
-							$this->db->execute();
-						}
-						catch (\RuntimeException $e)
-						{
-							$this->db->log(LogLevel::DEBUG, 'Fail: ' . $this->db->getQuery());
-
-							throw $e;
-						}
-
-						$this->db->log(LogLevel::DEBUG, 'Pass: ' . $this->db->getQuery());
+						$this->db->execute();
 					}
 				}
 			}
@@ -287,21 +323,16 @@ abstract class DatabaseImporter
 			{
 				// This is a new table.
 				$sql = $this->xmlToCreate($table);
+				$queries = explode(';', (string) $sql);
 
-				$this->db->setQuery((string) $sql);
-
-				try
+				foreach ($queries as $query)
 				{
-					$this->db->execute();
+					if (!empty($query))
+					{
+						$this->db->setQuery((string) $query);
+						$this->db->execute();
+					}
 				}
-				catch (\RuntimeException $e)
-				{
-					$this->db->log(LogLevel::DEBUG, 'Fail: ' . $this->db->getQuery());
-
-					throw $e;
-				}
-
-				$this->db->log(LogLevel::DEBUG, 'Pass: ' . $this->db->getQuery());
 			}
 		}
 	}
@@ -309,13 +340,13 @@ abstract class DatabaseImporter
 	/**
 	 * Sets the database connector to use for exporting structure and/or data.
 	 *
-	 * @param   DatabaseDriver  $db  The database connector.
+	 * @param   DatabaseInterface  $db  The database connector.
 	 *
-	 * @return  DatabaseImporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
-	public function setDbo(DatabaseDriver $db)
+	public function setDbo(DatabaseInterface $db)
 	{
 		$this->db = $db;
 
@@ -325,9 +356,9 @@ abstract class DatabaseImporter
 	/**
 	 * Sets an internal option to merge the structure based on the input data.
 	 *
-	 * @param   boolean  $setting  True to export the structure, false to not.
+	 * @param   boolean  $setting  True to import the structure, false to not.
 	 *
-	 * @return  DatabaseImporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -337,4 +368,16 @@ abstract class DatabaseImporter
 
 		return $this;
 	}
+
+	/**
+	 * Get the SQL syntax to add a table.
+	 *
+	 * @param   \SimpleXMLElement  $table  The table information.
+	 *
+	 * @return  string
+	 *
+	 * @since   2.0.0
+	 * @throws  \RuntimeException
+	 */
+	abstract protected function xmlToCreate(\SimpleXMLElement $table);
 }

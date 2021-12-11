@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -29,12 +29,12 @@ abstract class DatabaseExporter
 	 * @var    array
 	 * @since  1.0
 	 */
-	protected $cache = array();
+	protected $cache = ['columns' => [], 'keys' => []];
 
 	/**
 	 * The database connector to use for exporting structure and/or data.
 	 *
-	 * @var    DatabaseDriver
+	 * @var    DatabaseInterface
 	 * @since  1.0
 	 */
 	protected $db;
@@ -42,15 +42,15 @@ abstract class DatabaseExporter
 	/**
 	 * An array input sources (table names).
 	 *
-	 * @var    array
+	 * @var    string[]
 	 * @since  1.0
 	 */
-	protected $from = array();
+	protected $from = [];
 
 	/**
 	 * An array of options for the exporter.
 	 *
-	 * @var    object
+	 * @var    \stdClass
 	 * @since  1.0
 	 */
 	protected $options;
@@ -66,12 +66,11 @@ abstract class DatabaseExporter
 	{
 		$this->options = new \stdClass;
 
-		$this->cache = array('columns' => array(), 'keys' => array());
-
 		// Set up the class defaults:
 
-		// Export with only structure
+		// Export not only structure
 		$this->withStructure();
+		$this->withData();
 
 		// Export as xml.
 		$this->asXml();
@@ -116,7 +115,7 @@ abstract class DatabaseExporter
 	/**
 	 * Set the output option for the exporter to XML format.
 	 *
-	 * @return  DatabaseExporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -150,7 +149,7 @@ abstract class DatabaseExporter
 	/**
 	 * Checks if all data and options are in order prior to exporting.
 	 *
-	 * @return  DatabaseDriver  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \Exception if an error is encountered.
@@ -160,18 +159,18 @@ abstract class DatabaseExporter
 	/**
 	 * Specifies a list of table names to export.
 	 *
-	 * @param   mixed  $from  The name of a single table, or an array of the table names to export.
+	 * @param   string[]|string  $from  The name of a single table, or an array of the table names to export.
 	 *
-	 * @return  DatabaseExporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
-	 * @throws  \Exception if input is not a string or array.
+	 * @throws  \InvalidArgumentException
 	 */
 	public function from($from)
 	{
 		if (\is_string($from))
 		{
-			$this->from = array($from);
+			$this->from = [$from];
 		}
 		elseif (\is_array($from))
 		{
@@ -179,7 +178,7 @@ abstract class DatabaseExporter
 		}
 		else
 		{
-			throw new \Exception('The exporter requires either a single table name or array of table names');
+			throw new \InvalidArgumentException('The exporter requires either a single table name or array of table names');
 		}
 
 		return $this;
@@ -199,21 +198,19 @@ abstract class DatabaseExporter
 		$prefix = $this->db->getPrefix();
 
 		// Replace the magic prefix if found.
-		$table = preg_replace("|^$prefix|", '#__', $table);
-
-		return $table;
+		return preg_replace("|^$prefix|", '#__', $table);
 	}
 
 	/**
-	 * Sets the database connector to use for exporting structure and/or data from MySQL.
+	 * Sets the database connector to use for importing structure and/or data.
 	 *
-	 * @param   DatabaseDriver  $db  The database connector.
+	 * @param   DatabaseInterface  $db  The database connector.
 	 *
-	 * @return  DatabaseExporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
-	public function setDbo(DatabaseDriver $db)
+	public function setDbo(DatabaseInterface $db)
 	{
 		$this->db = $db;
 
@@ -225,7 +222,7 @@ abstract class DatabaseExporter
 	 *
 	 * @param   boolean  $setting  True to export the structure, false to not.
 	 *
-	 * @return  DatabaseExporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -234,5 +231,91 @@ abstract class DatabaseExporter
 		$this->options->withStructure = (boolean) $setting;
 
 		return $this;
+	}
+
+	/**
+	 * Sets an internal option to export the data of the input table(s).
+	 *
+	 * @param   boolean  $setting  True to export the data, false to not.
+	 *
+	 * @return  $this
+	 *
+	 * @since   2.0.0
+	 */
+	public function withData($setting = false)
+	{
+		$this->options->withData = (boolean) $setting;
+
+		return $this;
+	}
+
+	/**
+	 * Builds the XML data to export.
+	 *
+	 * @return  array  An array of XML lines (strings).
+	 *
+	 * @since   2.0.0
+	 * @throws  \Exception if an error occurs.
+	 */
+	protected function buildXmlData()
+	{
+		$buffer = [];
+
+		foreach ($this->from as $table)
+		{
+			// Replace the magic prefix if found.
+			$table = $this->getGenericTableName($table);
+
+			// Get the details columns information.
+			$fields  = $this->db->getTableColumns($table, false);
+			$colblob = [];
+
+			foreach ($fields as $field)
+			{
+				// Catch blob for conversion xml
+				if ($field->Type == 'mediumblob')
+				{
+					$colblob[] = $field->Field;
+				}
+			}
+
+			$this->db->setQuery(
+				$this->db->getQuery(true)
+					->select($this->db->quoteName(array_keys($fields)))
+					->from($this->db->quoteName($table))
+			);
+
+			$rows = $this->db->loadObjectList();
+
+			if (!count($rows))
+			{
+				continue;
+			}
+
+			$buffer[] = '  <table_data name="' . $table . '">';
+
+			foreach ($rows as $row)
+			{
+				$buffer[] = '   <row>';
+
+				foreach ($row as $key => $value)
+				{
+					if (!in_array($key, $colblob))
+					{
+						$buffer[] = '    <field name="' . $key . '">' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '</field>';
+					}
+					else
+					{
+						$buffer[] = '    <field name="' . $key . '">' . base64_encode($value) . '</field>';
+					}
+				}
+
+				$buffer[] = '   </row>';
+			}
+
+			$buffer[] = '  </table_data>';
+		}
+
+		return $buffer;
 	}
 }

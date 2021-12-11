@@ -2,27 +2,79 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database;
+
+use Joomla\Database\Exception\QueryTypeAlreadyDefinedException;
+use Joomla\Database\Exception\UnknownTypeException;
 
 /**
  * Joomla Framework Query Building Class.
  *
  * @since  1.0
  *
- * @method  string  q($text, $escape = true)  Alias for quote method
- * @method  string  qn($name, $as = null)     Alias for quoteName method
- * @method  string  e($text, $extra = false)  Alias for escape method
+ * @property-read  array                      $bounded             Holds key / value pair of bound objects.
+ * @property-read  array                      $parameterMapping    Mapping array for parameter types.
+ * @property-read  DatabaseInterface          $db                  The database driver.
+ * @property-read  string                     $sql                 The SQL query (if a direct query string was provided).
+ * @property-read  string                     $type                The query type.
+ * @property-read  string|null                $alias               The query alias.
+ * @property-read  Query\QueryElement         $element             The query element for a generic query (type = null).
+ * @property-read  Query\QueryElement         $select              The select element.
+ * @property-read  Query\QueryElement         $delete              The delete element.
+ * @property-read  Query\QueryElement         $update              The update element.
+ * @property-read  Query\QueryElement         $insert              The insert element.
+ * @property-read  Query\QueryElement         $from                The from element.
+ * @property-read  Query\QueryElement[]|null  $join                The join elements.
+ * @property-read  Query\QueryElement         $set                 The set element.
+ * @property-read  Query\QueryElement         $where               The where element.
+ * @property-read  Query\QueryElement         $group               The group element.
+ * @property-read  Query\QueryElement         $having              The having element.
+ * @property-read  Query\QueryElement         $columns             The column list for an INSERT statement.
+ * @property-read  Query\QueryElement         $values              The values list for an INSERT statement.
+ * @property-read  Query\QueryElement         $order               The order element.
+ * @property-read  boolean                    $autoIncrementField  The auto increment insert field element.
+ * @property-read  Query\QueryElement         $call                The call element.
+ * @property-read  Query\QueryElement         $exec                The exec element.
+ * @property-read  Query\QueryElement[]|null  $merge               The list of query elements.
+ * @property-read  DatabaseQuery|null         $querySet            The query object.
+ * @property-read  array|null                 $selectRowNumber     Details of window function.
+ * @property-read  string[]                   $nullDatetimeList    The list of zero or null representation of a datetime.
+ * @property-read  integer|null               $offset              The offset for the result set.
+ * @property-read  integer|null               $limit               The limit for the result set.
+ * @property-read  integer                    $preparedIndex       An internal index for the bindArray function for unique prepared parameters.
  */
-abstract class DatabaseQuery
+abstract class DatabaseQuery implements QueryInterface
 {
+	/**
+	 * Holds key / value pair of bound objects.
+	 *
+	 * @var    array
+	 * @since  2.0.0
+	 */
+	protected $bounded = [];
+
+	/**
+	 * Mapping array for parameter types.
+	 *
+	 * @var    array
+	 * @since  2.0.0
+	 */
+	protected $parameterMapping = [
+		ParameterType::BOOLEAN      => ParameterType::BOOLEAN,
+		ParameterType::INTEGER      => ParameterType::INTEGER,
+		ParameterType::LARGE_OBJECT => ParameterType::LARGE_OBJECT,
+		ParameterType::NULL         => ParameterType::NULL,
+		ParameterType::STRING       => ParameterType::STRING,
+	];
+
 	/**
 	 * The database driver.
 	 *
-	 * @var    DatabaseDriver
+	 * @var    DatabaseInterface
 	 * @since  1.0
 	 */
 	protected $db;
@@ -38,10 +90,18 @@ abstract class DatabaseQuery
 	/**
 	 * The query type.
 	 *
-	 * @var    string
+	 * @var    string|null
 	 * @since  1.0
 	 */
 	protected $type = '';
+
+	/**
+	 * The query alias.
+	 *
+	 * @var    string|null
+	 * @since  2.0.0
+	 */
+	protected $alias = null;
 
 	/**
 	 * The query element for a generic query (type = null).
@@ -92,9 +152,9 @@ abstract class DatabaseQuery
 	protected $from;
 
 	/**
-	 * The join element.
+	 * The join elements.
 	 *
-	 * @var    Query\QueryElement
+	 * @var    Query\QueryElement[]
 	 * @since  1.0
 	 */
 	protected $join;
@@ -158,10 +218,10 @@ abstract class DatabaseQuery
 	/**
 	 * The auto increment insert field element.
 	 *
-	 * @var    object
+	 * @var    boolean
 	 * @since  1.0
 	 */
-	protected $autoIncrementField;
+	protected $autoIncrementField = false;
 
 	/**
 	 * The call element.
@@ -180,59 +240,69 @@ abstract class DatabaseQuery
 	protected $exec;
 
 	/**
-	 * The union element.
+	 * The list of query elements, which may include UNION, UNION ALL, EXCEPT and INTERSECT.
 	 *
-	 * @var    Query\QueryElement
-	 * @since  1.0
+	 * @var    Query\QueryElement[]
+	 * @since  2.0.0
 	 */
-	protected $union;
+	protected $merge;
 
 	/**
-	 * The unionAll element.
+	 * The query object.
 	 *
-	 * @var    Query\QueryElement
-	 * @since  1.5.0
+	 * @var    Query\DatabaseQuery
+	 * @since  2.0.0
 	 */
-	protected $unionAll;
+	protected $querySet;
 
 	/**
-	 * Magic method to provide method alias support for quote() and quoteName().
+	 * Details of window function.
 	 *
-	 * @param   string  $method  The called method.
-	 * @param   array   $args    The array of arguments passed to the method.
-	 *
-	 * @return  mixed  The aliased method's return value or null.
-	 *
-	 * @since   1.0
+	 * @var    array|null
+	 * @since  2.0.0
 	 */
-	public function __call($method, $args)
-	{
-		if (empty($args))
-		{
-			return;
-		}
+	protected $selectRowNumber;
 
-		switch ($method)
-		{
-			case 'q':
-				return $this->quote($args[0], isset($args[1]) ? $args[1] : true);
+	/**
+	 * The list of zero or null representation of a datetime.
+	 *
+	 * @var    string[]
+	 * @since  2.0.0
+	 */
+	protected $nullDatetimeList = [];
 
-			case 'qn':
-				return $this->quoteName($args[0], isset($args[1]) ? $args[1] : null);
+	/**
+	 * The offset for the result set.
+	 *
+	 * @var    integer|null
+	 * @since  2.0.0
+	 */
+	protected $offset;
 
-			case 'e':
-				return $this->escape($args[0], isset($args[1]) ? $args[1] : false);
-		}
-	}
+	/**
+	 * The limit for the result set.
+	 *
+	 * @var    integer|null
+	 * @since  2.0.0
+	 */
+	protected $limit;
+
+	/**
+	 * An internal index for the bindArray function for unique prepared parameters.
+	 *
+	 * @var    integer
+	 * @since  2.0.0
+	 */
+	protected $preparedIndex = 0;
 
 	/**
 	 * Class constructor.
 	 *
-	 * @param   DatabaseDriver  $db  The database driver.
+	 * @param   DatabaseInterface  $db  The database driver.
 	 *
 	 * @since   1.0
 	 */
-	public function __construct(DatabaseDriver $db = null)
+	public function __construct(DatabaseInterface $db = null)
 	{
 		$this->db = $db;
 	}
@@ -246,17 +316,12 @@ abstract class DatabaseQuery
 	 */
 	public function __toString()
 	{
-		$query = '';
-
 		if ($this->sql)
 		{
-			if ($this instanceof Query\LimitableInterface)
-			{
-				return $this->processLimit($this->sql, $this->limit, $this->offset);
-			}
-
-			return $this->sql;
+			return $this->processLimit($this->sql, $this->limit, $this->offset);
 		}
+
+		$query = '';
 
 		switch ($this->type)
 		{
@@ -283,14 +348,26 @@ abstract class DatabaseQuery
 					$query .= (string) $this->where;
 				}
 
-				if ($this->group)
+				if ($this->selectRowNumber === null)
 				{
-					$query .= (string) $this->group;
-				}
+					if ($this->group)
+					{
+						$query .= (string) $this->group;
+					}
 
-				if ($this->having)
-				{
-					$query .= (string) $this->having;
+					if ($this->having)
+					{
+						$query .= (string) $this->having;
+					}
+
+					if ($this->merge)
+					{
+						// Special case for merge
+						foreach ($this->merge as $element)
+						{
+							$query .= (string) $element;
+						}
+					}
 				}
 
 				if ($this->order)
@@ -300,8 +377,28 @@ abstract class DatabaseQuery
 
 				break;
 
-			case 'union':
-				$query .= (string) $this->union;
+			case 'querySet':
+				$query = $this->querySet;
+
+				if ($query->order || ($query->limit || $query->offset))
+				{
+					// If ORDER BY or LIMIT statement exist then parentheses is required for the first query
+					$query = "($query)";
+				}
+
+				if ($this->merge)
+				{
+					// Special case for merge
+					foreach ($this->merge as $element)
+					{
+						$query .= (string) $element;
+					}
+				}
+
+				if ($this->order)
+				{
+					$query .= (string) $this->order;
+				}
 
 				break;
 
@@ -385,9 +482,11 @@ abstract class DatabaseQuery
 				break;
 		}
 
-		if ($this instanceof Query\LimitableInterface)
+		$query = $this->processLimit($query, $this->limit, $this->offset);
+
+		if ($this->type === 'select' && $this->alias !== null)
 		{
-			$query = $this->processLimit($query, $this->limit, $this->offset);
+			$query = '(' . $query . ') AS ' . $this->alias;
 		}
 
 		return $query;
@@ -404,14 +503,20 @@ abstract class DatabaseQuery
 	 */
 	public function __get($name)
 	{
-		return isset($this->$name) ? $this->$name : null;
+		if (property_exists($this, $name))
+		{
+			return $this->$name;
+		}
+
+		$trace = debug_backtrace();
+		trigger_error(
+			'Undefined property via __get(): ' . $name . ' in ' . $trace[0]['file'] . ' on line ' . $trace[0]['line'],
+			E_USER_NOTICE
+		);
 	}
 
 	/**
 	 * Add a single column, or array of columns to the CALL clause of the query.
-	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 * The call method can, however, be called multiple times in the same query.
 	 *
 	 * Usage:
 	 * $query->call('a.*')->call('b.id');
@@ -419,12 +524,24 @@ abstract class DatabaseQuery
 	 *
 	 * @param   mixed  $columns  A string or an array of field names.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function call($columns)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'call')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "call" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type = 'call';
 
 		if ($this->call === null)
@@ -445,17 +562,52 @@ abstract class DatabaseQuery
 	 * Ensure that the value is properly quoted before passing to the method.
 	 *
 	 * Usage:
+	 * $query->select($query->castAs('CHAR', 'a'));
+	 *
+	 * @param   string  $type    The type of string to cast as.
+	 * @param   string  $value   The value to cast as a char.
+	 * @param   string  $length  Optionally specify the length of the field (if the type supports it otherwise
+	 *                           ignored).
+	 *
+	 * @return  string  SQL statement to cast the value as a char type.
+	 *
+	 * @since   1.0
+	 */
+	public function castAs(string $type, string $value, ?string $length = null)
+	{
+		switch (strtoupper($type))
+		{
+			case 'CHAR':
+				return $value;
+
+			default:
+				throw new UnknownTypeException(
+					sprintf(
+						'Type %s was not recognised by the database driver as valid for casting',
+						$type
+					)
+				);
+		}
+	}
+
+	/**
+	 * Casts a value to a char.
+	 *
+	 * Ensure that the value is properly quoted before passing to the method.
+	 *
+	 * Usage:
 	 * $query->select($query->castAsChar('a'));
 	 *
 	 * @param   string  $value  The value to cast as a char.
 	 *
-	 * @return  string  Returns the cast value.
+	 * @return  string  SQL statement to cast the value as a char type.
 	 *
-	 * @since   1.0
+	 * @since       1.0
+	 * @deprecated  3.0  Use $query->castAs('CHAR', $value)
 	 */
 	public function castAsChar($value)
 	{
-		return $value;
+		return $this->castAs('CHAR', $value);
 	}
 
 	/**
@@ -466,9 +618,9 @@ abstract class DatabaseQuery
 	 * Usage:
 	 * $query->select($query->charLength('a'));
 	 *
-	 * @param   string  $field      A value.
-	 * @param   string  $operator   Comparison operator between charLength integer value and $condition
-	 * @param   string  $condition  Integer value to compare charLength with.
+	 * @param   string       $field      A value.
+	 * @param   string|null  $operator   Comparison operator between charLength integer value and $condition
+	 * @param   string|null  $condition  Integer value to compare charLength with.
 	 *
 	 * @return  string  The required char length call.
 	 *
@@ -476,7 +628,14 @@ abstract class DatabaseQuery
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
-		return 'CHAR_LENGTH(' . $field . ')' . (isset($operator, $condition) ? ' ' . $operator . ' ' . $condition : '');
+		$statement = 'CHAR_LENGTH(' . $field . ')';
+
+		if ($operator !== null && $condition !== null)
+		{
+			$statement .= ' ' . $operator . ' ' . $condition;
+		}
+
+		return $statement;
 	}
 
 	/**
@@ -484,7 +643,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   string  $clause  Optionally, the name of the clause to clear, or nothing to clear the whole query.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -494,9 +653,14 @@ abstract class DatabaseQuery
 
 		switch ($clause)
 		{
+			case 'alias':
+				$this->alias = null;
+				break;
+
 			case 'select':
-				$this->select = null;
-				$this->type   = null;
+				$this->select          = null;
+				$this->type            = null;
+				$this->selectRowNumber = null;
 
 				break;
 
@@ -516,6 +680,12 @@ abstract class DatabaseQuery
 				$this->insert             = null;
 				$this->type               = null;
 				$this->autoIncrementField = null;
+
+				break;
+
+			case 'querySet':
+				$this->querySet = null;
+				$this->type     = null;
 
 				break;
 
@@ -546,6 +716,11 @@ abstract class DatabaseQuery
 
 			case 'having':
 				$this->having = null;
+
+				break;
+
+			case 'merge':
+				$this->merge = null;
 
 				break;
 
@@ -587,30 +762,34 @@ abstract class DatabaseQuery
 
 				break;
 
-			case 'union':
-				$this->union = null;
+			case 'bounded':
+				$this->bounded = [];
 
 				break;
 
 			default:
 				$this->type               = null;
+				$this->alias              = null;
+				$this->bounded            = [];
 				$this->select             = null;
+				$this->selectRowNumber    = null;
 				$this->delete             = null;
 				$this->update             = null;
 				$this->insert             = null;
+				$this->querySet           = null;
 				$this->from               = null;
 				$this->join               = null;
 				$this->set                = null;
 				$this->where              = null;
 				$this->group              = null;
 				$this->having             = null;
+				$this->merge              = null;
 				$this->order              = null;
 				$this->columns            = null;
 				$this->values             = null;
 				$this->autoIncrementField = null;
 				$this->exec               = null;
 				$this->call               = null;
-				$this->union              = null;
 				$this->offset             = 0;
 				$this->limit              = 0;
 
@@ -625,7 +804,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $columns  A column name, or array of column names.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -649,8 +828,8 @@ abstract class DatabaseQuery
 	 * Usage:
 	 * $query->select($query->concatenate(array('a', 'b')));
 	 *
-	 * @param   array   $values     An array of values to concatenate.
-	 * @param   string  $separator  As separator to place between each value.
+	 * @param   string[]     $values     An array of values to concatenate.
+	 * @param   string|null  $separator  As separator to place between each value.
 	 *
 	 * @return  string  The concatenated values.
 	 *
@@ -658,7 +837,7 @@ abstract class DatabaseQuery
 	 */
 	public function concatenate($values, $separator = null)
 	{
-		if ($separator)
+		if ($separator !== null)
 		{
 			return 'CONCATENATE(' . implode(' || ' . $this->quote($separator) . ' || ', $values) . ')';
 		}
@@ -717,16 +896,16 @@ abstract class DatabaseQuery
 	 */
 	public function dateFormat()
 	{
-		if (!($this->db instanceof DatabaseDriver))
+		if (!($this->db instanceof DatabaseInterface))
 		{
-			throw new \RuntimeException('JLIB_DATABASE_ERROR_INVALID_DB_OBJECT');
+			throw new \RuntimeException(sprintf('A %s instance is not set to the query object.', DatabaseInterface::class));
 		}
 
 		return $this->db->getDateFormat();
 	}
 
 	/**
-	 * Creates a formatted dump of the query for debugging purposes.
+	 * Creates a HTML formatted dump of the query for debugging purposes.
 	 *
 	 * Usage:
 	 * echo $query->dump();
@@ -734,28 +913,46 @@ abstract class DatabaseQuery
 	 * @return  string
 	 *
 	 * @since   1.0
+	 * @deprecated  3.0  Deprecated without replacement
 	 */
 	public function dump()
 	{
+		trigger_deprecation(
+			'joomla/database',
+			'2.0.0',
+			'%s() is deprecated and will be removed in 3.0.',
+			__METHOD__
+		);
+
 		return '<pre class="jdatabasequery">' . str_replace('#__', $this->db->getPrefix(), $this) . '</pre>';
 	}
 
 	/**
 	 * Add a table name to the DELETE clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 *
 	 * Usage:
 	 * $query->delete('#__a')->where('id = 1');
 	 *
 	 * @param   string  $table  The name of the table to delete from.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function delete($table = null)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'delete')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "delete" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type   = 'delete';
 		$this->delete = new Query\QueryElement('DELETE', null);
 
@@ -768,12 +965,28 @@ abstract class DatabaseQuery
 	}
 
 	/**
+	 * Alias for escape method
+	 *
+	 * @param   string   $text   The string to be escaped.
+	 * @param   boolean  $extra  Optional parameter to provide extra escaping.
+	 *
+	 * @return  string  The escaped string.
+	 *
+	 * @since   1.0
+	 * @throws  \RuntimeException if the internal db property is not a valid object.
+	 */
+	public function e($text, $extra = false)
+	{
+		return $this->escape($text, $extra);
+	}
+
+	/**
 	 * Method to escape a string for usage in an SQL statement.
 	 *
 	 * This method is provided for use where the query object is passed to a function for modification.
 	 * If you have direct access to the database object, it is recommended you use the escape method directly.
 	 *
-	 * Note that 'e' is an alias for this method as it is in JDatabaseDatabaseDriver.
+	 * Note that 'e' is an alias for this method as it is in DatabaseDriver.
 	 *
 	 * @param   string   $text   The string to be escaped.
 	 * @param   boolean  $extra  Optional parameter to provide extra escaping.
@@ -785,9 +998,9 @@ abstract class DatabaseQuery
 	 */
 	public function escape($text, $extra = false)
 	{
-		if (!($this->db instanceof DatabaseDriver))
+		if (!($this->db instanceof DatabaseInterface))
 		{
-			throw new \RuntimeException('JLIB_DATABASE_ERROR_INVALID_DB_OBJECT');
+			throw new \RuntimeException(sprintf('A %s instance is not set to the query object.', DatabaseInterface::class));
 		}
 
 		return $this->db->escape($text, $extra);
@@ -796,21 +1009,30 @@ abstract class DatabaseQuery
 	/**
 	 * Add a single column, or array of columns to the EXEC clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 * The exec method can, however, be called multiple times in the same query.
-	 *
 	 * Usage:
 	 * $query->exec('a.*')->exec('b.id');
 	 * $query->exec(array('a.*', 'b.id'));
 	 *
 	 * @param   array|string  $columns  A string or an array of field names.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function exec($columns)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'exec')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "exec" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type = 'exec';
 
 		if ($this->exec === null)
@@ -848,40 +1070,51 @@ abstract class DatabaseQuery
 	/**
 	 * Add a table to the FROM clause of the query.
 	 *
-	 * Note that while an array of tables can be provided, it is recommended you use explicit joins.
-	 *
 	 * Usage:
 	 * $query->select('*')->from('#__a');
+	 * $query->select('*')->from($subquery->alias('a'));
 	 *
-	 * @param   array|string  $tables         A string or array of table names.  This can be a DatabaseQuery object (or a child of it) when used
-	 *                                        as a subquery in FROM clause along with a value for $subQueryAlias.
-	 * @param   string        $subQueryAlias  Alias used when $tables is a DatabaseQuery.
+	 * @param   string|DatabaseQuery  $table  The name of the table or a DatabaseQuery object (or a child of it) with alias set.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public function from($tables, $subQueryAlias = null)
+	public function from($table)
 	{
+		if ($table instanceof $this && $table->alias === null)
+		{
+			throw new \RuntimeException('JLIB_DATABASE_ERROR_NULL_SUBQUERY_ALIAS');
+		}
+
 		if ($this->from === null)
 		{
-			if ($tables instanceof $this)
-			{
-				if ($subQueryAlias === null)
-				{
-					throw new \RuntimeException('JLIB_DATABASE_ERROR_NULL_SUBQUERY_ALIAS');
-				}
-
-				$tables = '( ' . (string) $tables . ' ) AS ' . $this->quoteName($subQueryAlias);
-			}
-
-			$this->from = new Query\QueryElement('FROM', $tables);
+			$this->from = new Query\QueryElement('FROM', $table);
 		}
 		else
 		{
-			$this->from->append($tables);
+			$this->from->append($table);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * Add alias for current query.
+	 *
+	 * Usage:
+	 * $query->select('*')->from('#__a')->alias('subquery');
+	 *
+	 * @param   string  $alias  Alias used for a JDatabaseQuery.
+	 *
+	 * @return  $this
+	 *
+	 * @since   2.0.0
+	 */
+	public function alias($alias)
+	{
+		$this->alias = $alias;
 
 		return $this;
 	}
@@ -996,7 +1229,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $columns  A string or array of ordering columns.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1023,7 +1256,7 @@ abstract class DatabaseQuery
 	 * @param   array|string  $conditions  A string or array of columns.
 	 * @param   string        $glue        The glue by which to join the conditions. Defaults to AND.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1043,28 +1276,7 @@ abstract class DatabaseQuery
 	}
 
 	/**
-	 * Add an INNER JOIN clause to the query.
-	 *
-	 * Usage:
-	 * $query->innerJoin('b ON b.id = a.id')->innerJoin('c ON c.id = b.id');
-	 *
-	 * @param   string  $condition  The join condition.
-	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
-	 *
-	 * @since   1.0
-	 */
-	public function innerJoin($condition)
-	{
-		$this->join('INNER', $condition);
-
-		return $this;
-	}
-
-	/**
 	 * Add a table name to the INSERT clause of the query.
-	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
 	 *
 	 * Usage:
 	 * $query->insert('#__a')->set('id = 1');
@@ -1074,12 +1286,24 @@ abstract class DatabaseQuery
 	 * @param   string   $table           The name of the table to insert data into.
 	 * @param   boolean  $incrementField  The name of the field to auto increment.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
-	public function insert($table, $incrementField=false)
+	public function insert($table, $incrementField = false)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'insert')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "insert" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type               = 'insert';
 		$this->insert             = new Query\QueryElement('INSERT INTO', $table);
 		$this->autoIncrementField = $incrementField;
@@ -1091,44 +1315,102 @@ abstract class DatabaseQuery
 	 * Add a JOIN clause to the query.
 	 *
 	 * Usage:
-	 * $query->join('INNER', 'b ON b.id = a.id);
+	 * $query->join('INNER', 'b', 'b.id = a.id);
 	 *
-	 * @param   string        $type        The type of join. This string is prepended to the JOIN keyword.
-	 * @param   array|string  $conditions  A string or array of conditions.
+	 * @param   string  $type       The type of join. This string is prepended to the JOIN keyword.
+	 * @param   string  $table      The name of table.
+	 * @param   string  $condition  The join condition.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
-	public function join($type, $conditions)
+	public function join($type, $table, $condition = null)
 	{
-		if ($this->join === null)
+		$type = strtoupper($type) . ' JOIN';
+
+		if ($condition !== null)
 		{
-			$this->join = array();
+			$this->join[] = new Query\QueryElement($type, [$table, $condition], ' ON ');
+		}
+		else
+		{
+			$this->join[] = new Query\QueryElement($type, $table);
 		}
 
-		$this->join[] = new Query\QueryElement(strtoupper($type) . ' JOIN', $conditions);
-
 		return $this;
+	}
+
+	/**
+	 * Add an INNER JOIN clause to the query.
+	 *
+	 * Usage:
+	 * $query->innerJoin('b', 'b.id = a.id')->innerJoin('c', 'c.id = b.id');
+	 *
+	 * @param   string  $table      The name of table.
+	 * @param   string  $condition  The join condition.
+	 *
+	 * @return  $this
+	 *
+	 * @since   1.0
+	 */
+	public function innerJoin($table, $condition = null)
+	{
+		return $this->join('INNER', $table, $condition);
+	}
+
+	/**
+	 * Add an OUTER JOIN clause to the query.
+	 *
+	 * Usage:
+	 * $query->outerJoin('b', 'b.id = a.id')->leftJoin('c', 'c.id = b.id');
+	 *
+	 * @param   string  $table      The name of table.
+	 * @param   string  $condition  The join condition.
+	 *
+	 * @return  $this
+	 *
+	 * @since   1.0
+	 */
+	public function outerJoin($table, $condition = null)
+	{
+		return $this->join('OUTER', $table, $condition);
 	}
 
 	/**
 	 * Add a LEFT JOIN clause to the query.
 	 *
 	 * Usage:
-	 * $query->leftJoin('b ON b.id = a.id')->leftJoin('c ON c.id = b.id');
+	 * $query->leftJoin('b', 'b.id = a.id')->leftJoin('c', 'c.id = b.id');
 	 *
+	 * @param   string  $table      The name of table.
 	 * @param   string  $condition  The join condition.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
-	public function leftJoin($condition)
+	public function leftJoin($table, $condition = null)
 	{
-		$this->join('LEFT', $condition);
+		return $this->join('LEFT', $table, $condition);
+	}
 
-		return $this;
+	/**
+	 * Add a RIGHT JOIN clause to the query.
+	 *
+	 * Usage:
+	 * $query->rightJoin('b', 'b.id = a.id')->rightJoin('c', 'c.id = b.id');
+	 *
+	 * @param   string  $table      The name of table.
+	 * @param   string  $condition  The join condition.
+	 *
+	 * @return  $this
+	 *
+	 * @since   1.0
+	 */
+	public function rightJoin($table, $condition = null)
+	{
+		return $this->join('RIGHT', $table, $condition);
 	}
 
 	/**
@@ -1168,12 +1450,12 @@ abstract class DatabaseQuery
 	 */
 	public function nullDate($quoted = true)
 	{
-		if (!($this->db instanceof DatabaseDriver))
+		if (!($this->db instanceof DatabaseInterface))
 		{
-			throw new \RuntimeException('JLIB_DATABASE_ERROR_INVALID_DB_OBJECT');
+			throw new \RuntimeException(sprintf('A %s instance is not set to the query object.', DatabaseInterface::class));
 		}
 
-		$result = $this->db->getNullDate($quoted);
+		$result = $this->db->getNullDate();
 
 		if ($quoted)
 		{
@@ -1181,6 +1463,35 @@ abstract class DatabaseQuery
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Generate a SQL statement to check if column represents a zero or null datetime.
+	 *
+	 * Usage:
+	 * $query->where($query->isNullDatetime('modified_date'));
+	 *
+	 * @param   string  $column  A column name.
+	 *
+	 * @return  string
+	 *
+	 * @since   2.0.0
+	 */
+	public function isNullDatetime($column)
+	{
+		if (!$this->db instanceof DatabaseInterface)
+		{
+			throw new \RuntimeException(sprintf('A %s instance is not set to the query object.', DatabaseInterface::class));
+		}
+
+		if ($this->nullDatetimeList)
+		{
+			return "($column IN ("
+			. implode(', ', $this->db->quote($this->nullDatetimeList))
+			. ") OR $column IS NULL)";
+		}
+
+		return "$column IS NULL";
 	}
 
 	/**
@@ -1192,7 +1503,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $columns  A string or array of ordering columns.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1211,22 +1522,19 @@ abstract class DatabaseQuery
 	}
 
 	/**
-	 * Add an OUTER JOIN clause to the query.
+	 * Alias for quote method
 	 *
-	 * Usage:
-	 * $query->outerJoin('b ON b.id = a.id')->outerJoin('c ON c.id = b.id');
+	 * @param   array|string  $text    A string or an array of strings to quote.
+	 * @param   boolean       $escape  True (default) to escape the string, false to leave it unchanged.
 	 *
-	 * @param   string  $condition  The join condition.
-	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  string  The quoted input string.
 	 *
 	 * @since   1.0
+	 * @throws  \RuntimeException if the internal db property is not a valid object.
 	 */
-	public function outerJoin($condition)
+	public function q($text, $escape = true)
 	{
-		$this->join('OUTER', $condition);
-
-		return $this;
+		return $this->quote($text, $escape);
 	}
 
 	/**
@@ -1252,12 +1560,30 @@ abstract class DatabaseQuery
 	 */
 	public function quote($text, $escape = true)
 	{
-		if (!($this->db instanceof DatabaseDriver))
+		if (!($this->db instanceof DatabaseInterface))
 		{
-			throw new \RuntimeException('JLIB_DATABASE_ERROR_INVALID_DB_OBJECT');
+			throw new \RuntimeException(sprintf('A %s instance is not set to the query object.', DatabaseInterface::class));
 		}
 
 		return $this->db->quote($text, $escape);
+	}
+
+	/**
+	 * Alias for quoteName method
+	 *
+	 * @param   array|string  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
+	 *                               Each type supports dot-notation name.
+	 * @param   array|string  $as    The AS query part associated to $name. It can be string or array, in latter case it has to be
+	 *                               same length of $name; if is null there will not be any AS part for string or array element.
+	 *
+	 * @return  array|string  The quote wrapped name, same type of $name.
+	 *
+	 * @since   1.0
+	 * @throws  \RuntimeException if the internal db property is not a valid object.
+	 */
+	public function qn($name, $as = null)
+	{
+		return $this->quoteName($name, $as);
 	}
 
 	/**
@@ -1285,9 +1611,9 @@ abstract class DatabaseQuery
 	 */
 	public function quoteName($name, $as = null)
 	{
-		if (!($this->db instanceof DatabaseDriver))
+		if (!($this->db instanceof DatabaseInterface))
 		{
-			throw new \RuntimeException('JLIB_DATABASE_ERROR_INVALID_DB_OBJECT');
+			throw new \RuntimeException(sprintf('A %s instance is not set to the query object.', DatabaseInterface::class));
 		}
 
 		return $this->db->quoteName($name, $as);
@@ -1326,25 +1652,6 @@ abstract class DatabaseQuery
 	}
 
 	/**
-	 * Add a RIGHT JOIN clause to the query.
-	 *
-	 * Usage:
-	 * $query->rightJoin('b ON b.id = a.id')->rightJoin('c ON c.id = b.id');
-	 *
-	 * @param   string  $condition  The join condition.
-	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
-	 *
-	 * @since   1.0
-	 */
-	public function rightJoin($condition)
-	{
-		$this->join('RIGHT', $condition);
-
-		return $this;
-	}
-
-	/**
 	 * Add a single column, or array of columns to the SELECT clause of the query.
 	 *
 	 * Note that you must not mix insert, update, delete and select method calls when building a query.
@@ -1356,12 +1663,24 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $columns  A string or an array of field names.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function select($columns)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'select')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "select" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type = 'select';
 
 		if ($this->select === null)
@@ -1387,7 +1706,7 @@ abstract class DatabaseQuery
 	 * @param   string        $glue        The glue by which to join the condition strings. Defaults to ,.
 	 *                                     Note that the glue is set on first use and cannot be changed.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1407,6 +1726,28 @@ abstract class DatabaseQuery
 	}
 
 	/**
+	 * Sets the offset and limit for the result set, if the database driver supports it.
+	 *
+	 * Usage:
+	 * $query->setLimit(100, 0); (retrieve 100 rows, starting at first record)
+	 * $query->setLimit(50, 50); (retrieve 50 rows, starting at 50th record)
+	 *
+	 * @param   integer  $limit   The limit for the result set
+	 * @param   integer  $offset  The offset for the result set
+	 *
+	 * @return  $this
+	 *
+	 * @since   2.0.0
+	 */
+	public function setLimit($limit = 0, $offset = 0)
+	{
+		$this->limit  = (int) $limit;
+		$this->offset = (int) $offset;
+
+		return $this;
+	}
+
+	/**
 	 * Allows a direct query to be provided to the database driver's setQuery() method, but still allow queries
 	 * to have bounded variables.
 	 *
@@ -1415,7 +1756,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   DatabaseQuery|string  $sql  A SQL query string or DatabaseQuery object
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1429,19 +1770,29 @@ abstract class DatabaseQuery
 	/**
 	 * Add a table name to the UPDATE clause of the query.
 	 *
-	 * Note that you must not mix insert, update, delete and select method calls when building a query.
-	 *
 	 * Usage:
 	 * $query->update('#__foo')->set(...);
 	 *
 	 * @param   string  $table  A table to update.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
+	 * @throws  QueryTypeAlreadyDefinedException if the query type has already been defined
 	 */
 	public function update($table)
 	{
+		if ($this->type !== null && $this->type !== '' && $this->type !== 'update')
+		{
+			throw new QueryTypeAlreadyDefinedException(
+				\sprintf(
+					'Cannot set the query type to "update" as the query type is already set to "%s".'
+						. ' You should either call the `clear()` method to reset the type or create a new query object.',
+					$this->type
+				)
+			);
+		}
+
 		$this->type   = 'update';
 		$this->update = new Query\QueryElement('UPDATE', $table);
 
@@ -1457,7 +1808,7 @@ abstract class DatabaseQuery
 	 *
 	 * @param   array|string  $values  A single tuple, or array of tuples.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1486,7 +1837,7 @@ abstract class DatabaseQuery
 	 * @param   string        $glue        The glue by which to join the conditions. Defaults to AND.
 	 *                                     Note that the glue is set on first use and cannot be changed.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
@@ -1506,6 +1857,54 @@ abstract class DatabaseQuery
 	}
 
 	/**
+	 * Add a WHERE IN statement to the query.
+	 *
+	 * Note that all values must be the same data type.
+	 *
+	 * Usage
+	 * $query->whereIn('id', [1, 2, 3]);
+	 *
+	 * @param   string        $keyName    Key name for the where clause
+	 * @param   array         $keyValues  Array of values to be matched
+	 * @param   array|string  $dataType   Constant corresponding to a SQL datatype. It can be an array, in this case it
+	 *                                    has to be same length of $keyValues
+	 *
+	 * @return  $this
+	 *
+	 * @since 2.0.0
+	 */
+	public function whereIn(string $keyName, array $keyValues, $dataType = ParameterType::INTEGER)
+	{
+		return $this->where(
+			$keyName . ' IN (' . implode(',', $this->bindArray($keyValues, $dataType)) . ')'
+		);
+	}
+
+	/**
+	 * Add a WHERE NOT IN statement to the query.
+	 *
+	 * Note that all values must be the same data type.
+	 *
+	 * Usage
+	 * $query->whereNotIn('id', [1, 2, 3]);
+	 *
+	 * @param   string        $keyName    Key name for the where clause
+	 * @param   array         $keyValues  Array of values to be matched
+	 * @param   array|string  $dataType   Constant corresponding to a SQL datatype. It can be an array, in this case it
+	 *                                    has to be same length of $keyValues
+	 *
+	 * @return  $this
+	 *
+	 * @since 2.0.0
+	 */
+	public function whereNotIn(string $keyName, array $keyValues, $dataType = ParameterType::INTEGER)
+	{
+		return $this->where(
+			$keyName . ' NOT IN (' . implode(',', $this->bindArray($keyValues, $dataType)) . ')'
+		);
+	}
+
+	/**
 	 * Extend the WHERE clause with a single condition or an array of conditions, with a potentially
 	 * different logical operator from the one in the current WHERE clause.
 	 *
@@ -1517,7 +1916,7 @@ abstract class DatabaseQuery
 	 * @param   mixed   $conditions  A string or array of WHERE conditions.
 	 * @param   string  $innerGlue   The glue by which to join the conditions. Defaults to AND.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.3.0
 	 */
@@ -1542,7 +1941,7 @@ abstract class DatabaseQuery
 	 * @param   mixed   $conditions  A string or array of WHERE conditions.
 	 * @param   string  $glue        The glue by which to join the conditions. Defaults to AND.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.3.0
 	 */
@@ -1561,7 +1960,7 @@ abstract class DatabaseQuery
 	 * @param   mixed   $conditions  A string or array of WHERE conditions.
 	 * @param   string  $glue        The glue by which to join the conditions. Defaults to OR.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.3.0
 	 */
@@ -1571,7 +1970,151 @@ abstract class DatabaseQuery
 	}
 
 	/**
-	 * Method to provide deep copy support to nested objects and arrays when cloning.
+	 * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution.
+	 *
+	 * @param   array|string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
+	 *                                                the form ':key', but can also be an integer.
+	 * @param   mixed                 $value          The value that will be bound. It can be an array, in this case it has to be
+	 *                                                same length of $key; The value is passed by reference to support output
+	 *                                                parameters such as those possible with stored procedures.
+	 * @param   array|string          $dataType       Constant corresponding to a SQL datatype. It can be an array, in this case it
+	 *                                                has to be same length of $key
+	 * @param   integer               $length         The length of the variable. Usually required for OUTPUT parameters.
+	 * @param   array                 $driverOptions  Optional driver options to be used.
+	 *
+	 * @return  $this
+	 *
+	 * @since   1.5.0
+	 * @throws  \InvalidArgumentException
+	 */
+	public function bind($key, &$value, $dataType = ParameterType::STRING, $length = 0, $driverOptions = [])
+	{
+		if (!$key)
+		{
+			throw new \InvalidArgumentException('A key is required');
+		}
+
+		$key   = (array) $key;
+		$count = \count($key);
+
+		if (\is_array($value))
+		{
+			if ($count != \count($value))
+			{
+				throw new \InvalidArgumentException('Array length of $key and $value are not equal');
+			}
+
+			reset($value);
+		}
+
+		if (\is_array($dataType) && $count != \count($dataType))
+		{
+			throw new \InvalidArgumentException('Array length of $key and $dataType are not equal');
+		}
+
+		foreach ($key as $index)
+		{
+			if (\is_array($value))
+			{
+				$localValue = &$value[key($value)];
+				next($value);
+			}
+			else
+			{
+				$localValue = &$value;
+			}
+
+			if (\is_array($dataType))
+			{
+				$localDataType = array_shift($dataType);
+			}
+			else
+			{
+				$localDataType = $dataType;
+			}
+
+			// Validate parameter type
+			if (!isset($this->parameterMapping[$localDataType]))
+			{
+				throw new \InvalidArgumentException(sprintf('Unsupported parameter type `%s`', $localDataType));
+			}
+
+			$obj                = new \stdClass;
+			$obj->value         = &$localValue;
+			$obj->dataType      = $this->parameterMapping[$localDataType];
+			$obj->length        = $length;
+			$obj->driverOptions = $driverOptions;
+
+			// Add the Key/Value into the bounded array
+			$this->bounded[$index] = $obj;
+
+			unset($localValue);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Method to unbind a bound variable.
+	 *
+	 * @param   array|string|integer  $key  The key or array of keys to unbind.
+	 *
+	 * @return  $this
+	 *
+	 * @since   2.0.0
+	 */
+	public function unbind($key)
+	{
+		if (\is_array($key))
+		{
+			foreach ($key as $k)
+			{
+				unset($this->bounded[$k]);
+			}
+		}
+		else
+		{
+			unset($this->bounded[$key]);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Binds an array of values and returns an array of prepared parameter names.
+	 *
+	 * Note that all values must be the same data type.
+	 *
+	 * Usage:
+	 * $query->where('column in (' . implode(',', $query->bindArray($keyValues, $dataType)) . ')');
+	 *
+	 * @param   array         $values    Values to bind
+	 * @param   array|string  $dataType  Constant corresponding to a SQL datatype. It can be an array, in this case it
+	 *                                   has to be same length of $key
+	 *
+	 * @return  array   An array with parameter names
+	 *
+	 * @since 2.0.0
+	 */
+	public function bindArray(array $values, $dataType = ParameterType::INTEGER)
+	{
+		$parameterNames = [];
+
+		for ($i = 0; $i < count($values); $i++)
+		{
+			$parameterNames[] = ':preparedArray' . (++$this->preparedIndex);
+		}
+
+		$this->bind($parameterNames, $values, $dataType);
+
+		return $parameterNames;
+	}
+
+	/**
+	 * Method to provide basic copy support.
+	 *
+	 * Any object pushed into the data of this class should have its own __clone() implementation.
+	 * This method does not support copying objects in a multidimensional array.
 	 *
 	 * @return  void
 	 *
@@ -1586,121 +2129,146 @@ abstract class DatabaseQuery
 				continue;
 			}
 
-			if (\is_object($v) || \is_array($v))
+			if (\is_object($v))
 			{
-				$this->{$k} = unserialize(serialize($v));
+				$this->{$k} = clone $v;
+			}
+			elseif (\is_array($v))
+			{
+				foreach ($v as $i => $element)
+				{
+					if (\is_object($element))
+					{
+						$this->{$k}[$i] = clone $element;
+					}
+				}
 			}
 		}
 	}
 
 	/**
+	 * Retrieves the bound parameters array when key is null and returns it by reference. If a key is provided then that item is
+	 * returned.
+	 *
+	 * @param   mixed  $key  The bounded variable key to retrieve.
+	 *
+	 * @return  mixed
+	 *
+	 * @since   1.5.0
+	 */
+	public function &getBounded($key = null)
+	{
+		if (empty($key))
+		{
+			return $this->bounded;
+		}
+
+		if (isset($this->bounded[$key]))
+		{
+			return $this->bounded[$key];
+		}
+	}
+
+	/**
+	 * Combine a select statement to the current query by one of the set operators.
+	 * Operators: UNION, UNION ALL, EXCEPT or INTERSECT.
+	 *
+	 * @param   string                $name   The name of the set operator with parentheses.
+	 * @param   DatabaseQuery|string  $query  The DatabaseQuery object or string.
+	 *
+	 * @return  $this
+	 *
+	 * @since   2.0.0
+	 */
+	protected function merge($name, $query)
+	{
+		$this->type = $this->type ?: 'select';
+
+		$this->merge[] = new Query\QueryElement($name, $query);
+
+		return $this;
+	}
+
+	/**
 	 * Add a query to UNION with the current query.
-	 * Multiple unions each require separate statements and create an array of unions.
 	 *
 	 * Usage:
 	 * $query->union('SELECT name FROM  #__foo')
-	 * $query->union('SELECT name FROM  #__foo','distinct')
-	 * $query->union(array('SELECT name FROM  #__foo', 'SELECT name FROM  #__bar'))
+	 * $query->union('SELECT name FROM  #__foo', true)
 	 *
 	 * @param   DatabaseQuery|string  $query     The DatabaseQuery object or string to union.
 	 * @param   boolean               $distinct  True to only return distinct rows from the union.
-	 * @param   string                $glue      The glue by which to join the conditions.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */
-	public function union($query, $distinct = false, $glue = '')
+	public function union($query, $distinct = true)
 	{
-		// Clear any ORDER BY clause in UNION query
-		// See https://dev.mysql.com/doc/en/union.html
-		if ($this->order !== null)
-		{
-			$this->clear('order');
-		}
-
-		// Set up the DISTINCT flag, the name with parentheses, and the glue.
-		if ($distinct)
-		{
-			$name = 'UNION DISTINCT ()';
-			$glue = ')' . \PHP_EOL . 'UNION DISTINCT (';
-		}
-		else
-		{
-			$glue = ')' . \PHP_EOL . 'UNION (';
-			$name = 'UNION ()';
-		}
-
-		// Get the Query\QueryElement if it does not exist
-		if ($this->union === null)
-		{
-			$this->union = new Query\QueryElement($name, $query, "$glue");
-		}
-		else
-		{
-			// Otherwise append the second UNION.
-			$this->union->append($query);
-		}
-
-		return $this;
+		// Set up the name with parentheses, the DISTINCT flag is redundant
+		return $this->merge($distinct ? 'UNION ()' : 'UNION ALL ()', $query);
 	}
 
 	/**
 	 * Add a query to UNION ALL with the current query.
-	 * Multiple unions each require separate statements and create an array of unions.
 	 *
 	 * Usage:
-	 * $query->union('SELECT name FROM  #__foo')
-	 * $query->union(array('SELECT name FROM  #__foo','SELECT name FROM  #__bar'))
+	 * $query->unionAll('SELECT name FROM  #__foo')
 	 *
 	 * @param   DatabaseQuery|string  $query     The DatabaseQuery object or string to union.
-	 * @param   boolean               $distinct  Not used - ignored.
-	 * @param   string                $glue      The glue by which to join the conditions.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @see     union
 	 * @since   1.5.0
 	 */
-	public function unionAll($query, $distinct = false, $glue = '')
+	public function unionAll($query)
 	{
-		$glue = ')' . \PHP_EOL . 'UNION ALL (';
-		$name = 'UNION ALL ()';
+		return $this->union($query, false);
+	}
 
-		// Get the QueryElement if it does not exist
-		if ($this->unionAll === null)
-		{
-			$this->unionAll = new Query\QueryElement($name, $query, "$glue");
-		}
+	/**
+	 * Set a single query to the query set.
+	 * On this type of DatabaseQuery you can use union(), unionAll(), order() and setLimit()
+	 *
+	 * Usage:
+	 * $query->querySet($query2->select('name')->from('#__foo')->order('id DESC')->setLimit(1))
+	 *       ->unionAll($query3->select('name')->from('#__foo')->order('id')->setLimit(1))
+	 *       ->order('name')
+	 *       ->setLimit(1)
+	 *
+	 * @param   DatabaseQuery  $query  The DatabaseQuery object or string.
+	 *
+	 * @return  $this
+	 *
+	 * @since   2.0.0
+	 */
+	public function querySet($query)
+	{
+		$this->type = 'querySet';
 
-		// Otherwise append the second UNION.
-		else
-		{
-			$this->unionAll->append($query);
-		}
+		$this->querySet = $query;
 
 		return $this;
 	}
 
 	/**
-	 * Add a query to UNION DISTINCT with the current query. Simply a proxy to Union with the Distinct clause.
+	 * Create a DatabaseQuery object of type querySet from current query.
 	 *
 	 * Usage:
-	 * $query->unionDistinct('SELECT name FROM  #__foo')
+	 * $query->select('name')->from('#__foo')->order('id DESC')->setLimit(1)
+	 *       ->toQuerySet()
+	 *       ->unionAll($query2->select('name')->from('#__foo')->order('id')->setLimit(1))
+	 *       ->order('name')
+	 *       ->setLimit(1)
 	 *
-	 * @param   DatabaseQuery|string  $query  The DatabaseQuery object or string to union.
-	 * @param   string                $glue   The glue by which to join the conditions.
+	 * @return  DatabaseQuery  A new object of the DatabaseQuery.
 	 *
-	 * @return  DatabaseQuery  Returns this object to allow chaining.
-	 *
-	 * @since   1.0
+	 * @since   2.0.0
 	 */
-	public function unionDistinct($query, $glue = '')
+	public function toQuerySet()
 	{
-		$distinct = true;
-
-		// Apply the distinct flag to the union.
-		return $this->union($query, $distinct, $glue);
+		return (new static($this->db))->querySet($this);
 	}
 
 	/**
@@ -1866,5 +2434,54 @@ abstract class DatabaseQuery
 		 * 6: '%' if full token is '%%'
 		 */
 		return preg_replace_callback('#%(((([\d]+)\$)?([aeEnqQryYmMdDhHiIsStzZ]))|(%))#', $func, $format);
+	}
+
+	/**
+	 * Validate arguments which are passed to selectRowNumber method and set up common variables.
+	 *
+	 * @param   string  $orderBy           An expression of ordering for window function.
+	 * @param   string  $orderColumnAlias  An alias for new ordering column.
+	 *
+	 * @return  void
+	 *
+	 * @since   2.0.0
+	 * @throws  \RuntimeException
+	 */
+	protected function validateRowNumber($orderBy, $orderColumnAlias)
+	{
+		if ($this->selectRowNumber)
+		{
+			throw new \RuntimeException("Method 'selectRowNumber' can be called only once per instance.");
+		}
+
+		$this->type = 'select';
+
+		$this->selectRowNumber = [
+			'orderBy'          => $orderBy,
+			'orderColumnAlias' => $orderColumnAlias,
+		];
+	}
+
+	/**
+	 * Return the number of the current row.
+	 *
+	 * Usage:
+	 * $query->select('id');
+	 * $query->selectRowNumber('ordering,publish_up DESC', 'new_ordering');
+	 * $query->from('#__content');
+	 *
+	 * @param   string  $orderBy           An expression of ordering for window function.
+	 * @param   string  $orderColumnAlias  An alias for new ordering column.
+	 *
+	 * @return  $this
+	 *
+	 * @since   2.0.0
+	 * @throws  \RuntimeException
+	 */
+	public function selectRowNumber($orderBy, $orderColumnAlias)
+	{
+		$this->validateRowNumber($orderBy, $orderColumnAlias);
+
+		return $this->select("ROW_NUMBER() OVER (ORDER BY $orderBy) AS $orderColumnAlias");
 	}
 }

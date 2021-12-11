@@ -2,14 +2,13 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Sqlite;
 
 use Joomla\Database\Pdo\PdoDriver;
-use SQLite3;
 
 /**
  * SQLite database driver supporting PDO based connections
@@ -28,10 +27,10 @@ class SqliteDriver extends PdoDriver
 	public $name = 'sqlite';
 
 	/**
-	 * The character(s) used to quote SQL statement names such as table names or field names,
-	 * etc. The child classes should define this as necessary.  If a single character string the
-	 * same character is used for both sides of the quoted name, else the first character will be
-	 * used for the opening quote and the second for the closing quote.
+	 * The character(s) used to quote SQL statement names such as table names or field names, etc.
+	 *
+	 * If a single character string the same character is used for both sides of the quoted name, else the first character will be used for the
+	 * opening quote and the second for the closing quote.
 	 *
 	 * @var    string
 	 * @since  1.0
@@ -45,44 +44,90 @@ class SqliteDriver extends PdoDriver
 	 */
 	public function __destruct()
 	{
-		$this->freeResult();
-		$this->connection = null;
+		$this->disconnect();
 	}
 
 	/**
-	 * Disconnects the database.
+	 * Alter database's character set.
 	 *
-	 * @return  void
+	 * @param   string  $dbName  The database name that will be altered
 	 *
-	 * @since   1.0
+	 * @return  boolean|resource
+	 *
+	 * @since   2.0.0
+	 * @throws  \RuntimeException
 	 */
-	public function disconnect()
+	public function alterDbCharacterSet($dbName)
 	{
-		$this->freeResult();
-		$this->connection = null;
+		return false;
 	}
 
 	/**
-	 * Drops a table from the database.
+	 * Connects to the database if needed.
 	 *
-	 * @param   string   $tableName  The name of the database table to drop.
-	 * @param   boolean  $ifExists   Optionally specify that the table must exist before it is dropped.
+	 * @return  void  Returns void if the database connected successfully.
 	 *
-	 * @return  SqliteDriver  Returns this object to support chaining.
-	 *
-	 * @since   1.0
+	 * @since   2.0.0
+	 * @throws  RuntimeException
 	 */
-	public function dropTable($tableName, $ifExists = true)
+	public function connect()
 	{
-		$this->connect();
+		if ($this->connection)
+		{
+			return;
+		}
 
-		$query = $this->getQuery(true);
+		parent::connect();
 
-		$this->setQuery('DROP TABLE ' . ($ifExists ? 'IF EXISTS ' : '') . $query->quoteName($tableName));
+		$this->connection->sqliteCreateFunction(
+			'ROW_NUMBER',
+			function ($init = null)
+			{
+				static $rownum, $partition;
 
-		$this->execute();
+				if ($init !== null)
+				{
+					$rownum = $init;
+					$partition = null;
 
-		return $this;
+					return $rownum;
+				}
+
+				$args = \func_get_args();
+				array_shift($args);
+
+				$partitionBy = $args ? implode(',', $args) : null;
+
+				if ($partitionBy === null || $partitionBy === $partition)
+				{
+					$rownum++;
+				}
+				else
+				{
+					$rownum    = 1;
+					$partition = $partitionBy;
+				}
+
+				return $rownum;
+			}
+		);
+	}
+
+	/**
+	 * Create a new database using information from $options object.
+	 *
+	 * @param   \stdClass  $options  Object used to pass user and database name to database driver. This object must have "db_name" and "db_user" set.
+	 * @param   boolean    $utf      True if the database supports the UTF-8 character set.
+	 *
+	 * @return  boolean|resource
+	 *
+	 * @since   2.0.0
+	 * @throws  \RuntimeException
+	 */
+	public function createDatabase($options, $utf = true)
+	{
+		// SQLite doesn't have a query for this
+		return true;
 	}
 
 	/**
@@ -99,12 +144,18 @@ class SqliteDriver extends PdoDriver
 	 */
 	public function escape($text, $extra = false)
 	{
-		if (\is_int($text) || \is_float($text))
+		if (\is_int($text))
 		{
 			return $text;
 		}
 
-		return SQLite3::escapeString($text);
+		if (\is_float($text))
+		{
+			// Force the dot as a decimal point.
+			return str_replace(',', '.', $text);
+		}
+
+		return \SQLite3::escapeString($text);
 	}
 
 	/**
@@ -116,7 +167,7 @@ class SqliteDriver extends PdoDriver
 	 */
 	public function getCollation()
 	{
-		return $this->charset;
+		return false;
 	}
 
 	/**
@@ -129,7 +180,34 @@ class SqliteDriver extends PdoDriver
 	 */
 	public function getConnectionCollation()
 	{
-		return $this->charset;
+		return false;
+	}
+
+	/**
+	 * Method to get the database encryption details (cipher and protocol) in use.
+	 *
+	 * @return  string  The database encryption details.
+	 *
+	 * @since   2.0.0
+	 * @throws  \RuntimeException
+	 */
+	public function getConnectionEncryption(): string
+	{
+		// TODO: Not fake this
+		return '';
+	}
+
+	/**
+	 * Method to test if the database TLS connections encryption are supported.
+	 *
+	 * @return  boolean  Whether the database supports TLS connections encryption.
+	 *
+	 * @since   2.0.0
+	 */
+	public function isConnectionEncryptionSupported(): bool
+	{
+		// TODO: Not fake this
+		return false;
 	}
 
 	/**
@@ -169,8 +247,7 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$columns = array();
-		$query   = $this->getQuery(true);
+		$columns = [];
 
 		$fieldCasing = $this->getOption(\PDO::ATTR_CASE);
 
@@ -178,10 +255,7 @@ class SqliteDriver extends PdoDriver
 
 		$table = strtoupper($table);
 
-		$query->setQuery('pragma table_info(' . $table . ')');
-
-		$this->setQuery($query);
-		$fields = $this->loadObjectList();
+		$fields = $this->setQuery('pragma table_info(' . $table . ')')->loadObjectList();
 
 		if ($typeOnly)
 		{
@@ -196,13 +270,13 @@ class SqliteDriver extends PdoDriver
 			{
 				// Do some dirty translation to MySQL output.
 				// TODO: Come up with and implement a standard across databases.
-				$columns[$field->NAME] = (object) array(
+				$columns[$field->NAME] = (object) [
 					'Field'   => $field->NAME,
 					'Type'    => $field->TYPE,
 					'Null'    => $field->NOTNULL == '1' ? 'NO' : 'YES',
 					'Default' => $field->DFLT_VALUE,
 					'Key'     => $field->PK != '0' ? 'PRI' : '',
-				);
+				];
 			}
 		}
 
@@ -225,20 +299,15 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$keys  = array();
-		$query = $this->getQuery(true);
+		$keys = [];
 
 		$fieldCasing = $this->getOption(\PDO::ATTR_CASE);
 
 		$this->setOption(\PDO::ATTR_CASE, \PDO::CASE_UPPER);
 
 		$table = strtoupper($table);
-		$query->setQuery('pragma table_info( ' . $table . ')');
 
-		// $query->bind(':tableName', $table);
-
-		$this->setQuery($query);
-		$rows = $this->loadObjectList();
+		$rows = $this->setQuery('pragma table_info( ' . $table . ')')->loadObjectList();
 
 		foreach ($rows as $column)
 		{
@@ -265,20 +334,16 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		/** @var SqliteQuery $query */
-		$query = $this->getQuery(true);
-
 		$type = 'table';
 
-		$query->select('name');
-		$query->from('sqlite_master');
-		$query->where('type = :type');
-		$query->bind(':type', $type);
-		$query->order('name');
+		$query = $this->getQuery(true)
+			->select('name')
+			->from('sqlite_master')
+			->where('type = :type')
+			->bind(':type', $type)
+			->order('name');
 
-		$this->setQuery($query);
-
-		return $this->loadColumn();
+		return $this->setQuery($query)->loadColumn();
 	}
 
 	/**
@@ -292,9 +357,7 @@ class SqliteDriver extends PdoDriver
 	{
 		$this->connect();
 
-		$this->setQuery('SELECT sqlite_version()');
-
-		return $this->loadResult();
+		return $this->setQuery('SELECT sqlite_version()')->loadResult();
 	}
 
 	/**
@@ -337,7 +400,7 @@ class SqliteDriver extends PdoDriver
 	 *
 	 * @param   string  $table  The name of the table to unlock.
 	 *
-	 * @return  SqliteDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -355,7 +418,7 @@ class SqliteDriver extends PdoDriver
 	 * @param   string  $backup    Not used by Sqlite.
 	 * @param   string  $prefix    Not used by Sqlite.
 	 *
-	 * @return  SqliteDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -386,7 +449,7 @@ class SqliteDriver extends PdoDriver
 	/**
 	 * Unlocks tables in the database.
 	 *
-	 * @return  SqliteDriver  Returns this object to support chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
@@ -453,12 +516,9 @@ class SqliteDriver extends PdoDriver
 		else
 		{
 			$savepoint = 'SP_' . ($this->transactionDepth - 1);
-			$this->setQuery('ROLLBACK TO ' . $this->quoteName($savepoint));
+			$this->setQuery('ROLLBACK TO ' . $this->quoteName($savepoint))->execute();
 
-			if ($this->execute())
-			{
-				$this->transactionDepth--;
-			}
+			$this->transactionDepth--;
 		}
 	}
 
@@ -483,12 +543,9 @@ class SqliteDriver extends PdoDriver
 		else
 		{
 			$savepoint = 'SP_' . $this->transactionDepth;
-			$this->setQuery('SAVEPOINT ' . $this->quoteName($savepoint));
+			$this->setQuery('SAVEPOINT ' . $this->quoteName($savepoint))->execute();
 
-			if ($this->execute())
-			{
-				$this->transactionDepth++;
-			}
+			$this->transactionDepth++;
 		}
 	}
 }

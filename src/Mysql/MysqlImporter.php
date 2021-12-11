@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -18,6 +18,31 @@ use Joomla\Database\DatabaseImporter;
 class MysqlImporter extends DatabaseImporter
 {
 	/**
+	 * Checks if all data and options are in order prior to exporting.
+	 *
+	 * @return  $this
+	 *
+	 * @since   1.0
+	 * @throws  \RuntimeException
+	 */
+	public function check()
+	{
+		// Check if the db connector has been set.
+		if (!($this->db instanceof MysqlDriver))
+		{
+			throw new \RuntimeException('Database connection wrong type.');
+		}
+
+		// Check if the tables have been specified.
+		if (empty($this->from))
+		{
+			throw new \RuntimeException('ERROR: No Tables Specified');
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Get the SQL syntax to add a key.
 	 *
 	 * @param   string  $table  The table name.
@@ -29,15 +54,13 @@ class MysqlImporter extends DatabaseImporter
 	 */
 	protected function getAddKeySql($table, $keys)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD ' . $this->getKeySql($keys);
-
-		return $sql;
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD ' . $this->getKeySql($keys);
 	}
 
 	/**
 	 * Get alters for table if there is a difference.
 	 *
-	 * @param   \SimpleXMLElement  $structure  The XML structure pf the table.
+	 * @param   \SimpleXMLElement  $structure  The XML structure of the table.
 	 *
 	 * @return  array
 	 *
@@ -49,7 +72,7 @@ class MysqlImporter extends DatabaseImporter
 		$table     = $this->getRealTableName($structure['name']);
 		$oldFields = $this->db->getTableColumns($table);
 		$oldKeys   = $this->db->getTableKeys($table);
-		$alters    = array();
+		$alters    = [];
 
 		// Get the fields and keys from the XML that we are aiming for.
 		$newFields = $structure->xpath('field');
@@ -115,6 +138,7 @@ class MysqlImporter extends DatabaseImporter
 							&& ((string) $newLookup[$name][$i]['Column_name'] === $oldLookup[$name][$i]->Column_name)
 							&& ((string) $newLookup[$name][$i]['Seq_in_index'] === $oldLookup[$name][$i]->Seq_in_index)
 							&& ((string) $newLookup[$name][$i]['Collation'] === $oldLookup[$name][$i]->Collation)
+							&& ((string) $newLookup[$name][$i]['Sub_part'] === $oldLookup[$name][$i]->Sub_part)
 							&& ((string) $newLookup[$name][$i]['Index_type'] === $oldLookup[$name][$i]->Index_type));
 
 						/*
@@ -132,6 +156,9 @@ class MysqlImporter extends DatabaseImporter
 						echo '<br>Collation:    '.
 							((string) $newLookup[$name][$i]['Collation'] == $oldLookup[$name][$i]->Collation ? 'Pass' : 'Fail').' '.
 							(string) $newLookup[$name][$i]['Collation'].' vs '.$oldLookup[$name][$i]->Collation;
+						echo '<br>Sub_part:    '.
+							((string) $newLookup[$name][$i]['Sub_part'] == $oldLookup[$name][$i]->Sub_part ? 'Pass' : 'Fail').' '.
+							(string) $newLookup[$name][$i]['Sub_part'].' vs '.$oldLookup[$name][$i]->Sub_part;
 						echo '<br>Index_type:   '.
 							((string) $newLookup[$name][$i]['Index_type'] == $oldLookup[$name][$i]->Index_type ? 'Pass' : 'Fail').' '.
 							(string) $newLookup[$name][$i]['Index_type'].' vs '.$oldLookup[$name][$i]->Index_type;
@@ -196,10 +223,8 @@ class MysqlImporter extends DatabaseImporter
 	 */
 	protected function getChangeColumnSql($table, \SimpleXMLElement $field)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
 			. $this->getColumnSql($field);
-
-		return $sql;
 	}
 
 	/**
@@ -215,7 +240,7 @@ class MysqlImporter extends DatabaseImporter
 	{
 		// Initialise variables.
 		// TODO Incorporate into parent class and use $this.
-		$blobs = array('text', 'smalltext', 'mediumtext', 'largetext');
+		$blobs = ['text', 'smalltext', 'mediumtext', 'largetext'];
 
 		$fName    = (string) $field['Field'];
 		$fType    = (string) $field['Type'];
@@ -234,7 +259,14 @@ class MysqlImporter extends DatabaseImporter
 			else
 			{
 				// TODO Don't quote numeric values.
-				$sql .= ' NOT NULL DEFAULT ' . $this->db->quote($fDefault);
+				if (stristr($fDefault, 'CURRENT') !== false)
+				{
+					$sql .= ' NOT NULL DEFAULT CURRENT_TIMESTAMP()';
+				}
+				else
+				{
+					$sql .= ' NOT NULL DEFAULT ' . $this->db->quote($fDefault);
+				}
 			}
 		}
 		else
@@ -270,9 +302,7 @@ class MysqlImporter extends DatabaseImporter
 	 */
 	protected function getDropKeySql($table, $name)
 	{
-		$sql = 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP KEY ' . $this->db->quoteName($name);
-
-		return $sql;
+		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP KEY ' . $this->db->quoteName($name);
 	}
 
 	/**
@@ -302,7 +332,7 @@ class MysqlImporter extends DatabaseImporter
 	protected function getKeyLookup($keys)
 	{
 		// First pass, create a lookup of the keys.
-		$lookup = array();
+		$lookup = [];
 
 		foreach ($keys as $key)
 		{
@@ -317,7 +347,7 @@ class MysqlImporter extends DatabaseImporter
 
 			if (empty($lookup[$kName]))
 			{
-				$lookup[$kName] = array();
+				$lookup[$kName] = [];
 			}
 
 			$lookup[$kName][] = $key;
@@ -337,13 +367,9 @@ class MysqlImporter extends DatabaseImporter
 	 */
 	protected function getKeySql($columns)
 	{
-		// TODO Error checking on array and element types.
-
 		$kNonUnique = (string) $columns[0]['Non_unique'];
 		$kName      = (string) $columns[0]['Key_name'];
-		$kColumn    = (string) $columns[0]['Column_name'];
-
-		$prefix = '';
+		$prefix     = '';
 
 		if ($kName === 'PRIMARY')
 		{
@@ -354,48 +380,61 @@ class MysqlImporter extends DatabaseImporter
 			$prefix = 'UNIQUE ';
 		}
 
-		$nColumns = \count($columns);
-		$kColumns = array();
+		$kColumns = [];
 
-		if ($nColumns === 1)
+		foreach ($columns as $column)
 		{
-			$kColumns[] = $this->db->quoteName($kColumn);
-		}
-		else
-		{
-			foreach ($columns as $column)
+			$kLength = '';
+
+			if (!empty($column['Sub_part']))
 			{
-				$kColumns[] = (string) $column['Column_name'];
+				$kLength = '(' . $column['Sub_part'] . ')';
 			}
+
+			$kColumns[] = $this->db->quoteName((string) $column['Column_name']) . $kLength;
 		}
 
-		$sql = $prefix . 'KEY ' . ($kName !== 'PRIMARY' ? $this->db->quoteName($kName) : '') . ' (' . implode(',', $kColumns) . ')';
-
-		return $sql;
+		return $prefix . 'KEY ' . ($kName !== 'PRIMARY' ? $this->db->quoteName($kName) : '') . ' (' . implode(',', $kColumns) . ')';
 	}
 
 	/**
-	 * Checks if all data and options are in order prior to exporting.
+	 * Get the SQL syntax to add a table.
 	 *
-	 * @return  MysqlImporter  Method supports chaining.
+	 * @param   \SimpleXMLElement  $table  The table information.
 	 *
-	 * @since   1.0
-	 * @throws  \Exception if an error is encountered.
+	 * @return  string
+	 *
+	 * @since   2.0.0
+	 * @throws  \RuntimeException
 	 */
-	public function check()
+	protected function xmlToCreate(\SimpleXMLElement $table)
 	{
-		// Check if the db connector has been set.
-		if (!($this->db instanceof MysqlDriver))
+		$existingTables = $this->db->getTableList();
+		$tableName      = (string) $table['name'];
+
+		if (\in_array($tableName, $existingTables))
 		{
-			throw new \Exception('Database connection wrong type.');
+			throw new \RuntimeException('The table you are trying to create already exists');
 		}
 
-		// Check if the tables have been specified.
-		if (empty($this->from))
+		$createTableStatement = 'CREATE TABLE ' . $this->db->quoteName($tableName) . ' (';
+
+		foreach ($table->xpath('field') as $field)
 		{
-			throw new \Exception('ERROR: No Tables Specified');
+			$createTableStatement .= $this->getColumnSql($field) . ', ';
 		}
 
-		return $this;
+		$newLookup = $this->getKeyLookup($table->xpath('key'));
+
+		foreach ($newLookup as $key)
+		{
+			$createTableStatement .= $this->getKeySql($key) . ', ';
+		}
+
+		$createTableStatement = rtrim($createTableStatement, ', ');
+
+		$createTableStatement .= ')';
+
+		return $createTableStatement;
 	}
 }

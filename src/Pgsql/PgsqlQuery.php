@@ -2,122 +2,61 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Pgsql;
 
-use Joomla\Database\Postgresql\PostgresqlQuery;
-use Joomla\Database\Query\PreparableInterface;
+use Joomla\Database\Pdo\PdoQuery;
+use Joomla\Database\Query\PostgresqlQueryBuilder;
+use Joomla\Database\Query\QueryElement;
 
 /**
  * PDO PostgreSQL Query Building Class.
  *
  * @since  1.0
+ *
+ * @property-read  QueryElement  $forUpdate  The FOR UPDATE element used in "FOR UPDATE" lock
+ * @property-read  QueryElement  $forShare   The FOR SHARE element used in "FOR SHARE" lock
+ * @property-read  QueryElement  $noWait     The NOWAIT element used in "FOR SHARE" and "FOR UPDATE" lock
+ * @property-read  QueryElement  $returning  The RETURNING element of INSERT INTO
  */
-class PgsqlQuery extends PostgresqlQuery implements PreparableInterface
+class PgsqlQuery extends PdoQuery
 {
-	/**
-	 * Holds key / value pair of bound objects.
-	 *
-	 * @var    mixed
-	 * @since  1.5.0
-	 */
-	protected $bounded = array();
+	use PostgresqlQueryBuilder;
 
 	/**
-	 * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution. Also
-	 * removes a variable that has been bounded from the internal bounded array when the passed in value is null.
+	 * The list of zero or null representation of a datetime.
 	 *
-	 * @param   string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
-	 *                                          the form ':key', but can also be an integer.
-	 * @param   mixed           $value          The value that will be bound. The value is passed by reference to support output
-	 *                                          parameters such as those possible with stored procedures.
-	 * @param   integer         $dataType       Constant corresponding to a SQL datatype.
-	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters.
-	 * @param   array           $driverOptions  Optional driver options to be used.
-	 *
-	 * @return  PgsqlQuery
-	 *
-	 * @since   1.5.0
+	 * @var    array
+	 * @since  2.0.0
 	 */
-	public function bind($key = null, &$value = null, $dataType = \PDO::PARAM_STR, $length = 0, $driverOptions = array())
+	protected $nullDatetimeList = ['1970-01-01 00:00:00'];
+
+	/**
+	 * Casts a value to a char.
+	 *
+	 * Ensure that the value is properly quoted before passing to the method.
+	 *
+	 * Usage:
+	 * $query->select($query->castAsChar('a'));
+	 * $query->select($query->castAsChar('a', 40));
+	 *
+	 * @param   string  $value   The value to cast as a char.
+	 * @param   string  $length  The length of the char.
+	 *
+	 * @return  string  Returns the cast value.
+	 *
+	 * @since   1.8.0
+	 */
+	public function castAsChar($value, $length = null)
 	{
-		// Case 1: Empty Key (reset $bounded array)
-		if (empty($key))
+		if ((int) $length < 1)
 		{
-			$this->bounded = array();
-
-			return $this;
+			return $value . '::text';
 		}
 
-		// Case 2: Key Provided, null value (unset key from $bounded array)
-		if ($value === null)
-		{
-			if (isset($this->bounded[$key]))
-			{
-				unset($this->bounded[$key]);
-			}
-
-			return $this;
-		}
-
-		$obj = new \stdClass;
-
-		$obj->value         = &$value;
-		$obj->dataType      = $dataType;
-		$obj->length        = $length;
-		$obj->driverOptions = $driverOptions;
-
-		// Case 3: Simply add the Key/Value into the bounded array
-		$this->bounded[$key] = $obj;
-
-		return $this;
-	}
-
-	/**
-	 * Retrieves the bound parameters array when key is null and returns it by reference. If a key is provided then that item is
-	 * returned.
-	 *
-	 * @param   mixed  $key  The bounded variable key to retrieve.
-	 *
-	 * @return  mixed
-	 *
-	 * @since   1.5.0
-	 */
-	public function &getBounded($key = null)
-	{
-		if (empty($key))
-		{
-			return $this->bounded;
-		}
-
-		if (isset($this->bounded[$key]))
-		{
-			return $this->bounded[$key];
-		}
-	}
-
-	/**
-	 * Clear data from the query or a specific clause of the query.
-	 *
-	 * @param   string  $clause  Optionally, the name of the clause to clear, or nothing to clear the whole query.
-	 *
-	 * @return  PgsqlQuery  Returns this object to allow chaining.
-	 *
-	 * @since   1.5.0
-	 */
-	public function clear($clause = null)
-	{
-		switch ($clause)
-		{
-			case null:
-				$this->bounded = array();
-
-				break;
-		}
-
-		return parent::clear($clause);
+		return 'CAST(' . $value . ' AS CHAR(' . $length . '))';
 	}
 }

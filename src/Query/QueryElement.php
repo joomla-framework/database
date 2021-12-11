@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -11,28 +11,30 @@ namespace Joomla\Database\Query;
 /**
  * Query Element Class.
  *
- * @property-read  string  $name      The name of the element.
- * @property-read  array   $elements  An array of elements.
- * @property-read  string  $glue      Glue piece.
- *
  * @since  1.0
  */
 class QueryElement
 {
 	/**
-	 * @var    string  The name of the element.
+	 * The name of the element.
+	 *
+	 * @var    string
 	 * @since  1.0
 	 */
 	protected $name;
 
 	/**
-	 * @var    array  An array of elements.
+	 * An array of elements.
+	 *
+	 * @var    string[]
 	 * @since  1.0
 	 */
-	protected $elements;
+	protected $elements = [];
 
 	/**
-	 * @var    string  Glue piece.
+	 * Glue piece.
+	 *
+	 * @var    string
 	 * @since  1.0
 	 */
 	protected $glue;
@@ -40,17 +42,16 @@ class QueryElement
 	/**
 	 * Constructor.
 	 *
-	 * @param   string  $name      The name of the element.
-	 * @param   mixed   $elements  String or array.
-	 * @param   string  $glue      The glue for elements.
+	 * @param   string           $name      The name of the element.
+	 * @param   string[]|string  $elements  String or array.
+	 * @param   string           $glue      The glue for elements.
 	 *
 	 * @since   1.0
 	 */
 	public function __construct($name, $elements, $glue = ',')
 	{
-		$this->elements = array();
-		$this->name     = $name;
-		$this->glue     = $glue;
+		$this->name = $name;
+		$this->glue = $glue;
 
 		$this->append($elements);
 	}
@@ -75,7 +76,7 @@ class QueryElement
 	/**
 	 * Appends element parts to the internal list.
 	 *
-	 * @param   mixed  $elements  String or array.
+	 * @param   string[]|string  $elements  String or array.
 	 *
 	 * @return  void
 	 *
@@ -89,20 +90,32 @@ class QueryElement
 		}
 		else
 		{
-			$this->elements = array_merge($this->elements, array($elements));
+			$this->elements = array_merge($this->elements, [$elements]);
 		}
 	}
 
 	/**
 	 * Gets the elements of this element.
 	 *
-	 * @return  string
+	 * @return  string[]
 	 *
 	 * @since   1.0
 	 */
 	public function getElements()
 	{
 		return $this->elements;
+	}
+
+	/**
+	 * Gets the glue of this element.
+	 *
+	 * @return  string  Glue of the element.
+	 *
+	 * @since   2.0.0
+	 */
+	public function getGlue()
+	{
+		return $this->glue;
 	}
 
 	/**
@@ -122,7 +135,7 @@ class QueryElement
 	 *
 	 * @param   string  $name  Name of the element.
 	 *
-	 * @return  QueryElement  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.3.0
 	 */
@@ -134,8 +147,10 @@ class QueryElement
 	}
 
 	/**
-	 * Method to provide deep copy support to nested objects and arrays
-	 * when cloning.
+	 * Method to provide basic copy support.
+	 *
+	 * Any object pushed into the data of this class should have its own __clone() implementation.
+	 * This method does not support copying objects in a multidimensional array.
 	 *
 	 * @return  void
 	 *
@@ -145,9 +160,19 @@ class QueryElement
 	{
 		foreach ($this as $k => $v)
 		{
-			if (\is_object($v) || \is_array($v))
+			if (\is_object($v))
 			{
-				$this->{$k} = unserialize(serialize($v));
+				$this->{$k} = clone $v;
+			}
+			elseif (\is_array($v))
+			{
+				foreach ($v as $i => $element)
+				{
+					if (\is_object($element))
+					{
+						$this->{$k}[$i] = clone $element;
+					}
+				}
 			}
 		}
 	}

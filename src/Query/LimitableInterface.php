@@ -2,29 +2,33 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Database\Query;
 
+use Joomla\Database\QueryInterface;
+
+trigger_deprecation(
+	'joomla/database',
+	'2.0.0',
+	'%s() is deprecated and will be removed in 3.0, all query objects should implement %s instead.',
+	LimitableInterface::class,
+	QueryInterface::class
+);
+
 /**
  * Joomla Database Query LimitableInterface.
  *
- * Adds bind/unbind methods as well as a getBounded() method
- * to retrieve the stored bounded variables on demand prior to
- * query execution.
- *
- * @since  1.0
+ * @since       1.0
+ * @deprecated  3.0  Capabilities will be required in Joomla\Database\QueryInterface
  */
 interface LimitableInterface
 {
 	/**
-	 * Method to modify a query already in string format with the needed
-	 * additions to make the query limited to a particular number of
-	 * results, or start at a particular offset. This method is used
-	 * automatically by the __toString() method if it detects that the
-	 * query implements the LimitableInterface.
+	 * Method to modify a query already in string format with the needed additions to make the query limited to a particular number of
+	 * results, or start at a particular offset.
 	 *
 	 * @param   string   $query   The query in string format
 	 * @param   integer  $limit   The limit for the result set
@@ -46,7 +50,7 @@ interface LimitableInterface
 	 * @param   integer  $limit   The limit for the result set
 	 * @param   integer  $offset  The offset for the result set
 	 *
-	 * @return  LimitableInterface  Returns this object to allow chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
 	 */

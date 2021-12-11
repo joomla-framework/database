@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2020 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2021 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -27,13 +27,21 @@ class MysqlExporter extends DatabaseExporter
 	 */
 	protected function buildXml()
 	{
-		$buffer = array();
+		$buffer = [];
 
 		$buffer[] = '<?xml version="1.0"?>';
 		$buffer[] = '<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
 		$buffer[] = ' <database name="">';
 
-		$buffer = array_merge($buffer, $this->buildXmlStructure());
+		if ($this->options->withStructure)
+		{
+			$buffer = array_merge($buffer, $this->buildXmlStructure());
+		}
+
+		if ($this->options->withData)
+		{
+			$buffer = array_merge($buffer, $this->buildXmlData());
+		}
 
 		$buffer[] = ' </database>';
 		$buffer[] = '</mysqldump>';
@@ -51,7 +59,7 @@ class MysqlExporter extends DatabaseExporter
 	 */
 	protected function buildXmlStructure()
 	{
-		$buffer = array();
+		$buffer = [];
 
 		foreach ($this->from as $table)
 		{
@@ -76,6 +84,7 @@ class MysqlExporter extends DatabaseExporter
 				$buffer[] = '   <key Table="' . $table . '" Non_unique="' . $key->Non_unique . '" Key_name="' . $key->Key_name . '"' .
 					' Seq_in_index="' . $key->Seq_in_index . '" Column_name="' . $key->Column_name . '" Collation="' . $key->Collation . '"' .
 					' Null="' . $key->Null . '" Index_type="' . $key->Index_type . '"' .
+					' Sub_part="' . $key->Sub_part . '"' .
 					' Comment="' . htmlspecialchars($key->Comment, \ENT_COMPAT, 'UTF-8') . '"' .
 					' />';
 			}
@@ -89,23 +98,23 @@ class MysqlExporter extends DatabaseExporter
 	/**
 	 * Checks if all data and options are in order prior to exporting.
 	 *
-	 * @return  MysqlExporter  Method supports chaining.
+	 * @return  $this
 	 *
 	 * @since   1.0
-	 * @throws  \Exception if an error is encountered.
+	 * @throws  \RuntimeException
 	 */
 	public function check()
 	{
 		// Check if the db connector has been set.
 		if (!($this->db instanceof MysqlDriver))
 		{
-			throw new \Exception('Database connection wrong type.');
+			throw new \RuntimeException('Database connection wrong type.');
 		}
 
 		// Check if the tables have been specified.
 		if (empty($this->from))
 		{
-			throw new \Exception('ERROR: No Tables Specified');
+			throw new \RuntimeException('ERROR: No Tables Specified');
 		}
 
 		return $this;
