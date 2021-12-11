@@ -1,0 +1,35 @@
+{
+    "name": "joomla/language",
+    "type": "joomla-package",
+    "description": "Joomla Language Package",
+    "keywords": ["joomla", "framework", "language"],
+    "homepage": "https://github.com/joomla-framework/language",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": "^5.3.10|~7.0",
+        "ext-xml": "*",
+        "joomla/string": "~1.3|~2.0"
+    },
+    "require-dev": {
+        "joomla/coding-standards": "~2.0@alpha",
+        "joomla/filesystem": "~1.0|~2.0",
+        "joomla/test": "~1.0",
+        "phpunit/phpunit": "^4.8.35|^5.4.3|~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Joomla\\Language\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Joomla\\Language\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}
