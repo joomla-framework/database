@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<ruleset name="Joomla">
+
+    <arg name="report" value="full"/>
+    <arg name="tab-width" value="4"/>
+    <arg name="encoding" value="utf-8"/>
+    <arg value="sp"/>
+    <arg name="colors" />
+
+    <!-- Exclude folders not containing production code -->
+    <exclude-pattern>*/.github/*</exclude-pattern>
+    <exclude-pattern>*/.travis/*</exclude-pattern>
+
+    <!-- Exclude 3rd party libraries. -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+
+    <rule ref="Joomla">
+        <!-- Variables inherited from the PHP SessionHandlerInterface definition are named in snake case -->
+        <exclude name="Joomla.NamingConventions.ValidVariableName"/>
+        <!-- Required due to legacy methods being named with a leading underscore, should be fixed in 2.0 -->
+        <exclude name="Joomla.NamingConventions.ValidFunctionName.MethodUnderscore"/>
+    </rule>
+</ruleset>

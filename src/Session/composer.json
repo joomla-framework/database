@@ -1,0 +1,37 @@
+{
+    "name": "joomla/session",
+    "type": "joomla-package",
+    "description": "Joomla Session Package",
+    "keywords": ["joomla", "framework", "session"],
+    "homepage": "https://github.com/joomla-framework/session",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": "^5.3.10|~7.0",
+        "joomla/event": "~1.1",
+        "joomla/filter": "~1.0",
+        "joomla/input": "~1.4",
+        "paragonie/random_compat": "~1.0|~2.0"
+    },
+    "require-dev": {
+        "joomla/coding-standards": "~2.0@alpha",
+        "joomla/database": "~1.0",
+        "joomla/test": "~1.0",
+        "phpunit/phpunit": "~4.8|~5.0|~6.0",
+        "phpunit/dbunit": "~1.3"
+    },
+    "suggest": {
+        "joomla/database": "Install joomla/database if you want to use Database session storage."
+    },
+    "target-dir": "Joomla/Session",
+    "autoload": {
+        "psr-0": {
+            "Joomla\\Session": ""
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}
