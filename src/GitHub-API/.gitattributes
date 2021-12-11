@@ -1,0 +1,9 @@
+.github/ export-ignore
+build/ export-ignore
+Tests/ export-ignore
+.drone.jsonnet export-ignore
+.drone.yml export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+phpunit.xml.dist export-ignore
+ruleset.xml export-ignore
