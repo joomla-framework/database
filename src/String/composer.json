@@ -1,0 +1,51 @@
+{
+    "name": "joomla/string",
+    "type": "joomla-package",
+    "description": "Joomla String Package",
+    "keywords": ["joomla", "framework", "string"],
+    "homepage": "https://github.com/joomla-framework/string",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": "^5.3.10|~7.0"
+    },
+    "require-dev": {
+        "joomla/coding-standards": "~2.0@alpha",
+        "joomla/test": "~1.0",
+        "phpunit/phpunit": "^4.8.35|^5.4.3|~6.0"
+    },
+    "suggest": {
+        "ext-mbstring": "For improved processing"
+    },
+    "autoload": {
+        "psr-4": {
+            "Joomla\\String\\": "src/"
+        },
+        "files": [
+            "src/phputf8/utf8.php",
+            "src/phputf8/ord.php",
+            "src/phputf8/str_ireplace.php",
+            "src/phputf8/str_pad.php",
+            "src/phputf8/str_split.php",
+            "src/phputf8/strcasecmp.php",
+            "src/phputf8/strcspn.php",
+            "src/phputf8/stristr.php",
+            "src/phputf8/strrev.php",
+            "src/phputf8/strspn.php",
+            "src/phputf8/trim.php",
+            "src/phputf8/ucfirst.php",
+            "src/phputf8/ucwords.php",
+            "src/phputf8/utils/ascii.php",
+            "src/phputf8/utils/validation.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Joomla\\String\\Tests\\": "Tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    }
+}
