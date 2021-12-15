@@ -2,7 +2,11 @@
     "name": "joomla/database",
     "type": "joomla-package",
     "description": "Joomla Database Package",
-    "keywords": ["joomla", "framework", "database"],
+    "keywords": [
+        "joomla",
+        "framework",
+        "database"
+    ],
     "homepage": "https://github.com/joomla-framework/database",
     "license": "GPL-2.0-or-later",
     "require": {
@@ -12,7 +16,7 @@
     },
     "require-dev": {
         "joomla/archive": "^1.0|^2.0",
-        "joomla/coding-standards": "^2.0@alpha",
+        "joomla/coding-standards": "^3.0@dev",
         "joomla/console": "^2.0",
         "joomla/di": "^1.0|^2.0",
         "joomla/filesystem": "^1.3|^2.0",
@@ -46,7 +50,7 @@
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-	        "dev-2.0-dev": "2.0-dev"
+            "dev-2.0-dev": "2.0-dev"
         }
     }
 }
