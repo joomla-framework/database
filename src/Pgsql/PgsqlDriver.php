@@ -270,13 +270,13 @@ class PgsqlDriver extends PdoDriver
 			foreach ($fields as $field)
 			{
 				// Change Postgresql's NULL::* type with PHP's null one
-				if (preg_match('/^NULL::*/', $field->Default))
+				if (null !== $field->Default && preg_match('/^NULL::*/', $field->Default))
 				{
 					$field->Default = null;
 				}
 
 				// Normalise default values like datetime
-				if (preg_match('/^\'(.*)\'::.*/', $field->Default, $matches))
+				if (null !== $field->Default && preg_match('/^\'(.*)\'::.*/', $field->Default, $matches))
 				{
 					$field->Default = $matches[1];
 				}
