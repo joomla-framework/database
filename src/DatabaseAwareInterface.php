@@ -16,6 +16,16 @@ namespace Joomla\Database;
 interface DatabaseAwareInterface
 {
 	/**
+	 * Get the database.
+	 *
+	 * @return  DatabaseInterface
+	 *
+	 * @since   2.0.3
+	 * @throws  DatabaseNotFoundException May be thrown if the database has not been set.
+	 */
+	public function getDatabase(): DatabaseInterface;
+
+	/**
 	 * Set the database.
 	 *
 	 * @param   DatabaseInterface  $db  The database.
