@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Database Package
  *
- * @copyright  Copyright (C) 2005 - 2022 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2022 Open Source Matters, Inc. All rights reserved.
  * @license	GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -13,7 +13,7 @@ use Joomla\Database\Exception\DatabaseNotFoundException;
 /**
  * Defines the trait for a Database Aware Class.
  *
- * @since  2.0.3
+ * @since  2.1.0
  */
 trait DatabaseAwareTrait
 {
@@ -21,22 +21,23 @@ trait DatabaseAwareTrait
 	 * Database
 	 *
 	 * @var	   DatabaseInterface
-	 * @since  2.0.3
+	 * @since  2.1.0
 	 */
-	private $_db;
+	private $databaseAwareTraitDatabase;
 
 	/**
 	 * Get the database.
 	 *
 	 * @return  DatabaseInterface
 	 *
-	 * @since   2.0.3
+	 * @since   2.1.0
 	 * @throws  DatabaseNotFoundException May be thrown if the database has not been set.
 	 */
-	public function getDatabase()
+	protected function getDatabase(): DatabaseInterface
 	{
-		if ($this->_db) {
-			return $this->_db;
+		if ($this->databaseAwareTraitDatabase)
+		{
+			return $this->databaseAwareTraitDatabase;
 		}
 
 		throw new DatabaseNotFoundException('Database not set in ' . \get_class($this));
@@ -49,10 +50,10 @@ trait DatabaseAwareTrait
 	 *
 	 * @return  void
 	 *
-	 * @since   2.0.3
+	 * @since   2.1.0
 	 */
 	public function setDatabase(DatabaseInterface $db): void
 	{
-		$this->_db = $db;
+		$this->databaseAwareTraitDatabase = $db;
 	}
 }
