@@ -31,10 +31,18 @@ class DatabaseAwareTraitTest extends TestCase
 	{
 		$db = $this->createMock(DatabaseInterface::class);
 
-		$trait = $this->getObjectForTrait(DatabaseAwareTrait::class);
+		$trait = new class {
+			use DatabaseAwareTrait;
+
+			public function getDb()
+			{
+				return $this->getDatabase();
+			}
+		};
+
 		$trait->setDatabase($db);
 
-		$this->assertSame($db, $trait->getDatabase());
+		$this->assertSame($db, $trait->getDb());
 	}
 
 	/**
@@ -46,8 +54,15 @@ class DatabaseAwareTraitTest extends TestCase
 	{
 		$this->expectException(DatabaseNotFoundException::class);
 
-		$trait = $this->getObjectForTrait(DatabaseAwareTrait::class);
+		$trait = new class {
+			use DatabaseAwareTrait;
 
-		$trait->getDatabase();
+			public function getDb()
+			{
+				return $this->getDatabase();
+			}
+		};
+
+		$trait->getDb();
 	}
 }
