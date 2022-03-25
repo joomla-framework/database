@@ -123,17 +123,17 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		$options['socket']   = $options['socket'] ?? null;
 		$options['utf8mb4']  = isset($options['utf8mb4']) ? (bool) $options['utf8mb4'] : false;
 		$options['sqlModes'] = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
-		$options['ssl']      = isset($options['ssl']) ? $options['ssl'] : [];
+		$options['ssl']      = $options['ssl'] ?? [];
 
 		if ($options['ssl'] !== [])
 		{
-			$options['ssl']['enable']             = isset($options['ssl']['enable']) ? $options['ssl']['enable'] : false;
-			$options['ssl']['cipher']             = isset($options['ssl']['cipher']) ? $options['ssl']['cipher'] : null;
-			$options['ssl']['ca']                 = isset($options['ssl']['ca']) ? $options['ssl']['ca'] : null;
-			$options['ssl']['capath']             = isset($options['ssl']['capath']) ? $options['ssl']['capath'] : null;
-			$options['ssl']['key']                = isset($options['ssl']['key']) ? $options['ssl']['key'] : null;
-			$options['ssl']['cert']               = isset($options['ssl']['cert']) ? $options['ssl']['cert'] : null;
-			$options['ssl']['verify_server_cert'] = isset($options['ssl']['verify_server_cert']) ? $options['ssl']['verify_server_cert'] : null;
+			$options['ssl']['enable']             = $options['ssl']['enable'] ?? false;
+			$options['ssl']['cipher']             = $options['ssl']['cipher'] ?? null;
+			$options['ssl']['ca']                 = $options['ssl']['ca'] ?? null;
+			$options['ssl']['capath']             = $options['ssl']['capath'] ?? null;
+			$options['ssl']['key']                = $options['ssl']['key'] ?? null;
+			$options['ssl']['cert']               = $options['ssl']['cert'] ?? null;
+			$options['ssl']['verify_server_cert'] = $options['ssl']['verify_server_cert'] ?? null;
 		}
 
 		// Finalize initialisation.
@@ -165,7 +165,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		 * Unlike mysql_connect(), mysqli_connect() takes the port and socket as separate arguments. Therefore, we
 		 * have to extract them from the host string.
 		 */
-		$port = isset($this->options['port']) ? $this->options['port'] : 3306;
+		$port = $this->options['port'] ?? 3306;
 
 		if (preg_match('/^unix:(?P<socket>[^:]+)$/', $this->options['host'], $matches))
 		{
@@ -343,24 +343,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	}
 
 	/**
-	 * Disconnects the database.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function disconnect()
-	{
-		// Close the connection.
-		if (\is_callable($this->connection, 'close'))
-		{
-			$this->connection->close();
-		}
-
-		parent::disconnect();
-	}
-
-	/**
 	 * Method to escape a string for usage in an SQL statement.
 	 *
 	 * @param   string   $text   The string to be escaped.
@@ -512,8 +494,8 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	/**
 	 * Return the query string to create new Database.
 	 *
-	 * @param   stdClass  $options  Object used to pass user and database name to database driver. This object must have "db_name" and "db_user" set.
-	 * @param   boolean   $utf      True if the database supports the UTF-8 character set.
+	 * @param   \stdClass  $options  Object used to pass user and database name to database driver. This object must have "db_name" and "db_user" set.
+	 * @param   boolean    $utf      True if the database supports the UTF-8 character set.
 	 *
 	 * @return  string  The query that creates database
 	 *
@@ -698,8 +680,8 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	/**
 	 * Method to get the auto-incremented value from the last INSERT statement.
 	 *
-	 * @return  mixed  The value of the auto-increment field from the last inserted row.
-	 *                 If the value is greater than maximal int value, it will return a string.
+	 * @return  int|string  The value of the auto-increment field from the last inserted row.
+	 *                      If the value is greater than maximal int value, it will return a string.
 	 *
 	 * @since   1.0
 	 */
@@ -789,16 +771,16 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	/**
 	 * Locks a table in the database.
 	 *
-	 * @param   string  $table  The name of the table to unlock.
+	 * @param   string  $tableName  The name of the table to unlock.
 	 *
 	 * @return  $this
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public function lockTable($table)
+	public function lockTable($tableName)
 	{
-		$this->executeUnpreparedQuery($this->replacePrefix('LOCK TABLES ' . $this->quoteName($table) . ' WRITE'));
+		$this->executeUnpreparedQuery($this->replacePrefix('LOCK TABLES ' . $this->quoteName($tableName) . ' WRITE'));
 
 		return $this;
 	}
@@ -997,8 +979,8 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		// If an error occurred handle it.
 		if (!$cursor)
 		{
-			$errorNum = (int) $this->connection->errno;
-			$errorMsg = (string) $this->connection->error;
+			$errorNum = $this->connection->errno;
+			$errorMsg = $this->connection->error;
 
 			// Check if the server was disconnected.
 			if (!$this->connected())
@@ -1024,11 +1006,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		}
 
 		$this->freeResult();
-
-		if ($cursor instanceof \mysqli_result)
-		{
-			$cursor->free_result();
-		}
 
 		return true;
 	}

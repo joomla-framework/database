@@ -130,13 +130,12 @@ interface DatabaseInterface
 	public function getConnection();
 
 	/**
-	 * Method to get the database connection collation, as reported by the driver.
+	 * Method to get the database connection collation in use by sampling a text field of a table in the database.
 	 *
-	 * If the connector doesn't support reporting this value please return an empty string.
-	 *
-	 * @return  string
+	 * @return  string|boolean  The collation in use by the database connection (string) or boolean false if not supported.
 	 *
 	 * @since   2.0.0
+	 * @throws  \RuntimeException
 	 */
 	public function getConnectionCollation();
 
@@ -256,16 +255,16 @@ interface DatabaseInterface
 	public function getTableColumns($table, $typeOnly = true);
 
 	/**
-	 * Retrieves field information about the given tables.
+	 * Get the details list of keys for a table.
 	 *
-	 * @param   mixed  $tables  A table name or a list of table names.
+	 * @param   string  $table  The name of the table.
 	 *
-	 * @return  array
+	 * @return  array  An array of the column specification for the table.
 	 *
 	 * @since   2.0.0
 	 * @throws  \RuntimeException
 	 */
-	public function getTableKeys($tables);
+	public function getTableKeys($table);
 
 	/**
 	 * Method to get an array of all tables in the database.
