@@ -449,7 +449,7 @@ interface DatabaseInterface
 	 * @param   array|string  $text    A string or an array of strings to quote.
 	 * @param   boolean       $escape  True (default) to escape the string, false to leave it unchanged.
 	 *
-	 * @return  string
+	 * @return  string|array
 	 *
 	 * @since   2.0.0
 	 */
