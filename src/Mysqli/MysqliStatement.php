@@ -63,14 +63,6 @@ class MysqliStatement implements StatementInterface
 	protected $columnNames;
 
 	/**
-	 * The database connection resource.
-	 *
-	 * @var    \mysqli
-	 * @since  2.0.0
-	 */
-	protected $connection;
-
-	/**
 	 * The default fetch mode for the statement.
 	 *
 	 * @var    integer
@@ -111,25 +103,28 @@ class MysqliStatement implements StatementInterface
 	protected $typesKeyMapping;
 
 	/**
-	 * @param   \mysqli  $connection  The database connection resource
-	 * @param   string   $query       The query this statement will process
+	 * @param   \mysqli_stmt  $statement  The mysqli_stmt object
+	 * @param   string        $query      The query this statement will process
 	 *
 	 * @since   2.0.0
 	 * @throws  PrepareStatementFailureException
 	 */
-	public function __construct(\mysqli $connection, string $query)
+	public function __construct(\mysqli_stmt $statement, string $query)
 	{
-		$this->connection   = $connection;
-		$this->query        = $query;
+		$this->query = $query;
 
 		$query = $this->prepareParameterKeyMapping($query);
 
-		$this->statement  = $connection->prepare($query);
-
-		if (!$this->statement)
+		try
 		{
-			throw new PrepareStatementFailureException($this->connection->error, $this->connection->errno);
+			$statement->prepare($query);
 		}
+		catch (\mysqli_sql_exception $e)
+		{
+			throw new PrepareStatementFailureException($e->getMessage(), $e->getCode());
+		}
+
+		$this->statement = $statement;
 	}
 
 	/**
@@ -298,11 +293,11 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @param   array  $values  The values to bind to the statement
 	 *
-	 * @return  boolean
+	 * @return  void
 	 *
 	 * @since   2.0.0
 	 */
-	private function bindValues(array $values)
+	private function bindValues(array $values): void
 	{
 		if ($this->parameterKeyMapping)
 		{
@@ -314,10 +309,10 @@ class MysqliStatement implements StatementInterface
 
 			ksort($params);
 
-			return $this->statement->bind_param(str_repeat('s', \count($params)), ...$params);
+			$this->statement->bind_param(str_repeat('s', \count($params)), ...$params);
 		}
 
-		return $this->statement->bind_param(str_repeat('s', \count($values)), ...$values);
+		$this->statement->bind_param(str_repeat('s', \count($values)), ...$values);
 	}
 
 	/**
@@ -339,9 +334,9 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @since   2.0.0
 	 */
-	public function errorCode()
+	public function errorCode(): string
 	{
-		return (string) $this->statement->errno;
+		return $this->statement->sqlstate;
 	}
 
 	/**
@@ -351,9 +346,9 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @since   2.0.0
 	 */
-	public function errorInfo()
+	public function errorInfo(): array
 	{
-		return [$this->statement->error];
+		return $this->statement->error_list;
 	}
 
 	/**
@@ -392,22 +387,19 @@ class MysqliStatement implements StatementInterface
 			ksort($params);
 			ksort($types);
 
-			if (!$this->statement->bind_param(implode('', $types), ...$params))
-			{
-				throw new PrepareStatementFailureException($this->statement->error, $this->statement->errno);
-			}
+			$this->statement->bind_param(implode('', $types), ...$params);
 		}
 		elseif ($parameters !== null)
 		{
-			if (!$this->bindValues($parameters))
-			{
-				throw new PrepareStatementFailureException($this->statement->error, $this->statement->errno);
-			}
+			$this->bindValues($parameters);
 		}
 
-		if (!$this->statement->execute())
+		try {
+			$this->statement->execute();
+		}
+		catch (\mysqli_sql_exception $e)
 		{
-			throw new ExecutionFailureException($this->query, $this->statement->error, $this->statement->errno);
+			throw new ExecutionFailureException($this->query, $e->getMessage(), $e->getCode());
 		}
 
 		if ($this->columnNames === null)
@@ -433,10 +425,7 @@ class MysqliStatement implements StatementInterface
 			// The following is necessary as PHP cannot handle references to properties properly
 			$refs =& $this->rowBindedValues;
 
-			if (!$this->statement->bind_result(...$refs))
-			{
-				throw new \RuntimeException($this->statement->error, $this->statement->errno);
-			}
+			$this->statement->bind_result(...$refs);
 		}
 
 		return true;

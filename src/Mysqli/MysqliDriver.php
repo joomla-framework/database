@@ -214,6 +214,9 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			$this->options['socket'] = $port;
 		}
 
+		// Enable mysqli error reporting
+		mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
 		$this->connection = new \mysqli();
 
 		$connectionFlags = 0;
@@ -251,22 +254,24 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			);
 		}
 
-		// Attempt to connect to the server, use error suppression to silence warnings and allow us to throw an Exception separately.
-		$connected = @$this->connection->real_connect(
-			$this->options['host'],
-			$this->options['user'],
-			$this->options['password'],
-			null,
-			$this->options['port'],
-			$this->options['socket'],
-			$connectionFlags
-		);
-
-		if (!$connected)
+		try
+		{
+			// Attempt to connect to the server, use error suppression to silence warnings and allow us to throw an Exception separately.
+			@$this->connection->real_connect(
+				$this->options['host'],
+				$this->options['user'],
+				$this->options['password'],
+				null,
+				$this->options['port'],
+				$this->options['socket'],
+				$connectionFlags
+			);
+		}
+		catch (\mysqli_sql_exception $e)
 		{
 			throw new ConnectionFailureException(
-				'Could not connect to database: ' . $this->connection->connect_error,
-				$this->connection->connect_errno
+				'Could not connect to database: ' . $e->getMessage(),
+				$e->getCode()
 			);
 		}
 
@@ -811,7 +816,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			return false;
 		}
 
-		if (!$this->connection->select_db($database))
+		try
+		{
+			$this->connection->select_db($database);
+		}
+		catch (\mysqli_sql_exception $e)
 		{
 			throw new ConnectionFailureException('Could not connect to database.');
 		}
@@ -961,14 +970,13 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	{
 		$this->connect();
 
-		$cursor = $this->connection->query($sql);
-
-		// If an error occurred handle it.
-		if (!$cursor)
+		try
 		{
-			$errorNum = $this->connection->errno;
-			$errorMsg = $this->connection->error;
-
+			$this->connection->query($sql);
+		}
+		// If an error occurred handle it.
+		catch (\mysqli_sql_exception $e)
+		{
 			// Check if the server was disconnected.
 			if (!$this->connected())
 			{
@@ -981,7 +989,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 				catch (ConnectionFailureException $e)
 				{
 					// If connect fails, ignore that exception and throw the normal exception.
-					throw new ExecutionFailureException($sql, $errorMsg, $errorNum);
+					throw new ExecutionFailureException($sql, $e->getMessage(), $e->getCode());
 				}
 
 				// Since we were able to reconnect, run the query again.
@@ -989,7 +997,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			}
 
 			// The server was not disconnected.
-			throw new ExecutionFailureException($sql, $errorMsg, $errorNum);
+			throw new ExecutionFailureException($sql, $e->getMessage(), $e->getCode());
 		}
 
 		$this->freeResult();
@@ -1009,7 +1017,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 */
 	protected function prepareStatement(string $query): StatementInterface
 	{
-		return new MysqliStatement($this->connection, $query);
+		return new MysqliStatement($this->connection->stmt_init(), $query);
 	}
 
 	/**

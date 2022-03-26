@@ -83,7 +83,7 @@ class MysqliStatementTest extends DatabaseTestCase
 	{
 		$query = 'SELECT * FROM dbtest WHERE id IN (:preparedArray1,:preparedArray2,:preparedArray3,:preparedArray4,:preparedArray5,:preparedArray6,:preparedArray7,:preparedArray8,:preparedArray9,:preparedArray10)';
 
-		new MysqliStatement(static::$connection->getConnection(), $query);
+		new MysqliStatement(static::$connection->getConnection()->stmt_init(), $query);
 	}
 
 	/**
@@ -95,7 +95,7 @@ class MysqliStatementTest extends DatabaseTestCase
     {
         $query = 'SELECT * FROM dbtest WHERE `id` = :id AND `title` = :id_title';
 
-		new MysqliStatement(static::$connection->getConnection(), $query);
+		new MysqliStatement(static::$connection->getConnection()->stmt_init(), $query);
     }
 
     /**
@@ -108,6 +108,6 @@ class MysqliStatementTest extends DatabaseTestCase
     {
         $query = 'SELECT * FROM `dbtest` WHERE `description` LIKE :search_term AND `title` LIKE :search_term';
 
-		new MysqliStatement(static::$connection->getConnection(), $query);
+		new MysqliStatement(static::$connection->getConnection()->stmt_init(), $query);
     }
 }
