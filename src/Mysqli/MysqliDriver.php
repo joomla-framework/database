@@ -174,33 +174,20 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			$this->options['socket'] = $matches['socket'];
 			$this->options['port']   = null;
 		}
-		elseif (preg_match(
-			'/^(?P<host>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(:(?P<port>.+))?$/',
-			$this->options['host'],
-			$matches
-		))
+		elseif (
+			// It's an IPv4 address with or without port
+			preg_match(
+				'/^(?P<host>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(:(?P<port>.+))?$/',
+				$this->options['host'],
+				$matches
+			)
+			// We assume square-bracketed IPv6 address with or without port, e.g. [fe80:102::2%eth1]:3306
+			|| preg_match('/^(?P<host>\[.*\])(:(?P<port>.+))?$/', $this->options['host'], $matches)
+			// Named host (e.g. example.com or localhost) with or without port
+			|| preg_match('/^(?P<host>(\w+:\/{2,3})?[a-z0-9\.\-]+)(:(?P<port>[^:]+))?$/i', $this->options['host'], $matches)
+		)
 		{
 			// It's an IPv4 address with or without port
-			$this->options['host'] = $matches['host'];
-
-			if (!empty($matches['port']))
-			{
-				$port = $matches['port'];
-			}
-		}
-		elseif (preg_match('/^(?P<host>\[.*\])(:(?P<port>.+))?$/', $this->options['host'], $matches))
-		{
-			// We assume square-bracketed IPv6 address with or without port, e.g. [fe80:102::2%eth1]:3306
-			$this->options['host'] = $matches['host'];
-
-			if (!empty($matches['port']))
-			{
-				$port = $matches['port'];
-			}
-		}
-		elseif (preg_match('/^(?P<host>(\w+:\/{2,3})?[a-z0-9\.\-]+)(:(?P<port>[^:]+))?$/i', $this->options['host'], $matches))
-		{
-			// Named host (e.g example.com or localhost) with or without port
 			$this->options['host'] = $matches['host'];
 
 			if (!empty($matches['port']))
