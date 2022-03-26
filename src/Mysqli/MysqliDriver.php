@@ -214,7 +214,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			$this->options['socket'] = $port;
 		}
 
-		$this->connection = mysqli_init();
+		$this->connection = new \mysqli();
 
 		$connectionFlags = 0;
 
@@ -371,7 +371,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @since   1.0
 	 */
-	public static function isSupported()
+	public static function isSupported(): bool
 	{
 		return \extension_loaded('mysqli');
 	}
@@ -383,7 +383,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @since   1.0
 	 */
-	public function connected()
+	public function connected(): bool
 	{
 		if (\is_object($this->connection))
 		{
@@ -402,7 +402,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @since   2.0.0
 	 */
-	public function getAlterDbCharacterSet($dbName)
+	public function getAlterDbCharacterSet($dbName): string
 	{
 		$charset = $this->utf8mb4 ? 'utf8mb4' : 'utf8';
 
@@ -488,7 +488,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @since   2.0.0
 	 */
-	protected function getCreateDatabaseQuery($options, $utf)
+	protected function getCreateDatabaseQuery($options, $utf): string
 	{
 		if ($utf)
 		{
@@ -511,7 +511,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public function getTableCreate($tables)
+	public function getTableCreate($tables): array
 	{
 		$this->connect();
 
@@ -543,7 +543,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public function getTableColumns($table, $typeOnly = true)
+	public function getTableColumns($table, $typeOnly = true): array
 	{
 		$this->connect();
 
@@ -613,7 +613,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @since   1.0
 	 */
-	public function getVersion()
+	public function getVersion(): string
 	{
 		$this->connect();
 
@@ -633,7 +633,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @since   2.0.0
 	 */
-	public function getMinimum()
+	public function getMinimum(): string
 	{
 		return $this->mariadb ? static::$dbMinMariadb : static::$dbMinimum;
 	}
@@ -645,7 +645,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @since   2.0.0
 	 */
-	public function hasUTF8mb4Support()
+	public function hasUTF8mb4Support(): bool
 	{
 		return $this->utf8mb4;
 	}
@@ -802,7 +802,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public function select($database)
+	public function select($database): bool
 	{
 		$this->connect();
 
@@ -1068,7 +1068,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	 *
 	 * @since   2.0.0
 	 */
-	public function getNullDate()
+	public function getNullDate(): string
 	{
 		// Check the session sql mode;
 		if (\in_array('NO_ZERO_DATE', $this->options['sqlModes']) !== false)
