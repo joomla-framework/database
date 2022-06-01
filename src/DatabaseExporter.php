@@ -302,7 +302,7 @@ abstract class DatabaseExporter
 				{
 					if (!in_array($key, $colblob))
 					{
-						$buffer[] = '    <field name="' . $key . '">' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '</field>';
+						$buffer[] = '    <field name="' . $key . '">' . htmlspecialchars($value ?? '', ENT_COMPAT, 'UTF-8') . '</field>';
 					}
 					else
 					{
