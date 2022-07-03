@@ -292,6 +292,9 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		// And read the real sql mode to mitigate changes in mysql > 5.7.+
 		$this->options['sqlModes'] = explode(',', $this->setQuery('SELECT @@SESSION.sql_mode;')->loadResult());
 
+		// Turn 'big selects' on to ensure certain selects work on platforms that try to prevent these...  
+		$this->connection->query("SET @@SESSION.sql_big_selects = 1;" );
+
 		// If auto-select is enabled select the given database.
 		if ($this->options['select'] && !empty($this->options['database']))
 		{
