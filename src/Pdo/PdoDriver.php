@@ -399,10 +399,10 @@ abstract class PdoDriver extends DatabaseDriver
 		if (\is_float($text))
 		{
 			// Force the dot as a decimal point.
-			return str_replace(',', '.', $text);
+			return str_replace(',', '.', (string) $text);
 		}
 
-		$text = str_replace("'", "''", $text);
+		$text = str_replace("'", "''", (string) $text);
 
 		return addcslashes($text, "\000\n\r\\\032");
 	}

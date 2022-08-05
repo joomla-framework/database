@@ -380,12 +380,12 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		if (\is_float($text))
 		{
 			// Force the dot as a decimal point.
-			return str_replace(',', '.', $text);
+			return str_replace(',', '.', (string) $text);
 		}
 
 		$this->connect();
 
-		$result = $this->connection->real_escape_string($text);
+		$result = $this->connection->real_escape_string((string) $text);
 
 		if ($extra)
 		{
