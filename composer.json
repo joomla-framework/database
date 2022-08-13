@@ -10,14 +10,13 @@
     "homepage": "https://github.com/joomla-framework/renderer",
     "license": "LGPL-2.1-or-later",
     "require": {
-        "php": "^7.2.5|^8.0"
+        "php": "^7.2.5|~8.0.0|~8.1.0"
     },
     "require-dev": {
+        "joomla/test": "2.0-dev",
         "illuminate/events": "^6.0|^7.0",
         "illuminate/filesystem": "^6.0|^7.0",
         "illuminate/view": "^6.0|^7.0",
-        "joomla/coding-standards": "^3.0@dev",
-        "joomla/test": "^2.0",
         "league/plates": "^3.0",
         "mustache/mustache": "^2.3",
         "phpunit/phpunit": "^8.5|^9.0",
