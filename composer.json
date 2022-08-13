@@ -10,18 +10,17 @@
     "homepage": "https://github.com/joomla-framework/database",
     "license": "GPL-2.0-or-later",
     "require": {
-        "php": "^7.2.5|^8.0",
-        "joomla/event": "^2.0",
+        "php": "^7.2.5|~8.0.0|~8.1.0",
+        "joomla/event": "dev-php-8.2",
         "symfony/deprecation-contracts": "^2.1"
     },
     "require-dev": {
-        "joomla/archive": "^1.0|^2.0",
-        "joomla/coding-standards": "^3.0@dev",
-        "joomla/console": "^2.0",
-        "joomla/di": "^1.0|^2.0",
-        "joomla/filesystem": "^1.3|^2.0",
-        "joomla/registry": "^1.4.5|^2.0",
-        "joomla/test": "^2.0",
+        "joomla/archive": "dev-php-8.2",
+        "joomla/console": "dev-php-8.2",
+        "joomla/di": "dev-php-8.2",
+        "joomla/filesystem": "dev-php-8.2",
+        "joomla/registry": "dev-php-8.2",
+        "joomla/test": "dev-php-8.2",
         "phpunit/phpunit": "^8.5|^9.0",
         "psr/log": "^1.1",
         "symfony/phpunit-bridge": "^4.4|^5.0"
