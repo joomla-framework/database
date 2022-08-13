@@ -1,0 +1,346 @@
+---
+{
+   "kind": "pipeline",
+   "name": "Codequality",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update",
+            "composer require phpmd/phpmd phpstan/phpstan"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpcs --standard=ruleset.xml"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phpcs"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpmd src text cleancode",
+            "vendor/bin/phpmd src text codesize",
+            "vendor/bin/phpmd src text controversial",
+            "vendor/bin/phpmd src text design",
+            "vendor/bin/phpmd src text unusedcode"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phpmd"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpstan analyse src"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phpstan"
+      },
+      {
+         "commands": [
+            "phploc src"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phploc"
+      },
+      {
+         "commands": [
+            "phpcpd src"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phpcpd"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 7.2 lowest",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable --prefer-lowest"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 7.2",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 7.3",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 7.4",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 8.0",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 8.1",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 8.2",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable --ignore-platform-reqs"
+         ],
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+kind: signature
+hmac: 6151afcba44a8f260a06a7d8006a638adfae438f7f1cc830d15f7a62e0273ede
+
+...
