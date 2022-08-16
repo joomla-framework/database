@@ -1,0 +1,1332 @@
+---
+{
+   "kind": "pipeline",
+   "name": "Codequality",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update",
+            "composer require phpmd/phpmd phpstan/phpstan"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards",
+            "vendor/bin/phpcs --standard=ruleset.xml src/"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phpcs"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpmd src text cleancode",
+            "vendor/bin/phpmd src text codesize",
+            "vendor/bin/phpmd src text controversial",
+            "vendor/bin/phpmd src text design",
+            "vendor/bin/phpmd src text unusedcode"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phpmd"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpstan analyse src"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phpstan"
+      },
+      {
+         "commands": [
+            "phploc src"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phploc"
+      },
+      {
+         "commands": [
+            "phpcpd src"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phpcpd"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 7.2 lowest",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable --prefer-lowest"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MySQL 5.7'",
+            "echo -e \"[mysqld]\ndefault_authentication_plugin=mysql_native_password\" >/tmp/mysql-auth.cnf",
+            "docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=joomla_ut -v /tmp/mysql-auth.cnf:/etc/mysql/conf.d/auth.cnf:ro -p 33306:3306 --name mysql mysql:5.7",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 7.2",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MySQL 5.7'",
+            "echo -e \"[mysqld]\ndefault_authentication_plugin=mysql_native_password\" >/tmp/mysql-auth.cnf",
+            "docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=joomla_ut -v /tmp/mysql-auth.cnf:/etc/mysql/conf.d/auth.cnf:ro -p 33306:3306 --name mysql mysql:5.7",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 7.3",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MySQL 5.7'",
+            "echo -e \"[mysqld]\ndefault_authentication_plugin=mysql_native_password\" >/tmp/mysql-auth.cnf",
+            "docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=joomla_ut -v /tmp/mysql-auth.cnf:/etc/mysql/conf.d/auth.cnf:ro -p 33306:3306 --name mysql mysql:5.7",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 7.4",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MariaDB 10.0'",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 7.4",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MariaDB 10.2'",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 7.4",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            "echo 'MySQL 5.7'",
+            "echo -e \"[mysqld]\ndefault_authentication_plugin=mysql_native_password\" >/tmp/mysql-auth.cnf",
+            "docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=joomla_ut -v /tmp/mysql-auth.cnf:/etc/mysql/conf.d/auth.cnf:ro -p 33306:3306 --name mysql mysql:5.7",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 7.4",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MySQL 5.7'",
+            "echo -e \"[mysqld]\ndefault_authentication_plugin=mysql_native_password\" >/tmp/mysql-auth.cnf",
+            "docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=joomla_ut -v /tmp/mysql-auth.cnf:/etc/mysql/conf.d/auth.cnf:ro -p 33306:3306 --name mysql mysql:5.7",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 7.4",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "echo 'SQLite 3'",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 7.4",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MS SQL Server 5.8.0'",
+            "curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -",
+            "curl https://packages.microsoft.com/config/ubuntu/14.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql.list",
+            "sudo apt-get update",
+            "ACCEPT_EULA=Y",
+            "sudo apt-get install -qy msodbcsql17 mssql-tools unixodbc libssl1.0.0",
+            "sudo docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=JoomlaFramework123' -p 127.0.0.1:1433:1433 --name db -d microsoft/mssql-server-linux:2017-latest",
+            "retries=10",
+            "until (echo quit | /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 &> /dev/null)",
+            "do",
+            "if [[ \"$retries\" -le 0 ]]; then",
+            "echo SQL Server did not start",
+            "exit 1",
+            "fi",
+            "retries=$((retries - 1))",
+            "sleep 2s",
+            "done"
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlsrv.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 8.0",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MySQL 5.7'",
+            "echo -e \"[mysqld]\ndefault_authentication_plugin=mysql_native_password\" >/tmp/mysql-auth.cnf",
+            "docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=joomla_ut -v /tmp/mysql-auth.cnf:/etc/mysql/conf.d/auth.cnf:ro -p 33306:3306 --name mysql mysql:5.7",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 8.0",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MySQL 8.0'",
+            "echo -e \"[mysqld]\ndefault_authentication_plugin=mysql_native_password\" >/tmp/mysql-auth.cnf",
+            "docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=joomla_ut -v /tmp/mysql-auth.cnf:/etc/mysql/conf.d/auth.cnf:ro -p 33306:3306 --name mysql mysql:8.0",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 8.1",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MariaDB 10.0'",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 8.1",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MariaDB 10.2'",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 8.1",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            "echo 'MySQL 5.7'",
+            "echo -e \"[mysqld]\ndefault_authentication_plugin=mysql_native_password\" >/tmp/mysql-auth.cnf",
+            "docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=joomla_ut -v /tmp/mysql-auth.cnf:/etc/mysql/conf.d/auth.cnf:ro -p 33306:3306 --name mysql mysql:5.7",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 8.1",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MySQL 5.7'",
+            "echo -e \"[mysqld]\ndefault_authentication_plugin=mysql_native_password\" >/tmp/mysql-auth.cnf",
+            "docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=joomla_ut -v /tmp/mysql-auth.cnf:/etc/mysql/conf.d/auth.cnf:ro -p 33306:3306 --name mysql mysql:5.7",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 8.1",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MySQL 8.0'",
+            "echo -e \"[mysqld]\ndefault_authentication_plugin=mysql_native_password\" >/tmp/mysql-auth.cnf",
+            "docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=joomla_ut -v /tmp/mysql-auth.cnf:/etc/mysql/conf.d/auth.cnf:ro -p 33306:3306 --name mysql mysql:8.0",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 8.1",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MS SQL Server 5.8.0'",
+            "curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -",
+            "curl https://packages.microsoft.com/config/ubuntu/14.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql.list",
+            "sudo apt-get update",
+            "ACCEPT_EULA=Y",
+            "sudo apt-get install -qy msodbcsql17 mssql-tools unixodbc libssl1.0.0",
+            "sudo docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=JoomlaFramework123' -p 127.0.0.1:1433:1433 --name db -d microsoft/mssql-server-linux:2017-latest",
+            "retries=10",
+            "until (echo quit | /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 &> /dev/null)",
+            "do",
+            "if [[ \"$retries\" -le 0 ]]; then",
+            "echo SQL Server did not start",
+            "exit 1",
+            "fi",
+            "retries=$((retries - 1))",
+            "sleep 2s",
+            "done"
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlsrv.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "PHP 8.2",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update --prefer-stable --ignore-platform-reqs"
+         ],
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "echo 'MySQL 5.7'",
+            "echo -e \"[mysqld]\ndefault_authentication_plugin=mysql_native_password\" >/tmp/mysql-auth.cnf",
+            "docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=joomla_ut -v /tmp/mysql-auth.cnf:/etc/mysql/conf.d/auth.cnf:ro -p 33306:3306 --name mysql mysql:5.7",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+         ],
+         "name": "Database Installation"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}

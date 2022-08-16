@@ -190,7 +190,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 			/*
 			 * Otherwise, try connecting again without using utf8mb4 and see if maybe that was the problem. If the connection succeeds, then we
 			 * will have learned that the client end of the connection does not support utf8mb4.
-  			 */
+			   */
 			$this->utf8mb4            = false;
 			$this->options['charset'] = 'utf8';
 

@@ -3,7 +3,7 @@
 	<php>
 		<env name="JOOMLA_TEST_DB_DRIVER" value="pgsql" />
 		<env name="JOOMLA_TEST_DB_HOST" value="localhost" />
-		<env name="JOOMLA_TEST_DB_PORT" value="5432" />
+		<env name="JOOMLA_TEST_DB_PORT" value="5433" />
 		<env name="JOOMLA_TEST_DB_USER" value="postgres" />
 		<env name="JOOMLA_TEST_DB_PASSWORD" value="" />
 		<env name="JOOMLA_TEST_DB_DATABASE" value="joomla_ut" />
