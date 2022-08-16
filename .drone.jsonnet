@@ -244,7 +244,6 @@ local pipeline_sqlsrv_docker(phpversion, driver, dbversion, params) = {
         ],
     },
     pipeline_sqlite('7.2', 'sqlite', '--prefer-stable --prefer-lowest'),
-    pipeline_sqlite('7.2', 'sqlite', '--prefer-stable'),
     pipeline_sqlite('7.3', 'sqlite', '--prefer-stable'),
     pipeline_sqlite('7.4', 'sqlite', '--prefer-stable'),
     pipeline_sqlite('8.0', 'sqlite', '--prefer-stable'),

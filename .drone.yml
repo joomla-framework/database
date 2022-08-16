@@ -132,45 +132,6 @@
       "DB": "sqlite"
    },
    "kind": "pipeline",
-   "name": "PHP 7.2 with SQLite (sqlite driver)",
-   "steps": [
-      {
-         "commands": [
-            "php -v",
-            "composer update --prefer-stable"
-         ],
-         "image": "joomlaprojects/docker-images:php7.2",
-         "name": "composer",
-         "volumes": [
-            {
-               "name": "composer-cache",
-               "path": "/tmp/composer-cache"
-            }
-         ]
-      },
-      {
-         "commands": [
-            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml"
-         ],
-         "image": "joomlaprojects/docker-images:php7.2",
-         "name": "PHPUnit"
-      }
-   ],
-   "volumes": [
-      {
-         "host": {
-            "path": "/tmp/composer-cache"
-         },
-         "name": "composer-cache"
-      }
-   ]
-}
----
-{
-   "environment": {
-      "DB": "sqlite"
-   },
-   "kind": "pipeline",
    "name": "PHP 7.3 with SQLite (sqlite driver)",
    "steps": [
       {
@@ -3498,6 +3459,6 @@
 }
 ---
 kind: signature
-hmac: c01be6d8e96fb62e5ee6b4a6057d528cd6546ccdd83c055d977fb2e38ca6310a
+hmac: d21976590428bc6d150e68b740986abf49c123f3f81365abf6d61e77df56c759
 
 ...
