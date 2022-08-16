@@ -74,8 +74,8 @@ local pipeline_mysql_docker(phpversion, driver, dbversion, params) = {
             },
             ports: [
                 {
-                    container: '3306',
-                    host: '33306',
+                    container: 3306,
+                    host: 33306,
                 },
             ],
         },
@@ -105,8 +105,8 @@ local pipeline_mariadb_docker(phpversion, driver, dbversion, params) = {
             },
             ports: [
                 {
-                    container: '3306',
-                    host: '33306',
+                    container: 3306,
+                    host: 33306,
                 },
             ],
         },
@@ -136,8 +136,8 @@ local pipeline_postgres_docker(phpversion, driver, dbversion, params) = {
             },
             ports: [
                 {
-                    container: '5432',
-                    host: '5432',
+                    container: 5432,
+                    host: 5432,
                 },
             ],
         },
@@ -164,8 +164,8 @@ local pipeline_sqlsrv_docker(phpversion, driver, dbversion, params) = {
             },
             ports: [
                 {
-                    container: '1433',
-                    host: '1433',
+                    container: 1433,
+                    host: 1433,
                 },
             ],
         },

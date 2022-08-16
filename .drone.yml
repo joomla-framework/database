@@ -537,8 +537,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -596,8 +596,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -655,8 +655,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -714,8 +714,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -773,8 +773,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -832,8 +832,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -892,8 +892,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -951,8 +951,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1010,8 +1010,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1069,8 +1069,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1128,8 +1128,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1188,8 +1188,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1247,8 +1247,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1306,8 +1306,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1365,8 +1365,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1424,8 +1424,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1483,8 +1483,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1543,8 +1543,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1602,8 +1602,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1661,8 +1661,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1720,8 +1720,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1779,8 +1779,8 @@
          "name": "mysql",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1839,8 +1839,8 @@
          "name": "mariadb",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1898,8 +1898,8 @@
          "name": "mariadb",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -1957,8 +1957,8 @@
          "name": "mariadb",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -2016,8 +2016,8 @@
          "name": "mariadb",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -2075,8 +2075,8 @@
          "name": "mariadb",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -2134,8 +2134,8 @@
          "name": "mariadb",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -2193,8 +2193,8 @@
          "name": "mariadb",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -2252,8 +2252,8 @@
          "name": "mariadb",
          "ports": [
             {
-               "container": "3306",
-               "host": "33306"
+               "container": 3306,
+               "host": 33306
             }
          ]
       }
@@ -2310,8 +2310,8 @@
          "name": "postgresql",
          "ports": [
             {
-               "container": "5432",
-               "host": "5432"
+               "container": 5432,
+               "host": 5432
             }
          ]
       }
@@ -2369,8 +2369,8 @@
          "name": "postgresql",
          "ports": [
             {
-               "container": "5432",
-               "host": "5432"
+               "container": 5432,
+               "host": 5432
             }
          ]
       }
@@ -2428,8 +2428,8 @@
          "name": "postgresql",
          "ports": [
             {
-               "container": "5432",
-               "host": "5432"
+               "container": 5432,
+               "host": 5432
             }
          ]
       }
@@ -2487,8 +2487,8 @@
          "name": "postgresql",
          "ports": [
             {
-               "container": "5432",
-               "host": "5432"
+               "container": 5432,
+               "host": 5432
             }
          ]
       }
@@ -2546,8 +2546,8 @@
          "name": "postgresql",
          "ports": [
             {
-               "container": "5432",
-               "host": "5432"
+               "container": 5432,
+               "host": 5432
             }
          ]
       }
@@ -2605,8 +2605,8 @@
          "name": "postgresql",
          "ports": [
             {
-               "container": "5432",
-               "host": "5432"
+               "container": 5432,
+               "host": 5432
             }
          ]
       }
@@ -2664,8 +2664,8 @@
          "name": "postgresql",
          "ports": [
             {
-               "container": "5432",
-               "host": "5432"
+               "container": 5432,
+               "host": 5432
             }
          ]
       }
@@ -2723,8 +2723,8 @@
          "name": "postgresql",
          "ports": [
             {
-               "container": "5432",
-               "host": "5432"
+               "container": 5432,
+               "host": 5432
             }
          ]
       }
@@ -2783,8 +2783,8 @@
          "name": "postgresql",
          "ports": [
             {
-               "container": "5432",
-               "host": "5432"
+               "container": 5432,
+               "host": 5432
             }
          ]
       }
@@ -2842,8 +2842,8 @@
          "name": "postgresql",
          "ports": [
             {
-               "container": "5432",
-               "host": "5432"
+               "container": 5432,
+               "host": 5432
             }
          ]
       }
@@ -2901,8 +2901,8 @@
          "name": "postgresql",
          "ports": [
             {
-               "container": "5432",
-               "host": "5432"
+               "container": 5432,
+               "host": 5432
             }
          ]
       }
@@ -2960,8 +2960,8 @@
          "name": "postgresql",
          "ports": [
             {
-               "container": "5432",
-               "host": "5432"
+               "container": 5432,
+               "host": 5432
             }
          ]
       }
@@ -3019,8 +3019,8 @@
          "name": "postgresql",
          "ports": [
             {
-               "container": "5432",
-               "host": "5432"
+               "container": 5432,
+               "host": 5432
             }
          ]
       }
@@ -3078,8 +3078,8 @@
          "name": "mssql-server",
          "ports": [
             {
-               "container": "1433",
-               "host": "1433"
+               "container": 1433,
+               "host": 1433
             }
          ]
       }
@@ -3134,8 +3134,8 @@
          "name": "mssql-server",
          "ports": [
             {
-               "container": "1433",
-               "host": "1433"
+               "container": 1433,
+               "host": 1433
             }
          ]
       }
@@ -3190,8 +3190,8 @@
          "name": "mssql-server",
          "ports": [
             {
-               "container": "1433",
-               "host": "1433"
+               "container": 1433,
+               "host": 1433
             }
          ]
       }
@@ -3246,8 +3246,8 @@
          "name": "mssql-server",
          "ports": [
             {
-               "container": "1433",
-               "host": "1433"
+               "container": 1433,
+               "host": 1433
             }
          ]
       }
@@ -3302,8 +3302,8 @@
          "name": "mssql-server",
          "ports": [
             {
-               "container": "1433",
-               "host": "1433"
+               "container": 1433,
+               "host": 1433
             }
          ]
       }
@@ -3358,8 +3358,8 @@
          "name": "mssql-server",
          "ports": [
             {
-               "container": "1433",
-               "host": "1433"
+               "container": 1433,
+               "host": 1433
             }
          ]
       }
@@ -3400,6 +3400,6 @@
 }
 ---
 kind: signature
-hmac: 4f12323cabc72457ba72366cc0fd5b9889ccdfec45799bd43fc9966991e97d2f
+hmac: b4c573b41af9dae7f88d2ba0e457564bb6d1c6d12371efd867c00d6f0d2d23da
 
 ...
