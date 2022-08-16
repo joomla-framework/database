@@ -22,65 +22,153 @@ local composer(phpversion, params) = {
     ],
 };
 
-local dbimage = {
-    pgsql: 'postgresql',
-    sqlite: 'sqlite',
-    mysql: 'mysql',
-    mysqli: 'mysql',
-    mariadb: 'mariadb',
-    sqlsrv: 'microsoft/mssql-server-linux',
-};
-
-local dbinstall(phpversion, dbtype, dbversion) = {
-    name: 'Database Installation',
-    image: 'joomlaprojects/docker-images:php' + phpversion,
-    commands: [
-        if dbtype == 'sqlite' then "echo 'SQLite "+ dbversion + "'",
-        if dbtype == 'pgsql' then "echo 'PostgreSQL "+ dbversion + "'",
-        if dbtype == 'pgsql' then "docker run -d --name postgres -e POSTGRES_HOST_AUTH_METHOD=trust -p 5433:5432 postgres:" + dbversion,
-        if dbtype == 'pgsql' then "docker exec -i postgres bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
-        if dbtype == 'mysql' then "echo 'MySQL "+ dbversion + "'",
-        if dbtype == 'mysql' then "echo -e \"[mysqld]\ndefault_authentication_plugin=mysql_native_password\" >/tmp/mysql-auth.cnf",
-        if dbtype == 'mysql' then "docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=joomla_ut -v /tmp/mysql-auth.cnf:/etc/mysql/conf.d/auth.cnf:ro -p 33306:3306 --name mysql mysql:" + dbversion,
-        if dbtype == 'mysqli' then "echo 'MySQL "+ dbversion + "'",
-        if dbtype == 'mysqli' then "echo -e \"[mysqld]\ndefault_authentication_plugin=mysql_native_password\" >/tmp/mysql-auth.cnf",
-        if dbtype == 'mysqli' then "docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=joomla_ut -v /tmp/mysql-auth.cnf:/etc/mysql/conf.d/auth.cnf:ro -p 33306:3306 --name mysql mysql:" + dbversion,
-        if dbtype == 'mariadb' then "echo 'MariaDB "+ dbversion + "'",
-        if dbtype == 'sqlsrv' then "echo 'MS SQL Server "+ dbversion + "'",
-        if dbtype == 'sqlsrv' then  "curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -",
-        if dbtype == 'sqlsrv' then  "curl https://packages.microsoft.com/config/ubuntu/14.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql.list",
-        if dbtype == 'sqlsrv' then  "sudo apt-get update",
-        if dbtype == 'sqlsrv' then  "ACCEPT_EULA=Y",
-        if dbtype == 'sqlsrv' then  "sudo apt-get install -qy msodbcsql17 mssql-tools unixodbc libssl1.0.0",
-        if dbtype == 'sqlsrv' then  "sudo docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=JoomlaFramework123' -p 127.0.0.1:1433:1433 --name db -d microsoft/mssql-server-linux:2017-latest",
-        if dbtype == 'sqlsrv' then  "retries=10",
-        if dbtype == 'sqlsrv' then  "until (echo quit | /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 &> /dev/null)",
-        if dbtype == 'sqlsrv' then  "do",
-        if dbtype == 'sqlsrv' then  "if [[ \"$retries\" -le 0 ]]; then",
-        if dbtype == 'sqlsrv' then  "echo SQL Server did not start",
-        if dbtype == 'sqlsrv' then  "exit 1",
-        if dbtype == 'sqlsrv' then  "fi",
-        if dbtype == 'sqlsrv' then  "retries=$((retries - 1))",
-        if dbtype == 'sqlsrv' then  "sleep 2s",
-        if dbtype == 'sqlsrv' then  "done",
-    ],
-};
-
-local phpunit(phpversion, dbtype) = {
+local phpunit(phpversion, phpunit_config) = {
     name: 'PHPUnit',
     image: 'joomlaprojects/docker-images:php' + phpversion,
     [if phpversion == '8.2' then 'failure']: 'ignore',
-    commands: ['vendor/bin/phpunit --configuration ./.travis/phpunit.' + dbtype + '.xml'],
+    commands: ['vendor/bin/phpunit --configuration ' + phpunit_config],
 };
 
-local pipeline(name, phpversion, dbtype, dbversion, params) = {
+local pipeline_sqlite(phpversion, driver, params) = {
     kind: 'pipeline',
-    name: 'PHP ' + name + ' ' + dbtype + ' ' + dbversion,
+    name: 'PHP ' + phpversion + ' with SQLite (' + driver + ' driver)',
+    environment: { DB: driver },
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        dbinstall(phpversion, dbtype, dbversion),
-        phpunit(phpversion, dbtype),
+        phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
+    ],
+};
+
+local pipeline_mysql(phpversion, driver, dbversion, params) = {
+    kind: 'pipeline',
+    name: 'PHP ' + phpversion + ' with MySQL ' + dbversion + ' (' + driver + ' driver)',
+    environment: { DB: driver },
+    volumes: hostvolumes,
+    steps: [
+        composer(phpversion, params),
+        phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
+    ],
+};
+
+local pipeline_mysql_docker(phpversion, driver, dbversion, params) = {
+    kind: 'pipeline',
+    name: 'PHP ' + phpversion + ' with MySQL ' + dbversion + ' (' + driver + ' driver)',
+    environment: { DB: driver },
+    volumes: hostvolumes,
+    steps: [
+        composer(phpversion, params),
+        "docker exec -i mysql bash <<< 'until echo \\q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'",
+        phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
+    ],
+    services: [
+        {
+            name: 'mysql',
+            image: 'mysql:' + dbversion,
+            environment: {
+                MYSQL_ALLOW_EMPTY_PASSWORD: 'yes',
+                MYSQL_DATABASE: 'joomla_ut',
+                MYSQL_ROOT_PASSWORD: '',
+                MYSQL_USER: 'root',
+                MYSQL_PASSWORD: '',
+            },
+            ports: [
+                {
+                    container: '3306',
+                    host: '33306',
+                },
+            ],
+        },
+    ],
+};
+
+local pipeline_mariadb_docker(phpversion, driver, dbversion, params) = {
+    kind: 'pipeline',
+    name: 'PHP ' + phpversion + ' with MariaDB ' + dbversion + ' (' + driver + ' driver)',
+    environment: { DB: driver },
+    volumes: hostvolumes,
+    steps: [
+        composer(phpversion, params),
+        "docker exec -i mariadb bash <<< 'until echo \\q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'",
+        phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
+    ],
+    services: [
+        {
+            name: 'mariadb',
+            image: 'mariadb:' + dbversion,
+            environment: {
+                MYSQL_ALLOW_EMPTY_PASSWORD: 'yes',
+                MYSQL_DATABASE: 'joomla_ut',
+                MYSQL_ROOT_PASSWORD: '',
+                MYSQL_USER: 'root',
+                MYSQL_PASSWORD: '',
+            },
+            ports: [
+                {
+                    container: '3306',
+                    host: '33306',
+                },
+            ],
+        },
+    ],
+};
+
+local pipeline_postgres_docker(phpversion, driver, dbversion, params) = {
+    kind: 'pipeline',
+    name: 'PHP ' + phpversion + ' with PostgreSQL ' + dbversion + ' (' + driver + ' driver)',
+    environment: { DB: driver },
+    volumes: hostvolumes,
+    steps: [
+        composer(phpversion, params),
+        "docker exec -i postgres bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+        "psql -U postgres -c 'create database joomla_ut;'",
+        "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql",
+        phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
+    ],
+    services: [
+        {
+            name: 'postgresql',
+            image: 'postgresql:' + dbversion,
+            environment: {
+                POSTGRES_HOST_AUTH_METHOD: 'trust',
+                POSTGRES_PASSWORD: '',
+                POSTGRES_USER: 'postgres',
+            },
+            ports: [
+                {
+                    container: '5432',
+                    host: '5432',
+                },
+            ],
+        },
+    ],
+};
+
+local pipeline_sqlsrv_docker(phpversion, driver, dbversion, params) = {
+    kind: 'pipeline',
+    name: 'PHP ' + phpversion + ' with MS SQL Server ' + dbversion + ' (' + driver + ' driver)',
+    environment: { DB: driver },
+    volumes: hostvolumes,
+    steps: [
+        composer(phpversion, params),
+        "docker exec -i mssql-server bash <<< 'retries=10; echo 'Waiting for SQL Server to start...'; until (echo quit | /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 &> /dev/null) do if [[ \"$retries\" -le 0 ]]; then echo 'SQL Server did not start'; exit 1; fi; retries=$((retries - 1)); sleep 2s; done; echo 'SQL Server started'",
+        phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
+    ],
+    services: [
+        {
+            name: 'mssql-server',
+            image: 'mcr.microsoft.com/mssql/server:' + dbversion,
+            environment: {
+                ACCEPT_EULA: 'Y',
+                SA_PASSWORD: 'JoomlaFramework123',
+            },
+            ports: [
+                {
+                    container: '1433',
+                    host: '1433',
+                },
+            ],
+        },
     ],
 };
 
@@ -151,22 +239,64 @@ local pipeline(name, phpversion, dbtype, dbversion, params) = {
             },
         ],
     },
-    pipeline('7.2 lowest', '7.2', 'mysqli', '5.7', '--prefer-stable --prefer-lowest'),
-    pipeline('7.2', '7.2', 'mysqli', '5.7', '--prefer-stable'),
-    pipeline('7.3', '7.3', 'mysqli', '5.7', '--prefer-stable'),
-    pipeline('7.4', '7.4', 'mariadb', '10.0', '--prefer-stable'),
-    pipeline('7.4', '7.4', 'mariadb', '10.2', '--prefer-stable'),
-    pipeline('7.4', '7.4', 'mysql', '5.7', '--prefer-stable'),
-    pipeline('7.4', '7.4', 'mysqli', '5.7', '--prefer-stable'),
-    pipeline('7.4', '7.4', 'sqlite', '3', '--prefer-stable'),
-    pipeline('7.4', '7.4', 'sqlsrv', '5.8.0', '--prefer-stable'),
-    pipeline('8.0', '8.0', 'mysqli', '5.7', '--prefer-stable'),
-    pipeline('8.0', '8.0', 'mysqli', '8.0', '--prefer-stable'),
-    pipeline('8.1', '8.1', 'mariadb', '10.0', '--prefer-stable'),
-    pipeline('8.1', '8.1', 'mariadb', '10.2', '--prefer-stable'),
-    pipeline('8.1', '8.1', 'mysql', '5.7', '--prefer-stable'),
-    pipeline('8.1', '8.1', 'mysqli', '5.7', '--prefer-stable'),
-    pipeline('8.1', '8.1', 'mysqli', '8.0', '--prefer-stable'),
-    pipeline('8.1', '8.1', 'sqlsrv', '5.8.0', '--prefer-stable'),
-    pipeline('8.2', '8.2', 'mysqli', '5.7', '--prefer-stable --ignore-platform-reqs'),
+    pipeline_sqlite('7.2', 'sqlite', '--prefer-stable --prefer-lowest'),
+    pipeline_sqlite('7.2', 'sqlite', '--prefer-stable'),
+    pipeline_sqlite('7.3', 'sqlite', '--prefer-stable'),
+    pipeline_sqlite('7.4', 'sqlite', '--prefer-stable'),
+    pipeline_sqlite('8.0', 'sqlite', '--prefer-stable'),
+    pipeline_sqlite('8.1', 'sqlite', '--prefer-stable'),
+    pipeline_sqlite('8.2', 'sqlite', '--prefer-stable --ignore-platform-reqs'),
+    pipeline_mysql('7.2', 'mysql', '5.6', '--prefer-stable --prefer-lowest'),
+    pipeline_mysql('7.3', 'mysql', '5.6', '--prefer-stable'),
+    pipeline_mysql('7.2', 'mysqli', '5.6', '--prefer-stable --prefer-lowest'),
+    pipeline_mysql('7.3', 'mysqli', '5.6', '--prefer-stable'),
+    pipeline_mysql_docker('7.2', 'mysql.docker', '5.7', '--prefer-stable --prefer-lowest'),
+    pipeline_mysql_docker('7.3', 'mysql.docker', '5.7', '--prefer-stable'),
+    pipeline_mysql_docker('7.4', 'mysql.docker', '5.7', '--prefer-stable'),
+    pipeline_mysql_docker('8.0', 'mysql.docker', '5.7', '--prefer-stable'),
+    pipeline_mysql_docker('8.1', 'mysql.docker', '5.7', '--prefer-stable'),
+    pipeline_mysql_docker('8.2', 'mysql.docker', '5.7', '--prefer-stable --ignore-platform-reqs'),
+    pipeline_mysql_docker('7.3', 'mysql.docker', '8.0', '--prefer-stable'),
+    pipeline_mysql_docker('7.4', 'mysql.docker', '8.0', '--prefer-stable'),
+    pipeline_mysql_docker('8.0', 'mysql.docker', '8.0', '--prefer-stable'),
+    pipeline_mysql_docker('8.1', 'mysql.docker', '8.0', '--prefer-stable'),
+    pipeline_mysql_docker('8.2', 'mysql.docker', '8.0', '--prefer-stable --ignore-platform-reqs'),
+    pipeline_mysql_docker('7.2', 'mysqli.docker', '5.7', '--prefer-stable --prefer-lowest'),
+    pipeline_mysql_docker('7.3', 'mysqli.docker', '5.7', '--prefer-stable'),
+    pipeline_mysql_docker('7.4', 'mysqli.docker', '5.7', '--prefer-stable'),
+    pipeline_mysql_docker('8.0', 'mysqli.docker', '5.7', '--prefer-stable'),
+    pipeline_mysql_docker('8.1', 'mysqli.docker', '5.7', '--prefer-stable'),
+    pipeline_mysql_docker('8.2', 'mysqli.docker', '5.7', '--prefer-stable --ignore-platform-reqs'),
+    pipeline_mysql_docker('7.3', 'mysqli.docker', '8.0', '--prefer-stable'),
+    pipeline_mysql_docker('7.4', 'mysqli.docker', '8.0', '--prefer-stable'),
+    pipeline_mysql_docker('8.0', 'mysqli.docker', '8.0', '--prefer-stable'),
+    pipeline_mysql_docker('8.1', 'mysqli.docker', '8.0', '--prefer-stable'),
+    pipeline_mysql_docker('8.2', 'mysqli.docker', '8.0', '--prefer-stable --ignore-platform-reqs'),
+    pipeline_mariadb_docker('7.2', 'mariadb', '10.0', '--prefer-stable --prefer-lowest'),
+    pipeline_mariadb_docker('7.2', 'mariadb', '10.1', '--prefer-stable --prefer-lowest'),
+    pipeline_mariadb_docker('7.2', 'mariadb', '10.2', '--prefer-stable --prefer-lowest'),
+    pipeline_mariadb_docker('7.3', 'mariadb', '10.2', '--prefer-stable'),
+    pipeline_mariadb_docker('7.4', 'mariadb', '10.2', '--prefer-stable'),
+    pipeline_mariadb_docker('8.0', 'mariadb', '10.2', '--prefer-stable'),
+    pipeline_mariadb_docker('8.1', 'mariadb', '10.2', '--prefer-stable'),
+    pipeline_mariadb_docker('8.2', 'mariadb', '10.2', '--prefer-stable --ignore-platform-reqs'),
+    pipeline_postgres_docker('7.2', 'pgsql', '9.4', '--prefer-stable --prefer-lowest'),
+    pipeline_postgres_docker('7.2', 'pgsql', '9.5', '--prefer-stable --prefer-lowest'),
+    pipeline_postgres_docker('7.3', 'pgsql', '9.6', '--prefer-stable'),
+    pipeline_postgres_docker('7.3', 'pgsql', '10', '--prefer-stable'),
+    pipeline_postgres_docker('7.4', 'pgsql', '10', '--prefer-stable'),
+    pipeline_postgres_docker('8.0', 'pgsql', '10', '--prefer-stable'),
+    pipeline_postgres_docker('8.1', 'pgsql', '10', '--prefer-stable'),
+    pipeline_postgres_docker('8.2', 'pgsql', '10', '--prefer-stable --ignore-platform-reqs'),
+    pipeline_postgres_docker('7.3', 'pgsql', '11', '--prefer-stable'),
+    pipeline_postgres_docker('7.4', 'pgsql', '11', '--prefer-stable'),
+    pipeline_postgres_docker('8.0', 'pgsql', '11', '--prefer-stable'),
+    pipeline_postgres_docker('8.1', 'pgsql', '11', '--prefer-stable'),
+    pipeline_postgres_docker('8.2', 'pgsql', '11', '--prefer-stable --ignore-platform-reqs'),
+    pipeline_sqlsrv_docker('7.2', 'sqlsrv', '2017-latest', '--prefer-stable --prefer-lowest'),
+    pipeline_sqlsrv_docker('7.3', 'sqlsrv', '2017-latest', '--prefer-stable'),
+    pipeline_sqlsrv_docker('7.4', 'sqlsrv', '2017-latest', '--prefer-stable'),
+    pipeline_sqlsrv_docker('8.0', 'sqlsrv', '2017-latest', '--prefer-stable'),
+    pipeline_sqlsrv_docker('8.1', 'sqlsrv', '2017-latest', '--prefer-stable'),
+    pipeline_sqlsrv_docker('8.2', 'sqlsrv', '2017-latest', '--prefer-stable --ignore-platform-reqs'),
 ]
