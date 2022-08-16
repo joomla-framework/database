@@ -78,6 +78,7 @@ local pipeline_mysql_docker(phpversion, driver, dbversion, params) = {
                     host: 33306,
                 },
             ],
+            commands: ["bash <<< 'until echo \\q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'"],
         },
     ],
 };
@@ -89,7 +90,6 @@ local pipeline_mariadb_docker(phpversion, driver, dbversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        "docker exec -i mariadb bash <<< 'until echo \\q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'",
         phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
     ],
     services: [
@@ -109,6 +109,7 @@ local pipeline_mariadb_docker(phpversion, driver, dbversion, params) = {
                     host: 33306,
                 },
             ],
+            commands: ["bash <<< 'until echo \\q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'"],
         },
     ],
 };
@@ -120,9 +121,6 @@ local pipeline_postgres_docker(phpversion, driver, dbversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        "docker exec -i postgres bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
-        "psql -U postgres -c 'create database joomla_ut;'",
-        "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql",
         phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
     ],
     services: [
@@ -140,6 +138,11 @@ local pipeline_postgres_docker(phpversion, driver, dbversion, params) = {
                     host: 5432,
                 },
             ],
+            commands: [
+                "docker exec -i postgres bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+                "psql -U postgres -c 'create database joomla_ut;'",
+                "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql",
+            ]
         },
     ],
 };
@@ -151,7 +154,6 @@ local pipeline_sqlsrv_docker(phpversion, driver, dbversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        "docker exec -i mssql-server bash <<< 'retries=10; echo 'Waiting for SQL Server to start...'; until (echo quit | /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 &> /dev/null) do if [[ \"$retries\" -le 0 ]]; then echo 'SQL Server did not start'; exit 1; fi; retries=$((retries - 1)); sleep 2s; done; echo 'SQL Server started'",
         phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
     ],
     services: [
@@ -167,6 +169,9 @@ local pipeline_sqlsrv_docker(phpversion, driver, dbversion, params) = {
                     container: 1433,
                     host: 1433,
                 },
+            ],
+            commands: [
+                "bash <<< 'retries=10; echo 'Waiting for SQL Server to start...'; until (echo quit | /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 &> /dev/null) do if [[ \"$retries\" -le 0 ]]; then echo 'SQL Server did not start'; exit 1; fi; retries=$((retries - 1)); sleep 2s; done; echo 'SQL Server started'",
             ],
         },
     ],
