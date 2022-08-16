@@ -58,7 +58,6 @@ local pipeline_mysql_docker(phpversion, driver, dbversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        "docker exec -i mysql bash <<< 'until echo \\q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'",
         phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
     ],
     services: [
@@ -139,7 +138,7 @@ local pipeline_postgres_docker(phpversion, driver, dbversion, params) = {
                 },
             ],
             commands: [
-                "docker exec -i postgres bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+                "bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
                 "psql -U postgres -c 'create database joomla_ut;'",
                 "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql",
             ]
