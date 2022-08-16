@@ -31,8 +31,9 @@ local dbimage = {
     sqlsrv: 'microsoft/mssql-server-linux',
 };
 
-local dbinstall(dbtype, dbversion) = {
+local dbinstall(phpversion, dbtype, dbversion) = {
     name: 'Database Installation',
+    image: 'joomlaprojects/docker-images:php' + phpversion,
     commands: [
         if dbtype == 'sqlite' then "echo 'SQLite "+ dbversion + "'",
         if dbtype == 'pgsql' then "echo 'PostgreSQL "+ dbversion + "'",
@@ -78,7 +79,7 @@ local pipeline(name, phpversion, dbtype, dbversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        dbinstall(dbtype, dbversion),
+        dbinstall(phpversion, dbtype, dbversion),
         phpunit(phpversion, dbtype),
     ],
 };

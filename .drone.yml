@@ -137,6 +137,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php7.2",
          "name": "Database Installation"
       },
       {
@@ -206,6 +207,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php7.2",
          "name": "Database Installation"
       },
       {
@@ -275,6 +277,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php7.3",
          "name": "Database Installation"
       },
       {
@@ -344,6 +347,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php7.4",
          "name": "Database Installation"
       },
       {
@@ -413,6 +417,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php7.4",
          "name": "Database Installation"
       },
       {
@@ -482,6 +487,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php7.4",
          "name": "Database Installation"
       },
       {
@@ -551,6 +557,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php7.4",
          "name": "Database Installation"
       },
       {
@@ -620,6 +627,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php7.4",
          "name": "Database Installation"
       },
       {
@@ -689,6 +697,7 @@
             "sleep 2s",
             "done"
          ],
+         "image": "joomlaprojects/docker-images:php7.4",
          "name": "Database Installation"
       },
       {
@@ -758,6 +767,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php8.0",
          "name": "Database Installation"
       },
       {
@@ -827,6 +837,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php8.0",
          "name": "Database Installation"
       },
       {
@@ -896,6 +907,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php8.1",
          "name": "Database Installation"
       },
       {
@@ -965,6 +977,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php8.1",
          "name": "Database Installation"
       },
       {
@@ -1034,6 +1047,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php8.1",
          "name": "Database Installation"
       },
       {
@@ -1103,6 +1117,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php8.1",
          "name": "Database Installation"
       },
       {
@@ -1172,6 +1187,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php8.1",
          "name": "Database Installation"
       },
       {
@@ -1241,6 +1257,7 @@
             "sleep 2s",
             "done"
          ],
+         "image": "joomlaprojects/docker-images:php8.1",
          "name": "Database Installation"
       },
       {
@@ -1310,6 +1327,7 @@
             null,
             null
          ],
+         "image": "joomlaprojects/docker-images:php8.2",
          "name": "Database Installation"
       },
       {
@@ -1332,6 +1350,6 @@
 }
 ---
 kind: signature
-hmac: b2af16c371c7f14cd13d71b81b3b507577266405eef25ca80eef44502958a61d
+hmac: e72e2c49431bd2fcf45805f84f8193ecef7dc84579934dca293df7a17ba4fa1b
 
 ...
