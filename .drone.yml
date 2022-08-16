@@ -90,7 +90,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 7.2 lowest",
+   "name": "PHP 7.2 lowest mysqli 5.7",
    "steps": [
       {
          "commands": [
@@ -159,7 +159,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 7.2",
+   "name": "PHP 7.2 mysqli 5.7",
    "steps": [
       {
          "commands": [
@@ -228,7 +228,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 7.3",
+   "name": "PHP 7.3 mysqli 5.7",
    "steps": [
       {
          "commands": [
@@ -297,7 +297,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 7.4",
+   "name": "PHP 7.4 mariadb 10.0",
    "steps": [
       {
          "commands": [
@@ -366,7 +366,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 7.4",
+   "name": "PHP 7.4 mariadb 10.2",
    "steps": [
       {
          "commands": [
@@ -435,7 +435,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 7.4",
+   "name": "PHP 7.4 mysql 5.7",
    "steps": [
       {
          "commands": [
@@ -504,7 +504,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 7.4",
+   "name": "PHP 7.4 mysqli 5.7",
    "steps": [
       {
          "commands": [
@@ -573,7 +573,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 7.4",
+   "name": "PHP 7.4 sqlite 3",
    "steps": [
       {
          "commands": [
@@ -642,7 +642,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 7.4",
+   "name": "PHP 7.4 sqlsrv 5.8.0",
    "steps": [
       {
          "commands": [
@@ -711,7 +711,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 8.0",
+   "name": "PHP 8.0 mysqli 5.7",
    "steps": [
       {
          "commands": [
@@ -780,7 +780,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 8.0",
+   "name": "PHP 8.0 mysqli 8.0",
    "steps": [
       {
          "commands": [
@@ -849,7 +849,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 8.1",
+   "name": "PHP 8.1 mariadb 10.0",
    "steps": [
       {
          "commands": [
@@ -918,7 +918,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 8.1",
+   "name": "PHP 8.1 mariadb 10.2",
    "steps": [
       {
          "commands": [
@@ -987,7 +987,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 8.1",
+   "name": "PHP 8.1 mysql 5.7",
    "steps": [
       {
          "commands": [
@@ -1056,7 +1056,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 8.1",
+   "name": "PHP 8.1 mysqli 5.7",
    "steps": [
       {
          "commands": [
@@ -1125,7 +1125,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 8.1",
+   "name": "PHP 8.1 mysqli 8.0",
    "steps": [
       {
          "commands": [
@@ -1194,7 +1194,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 8.1",
+   "name": "PHP 8.1 sqlsrv 5.8.0",
    "steps": [
       {
          "commands": [
@@ -1263,7 +1263,7 @@
 ---
 {
    "kind": "pipeline",
-   "name": "PHP 8.2",
+   "name": "PHP 8.2 mysqli 5.7",
    "steps": [
       {
          "commands": [
@@ -1330,3 +1330,8 @@
       }
    ]
 }
+---
+kind: signature
+hmac: b2af16c371c7f14cd13d71b81b3b507577266405eef25ca80eef44502958a61d
+
+...

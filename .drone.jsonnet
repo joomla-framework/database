@@ -74,7 +74,7 @@ local phpunit(phpversion, dbtype) = {
 
 local pipeline(name, phpversion, dbtype, dbversion, params) = {
     kind: 'pipeline',
-    name: 'PHP ' + name,
+    name: 'PHP ' + name + ' ' + dbtype + ' ' + dbversion,
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
