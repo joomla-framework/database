@@ -22,7 +22,8 @@ local install_sqlsrv(phpversion) = {
         'echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main" >> /etc/apt/sources.list',
         'apt-get update',
         'ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev',
-        'pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv',
+        'pecl install sqlsrv && docker-php-ext-enable sqlsrv',
+        'pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv',
     ]
 };
 

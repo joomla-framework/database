@@ -119,7 +119,8 @@
             "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main\" >> /etc/apt/sources.list",
             "apt-get update",
             "ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev",
-            "pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv"
+            "pecl install sqlsrv && docker-php-ext-enable sqlsrv",
+            "pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "Install MS SQL Server"
@@ -158,6 +159,6 @@
 }
 ---
 kind: signature
-hmac: 25c36e298254777eb78fa0ec09021603eb46639c8b37ff4927cee23ea6135f5b
+hmac: de98481acfac2f3c163ebb5a1987265770327b6e57ff36ed79cabf00eefc4382
 
 ...
