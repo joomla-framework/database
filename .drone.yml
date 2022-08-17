@@ -62,6 +62,7 @@ name: PHP 7.4 with SQLite (sqlite)
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -98,13 +99,13 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
-- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
   image: joomlaprojects/docker-images:php7.4
@@ -135,13 +136,13 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
-- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
   image: joomlaprojects/docker-images:php7.4
@@ -172,13 +173,13 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
-- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
   image: joomlaprojects/docker-images:php7.4
@@ -209,13 +210,13 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
-- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
   image: joomlaprojects/docker-images:php7.4
@@ -246,13 +247,13 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
-- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml
   image: joomlaprojects/docker-images:php7.4
@@ -283,13 +284,13 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
-- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
   image: joomlaprojects/docker-images:php7.4
@@ -320,13 +321,13 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
-- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
   image: joomlaprojects/docker-images:php7.4
@@ -357,13 +358,13 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
-- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.sqlsrv.xml
   image: joomlaprojects/docker-images:php7.4
@@ -374,6 +375,6 @@ volumes:
   name: composer-cache
 ---
 kind: signature
-hmac: 75856ef788cc0eb16eeaa48bfd01bfb93e7118ebc0eb0a8523600723a943cf8c
+hmac: 500c7bbd824dae6193472b13dc866a3f5ebc2d57a4191773217a9c76fc38604f
 
 ...

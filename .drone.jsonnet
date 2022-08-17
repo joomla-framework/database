@@ -18,6 +18,7 @@ local composer(phpversion, params) = {
     volumes: volumes,
     commands: [
         'php -v',
+        'sleep 15',
         'composer update ' + params,
     ],
 };
@@ -58,7 +59,6 @@ local pipeline_mysql_docker(phpversion, driver, dbversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        'sleep 15',
         phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
     ],
     services: [
@@ -90,7 +90,6 @@ local pipeline_mariadb_docker(phpversion, driver, dbversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        'sleep 15',
         phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
     ],
     services: [
@@ -122,7 +121,6 @@ local pipeline_postgres_docker(phpversion, driver, dbversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        'sleep 15',
         phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
     ],
     services: [
@@ -156,7 +154,6 @@ local pipeline_sqlsrv_docker(phpversion, driver, dbversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        'sleep 15',
         phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
     ],
     services: [
