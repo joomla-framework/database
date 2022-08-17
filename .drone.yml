@@ -120,7 +120,8 @@
             "apt-get update",
             "ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev",
             "pecl install sqlsrv && docker-php-ext-enable sqlsrv",
-            "pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv"
+            "pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv",
+            "php -i | grep sql"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "Install MS SQL Server"
@@ -159,6 +160,6 @@
 }
 ---
 kind: signature
-hmac: de98481acfac2f3c163ebb5a1987265770327b6e57ff36ed79cabf00eefc4382
+hmac: 9a679ecc8b8c35ba3339d079402169be844f9b7eaea153f16b8527ef3c22f9ae
 
 ...
