@@ -16,11 +16,11 @@ local install_sqlsrv(phpversion) = {
     name: 'Install MS SQL Server',
     image: 'joomlaprojects/docker-images:php' + phpversion,
     commands: [
+        'echo "deb https://packages.sury.org/php/ bullseye main" >> /etc/apt/sources.list',
         'apt-get update',
-        'apt-get install -y software-properties-common gnupg lsb-release',
-        'lsb_release -a',
-        'add-apt-repository -y -s ppa:ondrej/php',
-        'apt-get update',
+        'apt-get install -y software-properties-common gnupg',
+        'cat /etc/apt/sources.list',
+        #'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4f4ea0aae5267a6c',
         'apt-get install -y php-dev gcc musl-dev make',
         'pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv',
     ]
