@@ -538,21 +538,6 @@
    "steps": [
       {
          "commands": [
-            "php -v",
-            "sleep 20",
-            "composer update --prefer-stable"
-         ],
-         "image": "joomlaprojects/docker-images:php7.4",
-         "name": "Composer",
-         "volumes": [
-            {
-               "name": "composer-cache",
-               "path": "/tmp/composer-cache"
-            }
-         ]
-      },
-      {
-         "commands": [
             "export DEBIAN_FRONTEND=noninteractive",
             "apt-get -qq update",
             "apt-get -qq install -y software-properties-common lsb-release gnupg",
@@ -567,6 +552,21 @@
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHP binding for MS SQL Server"
+      },
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "Composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
       },
       {
          "commands": [
@@ -588,6 +588,6 @@
 }
 ---
 kind: signature
-hmac: 70c9872e85ed4e9d8cd8e4423edf1e8123c1f45ffc24a6247cb4c8ad01794851
+hmac: 3c4dd3fcf6a50718fb9b6bf84ca481e657c4bce33efc03c3b4d74356683a2c77
 
 ...

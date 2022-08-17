@@ -12,24 +12,6 @@ local hostvolumes = [
     },
 ];
 
-local install_mysql(phpversion) = {
-    name: 'PHP binding for MySQL',
-    image: 'joomlaprojects/docker-images:php' + phpversion,
-    commands: [
-        'php --ri mysqli',
-        'php --ri pdo_mysql',
-    ]
-};
-
-local install_pgsql(phpversion) = {
-    name: 'PHP binding for PostgreSQL',
-    image: 'joomlaprojects/docker-images:php' + phpversion,
-    commands: [
-        'php --ri pgsql',
-        'php --ri pdo_pgsql',
-    ]
-};
-
 local install_sqlsrv(phpversion) = {
     name: 'PHP binding for MS SQL Server',
     image: 'joomlaprojects/docker-images:php' + phpversion,
@@ -59,13 +41,13 @@ local composer(phpversion, params) = {
     ],
 };
 
-local phpunit(phpversion, driver, phpunit_config) = {
+local phpunit(phpversion, driver) = {
     name: 'PHPUnit',
     image: 'joomlaprojects/docker-images:php' + phpversion,
     [if phpversion == '8.2' then 'failure']: 'ignore',
     commands: [
         'php --ri ' + driver + ' || true',
-        'vendor/bin/phpunit --configuration ' + phpunit_config
+        'vendor/bin/phpunit --configuration ./.travis/phpunit.' + driver + '.xml'
     ],
 };
 
@@ -76,7 +58,7 @@ local pipeline_sqlite(phpversion, driver, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        phpunit(phpversion, driver, './.travis/phpunit.' + driver + '.xml'),
+        phpunit(phpversion, driver),
     ],
 };
 
@@ -87,7 +69,7 @@ local pipeline_mysql(phpversion, driver, dbversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        phpunit(phpversion, driver, './.travis/phpunit.' + driver + '.xml'),
+        phpunit(phpversion, driver),
     ],
     services: [
         {
@@ -109,7 +91,7 @@ local pipeline_mariadb(phpversion, driver, dbversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        phpunit(phpversion, driver, './.travis/phpunit.' + driver + '.xml'),
+        phpunit(phpversion, driver),
     ],
     services: [
         {
@@ -131,7 +113,7 @@ local pipeline_postgres(phpversion, driver, dbversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        phpunit(phpversion, driver, './.travis/phpunit.' + driver + '.xml'),
+        phpunit(phpversion, driver),
     ],
     services: [
         {
@@ -162,9 +144,9 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
     environment: { DB: driver },
     volumes: hostvolumes,
     steps: [
-        composer(phpversion, params),
         install_sqlsrv(phpversion),
-        phpunit(phpversion, driver, './.travis/phpunit.' + driver + '.xml'),
+        composer(phpversion, params),
+        phpunit(phpversion, driver),
     ],
     services: [
         {
