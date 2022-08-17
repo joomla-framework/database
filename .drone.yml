@@ -86,9 +86,7 @@ services:
 - environment:
     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     MYSQL_DATABASE: joomla_ut
-    MYSQL_PASSWORD: ""
     MYSQL_ROOT_PASSWORD: ""
-    MYSQL_USER: root
   image: mysql:5.7
   name: mysql
 steps:
@@ -118,9 +116,7 @@ services:
 - environment:
     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     MYSQL_DATABASE: joomla_ut
-    MYSQL_PASSWORD: ""
     MYSQL_ROOT_PASSWORD: ""
-    MYSQL_USER: root
   image: mysql:8.0
   name: mysql
 steps:
@@ -150,9 +146,7 @@ services:
 - environment:
     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     MYSQL_DATABASE: joomla_ut
-    MYSQL_PASSWORD: ""
     MYSQL_ROOT_PASSWORD: ""
-    MYSQL_USER: root
   image: mysql:5.7
   name: mysql
 steps:
@@ -182,9 +176,7 @@ services:
 - environment:
     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     MYSQL_DATABASE: joomla_ut
-    MYSQL_PASSWORD: ""
     MYSQL_ROOT_PASSWORD: ""
-    MYSQL_USER: root
   image: mysql:8.0
   name: mysql
 steps:
@@ -214,9 +206,7 @@ services:
 - environment:
     MARIADB_ALLOW_EMPTY_PASSWORD: "yes"
     MARIADB_DATABASE: joomla_ut
-    MARIADB_PASSWORD: ""
     MARIADB_ROOT_PASSWORD: ""
-    MARIADB_USER: root
   image: mariadb:10.2
   name: mariadb
 steps:
@@ -350,6 +340,6 @@ volumes:
   name: composer-cache
 ---
 kind: signature
-hmac: a6a38e7c16de41990d9285fd56a3d8af6b74259e92bcc4706ccc23c35c3b986e
+hmac: e45c39c37e936d2cacbe31050bf9f2379593590b63dd9f31b7fbc0ae26c5f9e4
 
 ...
