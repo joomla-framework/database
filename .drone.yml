@@ -115,7 +115,7 @@
          "commands": [
             "apt-get update",
             "apt-get install -y software-properties-common gnupg",
-            "add-apt-repository -y -s packages.sury.org/php",
+            "add-apt-repository -y -s ppa:packages.sury.org/php",
             "apt-get update",
             "apt-get install -y php7.4-dev gcc musl-dev make",
             "pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv"
@@ -157,6 +157,6 @@
 }
 ---
 kind: signature
-hmac: 91f82397dc6f55f78f4121bc652d22317f354b1a3a08bcfe2e6c53cfa88df7f7
+hmac: bafd4245bee194cdff89e0d246e0438509b2dd21faa18d8ae1ba21d05b998bf1
 
 ...
