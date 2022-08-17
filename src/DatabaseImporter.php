@@ -160,6 +160,17 @@ abstract class DatabaseImporter
 	}
 
 	/**
+	 * Get the SQL syntax for a single column that would be included in a table create or alter statement.
+	 *
+	 * @param   \SimpleXMLElement  $field  The XML field definition.
+	 *
+	 * @return  string
+	 *
+	 * @since   2.0
+	 */
+	abstract protected function getColumnSql(\SimpleXMLElement $field);
+
+	/**
 	 * Get the SQL syntax to drop a column.
 	 *
 	 * @param   string  $table  The table name.
