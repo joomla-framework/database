@@ -204,7 +204,7 @@ kind: pipeline
 name: PHP 7.4 with MariaDB 10.2 (mariadb)
 services:
 - environment:
-    MARIADB_ALLOW_EMPTY_PASSWORD: "yes"
+    MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
     MARIADB_DATABASE: joomla_ut
     MARIADB_ROOT_PASSWORD: ""
   image: mariadb:10.2
@@ -340,6 +340,6 @@ volumes:
   name: composer-cache
 ---
 kind: signature
-hmac: e45c39c37e936d2cacbe31050bf9f2379593590b63dd9f31b7fbc0ae26c5f9e4
+hmac: 951aa35af84be98a2b5de6a686d0a17e9454557a4d51b729164209f814c43641
 
 ...
