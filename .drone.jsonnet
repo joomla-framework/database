@@ -16,9 +16,9 @@ local install_sqlsrv(phpversion) = {
     name: 'Install MS SQL Server',
     image: 'joomlaprojects/docker-images:php' + phpversion,
     commands: [
-        'lsb_release -a',
         'apt-get update',
-        'apt-get install -y software-properties-common gnupg',
+        'apt-get install -y software-properties-common gnupg lsb-release',
+        'lsb_release -a',
         'add-apt-repository -y -s ppa:ondrej/php',
         'apt-get update',
         'apt-get install -y php-dev gcc musl-dev make',

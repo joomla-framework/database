@@ -113,9 +113,9 @@
    "steps": [
       {
          "commands": [
-            "lsb_release -a",
             "apt-get update",
-            "apt-get install -y software-properties-common gnupg",
+            "apt-get install -y software-properties-common gnupg lsb-release",
+            "lsb_release -a",
             "add-apt-repository -y -s ppa:ondrej/php",
             "apt-get update",
             "apt-get install -y php-dev gcc musl-dev make",
@@ -158,6 +158,6 @@
 }
 ---
 kind: signature
-hmac: a9be2e9a2b9cebc05d440847d9cdafb1c37145d3995acb89e1999defae81b8cb
+hmac: 602a2f6ecf399770c988df26c54059bcdda12dc04f99b2f30c2483df46e6fa89
 
 ...
