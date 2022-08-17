@@ -113,11 +113,12 @@
    "steps": [
       {
          "commands": [
-            "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4f4ea0aae5267a6c",
-            "echo \"deb https://packages.sury.org/php/ bullseye main\" >> /etc/apt/sources.list",
             "apt-get update",
             "apt-get install -y software-properties-common gnupg",
+            "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4f4ea0aae5267a6c",
+            "echo \"deb https://packages.sury.org/php/ bullseye main\" >> /etc/apt/sources.list",
             "cat /etc/apt/sources.list",
+            "apt-get update",
             "apt-get install -y php-dev gcc musl-dev make",
             "pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv"
          ],
@@ -158,6 +159,6 @@
 }
 ---
 kind: signature
-hmac: 74e7f7cc3d3eb9083aa90ee4f00d7829a70ced8b9afaf8510f15caf190a32a2c
+hmac: 22262a9ae17e90470b9174317ed4d237e9776f1c76f6d5f3e4b15f4291b3c4fa
 
 ...
