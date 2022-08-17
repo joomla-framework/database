@@ -19,7 +19,7 @@ local install_sqlsrv(phpversion) = {
         'apt-get update',
         'apt-get install -y software-properties-common',
         'add-apt-repository -y -s ppa:ondrej/php',
-        'sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4f4ea0aae5267a6c',
+        'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4f4ea0aae5267a6c',
         'apt-get update',
         'apt-get install -y php' + phpversion + '-dev gcc musl-dev make',
         'pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv',
