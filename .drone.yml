@@ -116,12 +116,7 @@
    "steps": [
       {
          "command": [
-            "echo $OSTYPE",
-            "apk update",
-            "apk install -y php7-pear php7-dev gcc musl-dev make",
-            "pecl install sqlsrv",
-            "pecl install pdo_sqlsrv",
-            "phpenmod sqlsrv pdo_sqlsrv"
+            "pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "Install MS SQL Server"
@@ -160,6 +155,6 @@
 }
 ---
 kind: signature
-hmac: f4b858ba945d68cc3c9228b81fa31e6bf4789716aa0928633177e0de721d26b9
+hmac: 15e0ec605d579c8d7a1f79c765b70ef6f77511a87519ae40fbf60df7deaea7b2
 
 ...

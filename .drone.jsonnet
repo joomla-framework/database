@@ -16,12 +16,7 @@ local install_sqlsrv(phpversion) = {
     name: 'Install MS SQL Server',
     image: 'joomlaprojects/docker-images:php' + phpversion,
     command: [
-        'echo $OSTYPE',
-        'apk update',
-        'apk install -y php7-pear php7-dev gcc musl-dev make',
-        'pecl install sqlsrv',
-        'pecl install pdo_sqlsrv',
-        'phpenmod sqlsrv pdo_sqlsrv',
+        'pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv',
     ]
 };
 
