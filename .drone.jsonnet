@@ -17,7 +17,7 @@ local install_sqlsrv(phpversion) = {
     image: 'joomlaprojects/docker-images:php' + phpversion,
     commands: [
         'apt-get update',
-        'apt-get install -y software-properties-common lsb_release gnupg',
+        'apt-get install -y software-properties-common lsb-release gnupg',
         'curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -',
         'echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main" >> /etc/apt/sources.list',
         'apt-get update',

@@ -114,7 +114,7 @@
       {
          "commands": [
             "apt-get update",
-            "apt-get install -y software-properties-common lsb_release gnupg",
+            "apt-get install -y software-properties-common lsb-release gnupg",
             "curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -",
             "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main\" >> /etc/apt/sources.list",
             "apt-get update",
@@ -158,6 +158,6 @@
 }
 ---
 kind: signature
-hmac: 3d707cc1fe6e50a2e79a9b858d51800bd10a5b70eadaa1bc1cee540a10026e46
+hmac: 25c36e298254777eb78fa0ec09021603eb46639c8b37ff4927cee23ea6135f5b
 
 ...
