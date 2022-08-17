@@ -80,7 +80,7 @@ volumes:
 environment:
   DB: mysql.docker
 kind: pipeline
-name: PHP 7.4 with MySQL 5.7 (Docker) (mysql.docker)
+name: PHP 7.4 with MySQL 5.7 (mysql.docker)
 services:
 - commands:
   - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
@@ -116,7 +116,7 @@ volumes:
 environment:
   DB: mysql.docker
 kind: pipeline
-name: PHP 7.4 with MySQL 8.0 (Docker) (mysql.docker)
+name: PHP 7.4 with MySQL 8.0 (mysql.docker)
 services:
 - commands:
   - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
@@ -152,7 +152,7 @@ volumes:
 environment:
   DB: mysqli.docker
 kind: pipeline
-name: PHP 7.4 with MySQL 5.7 (Docker) (mysqli.docker)
+name: PHP 7.4 with MySQL 5.7 (mysqli.docker)
 services:
 - commands:
   - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
@@ -188,7 +188,7 @@ volumes:
 environment:
   DB: mysqli.docker
 kind: pipeline
-name: PHP 7.4 with MySQL 8.0 (Docker) (mysqli.docker)
+name: PHP 7.4 with MySQL 8.0 (mysqli.docker)
 services:
 - commands:
   - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
@@ -366,6 +366,6 @@ volumes:
   name: composer-cache
 ---
 kind: signature
-hmac: 8a7e80a4c284644cc73d47bc198d94886600aa60d746bf54000b41901dab052a
+hmac: f8ea961698f70e9aab9ac83744ff6dd67eba04d1765749a5b0373d378175247e
 
 ...
