@@ -31,7 +31,7 @@ local phpunit(phpversion, phpunit_config) = {
 
 local pipeline_sqlite(phpversion, driver, params) = {
     kind: 'pipeline',
-    name: 'PHP ' + phpversion + ' with SQLite (' + driver + ' driver)',
+    name: 'PHP ' + phpversion + ' with SQLite (' + driver + ')',
     environment: { DB: driver },
     volumes: hostvolumes,
     steps: [
@@ -42,7 +42,7 @@ local pipeline_sqlite(phpversion, driver, params) = {
 
 local pipeline_mysql(phpversion, driver, dbversion, params) = {
     kind: 'pipeline',
-    name: 'PHP ' + phpversion + ' with MySQL ' + dbversion + ' (' + driver + ' driver)',
+    name: 'PHP ' + phpversion + ' with MySQL ' + dbversion + ' (' + driver + ')',
     environment: { DB: driver },
     volumes: hostvolumes,
     steps: [
@@ -53,7 +53,7 @@ local pipeline_mysql(phpversion, driver, dbversion, params) = {
 
 local pipeline_mysql_docker(phpversion, driver, dbversion, params) = {
     kind: 'pipeline',
-    name: 'PHP ' + phpversion + ' with MySQL ' + dbversion + ' (Docker) (' + driver + ' driver)',
+    name: 'PHP ' + phpversion + ' with MySQL ' + dbversion + ' (Docker) (' + driver + ')',
     environment: { DB: driver },
     volumes: hostvolumes,
     steps: [
@@ -84,7 +84,7 @@ local pipeline_mysql_docker(phpversion, driver, dbversion, params) = {
 
 local pipeline_mariadb_docker(phpversion, driver, dbversion, params) = {
     kind: 'pipeline',
-    name: 'PHP ' + phpversion + ' with MariaDB ' + dbversion + ' (' + driver + ' driver)',
+    name: 'PHP ' + phpversion + ' with MariaDB ' + dbversion + ' (' + driver + ')',
     environment: { DB: driver },
     volumes: hostvolumes,
     steps: [
@@ -115,7 +115,7 @@ local pipeline_mariadb_docker(phpversion, driver, dbversion, params) = {
 
 local pipeline_postgres_docker(phpversion, driver, dbversion, params) = {
     kind: 'pipeline',
-    name: 'PHP ' + phpversion + ' with PostgreSQL ' + dbversion + ' (' + driver + ' driver)',
+    name: 'PHP ' + phpversion + ' with PostgreSQL ' + dbversion + ' (' + driver + ')',
     environment: { DB: driver },
     volumes: hostvolumes,
     steps: [
@@ -148,7 +148,7 @@ local pipeline_postgres_docker(phpversion, driver, dbversion, params) = {
 
 local pipeline_sqlsrv_docker(phpversion, driver, dbversion, params) = {
     kind: 'pipeline',
-    name: 'PHP ' + phpversion + ' with MS SQL Server ' + dbversion + ' (' + driver + ' driver)',
+    name: 'PHP ' + phpversion + ' with MS SQL Server ' + dbversion + ' (' + driver + ')',
     environment: { DB: driver },
     volumes: hostvolumes,
     steps: [

@@ -58,7 +58,7 @@ volumes:
 environment:
   DB: sqlite
 kind: pipeline
-name: PHP 7.4 with SQLite (sqlite driver)
+name: PHP 7.4 with SQLite (sqlite)
 steps:
 - commands:
   - php -v
@@ -80,7 +80,7 @@ volumes:
 environment:
   DB: mysql.docker
 kind: pipeline
-name: PHP 7.4 with MySQL 5.7 (Docker) (mysql.docker driver)
+name: PHP 7.4 with MySQL 5.7 (Docker) (mysql.docker)
 services:
 - commands:
   - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
@@ -116,7 +116,7 @@ volumes:
 environment:
   DB: mysql.docker
 kind: pipeline
-name: PHP 7.4 with MySQL 8.0 (Docker) (mysql.docker driver)
+name: PHP 7.4 with MySQL 8.0 (Docker) (mysql.docker)
 services:
 - commands:
   - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
@@ -152,7 +152,7 @@ volumes:
 environment:
   DB: mysqli.docker
 kind: pipeline
-name: PHP 7.4 with MySQL 5.7 (Docker) (mysqli.docker driver)
+name: PHP 7.4 with MySQL 5.7 (Docker) (mysqli.docker)
 services:
 - commands:
   - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
@@ -188,7 +188,7 @@ volumes:
 environment:
   DB: mysqli.docker
 kind: pipeline
-name: PHP 7.4 with MySQL 8.0 (Docker) (mysqli.docker driver)
+name: PHP 7.4 with MySQL 8.0 (Docker) (mysqli.docker)
 services:
 - commands:
   - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
@@ -224,7 +224,7 @@ volumes:
 environment:
   DB: mariadb
 kind: pipeline
-name: PHP 7.4 with MariaDB 10.2 (mariadb driver)
+name: PHP 7.4 with MariaDB 10.2 (mariadb)
 services:
 - commands:
   - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
@@ -260,7 +260,7 @@ volumes:
 environment:
   DB: pgsql
 kind: pipeline
-name: PHP 7.4 with PostgreSQL 10 (pgsql driver)
+name: PHP 7.4 with PostgreSQL 10 (pgsql)
 services:
 - commands:
   - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
@@ -296,7 +296,7 @@ volumes:
 environment:
   DB: pgsql
 kind: pipeline
-name: PHP 7.4 with PostgreSQL 11 (pgsql driver)
+name: PHP 7.4 with PostgreSQL 11 (pgsql)
 services:
 - commands:
   - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
@@ -332,7 +332,7 @@ volumes:
 environment:
   DB: sqlsrv
 kind: pipeline
-name: PHP 7.4 with MS SQL Server 2017-latest (sqlsrv driver)
+name: PHP 7.4 with MS SQL Server 2017-latest (sqlsrv)
 services:
 - commands:
   - bash <<< 'retries=10; echo 'Waiting for SQL Server to start...'; until (echo quit
@@ -364,3 +364,8 @@ volumes:
 - host:
     path: /tmp/composer-cache
   name: composer-cache
+---
+kind: signature
+hmac: b9a10991b58b97ce71a6ab52d760bd7660f22f7c075d6aa1984ce22425046cb0
+
+...
