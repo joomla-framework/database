@@ -115,7 +115,7 @@
    ],
    "steps": [
       {
-         "command": [
+         "commands": [
             "pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -155,6 +155,6 @@
 }
 ---
 kind: signature
-hmac: 15e0ec605d579c8d7a1f79c765b70ef6f77511a87519ae40fbf60df7deaea7b2
+hmac: f4c778f889f7df56d44a90f40797a94c000072db60184d5ca38da18f6f876cfc
 
 ...

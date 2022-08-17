@@ -15,7 +15,7 @@ local hostvolumes = [
 local install_sqlsrv(phpversion) = {
     name: 'Install MS SQL Server',
     image: 'joomlaprojects/docker-images:php' + phpversion,
-    command: [
+    commands: [
         'pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv',
     ]
 };
