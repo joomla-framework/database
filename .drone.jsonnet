@@ -125,7 +125,7 @@ local pipeline_postgres_docker(phpversion, driver, dbversion, params) = {
     services: [
         {
             name: 'postgresql',
-            image: 'postgresql:' + dbversion,
+            image: 'postgres:' + dbversion,
             environment: {
                 POSTGRES_HOST_AUTH_METHOD: 'trust',
                 POSTGRES_PASSWORD: '',

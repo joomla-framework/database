@@ -270,7 +270,7 @@ services:
     POSTGRES_HOST_AUTH_METHOD: trust
     POSTGRES_PASSWORD: ""
     POSTGRES_USER: postgres
-  image: postgresql:10
+  image: postgres:10
   name: postgresql
   ports:
   - container: 5432
@@ -306,7 +306,7 @@ services:
     POSTGRES_HOST_AUTH_METHOD: trust
     POSTGRES_PASSWORD: ""
     POSTGRES_USER: postgres
-  image: postgresql:11
+  image: postgres:11
   name: postgresql
   ports:
   - container: 5432
@@ -366,6 +366,6 @@ volumes:
   name: composer-cache
 ---
 kind: signature
-hmac: b9a10991b58b97ce71a6ab52d760bd7660f22f7c075d6aa1984ce22425046cb0
+hmac: 8a7e80a4c284644cc73d47bc198d94886600aa60d746bf54000b41901dab052a
 
 ...
