@@ -53,7 +53,7 @@ local pipeline_mysql(phpversion, driver, dbversion, params) = {
 
 local pipeline_mysql_docker(phpversion, driver, dbversion, params) = {
     kind: 'pipeline',
-    name: 'PHP ' + phpversion + ' with MySQL ' + dbversion + ' (' + driver + ' driver)',
+    name: 'PHP ' + phpversion + ' with MySQL ' + dbversion + ' (Docker) (' + driver + ' driver)',
     environment: { DB: driver },
     volumes: hostvolumes,
     steps: [
