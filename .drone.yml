@@ -118,9 +118,9 @@
          "commands": [
             "apt-get update",
             "apt-get install -y software-properties-common",
-            "add-apt-repository ppa:ondrej/php -y",
+            "add-apt-repository -y -s ppa:ondrej/php",
             "apt-get update",
-            "apt-get install -y php-dev gcc musl-dev make",
+            "apt-get install -y php7.4-dev gcc musl-dev make",
             "pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -160,6 +160,6 @@
 }
 ---
 kind: signature
-hmac: 47df31579d164b0b81a1706baa1e3c89a458e6ce88fae402b9d52b2e6cb71389
+hmac: 41ce87288a1ca8c2a1071fa706e7cdcf7424c7472223ebbb5b761063028e8046
 
 ...
