@@ -62,7 +62,6 @@ name: PHP 7.4 with SQLite (sqlite)
 steps:
 - commands:
   - php -v
-  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -93,13 +92,9 @@ services:
     MYSQL_USER: root
   image: mysql:5.7
   name: mysql
-  ports:
-  - container: 3306
-    host: 33306
 steps:
 - commands:
   - php -v
-  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -130,13 +125,9 @@ services:
     MYSQL_USER: root
   image: mysql:8.0
   name: mysql
-  ports:
-  - container: 3306
-    host: 33306
 steps:
 - commands:
   - php -v
-  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -167,13 +158,9 @@ services:
     MYSQL_USER: root
   image: mysql:5.7
   name: mysql
-  ports:
-  - container: 3306
-    host: 33306
 steps:
 - commands:
   - php -v
-  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -204,13 +191,9 @@ services:
     MYSQL_USER: root
   image: mysql:8.0
   name: mysql
-  ports:
-  - container: 3306
-    host: 33306
 steps:
 - commands:
   - php -v
-  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -241,13 +224,9 @@ services:
     MARIADB_USER: root
   image: mariadb:10.2
   name: mariadb
-  ports:
-  - container: 3306
-    host: 33306
 steps:
 - commands:
   - php -v
-  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -284,7 +263,6 @@ services:
 steps:
 - commands:
   - php -v
-  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -321,7 +299,6 @@ services:
 steps:
 - commands:
   - php -v
-  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -358,7 +335,6 @@ services:
 steps:
 - commands:
   - php -v
-  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -375,6 +351,6 @@ volumes:
   name: composer-cache
 ---
 kind: signature
-hmac: d6874d04bdad1fa1e69dcbfb30573aac33e4d964af266a0656d4ad81d5b3662a
+hmac: 853ae66eaeca3f7a3285e457ea153aa95c828714e7602bd1ee52ce9f646f6985
 
 ...
