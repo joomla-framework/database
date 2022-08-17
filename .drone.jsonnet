@@ -22,7 +22,7 @@ local install_sqlsrv(phpversion) = {
         'echo "deb https://packages.sury.org/php/ bullseye main" >> /etc/apt/sources.list',
         'cat /etc/apt/sources.list',
         'apt-get update',
-        'apt-get install -y php-dev gcc musl-dev make',
+        'apt-get install -y php' + phpversion + '-dev gcc musl-dev make',
         'pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv',
     ]
 };
