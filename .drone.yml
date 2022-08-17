@@ -131,10 +131,10 @@
 ---
 {
    "environment": {
-      "DB": "mysql.docker"
+      "DB": "mysql"
    },
    "kind": "pipeline",
-   "name": "PHP 7.4 with MySQL 5.7 (mysql.docker)",
+   "name": "PHP 7.4 with MySQL 5.7 (mysql)",
    "services": [
       {
          "environment": {
@@ -164,8 +164,8 @@
       },
       {
          "commands": [
-            "php --ri mysql.docker || true",
-            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml"
+            "php --ri mysql || true",
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.xml"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -183,10 +183,10 @@
 ---
 {
    "environment": {
-      "DB": "mysql.docker"
+      "DB": "mysql"
    },
    "kind": "pipeline",
-   "name": "PHP 7.4 with MySQL 8.0 (mysql.docker)",
+   "name": "PHP 7.4 with MySQL 8.0 (mysql)",
    "services": [
       {
          "environment": {
@@ -216,8 +216,8 @@
       },
       {
          "commands": [
-            "php --ri mysql.docker || true",
-            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml"
+            "php --ri mysql || true",
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.xml"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -235,10 +235,10 @@
 ---
 {
    "environment": {
-      "DB": "mysqli.docker"
+      "DB": "mysqli"
    },
    "kind": "pipeline",
-   "name": "PHP 7.4 with MySQL 5.7 (mysqli.docker)",
+   "name": "PHP 7.4 with MySQL 5.7 (mysqli)",
    "services": [
       {
          "environment": {
@@ -268,8 +268,8 @@
       },
       {
          "commands": [
-            "php --ri mysqli.docker || true",
-            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml"
+            "php --ri mysqli || true",
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -287,10 +287,10 @@
 ---
 {
    "environment": {
-      "DB": "mysqli.docker"
+      "DB": "mysqli"
    },
    "kind": "pipeline",
-   "name": "PHP 7.4 with MySQL 8.0 (mysqli.docker)",
+   "name": "PHP 7.4 with MySQL 8.0 (mysqli)",
    "services": [
       {
          "environment": {
@@ -320,8 +320,8 @@
       },
       {
          "commands": [
-            "php --ri mysqli.docker || true",
-            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml"
+            "php --ri mysqli || true",
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -588,6 +588,6 @@
 }
 ---
 kind: signature
-hmac: 3c4dd3fcf6a50718fb9b6bf84ca481e657c4bce33efc03c3b4d74356683a2c77
+hmac: 68a76bb88561ee72559002cff343b2ea604fe8c1cdd64ee3c3445dcf776115ba
 
 ...

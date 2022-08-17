@@ -14,7 +14,7 @@
 	</php>
 	<testsuites>
 		<testsuite name="Unit">
-			<directory>../Tests</directory>
+			<directory>../Tests/Pgsql</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>
