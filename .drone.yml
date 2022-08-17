@@ -94,6 +94,11 @@
    },
    "kind": "pipeline",
    "name": "PHP 7.4 with SQLite (sqlite)",
+   "services": [
+      {
+         "name": "sqlite"
+      }
+   ],
    "steps": [
       {
          "commands": [
@@ -114,6 +119,10 @@
          "commands": [
             "php --ri sqlite || true",
             "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml --testdox"
+         ],
+         "depends": [
+            "Composer",
+            "sqlite"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -167,6 +176,10 @@
             "php --ri mysql || true",
             "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.xml --testdox"
          ],
+         "depends": [
+            "Composer",
+            "mysql"
+         ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
       }
@@ -219,6 +232,10 @@
             "php --ri mysql || true",
             "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.xml --testdox"
          ],
+         "depends": [
+            "Composer",
+            "mysql"
+         ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
       }
@@ -247,7 +264,7 @@
             "MYSQL_ROOT_PASSWORD": ""
          },
          "image": "mysql:5.7",
-         "name": "mysql"
+         "name": "mysqli"
       }
    ],
    "steps": [
@@ -270,6 +287,10 @@
          "commands": [
             "php --ri mysqli || true",
             "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml --testdox"
+         ],
+         "depends": [
+            "Composer",
+            "mysqli"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -299,7 +320,7 @@
             "MYSQL_ROOT_PASSWORD": ""
          },
          "image": "mysql:8.0",
-         "name": "mysql"
+         "name": "mysqli"
       }
    ],
    "steps": [
@@ -322,6 +343,10 @@
          "commands": [
             "php --ri mysqli || true",
             "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml --testdox"
+         ],
+         "depends": [
+            "Composer",
+            "mysqli"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -375,6 +400,10 @@
             "php --ri mariadb || true",
             "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml --testdox"
          ],
+         "depends": [
+            "Composer",
+            "mariadb"
+         ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
       }
@@ -398,7 +427,7 @@
    "services": [
       {
          "commands": [
-            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -c ",
             "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
          ],
          "environment": {
@@ -407,7 +436,7 @@
             "POSTGRES_USER": "postgres"
          },
          "image": "postgres:10",
-         "name": "postgresql",
+         "name": "pgsql",
          "ports": [
             {
                "container": 5432,
@@ -436,6 +465,10 @@
          "commands": [
             "php --ri pgsql || true",
             "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml --testdox"
+         ],
+         "depends": [
+            "Composer",
+            "pgsql"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -460,7 +493,7 @@
    "services": [
       {
          "commands": [
-            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -c ",
             "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
          ],
          "environment": {
@@ -469,7 +502,7 @@
             "POSTGRES_USER": "postgres"
          },
          "image": "postgres:11",
-         "name": "postgresql",
+         "name": "pgsql",
          "ports": [
             {
                "container": 5432,
@@ -498,6 +531,10 @@
          "commands": [
             "php --ri pgsql || true",
             "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml --testdox"
+         ],
+         "depends": [
+            "Composer",
+            "pgsql"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -526,7 +563,7 @@
             "SA_PASSWORD": "JoomlaFramework123"
          },
          "image": "mcr.microsoft.com/mssql/server:2017-latest",
-         "name": "mssql-server",
+         "name": "sqlsrv",
          "ports": [
             {
                "container": 1433,
@@ -573,6 +610,10 @@
             "php --ri sqlsrv || true",
             "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlsrv.xml --testdox"
          ],
+         "depends": [
+            "Composer",
+            "sqlsrv"
+         ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
       }
@@ -588,6 +629,6 @@
 }
 ---
 kind: signature
-hmac: 0f3f7bad5f0c1639968e257e0d0e3101628b032983bcb2189221b24405a9ba4b
+hmac: d3285eba9ea1c23e6c832c923cda749e2af713ac2a27a76e4950b49c6bef4640
 
 ...

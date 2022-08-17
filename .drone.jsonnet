@@ -27,7 +27,7 @@ local install_sqlsrv(phpversion) = {
         'pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv',
         'php --ri sqlsrv',
         'php --ri pdo_sqlsrv',
-    ]
+    ],
 };
 
 local composer(phpversion, params) = {
@@ -44,10 +44,11 @@ local composer(phpversion, params) = {
 local phpunit(phpversion, driver) = {
     name: 'PHPUnit',
     image: 'joomlaprojects/docker-images:php' + phpversion,
+    depends: [ 'Composer', driver ],
     [if phpversion == '8.2' then 'failure']: 'ignore',
     commands: [
         'php --ri ' + driver + ' || true',
-        'vendor/bin/phpunit --configuration ./.travis/phpunit.' + driver + '.xml --testdox'
+        'vendor/bin/phpunit --configuration ./.travis/phpunit.' + driver + '.xml --testdox',
     ],
 };
 
@@ -59,6 +60,11 @@ local pipeline_sqlite(phpversion, driver, params) = {
     steps: [
         composer(phpversion, params),
         phpunit(phpversion, driver),
+    ],
+    services: [
+        {
+            name: driver,
+        },
     ],
 };
 
@@ -73,7 +79,7 @@ local pipeline_mysql(phpversion, driver, dbversion, params) = {
     ],
     services: [
         {
-            name: 'mysql',
+            name: driver,
             image: 'mysql:' + dbversion,
             environment: {
                 MYSQL_ALLOW_EMPTY_PASSWORD: 'yes',
@@ -95,7 +101,7 @@ local pipeline_mariadb(phpversion, driver, dbversion, params) = {
     ],
     services: [
         {
-            name: 'mariadb',
+            name: driver,
             image: 'mariadb:' + dbversion,
             environment: {
                 MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes',
@@ -117,7 +123,7 @@ local pipeline_postgres(phpversion, driver, dbversion, params) = {
     ],
     services: [
         {
-            name: 'postgresql',
+            name: driver,
             image: 'postgres:' + dbversion,
             environment: {
                 POSTGRES_HOST_AUTH_METHOD: 'trust',
@@ -131,9 +137,9 @@ local pipeline_postgres(phpversion, driver, dbversion, params) = {
                 },
             ],
             commands: [
-                "psql -U postgres -c 'create database joomla_ut;'",
-                "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql",
-            ]
+                'psql -U postgres -c ',
+                'psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql',
+            ],
         },
     ],
 };
@@ -150,7 +156,7 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
     ],
     services: [
         {
-            name: 'mssql-server',
+            name: driver,
             image: 'mcr.microsoft.com/mssql/server:' + dbversion,
             environment: {
                 ACCEPT_EULA: 'Y',
@@ -233,57 +239,57 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
             },
         ],
     },
-#    pipeline_sqlite('7.2', 'sqlite', '--prefer-stable --prefer-lowest'),
-#    pipeline_sqlite('7.3', 'sqlite', '--prefer-stable'),
+    #    pipeline_sqlite('7.2', 'sqlite', '--prefer-stable --prefer-lowest'),
+    #    pipeline_sqlite('7.3', 'sqlite', '--prefer-stable'),
     pipeline_sqlite('7.4', 'sqlite', '--prefer-stable'),
-#    pipeline_sqlite('8.0', 'sqlite', '--prefer-stable'),
-#    pipeline_sqlite('8.1', 'sqlite', '--prefer-stable'),
-#    pipeline_sqlite('8.2', 'sqlite', '--prefer-stable --ignore-platform-reqs'),
-#    pipeline_mysql('7.2', 'mysql', '5.7', '--prefer-stable --prefer-lowest'),
-#    pipeline_mysql('7.3', 'mysql', '5.7', '--prefer-stable'),
+    #    pipeline_sqlite('8.0', 'sqlite', '--prefer-stable'),
+    #    pipeline_sqlite('8.1', 'sqlite', '--prefer-stable'),
+    #    pipeline_sqlite('8.2', 'sqlite', '--prefer-stable --ignore-platform-reqs'),
+    #    pipeline_mysql('7.2', 'mysql', '5.7', '--prefer-stable --prefer-lowest'),
+    #    pipeline_mysql('7.3', 'mysql', '5.7', '--prefer-stable'),
     pipeline_mysql('7.4', 'mysql', '5.7', '--prefer-stable'),
-#    pipeline_mysql('8.0', 'mysql', '5.7', '--prefer-stable'),
-#    pipeline_mysql('8.1', 'mysql', '5.7', '--prefer-stable'),
-#    pipeline_mysql('8.2', 'mysql', '5.7', '--prefer-stable --ignore-platform-reqs'),
-#    pipeline_mysql('7.3', 'mysql', '8.0', '--prefer-stable'),
+    #    pipeline_mysql('8.0', 'mysql', '5.7', '--prefer-stable'),
+    #    pipeline_mysql('8.1', 'mysql', '5.7', '--prefer-stable'),
+    #    pipeline_mysql('8.2', 'mysql', '5.7', '--prefer-stable --ignore-platform-reqs'),
+    #    pipeline_mysql('7.3', 'mysql', '8.0', '--prefer-stable'),
     pipeline_mysql('7.4', 'mysql', '8.0', '--prefer-stable'),
-#    pipeline_mysql('8.0', 'mysql', '8.0', '--prefer-stable'),
-#    pipeline_mysql('8.1', 'mysql', '8.0', '--prefer-stable'),
-#    pipeline_mysql('8.2', 'mysql', '8.0', '--prefer-stable --ignore-platform-reqs'),
-#    pipeline_mysql('7.2', 'mysqli', '5.7', '--prefer-stable --prefer-lowest'),
-#    pipeline_mysql('7.3', 'mysqli', '5.7', '--prefer-stable'),
+    #    pipeline_mysql('8.0', 'mysql', '8.0', '--prefer-stable'),
+    #    pipeline_mysql('8.1', 'mysql', '8.0', '--prefer-stable'),
+    #    pipeline_mysql('8.2', 'mysql', '8.0', '--prefer-stable --ignore-platform-reqs'),
+    #    pipeline_mysql('7.2', 'mysqli', '5.7', '--prefer-stable --prefer-lowest'),
+    #    pipeline_mysql('7.3', 'mysqli', '5.7', '--prefer-stable'),
     pipeline_mysql('7.4', 'mysqli', '5.7', '--prefer-stable'),
-#    pipeline_mysql('8.0', 'mysqli', '5.7', '--prefer-stable'),
-#    pipeline_mysql('8.1', 'mysqli', '5.7', '--prefer-stable'),
-#    pipeline_mysql('8.2', 'mysqli', '5.7', '--prefer-stable --ignore-platform-reqs'),
-#    pipeline_mysql('7.3', 'mysqli', '8.0', '--prefer-stable'),
+    #    pipeline_mysql('8.0', 'mysqli', '5.7', '--prefer-stable'),
+    #    pipeline_mysql('8.1', 'mysqli', '5.7', '--prefer-stable'),
+    #    pipeline_mysql('8.2', 'mysqli', '5.7', '--prefer-stable --ignore-platform-reqs'),
+    #    pipeline_mysql('7.3', 'mysqli', '8.0', '--prefer-stable'),
     pipeline_mysql('7.4', 'mysqli', '8.0', '--prefer-stable'),
-#    pipeline_mysql('8.0', 'mysqli', '8.0', '--prefer-stable'),
-#    pipeline_mysql('8.1', 'mysqli', '8.0', '--prefer-stable'),
-#    pipeline_mysql('8.2', 'mysqli', '8.0', '--prefer-stable --ignore-platform-reqs'),
-#    pipeline_mariadb('7.2', 'mariadb', '10.0', '--prefer-stable --prefer-lowest'),
-#    pipeline_mariadb('7.2', 'mariadb', '10.1', '--prefer-stable --prefer-lowest'),
-#    pipeline_mariadb('7.2', 'mariadb', '10.2', '--prefer-stable --prefer-lowest'),
-#    pipeline_mariadb('7.3', 'mariadb', '10.2', '--prefer-stable'),
+    #    pipeline_mysql('8.0', 'mysqli', '8.0', '--prefer-stable'),
+    #    pipeline_mysql('8.1', 'mysqli', '8.0', '--prefer-stable'),
+    #    pipeline_mysql('8.2', 'mysqli', '8.0', '--prefer-stable --ignore-platform-reqs'),
+    #    pipeline_mariadb('7.2', 'mariadb', '10.0', '--prefer-stable --prefer-lowest'),
+    #    pipeline_mariadb('7.2', 'mariadb', '10.1', '--prefer-stable --prefer-lowest'),
+    #    pipeline_mariadb('7.2', 'mariadb', '10.2', '--prefer-stable --prefer-lowest'),
+    #    pipeline_mariadb('7.3', 'mariadb', '10.2', '--prefer-stable'),
     pipeline_mariadb('7.4', 'mariadb', '10.2', '--prefer-stable'),
-#    pipeline_mariadb('8.0', 'mariadb', '10.2', '--prefer-stable'),
-#    pipeline_mariadb('8.1', 'mariadb', '10.2', '--prefer-stable'),
-#    pipeline_mariadb('8.2', 'mariadb', '10.2', '--prefer-stable --ignore-platform-reqs'),
-#    pipeline_postgres('7.2', 'pgsql', '9.4', '--prefer-stable --prefer-lowest'),
-#    pipeline_postgres('7.2', 'pgsql', '9.5', '--prefer-stable --prefer-lowest'),
-#    pipeline_postgres('7.3', 'pgsql', '9.6', '--prefer-stable'),
-#    pipeline_postgres('7.3', 'pgsql', '10', '--prefer-stable'),
+    #    pipeline_mariadb('8.0', 'mariadb', '10.2', '--prefer-stable'),
+    #    pipeline_mariadb('8.1', 'mariadb', '10.2', '--prefer-stable'),
+    #    pipeline_mariadb('8.2', 'mariadb', '10.2', '--prefer-stable --ignore-platform-reqs'),
+    #    pipeline_postgres('7.2', 'pgsql', '9.4', '--prefer-stable --prefer-lowest'),
+    #    pipeline_postgres('7.2', 'pgsql', '9.5', '--prefer-stable --prefer-lowest'),
+    #    pipeline_postgres('7.3', 'pgsql', '9.6', '--prefer-stable'),
+    #    pipeline_postgres('7.3', 'pgsql', '10', '--prefer-stable'),
     pipeline_postgres('7.4', 'pgsql', '10', '--prefer-stable'),
-#    pipeline_postgres('8.0', 'pgsql', '10', '--prefer-stable'),
-#    pipeline_postgres('8.1', 'pgsql', '10', '--prefer-stable'),
-#    pipeline_postgres('8.2', 'pgsql', '10', '--prefer-stable --ignore-platform-reqs'),
-#    pipeline_postgres('7.3', 'pgsql', '11', '--prefer-stable'),
+    #    pipeline_postgres('8.0', 'pgsql', '10', '--prefer-stable'),
+    #    pipeline_postgres('8.1', 'pgsql', '10', '--prefer-stable'),
+    #    pipeline_postgres('8.2', 'pgsql', '10', '--prefer-stable --ignore-platform-reqs'),
+    #    pipeline_postgres('7.3', 'pgsql', '11', '--prefer-stable'),
     pipeline_postgres('7.4', 'pgsql', '11', '--prefer-stable'),
-#    pipeline_postgres('8.0', 'pgsql', '11', '--prefer-stable'),
-#    pipeline_postgres('8.1', 'pgsql', '11', '--prefer-stable'),
-#    pipeline_postgres('8.2', 'pgsql', '11', '--prefer-stable --ignore-platform-reqs'),
-#    pipeline_sqlsrv('7.2', 'sqlsrv', '2017-latest', '--prefer-stable --prefer-lowest'),
-#    pipeline_sqlsrv('7.3', 'sqlsrv', '2017-latest', '--prefer-stable'),
+    #    pipeline_postgres('8.0', 'pgsql', '11', '--prefer-stable'),
+    #    pipeline_postgres('8.1', 'pgsql', '11', '--prefer-stable'),
+    #    pipeline_postgres('8.2', 'pgsql', '11', '--prefer-stable --ignore-platform-reqs'),
+    #    pipeline_sqlsrv('7.2', 'sqlsrv', '2017-latest', '--prefer-stable --prefer-lowest'),
+    #    pipeline_sqlsrv('7.3', 'sqlsrv', '2017-latest', '--prefer-stable'),
     pipeline_sqlsrv('7.4', 'sqlsrv', '2017-latest', '--prefer-stable'),
 #    pipeline_sqlsrv('8.0', 'sqlsrv', '2017-latest', '--prefer-stable'),
 #    pipeline_sqlsrv('8.1', 'sqlsrv', '2017-latest', '--prefer-stable'),

@@ -29,7 +29,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
 
 		if (!static::$connection || static::$connection->getName() !== 'pgsql')
 		{
-			#self::markTestSkipped('PostgreSQL database not configured.');
+			self::markTestSkipped('PostgreSQL database not configured.');
 		}
 	}
 
