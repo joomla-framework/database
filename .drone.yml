@@ -104,6 +104,7 @@ steps:
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
+- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
   image: joomlaprojects/docker-images:php7.4
@@ -140,6 +141,7 @@ steps:
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
+- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
   image: joomlaprojects/docker-images:php7.4
@@ -176,6 +178,7 @@ steps:
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
+- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
   image: joomlaprojects/docker-images:php7.4
@@ -212,6 +215,7 @@ steps:
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
+- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
   image: joomlaprojects/docker-images:php7.4
@@ -248,6 +252,7 @@ steps:
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
+- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml
   image: joomlaprojects/docker-images:php7.4
@@ -284,6 +289,7 @@ steps:
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
+- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
   image: joomlaprojects/docker-images:php7.4
@@ -320,6 +326,7 @@ steps:
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
+- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
   image: joomlaprojects/docker-images:php7.4
@@ -356,6 +363,7 @@ steps:
   volumes:
   - name: composer-cache
     path: /tmp/composer-cache
+- sleep 15
 - commands:
   - vendor/bin/phpunit --configuration ./.travis/phpunit.sqlsrv.xml
   image: joomlaprojects/docker-images:php7.4
@@ -366,6 +374,6 @@ volumes:
   name: composer-cache
 ---
 kind: signature
-hmac: f8ea961698f70e9aab9ac83744ff6dd67eba04d1765749a5b0373d378175247e
+hmac: 75856ef788cc0eb16eeaa48bfd01bfb93e7118ebc0eb0a8523600723a943cf8c
 
 ...
