@@ -114,12 +114,7 @@
       {
          "commands": [
             "apt-get update",
-            "apt-get install -y software-properties-common gnupg",
-            "apt-key adv --fetch-keys \"https://packages.sury.org/php/apt.gpg\" > /dev/null 2>&1",
-            "echo \"deb https://packages.sury.org/php/ bullseye main\" >> /etc/apt/sources.list",
-            "cat /etc/apt/sources.list",
-            "apt-get update",
-            "apt-get install -y php7.4-dev gcc musl-dev make",
+            "apt-get install -y software-properties-common gnupg gcc musl-dev make",
             "pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -159,6 +154,6 @@
 }
 ---
 kind: signature
-hmac: bbe121cb7334dceb6d2ab27742cac1440c2e0de906a1f52c309033f562dd72c5
+hmac: 5a598d68194875be124a80e7a6033e3930ca9b4d58deca72b1f3a0f81e98703b
 
 ...
