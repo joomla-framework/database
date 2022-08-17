@@ -113,6 +113,7 @@
    "steps": [
       {
          "commands": [
+            "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4f4ea0aae5267a6c",
             "echo \"deb https://packages.sury.org/php/ bullseye main\" >> /etc/apt/sources.list",
             "apt-get update",
             "apt-get install -y software-properties-common gnupg",
@@ -157,6 +158,6 @@
 }
 ---
 kind: signature
-hmac: 24bd18f192bd8cb34f069ff0267662f01c4eea8d160676cdee93b1cf855fbd89
+hmac: 74e7f7cc3d3eb9083aa90ee4f00d7829a70ced8b9afaf8510f15caf190a32a2c
 
 ...
