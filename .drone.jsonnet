@@ -17,7 +17,7 @@ local install_sqlsrv(phpversion) = {
     image: 'joomlaprojects/docker-images:php' + phpversion,
     commands: [
         'apt-get update',
-        'apt-get install -y software-properties-common',
+        'apt-get install -y software-properties-common gnupg',
         'add-apt-repository -y -s ppa:ondrej/php',
         'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4f4ea0aae5267a6c',
         'apt-get update',

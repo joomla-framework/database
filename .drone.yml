@@ -117,7 +117,7 @@
       {
          "commands": [
             "apt-get update",
-            "apt-get install -y software-properties-common",
+            "apt-get install -y software-properties-common gnupg",
             "add-apt-repository -y -s ppa:ondrej/php",
             "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4f4ea0aae5267a6c",
             "apt-get update",
@@ -161,6 +161,6 @@
 }
 ---
 kind: signature
-hmac: d0982485b44fc9d0d3cf0c479530872f60a1e2fd595b529730134bdee5da67fe
+hmac: d61fba4f84b974198063358cc96565c6c1266d3bf955116cfd18bbe4c9a29f30
 
 ...
