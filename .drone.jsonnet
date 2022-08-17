@@ -43,8 +43,6 @@ local install_sqlsrv(phpversion) = {
         'ACCEPT_EULA=Y apt-get -qq install -y msodbcsql18 unixodbc-dev',
         'pecl install sqlsrv && docker-php-ext-enable sqlsrv',
         'pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv',
-        'cat /usr/local/etc/php/conf.d/docker-php-ext-sqlsrv.ini',
-        'cat /usr/local/etc/php/conf.d/docker-php-ext-pdo_sqlsrv.ini',
         'php --ri sqlsrv',
         'php --ri pdo_sqlsrv',
     ]
@@ -164,8 +162,8 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
     environment: { DB: driver },
     volumes: hostvolumes,
     steps: [
-        install_sqlsrv(phpversion),
         composer(phpversion, params),
+        install_sqlsrv(phpversion),
         phpunit(phpversion, driver, './.travis/phpunit.' + driver + '.xml'),
     ],
     services: [

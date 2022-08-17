@@ -538,25 +538,6 @@
    "steps": [
       {
          "commands": [
-            "export DEBIAN_FRONTEND=noninteractive",
-            "apt-get -qq update",
-            "apt-get -qq install -y software-properties-common lsb-release gnupg",
-            "curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -",
-            "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main\" >> /etc/apt/sources.list",
-            "apt-get -qq update",
-            "ACCEPT_EULA=Y apt-get -qq install -y msodbcsql18 unixodbc-dev",
-            "pecl install sqlsrv && docker-php-ext-enable sqlsrv",
-            "pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv",
-            "cat /usr/local/etc/php/conf.d/docker-php-ext-sqlsrv.ini",
-            "cat /usr/local/etc/php/conf.d/docker-php-ext-pdo_sqlsrv.ini",
-            "php --ri sqlsrv",
-            "php --ri pdo_sqlsrv"
-         ],
-         "image": "joomlaprojects/docker-images:php7.4",
-         "name": "PHP binding for MS SQL Server"
-      },
-      {
-         "commands": [
             "php -v",
             "sleep 20",
             "composer update --prefer-stable"
@@ -569,6 +550,23 @@
                "path": "/tmp/composer-cache"
             }
          ]
+      },
+      {
+         "commands": [
+            "export DEBIAN_FRONTEND=noninteractive",
+            "apt-get -qq update",
+            "apt-get -qq install -y software-properties-common lsb-release gnupg",
+            "curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -",
+            "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main\" >> /etc/apt/sources.list",
+            "apt-get -qq update",
+            "ACCEPT_EULA=Y apt-get -qq install -y msodbcsql18 unixodbc-dev",
+            "pecl install sqlsrv && docker-php-ext-enable sqlsrv",
+            "pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv",
+            "php --ri sqlsrv",
+            "php --ri pdo_sqlsrv"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHP binding for MS SQL Server"
       },
       {
          "commands": [
@@ -590,6 +588,6 @@
 }
 ---
 kind: signature
-hmac: 5b367c89188bdae29ff0fe2d472e10a70e5bf2d0f2dd5be6f637b5efd078ec06
+hmac: 70c9872e85ed4e9d8cd8e4423edf1e8123c1f45ffc24a6247cb4c8ad01794851
 
 ...
