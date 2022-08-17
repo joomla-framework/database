@@ -96,9 +96,6 @@
    "name": "PHP 7.4 with MS SQL Server 2017-latest (sqlsrv)",
    "services": [
       {
-         "commands": [
-            "bash <<< 'retries=10; echo 'Waiting for SQL Server to start...'; until (echo quit | /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 &> /dev/null) do if [[ \"$retries\" -le 0 ]]; then echo 'SQL Server did not start'; exit 1; fi; retries=$((retries - 1)); sleep 2s; done; echo 'SQL Server started'"
-         ],
          "environment": {
             "ACCEPT_EULA": "Y",
             "SA_PASSWORD": "JoomlaFramework123"
@@ -118,8 +115,7 @@
          "commands": [
             "apt-get update",
             "apt-get install -y software-properties-common gnupg",
-            "add-apt-repository -y -s ppa:ondrej/php",
-            "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4f4ea0aae5267a6c",
+            "add-apt-repository -y -s packages.sury.org/php",
             "apt-get update",
             "apt-get install -y php7.4-dev gcc musl-dev make",
             "pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv"
@@ -161,6 +157,6 @@
 }
 ---
 kind: signature
-hmac: d61fba4f84b974198063358cc96565c6c1266d3bf955116cfd18bbe4c9a29f30
+hmac: 91f82397dc6f55f78f4121bc652d22317f354b1a3a08bcfe2e6c53cfa88df7f7
 
 ...
