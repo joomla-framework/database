@@ -114,7 +114,11 @@
       {
          "commands": [
             "apt-get update",
-            "apt-get install -y software-properties-common gnupg gcc musl-dev make",
+            "apt-get install -y software-properties-common lsb_release gnupg",
+            "curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -",
+            "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main\" >> /etc/apt/sources.list",
+            "apt-get update",
+            "ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev",
             "pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -154,6 +158,6 @@
 }
 ---
 kind: signature
-hmac: 5a598d68194875be124a80e7a6033e3930ca9b4d58deca72b1f3a0f81e98703b
+hmac: 3d707cc1fe6e50a2e79a9b858d51800bd10a5b70eadaa1bc1cee540a10026e46
 
 ...

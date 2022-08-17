@@ -17,7 +17,11 @@ local install_sqlsrv(phpversion) = {
     image: 'joomlaprojects/docker-images:php' + phpversion,
     commands: [
         'apt-get update',
-        'apt-get install -y software-properties-common gnupg gcc musl-dev make',
+        'apt-get install -y software-properties-common lsb_release gnupg',
+        'curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -',
+        'echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main" >> /etc/apt/sources.list',
+        'apt-get update',
+        'ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev',
         'pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv',
     ]
 };
