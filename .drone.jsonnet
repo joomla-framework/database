@@ -16,13 +16,12 @@ local install_sqlsrv(phpversion) = {
     name: 'PHP binding for MS SQL Server',
     image: 'joomlaprojects/docker-images:php' + phpversion,
     commands: [
-        'export DEBIAN_FRONTEND=noninteractive',
-        'apt-get -qq update',
-        'apt-get -qq install -y software-properties-common lsb-release gnupg',
+        'apt-get update',
+        'apt-get install -y software-properties-common lsb-release gnupg',
         'curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -',
         'echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main" >> /etc/apt/sources.list',
-        'apt-get -qq update',
-        'ACCEPT_EULA=Y apt-get -qq install -y msodbcsql18 unixodbc-dev',
+        'apt-get update',
+        'ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev',
         'pecl install sqlsrv && docker-php-ext-enable sqlsrv',
         'pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv',
         'php --ri sqlsrv',
@@ -36,7 +35,6 @@ local composer(phpversion, params) = {
     volumes: volumes,
     commands: [
         'php -v',
-        'sleep 20',
         'composer update ' + params,
     ],
 };
@@ -44,7 +42,10 @@ local composer(phpversion, params) = {
 local phpunit(phpversion, driver) = {
     name: 'PHPUnit',
     image: 'joomlaprojects/docker-images:php' + phpversion,
-    depends: [ 'Composer', driver ],
+    depends: [
+        'Composer',
+        if driver != 'sqlite' then driver,
+    ],
     [if phpversion == '8.2' then 'failure']: 'ignore',
     commands: [
         'php --ri ' + driver + ' || true',
@@ -60,11 +61,6 @@ local pipeline_sqlite(phpversion, driver, params) = {
     steps: [
         composer(phpversion, params),
         phpunit(phpversion, driver),
-    ],
-    services: [
-        {
-            name: driver,
-        },
     ],
 };
 
