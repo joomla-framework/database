@@ -113,7 +113,7 @@
    "steps": [
       {
          "commands": [
-            "echo \"$OS ($OSTYPE)\"",
+            "lsb_release -a",
             "apt-get update",
             "apt-get install -y software-properties-common gnupg",
             "add-apt-repository -y -s ppa:ondrej/php",
@@ -158,6 +158,6 @@
 }
 ---
 kind: signature
-hmac: 7cefeda0c46a16af792c32163f229eeaf913da0f3911aa7aa6c7f3df860e30a1
+hmac: a9be2e9a2b9cebc05d440847d9cdafb1c37145d3995acb89e1999defae81b8cb
 
 ...
