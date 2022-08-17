@@ -18,6 +18,7 @@ local composer(phpversion, params) = {
     volumes: volumes,
     commands: [
         'php -v',
+        'sleep 15',
         'composer update ' + params,
     ],
 };
@@ -71,7 +72,6 @@ local pipeline_mysql_docker(phpversion, driver, dbversion, params) = {
                 MYSQL_USER: 'root',
                 MYSQL_PASSWORD: '',
             },
-            commands: ["bash <<< 'until echo \\q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'"],
         },
     ],
 };
@@ -96,7 +96,6 @@ local pipeline_mariadb_docker(phpversion, driver, dbversion, params) = {
                 MARIADB_USER: 'root',
                 MARIADB_PASSWORD: '',
             },
-            commands: ["bash <<< 'until echo \\q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'"],
         },
     ],
 };
