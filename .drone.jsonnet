@@ -16,8 +16,9 @@ local install_sqlsrv(phpversion) = {
     name: 'Install MS SQL Server',
     image: 'joomlaprojects/docker-images:php' + phpversion,
     command: [
-        'apt-get update',
-        'apt-get install -y php7-pear php7-dev gcc musl-dev make',
+        'echo $OSTYPE',
+        'apk update',
+        'apk install -y php7-pear php7-dev gcc musl-dev make',
         'pecl install sqlsrv',
         'pecl install pdo_sqlsrv',
         'phpenmod sqlsrv pdo_sqlsrv',
@@ -136,8 +137,8 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
     environment: { DB: driver },
     volumes: hostvolumes,
     steps: [
-        composer(phpversion, params),
         install_sqlsrv(phpversion),
+        composer(phpversion, params),
         phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
     ],
     services: [

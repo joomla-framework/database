@@ -115,6 +115,18 @@
    ],
    "steps": [
       {
+         "command": [
+            "echo $OSTYPE",
+            "apk update",
+            "apk install -y php7-pear php7-dev gcc musl-dev make",
+            "pecl install sqlsrv",
+            "pecl install pdo_sqlsrv",
+            "phpenmod sqlsrv pdo_sqlsrv"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "Install MS SQL Server"
+      },
+      {
          "commands": [
             "php -v",
             "sleep 20",
@@ -128,17 +140,6 @@
                "path": "/tmp/composer-cache"
             }
          ]
-      },
-      {
-         "command": [
-            "apt-get update",
-            "apt-get install -y php7-pear php7-dev gcc musl-dev make",
-            "pecl install sqlsrv",
-            "pecl install pdo_sqlsrv",
-            "phpenmod sqlsrv pdo_sqlsrv"
-         ],
-         "image": "joomlaprojects/docker-images:php7.4",
-         "name": "Install MS SQL Server"
       },
       {
          "commands": [
@@ -159,6 +160,6 @@
 }
 ---
 kind: signature
-hmac: bc4243ae25317bbe33317490ef46580cac2b47e458c68954f73bd93fdd5a1977
+hmac: f4b858ba945d68cc3c9228b81fa31e6bf4789716aa0928633177e0de721d26b9
 
 ...
