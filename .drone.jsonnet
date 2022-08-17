@@ -12,6 +12,16 @@ local hostvolumes = [
     },
 ];
 
+local install_sqlsrv(phpversion) = {
+    name: 'Install MS SQL Server',
+    image: 'joomlaprojects/docker-images:php' + phpversion,
+    command: [
+        'pecl install sqlsrv',
+        'pecl install pdo_sqlsrv',
+        'phpenmod sqlsrv pdo_sqlsrv',
+    ]
+};
+
 local composer(phpversion, params) = {
     name: 'composer',
     image: 'joomlaprojects/docker-images:php' + phpversion,
@@ -125,6 +135,7 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
+        install_sqlsrv(phpversion),
         phpunit(phpversion, './.travis/phpunit.' + driver + '.xml'),
     ],
     services: [
@@ -266,7 +277,7 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
     pipeline_postgres('8.2', 'pgsql', '11', '--prefer-stable --ignore-platform-reqs'),
 #    pipeline_sqlsrv('7.2', 'sqlsrv', '2017-latest', '--prefer-stable --prefer-lowest'),
 #    pipeline_sqlsrv('7.3', 'sqlsrv', '2017-latest', '--prefer-stable'),
-#    pipeline_sqlsrv('7.4', 'sqlsrv', '2017-latest', '--prefer-stable'),
+    pipeline_sqlsrv('7.4', 'sqlsrv', '2017-latest', '--prefer-stable'),
 #    pipeline_sqlsrv('8.0', 'sqlsrv', '2017-latest', '--prefer-stable'),
 #    pipeline_sqlsrv('8.1', 'sqlsrv', '2017-latest', '--prefer-stable'),
 #    pipeline_sqlsrv('8.2', 'sqlsrv', '2017-latest', '--prefer-stable --ignore-platform-reqs'),

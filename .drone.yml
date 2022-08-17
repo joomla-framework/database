@@ -1,1588 +1,2746 @@
 ---
-kind: pipeline
-name: Codequality
-steps:
-- commands:
-  - php -v
-  - composer update
-  - composer require phpmd/phpmd phpstan/phpstan
-  image: joomlaprojects/docker-images:php7.4
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards
-  - vendor/bin/phpcs --standard=ruleset.xml src/
-  depends:
-  - composer
-  image: joomlaprojects/docker-images:php7.4
-  name: phpcs
-- commands:
-  - vendor/bin/phpmd src text cleancode
-  - vendor/bin/phpmd src text codesize
-  - vendor/bin/phpmd src text controversial
-  - vendor/bin/phpmd src text design
-  - vendor/bin/phpmd src text unusedcode
-  depends:
-  - composer
-  failure: ignore
-  image: joomlaprojects/docker-images:php7.4
-  name: phpmd
-- commands:
-  - vendor/bin/phpstan analyse src
-  depends:
-  - composer
-  failure: ignore
-  image: joomlaprojects/docker-images:php7.4
-  name: phpstan
-- commands:
-  - phploc src
-  depends:
-  - composer
-  failure: ignore
-  image: joomlaprojects/docker-images:php7.4
-  name: phploc
-- commands:
-  - phpcpd src
-  depends:
-  - composer
-  failure: ignore
-  image: joomlaprojects/docker-images:php7.4
-  name: phpcpd
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "kind": "pipeline",
+   "name": "Codequality",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "composer update",
+            "composer require phpmd/phpmd phpstan/phpstan"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards",
+            "vendor/bin/phpcs --standard=ruleset.xml src/"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phpcs"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpmd src text cleancode",
+            "vendor/bin/phpmd src text codesize",
+            "vendor/bin/phpmd src text controversial",
+            "vendor/bin/phpmd src text design",
+            "vendor/bin/phpmd src text unusedcode"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phpmd"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpstan analyse src"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phpstan"
+      },
+      {
+         "commands": [
+            "phploc src"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phploc"
+      },
+      {
+         "commands": [
+            "phpcpd src"
+         ],
+         "depends": [
+            "composer"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "phpcpd"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: sqlite
-kind: pipeline
-name: PHP 7.2 with SQLite (sqlite)
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --prefer-lowest
-  image: joomlaprojects/docker-images:php7.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml
-  image: joomlaprojects/docker-images:php7.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "sqlite"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.2 with SQLite (sqlite)",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --prefer-lowest"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: sqlite
-kind: pipeline
-name: PHP 7.3 with SQLite (sqlite)
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.3
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml
-  image: joomlaprojects/docker-images:php7.3
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "sqlite"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.3 with SQLite (sqlite)",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: sqlite
-kind: pipeline
-name: PHP 7.4 with SQLite (sqlite)
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.4
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml
-  image: joomlaprojects/docker-images:php7.4
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "sqlite"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.4 with SQLite (sqlite)",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: sqlite
-kind: pipeline
-name: PHP 8.0 with SQLite (sqlite)
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.0
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml
-  image: joomlaprojects/docker-images:php8.0
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "sqlite"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.0 with SQLite (sqlite)",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: sqlite
-kind: pipeline
-name: PHP 8.1 with SQLite (sqlite)
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.1
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml
-  image: joomlaprojects/docker-images:php8.1
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "sqlite"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.1 with SQLite (sqlite)",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: sqlite
-kind: pipeline
-name: PHP 8.2 with SQLite (sqlite)
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --ignore-platform-reqs
-  image: joomlaprojects/docker-images:php8.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml
-  failure: ignore
-  image: joomlaprojects/docker-images:php8.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "sqlite"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.2 with SQLite (sqlite)",
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --ignore-platform-reqs"
+         ],
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysql.docker
-kind: pipeline
-name: PHP 7.2 with MySQL 5.7 (mysql.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:5.7
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --prefer-lowest
-  image: joomlaprojects/docker-images:php7.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
-  image: joomlaprojects/docker-images:php7.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysql.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.2 with MySQL 5.7 (mysql.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:5.7",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --prefer-lowest"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysql.docker
-kind: pipeline
-name: PHP 7.3 with MySQL 5.7 (mysql.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:5.7
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.3
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
-  image: joomlaprojects/docker-images:php7.3
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysql.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.3 with MySQL 5.7 (mysql.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:5.7",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysql.docker
-kind: pipeline
-name: PHP 7.4 with MySQL 5.7 (mysql.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:5.7
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.4
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
-  image: joomlaprojects/docker-images:php7.4
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysql.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.4 with MySQL 5.7 (mysql.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:5.7",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysql.docker
-kind: pipeline
-name: PHP 8.0 with MySQL 5.7 (mysql.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:5.7
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.0
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
-  image: joomlaprojects/docker-images:php8.0
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysql.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.0 with MySQL 5.7 (mysql.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:5.7",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysql.docker
-kind: pipeline
-name: PHP 8.1 with MySQL 5.7 (mysql.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:5.7
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.1
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
-  image: joomlaprojects/docker-images:php8.1
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysql.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.1 with MySQL 5.7 (mysql.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:5.7",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysql.docker
-kind: pipeline
-name: PHP 8.2 with MySQL 5.7 (mysql.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:5.7
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --ignore-platform-reqs
-  image: joomlaprojects/docker-images:php8.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
-  failure: ignore
-  image: joomlaprojects/docker-images:php8.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysql.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.2 with MySQL 5.7 (mysql.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:5.7",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --ignore-platform-reqs"
+         ],
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysql.docker
-kind: pipeline
-name: PHP 7.3 with MySQL 8.0 (mysql.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:8.0
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.3
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
-  image: joomlaprojects/docker-images:php7.3
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysql.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.3 with MySQL 8.0 (mysql.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:8.0",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysql.docker
-kind: pipeline
-name: PHP 7.4 with MySQL 8.0 (mysql.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:8.0
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.4
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
-  image: joomlaprojects/docker-images:php7.4
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysql.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.4 with MySQL 8.0 (mysql.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:8.0",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysql.docker
-kind: pipeline
-name: PHP 8.0 with MySQL 8.0 (mysql.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:8.0
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.0
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
-  image: joomlaprojects/docker-images:php8.0
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysql.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.0 with MySQL 8.0 (mysql.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:8.0",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysql.docker
-kind: pipeline
-name: PHP 8.1 with MySQL 8.0 (mysql.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:8.0
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.1
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
-  image: joomlaprojects/docker-images:php8.1
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysql.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.1 with MySQL 8.0 (mysql.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:8.0",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysql.docker
-kind: pipeline
-name: PHP 8.2 with MySQL 8.0 (mysql.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:8.0
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --ignore-platform-reqs
-  image: joomlaprojects/docker-images:php8.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml
-  failure: ignore
-  image: joomlaprojects/docker-images:php8.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysql.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.2 with MySQL 8.0 (mysql.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:8.0",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --ignore-platform-reqs"
+         ],
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.docker.xml"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysqli.docker
-kind: pipeline
-name: PHP 7.2 with MySQL 5.7 (mysqli.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:5.7
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --prefer-lowest
-  image: joomlaprojects/docker-images:php7.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
-  image: joomlaprojects/docker-images:php7.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysqli.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.2 with MySQL 5.7 (mysqli.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:5.7",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --prefer-lowest"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysqli.docker
-kind: pipeline
-name: PHP 7.3 with MySQL 5.7 (mysqli.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:5.7
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.3
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
-  image: joomlaprojects/docker-images:php7.3
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysqli.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.3 with MySQL 5.7 (mysqli.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:5.7",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysqli.docker
-kind: pipeline
-name: PHP 7.4 with MySQL 5.7 (mysqli.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:5.7
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.4
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
-  image: joomlaprojects/docker-images:php7.4
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysqli.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.4 with MySQL 5.7 (mysqli.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:5.7",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysqli.docker
-kind: pipeline
-name: PHP 8.0 with MySQL 5.7 (mysqli.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:5.7
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.0
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
-  image: joomlaprojects/docker-images:php8.0
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysqli.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.0 with MySQL 5.7 (mysqli.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:5.7",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysqli.docker
-kind: pipeline
-name: PHP 8.1 with MySQL 5.7 (mysqli.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:5.7
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.1
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
-  image: joomlaprojects/docker-images:php8.1
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysqli.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.1 with MySQL 5.7 (mysqli.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:5.7",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysqli.docker
-kind: pipeline
-name: PHP 8.2 with MySQL 5.7 (mysqli.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:5.7
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --ignore-platform-reqs
-  image: joomlaprojects/docker-images:php8.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
-  failure: ignore
-  image: joomlaprojects/docker-images:php8.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysqli.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.2 with MySQL 5.7 (mysqli.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:5.7",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --ignore-platform-reqs"
+         ],
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysqli.docker
-kind: pipeline
-name: PHP 7.3 with MySQL 8.0 (mysqli.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:8.0
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.3
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
-  image: joomlaprojects/docker-images:php7.3
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysqli.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.3 with MySQL 8.0 (mysqli.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:8.0",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysqli.docker
-kind: pipeline
-name: PHP 7.4 with MySQL 8.0 (mysqli.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:8.0
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.4
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
-  image: joomlaprojects/docker-images:php7.4
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysqli.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.4 with MySQL 8.0 (mysqli.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:8.0",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysqli.docker
-kind: pipeline
-name: PHP 8.0 with MySQL 8.0 (mysqli.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:8.0
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.0
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
-  image: joomlaprojects/docker-images:php8.0
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysqli.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.0 with MySQL 8.0 (mysqli.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:8.0",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysqli.docker
-kind: pipeline
-name: PHP 8.1 with MySQL 8.0 (mysqli.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:8.0
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.1
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
-  image: joomlaprojects/docker-images:php8.1
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysqli.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.1 with MySQL 8.0 (mysqli.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:8.0",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mysqli.docker
-kind: pipeline
-name: PHP 8.2 with MySQL 8.0 (mysqli.docker)
-services:
-- environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_ROOT_PASSWORD: ""
-  image: mysql:8.0
-  name: mysql
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --ignore-platform-reqs
-  image: joomlaprojects/docker-images:php8.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml
-  failure: ignore
-  image: joomlaprojects/docker-images:php8.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mysqli.docker"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.2 with MySQL 8.0 (mysqli.docker)",
+   "services": [
+      {
+         "environment": {
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
+         },
+         "image": "mysql:8.0",
+         "name": "mysql"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --ignore-platform-reqs"
+         ],
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.docker.xml"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mariadb
-kind: pipeline
-name: PHP 7.2 with MariaDB 10.0 (mariadb)
-services:
-- environment:
-    MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
-    MARIADB_DATABASE: joomla_ut
-    MARIADB_ROOT_PASSWORD: ""
-  image: mariadb:10.0
-  name: mariadb
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --prefer-lowest
-  image: joomlaprojects/docker-images:php7.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml
-  image: joomlaprojects/docker-images:php7.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mariadb"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.2 with MariaDB 10.0 (mariadb)",
+   "services": [
+      {
+         "environment": {
+            "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MARIADB_DATABASE": "joomla_ut",
+            "MARIADB_ROOT_PASSWORD": ""
+         },
+         "image": "mariadb:10.0",
+         "name": "mariadb"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --prefer-lowest"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mariadb
-kind: pipeline
-name: PHP 7.2 with MariaDB 10.1 (mariadb)
-services:
-- environment:
-    MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
-    MARIADB_DATABASE: joomla_ut
-    MARIADB_ROOT_PASSWORD: ""
-  image: mariadb:10.1
-  name: mariadb
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --prefer-lowest
-  image: joomlaprojects/docker-images:php7.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml
-  image: joomlaprojects/docker-images:php7.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mariadb"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.2 with MariaDB 10.1 (mariadb)",
+   "services": [
+      {
+         "environment": {
+            "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MARIADB_DATABASE": "joomla_ut",
+            "MARIADB_ROOT_PASSWORD": ""
+         },
+         "image": "mariadb:10.1",
+         "name": "mariadb"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --prefer-lowest"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mariadb
-kind: pipeline
-name: PHP 7.2 with MariaDB 10.2 (mariadb)
-services:
-- environment:
-    MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
-    MARIADB_DATABASE: joomla_ut
-    MARIADB_ROOT_PASSWORD: ""
-  image: mariadb:10.2
-  name: mariadb
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --prefer-lowest
-  image: joomlaprojects/docker-images:php7.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml
-  image: joomlaprojects/docker-images:php7.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mariadb"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.2 with MariaDB 10.2 (mariadb)",
+   "services": [
+      {
+         "environment": {
+            "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MARIADB_DATABASE": "joomla_ut",
+            "MARIADB_ROOT_PASSWORD": ""
+         },
+         "image": "mariadb:10.2",
+         "name": "mariadb"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --prefer-lowest"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mariadb
-kind: pipeline
-name: PHP 7.3 with MariaDB 10.2 (mariadb)
-services:
-- environment:
-    MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
-    MARIADB_DATABASE: joomla_ut
-    MARIADB_ROOT_PASSWORD: ""
-  image: mariadb:10.2
-  name: mariadb
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.3
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml
-  image: joomlaprojects/docker-images:php7.3
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mariadb"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.3 with MariaDB 10.2 (mariadb)",
+   "services": [
+      {
+         "environment": {
+            "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MARIADB_DATABASE": "joomla_ut",
+            "MARIADB_ROOT_PASSWORD": ""
+         },
+         "image": "mariadb:10.2",
+         "name": "mariadb"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mariadb
-kind: pipeline
-name: PHP 7.4 with MariaDB 10.2 (mariadb)
-services:
-- environment:
-    MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
-    MARIADB_DATABASE: joomla_ut
-    MARIADB_ROOT_PASSWORD: ""
-  image: mariadb:10.2
-  name: mariadb
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.4
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml
-  image: joomlaprojects/docker-images:php7.4
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mariadb"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.4 with MariaDB 10.2 (mariadb)",
+   "services": [
+      {
+         "environment": {
+            "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MARIADB_DATABASE": "joomla_ut",
+            "MARIADB_ROOT_PASSWORD": ""
+         },
+         "image": "mariadb:10.2",
+         "name": "mariadb"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mariadb
-kind: pipeline
-name: PHP 8.0 with MariaDB 10.2 (mariadb)
-services:
-- environment:
-    MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
-    MARIADB_DATABASE: joomla_ut
-    MARIADB_ROOT_PASSWORD: ""
-  image: mariadb:10.2
-  name: mariadb
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.0
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml
-  image: joomlaprojects/docker-images:php8.0
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mariadb"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.0 with MariaDB 10.2 (mariadb)",
+   "services": [
+      {
+         "environment": {
+            "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MARIADB_DATABASE": "joomla_ut",
+            "MARIADB_ROOT_PASSWORD": ""
+         },
+         "image": "mariadb:10.2",
+         "name": "mariadb"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mariadb
-kind: pipeline
-name: PHP 8.1 with MariaDB 10.2 (mariadb)
-services:
-- environment:
-    MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
-    MARIADB_DATABASE: joomla_ut
-    MARIADB_ROOT_PASSWORD: ""
-  image: mariadb:10.2
-  name: mariadb
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.1
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml
-  image: joomlaprojects/docker-images:php8.1
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mariadb"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.1 with MariaDB 10.2 (mariadb)",
+   "services": [
+      {
+         "environment": {
+            "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MARIADB_DATABASE": "joomla_ut",
+            "MARIADB_ROOT_PASSWORD": ""
+         },
+         "image": "mariadb:10.2",
+         "name": "mariadb"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: mariadb
-kind: pipeline
-name: PHP 8.2 with MariaDB 10.2 (mariadb)
-services:
-- environment:
-    MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
-    MARIADB_DATABASE: joomla_ut
-    MARIADB_ROOT_PASSWORD: ""
-  image: mariadb:10.2
-  name: mariadb
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --ignore-platform-reqs
-  image: joomlaprojects/docker-images:php8.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml
-  failure: ignore
-  image: joomlaprojects/docker-images:php8.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "mariadb"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.2 with MariaDB 10.2 (mariadb)",
+   "services": [
+      {
+         "environment": {
+            "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MARIADB_DATABASE": "joomla_ut",
+            "MARIADB_ROOT_PASSWORD": ""
+         },
+         "image": "mariadb:10.2",
+         "name": "mariadb"
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --ignore-platform-reqs"
+         ],
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: pgsql
-kind: pipeline
-name: PHP 7.2 with PostgreSQL 9.4 (pgsql)
-services:
-- commands:
-  - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
-  - psql -U postgres -c 'create database joomla_ut;'
-  - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
-  environment:
-    POSTGRES_HOST_AUTH_METHOD: trust
-    POSTGRES_PASSWORD: ""
-    POSTGRES_USER: postgres
-  image: postgres:9.4
-  name: postgresql
-  ports:
-  - container: 5432
-    host: 5432
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --prefer-lowest
-  image: joomlaprojects/docker-images:php7.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
-  image: joomlaprojects/docker-images:php7.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "pgsql"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.2 with PostgreSQL 9.4 (pgsql)",
+   "services": [
+      {
+         "commands": [
+            "bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
+         ],
+         "environment": {
+            "POSTGRES_HOST_AUTH_METHOD": "trust",
+            "POSTGRES_PASSWORD": "",
+            "POSTGRES_USER": "postgres"
+         },
+         "image": "postgres:9.4",
+         "name": "postgresql",
+         "ports": [
+            {
+               "container": 5432,
+               "host": 5432
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --prefer-lowest"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: pgsql
-kind: pipeline
-name: PHP 7.2 with PostgreSQL 9.5 (pgsql)
-services:
-- commands:
-  - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
-  - psql -U postgres -c 'create database joomla_ut;'
-  - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
-  environment:
-    POSTGRES_HOST_AUTH_METHOD: trust
-    POSTGRES_PASSWORD: ""
-    POSTGRES_USER: postgres
-  image: postgres:9.5
-  name: postgresql
-  ports:
-  - container: 5432
-    host: 5432
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --prefer-lowest
-  image: joomlaprojects/docker-images:php7.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
-  image: joomlaprojects/docker-images:php7.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "pgsql"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.2 with PostgreSQL 9.5 (pgsql)",
+   "services": [
+      {
+         "commands": [
+            "bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
+         ],
+         "environment": {
+            "POSTGRES_HOST_AUTH_METHOD": "trust",
+            "POSTGRES_PASSWORD": "",
+            "POSTGRES_USER": "postgres"
+         },
+         "image": "postgres:9.5",
+         "name": "postgresql",
+         "ports": [
+            {
+               "container": 5432,
+               "host": 5432
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --prefer-lowest"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: pgsql
-kind: pipeline
-name: PHP 7.3 with PostgreSQL 9.6 (pgsql)
-services:
-- commands:
-  - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
-  - psql -U postgres -c 'create database joomla_ut;'
-  - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
-  environment:
-    POSTGRES_HOST_AUTH_METHOD: trust
-    POSTGRES_PASSWORD: ""
-    POSTGRES_USER: postgres
-  image: postgres:9.6
-  name: postgresql
-  ports:
-  - container: 5432
-    host: 5432
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.3
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
-  image: joomlaprojects/docker-images:php7.3
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "pgsql"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.3 with PostgreSQL 9.6 (pgsql)",
+   "services": [
+      {
+         "commands": [
+            "bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
+         ],
+         "environment": {
+            "POSTGRES_HOST_AUTH_METHOD": "trust",
+            "POSTGRES_PASSWORD": "",
+            "POSTGRES_USER": "postgres"
+         },
+         "image": "postgres:9.6",
+         "name": "postgresql",
+         "ports": [
+            {
+               "container": 5432,
+               "host": 5432
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: pgsql
-kind: pipeline
-name: PHP 7.3 with PostgreSQL 10 (pgsql)
-services:
-- commands:
-  - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
-  - psql -U postgres -c 'create database joomla_ut;'
-  - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
-  environment:
-    POSTGRES_HOST_AUTH_METHOD: trust
-    POSTGRES_PASSWORD: ""
-    POSTGRES_USER: postgres
-  image: postgres:10
-  name: postgresql
-  ports:
-  - container: 5432
-    host: 5432
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.3
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
-  image: joomlaprojects/docker-images:php7.3
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "pgsql"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.3 with PostgreSQL 10 (pgsql)",
+   "services": [
+      {
+         "commands": [
+            "bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
+         ],
+         "environment": {
+            "POSTGRES_HOST_AUTH_METHOD": "trust",
+            "POSTGRES_PASSWORD": "",
+            "POSTGRES_USER": "postgres"
+         },
+         "image": "postgres:10",
+         "name": "postgresql",
+         "ports": [
+            {
+               "container": 5432,
+               "host": 5432
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: pgsql
-kind: pipeline
-name: PHP 7.4 with PostgreSQL 10 (pgsql)
-services:
-- commands:
-  - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
-  - psql -U postgres -c 'create database joomla_ut;'
-  - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
-  environment:
-    POSTGRES_HOST_AUTH_METHOD: trust
-    POSTGRES_PASSWORD: ""
-    POSTGRES_USER: postgres
-  image: postgres:10
-  name: postgresql
-  ports:
-  - container: 5432
-    host: 5432
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.4
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
-  image: joomlaprojects/docker-images:php7.4
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "pgsql"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.4 with PostgreSQL 10 (pgsql)",
+   "services": [
+      {
+         "commands": [
+            "bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
+         ],
+         "environment": {
+            "POSTGRES_HOST_AUTH_METHOD": "trust",
+            "POSTGRES_PASSWORD": "",
+            "POSTGRES_USER": "postgres"
+         },
+         "image": "postgres:10",
+         "name": "postgresql",
+         "ports": [
+            {
+               "container": 5432,
+               "host": 5432
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: pgsql
-kind: pipeline
-name: PHP 8.0 with PostgreSQL 10 (pgsql)
-services:
-- commands:
-  - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
-  - psql -U postgres -c 'create database joomla_ut;'
-  - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
-  environment:
-    POSTGRES_HOST_AUTH_METHOD: trust
-    POSTGRES_PASSWORD: ""
-    POSTGRES_USER: postgres
-  image: postgres:10
-  name: postgresql
-  ports:
-  - container: 5432
-    host: 5432
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.0
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
-  image: joomlaprojects/docker-images:php8.0
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "pgsql"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.0 with PostgreSQL 10 (pgsql)",
+   "services": [
+      {
+         "commands": [
+            "bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
+         ],
+         "environment": {
+            "POSTGRES_HOST_AUTH_METHOD": "trust",
+            "POSTGRES_PASSWORD": "",
+            "POSTGRES_USER": "postgres"
+         },
+         "image": "postgres:10",
+         "name": "postgresql",
+         "ports": [
+            {
+               "container": 5432,
+               "host": 5432
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: pgsql
-kind: pipeline
-name: PHP 8.1 with PostgreSQL 10 (pgsql)
-services:
-- commands:
-  - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
-  - psql -U postgres -c 'create database joomla_ut;'
-  - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
-  environment:
-    POSTGRES_HOST_AUTH_METHOD: trust
-    POSTGRES_PASSWORD: ""
-    POSTGRES_USER: postgres
-  image: postgres:10
-  name: postgresql
-  ports:
-  - container: 5432
-    host: 5432
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.1
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
-  image: joomlaprojects/docker-images:php8.1
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "pgsql"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.1 with PostgreSQL 10 (pgsql)",
+   "services": [
+      {
+         "commands": [
+            "bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
+         ],
+         "environment": {
+            "POSTGRES_HOST_AUTH_METHOD": "trust",
+            "POSTGRES_PASSWORD": "",
+            "POSTGRES_USER": "postgres"
+         },
+         "image": "postgres:10",
+         "name": "postgresql",
+         "ports": [
+            {
+               "container": 5432,
+               "host": 5432
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: pgsql
-kind: pipeline
-name: PHP 8.2 with PostgreSQL 10 (pgsql)
-services:
-- commands:
-  - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
-  - psql -U postgres -c 'create database joomla_ut;'
-  - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
-  environment:
-    POSTGRES_HOST_AUTH_METHOD: trust
-    POSTGRES_PASSWORD: ""
-    POSTGRES_USER: postgres
-  image: postgres:10
-  name: postgresql
-  ports:
-  - container: 5432
-    host: 5432
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --ignore-platform-reqs
-  image: joomlaprojects/docker-images:php8.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
-  failure: ignore
-  image: joomlaprojects/docker-images:php8.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "pgsql"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.2 with PostgreSQL 10 (pgsql)",
+   "services": [
+      {
+         "commands": [
+            "bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
+         ],
+         "environment": {
+            "POSTGRES_HOST_AUTH_METHOD": "trust",
+            "POSTGRES_PASSWORD": "",
+            "POSTGRES_USER": "postgres"
+         },
+         "image": "postgres:10",
+         "name": "postgresql",
+         "ports": [
+            {
+               "container": 5432,
+               "host": 5432
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --ignore-platform-reqs"
+         ],
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: pgsql
-kind: pipeline
-name: PHP 7.3 with PostgreSQL 11 (pgsql)
-services:
-- commands:
-  - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
-  - psql -U postgres -c 'create database joomla_ut;'
-  - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
-  environment:
-    POSTGRES_HOST_AUTH_METHOD: trust
-    POSTGRES_PASSWORD: ""
-    POSTGRES_USER: postgres
-  image: postgres:11
-  name: postgresql
-  ports:
-  - container: 5432
-    host: 5432
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.3
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
-  image: joomlaprojects/docker-images:php7.3
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "pgsql"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.3 with PostgreSQL 11 (pgsql)",
+   "services": [
+      {
+         "commands": [
+            "bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
+         ],
+         "environment": {
+            "POSTGRES_HOST_AUTH_METHOD": "trust",
+            "POSTGRES_PASSWORD": "",
+            "POSTGRES_USER": "postgres"
+         },
+         "image": "postgres:11",
+         "name": "postgresql",
+         "ports": [
+            {
+               "container": 5432,
+               "host": 5432
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.3",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: pgsql
-kind: pipeline
-name: PHP 7.4 with PostgreSQL 11 (pgsql)
-services:
-- commands:
-  - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
-  - psql -U postgres -c 'create database joomla_ut;'
-  - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
-  environment:
-    POSTGRES_HOST_AUTH_METHOD: trust
-    POSTGRES_PASSWORD: ""
-    POSTGRES_USER: postgres
-  image: postgres:11
-  name: postgresql
-  ports:
-  - container: 5432
-    host: 5432
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php7.4
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
-  image: joomlaprojects/docker-images:php7.4
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "pgsql"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.4 with PostgreSQL 11 (pgsql)",
+   "services": [
+      {
+         "commands": [
+            "bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
+         ],
+         "environment": {
+            "POSTGRES_HOST_AUTH_METHOD": "trust",
+            "POSTGRES_PASSWORD": "",
+            "POSTGRES_USER": "postgres"
+         },
+         "image": "postgres:11",
+         "name": "postgresql",
+         "ports": [
+            {
+               "container": 5432,
+               "host": 5432
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: pgsql
-kind: pipeline
-name: PHP 8.0 with PostgreSQL 11 (pgsql)
-services:
-- commands:
-  - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
-  - psql -U postgres -c 'create database joomla_ut;'
-  - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
-  environment:
-    POSTGRES_HOST_AUTH_METHOD: trust
-    POSTGRES_PASSWORD: ""
-    POSTGRES_USER: postgres
-  image: postgres:11
-  name: postgresql
-  ports:
-  - container: 5432
-    host: 5432
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.0
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
-  image: joomlaprojects/docker-images:php8.0
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "pgsql"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.0 with PostgreSQL 11 (pgsql)",
+   "services": [
+      {
+         "commands": [
+            "bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
+         ],
+         "environment": {
+            "POSTGRES_HOST_AUTH_METHOD": "trust",
+            "POSTGRES_PASSWORD": "",
+            "POSTGRES_USER": "postgres"
+         },
+         "image": "postgres:11",
+         "name": "postgresql",
+         "ports": [
+            {
+               "container": 5432,
+               "host": 5432
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.0",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: pgsql
-kind: pipeline
-name: PHP 8.1 with PostgreSQL 11 (pgsql)
-services:
-- commands:
-  - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
-  - psql -U postgres -c 'create database joomla_ut;'
-  - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
-  environment:
-    POSTGRES_HOST_AUTH_METHOD: trust
-    POSTGRES_PASSWORD: ""
-    POSTGRES_USER: postgres
-  image: postgres:11
-  name: postgresql
-  ports:
-  - container: 5432
-    host: 5432
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable
-  image: joomlaprojects/docker-images:php8.1
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
-  image: joomlaprojects/docker-images:php8.1
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "pgsql"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.1 with PostgreSQL 11 (pgsql)",
+   "services": [
+      {
+         "commands": [
+            "bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
+         ],
+         "environment": {
+            "POSTGRES_HOST_AUTH_METHOD": "trust",
+            "POSTGRES_PASSWORD": "",
+            "POSTGRES_USER": "postgres"
+         },
+         "image": "postgres:11",
+         "name": "postgresql",
+         "ports": [
+            {
+               "container": 5432,
+               "host": 5432
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php8.1",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
-environment:
-  DB: pgsql
-kind: pipeline
-name: PHP 8.2 with PostgreSQL 11 (pgsql)
-services:
-- commands:
-  - bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'
-  - psql -U postgres -c 'create database joomla_ut;'
-  - psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql
-  environment:
-    POSTGRES_HOST_AUTH_METHOD: trust
-    POSTGRES_PASSWORD: ""
-    POSTGRES_USER: postgres
-  image: postgres:11
-  name: postgresql
-  ports:
-  - container: 5432
-    host: 5432
-steps:
-- commands:
-  - php -v
-  - sleep 20
-  - composer update --prefer-stable --ignore-platform-reqs
-  image: joomlaprojects/docker-images:php8.2
-  name: composer
-  volumes:
-  - name: composer-cache
-    path: /tmp/composer-cache
-- commands:
-  - vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml
-  failure: ignore
-  image: joomlaprojects/docker-images:php8.2
-  name: PHPUnit
-volumes:
-- host:
-    path: /tmp/composer-cache
-  name: composer-cache
+{
+   "environment": {
+      "DB": "pgsql"
+   },
+   "kind": "pipeline",
+   "name": "PHP 8.2 with PostgreSQL 11 (pgsql)",
+   "services": [
+      {
+         "commands": [
+            "bash <<< 'until pg_isready -U postgres > /dev/null 2>&1 ; do sleep 1; done'",
+            "psql -U postgres -c 'create database joomla_ut;'",
+            "psql -U postgres -d joomla_ut -a -f Tests/Stubs/Schema/pgsql.sql"
+         ],
+         "environment": {
+            "POSTGRES_HOST_AUTH_METHOD": "trust",
+            "POSTGRES_PASSWORD": "",
+            "POSTGRES_USER": "postgres"
+         },
+         "image": "postgres:11",
+         "name": "postgresql",
+         "ports": [
+            {
+               "container": 5432,
+               "host": 5432
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --ignore-platform-reqs"
+         ],
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+         ],
+         "failure": "ignore",
+         "image": "joomlaprojects/docker-images:php8.2",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "environment": {
+      "DB": "sqlsrv"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.4 with MS SQL Server 2017-latest (sqlsrv)",
+   "services": [
+      {
+         "commands": [
+            "bash <<< 'retries=10; echo 'Waiting for SQL Server to start...'; until (echo quit | /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P JoomlaFramework123 &> /dev/null) do if [[ \"$retries\" -le 0 ]]; then echo 'SQL Server did not start'; exit 1; fi; retries=$((retries - 1)); sleep 2s; done; echo 'SQL Server started'"
+         ],
+         "environment": {
+            "ACCEPT_EULA": "Y",
+            "SA_PASSWORD": "JoomlaFramework123"
+         },
+         "image": "mcr.microsoft.com/mssql/server:2017-latest",
+         "name": "mssql-server",
+         "ports": [
+            {
+               "container": 1433,
+               "host": 1433
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "command": [
+            "pecl install sqlsrv",
+            "pecl install pdo_sqlsrv",
+            "phpenmod sqlsrv pdo_sqlsrv"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "Install MS SQL Server"
+      },
+      {
+         "commands": [
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlsrv.xml"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
 ---
 kind: signature
-hmac: ea5b503ae668d3a8207220f71b57ef580daff0ebefab0f0c644fc93fba78a320
+hmac: 0f39128c9b55b77986d1269a4e3e4a598d0645dec9114aa41a156f776a697b24
 
 ...
