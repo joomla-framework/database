@@ -24,8 +24,7 @@ local install_sqlsrv(phpversion) = {
         'ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev',
         'pecl install sqlsrv && docker-php-ext-enable sqlsrv',
         'pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv',
-        'cat /etc/php/7.2/mods-available/sqlsrv.ini',
-        'php --ri sqlsrv',
+        'php -i',
     ]
 };
 
