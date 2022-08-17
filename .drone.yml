@@ -113,7 +113,7 @@
       {
          "commands": [
             "php --ri sqlite || true",
-            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml"
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlite.xml --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -165,7 +165,7 @@
       {
          "commands": [
             "php --ri mysql || true",
-            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.xml"
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.xml --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -217,7 +217,7 @@
       {
          "commands": [
             "php --ri mysql || true",
-            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.xml"
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysql.xml --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -269,7 +269,7 @@
       {
          "commands": [
             "php --ri mysqli || true",
-            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml"
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -321,7 +321,7 @@
       {
          "commands": [
             "php --ri mysqli || true",
-            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml"
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mysqli.xml --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -373,7 +373,7 @@
       {
          "commands": [
             "php --ri mariadb || true",
-            "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml"
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.mariadb.xml --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -435,7 +435,7 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -497,7 +497,7 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml"
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.pgsql.xml --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -571,7 +571,7 @@
       {
          "commands": [
             "php --ri sqlsrv || true",
-            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlsrv.xml"
+            "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlsrv.xml --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -588,6 +588,6 @@
 }
 ---
 kind: signature
-hmac: 68a76bb88561ee72559002cff343b2ea604fe8c1cdd64ee3c3445dcf776115ba
+hmac: 0f3f7bad5f0c1639968e257e0d0e3101628b032983bcb2189221b24405a9ba4b
 
 ...

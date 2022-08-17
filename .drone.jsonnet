@@ -47,7 +47,7 @@ local phpunit(phpversion, driver) = {
     [if phpversion == '8.2' then 'failure']: 'ignore',
     commands: [
         'php --ri ' + driver + ' || true',
-        'vendor/bin/phpunit --configuration ./.travis/phpunit.' + driver + '.xml'
+        'vendor/bin/phpunit --configuration ./.travis/phpunit.' + driver + '.xml --testdox'
     ],
 };
 
