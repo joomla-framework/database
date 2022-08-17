@@ -117,7 +117,7 @@
       {
          "commands": [
             "apt-get update",
-            "apt-get install -y gcc musl-dev make",
+            "apt-get install -y php-dev gcc musl-dev make",
             "pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -157,6 +157,6 @@
 }
 ---
 kind: signature
-hmac: f6aa0a9ea35d05178e9bf8fe7fb3e6e128f54d21736d6012998cf2a592f7aa4a
+hmac: 18ce10c7000f1034c6c008fd5c857c06ac3c3889c96930484f156a73199cb563
 
 ...
