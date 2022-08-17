@@ -18,7 +18,7 @@ local install_sqlsrv(phpversion) = {
     commands: [
         'apt-get update',
         'apt-get install -y software-properties-common gnupg',
-        'apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4f4ea0aae5267a6c',
+        'apt-key adv --fetch-keys "https://packages.sury.org/php/apt.gpg" > /dev/null 2>&1',
         'echo "deb https://packages.sury.org/php/ bullseye main" >> /etc/apt/sources.list',
         'cat /etc/apt/sources.list',
         'apt-get update',
