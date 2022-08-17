@@ -97,11 +97,11 @@ local pipeline_mariadb_docker(phpversion, driver, dbversion, params) = {
             name: 'mariadb',
             image: 'mariadb:' + dbversion,
             environment: {
-                MYSQL_ALLOW_EMPTY_PASSWORD: 'yes',
-                MYSQL_DATABASE: 'joomla_ut',
-                MYSQL_ROOT_PASSWORD: '',
-                MYSQL_USER: 'root',
-                MYSQL_PASSWORD: '',
+                MARIADB_ALLOW_EMPTY_PASSWORD: 'yes',
+                MARIADB_DATABASE: 'joomla_ut',
+                MARIADB_ROOT_PASSWORD: '',
+                MARIADB_USER: 'root',
+                MARIADB_PASSWORD: '',
             },
             ports: [
                 {

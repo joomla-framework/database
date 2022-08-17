@@ -234,11 +234,11 @@ services:
 - commands:
   - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
   environment:
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    MYSQL_DATABASE: joomla_ut
-    MYSQL_PASSWORD: ""
-    MYSQL_ROOT_PASSWORD: ""
-    MYSQL_USER: root
+    MARIADB_ALLOW_EMPTY_PASSWORD: "yes"
+    MARIADB_DATABASE: joomla_ut
+    MARIADB_PASSWORD: ""
+    MARIADB_ROOT_PASSWORD: ""
+    MARIADB_USER: root
   image: mariadb:10.2
   name: mariadb
   ports:
@@ -375,6 +375,6 @@ volumes:
   name: composer-cache
 ---
 kind: signature
-hmac: 500c7bbd824dae6193472b13dc866a3f5ebc2d57a4191773217a9c76fc38604f
+hmac: d6874d04bdad1fa1e69dcbfb30573aac33e4d964af266a0656d4ad81d5b3662a
 
 ...
