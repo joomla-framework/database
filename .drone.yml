@@ -116,6 +116,8 @@
    "steps": [
       {
          "commands": [
+            "apt-get update",
+            "apt-get install -y software-properties-common",
             "add-apt-repository ppa:ondrej/php -y",
             "apt-get update",
             "apt-get install -y php-dev gcc musl-dev make",
@@ -158,6 +160,6 @@
 }
 ---
 kind: signature
-hmac: 3d77f70bd620bbc8823883be84fb7bfbe19376c0667c32803a1f53fedcee4742
+hmac: 47df31579d164b0b81a1706baa1e3c89a458e6ce88fae402b9d52b2e6cb71389
 
 ...
