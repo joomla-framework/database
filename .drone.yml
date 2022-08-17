@@ -116,6 +116,7 @@
    "steps": [
       {
          "commands": [
+            "add-apt-repository ppa:ondrej/php -y",
             "apt-get update",
             "apt-get install -y php-dev gcc musl-dev make",
             "pecl install sqlsrv pdo_sqlsrv && docker-php-ext-enable sqlsrv pdo_sqlsrv"
@@ -157,6 +158,6 @@
 }
 ---
 kind: signature
-hmac: 18ce10c7000f1034c6c008fd5c857c06ac3c3889c96930484f156a73199cb563
+hmac: 3d77f70bd620bbc8823883be84fb7bfbe19376c0667c32803a1f53fedcee4742
 
 ...
