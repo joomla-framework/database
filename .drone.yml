@@ -62,6 +62,7 @@ name: PHP 7.4 with SQLite (sqlite)
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -82,19 +83,16 @@ environment:
 kind: pipeline
 name: PHP 7.4 with MySQL 5.7 (mysql.docker)
 services:
-- commands:
-  - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
-  environment:
+- environment:
     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     MYSQL_DATABASE: joomla_ut
-    MYSQL_PASSWORD: ""
     MYSQL_ROOT_PASSWORD: ""
-    MYSQL_USER: root
   image: mysql:5.7
   name: mysql
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -115,19 +113,16 @@ environment:
 kind: pipeline
 name: PHP 7.4 with MySQL 8.0 (mysql.docker)
 services:
-- commands:
-  - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
-  environment:
+- environment:
     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     MYSQL_DATABASE: joomla_ut
-    MYSQL_PASSWORD: ""
     MYSQL_ROOT_PASSWORD: ""
-    MYSQL_USER: root
   image: mysql:8.0
   name: mysql
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -148,19 +143,16 @@ environment:
 kind: pipeline
 name: PHP 7.4 with MySQL 5.7 (mysqli.docker)
 services:
-- commands:
-  - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
-  environment:
+- environment:
     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     MYSQL_DATABASE: joomla_ut
-    MYSQL_PASSWORD: ""
     MYSQL_ROOT_PASSWORD: ""
-    MYSQL_USER: root
   image: mysql:5.7
   name: mysql
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -181,19 +173,16 @@ environment:
 kind: pipeline
 name: PHP 7.4 with MySQL 8.0 (mysqli.docker)
 services:
-- commands:
-  - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
-  environment:
+- environment:
     MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     MYSQL_DATABASE: joomla_ut
-    MYSQL_PASSWORD: ""
     MYSQL_ROOT_PASSWORD: ""
-    MYSQL_USER: root
   image: mysql:8.0
   name: mysql
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -214,19 +203,16 @@ environment:
 kind: pipeline
 name: PHP 7.4 with MariaDB 10.2 (mariadb)
 services:
-- commands:
-  - bash <<< 'until echo \q | mysql joomla_ut > /dev/null 2>&1 ; do sleep 1; done'
-  environment:
-    MARIADB_ALLOW_EMPTY_PASSWORD: "yes"
+- environment:
+    MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
     MARIADB_DATABASE: joomla_ut
-    MARIADB_PASSWORD: ""
     MARIADB_ROOT_PASSWORD: ""
-    MARIADB_USER: root
   image: mariadb:10.2
   name: mariadb
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -263,6 +249,7 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -299,6 +286,7 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -335,6 +323,7 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 15
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: composer
@@ -351,6 +340,6 @@ volumes:
   name: composer-cache
 ---
 kind: signature
-hmac: 853ae66eaeca3f7a3285e457ea153aa95c828714e7602bd1ee52ce9f646f6985
+hmac: 951aa35af84be98a2b5de6a686d0a17e9454557a4d51b729164209f814c43641
 
 ...
