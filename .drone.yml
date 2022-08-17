@@ -113,6 +113,7 @@
    "steps": [
       {
          "commands": [
+            "export DEBIAN_FRONTEND=noninteractive",
             "apt-get update",
             "apt-get install -y software-properties-common lsb-release gnupg",
             "curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -",
@@ -146,6 +147,7 @@
       },
       {
          "commands": [
+            "php --ri sqlsrv || true",
             "vendor/bin/phpunit --configuration ./.travis/phpunit.sqlsrv.xml"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -163,6 +165,6 @@
 }
 ---
 kind: signature
-hmac: 54737c7bb1f7b391d63ae52463b042e304d56a7eb40243fd6bf280e303dea02e
+hmac: a31350efb527cb930913de096cd8f8a6e541c3828e4134480053a5cd7b14a0cb
 
 ...
