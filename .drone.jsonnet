@@ -12,8 +12,26 @@ local hostvolumes = [
     },
 ];
 
+local install_mysql(phpversion) = {
+    name: 'PHP binding for MySQL',
+    image: 'joomlaprojects/docker-images:php' + phpversion,
+    commands: [
+        'php --ri mysqli',
+        'php --ri pdo_mysql',
+    ]
+};
+
+local install_pgsql(phpversion) = {
+    name: 'PHP binding for PostgreSQL',
+    image: 'joomlaprojects/docker-images:php' + phpversion,
+    commands: [
+        'php --ri pgsql',
+        'php --ri pdo_pgsql',
+    ]
+};
+
 local install_sqlsrv(phpversion) = {
-    name: 'Install MS SQL Server',
+    name: 'PHP binding for MS SQL Server',
     image: 'joomlaprojects/docker-images:php' + phpversion,
     commands: [
         'apt-get update',
@@ -24,12 +42,15 @@ local install_sqlsrv(phpversion) = {
         'ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev',
         'pecl install sqlsrv && docker-php-ext-enable sqlsrv',
         'pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv',
-        'php -i',
+        'cat /usr/local/etc/php/conf.d/docker-php-ext-sqlsrv.ini',
+        'cat /usr/local/etc/php/conf.d/docker-php-ext-pdo_sqlsrv.ini',
+        'php --ri sqlsrv',
+        'php --ri pdo_sqlsrv',
     ]
 };
 
 local composer(phpversion, params) = {
-    name: 'composer',
+    name: 'Composer',
     image: 'joomlaprojects/docker-images:php' + phpversion,
     volumes: volumes,
     commands: [

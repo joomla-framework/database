@@ -121,10 +121,13 @@
             "ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev",
             "pecl install sqlsrv && docker-php-ext-enable sqlsrv",
             "pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv",
-            "php -i"
+            "cat /usr/local/etc/php/conf.d/docker-php-ext-sqlsrv.ini",
+            "cat /usr/local/etc/php/conf.d/docker-php-ext-pdo_sqlsrv.ini",
+            "php --ri sqlsrv",
+            "php --ri pdo_sqlsrv"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
-         "name": "Install MS SQL Server"
+         "name": "PHP binding for MS SQL Server"
       },
       {
          "commands": [
@@ -133,7 +136,7 @@
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
-         "name": "composer",
+         "name": "Composer",
          "volumes": [
             {
                "name": "composer-cache",
@@ -160,6 +163,6 @@
 }
 ---
 kind: signature
-hmac: 60b81aaca31466a9920877c736cd3ad46fe8d0fd70a91b532a010dfd1badd8b9
+hmac: 54737c7bb1f7b391d63ae52463b042e304d56a7eb40243fd6bf280e303dea02e
 
 ...
