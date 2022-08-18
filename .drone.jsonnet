@@ -29,6 +29,7 @@ local phpunit(phpversion, driver) = {
     [if phpversion == '8.2' then 'failure']: 'ignore',
     commands: [
         'php --ri ' + driver + ' || true',
+        'php Tests/wait.' + driver + '.php',
         'vendor/bin/phpunit --configuration phpunit.' + driver + '.xml.dist --testdox',
     ],
 };
