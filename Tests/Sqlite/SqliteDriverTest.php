@@ -26,12 +26,14 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
 	 */
 	public static function setUpBeforeClass(): void
 	{
-		parent::setUpBeforeClass();
+		$manager = static::getDatabaseManager();
 
-		if (!static::$connection || static::$connection->getName() !== 'sqlite')
-		{
-			self::markTestSkipped('SQLite database not configured.');
-		}
+		$connection = $manager->getConnection();
+		$manager->dropDatabase();
+		$manager->createDatabase();
+		$connection->select($manager->getDbName());
+
+		static::$connection = $connection;
 	}
 
 	/**
