@@ -386,7 +386,11 @@
       {
          "commands": [
             "php --ri mysql || true",
+            null,
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysql"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
          "name": "PHPUnit"
@@ -448,7 +452,11 @@
       {
          "commands": [
             "php --ri mysql || true",
+            null,
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysql"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
          "name": "PHPUnit"
@@ -510,7 +518,11 @@
       {
          "commands": [
             "php --ri mysql || true",
+            null,
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysql"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -572,7 +584,11 @@
       {
          "commands": [
             "php --ri mysql || true",
+            null,
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysql"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "PHPUnit"
@@ -634,7 +650,11 @@
       {
          "commands": [
             "php --ri mysql || true",
+            null,
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysql"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "PHPUnit"
@@ -696,7 +716,11 @@
       {
          "commands": [
             "php --ri mysql || true",
+            null,
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysql"
          ],
          "failure": "ignore",
          "image": "joomlaprojects/docker-images:php8.2",
@@ -759,7 +783,11 @@
       {
          "commands": [
             "php --ri mysql || true",
+            null,
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysql"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
          "name": "PHPUnit"
@@ -821,7 +849,11 @@
       {
          "commands": [
             "php --ri mysql || true",
+            null,
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysql"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -883,7 +915,11 @@
       {
          "commands": [
             "php --ri mysql || true",
+            null,
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysql"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "PHPUnit"
@@ -945,7 +981,11 @@
       {
          "commands": [
             "php --ri mysql || true",
+            null,
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysql"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "PHPUnit"
@@ -1007,7 +1047,11 @@
       {
          "commands": [
             "php --ri mysql || true",
+            null,
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysql"
          ],
          "failure": "ignore",
          "image": "joomlaprojects/docker-images:php8.2",
@@ -1070,7 +1114,11 @@
       {
          "commands": [
             "php --ri mysqli || true",
+            "while ! mysqladmin ping -h mysql -u root --silent; do sleep 1; done",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysqli"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
          "name": "PHPUnit"
@@ -1132,7 +1180,11 @@
       {
          "commands": [
             "php --ri mysqli || true",
+            "while ! mysqladmin ping -h mysql -u root --silent; do sleep 1; done",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysqli"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
          "name": "PHPUnit"
@@ -1194,7 +1246,11 @@
       {
          "commands": [
             "php --ri mysqli || true",
+            "while ! mysqladmin ping -h mysql -u root --silent; do sleep 1; done",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysqli"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -1256,7 +1312,11 @@
       {
          "commands": [
             "php --ri mysqli || true",
+            "while ! mysqladmin ping -h mysql -u root --silent; do sleep 1; done",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysqli"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "PHPUnit"
@@ -1318,7 +1378,11 @@
       {
          "commands": [
             "php --ri mysqli || true",
+            "while ! mysqladmin ping -h mysql -u root --silent; do sleep 1; done",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysqli"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "PHPUnit"
@@ -1380,7 +1444,11 @@
       {
          "commands": [
             "php --ri mysqli || true",
+            "while ! mysqladmin ping -h mysql -u root --silent; do sleep 1; done",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysqli"
          ],
          "failure": "ignore",
          "image": "joomlaprojects/docker-images:php8.2",
@@ -1443,7 +1511,11 @@
       {
          "commands": [
             "php --ri mysqli || true",
+            "while ! mysqladmin ping -h mysql -u root --silent; do sleep 1; done",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysqli"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
          "name": "PHPUnit"
@@ -1505,7 +1577,11 @@
       {
          "commands": [
             "php --ri mysqli || true",
+            "while ! mysqladmin ping -h mysql -u root --silent; do sleep 1; done",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysqli"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
@@ -1567,7 +1643,11 @@
       {
          "commands": [
             "php --ri mysqli || true",
+            "while ! mysqladmin ping -h mysql -u root --silent; do sleep 1; done",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysqli"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "PHPUnit"
@@ -1629,7 +1709,11 @@
       {
          "commands": [
             "php --ri mysqli || true",
+            "while ! mysqladmin ping -h mysql -u root --silent; do sleep 1; done",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysqli"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "PHPUnit"
@@ -1691,7 +1775,11 @@
       {
          "commands": [
             "php --ri mysqli || true",
+            "while ! mysqladmin ping -h mysql -u root --silent; do sleep 1; done",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
+         ],
+         "depends_on": [
+            "mysqli"
          ],
          "failure": "ignore",
          "image": "joomlaprojects/docker-images:php8.2",
@@ -3339,6 +3427,6 @@
 }
 ---
 kind: signature
-hmac: 3acb839c91a64fb7dd62a210144cec78deee405e71ffe2fbfb42d83987aab887
+hmac: b6878c59f7a495848299353c0c0e026cb0e24ae5f199f7e19c88384979efce9c
 
 ...

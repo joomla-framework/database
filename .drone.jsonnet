@@ -35,10 +35,11 @@ local phpunit_common(phpversion) = {
 local phpunit_mysql(phpversion, driver) = {
     name: 'PHPUnit',
     image: 'joomlaprojects/docker-images:php' + phpversion,
+    depends_on: [ driver ],
     [if phpversion == '8.2' then 'failure']: 'ignore',
     commands: [
         'php --ri ' + driver + ' || true',
-        if driver == 'mysqli' then 'while ! mysqladmin ping -h mysql -u root --silent; do sleep 1; done' { depends_on: ['mysqli'] },
+        if driver == 'mysqli' then 'while ! mysqladmin ping -h mysql -u root --silent; do sleep 1; done',
         'vendor/bin/phpunit --configuration phpunit.' + driver + '.xml.dist --testdox',
     ],
 };
@@ -91,7 +92,7 @@ local pipeline_mysql(phpversion, driver, dbversion, params) = {
     volumes: hostvolumes,
     steps: [
         composer(phpversion, params),
-        phpunit(phpversion, driver),
+        phpunit_mysql(phpversion, driver),
     ],
     services: [
         {
