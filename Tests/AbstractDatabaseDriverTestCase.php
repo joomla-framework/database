@@ -32,15 +32,18 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 		$maxCount = 5;
 		$manager = static::getDatabaseManager();
 
-		while (static::$connection === null && 0 < $maxCount--)
-		{
-			$connection = $manager->getConnection();
-			$manager->dropDatabase();
-			$manager->createDatabase();
-			$connection->select($manager->getDbName());
+		if (static::$connection === null) {
+			throw new \RuntimeException('The database driver could not be loaded.');
+		}
 
-			static::$connection = $connection;
+		while (!static::$connection->connected() && 0 < $maxCount--)
+		{
 			sleep(5);
+		}
+
+		if (!static::$connection->connected())
+		{
+			throw new \RuntimeException('The database connection has not been established.');
 		}
 	}
 
