@@ -344,7 +344,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            null
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -399,7 +399,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            null
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -454,7 +454,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            null
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -509,7 +509,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            null
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -564,7 +564,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            null
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -619,7 +619,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            null
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -675,7 +675,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -730,7 +730,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -785,7 +785,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -840,7 +840,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -895,7 +895,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -951,7 +951,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            null
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -1006,7 +1006,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            null
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -1061,7 +1061,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            null
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -1116,7 +1116,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            null
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -1171,7 +1171,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            null
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -1226,7 +1226,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            null
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -1282,7 +1282,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -1337,7 +1337,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -1392,7 +1392,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -1447,7 +1447,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -1502,7 +1502,7 @@
    "services": [
       {
          "commands": [
-            "mysql --help"
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -3105,6 +3105,6 @@
 }
 ---
 kind: signature
-hmac: f97cb1cecb5accf76d4d0762952b68f1f8f0a7bddd34c4648487be28720bb932
+hmac: 7f5faae70b5cc326db23500538fa6e333b637efabad06540d8cc3b6a2b44f875
 
 ...

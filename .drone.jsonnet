@@ -90,7 +90,7 @@ local pipeline_mysql(phpversion, driver, dbversion, params) = {
                 MYSQL_ROOT_PASSWORD: '',
             },
             commands: [
-                'mysql --help',
+                if dbversion == '8.0' then 'echo "default_authentication_plugin=mysql_native_password" >> /usr/etc/my.cnf',
             ],
         },
     ],
