@@ -89,6 +89,12 @@ local pipeline_mysql(phpversion, driver, dbversion, params) = {
                 MYSQL_DATABASE: 'joomla_ut',
                 MYSQL_ROOT_PASSWORD: '',
             },
+            ports: [
+                {
+                    container: 3306,
+                    host: 3306,
+                },
+            ],
             commands: [
                 if dbversion == '8.0' then 'echo "default_authentication_plugin=mysql_native_password" >> /usr/etc/my.cnf',
             ],
@@ -114,6 +120,12 @@ local pipeline_mariadb(phpversion, driver, dbversion, params) = {
                 MARIADB_DATABASE: 'joomla_ut',
                 MARIADB_ROOT_PASSWORD: '',
             },
+            ports: [
+                {
+                    container: 3306,
+                    host: 3306,
+                },
+            ],
         },
     ],
 };

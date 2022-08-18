@@ -38,6 +38,10 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
 		// Give the container a chance to get ready
 		sleep(30);
 
+		// Try to get IP address. If resolved, the host is online.
+		$ip = gethostbyname('mysqli');
+		echo "MySQLi: $ip\n";
+
 		parent::setUpBeforeClass();
 
 		if (!static::$connection || static::$connection->getName() !== 'mysqli')
