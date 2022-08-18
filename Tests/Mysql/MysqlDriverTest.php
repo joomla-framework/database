@@ -24,7 +24,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 	 * The database connection for the test case
 	 *
 	 * @var    MysqlDriver|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected static $connection;
 
@@ -39,7 +39,14 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 
 		if (!static::$connection || static::$connection->getName() !== 'mysql')
 		{
-			self::markTestSkipped('MySQL database not configured.');
+			$manager = static::getDatabaseManager();
+
+			$connection = $manager->getConnection();
+			$manager->dropDatabase();
+			$manager->createDatabase();
+			$connection->select($manager->getDbName());
+
+			static::$connection = $connection;
 		}
 	}
 
