@@ -36,7 +36,7 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
 	public static function setUpBeforeClass(): void
 	{
 		// Give the container a chance to get ready
-		sleep(20);
+		sleep(30);
 
 		parent::setUpBeforeClass();
 
