@@ -1,16 +1,19 @@
 <?php
 
+/**
+ * @var array $dbCredentials The credentials to use to connect to the database, provided by following include:
+ */
 include __DIR__ . '/get_phpunit_env.php';
 
 echo 'Waiting for MySQL to become available ...';
 $maxTries = 10;
 do {
     $mysql = new mysqli(
-        JOOMLA_TEST_DB_HOST,
-        JOOMLA_TEST_DB_USER,
-        JOOMLA_TEST_DB_PASSWORD,
-        JOOMLA_TEST_DB_DATABASE,
-        JOOMLA_TEST_DB_PORT
+        $dbCredentials['JOOMLA_TEST_DB_HOST'] ?? 'localhost',
+        $dbCredentials['JOOMLA_TEST_DB_USER'] ?? 'root',
+        $dbCredentials['JOOMLA_TEST_DB_PASSWORD'] ?? null,
+        $dbCredentials['JOOMLA_TEST_DB_DATABASE'] ?? null,
+        $dbCredentials['JOOMLA_TEST_DB_PORT'] ?? '3306'
     );
 
     if ($mysql->connect_error) {
