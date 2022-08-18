@@ -62,6 +62,7 @@ name: PHP 7.4 with SQLite (sqlite)
 steps:
 - commands:
   - php -v
+  - sleep 20
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: Composer
@@ -95,6 +96,7 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 20
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: Composer
@@ -128,6 +130,7 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 20
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: Composer
@@ -161,6 +164,7 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 20
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: Composer
@@ -194,6 +198,7 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 20
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: Composer
@@ -227,6 +232,7 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 20
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: Composer
@@ -266,6 +272,7 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 20
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: Composer
@@ -305,6 +312,7 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 20
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: Composer
@@ -340,6 +348,7 @@ services:
 steps:
 - commands:
   - php -v
+  - sleep 20
   - composer update --prefer-stable
   image: joomlaprojects/docker-images:php7.4
   name: Composer
@@ -367,6 +376,6 @@ volumes:
   name: composer-cache
 ---
 kind: signature
-hmac: cacaff911b83a19196cac525c8783f5fb2bc6f9e5cb1aab72141e098a280cc89
+hmac: d8a7992cf219b0f9d027c6346fd5094a5f0e56d14ec9170d0c5ab33e3ce02189
 
 ...
