@@ -222,7 +222,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -263,7 +263,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -525,7 +525,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -580,7 +580,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -801,7 +801,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -856,7 +856,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -1132,7 +1132,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -1187,7 +1187,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -1408,7 +1408,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -1463,7 +1463,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -1831,7 +1831,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -1883,7 +1883,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -2308,7 +2308,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -2370,7 +2370,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -2619,7 +2619,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -2681,7 +2681,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -2933,7 +2933,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -2999,7 +2999,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable"
+            "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -3105,6 +3105,6 @@
 }
 ---
 kind: signature
-hmac: 7f5faae70b5cc326db23500538fa6e333b637efabad06540d8cc3b6a2b44f875
+hmac: cb7821dcbc1ed11d07e156aba2dae094967db531c624b7fb1c796eec935c0337
 
 ...

@@ -19,35 +19,6 @@ use Joomla\Test\DatabaseTestCase;
 abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 {
 	/**
-	 * Set up the database connection.
-	 *
-	 * This should happen in DatabaseTestCase::setUpBeforeClass() but it does not wait for the connection to be established.
-	 *
-	 * @return  void
-	 */
-	public static function setUpBeforeClass(): void
-	{
-		parent::setUpBeforeClass();
-
-		$maxCount = 5;
-		$manager = static::getDatabaseManager();
-
-		if (static::$connection === null) {
-			throw new \RuntimeException('The database driver could not be loaded.');
-		}
-
-		while (!static::$connection->connected() && 0 < $maxCount--)
-		{
-			sleep(5);
-		}
-
-		if (!static::$connection->connected())
-		{
-			throw new \RuntimeException('The database connection has not been established.');
-		}
-	}
-
-	/**
 	 * Loads the example data into the database.
 	 *
 	 * @return  void
