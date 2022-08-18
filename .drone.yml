@@ -2713,72 +2713,6 @@
       "DB": "sqlsrv"
    },
    "kind": "pipeline",
-   "name": "PHP 7.2 with MS SQL Server 2017-latest (sqlsrv)",
-   "services": [
-      {
-         "environment": {
-            "ACCEPT_EULA": "Y",
-            "SA_PASSWORD": "JoomlaFramework123"
-         },
-         "image": "mcr.microsoft.com/mssql/server:2017-latest",
-         "name": "sqlsrv",
-         "ports": [
-            {
-               "container": 1433,
-               "host": 1433
-            }
-         ]
-      }
-   ],
-   "steps": [
-      {
-         "commands": [
-            "php -v",
-            "sleep 20",
-            "composer update --prefer-stable --prefer-lowest"
-         ],
-         "image": "joomlaprojects/docker-images:php7.2",
-         "name": "Composer",
-         "volumes": [
-            {
-               "name": "composer-cache",
-               "path": "/tmp/composer-cache"
-            }
-         ]
-      },
-      {
-         "commands": [
-            "apt-get update",
-            "apt-get install -y software-properties-common lsb-release gnupg",
-            "curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -",
-            "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main\" >> /etc/apt/sources.list",
-            "apt-get update",
-            "ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev",
-            "pecl install sqlsrv && docker-php-ext-enable sqlsrv",
-            "pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv",
-            "php --ri sqlsrv",
-            "php --ri pdo_sqlsrv",
-            "vendor/bin/phpunit --configuration phpunit.sqlsrv.xml.dist --testdox"
-         ],
-         "image": "joomlaprojects/docker-images:php7.2",
-         "name": "PHPUnit with MS SQL Server"
-      }
-   ],
-   "volumes": [
-      {
-         "host": {
-            "path": "/tmp/composer-cache"
-         },
-         "name": "composer-cache"
-      }
-   ]
-}
----
-{
-   "environment": {
-      "DB": "sqlsrv"
-   },
-   "kind": "pipeline",
    "name": "PHP 7.3 with MS SQL Server 2017-latest (sqlsrv)",
    "services": [
       {
@@ -3105,6 +3039,6 @@
 }
 ---
 kind: signature
-hmac: c54fe147b6b4a65738cb546f7b336bee23d8d234c8ae82c996f45e525d21975b
+hmac: c94d4c882747fcdc108932d5235b8f9108421125ef0c448ca0bde426eea58dcb
 
 ...

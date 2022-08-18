@@ -290,7 +290,6 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
     pipeline_postgres('8.0', 'pgsql', '11', '--prefer-stable'),
     pipeline_postgres('8.1', 'pgsql', '11', '--prefer-stable'),
     pipeline_postgres('8.2', 'pgsql', '11', '--prefer-stable --ignore-platform-reqs'),
-    pipeline_sqlsrv('7.2', 'sqlsrv', '2017-latest', '--prefer-stable --prefer-lowest'),
     pipeline_sqlsrv('7.3', 'sqlsrv', '2017-latest', '--prefer-stable'),
     pipeline_sqlsrv('7.4', 'sqlsrv', '2017-latest', '--prefer-stable'),
     pipeline_sqlsrv('8.0', 'sqlsrv', '2017-latest', '--prefer-stable'),
