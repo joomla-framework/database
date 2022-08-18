@@ -35,7 +35,6 @@ local phpunit_common(phpversion) = {
 local phpunit_mysql(phpversion, driver) = {
     name: 'PHPUnit',
     image: 'joomlaprojects/docker-images:php' + phpversion,
-    depends_on: [ driver ],
     [if phpversion == '8.2' then 'failure']: 'ignore',
     commands: [
         'php --ri ' + driver + ' || true',
