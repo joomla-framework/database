@@ -39,14 +39,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 
 		if (!static::$connection || static::$connection->getName() !== 'mysql')
 		{
-			$manager = static::getDatabaseManager();
-
-			$connection = $manager->getConnection();
-			$manager->dropDatabase();
-			$manager->createDatabase();
-			$connection->select($manager->getDbName());
-
-			static::$connection = $connection;
+			self::markTestSkipped('MySQL database not configured.');
 		}
 	}
 
