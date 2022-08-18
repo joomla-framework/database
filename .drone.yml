@@ -98,6 +98,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --prefer-lowest"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -112,7 +113,6 @@
       {
          "commands": [
             "php --ri sqlite || true",
-            "php Tests/wait.sqlite.php",
             "vendor/bin/phpunit --configuration phpunit.sqlite.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -139,6 +139,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -153,7 +154,6 @@
       {
          "commands": [
             "php --ri sqlite || true",
-            "php Tests/wait.sqlite.php",
             "vendor/bin/phpunit --configuration phpunit.sqlite.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -180,6 +180,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -194,7 +195,6 @@
       {
          "commands": [
             "php --ri sqlite || true",
-            "php Tests/wait.sqlite.php",
             "vendor/bin/phpunit --configuration phpunit.sqlite.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -221,6 +221,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -235,7 +236,6 @@
       {
          "commands": [
             "php --ri sqlite || true",
-            "php Tests/wait.sqlite.php",
             "vendor/bin/phpunit --configuration phpunit.sqlite.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -262,6 +262,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -276,7 +277,6 @@
       {
          "commands": [
             "php --ri sqlite || true",
-            "php Tests/wait.sqlite.php",
             "vendor/bin/phpunit --configuration phpunit.sqlite.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -303,6 +303,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.2",
@@ -317,7 +318,6 @@
       {
          "commands": [
             "php --ri sqlite || true",
-            "php Tests/wait.sqlite.php",
             "vendor/bin/phpunit --configuration phpunit.sqlite.xml.dist --testdox"
          ],
          "failure": "ignore",
@@ -359,6 +359,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --prefer-lowest"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -373,7 +374,6 @@
       {
          "commands": [
             "php --ri mysql || true",
-            "php Tests/wait.mysql.php",
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -414,6 +414,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -428,7 +429,6 @@
       {
          "commands": [
             "php --ri mysql || true",
-            "php Tests/wait.mysql.php",
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -469,6 +469,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -483,7 +484,6 @@
       {
          "commands": [
             "php --ri mysql || true",
-            "php Tests/wait.mysql.php",
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -524,6 +524,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -538,7 +539,6 @@
       {
          "commands": [
             "php --ri mysql || true",
-            "php Tests/wait.mysql.php",
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -579,6 +579,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -593,7 +594,6 @@
       {
          "commands": [
             "php --ri mysql || true",
-            "php Tests/wait.mysql.php",
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -634,6 +634,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.2",
@@ -648,7 +649,6 @@
       {
          "commands": [
             "php --ri mysql || true",
-            "php Tests/wait.mysql.php",
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
          ],
          "failure": "ignore",
@@ -690,6 +690,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -704,7 +705,6 @@
       {
          "commands": [
             "php --ri mysql || true",
-            "php Tests/wait.mysql.php",
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -745,6 +745,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -759,7 +760,6 @@
       {
          "commands": [
             "php --ri mysql || true",
-            "php Tests/wait.mysql.php",
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -800,6 +800,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -814,7 +815,6 @@
       {
          "commands": [
             "php --ri mysql || true",
-            "php Tests/wait.mysql.php",
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -855,6 +855,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -869,7 +870,6 @@
       {
          "commands": [
             "php --ri mysql || true",
-            "php Tests/wait.mysql.php",
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -910,6 +910,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.2",
@@ -924,7 +925,6 @@
       {
          "commands": [
             "php --ri mysql || true",
-            "php Tests/wait.mysql.php",
             "vendor/bin/phpunit --configuration phpunit.mysql.xml.dist --testdox"
          ],
          "failure": "ignore",
@@ -966,6 +966,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --prefer-lowest"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -980,7 +981,6 @@
       {
          "commands": [
             "php --ri mysqli || true",
-            "php Tests/wait.mysqli.php",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -1021,6 +1021,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -1035,7 +1036,6 @@
       {
          "commands": [
             "php --ri mysqli || true",
-            "php Tests/wait.mysqli.php",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -1076,6 +1076,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -1090,7 +1091,6 @@
       {
          "commands": [
             "php --ri mysqli || true",
-            "php Tests/wait.mysqli.php",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -1131,6 +1131,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -1145,7 +1146,6 @@
       {
          "commands": [
             "php --ri mysqli || true",
-            "php Tests/wait.mysqli.php",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -1186,6 +1186,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -1200,7 +1201,6 @@
       {
          "commands": [
             "php --ri mysqli || true",
-            "php Tests/wait.mysqli.php",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -1241,6 +1241,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.2",
@@ -1255,7 +1256,6 @@
       {
          "commands": [
             "php --ri mysqli || true",
-            "php Tests/wait.mysqli.php",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
          ],
          "failure": "ignore",
@@ -1297,6 +1297,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -1311,7 +1312,6 @@
       {
          "commands": [
             "php --ri mysqli || true",
-            "php Tests/wait.mysqli.php",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -1352,6 +1352,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -1366,7 +1367,6 @@
       {
          "commands": [
             "php --ri mysqli || true",
-            "php Tests/wait.mysqli.php",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -1407,6 +1407,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -1421,7 +1422,6 @@
       {
          "commands": [
             "php --ri mysqli || true",
-            "php Tests/wait.mysqli.php",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -1462,6 +1462,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -1476,7 +1477,6 @@
       {
          "commands": [
             "php --ri mysqli || true",
-            "php Tests/wait.mysqli.php",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -1517,6 +1517,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.2",
@@ -1531,7 +1532,6 @@
       {
          "commands": [
             "php --ri mysqli || true",
-            "php Tests/wait.mysqli.php",
             "vendor/bin/phpunit --configuration phpunit.mysqli.xml.dist --testdox"
          ],
          "failure": "ignore",
@@ -1570,6 +1570,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --prefer-lowest"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -1584,7 +1585,6 @@
       {
          "commands": [
             "php --ri mariadb || true",
-            "php Tests/wait.mariadb.php",
             "vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -1622,6 +1622,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --prefer-lowest"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -1636,7 +1637,6 @@
       {
          "commands": [
             "php --ri mariadb || true",
-            "php Tests/wait.mariadb.php",
             "vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -1674,6 +1674,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --prefer-lowest"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -1688,7 +1689,6 @@
       {
          "commands": [
             "php --ri mariadb || true",
-            "php Tests/wait.mariadb.php",
             "vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -1726,6 +1726,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -1740,7 +1741,6 @@
       {
          "commands": [
             "php --ri mariadb || true",
-            "php Tests/wait.mariadb.php",
             "vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -1778,6 +1778,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -1792,7 +1793,6 @@
       {
          "commands": [
             "php --ri mariadb || true",
-            "php Tests/wait.mariadb.php",
             "vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -1830,6 +1830,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -1844,7 +1845,6 @@
       {
          "commands": [
             "php --ri mariadb || true",
-            "php Tests/wait.mariadb.php",
             "vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -1882,6 +1882,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -1896,7 +1897,6 @@
       {
          "commands": [
             "php --ri mariadb || true",
-            "php Tests/wait.mariadb.php",
             "vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -1934,6 +1934,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.2",
@@ -1948,7 +1949,6 @@
       {
          "commands": [
             "php --ri mariadb || true",
-            "php Tests/wait.mariadb.php",
             "vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist --testdox"
          ],
          "failure": "ignore",
@@ -1997,6 +1997,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --prefer-lowest"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -2011,7 +2012,6 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "php Tests/wait.pgsql.php",
             "vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -2059,6 +2059,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --prefer-lowest"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -2073,7 +2074,6 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "php Tests/wait.pgsql.php",
             "vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.2",
@@ -2121,6 +2121,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -2135,7 +2136,6 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "php Tests/wait.pgsql.php",
             "vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -2183,6 +2183,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -2197,7 +2198,6 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "php Tests/wait.pgsql.php",
             "vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -2245,6 +2245,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -2259,7 +2260,6 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "php Tests/wait.pgsql.php",
             "vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -2307,6 +2307,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -2321,7 +2322,6 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "php Tests/wait.pgsql.php",
             "vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -2369,6 +2369,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -2383,7 +2384,6 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "php Tests/wait.pgsql.php",
             "vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -2431,6 +2431,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.2",
@@ -2445,7 +2446,6 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "php Tests/wait.pgsql.php",
             "vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist --testdox"
          ],
          "failure": "ignore",
@@ -2494,6 +2494,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -2508,7 +2509,6 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "php Tests/wait.pgsql.php",
             "vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -2556,6 +2556,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -2570,7 +2571,6 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "php Tests/wait.pgsql.php",
             "vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -2618,6 +2618,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -2632,7 +2633,6 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "php Tests/wait.pgsql.php",
             "vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -2680,6 +2680,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -2694,7 +2695,6 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "php Tests/wait.pgsql.php",
             "vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -2742,6 +2742,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.2",
@@ -2756,7 +2757,6 @@
       {
          "commands": [
             "php --ri pgsql || true",
-            "php Tests/wait.pgsql.php",
             "vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist --testdox"
          ],
          "failure": "ignore",
@@ -2800,6 +2800,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
@@ -2865,6 +2866,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
@@ -2930,6 +2932,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
@@ -2995,6 +2998,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -3060,6 +3064,7 @@
       {
          "commands": [
             "php -v",
+            "sleep 20",
             "composer update --prefer-stable --ignore-platform-reqs"
          ],
          "image": "joomlaprojects/docker-images:php8.2",
@@ -3100,6 +3105,6 @@
 }
 ---
 kind: signature
-hmac: fb8f48cd579216e9065854b3dd53cf2ecb55f6222e770b807b3465dbf91e6a40
+hmac: f97cb1cecb5accf76d4d0762952b68f1f8f0a7bddd34c4648487be28720bb932
 
 ...
