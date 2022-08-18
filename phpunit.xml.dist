@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="Tests/bootstrap.php" colors="false">
+<phpunit bootstrap="../Tests/bootstrap.php" colors="false">
 	<php>
-		<!-- These constants help setup environment configurations for running the database driver tests and should be configured to test the expected driver. -->
-		<env name="JOOMLA_TEST_DB_DRIVER" value="sqlite" />
-		<env name="JOOMLA_TEST_DB_HOST" value="" />
-		<env name="JOOMLA_TEST_DB_PORT" value="" />
-		<env name="JOOMLA_TEST_DB_USER" value="" />
+		<env name="JOOMLA_TEST_DB_DRIVER" value="mysqli" />
+		<env name="JOOMLA_TEST_DB_HOST" value="mysqli" />
+		<env name="JOOMLA_TEST_DB_PORT" value="3306" />
+		<env name="JOOMLA_TEST_DB_USER" value="root" />
 		<env name="JOOMLA_TEST_DB_PASSWORD" value="" />
-		<env name="JOOMLA_TEST_DB_DATABASE" value=":memory:" />
+		<env name="JOOMLA_TEST_DB_DATABASE" value="joomla_ut" />
 		<env name="JOOMLA_TEST_DB_PREFIX" value="" />
 
 		<env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
-
-		<const name="JPATH_ROOT" value="/path/to/database"/>
 	</php>
 	<testsuites>
 		<testsuite name="Unit">
-			<directory>Tests</directory>
+			<directory>../Tests/Command</directory>
+			<directory>../Tests/Monitor</directory>
+			<directory>../Tests/Query</directory>
+			<directory>../Tests/Service</directory>
+			<file>../Tests/AbstractDatabaseDriverTestCase.php</file>
+			<file>../Tests/DatabaseAwareTraitTest.php</file>
+			<file>../Tests/DatabaseExporterTest.php</file>
+			<file>../Tests/DatabaseFactoryTest.php</file>
+			<file>../Tests/DatabaseImporterTest.php</file>
+			<file>../Tests/DatabaseIteratorTest.php</file>
+			<file>../Tests/DatabaseQueryTest.php</file>
 		</testsuite>
 	</testsuites>
 </phpunit>
