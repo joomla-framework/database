@@ -119,6 +119,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -160,6 +161,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -201,6 +203,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -242,6 +245,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -283,6 +287,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -325,6 +330,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -386,6 +392,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -447,6 +454,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -508,6 +516,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -569,6 +578,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -630,6 +640,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -692,6 +703,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -753,6 +765,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -814,6 +827,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -875,6 +889,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -936,6 +951,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -998,6 +1014,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1059,6 +1076,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1120,6 +1138,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1181,6 +1200,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1242,6 +1262,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1303,6 +1324,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1365,6 +1387,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1426,6 +1449,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1487,6 +1511,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1548,6 +1573,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1609,6 +1635,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1671,6 +1698,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1729,6 +1757,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1787,6 +1816,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1845,6 +1875,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1903,6 +1934,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -1961,6 +1993,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2019,6 +2052,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2077,6 +2111,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2136,6 +2171,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2198,6 +2234,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2260,6 +2297,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2322,6 +2360,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2384,6 +2423,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2446,6 +2486,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2508,6 +2549,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2570,6 +2612,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2633,6 +2676,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2695,6 +2739,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2757,6 +2802,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2819,6 +2865,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2881,6 +2928,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -2944,6 +2992,7 @@
          "name": "PHPUnit"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -3010,6 +3059,7 @@
          "name": "PHPUnit with MS SQL Server"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -3076,6 +3126,7 @@
          "name": "PHPUnit with MS SQL Server"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -3142,6 +3193,7 @@
          "name": "PHPUnit with MS SQL Server"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -3208,6 +3260,7 @@
          "name": "PHPUnit with MS SQL Server"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -3274,6 +3327,7 @@
          "name": "PHPUnit with MS SQL Server"
       }
    ],
+   "type": "docker",
    "volumes": [
       {
          "host": {
@@ -3285,6 +3339,6 @@
 }
 ---
 kind: signature
-hmac: 495a121bb442c9fb2e3e4043331b3f7e3c29619757c9861b18e4daeb8297f8d1
+hmac: 3acb839c91a64fb7dd62a210144cec78deee405e71ffe2fbfb42d83987aab887
 
 ...
