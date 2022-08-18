@@ -12,23 +12,6 @@ local hostvolumes = [
     },
 ];
 
-local install_sqlsrv(phpversion) = {
-    name: 'PHP binding for MS SQL Server',
-    image: 'joomlaprojects/docker-images:php' + phpversion,
-    commands: [
-        'apt-get update',
-        'apt-get install -y software-properties-common lsb-release gnupg',
-        'curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -',
-        'echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main" >> /etc/apt/sources.list',
-        'apt-get update',
-        'ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev',
-        'pecl install sqlsrv && docker-php-ext-enable sqlsrv',
-        'pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv',
-        'php --ri sqlsrv',
-        'php --ri pdo_sqlsrv',
-    ],
-};
-
 local composer(phpversion, params) = {
     name: 'Composer',
     image: 'joomlaprojects/docker-images:php' + phpversion,
@@ -50,6 +33,24 @@ local phpunit(phpversion, driver) = {
     commands: [
         'php --ri ' + driver + ' || true',
         'vendor/bin/phpunit --configuration ./.travis/phpunit.' + driver + '.xml --testdox',
+    ],
+};
+
+local phpunit_sqlsrv(phpversion) = {
+    name: 'PHPUnit with MS SQL Server',
+    image: 'joomlaprojects/docker-images:php' + phpversion,
+    commands: [
+        'apt-get update',
+        'apt-get install -y software-properties-common lsb-release gnupg',
+        'curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -',
+        'echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main" >> /etc/apt/sources.list',
+        'apt-get update',
+        'ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev',
+        'pecl install sqlsrv && docker-php-ext-enable sqlsrv',
+        'pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv',
+        'php --ri sqlsrv',
+        'php --ri pdo_sqlsrv',
+        'vendor/bin/phpunit --configuration ./.travis/phpunit.sqlsrv.xml --testdox',
     ],
 };
 
@@ -146,9 +147,8 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
     environment: { DB: driver },
     volumes: hostvolumes,
     steps: [
-        install_sqlsrv(phpversion),
         composer(phpversion, params),
-        phpunit(phpversion, driver),
+        phpunit_sqlsrv(phpversion),
     ],
     services: [
         {
