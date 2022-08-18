@@ -18,7 +18,6 @@ local composer(phpversion, params) = {
     volumes: volumes,
     commands: [
         'php -v',
-        'sleep 20',
         'composer update ' + params,
     ],
 };
@@ -90,6 +89,9 @@ local pipeline_mysql(phpversion, driver, dbversion, params) = {
                 MYSQL_DATABASE: 'joomla_ut',
                 MYSQL_ROOT_PASSWORD: '',
             },
+            commands: [
+                'mysql --help',
+            ],
         },
     ],
 };
