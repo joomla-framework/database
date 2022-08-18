@@ -13,7 +13,7 @@
 	</php>
 	<testsuites>
 		<testsuite name="Unit">
-			<directory>../Tests/Mysqli</directory>
+			<directory>Tests/Mysqli</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>
