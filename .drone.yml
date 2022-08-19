@@ -1686,122 +1686,6 @@
       "DB": "mariadb"
    },
    "kind": "pipeline",
-   "name": "PHP 7.2 with MariaDB 10.0 (mariadb)",
-   "services": [
-      {
-         "environment": {
-            "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
-            "MARIADB_DATABASE": "joomla_ut",
-            "MARIADB_ROOT_PASSWORD": ""
-         },
-         "image": "mariadb:10.0",
-         "name": "mariadb",
-         "ports": [
-            {
-               "container": 3306,
-               "host": 3306
-            }
-         ]
-      }
-   ],
-   "steps": [
-      {
-         "commands": [
-            "php -v",
-            "sleep 20",
-            "composer update --prefer-stable --prefer-lowest"
-         ],
-         "image": "joomlaprojects/docker-images:php7.2",
-         "name": "Composer",
-         "volumes": [
-            {
-               "name": "composer-cache",
-               "path": "/tmp/composer-cache"
-            }
-         ]
-      },
-      {
-         "commands": [
-            "php --ri mariadb || true",
-            "vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist --testdox"
-         ],
-         "image": "joomlaprojects/docker-images:php7.2",
-         "name": "PHPUnit"
-      }
-   ],
-   "volumes": [
-      {
-         "host": {
-            "path": "/tmp/composer-cache"
-         },
-         "name": "composer-cache"
-      }
-   ]
-}
----
-{
-   "environment": {
-      "DB": "mariadb"
-   },
-   "kind": "pipeline",
-   "name": "PHP 7.2 with MariaDB 10.1 (mariadb)",
-   "services": [
-      {
-         "environment": {
-            "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
-            "MARIADB_DATABASE": "joomla_ut",
-            "MARIADB_ROOT_PASSWORD": ""
-         },
-         "image": "mariadb:10.1",
-         "name": "mariadb",
-         "ports": [
-            {
-               "container": 3306,
-               "host": 3306
-            }
-         ]
-      }
-   ],
-   "steps": [
-      {
-         "commands": [
-            "php -v",
-            "sleep 20",
-            "composer update --prefer-stable --prefer-lowest"
-         ],
-         "image": "joomlaprojects/docker-images:php7.2",
-         "name": "Composer",
-         "volumes": [
-            {
-               "name": "composer-cache",
-               "path": "/tmp/composer-cache"
-            }
-         ]
-      },
-      {
-         "commands": [
-            "php --ri mariadb || true",
-            "vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist --testdox"
-         ],
-         "image": "joomlaprojects/docker-images:php7.2",
-         "name": "PHPUnit"
-      }
-   ],
-   "volumes": [
-      {
-         "host": {
-            "path": "/tmp/composer-cache"
-         },
-         "name": "composer-cache"
-      }
-   ]
-}
----
-{
-   "environment": {
-      "DB": "mariadb"
-   },
-   "kind": "pipeline",
    "name": "PHP 7.2 with MariaDB 10.2 (mariadb)",
    "services": [
       {
@@ -1900,6 +1784,122 @@
             "vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php7.3",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "environment": {
+      "DB": "mariadb"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.4 with MariaDB 10.0 (mariadb)",
+   "services": [
+      {
+         "environment": {
+            "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MARIADB_DATABASE": "joomla_ut",
+            "MARIADB_ROOT_PASSWORD": ""
+         },
+         "image": "mariadb:10.0",
+         "name": "mariadb",
+         "ports": [
+            {
+               "container": 3306,
+               "host": 3306
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --prefer-lowest"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "Composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "php --ri mariadb || true",
+            "vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist --testdox"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "PHPUnit"
+      }
+   ],
+   "volumes": [
+      {
+         "host": {
+            "path": "/tmp/composer-cache"
+         },
+         "name": "composer-cache"
+      }
+   ]
+}
+---
+{
+   "environment": {
+      "DB": "mariadb"
+   },
+   "kind": "pipeline",
+   "name": "PHP 7.4 with MariaDB 10.1 (mariadb)",
+   "services": [
+      {
+         "environment": {
+            "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MARIADB_DATABASE": "joomla_ut",
+            "MARIADB_ROOT_PASSWORD": ""
+         },
+         "image": "mariadb:10.1",
+         "name": "mariadb",
+         "ports": [
+            {
+               "container": 3306,
+               "host": 3306
+            }
+         ]
+      }
+   ],
+   "steps": [
+      {
+         "commands": [
+            "php -v",
+            "sleep 20",
+            "composer update --prefer-stable --prefer-lowest"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
+         "name": "Composer",
+         "volumes": [
+            {
+               "name": "composer-cache",
+               "path": "/tmp/composer-cache"
+            }
+         ]
+      },
+      {
+         "commands": [
+            "php --ri mariadb || true",
+            "vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist --testdox"
+         ],
+         "image": "joomlaprojects/docker-images:php7.4",
          "name": "PHPUnit"
       }
    ],
@@ -3285,6 +3285,6 @@
 }
 ---
 kind: signature
-hmac: 495a121bb442c9fb2e3e4043331b3f7e3c29619757c9861b18e4daeb8297f8d1
+hmac: 08ff26ff3b23f860d5c59ec44a705c871fc9c68b2e3f0e7d05ff153b1e73244a
 
 ...
