@@ -38,7 +38,6 @@ local phpunit_mysql(phpversion, driver) = {
     [if phpversion == '8.2' then 'failure']: 'ignore',
     commands: [
         'php --ri ' + driver + ' || true',
-        'while ! mysqladmin ping -h ' + driver + ' -u root --silent; do sleep 1; done',
         'vendor/bin/phpunit --configuration phpunit.' + driver + '.xml.dist --testdox',
     ],
 };
