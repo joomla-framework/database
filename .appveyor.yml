@@ -107,7 +107,7 @@ install:
             New-Item -path c:\tools\ -name cacert -itemtype directory
           }
           if (!(Test-Path c:\tools\cacert\bundle.pem)) {
-            appveyor-retry appveyor DownloadFile https://curl.haxx.se/ca/cacert.pem -Filename C:\tools\cacert\bundle.pem
+            appveyor-retry curl -fksSL -o C:\tools\cacert\bundle.pem https://curl.haxx.se/ca/cacert.pem
           }
         }
     # install composer dependencies
