@@ -38,7 +38,6 @@ local phpunit_mysql(phpversion, driver) = {
     [if phpversion == '8.2' then 'failure']: 'ignore',
     commands: [
         'php --ri ' + driver + ' || true',
-        if driver == 'mysqli' then 'while ! mysqladmin ping -h mysql -u root --silent; do sleep 1; done',
         'vendor/bin/phpunit --configuration phpunit.' + driver + '.xml.dist --testdox',
     ],
 };
@@ -73,7 +72,6 @@ local phpunit_sqlsrv(phpversion) = {
 
 local pipeline_sqlite(phpversion, driver, params) = {
     kind: 'pipeline',
-    type: 'docker',
     name: 'PHP ' + phpversion + ' with SQLite (' + driver + ')',
     environment: { DB: driver },
     volumes: hostvolumes,
@@ -85,7 +83,6 @@ local pipeline_sqlite(phpversion, driver, params) = {
 
 local pipeline_mysql(phpversion, driver, dbversion, params) = {
     kind: 'pipeline',
-    type: 'docker',
     name: 'PHP ' + phpversion + ' with MySQL ' + dbversion + ' (' + driver + ')',
     environment: { DB: driver },
     volumes: hostvolumes,
@@ -117,7 +114,6 @@ local pipeline_mysql(phpversion, driver, dbversion, params) = {
 
 local pipeline_mariadb(phpversion, driver, dbversion, params) = {
     kind: 'pipeline',
-    type: 'docker',
     name: 'PHP ' + phpversion + ' with MariaDB ' + dbversion + ' (' + driver + ')',
     environment: { DB: driver },
     volumes: hostvolumes,
@@ -146,7 +142,6 @@ local pipeline_mariadb(phpversion, driver, dbversion, params) = {
 
 local pipeline_postgres(phpversion, driver, dbversion, params) = {
     kind: 'pipeline',
-    type: 'docker',
     name: 'PHP ' + phpversion + ' with PostgreSQL ' + dbversion + ' (' + driver + ')',
     environment: { DB: driver },
     volumes: hostvolumes,
@@ -179,7 +174,6 @@ local pipeline_postgres(phpversion, driver, dbversion, params) = {
 
 local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
     kind: 'pipeline',
-    type: 'docker',
     name: 'PHP ' + phpversion + ' with MS SQL Server ' + dbversion + ' (' + driver + ')',
     environment: { DB: driver },
     volumes: hostvolumes,
