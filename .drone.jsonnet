@@ -94,7 +94,7 @@ local pipeline_mysql(phpversion, driver, dbversion, params) = {
     services: [
         {
             name: driver,
-            image: 'mysql:' + dbversion,
+            image: 'bitnami/mysql:' + dbversion,
             environment: {
                 MYSQL_ALLOW_EMPTY_PASSWORD: 'yes',
                 MYSQL_DATABASE: 'joomla_ut',

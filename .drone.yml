@@ -102,7 +102,7 @@
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
-         "image": "mysql:5.7",
+         "image": "bitnami/mysql:5.7",
          "name": "mysqli",
          "ports": [
             {
@@ -162,7 +162,7 @@
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
-         "image": "mysql:5.7",
+         "image": "bitnami/mysql:5.7",
          "name": "mysqli",
          "ports": [
             {
@@ -222,7 +222,7 @@
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
-         "image": "mysql:5.7",
+         "image": "bitnami/mysql:5.7",
          "name": "mysqli",
          "ports": [
             {
@@ -282,7 +282,7 @@
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
-         "image": "mysql:5.7",
+         "image": "bitnami/mysql:5.7",
          "name": "mysqli",
          "ports": [
             {
@@ -342,7 +342,7 @@
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
-         "image": "mysql:5.7",
+         "image": "bitnami/mysql:5.7",
          "name": "mysqli",
          "ports": [
             {
@@ -402,7 +402,7 @@
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
-         "image": "mysql:5.7",
+         "image": "bitnami/mysql:5.7",
          "name": "mysqli",
          "ports": [
             {
@@ -463,7 +463,7 @@
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
-         "image": "mysql:8.0",
+         "image": "bitnami/mysql:8.0",
          "name": "mysqli",
          "ports": [
             {
@@ -523,7 +523,7 @@
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
-         "image": "mysql:8.0",
+         "image": "bitnami/mysql:8.0",
          "name": "mysqli",
          "ports": [
             {
@@ -583,7 +583,7 @@
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
-         "image": "mysql:8.0",
+         "image": "bitnami/mysql:8.0",
          "name": "mysqli",
          "ports": [
             {
@@ -643,7 +643,7 @@
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
-         "image": "mysql:8.0",
+         "image": "bitnami/mysql:8.0",
          "name": "mysqli",
          "ports": [
             {
@@ -703,7 +703,7 @@
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
-         "image": "mysql:8.0",
+         "image": "bitnami/mysql:8.0",
          "name": "mysqli",
          "ports": [
             {
@@ -751,6 +751,6 @@
 }
 ---
 kind: signature
-hmac: 6a7e9dd00090f670042ab03adbcb05f37b2a6f1cc7d59e4cfc00bc0504d467db
+hmac: a3a28fa44145b349efa5cfebf5b3477a6dc9268ca67c8fcea540cae7f2a90fcc
 
 ...
