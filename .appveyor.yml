@@ -107,7 +107,7 @@ before_test:
   - ps: $instanceName = $env:db_version.ToUpper()
   - ps: $sqlInstance = "(local)\$instanceName"
   - ps: net start "MSSQL`$$instanceName"
-  - ps: $phpunitConfig = ".travis\phpunit.appveyor_$($env:db_version).xml"
+  - ps: $phpunitConfig = "phpunit.appveyor_$($env:db_version).xml"
 
 test_script:
   - cd C:\projects\database
