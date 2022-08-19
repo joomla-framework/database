@@ -34,6 +34,18 @@ environment:
     driver: sqlsrv
     db_version: sql2017
     php: 7.4
+  - db: mssql
+    driver: sqlsrv
+    db_version: sql2017
+    php: 8.0
+  - db: mssql
+    driver: sqlsrv
+    db_version: sql2017
+    php: 8.1
+  - db: mssql
+    driver: sqlsrv
+    db_version: sql2017
+    php: 8.2
 
 init:
   - SET PATH=C:\Program Files\OpenSSL;c:\tools\php;C:\tools\composer;%PATH%
