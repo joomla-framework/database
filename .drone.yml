@@ -98,6 +98,7 @@
       {
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_AUTHENTICATION_PLUGIN": "mysql_native_password",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -157,6 +158,7 @@
       {
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_AUTHENTICATION_PLUGIN": "mysql_native_password",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -216,6 +218,7 @@
       {
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_AUTHENTICATION_PLUGIN": "mysql_native_password",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -275,6 +278,7 @@
       {
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_AUTHENTICATION_PLUGIN": "mysql_native_password",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -334,6 +338,7 @@
       {
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_AUTHENTICATION_PLUGIN": "mysql_native_password",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -393,6 +398,7 @@
       {
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_AUTHENTICATION_PLUGIN": "mysql_native_password",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -453,6 +459,7 @@
       {
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_AUTHENTICATION_PLUGIN": "mysql_native_password",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -512,6 +519,7 @@
       {
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_AUTHENTICATION_PLUGIN": "mysql_native_password",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -571,6 +579,7 @@
       {
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_AUTHENTICATION_PLUGIN": "mysql_native_password",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -630,6 +639,7 @@
       {
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_AUTHENTICATION_PLUGIN": "mysql_native_password",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -689,6 +699,7 @@
       {
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
+            "MYSQL_AUTHENTICATION_PLUGIN": "mysql_native_password",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -740,6 +751,6 @@
 }
 ---
 kind: signature
-hmac: 0c53dee1ad6428eab2d837874deb4d2650b88cdce1c4eaec77d1c2394250713b
+hmac: 6a7e9dd00090f670042ab03adbcb05f37b2a6f1cc7d59e4cfc00bc0504d467db
 
 ...
