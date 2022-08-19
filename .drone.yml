@@ -1692,7 +1692,10 @@
          "environment": {
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
-            "MARIADB_ROOT_PASSWORD": ""
+            "MARIADB_ROOT_PASSWORD": "",
+            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
          },
          "image": "mariadb:10.2",
          "name": "mariadb",
@@ -1750,7 +1753,10 @@
          "environment": {
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
-            "MARIADB_ROOT_PASSWORD": ""
+            "MARIADB_ROOT_PASSWORD": "",
+            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
          },
          "image": "mariadb:10.2",
          "name": "mariadb",
@@ -1808,7 +1814,10 @@
          "environment": {
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
-            "MARIADB_ROOT_PASSWORD": ""
+            "MARIADB_ROOT_PASSWORD": "",
+            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
          },
          "image": "mariadb:10.0",
          "name": "mariadb",
@@ -1825,7 +1834,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --prefer-lowest"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "Composer",
@@ -1866,7 +1875,10 @@
          "environment": {
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
-            "MARIADB_ROOT_PASSWORD": ""
+            "MARIADB_ROOT_PASSWORD": "",
+            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
          },
          "image": "mariadb:10.1",
          "name": "mariadb",
@@ -1883,7 +1895,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --prefer-lowest"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "Composer",
@@ -1924,7 +1936,10 @@
          "environment": {
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
-            "MARIADB_ROOT_PASSWORD": ""
+            "MARIADB_ROOT_PASSWORD": "",
+            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
          },
          "image": "mariadb:10.2",
          "name": "mariadb",
@@ -1982,7 +1997,10 @@
          "environment": {
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
-            "MARIADB_ROOT_PASSWORD": ""
+            "MARIADB_ROOT_PASSWORD": "",
+            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
          },
          "image": "mariadb:10.2",
          "name": "mariadb",
@@ -2040,7 +2058,10 @@
          "environment": {
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
-            "MARIADB_ROOT_PASSWORD": ""
+            "MARIADB_ROOT_PASSWORD": "",
+            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
          },
          "image": "mariadb:10.2",
          "name": "mariadb",
@@ -2098,7 +2119,10 @@
          "environment": {
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
-            "MARIADB_ROOT_PASSWORD": ""
+            "MARIADB_ROOT_PASSWORD": "",
+            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_DATABASE": "joomla_ut",
+            "MYSQL_ROOT_PASSWORD": ""
          },
          "image": "mariadb:10.2",
          "name": "mariadb",
@@ -3285,6 +3309,6 @@
 }
 ---
 kind: signature
-hmac: 08ff26ff3b23f860d5c59ec44a705c871fc9c68b2e3f0e7d05ff153b1e73244a
+hmac: 55e846d37ad0f10772dbe44345fb7ccb51bbac36a88f684890fa62927241eb1f
 
 ...

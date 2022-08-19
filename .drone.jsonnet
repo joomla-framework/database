@@ -129,6 +129,10 @@ local pipeline_mariadb(phpversion, driver, dbversion, params) = {
                 MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes',
                 MARIADB_DATABASE: 'joomla_ut',
                 MARIADB_ROOT_PASSWORD: '',
+                # Provide MySQL environments variables for MariaDB < 10.2.
+                MYSQL_ALLOW_EMPTY_ROOT_PASSWORD: 'yes',
+                MYSQL_DATABASE: 'joomla_ut',
+                MYSQL_ROOT_PASSWORD: '',
             },
             ports: [
                 {
