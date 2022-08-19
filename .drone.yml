@@ -96,11 +96,6 @@
    "name": "PHP 7.2 with MySQL 5.7 (mysqli)",
    "services": [
       {
-         "commands": [
-            "mkdir -p /usr/etc",
-            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
-            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
-         ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
@@ -160,11 +155,6 @@
    "name": "PHP 7.3 with MySQL 5.7 (mysqli)",
    "services": [
       {
-         "commands": [
-            "mkdir -p /usr/etc",
-            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
-            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
-         ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
@@ -224,11 +214,6 @@
    "name": "PHP 7.4 with MySQL 5.7 (mysqli)",
    "services": [
       {
-         "commands": [
-            "mkdir -p /usr/etc",
-            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
-            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
-         ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
@@ -288,11 +273,6 @@
    "name": "PHP 8.0 with MySQL 5.7 (mysqli)",
    "services": [
       {
-         "commands": [
-            "mkdir -p /usr/etc",
-            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
-            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
-         ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
@@ -352,11 +332,6 @@
    "name": "PHP 8.1 with MySQL 5.7 (mysqli)",
    "services": [
       {
-         "commands": [
-            "mkdir -p /usr/etc",
-            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
-            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
-         ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
@@ -416,11 +391,6 @@
    "name": "PHP 8.2 with MySQL 5.7 (mysqli)",
    "services": [
       {
-         "commands": [
-            "mkdir -p /usr/etc",
-            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
-            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
-         ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
@@ -481,11 +451,6 @@
    "name": "PHP 7.3 with MySQL 8.0 (mysqli)",
    "services": [
       {
-         "commands": [
-            "mkdir -p /usr/etc",
-            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
-            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
-         ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
@@ -545,11 +510,6 @@
    "name": "PHP 7.4 with MySQL 8.0 (mysqli)",
    "services": [
       {
-         "commands": [
-            "mkdir -p /usr/etc",
-            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
-            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
-         ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
@@ -609,11 +569,6 @@
    "name": "PHP 8.0 with MySQL 8.0 (mysqli)",
    "services": [
       {
-         "commands": [
-            "mkdir -p /usr/etc",
-            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
-            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
-         ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
@@ -673,11 +628,6 @@
    "name": "PHP 8.1 with MySQL 8.0 (mysqli)",
    "services": [
       {
-         "commands": [
-            "mkdir -p /usr/etc",
-            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
-            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
-         ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
@@ -737,11 +687,6 @@
    "name": "PHP 8.2 with MySQL 8.0 (mysqli)",
    "services": [
       {
-         "commands": [
-            "mkdir -p /usr/etc",
-            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
-            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
-         ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
@@ -795,6 +740,6 @@
 }
 ---
 kind: signature
-hmac: 99ccb2921264ce7a2f17a5da97b12558ef13326331f1638231e76c4bc860f56d
+hmac: 0c53dee1ad6428eab2d837874deb4d2650b88cdce1c4eaec77d1c2394250713b
 
 ...
