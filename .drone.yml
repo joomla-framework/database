@@ -1693,7 +1693,7 @@
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
             "MARIADB_ROOT_PASSWORD": "",
-            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -1754,7 +1754,7 @@
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
             "MARIADB_ROOT_PASSWORD": "",
-            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -1815,7 +1815,7 @@
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
             "MARIADB_ROOT_PASSWORD": "",
-            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -1876,7 +1876,7 @@
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
             "MARIADB_ROOT_PASSWORD": "",
-            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -1937,7 +1937,7 @@
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
             "MARIADB_ROOT_PASSWORD": "",
-            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -1998,7 +1998,7 @@
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
             "MARIADB_ROOT_PASSWORD": "",
-            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -2059,7 +2059,7 @@
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
             "MARIADB_ROOT_PASSWORD": "",
-            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -2120,7 +2120,7 @@
             "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
             "MARIADB_DATABASE": "joomla_ut",
             "MARIADB_ROOT_PASSWORD": "",
-            "MYSQL_ALLOW_EMPTY_ROOT_PASSWORD": "yes",
+            "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
             "MYSQL_DATABASE": "joomla_ut",
             "MYSQL_ROOT_PASSWORD": ""
          },
@@ -3309,6 +3309,6 @@
 }
 ---
 kind: signature
-hmac: 55e846d37ad0f10772dbe44345fb7ccb51bbac36a88f684890fa62927241eb1f
+hmac: 5bbb332916d5875ed43139c57412c660c0a294051526baa3a32c948cc460128f
 
 ...
