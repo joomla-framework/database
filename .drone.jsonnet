@@ -107,7 +107,9 @@ local pipeline_mysql(phpversion, driver, dbversion, params) = {
                 },
             ],
             commands: [
-                'echo "default_authentication_plugin=mysql_native_password" > /usr/etc/my.cnf',
+                'mkdir -p /usr/etc',
+                'echo "[mysqld-8.0]" > /usr/etc/my.cnf',
+                'echo "default_authentication_plugin=mysql_native_password" >> /usr/etc/my.cnf',
             ],
         },
     ],

@@ -97,7 +97,9 @@
    "services": [
       {
          "commands": [
-            "echo \"default_authentication_plugin=mysql_native_password\" > /usr/etc/my.cnf"
+            "mkdir -p /usr/etc",
+            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -159,7 +161,9 @@
    "services": [
       {
          "commands": [
-            "echo \"default_authentication_plugin=mysql_native_password\" > /usr/etc/my.cnf"
+            "mkdir -p /usr/etc",
+            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -221,7 +225,9 @@
    "services": [
       {
          "commands": [
-            "echo \"default_authentication_plugin=mysql_native_password\" > /usr/etc/my.cnf"
+            "mkdir -p /usr/etc",
+            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -283,7 +289,9 @@
    "services": [
       {
          "commands": [
-            "echo \"default_authentication_plugin=mysql_native_password\" > /usr/etc/my.cnf"
+            "mkdir -p /usr/etc",
+            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -345,7 +353,9 @@
    "services": [
       {
          "commands": [
-            "echo \"default_authentication_plugin=mysql_native_password\" > /usr/etc/my.cnf"
+            "mkdir -p /usr/etc",
+            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -407,7 +417,9 @@
    "services": [
       {
          "commands": [
-            "echo \"default_authentication_plugin=mysql_native_password\" > /usr/etc/my.cnf"
+            "mkdir -p /usr/etc",
+            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -470,7 +482,9 @@
    "services": [
       {
          "commands": [
-            "echo \"default_authentication_plugin=mysql_native_password\" > /usr/etc/my.cnf"
+            "mkdir -p /usr/etc",
+            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -532,7 +546,9 @@
    "services": [
       {
          "commands": [
-            "echo \"default_authentication_plugin=mysql_native_password\" > /usr/etc/my.cnf"
+            "mkdir -p /usr/etc",
+            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -594,7 +610,9 @@
    "services": [
       {
          "commands": [
-            "echo \"default_authentication_plugin=mysql_native_password\" > /usr/etc/my.cnf"
+            "mkdir -p /usr/etc",
+            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -656,7 +674,9 @@
    "services": [
       {
          "commands": [
-            "echo \"default_authentication_plugin=mysql_native_password\" > /usr/etc/my.cnf"
+            "mkdir -p /usr/etc",
+            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -718,7 +738,9 @@
    "services": [
       {
          "commands": [
-            "echo \"default_authentication_plugin=mysql_native_password\" > /usr/etc/my.cnf"
+            "mkdir -p /usr/etc",
+            "echo \"[mysqld-8.0]\" > /usr/etc/my.cnf",
+            "echo \"default_authentication_plugin=mysql_native_password\" >> /usr/etc/my.cnf"
          ],
          "environment": {
             "MYSQL_ALLOW_EMPTY_PASSWORD": "yes",
@@ -773,6 +795,6 @@
 }
 ---
 kind: signature
-hmac: 2f3ac99089a1e9330c2aecbf1752d9b10f1bfedec8ef0f7be887369c9ae148eb
+hmac: 99ccb2921264ce7a2f17a5da97b12558ef13326331f1638231e76c4bc860f56d
 
 ...
