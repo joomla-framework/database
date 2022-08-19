@@ -96,7 +96,7 @@ local pipeline_mysql(phpversion, driver, dbversion, params) = {
             name: driver,
             image: 'bitnami/mysql:' + dbversion,
             environment: {
-                MYSQL_ALLOW_EMPTY_PASSWORD: 'yes',
+                ALLOW_EMPTY_PASSWORD: 'yes',
                 MYSQL_DATABASE: 'joomla_ut',
                 MYSQL_ROOT_PASSWORD: '',
                 MYSQL_AUTHENTICATION_PLUGIN: 'mysql_native_password',
