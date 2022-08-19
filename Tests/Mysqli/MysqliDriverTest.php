@@ -37,7 +37,7 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
 	public static function setUpBeforeClass(): void
 	{
 		$host = getenv('JOOMLA_TEST_DB_HOST');
-		$port = getenv('JOOMLA_TEST_DB_PORT') ?: null;
+		$port = getenv('JOOMLA_TEST_DB_PORT') ?: 3306;
 
 		/** @var MysqliDriver $mysqli */
 		$mysqli = (new DatabaseFactory())->getDriver('mysqli');
