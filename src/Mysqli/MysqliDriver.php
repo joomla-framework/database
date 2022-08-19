@@ -171,6 +171,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			if ($file)
 			{
 				fclose($file);
+
 				return true;
 			}
 
