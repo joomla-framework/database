@@ -7,6 +7,7 @@
 namespace Joomla\Database\Tests\Mysqli;
 
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseFactory;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Mysqli\MysqliDriver;
 use Joomla\Database\Mysqli\MysqliExporter;
@@ -35,6 +36,13 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
 	 */
 	public static function setUpBeforeClass(): void
 	{
+		$host = getenv('JOOMLA_TEST_DB_HOST');
+		$port = getenv('JOOMLA_TEST_DB_PORT') ?: null;
+
+		/** @var MysqliDriver $mysqli */
+		$mysqli = (new DatabaseFactory())->getDriver('mysqli');
+		$mysqli->healthCheck($host, $port, 10, 10, 1, 10);
+
 		parent::setUpBeforeClass();
 
 		if (!static::$connection || static::$connection->getName() !== 'mysqli')
