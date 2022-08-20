@@ -63,10 +63,9 @@ install:
     - ps: |
         # Check if installation is cached
         if (!(Test-Path c:\tools\php)) {
-          choco upgrade chocolatey -y --version 0.10.13 --allow-downgrade --force
-          appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
+          appveyor-retry cinst --no-progress --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
           # install sqlite
-          appveyor-retry cinst -y sqlite
+          appveyor-retry cinst --no-progress -y sqlite
           Get-ChildItem -Path c:\tools\php
           cd c:\tools\php
 
@@ -119,7 +118,7 @@ install:
     # install composer dependencies
     - cd C:\projects\database
     - appveyor-retry composer self-update
-    - appveyor-retry composer install --no-progress --prefer-dist $($env:composer_flags)
+    - appveyor-retry composer install --no-progress --prefer-dist $env:composer_flags
 
 before_test:
   - ps: $instanceName = $env:db_version.ToUpper()
