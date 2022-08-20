@@ -7,6 +7,7 @@
 namespace Joomla\Database\Tests\Mysqli;
 
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseFactory;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Mysqli\MysqliDriver;
 use Joomla\Database\Mysqli\MysqliExporter;
@@ -35,6 +36,13 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
 	 */
 	public static function setUpBeforeClass(): void
 	{
+		$host = getenv('JOOMLA_TEST_DB_HOST');
+		$port = getenv('JOOMLA_TEST_DB_PORT') ?: 3306;
+
+		/** @var MysqliDriver $mysqli */
+		$mysqli = (new DatabaseFactory())->getDriver('mysqli');
+		$mysqli->healthCheck($host, $port, 10, 10, 1, 10);
+
 		parent::setUpBeforeClass();
 
 		if (!static::$connection || static::$connection->getName() !== 'mysqli')
@@ -149,10 +157,10 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
 				'title'       => (object) [
 					'Field'      => 'title',
 					'Type'       => 'varchar(50)',
-					'Collation'  => 'utf8_general_ci',
+					'Collation'  => $isMySQL8 ? 'utf8mb3_general_ci' : 'utf8_general_ci',
 					'Null'       => 'NO',
 					'Key'        => '',
-					'Default'    => '',
+					'Default'    => $isMySQL8 ? null : '',
 					'Extra'      => '',
 					'Privileges' => 'select,insert,update,references',
 					'Comment'    => '',
@@ -171,10 +179,10 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
 				'description' => (object) [
 					'Field'      => 'description',
 					'Type'       => 'text',
-					'Collation'  => 'utf8_general_ci',
+					'Collation'  => $isMySQL8 ? 'utf8mb3_general_ci' : 'utf8_general_ci',
 					'Null'       => 'NO',
 					'Key'        => '',
-					'Default'    => '',
+					'Default'    => $isMySQL8 ? null : '',
 					'Extra'      => '',
 					'Privileges' => 'select,insert,update,references',
 					'Comment'    => '',

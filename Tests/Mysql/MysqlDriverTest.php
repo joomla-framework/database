@@ -24,7 +24,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 	 * The database connection for the test case
 	 *
 	 * @var    MysqlDriver|null
-	 * @since  2.0.0-beta
+	 * @since  2.0.0
 	 */
 	protected static $connection;
 
@@ -35,6 +35,9 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 	 */
 	public static function setUpBeforeClass(): void
 	{
+		// Give the container a chance to get ready
+		sleep(20);
+
 		parent::setUpBeforeClass();
 
 		if (!static::$connection || static::$connection->getName() !== 'mysql')
@@ -137,10 +140,10 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 				'title'       => (object) [
 					'Field'      => 'title',
 					'Type'       => 'varchar(50)',
-					'Collation'  => 'utf8_general_ci',
+					'Collation'  => $isMySQL8 ? 'utf8mb3_general_ci' : 'utf8_general_ci',
 					'Null'       => 'NO',
 					'Key'        => '',
-					'Default'    => '',
+					'Default'    => $isMySQL8 ? null : '',
 					'Extra'      => '',
 					'Privileges' => 'select,insert,update,references',
 					'Comment'    => '',
@@ -159,10 +162,10 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 				'description' => (object) [
 					'Field'      => 'description',
 					'Type'       => 'text',
-					'Collation'  => 'utf8_general_ci',
+					'Collation'  => $isMySQL8 ? 'utf8mb3_general_ci' : 'utf8_general_ci',
 					'Null'       => 'NO',
 					'Key'        => '',
-					'Default'    => '',
+					'Default'    => $isMySQL8 ? null : '',
 					'Extra'      => '',
 					'Privileges' => 'select,insert,update,references',
 					'Comment'    => '',
