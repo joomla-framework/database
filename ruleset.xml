@@ -9,7 +9,6 @@
 
     <!-- Exclude folders not containing production code -->
     <exclude-pattern>*/.github/*</exclude-pattern>
-    <exclude-pattern>*/.travis/*</exclude-pattern>
 
     <!-- Exclude 3rd party libraries. -->
     <exclude-pattern>*/vendor/*</exclude-pattern>

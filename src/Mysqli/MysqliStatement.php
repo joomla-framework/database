@@ -430,9 +430,16 @@ class MysqliStatement implements StatementInterface
 			}
 		}
 
-		if (!$this->statement->execute())
+		try
 		{
-			throw new ExecutionFailureException($this->query, $this->statement->error, $this->statement->errno);
+			if (!$this->statement->execute())
+			{
+				throw new ExecutionFailureException($this->query, $this->statement->error, $this->statement->errno);
+			}
+		}
+		catch (\Throwable $e)
+		{
+			throw new ExecutionFailureException($this->query, $e->getMessage(), $e->getCode(), $e);
 		}
 
 		if ($this->columnNames === null)
