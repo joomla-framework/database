@@ -230,14 +230,15 @@ class PgsqlDriver extends PdoDriver
 		$tableSub      = $this->replacePrefix($table);
 
 		$fullname = explode('.', $tableSub);
+
 		if (is_array($fullname) && count($fullname) == 2)
 		{
-		$tableSub = $fullname[1];
-		$defaultSchema = $fullname[0];
-		} 
+			$tableSub = $fullname[1];
+			$defaultSchema = $fullname[0];
+		}
 		else
 		{
-		$defaultSchema = $this->getDefaultSchema();
+			$defaultSchema = $this->getDefaultSchema();
 		}
 
 		$this->setQuery('
