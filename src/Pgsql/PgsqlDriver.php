@@ -228,7 +228,17 @@ class PgsqlDriver extends PdoDriver
 
 		$result        = [];
 		$tableSub      = $this->replacePrefix($table);
+
+		$fullname = explode('.', $tableSub);
+		if (is_array($fullname) && count($fullname) == 2)
+		{
+		$tableSub = $fullname[1];
+		$defaultSchema = $fullname[0];
+		} 
+		else
+		{
 		$defaultSchema = $this->getDefaultSchema();
+		}
 
 		$this->setQuery('
 			SELECT a.attname AS "column_name",
