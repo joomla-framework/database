@@ -94,6 +94,14 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	];
 
 	/**
+	 * The default charset.
+	 *
+	 * @var    string
+	 * @since  2.0.0
+	 */
+	public $charset = 'utf8';
+
+	/**
 	 * Constructor.
 	 *
 	 * @param   array  $options  Array of database options with keys: host, user, password, database, select.
