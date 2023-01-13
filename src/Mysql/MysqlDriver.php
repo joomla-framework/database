@@ -99,7 +99,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	 * @var    string
 	 * @since  2.0.0
 	 */
-	protected $charset = 'utf8';
+	public $charset = 'utf8';
 
 	/**
 	 * Constructor.
