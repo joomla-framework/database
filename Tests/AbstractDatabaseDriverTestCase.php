@@ -193,7 +193,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 		$this->loadExampleData();
 
 		static::$connection->setQuery(
-			static::$connection->getQuery(true)
+			static::$connection->createQuery()
 				->select('*')
 				->from('#__dbtest')
 				->where(static::$connection->quoteName('description') . ' = ' . static::$connection->quote('test row one'))
@@ -209,7 +209,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 	 */
 	public function testGetQueryCachedQuery()
 	{
-		$query = static::$connection->getQuery(true)
+		$query = static::$connection->createQuery()
 			->select('*')
 			->from('#__dbtest');
 
@@ -226,7 +226,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 		$this->loadExampleData();
 
 		static::$connection->setQuery(
-			static::$connection->getQuery(true)
+			static::$connection->createQuery()
 				->select('*')
 				->from('#__dbtest')
 		);
@@ -335,7 +335,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 		$this->loadExampleData();
 
 		$result = static::$connection->setQuery(
-			static::$connection->getQuery(true)
+			static::$connection->createQuery()
 				->select('title')
 				->from('#__dbtest')
 		)->loadAssoc();
@@ -356,7 +356,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 		$this->loadExampleData();
 
 		$result = static::$connection->setQuery(
-			static::$connection->getQuery(true)
+			static::$connection->createQuery()
 				->select('title')
 				->from('#__dbtest')
 		)->loadAssocList();
@@ -380,7 +380,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 		$this->loadExampleData();
 
 		$result = static::$connection->setQuery(
-			static::$connection->getQuery(true)
+			static::$connection->createQuery()
 				->select('title')
 				->from('#__dbtest')
 		)->loadColumn();
@@ -404,7 +404,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 		$this->loadExampleData();
 
 		$result = static::$connection->setQuery(
-			static::$connection->getQuery(true)
+			static::$connection->createQuery()
 				->select('*')
 				->from('#__dbtest')
 		)->loadObject();
@@ -428,7 +428,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 		$this->loadExampleData();
 
 		$result = static::$connection->setQuery(
-			static::$connection->getQuery(true)
+			static::$connection->createQuery()
 				->select('*')
 				->from('#__dbtest')
 		)->loadObjectList();
@@ -475,7 +475,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 		$this->loadExampleData();
 
 		$result = static::$connection->setQuery(
-			static::$connection->getQuery(true)
+			static::$connection->createQuery()
 				->select('*')
 				->from('#__dbtest')
 		)->loadResult();
@@ -491,7 +491,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 		$this->loadExampleData();
 
 		$result = static::$connection->setQuery(
-			static::$connection->getQuery(true)
+			static::$connection->createQuery()
 				->select('*')
 				->from('#__dbtest')
 		)->loadRow();
@@ -515,7 +515,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 		$this->loadExampleData();
 
 		$result = static::$connection->setQuery(
-			static::$connection->getQuery(true)
+			static::$connection->createQuery()
 				->select('*')
 				->from('#__dbtest')
 		)->loadRowList();
@@ -668,7 +668,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 	 */
 	public function testSetQueryWithQueryObjectWithoutOffsetOrLimit()
 	{
-		$query = static::$connection->getQuery(true)
+		$query = static::$connection->createQuery()
 			->select('*')
 			->from('#__dbtest');
 
@@ -690,7 +690,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 	 */
 	public function testSetQueryWithQueryObjectWithOffsetAndLimit()
 	{
-		$query = static::$connection->getQuery(true)
+		$query = static::$connection->createQuery()
 			->select('*')
 			->from('#__dbtest');
 
@@ -726,7 +726,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 	 */
 	public function testSetQueryWithQueryObjectWithOffsetAndLimitOnQuery()
 	{
-		$query = static::$connection->getQuery(true)
+		$query = static::$connection->createQuery()
 			->select('*')
 			->from('#__dbtest')
 			->setLimit(10, 3);
@@ -821,7 +821,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 
 		// Fetch row to validate update
 		$row = static::$connection->setQuery(
-			static::$connection->getQuery(true)
+			static::$connection->createQuery()
 				->select('*')
 				->from('#__dbtest')
 				->where('id = :id')
@@ -838,9 +838,9 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 	{
 		$this->loadExampleData();
 
-		$query  = static::$connection->getQuery(true);
-		$union1 = static::$connection->getQuery(true);
-		$union2 = static::$connection->getQuery(true);
+		$query  = static::$connection->createQuery();
+		$union1 = static::$connection->createQuery();
+		$union2 = static::$connection->createQuery();
 
 		$union1->select('id, title')
 			->from('#__dbtest')
@@ -876,8 +876,8 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 	{
 		$this->loadExampleData();
 
-		$query = static::$connection->getQuery(true);
-		$union = static::$connection->getQuery(true);
+		$query = static::$connection->createQuery();
+		$union = static::$connection->createQuery();
 
 		$query->select('id, title')
 			->from('#__dbtest')
@@ -912,7 +912,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 		$this->loadExampleData();
 		$results = [];
 
-		$query = static::$connection->getQuery(true);
+		$query = static::$connection->createQuery();
 		$query->select('id, title')
 			->from('#__dbtest')
 			->where('id = :id')
@@ -948,7 +948,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 		static::$connection->setMonitor(new DebugMonitor);
 
 		$title = 'test';
-		$query = static::$connection->getQuery(true)
+		$query = static::$connection->createQuery()
 			->select('id')
 			->from('#__dbtest')
 			->where('title = :title')
@@ -991,7 +991,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
 	{
 		static::$connection->setMonitor(new DebugMonitor);
 
-		$query = static::$connection->getQuery(true)
+		$query = static::$connection->createQuery()
 			->select('id')
 			->from('#__dbtest')
 			->where('id = :id')
