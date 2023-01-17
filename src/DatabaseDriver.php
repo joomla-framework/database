@@ -578,6 +578,18 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	}
 
 	/**
+	 * Create a new DatabaseQuery object.
+	 *
+	 * @return  DatabaseQuery
+	 *
+	 * @since   2.1
+	 */
+	public function createQuery()
+	{
+			return $this->factory->getQuery($this->name, $this);
+	}
+
+	/**
 	 * Disconnects the database.
 	 *
 	 * @return  void
@@ -1040,12 +1052,19 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * @return  DatabaseQuery
 	 *
 	 * @since   1.0
+	 * @deprecated  4.0  $new parameter will be removed, use createQuery() method instead.
 	 */
 	public function getQuery($new = false)
 	{
 		if ($new)
 		{
-			return $this->factory->getQuery($this->name, $this);
+			trigger_deprecation(
+				'joomla/database',
+				'2.1.0',
+				'getQuery(true) call is deprecated and will be removed in 4.0, use createQuery() instead.',
+			);
+
+			return $this->createQuery();
 		}
 
 		return $this->sql;
@@ -1148,7 +1167,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		}
 
 		// Create the base insert statement.
-		$query = $this->getQuery(true)
+		$query = $this->createQuery()
 			->insert($this->quoteName($table))
 			->columns($fields)
 			->values(implode(',', $values));
@@ -1858,7 +1877,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		if (\is_string($query))
 		{
 			// Allows taking advantage of bound variables in a direct query:
-			$query = $this->getQuery(true)->setQuery($query);
+			$query = $this->createQuery()->setQuery($query);
 		}
 		elseif (!($query instanceof QueryInterface))
 		{

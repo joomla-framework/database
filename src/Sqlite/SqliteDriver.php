@@ -336,7 +336,7 @@ class SqliteDriver extends PdoDriver
 
 		$type = 'table';
 
-		$query = $this->getQuery(true)
+		$query = $this->createQuery()
 			->select('name')
 			->from('sqlite_master')
 			->where('type = :type')

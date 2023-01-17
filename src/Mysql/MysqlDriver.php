@@ -687,7 +687,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		}
 
 		// Create the base insert statement.
-		$query = $this->getQuery(true)
+		$query = $this->createQuery()
 			->insert($this->quoteName($table))
 			->columns($fields)
 			->values(implode(',', $values));
