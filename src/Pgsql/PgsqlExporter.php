@@ -134,7 +134,7 @@ class PgsqlExporter extends DatabaseExporter
 				}
 			}
 
-			$query = $this->db->createQuery();
+			$query = $this->db->getQuery(true);
 			$query->select($query->quoteName(array_keys($fields)))
 				->from($query->quoteName($table));
 			$this->db->setQuery($query);

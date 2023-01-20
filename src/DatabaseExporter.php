@@ -280,7 +280,7 @@ abstract class DatabaseExporter
 			}
 
 			$this->db->setQuery(
-				$this->db->createQuery()
+				$this->db->getQuery(true)
 					->select($this->db->quoteName(array_keys($fields)))
 					->from($this->db->quoteName($table))
 			);
