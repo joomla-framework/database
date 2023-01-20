@@ -580,11 +580,11 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	/**
 	 * Create a new DatabaseQuery object.
 	 *
-	 * @return  DatabaseQuery
+	 * @return  QueryInterface
 	 *
-	 * @since   2.1
+	 * @since   2.2
 	 */
-	public function createQuery()
+	public function createQuery(): QueryInterface
 	{
 			return $this->factory->getQuery($this->name, $this);
 	}
@@ -1048,11 +1048,11 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 * Get the current query object or a new DatabaseQuery object.
 	 *
 	 * @param   boolean  $new  False to return the current query object, True to return a new DatabaseQuery object.
+	 *                         The $new parameter is deprecated in 2.2 and will be removed in 4.0, use createQuery() instead.
 	 *
 	 * @return  DatabaseQuery
 	 *
 	 * @since   1.0
-	 * @deprecated  4.0  $new parameter will be removed, use createQuery() method instead.
 	 */
 	public function getQuery($new = false)
 	{
@@ -1060,8 +1060,9 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 		{
 			trigger_deprecation(
 				'joomla/database',
-				'2.1.0',
-				'getQuery(true) call is deprecated and will be removed in 4.0, use createQuery() instead.',
+				'2.2.0',
+				'The parameter $new is deprecated and will be removed in 4.0, use %s::createQuery() instead.',
+				self::class
 			);
 
 			return $this->createQuery();
