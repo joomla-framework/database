@@ -222,7 +222,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -236,7 +236,7 @@
       {
          "commands": [
             "php --ri sqlite || true",
-            "vendor/bin/phpunit --configuration phpunit.sqlite.xml.dist --testdox"
+            "vendor/bin/phpunit --configuration phpunit.sqlite.xml.dist --verbose --debug"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "PHPUnit"
@@ -263,7 +263,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -544,7 +544,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -604,7 +604,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -845,7 +845,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -905,7 +905,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -1206,7 +1206,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -1266,7 +1266,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -1507,7 +1507,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -1567,7 +1567,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -1995,7 +1995,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -2056,7 +2056,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -2490,7 +2490,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -2552,7 +2552,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -2801,7 +2801,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -2863,7 +2863,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -3115,7 +3115,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "Composer",
@@ -3181,7 +3181,7 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --ignore-platform-reqs"
+            "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
          "name": "Composer",
@@ -3287,6 +3287,6 @@
 }
 ---
 kind: signature
-hmac: b389fab99824411af8ffc163a663529071e2a6e7f7b6a0f19ae148721bea8fb8
+hmac: 302cd1e7217471caf7f0128aa7a18720c979b657b3a7c3fea2927e27c67fbb17
 
 ...
