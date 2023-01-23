@@ -141,6 +141,47 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	}
 
 	/**
+	 * Check if the database server is responsive.
+	 *
+	 * @param   string  $host                   The host name or IP address.
+	 * @param   int     $port                   The port number. Optional; default is the MySQL default.
+	 * @param   int     $initialWaitInSeconds   The number of seconds to wait before pinging the server. Optional; default is 0 seconds.
+	 * @param   int     $intervalWaitInSeconds  The number of seconds to wait between pinging the server. Optional; default is 3 seconds.
+	 * @param   int     $timeoutInSeconds       The timeout in seconds for the server to respond. Optional; default is 1 second.
+	 * @param   int     $retries                The number of retries. Optional; default is 3.
+	 *
+	 * @return boolean
+	 * @todo  This should maybe be moved to the parent class.
+	 *
+	 */
+	public function healthCheck(string $host,
+		int $port = 3306,
+		int $initialWaitInSeconds = 0,
+		int $intervalWaitInSeconds = 3,
+		int $timeoutInSeconds = 1,
+		int $retries = 3
+	): bool
+	{
+		sleep($initialWaitInSeconds);
+
+		for ($i = 0; $i < $retries; $i++)
+		{
+			$file = @fsockopen($host, $port, $errno, $errstr, $timeoutInSeconds);
+
+			if ($file)
+			{
+				fclose($file);
+
+				return true;
+			}
+
+			sleep($intervalWaitInSeconds);
+		}
+
+		return false;
+	}
+
+	/**
 	 * Connects to the database if needed.
 	 *
 	 * @return  void  Returns void if the database connected successfully.
@@ -512,8 +553,8 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 	/**
 	 * Return the query string to create new Database.
 	 *
-	 * @param   stdClass  $options  Object used to pass user and database name to database driver. This object must have "db_name" and "db_user" set.
-	 * @param   boolean   $utf      True if the database supports the UTF-8 character set.
+	 * @param   \stdClass  $options  Object used to pass user and database name to database driver. This object must have "db_name" and "db_user" set.
+	 * @param   boolean    $utf      True if the database supports the UTF-8 character set.
 	 *
 	 * @return  string  The query that creates database
 	 *

@@ -6,6 +6,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
+// phpcs:disable Generic.PHP.DeprecatedFunctions.Deprecated
 namespace Joomla\Database\Command;
 
 use Joomla\Archive\Archive;
