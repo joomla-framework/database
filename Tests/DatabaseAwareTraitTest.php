@@ -16,53 +16,53 @@ use PHPUnit\Framework\TestCase;
  */
 class DatabaseAwareTraitTest extends TestCase
 {
-	/**
-	 * @var DatabaseAwareTrait
-	 */
-	protected $object;
+    /**
+     * @var DatabaseAwareTrait
+     */
+    protected $object;
 
-	/**
-	 * @testdox  Database can be set with setDatabase()
-	 *
-	 * @covers   \Joomla\Database\DatabaseAwareTrait
-	 * @uses     \Joomla\Database\Database
-	 */
-	public function testGetSetDatabase(): void
-	{
-		$db = $this->createMock(DatabaseInterface::class);
+    /**
+     * @testdox  Database can be set with setDatabase()
+     *
+     * @covers   \Joomla\Database\DatabaseAwareTrait
+     * @uses     \Joomla\Database\Database
+     */
+    public function testGetSetDatabase(): void
+    {
+        $db = $this->createMock(DatabaseInterface::class);
 
-		$trait = new class {
-			use DatabaseAwareTrait;
+        $trait = new class () {
+            use DatabaseAwareTrait;
 
-			public function getDb()
-			{
-				return $this->getDatabase();
-			}
-		};
+            public function getDb()
+            {
+                return $this->getDatabase();
+            }
+        };
 
-		$trait->setDatabase($db);
+        $trait->setDatabase($db);
 
-		$this->assertSame($db, $trait->getDb());
-	}
+        $this->assertSame($db, $trait->getDb());
+    }
 
-	/**
-	 * @testdox  getDatabase() throws an DatabaseNotFoundException, if no database is set
-	 *
-	 * @covers   \Joomla\Database\DatabaseAwareTrait
-	 */
-	public function testGetDatabaseException(): void
-	{
-		$this->expectException(DatabaseNotFoundException::class);
+    /**
+     * @testdox  getDatabase() throws an DatabaseNotFoundException, if no database is set
+     *
+     * @covers   \Joomla\Database\DatabaseAwareTrait
+     */
+    public function testGetDatabaseException(): void
+    {
+        $this->expectException(DatabaseNotFoundException::class);
 
-		$trait = new class {
-			use DatabaseAwareTrait;
+        $trait = new class () {
+            use DatabaseAwareTrait;
 
-			public function getDb()
-			{
-				return $this->getDatabase();
-			}
-		};
+            public function getDb()
+            {
+                return $this->getDatabase();
+            }
+        };
 
-		$trait->getDb();
-	}
+        $trait->getDb();
+    }
 }

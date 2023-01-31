@@ -20,53 +20,55 @@ use PHPUnit\Framework\TestCase;
  */
 class DatabaseProviderTest extends TestCase
 {
-	/**
-	 * DI Container for testing
-	 *
-	 * @var  Container
-	 */
-	private $container;
+    /**
+     * DI Container for testing
+     *
+     * @var  Container
+     */
+    private $container;
 
-	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
-	 *
-	 * @return  void
-	 */
-	protected function setUp(): void
-	{
-		parent::setUp();
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     *
+     * @return  void
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-		// Create a DI container for testing
-		$this->container = new Container;
-		$config = new Registry;
-		$config->set('database.driver', 'sqlite');
-		$config->set('database.name', ':memory:');
-		$config->set('database.prefix', 'jos_');
-		$this->container->set('config', $config);
-	}
+        // Create a DI container for testing
+        $this->container = new Container();
+        $config          = new Registry();
+        $config->set('database.driver', 'sqlite');
+        $config->set('database.name', ':memory:');
+        $config->set('database.prefix', 'jos_');
+        $this->container->set('config', $config);
+    }
 
-	/**
-	 * @testdox  Verify that the DatabaseProvider returns a DatabaseInterface object
-	 */
-	public function testVerifyTheDatabaseDriverIsRegisteredToTheContainer()
-	{
-		$this->container->registerServiceProvider(new DatabaseProvider);
+    /**
+     * @testdox  Verify that the DatabaseProvider returns a DatabaseInterface object
+     */
+    public function testVerifyTheDatabaseDriverIsRegisteredToTheContainer()
+    {
+        $this->container->registerServiceProvider(new DatabaseProvider());
 
-		$this->assertInstanceOf(
-			DatabaseInterface::class, $this->container->get(DatabaseInterface::class)
-		);
-	}
+        $this->assertInstanceOf(
+            DatabaseInterface::class,
+            $this->container->get(DatabaseInterface::class)
+        );
+    }
 
-	/**
-	 * @testdox  Verify that the DatabaseProvider returns a DatabaseFactory object
-	 */
-	public function testVerifyTheDatabaseFactoryIsRegisteredToTheContainer()
-	{
-		$this->container->registerServiceProvider(new DatabaseProvider);
+    /**
+     * @testdox  Verify that the DatabaseProvider returns a DatabaseFactory object
+     */
+    public function testVerifyTheDatabaseFactoryIsRegisteredToTheContainer()
+    {
+        $this->container->registerServiceProvider(new DatabaseProvider());
 
-		$this->assertInstanceOf(
-			DatabaseFactory::class, $this->container->get(DatabaseFactory::class)
-		);
-	}
+        $this->assertInstanceOf(
+            DatabaseFactory::class,
+            $this->container->get(DatabaseFactory::class)
+        );
+    }
 }

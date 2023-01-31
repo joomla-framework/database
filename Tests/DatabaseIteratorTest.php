@@ -17,228 +17,227 @@ use PHPUnit\Framework\TestCase;
  */
 class DatabaseIteratorTest extends TestCase
 {
-	/**
-	 * @testdox  The iterator is instantiated and the first object from the result set is set as the current key
-	 */
-	public function testInstantiation()
-	{
-		/** @var StatementInterface|MockObject $statement */
-		$statement = $this->createMock(StatementInterface::class);
+    /**
+     * @testdox  The iterator is instantiated and the first object from the result set is set as the current key
+     */
+    public function testInstantiation()
+    {
+        /** @var StatementInterface|MockObject $statement */
+        $statement = $this->createMock(StatementInterface::class);
 
-		$i = 0;
+        $i = 0;
 
-		$statement->expects($this->any())
-				  ->method('fetch')
-				  ->willReturnCallback(
-					  function () use ($i) {
-						  $i++;
+        $statement->expects($this->any())
+                  ->method('fetch')
+                  ->willReturnCallback(
+                      function () use ($i) {
+                          $i++;
 
-						  $object        = new \stdClass;
-						  $object->id    = $i;
-						  $object->title = 'Row ' . $i;
+                          $object        = new \stdClass();
+                          $object->id    = $i;
+                          $object->title = 'Row ' . $i;
 
-						  return $object;
-					  }
-				  )
-		;
+                          return $object;
+                      }
+                  )
+        ;
 
-		$iterator = new DatabaseIterator($statement);
+        $iterator = new DatabaseIterator($statement);
 
-		$expected        = new \stdClass;
-		$expected->id    = 1;
-		$expected->title = 'Row 1';
+        $expected        = new \stdClass();
+        $expected->id    = 1;
+        $expected->title = 'Row 1';
 
-		$this->assertEquals($expected, $iterator->current());
-	}
+        $this->assertEquals($expected, $iterator->current());
+    }
 
-	/**
-	 * @testdox  The iterator can iterate over all rows in a result set
-	 */
-	public function testIteration()
-	{
-		/** @var StatementInterface|MockObject $statement */
-		$statement = $this->createMock(StatementInterface::class);
+    /**
+     * @testdox  The iterator can iterate over all rows in a result set
+     */
+    public function testIteration()
+    {
+        /** @var StatementInterface|MockObject $statement */
+        $statement = $this->createMock(StatementInterface::class);
 
-		$statement
-			->expects($this->once())
-			->method('setFetchMode')
-			->with(FetchMode::STANDARD_OBJECT)
-		;
+        $statement
+            ->expects($this->once())
+            ->method('setFetchMode')
+            ->with(FetchMode::STANDARD_OBJECT)
+        ;
 
-		$statement
-			->method('fetch')
-			->willReturnOnConsecutiveCalls(
-				(object) ['id' => 1, 'title' => 'Row 1'],
-				(object) ['id' => 2, 'title' => 'Row 2'],
-				(object) ['id' => 3, 'title' => 'Row 3'],
-				(object) ['id' => 4, 'title' => 'Row 4'],
-				(object) ['id' => 5, 'title' => 'Row 5'],
-				false
-			)
-		;
+        $statement
+            ->method('fetch')
+            ->willReturnOnConsecutiveCalls(
+                (object) ['id' => 1, 'title' => 'Row 1'],
+                (object) ['id' => 2, 'title' => 'Row 2'],
+                (object) ['id' => 3, 'title' => 'Row 3'],
+                (object) ['id' => 4, 'title' => 'Row 4'],
+                (object) ['id' => 5, 'title' => 'Row 5'],
+                false
+            )
+        ;
 
-		$expected = [
-			(object) [
-				'id'    => 1,
-				'title' => 'Row 1',
-			],
-			(object) [
-				'id'    => 2,
-				'title' => 'Row 2',
-			],
-			(object) [
-				'id'    => 3,
-				'title' => 'Row 3',
-			],
-			(object) [
-				'id'    => 4,
-				'title' => 'Row 4',
-			],
-			(object) [
-				'id'    => 5,
-				'title' => 'Row 5',
-			],
-		];
+        $expected = [
+            (object) [
+                'id'    => 1,
+                'title' => 'Row 1',
+            ],
+            (object) [
+                'id'    => 2,
+                'title' => 'Row 2',
+            ],
+            (object) [
+                'id'    => 3,
+                'title' => 'Row 3',
+            ],
+            (object) [
+                'id'    => 4,
+                'title' => 'Row 4',
+            ],
+            (object) [
+                'id'    => 5,
+                'title' => 'Row 5',
+            ],
+        ];
 
-		$iterator = new DatabaseIterator($statement);
+        $iterator = new DatabaseIterator($statement);
 
-		$this->assertEquals($expected, iterator_to_array($iterator));
-	}
+        $this->assertEquals($expected, iterator_to_array($iterator));
+    }
 
-	/**
-	 * @testdox  The iterator can iterate over all rows in a result set with a custom key
-	 */
-	public function testIterationWithCustomKey()
-	{
-		/** @var StatementInterface|MockObject $statement */
-		$statement = $this->createMock(StatementInterface::class);
+    /**
+     * @testdox  The iterator can iterate over all rows in a result set with a custom key
+     */
+    public function testIterationWithCustomKey()
+    {
+        /** @var StatementInterface|MockObject $statement */
+        $statement = $this->createMock(StatementInterface::class);
 
-		$statement
-			->expects($this->once())
-			->method('setFetchMode')
-			->with(FetchMode::STANDARD_OBJECT)
-		;
+        $statement
+            ->expects($this->once())
+            ->method('setFetchMode')
+            ->with(FetchMode::STANDARD_OBJECT)
+        ;
 
-		$statement
-			->method('fetch')
-			->willReturnOnConsecutiveCalls(
-				(object) ['id' => 1, 'key' => 'Key 1', 'title' => 'Row 1'],
-				(object) ['id' => 2, 'key' => 'Key 2', 'title' => 'Row 2'],
-				(object) ['id' => 3, 'key' => 'Key 3', 'title' => 'Row 3'],
-				(object) ['id' => 4, 'key' => 'Key 4', 'title' => 'Row 4'],
-				(object) ['id' => 5, 'key' => 'Key 5', 'title' => 'Row 5'],
-				false
-			)
-		;
+        $statement
+            ->method('fetch')
+            ->willReturnOnConsecutiveCalls(
+                (object) ['id' => 1, 'key' => 'Key 1', 'title' => 'Row 1'],
+                (object) ['id' => 2, 'key' => 'Key 2', 'title' => 'Row 2'],
+                (object) ['id' => 3, 'key' => 'Key 3', 'title' => 'Row 3'],
+                (object) ['id' => 4, 'key' => 'Key 4', 'title' => 'Row 4'],
+                (object) ['id' => 5, 'key' => 'Key 5', 'title' => 'Row 5'],
+                false
+            )
+        ;
 
-		$iterator = new DatabaseIterator($statement, 'key');
+        $iterator = new DatabaseIterator($statement, 'key');
 
-		$expected = [
-			'Key 1' => (object)[
-				'id'    => 1,
-				'key'   => 'Key 1',
-				'title' => 'Row 1',
-			],
-			'Key 2' => (object)[
-				'id'    => 2,
-				'key'   => 'Key 2',
-				'title' => 'Row 2',
-			],
-			'Key 3' => (object)[
-				'id'    => 3,
-				'key'   => 'Key 3',
-				'title' => 'Row 3',
-			],
-			'Key 4' => (object)[
-				'id'    => 4,
-				'key'   => 'Key 4',
-				'title' => 'Row 4',
-			],
-			'Key 5' => (object)[
-				'id'    => 5,
-				'key'   => 'Key 5',
-				'title' => 'Row 5',
-			],
-		];
+        $expected = [
+            'Key 1' => (object)[
+                'id'    => 1,
+                'key'   => 'Key 1',
+                'title' => 'Row 1',
+            ],
+            'Key 2' => (object)[
+                'id'    => 2,
+                'key'   => 'Key 2',
+                'title' => 'Row 2',
+            ],
+            'Key 3' => (object)[
+                'id'    => 3,
+                'key'   => 'Key 3',
+                'title' => 'Row 3',
+            ],
+            'Key 4' => (object)[
+                'id'    => 4,
+                'key'   => 'Key 4',
+                'title' => 'Row 4',
+            ],
+            'Key 5' => (object)[
+                'id'    => 5,
+                'key'   => 'Key 5',
+                'title' => 'Row 5',
+            ],
+        ];
 
-		$this->assertEquals($expected, iterator_to_array($iterator));
-	}
+        $this->assertEquals($expected, iterator_to_array($iterator));
+    }
 
-	/**
-	 * @testdox  The iterator can iterate over all rows in a result set with a custom PHP class
-	 */
-	public function testIterationWithCustomClass()
-	{
-		/** @var StatementInterface|MockObject $statement */
-		$statement = $this->createMock(StatementInterface::class);
+    /**
+     * @testdox  The iterator can iterate over all rows in a result set with a custom PHP class
+     */
+    public function testIterationWithCustomClass()
+    {
+        /** @var StatementInterface|MockObject $statement */
+        $statement = $this->createMock(StatementInterface::class);
 
-		$statement
-			->expects($this->once())
-			->method('setFetchMode')
-			->with(FetchMode::CUSTOM_OBJECT, TestEntity::class);
+        $statement
+            ->expects($this->once())
+            ->method('setFetchMode')
+            ->with(FetchMode::CUSTOM_OBJECT, TestEntity::class);
 
-		$expected = [];
+        $expected = [];
 
-		for ($i = 1; $i < 6; $i++)
-		{
-			$object        = new TestEntity;
-			$object->id    = $i;
-			$object->title = 'Row ' . $i;
+        for ($i = 1; $i < 6; $i++) {
+            $object        = new TestEntity();
+            $object->id    = $i;
+            $object->title = 'Row ' . $i;
 
-			$expected[] = $object;
-		}
+            $expected[] = $object;
+        }
 
-		$statement
-			->method('fetch')
-			->willReturnOnConsecutiveCalls(
-				$expected[0],
-				$expected[1],
-				$expected[2],
-				$expected[3],
-				$expected[4],
-				false
-			)
-		;
+        $statement
+            ->method('fetch')
+            ->willReturnOnConsecutiveCalls(
+                $expected[0],
+                $expected[1],
+                $expected[2],
+                $expected[3],
+                $expected[4],
+                false
+            )
+        ;
 
-		$iterator = new DatabaseIterator($statement, null, TestEntity::class);
+        $iterator = new DatabaseIterator($statement, null, TestEntity::class);
 
-		$this->assertEquals($expected, iterator_to_array($iterator));
-	}
+        $this->assertEquals($expected, iterator_to_array($iterator));
+    }
 
-	/**
-	 * @testdox  The iterator can be counted
-	 */
-	public function testCount()
-	{
-		/** @var StatementInterface|MockObject $statement */
-		$statement = $this->createMock(StatementInterface::class);
+    /**
+     * @testdox  The iterator can be counted
+     */
+    public function testCount()
+    {
+        /** @var StatementInterface|MockObject $statement */
+        $statement = $this->createMock(StatementInterface::class);
 
-		$statement->expects($this->once())
-				  ->method('rowCount')
-				  ->willReturn(42)
-		;
+        $statement->expects($this->once())
+                  ->method('rowCount')
+                  ->willReturn(42)
+        ;
 
-		$iterator = new DatabaseIterator($statement);
+        $iterator = new DatabaseIterator($statement);
 
-		$this->assertCount(42, $iterator);
-	}
+        $this->assertCount(42, $iterator);
+    }
 
-	/**
-	 * @testdox  The iterator cannot be created if the class that objects should be placed in does not exist
-	 */
-	public function testConstructorExceptionForNonExistingClass()
-	{
-		$this->expectException(\InvalidArgumentException::class);
+    /**
+     * @testdox  The iterator cannot be created if the class that objects should be placed in does not exist
+     */
+    public function testConstructorExceptionForNonExistingClass()
+    {
+        $this->expectException(\InvalidArgumentException::class);
 
-		/** @var StatementInterface|MockObject $statement */
-		$statement = $this->createMock(StatementInterface::class);
+        /** @var StatementInterface|MockObject $statement */
+        $statement = $this->createMock(StatementInterface::class);
 
-		$iterator = new DatabaseIterator($statement, null, \NonExistingClass::class);
-	}
+        $iterator = new DatabaseIterator($statement, null, \NonExistingClass::class);
+    }
 }
 
 class TestEntity
 {
-	public $id;
-	public $title;
+    public $id;
+    public $title;
 }

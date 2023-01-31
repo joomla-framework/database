@@ -7,6 +7,7 @@
  */
 
 // phpcs:disable Generic.PHP.DeprecatedFunctions.Deprecated
+
 namespace Joomla\Database\Command;
 
 use Joomla\Archive\Archive;
@@ -29,254 +30,220 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class ImportCommand extends AbstractCommand
 {
-	/**
-	 * The default command name
-	 *
-	 * @var    string
-	 * @since  2.0.0
-	 */
-	protected static $defaultName = 'database:import';
+    /**
+     * The default command name
+     *
+     * @var    string
+     * @since  2.0.0
+     */
+    protected static $defaultName = 'database:import';
 
-	/**
-	 * Database connector
-	 *
-	 * @var    DatabaseDriver
-	 * @since  2.0.0
-	 */
-	private $db;
+    /**
+     * Database connector
+     *
+     * @var    DatabaseDriver
+     * @since  2.0.0
+     */
+    private $db;
 
-	/**
-	 * Instantiate the command.
-	 *
-	 * @param   DatabaseDriver  $db  Database connector
-	 *
-	 * @since   2.0.0
-	 */
-	public function __construct(DatabaseDriver $db)
-	{
-		$this->db = $db;
+    /**
+     * Instantiate the command.
+     *
+     * @param   DatabaseDriver  $db  Database connector
+     *
+     * @since   2.0.0
+     */
+    public function __construct(DatabaseDriver $db)
+    {
+        $this->db = $db;
 
-		parent::__construct();
-	}
+        parent::__construct();
+    }
 
-	/**
-	 * Checks if the zip file contains database export files
-	 *
-	 * @param   string  $archive  A zip archive to analyze
-	 *
-	 * @return  void
-	 *
-	 * @since   2.0.0
-	 * @throws  \RuntimeException
-	 */
-	private function checkZipFile(string $archive): void
-	{
-		if (!extension_loaded('zip'))
-		{
-			throw new \RuntimeException('The PHP zip extension is not installed or is disabled');
-		}
+    /**
+     * Checks if the zip file contains database export files
+     *
+     * @param   string  $archive  A zip archive to analyze
+     *
+     * @return  void
+     *
+     * @since   2.0.0
+     * @throws  \RuntimeException
+     */
+    private function checkZipFile(string $archive): void
+    {
+        if (!extension_loaded('zip')) {
+            throw new \RuntimeException('The PHP zip extension is not installed or is disabled');
+        }
 
-		$zip = zip_open($archive);
+        $zip = zip_open($archive);
 
-		if (!\is_resource($zip))
-		{
-			throw new \RuntimeException('Unable to open archive');
-		}
+        if (!\is_resource($zip)) {
+            throw new \RuntimeException('Unable to open archive');
+        }
 
-		while ($file = @zip_read($zip))
-		{
-			if (strpos(zip_entry_name($file), $this->db->getPrefix()) === false)
-			{
-				zip_entry_close($file);
-				@zip_close($zip);
+        while ($file = @zip_read($zip)) {
+            if (strpos(zip_entry_name($file), $this->db->getPrefix()) === false) {
+                zip_entry_close($file);
+                @zip_close($zip);
 
-				throw new \RuntimeException('Unable to find table matching database prefix');
-			}
+                throw new \RuntimeException('Unable to find table matching database prefix');
+            }
 
-			zip_entry_close($file);
-		}
+            zip_entry_close($file);
+        }
 
-		@zip_close($zip);
-	}
+        @zip_close($zip);
+    }
 
-	/**
-	 * Internal function to execute the command.
-	 *
-	 * @param   InputInterface   $input   The input to inject into the command.
-	 * @param   OutputInterface  $output  The output to inject into the command.
-	 *
-	 * @return  integer  The command exit code
-	 *
-	 * @since   2.0.0
-	 */
-	protected function doExecute(InputInterface $input, OutputInterface $output): int
-	{
-		$symfonyStyle = new SymfonyStyle($input, $output);
+    /**
+     * Internal function to execute the command.
+     *
+     * @param   InputInterface   $input   The input to inject into the command.
+     * @param   OutputInterface  $output  The output to inject into the command.
+     *
+     * @return  integer  The command exit code
+     *
+     * @since   2.0.0
+     */
+    protected function doExecute(InputInterface $input, OutputInterface $output): int
+    {
+        $symfonyStyle = new SymfonyStyle($input, $output);
 
-		$symfonyStyle->title('Importing Database');
+        $symfonyStyle->title('Importing Database');
 
-		$totalTime = microtime(true);
+        $totalTime = microtime(true);
 
-		// Make sure the database supports imports before we get going
-		try
-		{
-			$importer = $this->db->getImporter()
-				->withStructure()
-				->asXml();
-		}
-		catch (UnsupportedAdapterException $e)
-		{
-			$symfonyStyle->error(sprintf('The "%s" database driver does not support importing data.', $this->db->getName()));
+        // Make sure the database supports imports before we get going
+        try {
+            $importer = $this->db->getImporter()
+                ->withStructure()
+                ->asXml();
+        } catch (UnsupportedAdapterException $e) {
+            $symfonyStyle->error(sprintf('The "%s" database driver does not support importing data.', $this->db->getName()));
 
-			return 1;
-		}
+            return 1;
+        }
 
-		$folderPath = $input->getOption('folder');
-		$tableName  = $input->getOption('table');
-		$zipFile    = $input->getOption('zip');
+        $folderPath = $input->getOption('folder');
+        $tableName  = $input->getOption('table');
+        $zipFile    = $input->getOption('zip');
 
-		if ($zipFile)
-		{
-			if (!class_exists(File::class))
-			{
-				$symfonyStyle->error('The "joomla/filesystem" Composer package is not installed, cannot process ZIP files.');
+        if ($zipFile) {
+            if (!class_exists(File::class)) {
+                $symfonyStyle->error('The "joomla/filesystem" Composer package is not installed, cannot process ZIP files.');
 
-				return 1;
-			}
+                return 1;
+            }
 
-			if (!class_exists(Archive::class))
-			{
-				$symfonyStyle->error('The "joomla/archive" Composer package is not installed, cannot process ZIP files.');
+            if (!class_exists(Archive::class)) {
+                $symfonyStyle->error('The "joomla/archive" Composer package is not installed, cannot process ZIP files.');
 
-				return 1;
-			}
+                return 1;
+            }
 
-			$zipPath = $folderPath . '/' . $zipFile;
+            $zipPath = $folderPath . '/' . $zipFile;
 
-			try
-			{
-				$this->checkZipFile($zipPath);
-			}
-			catch (\RuntimeException $e)
-			{
-				$symfonyStyle->error($e->getMessage());
+            try {
+                $this->checkZipFile($zipPath);
+            } catch (\RuntimeException $e) {
+                $symfonyStyle->error($e->getMessage());
 
-				return 1;
-			}
+                return 1;
+            }
 
-			$folderPath .= File::stripExt($zipFile);
+            $folderPath .= File::stripExt($zipFile);
 
-			try
-			{
-				Folder::create($folderPath);
-			}
-			catch (FilesystemException $e)
-			{
-				$symfonyStyle->error($e->getMessage());
+            try {
+                Folder::create($folderPath);
+            } catch (FilesystemException $e) {
+                $symfonyStyle->error($e->getMessage());
 
-				return 1;
-			}
+                return 1;
+            }
 
-			try
-			{
-				(new Archive)->extract($zipPath, $folderPath);
-			}
-			catch (\RuntimeException $e)
-			{
-				$symfonyStyle->error($e->getMessage());
-				Folder::delete($folderPath);
+            try {
+                (new Archive())->extract($zipPath, $folderPath);
+            } catch (\RuntimeException $e) {
+                $symfonyStyle->error($e->getMessage());
+                Folder::delete($folderPath);
 
-				return 1;
-			}
-		}
+                return 1;
+            }
+        }
 
-		if ($tableName)
-		{
-			$tables = [$tableName . '.xml'];
-		}
-		else
-		{
-			$tables = Folder::files($folderPath, '\.xml$');
-		}
+        if ($tableName) {
+            $tables = [$tableName . '.xml'];
+        } else {
+            $tables = Folder::files($folderPath, '\.xml$');
+        }
 
-		foreach ($tables as $table)
-		{
-			$taskTime = microtime(true);
-			$percorso = $folderPath . '/' . $table;
+        foreach ($tables as $table) {
+            $taskTime = microtime(true);
+            $percorso = $folderPath . '/' . $table;
 
-			// Check file
-			if (!file_exists($percorso))
-			{
-				$symfonyStyle->error(sprintf('The %s file does not exist.', $table));
+            // Check file
+            if (!file_exists($percorso)) {
+                $symfonyStyle->error(sprintf('The %s file does not exist.', $table));
 
-				return 1;
-			}
+                return 1;
+            }
 
-			$tableName = str_replace('.xml', '', $table);
-			$symfonyStyle->text(sprintf('Importing %1$s from %2$s', $tableName, $table));
+            $tableName = str_replace('.xml', '', $table);
+            $symfonyStyle->text(sprintf('Importing %1$s from %2$s', $tableName, $table));
 
-			$importer->from(file_get_contents($percorso));
+            $importer->from(file_get_contents($percorso));
 
-			$symfonyStyle->text(sprintf('Processing the %s table', $tableName));
+            $symfonyStyle->text(sprintf('Processing the %s table', $tableName));
 
-			try
-			{
-				$this->db->dropTable($tableName, true);
-			}
-			catch (ExecutionFailureException $e)
-			{
-				$symfonyStyle->error(sprintf('Error executing the DROP TABLE statement for %1$s: %2$s', $tableName, $e->getMessage()));
+            try {
+                $this->db->dropTable($tableName, true);
+            } catch (ExecutionFailureException $e) {
+                $symfonyStyle->error(sprintf('Error executing the DROP TABLE statement for %1$s: %2$s', $tableName, $e->getMessage()));
 
-				return 1;
-			}
+                return 1;
+            }
 
-			try
-			{
-				$importer->mergeStructure();
-			}
-			catch (\Exception $e)
-			{
-				$symfonyStyle->error(sprintf('Error merging the structure for %1$s: %2$s', $tableName, $e->getMessage()));
+            try {
+                $importer->mergeStructure();
+            } catch (\Exception $e) {
+                $symfonyStyle->error(sprintf('Error merging the structure for %1$s: %2$s', $tableName, $e->getMessage()));
 
-				return 1;
-			}
+                return 1;
+            }
 
-			try
-			{
-				$importer->importData();
-			}
-			catch (\Exception $e)
-			{
-				$symfonyStyle->error(sprintf('Error importing the data for %1$s: %2$s', $tableName, $e->getMessage()));
+            try {
+                $importer->importData();
+            } catch (\Exception $e) {
+                $symfonyStyle->error(sprintf('Error importing the data for %1$s: %2$s', $tableName, $e->getMessage()));
 
-				return 1;
-			}
+                return 1;
+            }
 
-			$symfonyStyle->text(sprintf('Imported data for %s in %d seconds', $table, round(microtime(true) - $taskTime, 3)));
-		}
+            $symfonyStyle->text(sprintf('Imported data for %s in %d seconds', $table, round(microtime(true) - $taskTime, 3)));
+        }
 
-		if ($zipFile)
-		{
-			Folder::delete($folderPath);
-		}
+        if ($zipFile) {
+            Folder::delete($folderPath);
+        }
 
-		$symfonyStyle->success(sprintf('Import completed in %d seconds', round(microtime(true) - $totalTime, 3)));
+        $symfonyStyle->success(sprintf('Import completed in %d seconds', round(microtime(true) - $totalTime, 3)));
 
-		return 0;
-	}
+        return 0;
+    }
 
-	/**
-	 * Configure the command.
-	 *
-	 * @return  void
-	 *
-	 * @since   2.0.0
-	 */
-	protected function configure(): void
-	{
-		$this->setDescription('Import the database');
-		$this->addOption('folder', null, InputOption::VALUE_OPTIONAL, 'Path to the folder containing files to import', '.');
-		$this->addOption('zip', null, InputOption::VALUE_REQUIRED, 'The name of a ZIP file to import');
-		$this->addOption('table', null, InputOption::VALUE_REQUIRED, 'The name of the database table to import');
-	}
+    /**
+     * Configure the command.
+     *
+     * @return  void
+     *
+     * @since   2.0.0
+     */
+    protected function configure(): void
+    {
+        $this->setDescription('Import the database');
+        $this->addOption('folder', null, InputOption::VALUE_OPTIONAL, 'Path to the folder containing files to import', '.');
+        $this->addOption('zip', null, InputOption::VALUE_REQUIRED, 'The name of a ZIP file to import');
+        $this->addOption('table', null, InputOption::VALUE_REQUIRED, 'The name of the database table to import');
+    }
 }

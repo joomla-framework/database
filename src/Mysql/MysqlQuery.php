@@ -18,13 +18,13 @@ use Joomla\Database\Query\MysqlQueryBuilder;
  */
 class MysqlQuery extends PdoQuery
 {
-	use MysqlQueryBuilder;
+    use MysqlQueryBuilder;
 
-	/**
-	 * The list of zero or null representation of a datetime.
-	 *
-	 * @var    array
-	 * @since  2.0.0
-	 */
-	protected $nullDatetimeList = ['0000-00-00 00:00:00', '1000-01-01 00:00:00'];
+    /**
+     * The list of zero or null representation of a datetime.
+     *
+     * @var    array
+     * @since  2.0.0
+     */
+    protected $nullDatetimeList = ['0000-00-00 00:00:00', '1000-01-01 00:00:00'];
 }

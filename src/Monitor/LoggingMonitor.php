@@ -19,39 +19,38 @@ use Psr\Log\LoggerAwareTrait;
  */
 class LoggingMonitor implements QueryMonitorInterface, LoggerAwareInterface
 {
-	use LoggerAwareTrait;
+    use LoggerAwareTrait;
 
-	/**
-	 * Act on a query being started.
-	 *
-	 * @param   string         $sql          The SQL to be executed.
-	 * @param   object[]|null  $boundParams  List of bound params, used with the query.
-	 *                                       Each item is an object that holds: value, dataType
-	 * @return  void
-	 *
-	 * @since   2.0.0
-	 */
-	public function startQuery(string $sql, ?array $boundParams = null): void
-	{
-		if ($this->logger)
-		{
-			// Add the query to the object queue.
-			$this->logger->info(
-				'Query Executed: {sql}',
-				['sql' => $sql, 'trace' => debug_backtrace()]
-			);
-		}
-	}
+    /**
+     * Act on a query being started.
+     *
+     * @param   string         $sql          The SQL to be executed.
+     * @param   object[]|null  $boundParams  List of bound params, used with the query.
+     *                                       Each item is an object that holds: value, dataType
+     * @return  void
+     *
+     * @since   2.0.0
+     */
+    public function startQuery(string $sql, ?array $boundParams = null): void
+    {
+        if ($this->logger) {
+            // Add the query to the object queue.
+            $this->logger->info(
+                'Query Executed: {sql}',
+                ['sql' => $sql, 'trace' => debug_backtrace()]
+            );
+        }
+    }
 
-	/**
-	 * Act on a query being stopped.
-	 *
-	 * @return  void
-	 *
-	 * @since   2.0.0
-	 */
-	public function stopQuery(): void
-	{
-		// Nothing to do
-	}
+    /**
+     * Act on a query being stopped.
+     *
+     * @return  void
+     *
+     * @since   2.0.0
+     */
+    public function stopQuery(): void
+    {
+        // Nothing to do
+    }
 }

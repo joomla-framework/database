@@ -19,154 +19,151 @@ use Symfony\Component\Console\Output\BufferedOutput;
  */
 class ImportCommandTest extends DatabaseTestCase
 {
-	/**
-	 * Path to the database stubs
-	 *
-	 * @var  null|string
-	 */
-	private $stubPath = null;
+    /**
+     * Path to the database stubs
+     *
+     * @var  null|string
+     */
+    private $stubPath = null;
 
-	/**
-	 * This method is called before the first test of this test class is run.
-	 *
-	 * @return  void
-	 */
-	public static function setUpBeforeClass(): void
-	{
-		if (!\defined('JPATH_ROOT'))
-		{
-			self::markTestSkipped('Constant `JPATH_ROOT` is not defined.');
-		}
+    /**
+     * This method is called before the first test of this test class is run.
+     *
+     * @return  void
+     */
+    public static function setUpBeforeClass(): void
+    {
+        if (!\defined('JPATH_ROOT')) {
+            self::markTestSkipped('Constant `JPATH_ROOT` is not defined.');
+        }
 
-		parent::setUpBeforeClass();
+        parent::setUpBeforeClass();
 
-		if (!static::$connection || static::$connection->getName() !== 'mysql')
-		{
-			self::markTestSkipped('MySQL database not configured.');
-		}
-	}
+        if (!static::$connection || static::$connection->getName() !== 'mysql') {
+            self::markTestSkipped('MySQL database not configured.');
+        }
+    }
 
-	/**
-	 * Sets up the fixture, for example, opens a network connection.
-	 * This method is called before a test is executed.
-	 *
-	 * @return  void
-	 */
-	protected function setUp(): void
-	{
-		parent::setUp();
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     *
+     * @return  void
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-		$this->stubPath = dirname(__DIR__) . '/Stubs/Importer';
-	}
+        $this->stubPath = dirname(__DIR__) . '/Stubs/Importer';
+    }
 
-	/**
-	 * Tears down the fixture, for example, close a network connection.
-	 * This method is called after a test is executed.
-	 *
-	 * @return  void
-	 */
-	protected function tearDown(): void
-	{
-		foreach (static::$connection->getTableList() as $table)
-		{
-			static::$connection->dropTable($table);
-		}
+    /**
+     * Tears down the fixture, for example, close a network connection.
+     * This method is called after a test is executed.
+     *
+     * @return  void
+     */
+    protected function tearDown(): void
+    {
+        foreach (static::$connection->getTableList() as $table) {
+            static::$connection->dropTable($table);
+        }
 
-		parent::tearDown();
-	}
+        parent::tearDown();
+    }
 
-	public function testTheDatabaseIsImportedWithAllTables()
-	{
-		$input  = new ArrayInput(
-			[
-				'command'  => 'database:import',
-				'--folder' => $this->stubPath,
-			]
-		);
-		$output = new BufferedOutput;
+    public function testTheDatabaseIsImportedWithAllTables()
+    {
+        $input  = new ArrayInput(
+            [
+                'command'  => 'database:import',
+                '--folder' => $this->stubPath,
+            ]
+        );
+        $output = new BufferedOutput();
 
-		$application = new Application($input, $output);
+        $application = new Application($input, $output);
 
-		$command = new ImportCommand(static::$connection);
-		$command->setApplication($application);
+        $command = new ImportCommand(static::$connection);
+        $command->setApplication($application);
 
-		$this->assertSame(0, $command->execute($input, $output));
+        $this->assertSame(0, $command->execute($input, $output));
 
-		$screenOutput = $output->fetch();
-		$this->assertStringContainsString('Import completed in', $screenOutput);
-	}
+        $screenOutput = $output->fetch();
+        $this->assertStringContainsString('Import completed in', $screenOutput);
+    }
 
-	public function testTheDatabaseIsImportedWithASingleTable()
-	{
-		$input  = new ArrayInput(
-			[
-				'command'  => 'database:import',
-				'--table'  => 'dbtest',
-				'--folder' => $this->stubPath,
-			]
-		);
-		$output = new BufferedOutput;
+    public function testTheDatabaseIsImportedWithASingleTable()
+    {
+        $input  = new ArrayInput(
+            [
+                'command'  => 'database:import',
+                '--table'  => 'dbtest',
+                '--folder' => $this->stubPath,
+            ]
+        );
+        $output = new BufferedOutput();
 
-		$application = new Application($input, $output);
+        $application = new Application($input, $output);
 
-		$command = new ImportCommand(static::$connection);
-		$command->setApplication($application);
+        $command = new ImportCommand(static::$connection);
+        $command->setApplication($application);
 
-		$this->assertSame(0, $command->execute($input, $output));
+        $this->assertSame(0, $command->execute($input, $output));
 
-		$screenOutput = $output->fetch();
-		$this->assertStringContainsString('Import completed in', $screenOutput);
-	}
+        $screenOutput = $output->fetch();
+        $this->assertStringContainsString('Import completed in', $screenOutput);
+    }
 
-	public function testTheCommandFailsIfTheDatabaseDriverDoesNotSupportImports()
-	{
-		$db = $this->createMock(DatabaseDriver::class);
-		$db->expects($this->once())
-			->method('getImporter')
-			->willThrowException(new UnsupportedAdapterException('Testing'));
+    public function testTheCommandFailsIfTheDatabaseDriverDoesNotSupportImports()
+    {
+        $db = $this->createMock(DatabaseDriver::class);
+        $db->expects($this->once())
+            ->method('getImporter')
+            ->willThrowException(new UnsupportedAdapterException('Testing'));
 
-		$db->expects($this->once())
-			->method('getName')
-			->willReturn('test');
+        $db->expects($this->once())
+            ->method('getName')
+            ->willReturn('test');
 
-		$input  = new ArrayInput(
-			[
-				'command'  => 'database:import',
-				'--folder' => $this->stubPath,
-			]
-		);
-		$output = new BufferedOutput;
+        $input  = new ArrayInput(
+            [
+                'command'  => 'database:import',
+                '--folder' => $this->stubPath,
+            ]
+        );
+        $output = new BufferedOutput();
 
-		$application = new Application($input, $output);
+        $application = new Application($input, $output);
 
-		$command = new ImportCommand($db);
-		$command->setApplication($application);
+        $command = new ImportCommand($db);
+        $command->setApplication($application);
 
-		$this->assertSame(1, $command->execute($input, $output));
+        $this->assertSame(1, $command->execute($input, $output));
 
-		$screenOutput = $output->fetch();
-		$this->assertStringContainsString('The "test" database driver does not', $screenOutput);
-	}
+        $screenOutput = $output->fetch();
+        $this->assertStringContainsString('The "test" database driver does not', $screenOutput);
+    }
 
-	public function testTheCommandFailsIfTheRequestedTableDoesNotHaveAnImportFile()
-	{
-		$input  = new ArrayInput(
-			[
-				'command'  => 'database:import',
-				'--table'  => 'unexisting_table',
-				'--folder' => dirname($this->stubPath),
-			]
-		);
-		$output = new BufferedOutput;
+    public function testTheCommandFailsIfTheRequestedTableDoesNotHaveAnImportFile()
+    {
+        $input  = new ArrayInput(
+            [
+                'command'  => 'database:import',
+                '--table'  => 'unexisting_table',
+                '--folder' => dirname($this->stubPath),
+            ]
+        );
+        $output = new BufferedOutput();
 
-		$application = new Application($input, $output);
+        $application = new Application($input, $output);
 
-		$command = new ImportCommand(static::$connection);
-		$command->setApplication($application);
+        $command = new ImportCommand(static::$connection);
+        $command->setApplication($application);
 
-		$this->assertSame(1, $command->execute($input, $output));
+        $this->assertSame(1, $command->execute($input, $output));
 
-		$screenOutput = $output->fetch();
-		$this->assertStringContainsString('The unexisting_table.xml file does not exist.', $screenOutput);
-	}
+        $screenOutput = $output->fetch();
+        $this->assertStringContainsString('The unexisting_table.xml file does not exist.', $screenOutput);
+    }
 }

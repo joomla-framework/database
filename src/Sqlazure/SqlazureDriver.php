@@ -18,11 +18,11 @@ use Joomla\Database\Sqlsrv\SqlsrvDriver;
  */
 class SqlazureDriver extends SqlsrvDriver
 {
-	/**
-	 * The name of the database driver.
-	 *
-	 * @var    string
-	 * @since  1.0
-	 */
-	public $name = 'sqlazure';
+    /**
+     * The name of the database driver.
+     *
+     * @var    string
+     * @since  1.0
+     */
+    public $name = 'sqlazure';
 }

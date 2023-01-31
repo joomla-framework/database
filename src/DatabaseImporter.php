@@ -15,369 +15,346 @@ namespace Joomla\Database;
  */
 abstract class DatabaseImporter
 {
-	/**
-	 * An array of cached data.
-	 *
-	 * @var    array
-	 * @since  1.0
-	 */
-	protected $cache = ['columns' => [], 'keys' => []];
+    /**
+     * An array of cached data.
+     *
+     * @var    array
+     * @since  1.0
+     */
+    protected $cache = ['columns' => [], 'keys' => []];
 
-	/**
-	 * The database connector to use for exporting structure and/or data.
-	 *
-	 * @var    DatabaseInterface
-	 * @since  1.0
-	 */
-	protected $db;
+    /**
+     * The database connector to use for exporting structure and/or data.
+     *
+     * @var    DatabaseInterface
+     * @since  1.0
+     */
+    protected $db;
 
-	/**
-	 * The input source.
-	 *
-	 * @var    mixed
-	 * @since  1.0
-	 */
-	protected $from = [];
+    /**
+     * The input source.
+     *
+     * @var    mixed
+     * @since  1.0
+     */
+    protected $from = [];
 
-	/**
-	 * The type of input format.
-	 *
-	 * @var    string
-	 * @since  1.0
-	 */
-	protected $asFormat = 'xml';
+    /**
+     * The type of input format.
+     *
+     * @var    string
+     * @since  1.0
+     */
+    protected $asFormat = 'xml';
 
-	/**
-	 * An array of options for the exporter.
-	 *
-	 * @var    \stdClass
-	 * @since  1.0
-	 */
-	protected $options;
+    /**
+     * An array of options for the exporter.
+     *
+     * @var    \stdClass
+     * @since  1.0
+     */
+    protected $options;
 
-	/**
-	 * Constructor.
-	 *
-	 * Sets up the default options for the importer.
-	 *
-	 * @since   1.0
-	 */
-	public function __construct()
-	{
-		$this->options = new \stdClass;
+    /**
+     * Constructor.
+     *
+     * Sets up the default options for the importer.
+     *
+     * @since   1.0
+     */
+    public function __construct()
+    {
+        $this->options = new \stdClass();
 
-		// Set up the class defaults:
+        // Set up the class defaults:
 
-		// Import with only structure
-		$this->withStructure();
+        // Import with only structure
+        $this->withStructure();
 
-		// Export as XML.
-		$this->asXml();
+        // Export as XML.
+        $this->asXml();
 
-		// Default destination is a string using $output = (string) $importer;
-	}
+        // Default destination is a string using $output = (string) $importer;
+    }
 
-	/**
-	 * Set the output option for the importer to XML format.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function asXml()
-	{
-		$this->asFormat = 'xml';
+    /**
+     * Set the output option for the importer to XML format.
+     *
+     * @return  $this
+     *
+     * @since   1.0
+     */
+    public function asXml()
+    {
+        $this->asFormat = 'xml';
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Checks if all data and options are in order prior to importer.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 * @throws  \RuntimeException
-	 */
-	abstract public function check();
+    /**
+     * Checks if all data and options are in order prior to importer.
+     *
+     * @return  $this
+     *
+     * @since   1.0
+     * @throws  \RuntimeException
+     */
+    abstract public function check();
 
-	/**
-	 * Specifies the data source to import.
-	 *
-	 * @param   \SimpleXMLElement|string  $from  The data source to import, either as a SimpleXMLElement object or XML string.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function from($from)
-	{
-		$this->from = $from;
+    /**
+     * Specifies the data source to import.
+     *
+     * @param   \SimpleXMLElement|string  $from  The data source to import, either as a SimpleXMLElement object or XML string.
+     *
+     * @return  $this
+     *
+     * @since   1.0
+     */
+    public function from($from)
+    {
+        $this->from = $from;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get the SQL syntax to add a column.
-	 *
-	 * @param   string             $table  The table name.
-	 * @param   \SimpleXMLElement  $field  The XML field definition.
-	 *
-	 * @return  string
-	 *
-	 * @since   1.0
-	 */
-	protected function getAddColumnSql($table, \SimpleXMLElement $field)
-	{
-		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD COLUMN ' . $this->getColumnSQL($field);
-	}
+    /**
+     * Get the SQL syntax to add a column.
+     *
+     * @param   string             $table  The table name.
+     * @param   \SimpleXMLElement  $field  The XML field definition.
+     *
+     * @return  string
+     *
+     * @since   1.0
+     */
+    protected function getAddColumnSql($table, \SimpleXMLElement $field)
+    {
+        return 'ALTER TABLE ' . $this->db->quoteName($table) . ' ADD COLUMN ' . $this->getColumnSQL($field);
+    }
 
-	/**
-	 * Get alters for table if there is a difference.
-	 *
-	 * @param   \SimpleXMLElement  $structure  The XML structure of the table.
-	 *
-	 * @return  array
-	 *
-	 * @since   2.0.0
-	 */
-	abstract protected function getAlterTableSql(\SimpleXMLElement $structure);
+    /**
+     * Get alters for table if there is a difference.
+     *
+     * @param   \SimpleXMLElement  $structure  The XML structure of the table.
+     *
+     * @return  array
+     *
+     * @since   2.0.0
+     */
+    abstract protected function getAlterTableSql(\SimpleXMLElement $structure);
 
-	/**
-	 * Get the syntax to alter a column.
-	 *
-	 * @param   string             $table  The name of the database table to alter.
-	 * @param   \SimpleXMLElement  $field  The XML definition for the field.
-	 *
-	 * @return  string
-	 *
-	 * @since   1.0
-	 */
-	protected function getChangeColumnSql($table, \SimpleXMLElement $field)
-	{
-		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
-			. $this->getColumnSQL($field);
-	}
+    /**
+     * Get the syntax to alter a column.
+     *
+     * @param   string             $table  The name of the database table to alter.
+     * @param   \SimpleXMLElement  $field  The XML definition for the field.
+     *
+     * @return  string
+     *
+     * @since   1.0
+     */
+    protected function getChangeColumnSql($table, \SimpleXMLElement $field)
+    {
+        return 'ALTER TABLE ' . $this->db->quoteName($table) . ' CHANGE COLUMN ' . $this->db->quoteName((string) $field['Field']) . ' '
+            . $this->getColumnSQL($field);
+    }
 
-	/**
-	 * Get the SQL syntax to drop a column.
-	 *
-	 * @param   string  $table  The table name.
-	 * @param   string  $name   The name of the field to drop.
-	 *
-	 * @return  string
-	 *
-	 * @since   1.0
-	 */
-	protected function getDropColumnSql($table, $name)
-	{
-		return 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP COLUMN ' . $this->db->quoteName($name);
-	}
+    /**
+     * Get the SQL syntax to drop a column.
+     *
+     * @param   string  $table  The table name.
+     * @param   string  $name   The name of the field to drop.
+     *
+     * @return  string
+     *
+     * @since   1.0
+     */
+    protected function getDropColumnSql($table, $name)
+    {
+        return 'ALTER TABLE ' . $this->db->quoteName($table) . ' DROP COLUMN ' . $this->db->quoteName($name);
+    }
 
-	/**
-	 * Get the details list of keys for a table.
-	 *
-	 * @param   array  $keys  An array of objects that comprise the keys for the table.
-	 *
-	 * @return  array  The lookup array. array({key name} => array(object, ...))
-	 *
-	 * @since   1.0
-	 */
-	protected function getKeyLookup($keys)
-	{
-		// First pass, create a lookup of the keys.
-		$lookup = [];
+    /**
+     * Get the details list of keys for a table.
+     *
+     * @param   array  $keys  An array of objects that comprise the keys for the table.
+     *
+     * @return  array  The lookup array. array({key name} => array(object, ...))
+     *
+     * @since   1.0
+     */
+    protected function getKeyLookup($keys)
+    {
+        // First pass, create a lookup of the keys.
+        $lookup = [];
 
-		foreach ($keys as $key)
-		{
-			if ($key instanceof \SimpleXMLElement)
-			{
-				$kName = (string) $key['Key_name'];
-			}
-			else
-			{
-				$kName = $key->Key_name;
-			}
+        foreach ($keys as $key) {
+            if ($key instanceof \SimpleXMLElement) {
+                $kName = (string) $key['Key_name'];
+            } else {
+                $kName = $key->Key_name;
+            }
 
-			if (empty($lookup[$kName]))
-			{
-				$lookup[$kName] = [];
-			}
+            if (empty($lookup[$kName])) {
+                $lookup[$kName] = [];
+            }
 
-			$lookup[$kName][] = $key;
-		}
+            $lookup[$kName][] = $key;
+        }
 
-		return $lookup;
-	}
+        return $lookup;
+    }
 
-	/**
-	 * Get the real name of the table, converting the prefix wildcard string if present.
-	 *
-	 * @param   string  $table  The name of the table.
-	 *
-	 * @return  string	The real name of the table.
-	 *
-	 * @since   1.0
-	 */
-	protected function getRealTableName($table)
-	{
-		$prefix = $this->db->getPrefix();
+    /**
+     * Get the real name of the table, converting the prefix wildcard string if present.
+     *
+     * @param   string  $table  The name of the table.
+     *
+     * @return  string	The real name of the table.
+     *
+     * @since   1.0
+     */
+    protected function getRealTableName($table)
+    {
+        $prefix = $this->db->getPrefix();
 
-		// Replace the magic prefix if found.
-		$table = preg_replace('|^#__|', $prefix, $table);
+        // Replace the magic prefix if found.
+        $table = preg_replace('|^#__|', $prefix, $table);
 
-		return $table;
-	}
+        return $table;
+    }
 
-	/**
-	 * Import the data from the source into the existing tables.
-	 *
-	 * @return  void
-	 *
-	 * @note    Currently only supports XML format.
-	 * @since   2.0.0
-	 * @throws  \RuntimeException on error.
-	 */
-	public function importData()
-	{
-		if ($this->from instanceof \SimpleXMLElement)
-		{
-			$xml = $this->from;
-		}
-		else
-		{
-			$xml = new \SimpleXMLElement($this->from);
-		}
+    /**
+     * Import the data from the source into the existing tables.
+     *
+     * @return  void
+     *
+     * @note    Currently only supports XML format.
+     * @since   2.0.0
+     * @throws  \RuntimeException on error.
+     */
+    public function importData()
+    {
+        if ($this->from instanceof \SimpleXMLElement) {
+            $xml = $this->from;
+        } else {
+            $xml = new \SimpleXMLElement($this->from);
+        }
 
-		// Get all the table definitions.
-		$xmlTables = $xml->xpath('database/table_data');
+        // Get all the table definitions.
+        $xmlTables = $xml->xpath('database/table_data');
 
-		foreach ($xmlTables as $table)
-		{
-			// Convert the magic prefix into the real table name.
-			$tableName = $this->getRealTableName((string) $table['name']);
+        foreach ($xmlTables as $table) {
+            // Convert the magic prefix into the real table name.
+            $tableName = $this->getRealTableName((string) $table['name']);
 
-			$rows = $table->children();
+            $rows = $table->children();
 
-			foreach ($rows as $row)
-			{
-				if ($row->getName() == 'row')
-				{
-					$entry = new \stdClass;
+            foreach ($rows as $row) {
+                if ($row->getName() == 'row') {
+                    $entry = new \stdClass();
 
-					foreach ($row->children() as $data)
-					{
-						$entry->{(string) $data['name']} = (string) $data;
-					}
+                    foreach ($row->children() as $data) {
+                        $entry->{(string) $data['name']} = (string) $data;
+                    }
 
-					$this->db->insertObject($tableName, $entry);
-				}
-			}
-		}
-	}
+                    $this->db->insertObject($tableName, $entry);
+                }
+            }
+        }
+    }
 
-	/**
-	 * Merges the incoming structure definition with the existing structure.
-	 *
-	 * @return  void
-	 *
-	 * @note    Currently only supports XML format.
-	 * @since   1.0
-	 * @throws  \RuntimeException on error.
-	 */
-	public function mergeStructure()
-	{
-		$tables = $this->db->getTableList();
+    /**
+     * Merges the incoming structure definition with the existing structure.
+     *
+     * @return  void
+     *
+     * @note    Currently only supports XML format.
+     * @since   1.0
+     * @throws  \RuntimeException on error.
+     */
+    public function mergeStructure()
+    {
+        $tables = $this->db->getTableList();
 
-		if ($this->from instanceof \SimpleXMLElement)
-		{
-			$xml = $this->from;
-		}
-		else
-		{
-			$xml = new \SimpleXMLElement($this->from);
-		}
+        if ($this->from instanceof \SimpleXMLElement) {
+            $xml = $this->from;
+        } else {
+            $xml = new \SimpleXMLElement($this->from);
+        }
 
-		// Get all the table definitions.
-		$xmlTables = $xml->xpath('database/table_structure');
+        // Get all the table definitions.
+        $xmlTables = $xml->xpath('database/table_structure');
 
-		foreach ($xmlTables as $table)
-		{
-			// Convert the magic prefix into the real table name.
-			$tableName = $this->getRealTableName((string) $table['name']);
+        foreach ($xmlTables as $table) {
+            // Convert the magic prefix into the real table name.
+            $tableName = $this->getRealTableName((string) $table['name']);
 
-			if (\in_array($tableName, $tables, true))
-			{
-				// The table already exists. Now check if there is any difference.
-				if ($queries = $this->getAlterTableSql($table))
-				{
-					// Run the queries to upgrade the data structure.
-					foreach ($queries as $query)
-					{
-						$this->db->setQuery((string) $query);
-						$this->db->execute();
-					}
-				}
-			}
-			else
-			{
-				// This is a new table.
-				$sql = $this->xmlToCreate($table);
-				$queries = explode(';', (string) $sql);
+            if (\in_array($tableName, $tables, true)) {
+                // The table already exists. Now check if there is any difference.
+                if ($queries = $this->getAlterTableSql($table)) {
+                    // Run the queries to upgrade the data structure.
+                    foreach ($queries as $query) {
+                        $this->db->setQuery((string) $query);
+                        $this->db->execute();
+                    }
+                }
+            } else {
+                // This is a new table.
+                $sql     = $this->xmlToCreate($table);
+                $queries = explode(';', (string) $sql);
 
-				foreach ($queries as $query)
-				{
-					if (!empty($query))
-					{
-						$this->db->setQuery((string) $query);
-						$this->db->execute();
-					}
-				}
-			}
-		}
-	}
+                foreach ($queries as $query) {
+                    if (!empty($query)) {
+                        $this->db->setQuery((string) $query);
+                        $this->db->execute();
+                    }
+                }
+            }
+        }
+    }
 
-	/**
-	 * Sets the database connector to use for exporting structure and/or data.
-	 *
-	 * @param   DatabaseInterface  $db  The database connector.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function setDbo(DatabaseInterface $db)
-	{
-		$this->db = $db;
+    /**
+     * Sets the database connector to use for exporting structure and/or data.
+     *
+     * @param   DatabaseInterface  $db  The database connector.
+     *
+     * @return  $this
+     *
+     * @since   1.0
+     */
+    public function setDbo(DatabaseInterface $db)
+    {
+        $this->db = $db;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Sets an internal option to merge the structure based on the input data.
-	 *
-	 * @param   boolean  $setting  True to import the structure, false to not.
-	 *
-	 * @return  $this
-	 *
-	 * @since   1.0
-	 */
-	public function withStructure($setting = true)
-	{
-		$this->options->withStructure = (boolean) $setting;
+    /**
+     * Sets an internal option to merge the structure based on the input data.
+     *
+     * @param   boolean  $setting  True to import the structure, false to not.
+     *
+     * @return  $this
+     *
+     * @since   1.0
+     */
+    public function withStructure($setting = true)
+    {
+        $this->options->withStructure = (bool) $setting;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Get the SQL syntax to add a table.
-	 *
-	 * @param   \SimpleXMLElement  $table  The table information.
-	 *
-	 * @return  string
-	 *
-	 * @since   2.0.0
-	 * @throws  \RuntimeException
-	 */
-	abstract protected function xmlToCreate(\SimpleXMLElement $table);
+    /**
+     * Get the SQL syntax to add a table.
+     *
+     * @param   \SimpleXMLElement  $table  The table information.
+     *
+     * @return  string
+     *
+     * @since   2.0.0
+     * @throws  \RuntimeException
+     */
+    abstract protected function xmlToCreate(\SimpleXMLElement $table);
 }

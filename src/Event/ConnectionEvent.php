@@ -18,38 +18,38 @@ use Joomla\Event\Event;
  */
 class ConnectionEvent extends Event
 {
-	/**
-	 * DatabaseInterface object for this event
-	 *
-	 * @var    DatabaseInterface
-	 * @since  2.0.0
-	 */
-	private $driver;
+    /**
+     * DatabaseInterface object for this event
+     *
+     * @var    DatabaseInterface
+     * @since  2.0.0
+     */
+    private $driver;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param   string             $name    The event name.
-	 * @param   DatabaseInterface  $driver  The DatabaseInterface object for this event.
-	 *
-	 * @since   2.0.0
-	 */
-	public function __construct(string $name, DatabaseInterface $driver)
-	{
-		parent::__construct($name);
+    /**
+     * Constructor.
+     *
+     * @param   string             $name    The event name.
+     * @param   DatabaseInterface  $driver  The DatabaseInterface object for this event.
+     *
+     * @since   2.0.0
+     */
+    public function __construct(string $name, DatabaseInterface $driver)
+    {
+        parent::__construct($name);
 
-		$this->driver = $driver;
-	}
+        $this->driver = $driver;
+    }
 
-	/**
-	 * Retrieve the DatabaseInterface object attached to this event.
-	 *
-	 * @return  DatabaseInterface
-	 *
-	 * @since   2.0.0
-	 */
-	public function getDriver(): DatabaseInterface
-	{
-		return $this->driver;
-	}
+    /**
+     * Retrieve the DatabaseInterface object attached to this event.
+     *
+     * @return  DatabaseInterface
+     *
+     * @since   2.0.0
+     */
+    public function getDriver(): DatabaseInterface
+    {
+        return $this->driver;
+    }
 }

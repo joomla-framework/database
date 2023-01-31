@@ -15,14 +15,14 @@ namespace Joomla\Database;
  */
 interface DatabaseAwareInterface
 {
-	/**
-	 * Set the database.
-	 *
-	 * @param   DatabaseInterface  $db  The database.
-	 *
-	 * @return  void
-	 *
-	 * @since   2.1.0
-	 */
-	public function setDatabase(DatabaseInterface $db): void;
+    /**
+     * Set the database.
+     *
+     * @param   DatabaseInterface  $db  The database.
+     *
+     * @return  void
+     *
+     * @since   2.1.0
+     */
+    public function setDatabase(DatabaseInterface $db): void;
 }

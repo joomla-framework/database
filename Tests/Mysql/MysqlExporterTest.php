@@ -18,130 +18,128 @@ use PHPUnit\Framework\TestCase;
  */
 class MysqlExporterTest extends TestCase
 {
-	/**
-	 * Mock database driver
-	 *
-	 * @var  MockObject|MysqlDriver
-	 */
-	private $db;
+    /**
+     * Mock database driver
+     *
+     * @var  MockObject|MysqlDriver
+     */
+    private $db;
 
-	/**
-	 * Sets up the fixture.
-	 *
-	 * This method is called before a test is executed.
-	 *
-	 * @return  void
-	 */
-	protected function setUp(): void
-	{
-		parent::setUp();
+    /**
+     * Sets up the fixture.
+     *
+     * This method is called before a test is executed.
+     *
+     * @return  void
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-		$this->db = $this->createMock(MysqlDriver::class);
+        $this->db = $this->createMock(MysqlDriver::class);
 
-		$this->db->expects($this->any())
-			->method('getPrefix')
-			->willReturn('jos_');
+        $this->db->expects($this->any())
+            ->method('getPrefix')
+            ->willReturn('jos_');
 
-		$this->db->expects($this->any())
-			->method('getQuery')
-			->willReturnCallback(function () {
-				return new MysqlQuery($this->db);
-			});
+        $this->db->expects($this->any())
+            ->method('getQuery')
+            ->willReturnCallback(function () {
+                return new MysqlQuery($this->db);
+            });
 
-		$this->db->expects($this->any())
-			->method('getTableColumns')
-			->willReturn(
-				[
-					'id'    => (object) [
-						'Field'      => 'id',
-						'Type'       => 'int(11) unsigned',
-						'Collation'  => null,
-						'Null'       => 'NO',
-						'Key'        => 'PRI',
-						'Default'    => '',
-						'Extra'      => 'auto_increment',
-						'Privileges' => 'select,insert,update,references',
-						'Comment'    => '',
-					],
-					'title' => (object) [
-						'Field'      => 'title',
-						'Type'       => 'varchar(255)',
-						'Collation'  => 'utf8_general_ci',
-						'Null'       => 'NO',
-						'Key'        => '',
-						'Default'    => '',
-						'Extra'      => '',
-						'Privileges' => 'select,insert,update,references',
-						'Comment'    => '',
-					],
-				]
-			);
+        $this->db->expects($this->any())
+            ->method('getTableColumns')
+            ->willReturn(
+                [
+                    'id' => (object) [
+                        'Field'      => 'id',
+                        'Type'       => 'int(11) unsigned',
+                        'Collation'  => null,
+                        'Null'       => 'NO',
+                        'Key'        => 'PRI',
+                        'Default'    => '',
+                        'Extra'      => 'auto_increment',
+                        'Privileges' => 'select,insert,update,references',
+                        'Comment'    => '',
+                    ],
+                    'title' => (object) [
+                        'Field'      => 'title',
+                        'Type'       => 'varchar(255)',
+                        'Collation'  => 'utf8_general_ci',
+                        'Null'       => 'NO',
+                        'Key'        => '',
+                        'Default'    => '',
+                        'Extra'      => '',
+                        'Privileges' => 'select,insert,update,references',
+                        'Comment'    => '',
+                    ],
+                ]
+            );
 
-		$this->db->expects($this->any())
-			->method('getTableKeys')
-			->willReturn(
-				[
-					(object) [
-						'Table'        => 'jos_test',
-						'Non_unique'   => '0',
-						'Key_name'     => 'PRIMARY',
-						'Seq_in_index' => '1',
-						'Column_name'  => 'id',
-						'Collation'    => 'A',
-						'Cardinality'  => '2695',
-						'Sub_part'     => '',
-						'Packed'       => '',
-						'Null'         => '',
-						'Index_type'   => 'BTREE',
-						'Comment'      => '',
-					],
-				]
-			);
+        $this->db->expects($this->any())
+            ->method('getTableKeys')
+            ->willReturn(
+                [
+                    (object) [
+                        'Table'        => 'jos_test',
+                        'Non_unique'   => '0',
+                        'Key_name'     => 'PRIMARY',
+                        'Seq_in_index' => '1',
+                        'Column_name'  => 'id',
+                        'Collation'    => 'A',
+                        'Cardinality'  => '2695',
+                        'Sub_part'     => '',
+                        'Packed'       => '',
+                        'Null'         => '',
+                        'Index_type'   => 'BTREE',
+                        'Comment'      => '',
+                    ],
+                ]
+            );
 
-		$this->db->expects($this->any())
-			->method('quoteName')
-			->willReturnCallback(
-				function ($name, $as = null) {
-					if (is_string($name))
-					{
-						return "`$name`";
-					}
+        $this->db->expects($this->any())
+            ->method('quoteName')
+            ->willReturnCallback(
+                function ($name, $as = null) {
+                    if (is_string($name)) {
+                        return "`$name`";
+                    }
 
-					$fields = [];
+                    $fields = [];
 
-					foreach ($name as $value)
-					{
-						$fields[] = "`$value`";
-					}
+                    foreach ($name as $value) {
+                        $fields[] = "`$value`";
+                    }
 
-					return $fields;
-				}
-			);
-	}
+                    return $fields;
+                }
+            );
+    }
 
-	/**
-	 * Data provider for string casting test cases
-	 *
-	 * @return  \Generator
-	 */
-	public function dataCastingToString(): \Generator
-	{
-		yield 'without structure or data' => [
-			false,
-			false,
-			<<<XML
+    /**
+     * Data provider for string casting test cases
+     *
+     * @return  \Generator
+     */
+    public function dataCastingToString(): \Generator
+    {
+        yield 'without structure or data' => [
+            false,
+            false,
+            <<<XML
 <mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
  <database name="">
  </database>
 </mysqldump>
 XML
-			,
-		];
+            ,
+        ];
 
-		yield 'with only structure' => [
-			true,
-			false,
-			<<<XML
+        yield 'with only structure' => [
+            true,
+            false,
+            <<<XML
 <mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <database name="">
     <table_structure name="#__test">
@@ -152,13 +150,13 @@ XML
   </database>
 </mysqldump>
 XML
-			,
-		];
+            ,
+        ];
 
-		yield 'with only data' => [
-			false,
-			true,
-			<<<XML
+        yield 'with only data' => [
+            false,
+            true,
+            <<<XML
 <mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <database name="">
     <table_data name="#__test">
@@ -174,13 +172,13 @@ XML
   </database>
 </mysqldump>
 XML
-			,
-		];
+            ,
+        ];
 
-		yield 'with structure and data' => [
-			true,
-			true,
-			<<<XML
+        yield 'with structure and data' => [
+            true,
+            true,
+            <<<XML
 <mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <database name="">
     <table_structure name="#__test">
@@ -201,110 +199,106 @@ XML
   </database>
 </mysqldump>
 XML
-			,
-		];
-	}
+            ,
+        ];
+    }
 
-	/**
-	 * @testdox  The exporter can be cast to a string
-	 *
-	 * @param   boolean  $withStructure  True to export the structure, false to not.
-	 * @param   boolean  $withData       True to export the data, false to not.
-	 * @param   string   $expectedXml    Expected XML string.
-	 *
-	 * @dataProvider  dataCastingToString
-	 */
-	public function testCastingToString(bool $withStructure, bool $withData, string $expectedXml)
-	{
-		$exporter = new MysqlExporter;
+    /**
+     * @testdox  The exporter can be cast to a string
+     *
+     * @param   boolean  $withStructure  True to export the structure, false to not.
+     * @param   boolean  $withData       True to export the data, false to not.
+     * @param   string   $expectedXml    Expected XML string.
+     *
+     * @dataProvider  dataCastingToString
+     */
+    public function testCastingToString(bool $withStructure, bool $withData, string $expectedXml)
+    {
+        $exporter = new MysqlExporter();
 
-		$exporter->setDbo($this->db)
-			->from('jos_test')
-			->withStructure($withStructure)
-			->withData($withData);
+        $exporter->setDbo($this->db)
+            ->from('jos_test')
+            ->withStructure($withStructure)
+            ->withData($withData);
 
-		if ($withData)
-		{
-			$this->db->expects($this->once())
-				->method('loadObjectList')
-				->willReturn(
-					[
-						(object) [
-							'id'    => 1,
-							'title' => 'Row 1',
-						],
-						(object) [
-							'id'    => 2,
-							'title' => 'Row 2',
-						],
-					]
-				);
-		}
+        if ($withData) {
+            $this->db->expects($this->once())
+                ->method('loadObjectList')
+                ->willReturn(
+                    [
+                        (object) [
+                            'id'    => 1,
+                            'title' => 'Row 1',
+                        ],
+                        (object) [
+                            'id'    => 2,
+                            'title' => 'Row 2',
+                        ],
+                    ]
+                );
+        }
 
-		$this->assertXmlStringEqualsXmlString($expectedXml, (string) $exporter);
-	}
+        $this->assertXmlStringEqualsXmlString($expectedXml, (string) $exporter);
+    }
 
-	/**
-	 * Data provider for check test cases
-	 *
-	 * @return  \Generator
-	 */
-	public function dataCheck(): \Generator
-	{
-		yield 'passes checks' => [
-			$this->createMock(MysqlDriver::class),
-			'#__dbtest',
-			null,
-		];
+    /**
+     * Data provider for check test cases
+     *
+     * @return  \Generator
+     */
+    public function dataCheck(): \Generator
+    {
+        yield 'passes checks' => [
+            $this->createMock(MysqlDriver::class),
+            '#__dbtest',
+            null,
+        ];
 
-		yield 'fails checks with incorrect database driver subclass' => [
-			$this->createMock(DatabaseInterface::class),
-			'#__dbtest',
-			'Database connection wrong type.',
-		];
+        yield 'fails checks with incorrect database driver subclass' => [
+            $this->createMock(DatabaseInterface::class),
+            '#__dbtest',
+            'Database connection wrong type.',
+        ];
 
-		yield 'fails checks with no database driver' => [
-			null,
-			'#__dbtest',
-			'Database connection wrong type.',
-		];
+        yield 'fails checks with no database driver' => [
+            null,
+            '#__dbtest',
+            'Database connection wrong type.',
+        ];
 
-		yield 'fails checks with no tables' => [
-			$this->createMock(MysqlDriver::class),
-			null,
-			'ERROR: No Tables Specified',
-		];
-	}
+        yield 'fails checks with no tables' => [
+            $this->createMock(MysqlDriver::class),
+            null,
+            'ERROR: No Tables Specified',
+        ];
+    }
 
-	/**
-	 * @testdox  The exporter checks for errors
-	 *
-	 * @param   DatabaseInterface|null  $db                Database driver to set in the exporter.
-	 * @param   string[]|string|null    $from              Database tables to export from.
-	 * @param   string|null             $exceptionMessage  If an Exception should be thrown, the expected message
-	 *
-	 * @dataProvider  dataCheck
-	 */
-	public function testCheck(?DatabaseInterface $db, $from, ?string $exceptionMessage)
-	{
-		if ($exceptionMessage)
-		{
-			$this->expectException(\RuntimeException::class);
-			$this->expectExceptionMessage($exceptionMessage);
-		}
+    /**
+     * @testdox  The exporter checks for errors
+     *
+     * @param   DatabaseInterface|null  $db                Database driver to set in the exporter.
+     * @param   string[]|string|null    $from              Database tables to export from.
+     * @param   string|null             $exceptionMessage  If an Exception should be thrown, the expected message
+     *
+     * @dataProvider  dataCheck
+     */
+    public function testCheck(?DatabaseInterface $db, $from, ?string $exceptionMessage)
+    {
+        if ($exceptionMessage) {
+            $this->expectException(\RuntimeException::class);
+            $this->expectExceptionMessage($exceptionMessage);
+        }
 
-		$exporter = new MysqlExporter;
+        $exporter = new MysqlExporter();
 
-		if ($db)
-		{
-			$exporter->setDbo($db);
-		}
+        if ($db) {
+            $exporter->setDbo($db);
+        }
 
-		if ($from)
-		{
-			$exporter->from($from);
-		}
+        if ($from) {
+            $exporter->from($from);
+        }
 
-		$this->assertSame($exporter, $exporter->check(), 'The exporter supports method chaining');
-	}
+        $this->assertSame($exporter, $exporter->check(), 'The exporter supports method chaining');
+    }
 }

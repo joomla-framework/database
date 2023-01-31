@@ -21,36 +21,34 @@ use Joomla\DI\ServiceProviderInterface;
  */
 class DatabaseProvider implements ServiceProviderInterface
 {
-	/**
-	 * Registers the service provider with a DI container.
-	 *
-	 * @param   Container  $container  The DI container.
-	 *
-	 * @return  void
-	 *
-	 * @since   2.0.0
-	 */
-	public function register(Container $container)
-	{
-		$container->alias(DatabaseInterface::class, DatabaseDriver::class)
-			->share(
-				DatabaseDriver::class,
-				function (Container $container)
-				{
-					/** @var \Joomla\Registry\Registry $config */
-					$config  = $container->get('config');
-					$options = (array) $config->get('database');
+    /**
+     * Registers the service provider with a DI container.
+     *
+     * @param   Container  $container  The DI container.
+     *
+     * @return  void
+     *
+     * @since   2.0.0
+     */
+    public function register(Container $container)
+    {
+        $container->alias(DatabaseInterface::class, DatabaseDriver::class)
+            ->share(
+                DatabaseDriver::class,
+                function (Container $container) {
+                    /** @var \Joomla\Registry\Registry $config */
+                    $config  = $container->get('config');
+                    $options = (array) $config->get('database');
 
-					return $container->get(DatabaseFactory::class)->getDriver($options['driver'], $options);
-				}
-			);
+                    return $container->get(DatabaseFactory::class)->getDriver($options['driver'], $options);
+                }
+            );
 
-		$container->share(
-			DatabaseFactory::class,
-			function (Container $container)
-			{
-				return new DatabaseFactory;
-			}
-		);
-	}
+        $container->share(
+            DatabaseFactory::class,
+            function (Container $container) {
+                return new DatabaseFactory();
+            }
+        );
+    }
 }
