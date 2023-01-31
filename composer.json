@@ -7,16 +7,16 @@
     "license": "GPL-2.0-or-later",
     "require": {
         "php": "~8.1.0",
-        "joomla/event": "^2.0",
+        "joomla/event": "3.0.x-dev",
         "symfony/deprecation-contracts": "^2.1"
     },
     "require-dev": {
-        "joomla/archive": "^2.0",
-        "joomla/console": "^2.0",
-        "joomla/di": "^2.0",
-        "joomla/filesystem": "^2.0",
-        "joomla/registry": "^2.0",
-        "joomla/test": "^2.0",
+        "joomla/archive": "3.0.x-dev",
+        "joomla/console": "3.0.x-dev",
+        "joomla/di": "3.0.x-dev",
+        "joomla/filesystem": "3.0.x-dev",
+        "joomla/registry": "3.0.x-dev",
+        "joomla/test": "3.0.x-dev",
         "phpunit/phpunit": "^8.5|^9.0",
         "psr/log": "^1.1",
         "symfony/phpunit-bridge": "^4.4|^5.0",
