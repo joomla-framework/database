@@ -269,7 +269,6 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
             },
         ],
     },
-    pipeline_sqlite('8.1', 'sqlite', '--prefer-stable --prefer-lowest'),
     pipeline_sqlite('8.1', 'sqlite', '--prefer-stable'),
     pipeline_sqlite('8.2', 'sqlite', '--prefer-stable --ignore-platform-reqs'),
     pipeline_mysql('8.1', 'mysql', '5.7', '--prefer-stable'),

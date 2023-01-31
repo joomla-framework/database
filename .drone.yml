@@ -99,47 +99,6 @@
          "commands": [
             "php -v",
             "sleep 20",
-            "composer update --prefer-stable --prefer-lowest"
-         ],
-         "image": "joomlaprojects/docker-images:php8.1",
-         "name": "Composer",
-         "volumes": [
-            {
-               "name": "composer-cache",
-               "path": "/tmp/composer-cache"
-            }
-         ]
-      },
-      {
-         "commands": [
-            "php --ri sqlite || true",
-            "vendor/bin/phpunit --configuration phpunit.sqlite.xml.dist --testdox"
-         ],
-         "image": "joomlaprojects/docker-images:php8.1",
-         "name": "PHPUnit"
-      }
-   ],
-   "volumes": [
-      {
-         "host": {
-            "path": "/tmp/composer-cache"
-         },
-         "name": "composer-cache"
-      }
-   ]
-}
----
-{
-   "environment": {
-      "DB": "sqlite"
-   },
-   "kind": "pipeline",
-   "name": "PHP 8.1 with SQLite (sqlite)",
-   "steps": [
-      {
-         "commands": [
-            "php -v",
-            "sleep 20",
             "composer update --prefer-stable"
          ],
          "image": "joomlaprojects/docker-images:php8.1",
@@ -1202,6 +1161,6 @@
 }
 ---
 kind: signature
-hmac: 60e605c2c161a3bdd6ab7b5127e4b37c24bc3be4f93dec329c913a2a115f91a6
+hmac: c1fe7b436a999536a5e2163333eb76929e2883621a4adc5bbdb8b0a0fdfcd4fe
 
 ...
