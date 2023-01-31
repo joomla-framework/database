@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Joomla Framework Database Package
  *
@@ -66,7 +67,7 @@ class PgsqlDriver extends PdoDriver
      *
      * @param   array  $options  List of options used to configure the connection
      *
-     * @since	1.5.0
+     * @since   1.5.0
      */
     public function __construct($options)
     {
@@ -858,7 +859,7 @@ class PgsqlDriver extends PdoDriver
      * @param   object   $options  object coming from "initialise" function to pass user and database name to database driver.
      * @param   boolean  $utf      True if the database supports the UTF-8 character set, not used in PostgreSQL "CREATE DATABASE" query.
      *
-     * @return  string	The query that creates database, owned by $options['user']
+     * @return  string  The query that creates database, owned by $options['user']
      *
      * @since   1.5.0
      */

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Joomla Framework Database Package
  *

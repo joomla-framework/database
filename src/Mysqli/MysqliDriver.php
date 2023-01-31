@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Joomla Framework Database Package
  *
@@ -208,11 +209,13 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
             $this->options['host']   = null;
             $this->options['socket'] = $matches['socket'];
             $this->options['port']   = null;
-        } elseif (preg_match(
-            '/^(?P<host>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(:(?P<port>.+))?$/',
-            $this->options['host'],
-            $matches
-        )) {
+        } elseif (
+            preg_match(
+                '/^(?P<host>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(:(?P<port>.+))?$/',
+                $this->options['host'],
+                $matches
+            )
+        ) {
             // It's an IPv4 address with or without port
             $this->options['host'] = $matches['host'];
 

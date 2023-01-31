@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Joomla Framework Database Package
  *
@@ -310,7 +311,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * Magic function to convert the query to a string.
      *
-     * @return  string	The completed query.
+     * @return  string  The completed query.
      *
      * @since   1.0
      */

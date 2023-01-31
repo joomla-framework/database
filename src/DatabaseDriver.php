@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Joomla Framework Database Package
  *
@@ -340,10 +341,12 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
             $lenEndString = \strlen($endString);
             $testEnd      = substr($sql, $i, $lenEndString);
 
-            if ($current === '"' || $current === "'" || $current2 === '--'
+            if (
+                $current === '"' || $current === "'" || $current2 === '--'
                 || ($current2 === '/*' && $current3 !== '/*!' && $current3 !== '/*+')
                 || ($current === '#' && $current3 !== '#__')
-                || ($comment && $testEnd === $endString)) {
+                || ($comment && $testEnd === $endString)
+            ) {
                 // Check if quoted with previous backslash
                 $n = 2;
 

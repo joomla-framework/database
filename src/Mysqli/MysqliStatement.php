@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Joomla Framework Database Package
  *
@@ -152,9 +153,9 @@ class MysqliStatement implements StatementInterface
      */
     public function prepareParameterKeyMapping($sql)
     {
-        $escaped   	= false;
-        $startPos  	= 0;
-        $quoteChar 	= '';
+        $escaped    = false;
+        $startPos   = 0;
+        $quoteChar  = '';
         $literal    = '';
         $mapping    = [];
         $replace    = [];

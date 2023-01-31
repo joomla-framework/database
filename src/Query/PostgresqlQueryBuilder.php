@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Joomla Framework Database Package
  *
@@ -66,7 +67,7 @@ trait PostgresqlQueryBuilder
     /**
      * Magic function to convert the query to a string, only for PostgreSQL specific queries
      *
-     * @return  string	The completed query.
+     * @return  string  The completed query.
      *
      * @since   2.0.0
      */

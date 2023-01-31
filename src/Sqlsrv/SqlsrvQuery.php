@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Joomla Framework Database Package
  *
@@ -524,12 +525,14 @@ class SqlsrvQuery extends DatabaseQuery
                 continue;
             }
 
-            if ($lastChar == ')'
+            if (
+                $lastChar == ')'
                 || ($size == 1 && $lastChar == "'")
                 || $lastWord[0] == '@'
                 || $lastWord == 'NULL'
                 || $lastWord == 'END'
-                || is_numeric($lastWord)) {
+                || is_numeric($lastWord)
+            ) {
                 /*
                  * Ends with:
                  * - SQL function
@@ -870,10 +873,12 @@ class SqlsrvQuery extends DatabaseQuery
             $lenEndString = \strlen($endString);
             $testEnd      = substr($string, $i, $lenEndString);
 
-            if ($current == '[' || $current == '"' || $current == "'" || $current2 == '--'
+            if (
+                $current == '[' || $current == '"' || $current == "'" || $current2 == '--'
                 || ($current2 == '/*')
                 || ($current == '#' && $current3 != '#__')
-                || ($lenEndString && $testEnd == $endString)) {
+                || ($lenEndString && $testEnd == $endString)
+            ) {
                 if ($open) {
                     if ($testEnd === $endString) {
                         if ($comment) {

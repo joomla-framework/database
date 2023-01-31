@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Part of the Joomla Framework Database Package
  *
@@ -210,7 +211,7 @@ abstract class DatabaseImporter
      *
      * @param   string  $table  The name of the table.
      *
-     * @return  string	The real name of the table.
+     * @return  string  The real name of the table.
      *
      * @since   1.0
      */
