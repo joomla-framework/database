@@ -1,27 +1,23 @@
 <?xml version="1.0"?>
-<ruleset name="Joomla">
+<ruleset name="PSR12 with Joomla specific additions">
+    <description>
+        This is a PSR-12 compliant ruleset for Joomla.
+    </description>
 
+    <file>src</file>
+    <file>Tests</file>
+
+    <exclude-pattern>*/Tests/Stubs/*</exclude-pattern>
+
+    <arg name="extensions" value="php"/>
     <arg name="report" value="full"/>
     <arg name="tab-width" value="4"/>
     <arg name="encoding" value="utf-8"/>
-    <arg value="sp"/>
     <arg name="colors" />
+    <arg value="sp"/>
 
-    <!-- Exclude folders not containing production code -->
-    <exclude-pattern>*/.github/*</exclude-pattern>
-
-    <!-- Exclude 3rd party libraries. -->
-    <exclude-pattern>*/vendor/*</exclude-pattern>
-
-    <rule ref="Joomla">
-        <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
-        <!-- Required due to non-private class properties being named in snake case -->
-        <exclude name="Joomla.NamingConventions.ValidVariableName"/>
-    </rule>
-
-    <rule ref="Joomla.Classes.InstantiateNewClasses">
-        <properties>
-            <property name="shortArraySyntax" value="true"/>
-        </properties>
+    <rule ref="PSR12">
+        <exclude name="Generic.Files.LineLength.MaxExceeded"/>
+        <exclude name="Generic.Files.LineLength.TooLong"/>
     </rule>
 </ruleset>
