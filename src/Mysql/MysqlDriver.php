@@ -446,9 +446,8 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
             foreach ($fields as $field) {
                 $result[$field->Field] = preg_replace('/[(0-9)]/', '', $field->Type);
             }
-        }
-        // If we want the whole field data object add that to the list.
-        else {
+        } else {
+            // If we want the whole field data object add that to the list.
             foreach ($fields as $field) {
                 $result[$field->Field] = $field;
             }

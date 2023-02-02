@@ -223,7 +223,6 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
                 image: 'joomlaprojects/docker-images:php8.1',
                 depends: [ 'composer' ],
                 commands: [
-                    'vendor/bin/phpcs --config-set installed_paths vendor/joomla/coding-standards',
                     'vendor/bin/phpcs --standard=ruleset.xml src/',
                 ],
             },
