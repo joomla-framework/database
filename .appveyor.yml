@@ -6,39 +6,16 @@ clone_folder: C:\projects\database
 
 ## Build matrix for lowest and highest possible targets
 environment:
-  DLLVersion: "5.8.1"
+  DLLVersion: "5.10.0"
   PHPBuild: "x64"
-  VC: "vc15"
+  driver: sqlsrv
+  db_version: sql2017
+  VC: "vs16"
   matrix:
   - db: mssql
-    driver: sqlsrv
-    db_version: sql2017
-    php: 7.2
-    DLLVersion: "5.3.0"
-  - db: mssql
-    driver: sqlsrv
-    db_version: sql2017
-    php: 7.3
-  - db: mssql
-    driver: sqlsrv
-    db_version: sql2017
-    php: 7.4
-  - db: mssql
-    driver: sqlsrv
-    db_version: sql2017
-    php: 8.0
-    DLLVersion: "5.9.0"
-    VC: "vs16"
-  - db: mssql
-    driver: sqlsrv
-    db_version: sql2017
     php: 8.1
-    DLLVersion: "5.10.0"
-    VC: "vs16"
-#  - db: mssql
-#    driver: sqlsrv
-#    db_version: sql2017
-#    php: 8.2
+  - db: mssql
+    php: 8.2
 
 init:
   - SET PATH=C:\Program Files\OpenSSL;c:\tools\php;C:\tools\composer;%PATH%
