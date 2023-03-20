@@ -22,7 +22,7 @@ steps:
   - composer
   failure: ignore
   image: joomlaprojects/docker-images:php8.1-ast
-  name: phpmd
+  name: phan
 - commands:
   - vendor/bin/phpstan analyse src
   depends:
@@ -694,6 +694,6 @@ volumes:
   name: composer-cache
 ---
 kind: signature
-hmac: 4dc620976a1e01991fe3fd21e34d9cfc8f8b2d98bdc6c75cfb145b4b44c64c1b
+hmac: dd634ca2264ed41c6016c3b864ab076585a5bf525fcf6b69d039d42a44888e00
 
 ...

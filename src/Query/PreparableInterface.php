@@ -12,6 +12,7 @@ namespace Joomla\Database\Query;
 use Joomla\Database\ParameterType;
 use Joomla\Database\QueryInterface;
 
+// phpcs:disable PSR1.Files.SideEffects
 trigger_deprecation(
     'joomla/database',
     '2.0.0',
@@ -19,6 +20,7 @@ trigger_deprecation(
     PreparableInterface::class,
     QueryInterface::class
 );
+// phpcs:enable PSR1.Files.SideEffects
 
 /**
  * Joomla Database Query Preparable Interface.
