@@ -26,8 +26,8 @@ interface StatementInterface
      *                                          the 1-indexed position of the parameter.
      * @param   mixed           $variable       Name of the PHP variable to bind to the SQL statement parameter.
      * @param   string          $dataType       Constant corresponding to a SQL datatype, this should be the processed type from the QueryInterface.
-     * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters.
-     * @param   array           $driverOptions  Optional driver options to be used.
+     * @param   ?integer        $length         The length of the variable. Usually required for OUTPUT parameters.
+     * @param   ?array          $driverOptions  Optional driver options to be used.
      *
      * @return  boolean
      *

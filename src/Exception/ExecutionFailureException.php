@@ -27,10 +27,10 @@ class ExecutionFailureException extends \RuntimeException
     /**
      * Construct the exception
      *
-     * @param   string     $query     The SQL statement that was executed.
-     * @param   string     $message   The Exception message to throw. [optional]
-     * @param   integer    $code      The Exception code. [optional]
-     * @param   Exception  $previous  The previous exception used for the exception chaining. [optional]
+     * @param   string       $query     The SQL statement that was executed.
+     * @param   string       $message   The Exception message to throw. [optional]
+     * @param   integer      $code      The Exception code. [optional]
+     * @param   ?\Exception  $previous  The previous exception used for the exception chaining. [optional]
      *
      * @since   1.5.0
      */

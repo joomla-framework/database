@@ -299,7 +299,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * Class constructor.
      *
-     * @param   DatabaseInterface  $db  The database driver.
+     * @param   ?DatabaseInterface  $db  The database driver.
      *
      * @since   1.0
      */
@@ -533,10 +533,10 @@ abstract class DatabaseQuery implements QueryInterface
      * Usage:
      * $query->select($query->castAs('CHAR', 'a'));
      *
-     * @param   string  $type    The type of string to cast as.
-     * @param   string  $value   The value to cast as a char.
-     * @param   string  $length  Optionally specify the length of the field (if the type supports it otherwise
-     *                           ignored).
+     * @param   string   $type    The type of string to cast as.
+     * @param   string   $value   The value to cast as a char.
+     * @param   ?string  $length  Optionally specify the length of the field (if the type supports it otherwise
+     *                            ignored).
      *
      * @return  string  SQL statement to cast the value as a char type.
      *

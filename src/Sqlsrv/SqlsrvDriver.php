@@ -425,7 +425,7 @@ class SqlsrvDriver extends DatabaseDriver
     {
         $this->connect();
 
-        return '';
+        return [];
     }
 
     /**

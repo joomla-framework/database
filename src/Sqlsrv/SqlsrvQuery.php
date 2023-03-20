@@ -229,9 +229,9 @@ class SqlsrvQuery extends DatabaseQuery
      * Usage:
      * $query->select($query->castAs('CHAR', 'a'));
      *
-     * @param   string  $type    The type of string to cast as.
-     * @param   string  $value   The value to cast as a char.
-     * @param   string  $length  The value to cast as a char.
+     * @param   string   $type    The type of string to cast as.
+     * @param   string   $value   The value to cast as a char.
+     * @param   ?string  $length  The value to cast as a char.
      *
      * @return  string  SQL statement to cast the value as a char type.
      *

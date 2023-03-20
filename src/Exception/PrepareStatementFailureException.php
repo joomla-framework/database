@@ -19,9 +19,9 @@ class PrepareStatementFailureException extends \RuntimeException
     /**
      * Construct the exception
      *
-     * @param   string     $message   The Exception message to throw. [optional]
-     * @param   integer    $code      The Exception code. [optional]
-     * @param   Exception  $previous  The previous exception used for the exception chaining. [optional]
+     * @param   string       $message   The Exception message to throw. [optional]
+     * @param   integer      $code      The Exception code. [optional]
+     * @param   ?\Exception  $previous  The previous exception used for the exception chaining. [optional]
      *
      * @since   2.0.0
      */
