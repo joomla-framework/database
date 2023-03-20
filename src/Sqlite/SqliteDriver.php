@@ -69,7 +69,7 @@ class SqliteDriver extends PdoDriver
      * @return  void  Returns void if the database connected successfully.
      *
      * @since   2.0.0
-     * @throws  RuntimeException
+     * @throws  \RuntimeException
      */
     public function connect()
     {

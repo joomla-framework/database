@@ -363,7 +363,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
     public function disconnect()
     {
         // Close the connection.
-        if (\is_callable($this->connection, 'close')) {
+        if (\is_callable([$this->connection, 'close'])) {
             $this->connection->close();
         }
 
