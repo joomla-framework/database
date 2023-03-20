@@ -226,7 +226,7 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
                 ],
             },
             {
-                name: 'phpmd',
+                name: 'phan',
                 image: 'joomlaprojects/docker-images:php8.1-ast',
                 depends: [ 'composer' ],
                 failure: 'ignore',
