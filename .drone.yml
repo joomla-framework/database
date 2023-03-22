@@ -634,8 +634,8 @@ steps:
   - apt-get update
   - apt-get install -y software-properties-common lsb-release gnupg
   - curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-  - echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod
-    bullseye main" >> /etc/apt/sources.list
+  - echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/ubuntu/22.04/prod
+    jammy main" >> /etc/apt/sources.list
   - apt-get update
   - ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev
   - pecl install sqlsrv && docker-php-ext-enable sqlsrv
@@ -677,8 +677,8 @@ steps:
   - apt-get update
   - apt-get install -y software-properties-common lsb-release gnupg
   - curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-  - echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod
-    bullseye main" >> /etc/apt/sources.list
+  - echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/ubuntu/22.04/prod
+    jammy main" >> /etc/apt/sources.list
   - apt-get update
   - ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev
   - pecl install sqlsrv && docker-php-ext-enable sqlsrv
@@ -694,6 +694,6 @@ volumes:
   name: composer-cache
 ---
 kind: signature
-hmac: dd634ca2264ed41c6016c3b864ab076585a5bf525fcf6b69d039d42a44888e00
+hmac: f10d10bd05fc1ed951b24c2ee47d2c02c059edee4a868848fe522912820d0902
 
 ...
