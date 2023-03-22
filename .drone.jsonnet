@@ -60,7 +60,7 @@ local phpunit_sqlsrv(phpversion) = {
         'apt-get update',
         'apt-get install -y software-properties-common lsb-release gnupg',
         'curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -',
-        'echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main" >> /etc/apt/sources.list',
+        'echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/ubuntu/22.04/prod jammy main" >> /etc/apt/sources.list',
         'apt-get update',
         'ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev',
         'pecl install sqlsrv && docker-php-ext-enable sqlsrv',
