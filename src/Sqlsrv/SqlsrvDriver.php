@@ -87,6 +87,7 @@ class SqlsrvDriver extends DatabaseDriver
 		$options['password'] = $options['password'] ?? '';
 		$options['database'] = $options['database'] ?? '';
 		$options['select']   = isset($options['select']) ? (bool) $options['select'] : true;
+		$options['trust_certificate'] = $options['trust_certificate'] ?? false;
 
 		// Finalize initialisation
 		parent::__construct($options);
@@ -118,6 +119,7 @@ class SqlsrvDriver extends DatabaseDriver
 			'Database'             => $this->options['database'],
 			'uid'                  => $this->options['user'],
 			'pwd'                  => $this->options['password'],
+			'TrustServerCertificate' => $this->options['trust_certificate'],
 			'CharacterSet'         => 'UTF-8',
 			'ReturnDatesAsStrings' => true,
 		];
