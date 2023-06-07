@@ -71,7 +71,7 @@ class DatabaseFactory
             throw new Exception\UnsupportedAdapterException('Database Exporter not found.');
         }
 
-        /** @var $o DatabaseExporter */
+        /** @var DatabaseExporter $o */
         $o = new $class();
 
         if ($db) {
@@ -103,7 +103,7 @@ class DatabaseFactory
             throw new Exception\UnsupportedAdapterException('Database importer not found.');
         }
 
-        /** @var $o DatabaseImporter */
+        /** @var DatabaseImporter $o */
         $o = new $class();
 
         if ($db) {

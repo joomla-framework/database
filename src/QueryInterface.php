@@ -436,6 +436,31 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
     public function order($columns);
 
     /**
+     * Wrap an SQL statement identifier name such as column, table or database names in quotes to prevent injection
+     * risks and reserved word conflicts.
+     *
+     * This method is provided for use where the query object is passed to a function for modification.
+     * If you have direct access to the database object, it is recommended you use the quoteName method directly.
+     *
+     * Note that 'qn' is an alias for this method as it is in DatabaseDriver.
+     *
+     * Usage:
+     * $query->quoteName('#__a');
+     * $query->qn('#__a');
+     *
+     * @param   array|string  $name  The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
+     *                               Each type supports dot-notation name.
+     * @param   array|string  $as    The AS query part associated to $name. It can be string or array, in latter case it has to be
+     *                               same length of $name; if is null there will not be any AS part for string or array element.
+     *
+     * @return  array|string  The quote wrapped name, same type of $name.
+     *
+     * @since   1.0
+     * @throws  \RuntimeException if the internal db property is not a valid object.
+     */
+    public function quoteName($name, $as = null);
+
+    /**
      * Get the function to return a random floating-point value
      *
      * Usage:

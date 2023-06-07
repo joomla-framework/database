@@ -333,7 +333,7 @@ class MysqliStatement implements StatementInterface
     /**
      * Fetches the SQLSTATE associated with the last operation on the statement handle.
      *
-     * @return  string
+     * @return  int
      *
      * @since   2.0.0
      */
@@ -345,7 +345,7 @@ class MysqliStatement implements StatementInterface
     /**
      * Fetches extended error information associated with the last operation on the statement handle.
      *
-     * @return  array
+     * @return  string
      *
      * @since   2.0.0
      */
