@@ -169,7 +169,7 @@ abstract class DatabaseImporter
      *
      * @since   1.0
      */
-    protected function getColumnSql(\SimpleXMLElement $field);
+    abstract protected function getColumnSql(\SimpleXMLElement $field);
 
     /**
      * Get the SQL syntax to drop a column.
