@@ -115,16 +115,17 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
         ];
 
         // Get some basic values from the options.
-        $options['host']     = $options['host'] ?? 'localhost';
-        $options['user']     = $options['user'] ?? 'root';
-        $options['password'] = $options['password'] ?? '';
-        $options['database'] = $options['database'] ?? '';
-        $options['select']   = isset($options['select']) ? (bool) $options['select'] : true;
-        $options['port']     = isset($options['port']) ? (int) $options['port'] : null;
-        $options['socket']   = $options['socket'] ?? null;
-        $options['utf8mb4']  = isset($options['utf8mb4']) ? (bool) $options['utf8mb4'] : false;
-        $options['sqlModes'] = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
-        $options['ssl']      = isset($options['ssl']) ? $options['ssl'] : [];
+        $options['host']         = $options['host'] ?? 'localhost';
+        $options['user']         = $options['user'] ?? 'root';
+        $options['password']     = $options['password'] ?? '';
+        $options['database']     = $options['database'] ?? '';
+        $options['select']       = isset($options['select']) ? (bool) $options['select'] : true;
+        $options['port']         = isset($options['port']) ? (int) $options['port'] : null;
+        $options['socket']       = $options['socket'] ?? null;
+        $options['utf8mb4']      = isset($options['utf8mb4']) ? (bool) $options['utf8mb4'] : false;
+        $options['sqlModes']     = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
+        $options['sqlBigSelect'] = isset($options['sqlBigSelect']) ? (bool) $options['sqlBigSelect'] : false;
+        $options['ssl']          = isset($options['ssl']) ? $options['ssl'] : [];
 
         if ($options['ssl'] !== []) {
             $options['ssl']['enable']             = isset($options['ssl']['enable']) ? $options['ssl']['enable'] : false;
@@ -306,6 +307,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 
         // And read the real sql mode to mitigate changes in mysql > 5.7.+
         $this->options['sqlModes'] = explode(',', $this->setQuery('SELECT @@SESSION.sql_mode;')->loadResult());
+
+        // If needed, enable SQL big selects
+        if ($this->options['sqlBigSelect']) {
+            $this->connection->query('SET @@SESSION.sql_big_selects = 1;');
+        }
 
         // If auto-select is enabled select the given database.
         if ($this->options['select'] && !empty($this->options['database'])) {
