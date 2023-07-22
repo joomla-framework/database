@@ -114,17 +114,17 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		];
 
 		// Get some basic values from the options.
-		$options['host']         = $options['host'] ?? 'localhost';
-		$options['user']         = $options['user'] ?? 'root';
-		$options['password']     = $options['password'] ?? '';
-		$options['database']     = $options['database'] ?? '';
-		$options['select']       = isset($options['select']) ? (bool) $options['select'] : true;
-		$options['port']         = isset($options['port']) ? (int) $options['port'] : null;
-		$options['socket']       = $options['socket'] ?? null;
-		$options['utf8mb4']      = isset($options['utf8mb4']) ? (bool) $options['utf8mb4'] : false;
-		$options['sqlModes']     = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
-		$options['sqlBigSelect'] = isset($options['sqlBigSelect']) ? (bool) $options['sqlBigSelect'] : false;
-		$options['ssl']          = isset($options['ssl']) ? $options['ssl'] : [];
+		$options['host']          = $options['host'] ?? 'localhost';
+		$options['user']          = $options['user'] ?? 'root';
+		$options['password']      = $options['password'] ?? '';
+		$options['database']      = $options['database'] ?? '';
+		$options['select']        = isset($options['select']) ? (bool) $options['select'] : true;
+		$options['port']          = isset($options['port']) ? (int) $options['port'] : null;
+		$options['socket']        = $options['socket'] ?? null;
+		$options['utf8mb4']       = isset($options['utf8mb4']) ? (bool) $options['utf8mb4'] : false;
+		$options['sqlModes']      = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
+		$options['sqlBigSelects'] = isset($options['sqlBigSelects']) ? (bool) $options['sqlBigSelects'] : false;
+		$options['ssl']           = isset($options['ssl']) ? $options['ssl'] : [];
 
 		if ($options['ssl'] !== [])
 		{
@@ -335,7 +335,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		$this->options['sqlModes'] = explode(',', $this->setQuery('SELECT @@SESSION.sql_mode;')->loadResult());
 
 		// If needed, enable SQL big selects
-		if ($this->options['sqlBigSelect'])
+		if ($this->options['sqlBigSelects'])
 		{
 			$this->connection->query('SET @@SESSION.sql_big_selects = 1;');
 		}

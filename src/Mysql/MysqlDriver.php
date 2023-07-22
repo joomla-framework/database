@@ -122,10 +122,10 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		];
 
 		// Get some basic values from the options.
-		$options['driver']       = 'mysql';
-		$options['charset']      = $options['charset'] ?? 'utf8';
-		$options['sqlModes']     = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
-		$options['sqlBigSelect'] = isset($options['sqlBigSelect']) ? (bool) $options['sqlBigSelect'] : false;
+		$options['driver']        = 'mysql';
+		$options['charset']       = $options['charset'] ?? 'utf8';
+		$options['sqlModes']      = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
+		$options['sqlBigSelects'] = isset($options['sqlBigSelects']) ? (bool) $options['sqlBigSelects'] : false;
 
 		$this->charset = $options['charset'];
 
@@ -236,7 +236,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		}
 
 		// If needed, enable SQL big selects
-		if ($this->options['sqlBigSelect'])
+		if ($this->options['sqlBigSelects'])
 		{
 			$this->connection->query('SET @@SESSION.sql_big_selects = 1;');
 		}
