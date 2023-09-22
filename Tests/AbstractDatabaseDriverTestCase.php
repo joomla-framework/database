@@ -327,33 +327,33 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-	/**
-	 * @testdox  The first row of a result set can be loaded as an associative array, using old getQuery(true) syntax
-	 */
-	public function testLoadAssocWithOldGetQueryTrueSyntax()
-	{
-		$this->loadExampleData();
+    /**
+    * @testdox  The first row of a result set can be loaded as an associative array, using old getQuery(true) syntax
+    */
+    public function testLoadAssocWithOldGetQueryTrueSyntax()
+    {
+        $this->loadExampleData();
 
-		$result = static::$connection->setQuery(
-			static::$connection->getQuery(true)
-				->select('title')
-				->from('#__dbtest')
-		)->loadAssoc();
+        $result = static::$connection->setQuery(
+            static::$connection->getQuery(true)
+                ->select('title')
+                ->from('#__dbtest')
+        )->loadAssoc();
 
-		$this->assertEquals(
-			[
-				'title' => 'Testing1',
-			],
-			$result
-		);
-	}
+        $this->assertEquals(
+            [
+                'title' => 'Testing1',
+            ],
+            $result
+        );
+    }
 
-	/**
-	 * @testdox  The first row of a result set can be loaded as an associative array
-	 */
-	public function testLoadAssoc()
-	{
-		$this->loadExampleData();
+    /**
+    * @testdox  The first row of a result set can be loaded as an associative array
+    */
+    public function testLoadAssoc()
+    {
+        $this->loadExampleData();
 
         $result = static::$connection->setQuery(
             static::$connection->createQuery()
