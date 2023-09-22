@@ -269,11 +269,11 @@ abstract class DatabaseImporter
 					{
 						if (isset($data['value_is_null']))
 						{
-							$entry->{(string)$data['name']} = null;
+							$entry->{(string) $data['name']} = null;
 						}
 						else
 						{
-							$entry->{(string)$data['name']} = (string)$data;
+							$entry->{(string) $data['name']} = (string) $data;
 						}
 					}
 
