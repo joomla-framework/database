@@ -199,14 +199,14 @@ class PgsqlDriver extends PdoDriver
      *
      * @param   mixed  $tables  A table name or a list of table names.
      *
-     * @return  string  An empty string because this function is not supported by PostgreSQL.
+     * @return  array  An empty array because this function is not supported by PostgreSQL.
      *
      * @since   1.5.0
      * @throws  \RuntimeException
      */
     public function getTableCreate($tables)
     {
-        return '';
+        return [];
     }
 
     /**

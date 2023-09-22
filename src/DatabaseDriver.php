@@ -240,7 +240,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
             $dir      = __DIR__;
             $iterator = new \DirectoryIterator($dir);
 
-            /** @var $file \DirectoryIterator */
+            /** @var \DirectoryIterator $file */
             foreach ($iterator as $file) {
                 // Only load for php files.
                 if (!$file->isDir()) {
@@ -250,7 +250,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
                 $baseName = $file->getBasename();
 
                 // Derive the class name from the type.
-                /** @var $class DatabaseDriver */
+                /** @var DatabaseDriver $class */
                 $class = __NAMESPACE__ . '\\' . ucfirst(strtolower($baseName)) . '\\' . ucfirst(strtolower($baseName)) . 'Driver';
 
                 // If the class doesn't exist, or if it's not supported on this system, move on to the next type.
@@ -968,7 +968,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      *
      * @param   boolean  $new  False to return the current query object, True to return a new DatabaseQuery object.
      *
-     * @return  DatabaseQuery
+     * @return  QueryInterface
      *
      * @since   1.0
      */

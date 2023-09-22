@@ -312,7 +312,7 @@ class SqlsrvQuery extends DatabaseQuery
      *
      * @param   string  $value  The string to measure.
      *
-     * @return  integer
+     * @return  string
      *
      * @since   1.0
      */

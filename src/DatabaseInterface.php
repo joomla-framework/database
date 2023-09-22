@@ -214,6 +214,15 @@ interface DatabaseInterface
     public function getNullDate();
 
     /**
+     * Get the common table prefix for the database driver.
+     *
+     * @return  string  The common database table prefix.
+     *
+     * @since   3.0
+     */
+    public function getPrefix();
+
+    /**
      * Get the number of returned rows for the previous executed SQL statement.
      *
      * @return  integer

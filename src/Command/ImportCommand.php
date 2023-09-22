@@ -12,6 +12,7 @@
 namespace Joomla\Database\Command;
 
 use Joomla\Archive\Archive;
+use Joomla\Archive\Exception\UnknownArchiveException;
 use Joomla\Console\Command\AbstractCommand;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
@@ -165,7 +166,7 @@ class ImportCommand extends AbstractCommand
 
             try {
                 (new Archive())->extract($zipPath, $folderPath);
-            } catch (\RuntimeException $e) {
+            } catch (UnknownArchiveException $e) {
                 $symfonyStyle->error($e->getMessage());
                 Folder::delete($folderPath);
 
