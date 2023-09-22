@@ -31,21 +31,6 @@
       },
       {
          "commands": [
-            "vendor/bin/phpmd src text cleancode",
-            "vendor/bin/phpmd src text codesize",
-            "vendor/bin/phpmd src text controversial",
-            "vendor/bin/phpmd src text design",
-            "vendor/bin/phpmd src text unusedcode"
-         ],
-         "depends": [
-            "composer"
-         ],
-         "failure": "ignore",
-         "image": "joomlaprojects/docker-images:php7.4",
-         "name": "phpmd"
-      },
-      {
-         "commands": [
             "vendor/bin/phpstan analyse src"
          ],
          "depends": [
@@ -65,17 +50,6 @@
          "failure": "ignore",
          "image": "joomlaprojects/docker-images:php7.4",
          "name": "phploc"
-      },
-      {
-         "commands": [
-            "phpcpd src"
-         ],
-         "depends": [
-            "composer"
-         ],
-         "failure": "ignore",
-         "image": "joomlaprojects/docker-images:php7.4",
-         "name": "phpcpd"
       }
    ],
    "volumes": [
@@ -236,7 +210,7 @@
       {
          "commands": [
             "php --ri sqlite || true",
-            "vendor/bin/phpunit --configuration phpunit.sqlite.xml.dist --verbose --debug"
+            "vendor/bin/phpunit --configuration phpunit.sqlite.xml.dist --testdox"
          ],
          "image": "joomlaprojects/docker-images:php8.0",
          "name": "PHPUnit"
@@ -2999,11 +2973,11 @@
             "apt-get update",
             "apt-get install -y software-properties-common lsb-release gnupg",
             "curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -",
-            "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main\" >> /etc/apt/sources.list",
+            "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/ubuntu/22.04/prod jammy main\" >> /etc/apt/sources.list",
             "apt-get update",
             "ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev",
-            "pecl install sqlsrv && docker-php-ext-enable sqlsrv",
-            "pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv",
+            "pecl install sqlsrv-5.10.1 && docker-php-ext-enable sqlsrv",
+            "pecl install pdo_sqlsrv-5.10.1 && docker-php-ext-enable pdo_sqlsrv",
             "php --ri sqlsrv",
             "php --ri pdo_sqlsrv",
             "vendor/bin/phpunit --configuration phpunit.sqlsrv.xml.dist --testdox"
@@ -3065,11 +3039,11 @@
             "apt-get update",
             "apt-get install -y software-properties-common lsb-release gnupg",
             "curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -",
-            "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main\" >> /etc/apt/sources.list",
+            "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/ubuntu/22.04/prod jammy main\" >> /etc/apt/sources.list",
             "apt-get update",
             "ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev",
-            "pecl install sqlsrv && docker-php-ext-enable sqlsrv",
-            "pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv",
+            "pecl install sqlsrv-5.10.1 && docker-php-ext-enable sqlsrv",
+            "pecl install pdo_sqlsrv-5.10.1 && docker-php-ext-enable pdo_sqlsrv",
             "php --ri sqlsrv",
             "php --ri pdo_sqlsrv",
             "vendor/bin/phpunit --configuration phpunit.sqlsrv.xml.dist --testdox"
@@ -3131,7 +3105,7 @@
             "apt-get update",
             "apt-get install -y software-properties-common lsb-release gnupg",
             "curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -",
-            "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main\" >> /etc/apt/sources.list",
+            "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/ubuntu/22.04/prod jammy main\" >> /etc/apt/sources.list",
             "apt-get update",
             "ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev",
             "pecl install sqlsrv && docker-php-ext-enable sqlsrv",
@@ -3197,7 +3171,7 @@
             "apt-get update",
             "apt-get install -y software-properties-common lsb-release gnupg",
             "curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -",
-            "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main\" >> /etc/apt/sources.list",
+            "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/ubuntu/22.04/prod jammy main\" >> /etc/apt/sources.list",
             "apt-get update",
             "ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev",
             "pecl install sqlsrv && docker-php-ext-enable sqlsrv",
@@ -3263,7 +3237,7 @@
             "apt-get update",
             "apt-get install -y software-properties-common lsb-release gnupg",
             "curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -",
-            "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main\" >> /etc/apt/sources.list",
+            "echo \"deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/ubuntu/22.04/prod jammy main\" >> /etc/apt/sources.list",
             "apt-get update",
             "ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev",
             "pecl install sqlsrv && docker-php-ext-enable sqlsrv",
@@ -3287,6 +3261,6 @@
 }
 ---
 kind: signature
-hmac: 302cd1e7217471caf7f0128aa7a18720c979b657b3a7c3fea2927e27c67fbb17
+hmac: d6c74ff0b2582f86e054449932a847efab8008c7c50789a2ddf8884766416076
 
 ...

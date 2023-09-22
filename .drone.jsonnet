@@ -60,11 +60,13 @@ local phpunit_sqlsrv(phpversion) = {
         'apt-get update',
         'apt-get install -y software-properties-common lsb-release gnupg',
         'curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -',
-        'echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/debian/11/prod bullseye main" >> /etc/apt/sources.list',
+        'echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/ubuntu/22.04/prod jammy main" >> /etc/apt/sources.list',
         'apt-get update',
         'ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev',
-        'pecl install sqlsrv && docker-php-ext-enable sqlsrv',
-        'pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv',
+        if phpversion < '8.0' then 'pecl install sqlsrv-5.10.1 && docker-php-ext-enable sqlsrv'
+        else 'pecl install sqlsrv && docker-php-ext-enable sqlsrv' ,
+        if phpversion < '8.0' then 'pecl install pdo_sqlsrv-5.10.1 && docker-php-ext-enable pdo_sqlsrv'
+        else 'pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv',
         'php --ri sqlsrv',
         'php --ri pdo_sqlsrv',
         'vendor/bin/phpunit --configuration phpunit.sqlsrv.xml.dist --testdox',
@@ -228,19 +230,6 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
                 ],
             },
             {
-                name: 'phpmd',
-                image: 'joomlaprojects/docker-images:php7.4',
-                depends: [ 'composer' ],
-                failure: 'ignore',
-                commands: [
-                    'vendor/bin/phpmd src text cleancode',
-                    'vendor/bin/phpmd src text codesize',
-                    'vendor/bin/phpmd src text controversial',
-                    'vendor/bin/phpmd src text design',
-                    'vendor/bin/phpmd src text unusedcode',
-                ],
-            },
-            {
                 name: 'phpstan',
                 image: 'joomlaprojects/docker-images:php7.4',
                 depends: [ 'composer' ],
@@ -256,15 +245,6 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
                 failure: 'ignore',
                 commands: [
                     'phploc src',
-                ],
-            },
-            {
-                name: 'phpcpd',
-                image: 'joomlaprojects/docker-images:php7.4',
-                depends: [ 'composer' ],
-                failure: 'ignore',
-                commands: [
-                    'phpcpd src',
                 ],
             },
         ],
