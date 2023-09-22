@@ -267,7 +267,14 @@ abstract class DatabaseImporter
 
 					foreach ($row->children() as $data)
 					{
-						$entry->{(string) $data['name']} = (string) $data;
+						if (isset($data['value_is_null']))
+						{
+							$entry->{(string) $data['name']} = null;
+						}
+						else
+						{
+							$entry->{(string) $data['name']} = (string) $data;
+						}
 					}
 
 					$this->db->insertObject($tableName, $entry);
