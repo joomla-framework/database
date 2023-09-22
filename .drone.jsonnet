@@ -252,15 +252,6 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
                     'phploc src',
                 ],
             },
-            {
-                name: 'phpcpd',
-                image: 'joomlaprojects/docker-images:php8.1',
-                depends: [ 'composer' ],
-                failure: 'ignore',
-                commands: [
-                    'phpcpd src',
-                ],
-            },
         ],
     },
     pipeline_sqlite('8.1', 'sqlite', '--prefer-stable'),

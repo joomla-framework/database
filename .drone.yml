@@ -37,13 +37,6 @@ steps:
   failure: ignore
   image: joomlaprojects/docker-images:php8.1
   name: phploc
-- commands:
-  - phpcpd src
-  depends:
-  - composer
-  failure: ignore
-  image: joomlaprojects/docker-images:php8.1
-  name: phpcpd
 volumes:
 - host:
     path: /tmp/composer-cache
@@ -694,6 +687,6 @@ volumes:
   name: composer-cache
 ---
 kind: signature
-hmac: f10d10bd05fc1ed951b24c2ee47d2c02c059edee4a868848fe522912820d0902
+hmac: e511351199fd2fa0a45c01a540e0c31ecbe7c72b30075fa2dea06b11ca5c7f58
 
 ...

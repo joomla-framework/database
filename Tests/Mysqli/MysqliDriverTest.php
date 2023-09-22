@@ -360,7 +360,7 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
 
         // Insert row
         static::$connection->setQuery(
-            static::$connection->getQuery(true)
+            static::$connection->createQuery()
                 ->insert('#__dbtest')
                 ->columns(['id', 'title', 'start_date', 'description'])
                 ->values(':id, :title, :start_date, :description')
@@ -376,7 +376,7 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
         $this->assertSame(1, static::$connection->getAffectedRows());
 
         $row = static::$connection->setQuery(
-            static::$connection->getQuery(true)
+            static::$connection->createQuery()
                 ->select('*')
                 ->from('#__dbtest')
                 ->where('id = :id')
@@ -419,7 +419,7 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
         $description = 'testRollbackSp';
 
         static::$connection->setQuery(
-            static::$connection->getQuery(true)
+            static::$connection->createQuery()
                 ->insert('#__dbtest')
                 ->columns(['id', 'title', 'start_date', 'description'])
                 ->values(':id, :title, :start_date, :description')
@@ -439,7 +439,7 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
         $startDate = '2019-10-27';
 
         static::$connection->setQuery(
-            static::$connection->getQuery(true)
+            static::$connection->createQuery()
                 ->insert('#__dbtest')
                 ->columns(['id', 'title', 'start_date', 'description'])
                 ->values(':id, :title, :start_date, :description')
@@ -463,7 +463,7 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
          * - 1 if a savepoint exists
          */
         $transactionRows = static::$connection->setQuery(
-            static::$connection->getQuery(true)
+            static::$connection->createQuery()
                 ->select('*')
                 ->from('#__dbtest')
                 ->where('description = :description')
@@ -553,7 +553,7 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
     {
         $this->assertInstanceOf(
             MysqliQuery::class,
-            static::$connection->getQuery(true)
+            static::$connection->createQuery()
         );
     }
 
@@ -565,7 +565,7 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
         $this->loadExampleData();
 
         // Add binary data with null byte
-        $query = static::$connection->getQuery(true)
+        $query = static::$connection->createQuery()
             ->update('#__dbtest')
             ->set('data = ' . static::$connection->quoteBinary("\x00\x01\x02\xff"))
             ->where('id = 3');
@@ -573,19 +573,19 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
         static::$connection->setQuery($query)->execute();
 
         // Add binary data with invalid UTF-8
-        $query = static::$connection->getQuery(true)
+        $query = static::$connection->createQuery()
             ->update('#__dbtest')
             ->set('data = ' . static::$connection->quoteBinary("\x01\x01\x02\xff"))
             ->where('id = 4');
 
         static::$connection->setQuery($query)->execute();
 
-        $selectRow3 = static::$connection->getQuery(true)
+        $selectRow3 = static::$connection->createQuery()
             ->select('id')
             ->from('#__dbtest')
             ->where('data = ' . static::$connection->quoteBinary("\x00\x01\x02\xff"));
 
-        $selectRow4 = static::$connection->getQuery(true)
+        $selectRow4 = static::$connection->createQuery()
             ->select('id')
             ->from('#__dbtest')
             ->where('data = ' . static::$connection->quoteBinary("\x01\x01\x02\xff"));
@@ -596,7 +596,7 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
         $result = static::$connection->setQuery($selectRow4)->loadResult();
         $this->assertEquals(4, $result);
 
-        $selectRows = static::$connection->getQuery(true)
+        $selectRows = static::$connection->createQuery()
             ->select('data')
             ->from('#__dbtest')
             ->order('id');

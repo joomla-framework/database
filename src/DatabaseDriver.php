@@ -548,12 +548,24 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     }
 
     /**
-     * Disconnects the database.
-     *
-     * @return  void
-     *
-     * @since   2.0.0
-     */
+    * Create a new DatabaseQuery object.
+    *
+    * @return  QueryInterface
+    *
+    * @since   2.2
+    */
+    public function createQuery(): QueryInterface
+    {
+        return $this->factory->getQuery($this->name, $this);
+    }
+
+    /**
+    * Disconnects the database.
+    *
+    * @return  void
+    *
+    * @since   2.0.0
+    */
     public function disconnect()
     {
         $this->freeResult();
@@ -964,18 +976,26 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     }
 
     /**
-     * Get the current query object or a new DatabaseQuery object.
-     *
-     * @param   boolean  $new  False to return the current query object, True to return a new DatabaseQuery object.
-     *
-     * @return  QueryInterface
-     *
-     * @since   1.0
-     */
+    * Get the current query object or a new DatabaseQuery object.
+    *
+    * @param   boolean  $new  False to return the current query object, True to return a new DatabaseQuery object.
+    *                         The $new parameter is deprecated in 2.2 and will be removed in 4.0, use createQuery() instead.
+    *
+    * @return  DatabaseQuery
+    *
+    * @since   1.0
+    */
     public function getQuery($new = false)
     {
         if ($new) {
-            return $this->factory->getQuery($this->name, $this);
+            trigger_deprecation(
+                'joomla/database',
+                '2.2.0',
+                'The parameter $new is deprecated and will be removed in 4.0, use %s::createQuery() instead.',
+                self::class
+            );
+
+            return $this->createQuery();
         }
 
         return $this->sql;
@@ -1073,7 +1093,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
         }
 
         // Create the base insert statement.
-        $query = $this->getQuery(true)
+        $query = $this->createQuery()
             ->insert($this->quoteName($table))
             ->columns($fields)
             ->values(implode(',', $values));

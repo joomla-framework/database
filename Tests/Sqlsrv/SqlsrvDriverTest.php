@@ -226,7 +226,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         $this->loadExampleData();
 
         $result = static::$connection->setQuery(
-            static::$connection->getQuery(true)
+            static::$connection->createQuery()
                 ->select('*')
                 ->from('#__dbtest')
         )->loadObject();
@@ -252,7 +252,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         $this->loadExampleData();
 
         $result = static::$connection->setQuery(
-            static::$connection->getQuery(true)
+            static::$connection->createQuery()
                 ->select('*')
                 ->from('#__dbtest')
         )->loadObjectList();
@@ -301,7 +301,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         $this->loadExampleData();
 
         $result = static::$connection->setQuery(
-            static::$connection->getQuery(true)
+            static::$connection->createQuery()
                 ->select('*')
                 ->from('#__dbtest')
         )->loadRow();
@@ -327,7 +327,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         $this->loadExampleData();
 
         $result = static::$connection->setQuery(
-            static::$connection->getQuery(true)
+            static::$connection->createQuery()
                 ->select('*')
                 ->from('#__dbtest')
         )->loadRowList();
@@ -375,8 +375,8 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
     {
         $this->loadExampleData();
 
-        $query = static::$connection->getQuery(true);
-        $union = static::$connection->getQuery(true);
+        $query = static::$connection->createQuery();
+        $union = static::$connection->createQuery();
 
         $query = $query->select('id, title')
             ->from('#__dbtest')
@@ -560,7 +560,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
     {
         $this->assertInstanceOf(
             SqlsrvQuery::class,
-            static::$connection->getQuery(true)
+            static::$connection->createQuery()
         );
     }
 }
