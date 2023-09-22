@@ -302,9 +302,12 @@ abstract class DatabaseExporter
 				{
 					if (!in_array($key, $colblob))
 					{
-						if (is_null($value)) {
+						if (is_null($value))
+						{
 							$buffer[] = '    <field name="' . $key . '" value_is_null></field>';
-						} else {
+						}
+						else
+						{
 							$buffer[] = '    <field name="' . $key . '">' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '</field>';
 						}
 					}
