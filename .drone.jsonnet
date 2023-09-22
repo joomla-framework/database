@@ -63,10 +63,8 @@ local phpunit_sqlsrv(phpversion) = {
         'echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/ubuntu/22.04/prod jammy main" >> /etc/apt/sources.list',
         'apt-get update',
         'ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev',
-        if phpversion < '8.0' then 'pecl install sqlsrv-5.10.1 && docker-php-ext-enable sqlsrv'
-        else 'pecl install sqlsrv && docker-php-ext-enable sqlsrv' ,
-        if phpversion < '8.0' then 'pecl install pdo_sqlsrv-5.10.1 && docker-php-ext-enable pdo_sqlsrv'
-        else 'pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv',
+        'pecl install sqlsrv && docker-php-ext-enable sqlsrv',
+        'pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv',
         'php --ri sqlsrv',
         'php --ri pdo_sqlsrv',
         'vendor/bin/phpunit --configuration phpunit.sqlsrv.xml.dist --testdox',
