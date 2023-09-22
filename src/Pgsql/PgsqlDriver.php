@@ -148,7 +148,7 @@ class PgsqlDriver extends PdoDriver
             return '';
         }
 
-        $query = $this->getQuery(true)
+        $query = $this->createQuery()
             ->select($this->quoteName(['version', 'cipher']))
             ->from($this->quoteName('pg_stat_ssl'))
             ->where($this->quoteName('pid') . ' = pg_backend_pid()');
@@ -356,7 +356,7 @@ class PgsqlDriver extends PdoDriver
         $colNames = [];
 
         foreach ($tabInd as $numCol) {
-            $query = $this->getQuery(true)
+            $query = $this->createQuery()
                 ->select('attname')
                 ->from('pg_attribute')
                 ->join('LEFT', 'pg_class ON pg_class.relname=' . $this->quote($tableSub))
@@ -378,7 +378,7 @@ class PgsqlDriver extends PdoDriver
      */
     public function getTableList()
     {
-        $query = $this->getQuery(true)
+        $query = $this->createQuery()
             ->select('table_name')
             ->from('information_schema.tables')
             ->where('table_type = ' . $this->quote('BASE TABLE'))
@@ -417,7 +417,7 @@ class PgsqlDriver extends PdoDriver
             ];
 
             // Get the details columns information.
-            $query = $this->getQuery(true)
+            $query = $this->createQuery()
                 ->select($this->quoteName($name, $as))
                 ->from('pg_class AS s')
                 ->leftJoin("pg_depend d ON d.objid = s.oid AND d.classid = 'pg_class'::regclass AND d.refclassid = 'pg_class'::regclass")
@@ -448,7 +448,7 @@ class PgsqlDriver extends PdoDriver
     {
         $this->connect();
 
-        $query = $this->getQuery(true)
+        $query = $this->createQuery()
             ->select($this->quoteName('last_value'))
             ->from($sequence);
 
@@ -471,7 +471,7 @@ class PgsqlDriver extends PdoDriver
     {
         $this->connect();
 
-        $query = $this->getQuery(true)
+        $query = $this->createQuery()
             ->select($this->quoteName('is_called'))
             ->from($sequence);
 
@@ -528,14 +528,14 @@ class PgsqlDriver extends PdoDriver
         }
 
         // Rename indexes
-        $subQuery = $this->getQuery(true)
+        $subQuery = $this->createQuery()
             ->select('indexrelid')
             ->from('pg_index, pg_class')
             ->where('pg_class.relname = ' . $this->quote($oldTable))
             ->where('pg_class.oid = pg_index.indrelid');
 
         $this->setQuery(
-            $this->getQuery(true)
+            $this->createQuery()
                 ->select('relname')
                 ->from('pg_class')
                 ->where('oid IN (' . (string) $subQuery . ')')
@@ -549,14 +549,14 @@ class PgsqlDriver extends PdoDriver
         }
 
         // Rename sequences
-        $subQuery = $this->getQuery(true)
+        $subQuery = $this->createQuery()
             ->select('oid')
             ->from('pg_namespace')
             ->where('nspname NOT LIKE ' . $this->quote('pg_%'))
             ->where('nspname != ' . $this->quote('information_schema'));
 
         $this->setQuery(
-            $this->getQuery(true)
+            $this->createQuery()
                 ->select('relname')
                 ->from('pg_class')
                 ->where('relkind = ' . $this->quote('S'))
@@ -755,7 +755,7 @@ class PgsqlDriver extends PdoDriver
         }
 
         // Create the base insert statement.
-        $query = $this->getQuery(true);
+        $query = $this->createQuery();
 
         $query->insert($this->quoteName($table))
             ->columns($fields)
@@ -795,7 +795,7 @@ class PgsqlDriver extends PdoDriver
      */
     public function showTables()
     {
-        $query = $this->getQuery(true)
+        $query = $this->createQuery()
             ->select('table_name')
             ->from('information_schema.tables')
             ->where('table_type=' . $this->quote('BASE TABLE'))

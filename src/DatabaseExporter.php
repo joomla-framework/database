@@ -287,7 +287,11 @@ abstract class DatabaseExporter
 
                 foreach ($row as $key => $value) {
                     if (!in_array($key, $colblob)) {
-                        $buffer[] = '    <field name="' . $key . '">' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '</field>';
+                        if (is_null($value)) {
+                            $buffer[] = '    <field name="' . $key . '" value_is_null></field>';
+                        } else {
+                            $buffer[] = '    <field name="' . $key . '">' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '</field>';
+                        }
                     } else {
                         $buffer[] = '    <field name="' . $key . '">' . base64_encode($value) . '</field>';
                     }

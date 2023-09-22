@@ -137,7 +137,7 @@ class ExportCommand extends AbstractCommand
                 File::write($filename, $data);
 
                 if ($zip) {
-                    $zipFilesArray[] = ['name' => $table . '.xml', 'data' => $data];
+                    $zipFilesArray = [['name' => $table . '.xml', 'data' => $data]];
                     $zipArchive->create($zipFile, $zipFilesArray);
                     File::delete($filename);
                 }
