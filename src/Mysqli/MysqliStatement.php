@@ -12,6 +12,7 @@ use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Exception\PrepareStatementFailureException;
 use Joomla\Database\FetchMode;
 use Joomla\Database\FetchOrientation;
+use Joomla\Database\ParameterKeyMappingTrait;
 use Joomla\Database\ParameterType;
 use Joomla\Database\StatementInterface;
 
@@ -24,13 +25,15 @@ use Joomla\Database\StatementInterface;
  */
 class MysqliStatement implements StatementInterface
 {
+	use ParameterKeyMappingTrait;
+
 	/**
 	 * Values which have been bound to the statement.
 	 *
 	 * @var    array
 	 * @since  2.0.0
 	 */
-	protected $bindedValues;
+	protected $bindedValues = [];
 
 	/**
 	 * Mapping between named parameters and position in query.
@@ -46,7 +49,7 @@ class MysqliStatement implements StatementInterface
 	 * @var    array
 	 * @since  2.0.0
 	 */
-	protected $parameterTypeMapping = [
+	private const PARAMETER_TYPE_MAP = [
 		ParameterType::BOOLEAN      => 'i',
 		ParameterType::INTEGER      => 'i',
 		ParameterType::LARGE_OBJECT => 's',
@@ -63,14 +66,6 @@ class MysqliStatement implements StatementInterface
 	protected $columnNames;
 
 	/**
-	 * The database connection resource.
-	 *
-	 * @var    \mysqli
-	 * @since  2.0.0
-	 */
-	protected $connection;
-
-	/**
 	 * The default fetch mode for the statement.
 	 *
 	 * @var    integer
@@ -85,14 +80,6 @@ class MysqliStatement implements StatementInterface
 	 * @since  2.0.0
 	 */
 	protected $query;
-
-	/**
-	 * Internal tracking flag to set whether there is a result set available for processing
-	 *
-	 * @var    boolean
-	 * @since  2.0.0
-	 */
-	private $result = false;
 
 	/**
 	 * Values which have been bound to the rows of each result set.
@@ -119,161 +106,28 @@ class MysqliStatement implements StatementInterface
 	protected $typesKeyMapping;
 
 	/**
-	 * Constructor.
-	 *
-	 * @param   \mysqli  $connection  The database connection resource
-	 * @param   string   $query       The query this statement will process
+	 * @param   \mysqli_stmt  $statement  The mysqli_stmt object
+	 * @param   string        $query      The query this statement will process
 	 *
 	 * @since   2.0.0
 	 * @throws  PrepareStatementFailureException
 	 */
-	public function __construct(\mysqli $connection, string $query)
+	public function __construct(\mysqli_stmt $statement, string $query)
 	{
-		$this->connection   = $connection;
-		$this->query        = $query;
+		$this->query = $query;
 
 		$query = $this->prepareParameterKeyMapping($query);
 
-		$this->statement  = $connection->prepare($query);
-
-		if (!$this->statement)
+		try
 		{
-			throw new PrepareStatementFailureException($this->connection->error, $this->connection->errno);
+			$statement->prepare($query);
 		}
-	}
-
-	/**
-	 * Replace named parameters with numbered parameters
-	 *
-	 * @param   string  $sql  The SQL statement to prepare.
-	 *
-	 * @return  string  The processed SQL statement.
-	 *
-	 * @since   2.0.0
-	 */
-	public function prepareParameterKeyMapping($sql)
-	{
-		$escaped   	= false;
-		$startPos  	= 0;
-		$quoteChar 	= '';
-		$literal    = '';
-		$mapping    = [];
-		$replace    = [];
-		$matches    = [];
-		$pattern    = '/([:][a-zA-Z0-9_]+)/';
-
-		if (!preg_match($pattern, $sql, $matches))
+		catch (\mysqli_sql_exception $e)
 		{
-			return $sql;
+			throw new PrepareStatementFailureException($e->getMessage(), $e->getCode());
 		}
 
-		$sql = trim($sql);
-		$n   = \strlen($sql);
-
-		while ($startPos < $n)
-		{
-			if (!preg_match($pattern, $sql, $matches, 0, $startPos))
-			{
-				break;
-			}
-
-			$j = strpos($sql, "'", $startPos);
-			$k = strpos($sql, '"', $startPos);
-
-			if (($k !== false) && (($k < $j) || ($j === false)))
-			{
-				$quoteChar = '"';
-				$j         = $k;
-			}
-			else
-			{
-				$quoteChar = "'";
-			}
-
-			if ($j === false)
-			{
-				$j = $n;
-			}
-
-			// Search for named prepared parameters and replace it with ? and save its position
-			$substring = substr($sql, $startPos, $j - $startPos);
-
-			if (preg_match_all($pattern, $substring, $matches, PREG_PATTERN_ORDER + PREG_OFFSET_CAPTURE))
-			{
-				foreach ($matches[0] as $i => $match)
-				{
-					if ($i === 0)
-					{
-						$literal .= substr($substring, 0, $match[1]);
-					}
-
-					$mapping[$match[0]]     = \count($mapping);
-					$endOfPlaceholder       = $match[1] + strlen($match[0]);
-					$beginOfNextPlaceholder = $matches[0][$i + 1][1] ?? strlen($substring);
-					$beginOfNextPlaceholder -= $endOfPlaceholder;
-					$literal                .= '?' . substr($substring, $endOfPlaceholder, $beginOfNextPlaceholder);
-				}
-			}
-			else
-			{
-				$literal .= $substring;
-			}
-
-			$startPos = $j;
-			$j++;
-
-			if ($j >= $n)
-			{
-				break;
-			}
-
-			// Quote comes first, find end of quote
-			while (true)
-			{
-				$k       = strpos($sql, $quoteChar, $j);
-				$escaped = false;
-
-				if ($k === false)
-				{
-					break;
-				}
-
-				$l = $k - 1;
-
-				while ($l >= 0 && $sql[$l] === '\\')
-				{
-					$l--;
-					$escaped = !$escaped;
-				}
-
-				if ($escaped)
-				{
-					$j = $k + 1;
-
-					continue;
-				}
-
-				break;
-			}
-
-			if ($k === false)
-			{
-				// Error in the query - no end quote; ignore it
-				break;
-			}
-
-			$literal .= substr($sql, $startPos, $k - $startPos + 1);
-			$startPos = $k + 1;
-		}
-
-		if ($startPos < $n)
-		{
-			$literal .= substr($sql, $startPos, $n - $startPos);
-		}
-
-		$this->parameterKeyMapping = $mapping;
-
-		return $literal;
+		$this->statement = $statement;
 	}
 
 	/**
@@ -283,7 +137,7 @@ class MysqliStatement implements StatementInterface
 	 *                                          name of the form `:name`. For a prepared statement using question mark placeholders, this will be
 	 *                                          the 1-indexed position of the parameter.
 	 * @param   mixed           $variable       Name of the PHP variable to bind to the SQL statement parameter.
-	 * @param   integer         $dataType       Constant corresponding to a SQL datatype, this should be the processed type from the QueryInterface.
+	 * @param   string          $dataType       Constant corresponding to a SQL datatype, this should be the processed type from the QueryInterface.
 	 * @param   integer         $length         The length of the variable. Usually required for OUTPUT parameters.
 	 * @param   array           $driverOptions  Optional driver options to be used.
 	 *
@@ -296,50 +150,41 @@ class MysqliStatement implements StatementInterface
 		$this->bindedValues[$parameter] =& $variable;
 
 		// Validate parameter type
-		if (!isset($this->parameterTypeMapping[$dataType]))
+		if (!isset(self::PARAMETER_TYPE_MAP[$dataType]))
 		{
 			throw new \InvalidArgumentException(sprintf('Unsupported parameter type `%s`', $dataType));
 		}
 
-		$this->typesKeyMapping[$parameter] = $this->parameterTypeMapping[$dataType];
+		$this->typesKeyMapping[$parameter] = self::PARAMETER_TYPE_MAP[$dataType];
 
 		return true;
 	}
 
 	/**
-	 * Binds a array of values to bound parameters.
+	 * Binds an array of values to bound parameters.
 	 *
 	 * @param   array  $values  The values to bind to the statement
 	 *
-	 * @return  boolean
+	 * @return  void
 	 *
 	 * @since   2.0.0
 	 */
-	private function bindValues(array $values)
+	private function bindValues(array $values): void
 	{
-		$params = [];
-		$types  = str_repeat('s', \count($values));
-
-		if (!empty($this->parameterKeyMapping))
+		if ($this->parameterKeyMapping)
 		{
-			foreach ($values as $key => &$value)
+			$params = [];
+			foreach ($values as $key => $value)
 			{
-				$params[$this->parameterKeyMapping[$key]] =& $value;
+				$params[$this->parameterKeyMapping[$key]] = $value;
 			}
 
 			ksort($params);
-		}
-		else
-		{
-			foreach ($values as $key => &$value)
-			{
-				$params[] =& $value;
-			}
+
+			$this->statement->bind_param(str_repeat('s', \count($params)), ...$params);
 		}
 
-		array_unshift($params, $types);
-
-		return \call_user_func_array([$this->statement, 'bind_param'], $params);
+		$this->statement->bind_param(str_repeat('s', \count($values)), ...$values);
 	}
 
 	/**
@@ -352,7 +197,6 @@ class MysqliStatement implements StatementInterface
 	public function closeCursor(): void
 	{
 		$this->statement->free_result();
-		$this->result = false;
 	}
 
 	/**
@@ -362,9 +206,9 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @since   2.0.0
 	 */
-	public function errorCode()
+	public function errorCode(): string
 	{
-		return $this->statement->errno;
+		return $this->statement->sqlstate;
 	}
 
 	/**
@@ -374,9 +218,9 @@ class MysqliStatement implements StatementInterface
 	 *
 	 * @since   2.0.0
 	 */
-	public function errorInfo()
+	public function errorInfo(): array
 	{
-		return $this->statement->error;
+		return $this->statement->error_list;
 	}
 
 	/**
@@ -390,24 +234,24 @@ class MysqliStatement implements StatementInterface
 	 */
 	public function execute(?array $parameters = null)
 	{
-		if ($this->bindedValues !== null)
+		if ($this->bindedValues !== [])
 		{
 			$params = [];
 			$types  = [];
 
-			if (!empty($this->parameterKeyMapping))
+			if ($this->parameterKeyMapping)
 			{
-				foreach ($this->bindedValues as $key => &$value)
+				foreach ($this->bindedValues as $key => $value)
 				{
-					$params[$this->parameterKeyMapping[$key]] =& $value;
+					$params[$this->parameterKeyMapping[$key]] = $value;
 					$types[$this->parameterKeyMapping[$key]]  = $this->typesKeyMapping[$key];
 				}
 			}
 			else
 			{
-				foreach ($this->bindedValues as $key => &$value)
+				$params = $this->bindedValues;
+				foreach (array_keys($this->bindedValues) as $key)
 				{
-					$params[]    =& $value;
 					$types[$key] = $this->typesKeyMapping[$key];
 				}
 			}
@@ -415,31 +259,19 @@ class MysqliStatement implements StatementInterface
 			ksort($params);
 			ksort($types);
 
-			array_unshift($params, implode('', $types));
-
-			if (!\call_user_func_array([$this->statement, 'bind_param'], $params))
-			{
-				throw new PrepareStatementFailureException($this->statement->error, $this->statement->errno);
-			}
+			$this->statement->bind_param(implode('', $types), ...$params);
 		}
 		elseif ($parameters !== null)
 		{
-			if (!$this->bindValues($parameters))
-			{
-				throw new PrepareStatementFailureException($this->statement->error, $this->statement->errno);
-			}
+			$this->bindValues($parameters);
 		}
 
-		try
-		{
-			if (!$this->statement->execute())
-			{
-				throw new ExecutionFailureException($this->query, $this->statement->error, $this->statement->errno);
-			}
+		try {
+			$this->statement->execute();
 		}
-		catch (\Throwable $e)
+		catch (\mysqli_sql_exception $e)
 		{
-			throw new ExecutionFailureException($this->query, $e->getMessage(), $e->getCode(), $e);
+			throw new ExecutionFailureException($this->query, $e->getMessage(), $e->getCode());
 		}
 
 		if ($this->columnNames === null)
@@ -448,16 +280,7 @@ class MysqliStatement implements StatementInterface
 
 			if ($meta !== false)
 			{
-				$columnNames = [];
-
-				foreach ($meta->fetch_fields() as $col)
-				{
-					$columnNames[] = $col->name;
-				}
-
-				$meta->free();
-
-				$this->columnNames = $columnNames;
+				$this->columnNames = array_column($meta->fetch_fields(), 'name');
 			}
 			else
 			{
@@ -470,20 +293,12 @@ class MysqliStatement implements StatementInterface
 			$this->statement->store_result();
 
 			$this->rowBindedValues = array_fill(0, \count($this->columnNames), null);
-			$refs                  = [];
 
-			foreach ($this->rowBindedValues as $key => &$value)
-			{
-				$refs[$key] =& $value;
-			}
+			// The following is necessary as PHP cannot handle references to properties properly
+			$refs =& $this->rowBindedValues;
 
-			if (!\call_user_func_array([$this->statement, 'bind_result'], $refs))
-			{
-				throw new \RuntimeException($this->statement->error, $this->statement->errno);
-			}
+			$this->statement->bind_result(...$refs);
 		}
-
-		$this->result = true;
 
 		return true;
 	}
@@ -508,7 +323,7 @@ class MysqliStatement implements StatementInterface
 	 */
 	public function fetch(?int $fetchStyle = null, int $cursorOrientation = FetchOrientation::NEXT, int $cursorOffset = 0)
 	{
-		if (!$this->result)
+		if (!\is_array($this->columnNames))
 		{
 			return false;
 		}
@@ -527,11 +342,6 @@ class MysqliStatement implements StatementInterface
 			return false;
 		}
 
-		if ($values === false)
-		{
-			throw new \RuntimeException($this->statement->error, $this->statement->errno);
-		}
-
 		switch ($fetchStyle)
 		{
 			case FetchMode::NUMERIC:
@@ -541,10 +351,7 @@ class MysqliStatement implements StatementInterface
 				return array_combine($this->columnNames, $values);
 
 			case FetchMode::MIXED:
-				$ret = array_combine($this->columnNames, $values);
-				$ret += $values;
-
-				return $ret;
+				return array_combine($this->columnNames, $values) + $values;
 
 			case FetchMode::STANDARD_OBJECT:
 				return (object) array_combine($this->columnNames, $values);
@@ -579,13 +386,18 @@ class MysqliStatement implements StatementInterface
 	/**
 	 * Fetch the data from the statement.
 	 *
-	 * @return  array|boolean
+	 * @return  array|null
 	 *
 	 * @since   2.0.0
 	 */
-	private function fetchData()
+	private function fetchData(): ?array
 	{
 		$return = $this->statement->fetch();
+
+		if ($return === false)
+		{
+			throw new \RuntimeException($this->statement->error, $this->statement->errno);
+		}
 
 		if ($return === true)
 		{
@@ -599,7 +411,7 @@ class MysqliStatement implements StatementInterface
 			return $values;
 		}
 
-		return $return;
+		return null;
 	}
 
 	/**

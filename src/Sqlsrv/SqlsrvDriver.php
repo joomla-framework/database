@@ -253,7 +253,7 @@ class SqlsrvDriver extends DatabaseDriver
 	 * @param   mixed    $text    A string or an array of strings to quote.
 	 * @param   boolean  $escape  True (default) to escape the string, false to leave it unchanged.
 	 *
-	 * @return  string  The quoted input string.
+	 * @return  string|array  The quoted input string.
 	 *
 	 * @since   1.6.0
 	 */
