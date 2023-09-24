@@ -214,7 +214,7 @@ class PgsqlDriver extends PdoDriver
 	/**
 	 * Retrieves field information about a given table.
 	 *
-	 * @param   string   $table     The name of the database table.
+	 * @param   string   $table     The name of the database table with or without schema.
 	 * @param   boolean  $typeOnly  True to only return field types.
 	 *
 	 * @return  array  An array of fields for the database table.
@@ -228,7 +228,18 @@ class PgsqlDriver extends PdoDriver
 
 		$result        = [];
 		$tableSub      = $this->replacePrefix($table);
-		$defaultSchema = $this->getDefaultSchema();
+
+		$fullname = explode('.', $tableSub);
+
+		if (is_array($fullname) && count($fullname) == 2)
+		{
+			$tableSub = $fullname[1];
+			$defaultSchema = $fullname[0];
+		}
+		else
+		{
+			$defaultSchema = $this->getDefaultSchema();
+		}
 
 		$this->setQuery('
 			SELECT a.attname AS "column_name",
