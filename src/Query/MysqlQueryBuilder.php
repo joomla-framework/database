@@ -196,29 +196,6 @@ trait MysqlQueryBuilder
     }
 
     /**
-     * Return the number of the current row.
-     *
-     * Usage:
-     * $query->select('id');
-     * $query->selectRowNumber('ordering,publish_up DESC', 'new_ordering');
-     * $query->from('#__content');
-     *
-     * @param   string  $orderBy           An expression of ordering for window function.
-     * @param   string  $orderColumnAlias  An alias for new ordering column.
-     *
-     * @return  $this
-     *
-     * @since   2.0.0
-     * @throws  \RuntimeException
-     */
-    public function selectRowNumber($orderBy, $orderColumnAlias)
-    {
-        $this->validateRowNumber($orderBy, $orderColumnAlias);
-
-        return $this->select("(SELECT @rownum := @rownum + 1 FROM (SELECT @rownum := 0) AS r) AS $orderColumnAlias");
-    }
-
-    /**
      * Casts a value to a char.
      *
      * Ensure that the value is properly quoted before passing to the method.
