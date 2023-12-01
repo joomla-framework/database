@@ -126,6 +126,9 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		$options['sqlBigSelects'] = isset($options['sqlBigSelects']) ? (bool) $options['sqlBigSelects'] : null;
 		$options['ssl']           = isset($options['ssl']) ? $options['ssl'] : [];
 
+		// Set maxJoinSize only if sqlBigSelects is explicitely set to false.
+		$options['maxJoinSize'] = isset($options['maxJoinSize']) && $options['sqlBigSelects'] === false ? $options['maxJoinSize'] : null;
+
 		if ($options['ssl'] !== [])
 		{
 			$options['ssl']['enable']             = isset($options['ssl']['enable']) ? $options['ssl']['enable'] : false;
@@ -338,6 +341,12 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		if ($this->options['sqlBigSelects'] !== null)
 		{
 			$this->connection->query('SET @@SESSION.sql_big_selects = ' . ($this->options['sqlBigSelects'] ? '1' : '0') . ';');
+		}
+
+		// Set max_join_size if value provided in options
+		if ($this->options['maxJoinSize'] !== null)
+		{
+			$this->connection->query('SET @@SESSION.max_join_size = ' . $this->options['maxJoinSize'] . ';');
 		}
 
 		// If auto-select is enabled select the given database.
