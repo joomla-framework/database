@@ -159,6 +159,28 @@ interface DatabaseInterface
 	public function isConnectionEncryptionSupported(): bool;
 
 	/**
+	 * Method to get the sql_big_selects system variable.
+	 *
+	 * If the connector doesn't support reporting this value please return false.
+	 *
+	 * @return  boolean  Whether sql_big_selects is enabled or not.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getSqlBigSelects(): bool;
+
+	/**
+	 * Method to get the max_join_size system variable.
+	 *
+	 * If the connector doesn't support reporting this value please return an empty string.
+	 *
+	 * @return  string  max_join_size value.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getMaxJoinSize(): string;
+
+	/**
 	 * Method to check whether the installed database version is supported by the database driver
 	 *
 	 * @return  boolean  True if the database version is supported

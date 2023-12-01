@@ -393,6 +393,36 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 	}
 
 	/**
+	 * Method to get the sql_big_selects system variable.
+	 *
+	 * If the connector doesn't support reporting this value please return false.
+	 *
+	 * @return  boolean  Whether sql_big_selects is enabled or not.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getSqlBigSelects(): bool
+	{
+		$this->connect();
+
+		return $this->setQuery('SELECT @@sql_big_selects;')->loadResult() == 1;
+	}
+
+	/**
+	 * Method to get the max_join_size system variable.
+	 *
+	 * If the connector doesn't support reporting this value please return an empty string.
+	 *
+	 * @return  string  max_join_size value.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getMaxJoinSize(): string
+	{
+		return $this->setQuery('SELECT @@max_join_size;')->loadResult();
+	}
+
+	/**
 	 * Return the query string to create new Database.
 	 *
 	 * @param   stdClass  $options  Object used to pass user and database name to database driver. This object must have "db_name" and "db_user" set.
