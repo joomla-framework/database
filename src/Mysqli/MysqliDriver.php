@@ -124,7 +124,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
         $options['socket']        = $options['socket'] ?? null;
         $options['utf8mb4']       = isset($options['utf8mb4']) ? (bool) $options['utf8mb4'] : false;
         $options['sqlModes']      = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
-        $options['sqlBigSelects'] = isset($options['sqlBigSelects']) ? (bool) $options['sqlBigSelects'] : false;
+        $options['sqlBigSelects'] = isset($options['sqlBigSelects']) ? (bool) $options['sqlBigSelects'] : null;
         $options['ssl']           = isset($options['ssl']) ? $options['ssl'] : [];
 
         if ($options['ssl'] !== []) {
@@ -308,9 +308,9 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
         // And read the real sql mode to mitigate changes in mysql > 5.7.+
         $this->options['sqlModes'] = explode(',', $this->setQuery('SELECT @@SESSION.sql_mode;')->loadResult());
 
-        // If needed, enable SQL big selects
-        if ($this->options['sqlBigSelects']) {
-            $this->connection->query('SET @@SESSION.sql_big_selects = 1;');
+        // Set sql_big_selects if value provided in options
+        if ($this->options['sqlBigSelects'] !== null) {
+            $this->connection->query('SET @@SESSION.sql_big_selects = ' . ($this->options['sqlBigSelects'] ? '1' : '0') . ';');
         }
 
         // If auto-select is enabled select the given database.
