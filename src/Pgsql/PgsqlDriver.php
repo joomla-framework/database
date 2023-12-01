@@ -179,7 +179,7 @@ class PgsqlDriver extends PdoDriver
 	}
 
 	/**
-	 * Method to get the sql_big_selects system variable.
+	 * Method to get the sql_big_selects session variable.
 	 *
 	 * If the connector doesn't support reporting this value please return false.
 	 *
@@ -193,7 +193,7 @@ class PgsqlDriver extends PdoDriver
 	}
 
 	/**
-	 * Method to get the max_join_size system variable.
+	 * Method to get the max_join_size session variable.
 	 *
 	 * If the connector doesn't support reporting this value please return an empty string.
 	 *
