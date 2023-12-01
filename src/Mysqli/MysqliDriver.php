@@ -123,11 +123,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 		$options['socket']        = $options['socket'] ?? null;
 		$options['utf8mb4']       = isset($options['utf8mb4']) ? (bool) $options['utf8mb4'] : false;
 		$options['sqlModes']      = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
-		$options['sqlBigSelects'] = isset($options['sqlBigSelects']) ? (bool) $options['sqlBigSelects'] : null;
 		$options['ssl']           = isset($options['ssl']) ? $options['ssl'] : [];
-
-		// Set maxJoinSize only if sqlBigSelects is explicitely set to false.
-		$options['maxJoinSize'] = isset($options['maxJoinSize']) && $options['sqlBigSelects'] === false ? $options['maxJoinSize'] : null;
 
 		if ($options['ssl'] !== [])
 		{
@@ -139,6 +135,12 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 			$options['ssl']['cert']               = isset($options['ssl']['cert']) ? $options['ssl']['cert'] : null;
 			$options['ssl']['verify_server_cert'] = isset($options['ssl']['verify_server_cert']) ? $options['ssl']['verify_server_cert'] : null;
 		}
+
+		// Ignore sqlBigSelects if maxJoinSize is explicitely set.
+		$options['sqlBigSelects'] = isset($options['sqlBigSelects']) && !isset($options['maxJoinSize']) ? (bool) $options['sqlBigSelects'] : null;
+
+		// Ignore maxJoinSize if sqlBigSelects is explicitely enabled.
+		$options['maxJoinSize'] = isset($options['maxJoinSize']) && $options['sqlBigSelects'] !== true ? $options['maxJoinSize'] : null;
 
 		// Finalize initialisation.
 		parent::__construct($options);
