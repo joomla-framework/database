@@ -128,6 +128,9 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
         $options['sqlModes']      = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
         $options['sqlBigSelects'] = isset($options['sqlBigSelects']) ? (bool) $options['sqlBigSelects'] : null;
 
+        // Set maxJoinSize only if sqlBigSelects is explicitely set to false.
+        $options['maxJoinSize'] = isset($options['maxJoinSize']) && $options['sqlBigSelects'] === false ? $options['maxJoinSize'] : null;
+
         $this->charset = $options['charset'];
 
         /*
@@ -225,6 +228,11 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
         // Set sql_big_selects if value provided in options
         if ($this->options['sqlBigSelects'] !== null) {
             $this->connection->query('SET @@SESSION.sql_big_selects = ' . ($this->options['sqlBigSelects'] ? '1' : '0') . ';');
+        }
+
+        // Set max_join_size if value provided in options
+        if ($this->options['maxJoinSize'] !== null) {
+            $this->connection->query('SET @@SESSION.max_join_size = ' . $this->options['maxJoinSize'] . ';');
         }
 
         $this->setOption(\PDO::ATTR_EMULATE_PREPARES, true);
