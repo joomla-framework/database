@@ -136,10 +136,10 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
             $options['ssl']['verify_server_cert'] = isset($options['ssl']['verify_server_cert']) ? $options['ssl']['verify_server_cert'] : null;
         }
 
-        // Ignore sqlBigSelects if maxJoinSize is explicitely set.
+        // Ignore sqlBigSelects if maxJoinSize is explicitly set.
         $options['sqlBigSelects'] = isset($options['sqlBigSelects']) && !isset($options['maxJoinSize']) ? (bool) $options['sqlBigSelects'] : null;
 
-        // Ignore maxJoinSize if sqlBigSelects is explicitely enabled.
+        // Ignore maxJoinSize if sqlBigSelects is explicitly enabled.
         $options['maxJoinSize'] = isset($options['maxJoinSize']) && $options['sqlBigSelects'] !== true ? $options['maxJoinSize'] : null;
 
         // Finalize initialisation.
