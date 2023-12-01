@@ -126,10 +126,10 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 		$options['charset']  = $options['charset'] ?? 'utf8';
 		$options['sqlModes'] = isset($options['sqlModes']) ? (array) $options['sqlModes'] : $sqlModes;
 
-		// Ignore sqlBigSelects if maxJoinSize is explicitely set.
+		// Ignore sqlBigSelects if maxJoinSize is explicitly set.
 		$options['sqlBigSelects'] = isset($options['sqlBigSelects']) && !isset($options['maxJoinSize']) ? (bool) $options['sqlBigSelects'] : null;
 
-		// Ignore maxJoinSize if sqlBigSelects is explicitely enabled.
+		// Ignore maxJoinSize if sqlBigSelects is explicitly enabled.
 		$options['maxJoinSize'] = isset($options['maxJoinSize']) && $options['sqlBigSelects'] !== true ? $options['maxJoinSize'] : null;
 
 		$this->charset = $options['charset'];
