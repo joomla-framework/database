@@ -177,6 +177,34 @@ class PgsqlDriver extends PdoDriver
     }
 
     /**
+     * Method to get the sql_big_selects system variable.
+     *
+     * If the connector doesn't support reporting this value please return false.
+     *
+     * @return  boolean  Whether sql_big_selects is enabled or not.
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function getSqlBigSelects(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Method to get the max_join_size system variable.
+     *
+     * If the connector doesn't support reporting this value please return an empty string.
+     *
+     * @return  string  max_join_size value.
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function getMaxJoinSize(): string
+    {
+        return '';
+    }
+
+    /**
      * Internal function to get the name of the default schema for the current PostgreSQL connection.
      * That is the schema where tables are created by Joomla.
      *
