@@ -616,4 +616,28 @@ interface DatabaseInterface
      * @throws  \RuntimeException
      */
     public function updateObject($table, &$object, $key, $nulls = false);
+
+    /**
+     * Get value of boolean session variable with the given name.
+     * Returns null if database doesn't support session variables or variable doesn't exist.
+     *
+     * @param   string  $name  The name of the session variable.
+     *
+     * @return  boolean|null
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function getSessionVarBool($name);
+
+    /**
+     * Get value of string session variable with the given name.
+     * Returns null if database doesn't support session variables or variable doesn't exist.
+     *
+     * @param   string  $name  The name of the session variable.
+     *
+     * @return  string|null
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function getSessionVarString($name);
 }

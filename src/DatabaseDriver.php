@@ -1893,4 +1893,34 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 
         return true;
     }
+
+    /**
+     * Get value of boolean session variable with the given name.
+     * Returns null if database doesn't support session variables or variable doesn't exist.
+     *
+     * @param   string  $name  The name of the session variable.
+     *
+     * @return  boolean|null
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function getSessionVarBool($name)
+    {
+        return null;
+    }
+
+    /**
+     * Get value of string session variable with the given name.
+     * Returns null if database doesn't support session variables or variable doesn't exist.
+     *
+     * @param   string  $name  The name of the session variable.
+     *
+     * @return  string|null
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function getSessionVarString($name)
+    {
+        return null;
+    }
 }

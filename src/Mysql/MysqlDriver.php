@@ -804,4 +804,42 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
             }
         }
     }
+
+    /**
+     * Get value of boolean session variable with the given name.
+     * Returns null if database doesn't support session variables or variable doesn't exist.
+     *
+     * @param   string  $name  The name of the session variable.
+     *
+     * @return  boolean|null
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function getSessionVarBool($name)
+    {
+        $this->connect();
+
+        $result = $this->setQuery('SELECT @@' . $name . ';')->loadResult();
+
+        return $result === null ? null : (bool) $result;
+    }
+
+    /**
+     * Get value of string session variable with the given name.
+     * Returns null if database doesn't support session variables or variable doesn't exist.
+     *
+     * @param   string  $name  The name of the session variable.
+     *
+     * @return  string|null
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function getSessionVarString($name)
+    {
+        $this->connect();
+
+        $result = $this->setQuery('SELECT @@' . $name . ';')->loadResult();
+
+        return $result === null ? null : (string) $result;
+    }
 }
