@@ -136,6 +136,9 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
             $options['ssl']['verify_server_cert'] = isset($options['ssl']['verify_server_cert']) ? $options['ssl']['verify_server_cert'] : null;
         }
 
+        // Use sqlBigSelects only if explicitly set.
+        $options['sqlBigSelects'] = isset($options['sqlBigSelects']) ? (bool) $options['sqlBigSelects'] : null;
+
         // Finalize initialisation.
         parent::__construct($options);
     }
@@ -307,6 +310,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
         // And read the real sql mode to mitigate changes in mysql > 5.7.+
         $this->options['sqlModes'] = explode(',', $this->setQuery('SELECT @@SESSION.sql_mode;')->loadResult());
 
+        // Set sql_big_selects if value provided in options
+        if ($this->options['sqlBigSelects'] !== null)
+        {
+            $this->connection->query('SET @@SESSION.sql_big_selects = ' . ($this->options['sqlBigSelects'] ? '1' : '0') . ';');
+        }
         // If auto-select is enabled select the given database.
         if ($this->options['select'] && !empty($this->options['database'])) {
             $this->select($this->options['database']);
