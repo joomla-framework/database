@@ -632,7 +632,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
         $this->connect();
 
         // Set the query to get the tables statement.
-        return $this->setQuery('SHOW TABLES')->loadColumn();
+        return $this->setQuery('SHOW FULL TABLES WHERE table_type="BASE TABLE"')->loadColumn();
     }
 
     /**
