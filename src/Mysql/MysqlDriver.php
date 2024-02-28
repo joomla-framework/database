@@ -487,7 +487,7 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
         $this->connect();
 
         // Set the query to get the tables statement and not the views.
-       return $this->setQuery('SHOW FULL TABLES WHERE table_type="BASE TABLE"')->loadColumn();
+        return $this->setQuery('SHOW FULL TABLES WHERE table_type="BASE TABLE"')->loadColumn();
     }
 
     /**
