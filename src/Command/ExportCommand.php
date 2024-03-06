@@ -118,6 +118,9 @@ class ExportCommand extends AbstractCommand
 
             /** @var Zip $zipArchive */
             $zipArchive = (new Archive())->getAdapter('zip');
+
+            $filenames = [];
+            $zipFilesArray = [];
         }
 
         foreach ($tables as $table) {
@@ -137,12 +140,18 @@ class ExportCommand extends AbstractCommand
                 File::write($filename, $data);
 
                 if ($zip) {
-                    $zipFilesArray = [['name' => $table . '.xml', 'data' => $data]];
-                    $zipArchive->create($zipFile, $zipFilesArray);
-                    File::delete($filename);
+                    $zipFilesArray[] = ['name' => $table . '.xml', 'data' => $data];
+                    $filenames[] = $filename;
                 }
 
                 $symfonyStyle->text(sprintf('Exported data for %s in %d seconds', $table, round(microtime(true) - $taskTime, 3)));
+            }
+        }
+
+        if ($zip) {
+            $zipArchive->create($zipFile, $zipFilesArray);
+            foreach ($filenames as $fname) {
+                File::delete($fname);
             }
         }
 
