@@ -111,6 +111,11 @@ class PgsqlDriver extends PdoDriver
      */
     public function getCollation()
     {
+        // https://www.postgresql.org/docs/current/release-16.html
+        if (version_compare($this->getVersion(), '16.0', '>=')) {
+            return false;
+        }
+
         $this->setQuery('SHOW LC_COLLATE');
         $array = $this->loadAssocList();
 
@@ -127,6 +132,11 @@ class PgsqlDriver extends PdoDriver
      */
     public function getConnectionCollation()
     {
+        // https://www.postgresql.org/docs/current/release-16.html
+        if (version_compare($this->getVersion(), '16.0', '>=')) {
+            return false;
+        }
+
         $this->setQuery('SHOW LC_COLLATE');
         $array = $this->loadAssocList();
 
