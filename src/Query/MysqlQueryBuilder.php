@@ -215,6 +215,10 @@ trait MysqlQueryBuilder
     {
         $this->validateRowNumber($orderBy, $orderColumnAlias);
 
+        if ($this->db->isMariaDb() && version_compare($this->db->getVersion(), '11.0.0', '>=')) {
+            return $this->select("ROW_NUMBER() OVER (ORDER BY $orderBy) AS $orderColumnAlias");
+        }
+
         return $this->select("(SELECT @rownum := @rownum + 1 FROM (SELECT @rownum := 0) AS r) AS $orderColumnAlias");
     }
 
