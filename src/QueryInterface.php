@@ -10,9 +10,9 @@
 namespace Joomla\Database;
 
 use Joomla\Database\Exception\QueryTypeAlreadyDefinedException;
+use Joomla\Database\Exception\UnknownTypeException;
 use Joomla\Database\Query\LimitableInterface;
 use Joomla\Database\Query\PreparableInterface;
-use Joomla\Database\Exception\UnknownTypeException;
 
 /**
  * Joomla Framework Query Building Interface.

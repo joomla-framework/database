@@ -9,8 +9,8 @@ namespace Joomla\Database\Tests;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Exception\QueryTypeAlreadyDefinedException;
-use Joomla\Database\ParameterType;
 use Joomla\Database\Exception\UnknownTypeException;
+use Joomla\Database\ParameterType;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
