@@ -120,7 +120,7 @@ class SqlsrvDriver extends DatabaseDriver
             'pwd'                  => $this->options['password'],
             'CharacterSet'         => 'UTF-8',
             'ReturnDatesAsStrings' => true,
-            'Encrypt'              => $this->options['encrypt']
+            'Encrypt'              => $this->options['encrypt'],
         ];
 
         // Attempt to connect to the server.
