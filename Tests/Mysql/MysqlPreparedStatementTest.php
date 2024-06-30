@@ -8,7 +8,6 @@ namespace Joomla\Database\Tests\Mysql;
 
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
-use Joomla\Database\Mysqli\MysqliStatement;
 use Joomla\Test\DatabaseTestCase;
 
 class MysqlPreparedStatementTest extends DatabaseTestCase
