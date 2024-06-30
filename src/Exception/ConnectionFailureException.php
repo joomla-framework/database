@@ -25,7 +25,7 @@ class ConnectionFailureException extends \RuntimeException
      *
      * @since   2.0.0
      */
-    public function __construct($message = '', $code = 0, \Exception $previous = null)
+    public function __construct($message = '', $code = 0, ?\Exception $previous = null)
     {
         // PDO uses strings for exception codes, PHP forces numeric codes, so "force" the string code to be used
         parent::__construct($message, 0, $previous);

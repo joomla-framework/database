@@ -303,7 +303,7 @@ abstract class DatabaseQuery implements QueryInterface
      *
      * @since   1.0
      */
-    public function __construct(DatabaseInterface $db = null)
+    public function __construct(?DatabaseInterface $db = null)
     {
         $this->db = $db;
     }
