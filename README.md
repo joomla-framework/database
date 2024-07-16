@@ -1,4 +1,4 @@
-# The Database Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/database/status.svg?ref=refs/heads/2.0-dev)](https://ci.joomla.org/joomla-framework/database) [![Build status](https://ci.appveyor.com/api/projects/status/m2eh75a1g9k9y59u?svg=true)](https://ci.appveyor.com/project/joomla/database)
+# The Database Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/database/status.svg?ref=refs/heads/3.x-dev)](https://ci.joomla.org/joomla-framework/database) [![Build status](https://ci.appveyor.com/api/projects/status/m2eh75a1g9k9y59u?svg=true)](https://ci.appveyor.com/project/joomla/database)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/database/v/stable)](https://packagist.org/packages/joomla/database)
 [![Total Downloads](https://poser.pugx.org/joomla/database/downloads)](https://packagist.org/packages/joomla/database)
@@ -173,12 +173,12 @@ This is the log file:
 
 ## Installation via Composer
 
-Add `"joomla/database": "~2.0"` to the require block in your composer.json and then run `composer install`.
+Add `"joomla/database": "~3.0"` to the require block in your composer.json and then run `composer install`.
 
 ```json
 {
 	"require": {
-		"joomla/database": "~2.0"
+		"joomla/database": "~3.0"
 	}
 }
 ```
@@ -186,11 +186,11 @@ Add `"joomla/database": "~2.0"` to the require block in your composer.json and t
 Alternatively, you can simply run the following from the command line:
 
 ```sh
-composer require joomla/database "~2.0"
+composer require joomla/database "~3.0"
 ```
 
 If you want to include the test sources, use
 
 ```sh
-composer require --prefer-source joomla/database "~2.0"
+composer require --prefer-source joomla/database "~3.0"
 ```
