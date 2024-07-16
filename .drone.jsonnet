@@ -26,7 +26,7 @@ local composer(phpversion, params) = {
 local phpunit_common(phpversion) = {
     name: 'PHPUnit',
     image: 'joomlaprojects/docker-images:php' + phpversion,
-    [if phpversion == '8.3' then 'failure']: 'ignore',
+    [if phpversion == '8.4' then 'failure']: 'ignore',
     commands: [
         'vendor/bin/phpunit --configuration phpunit.xml.dist --testdox',
     ],
@@ -35,7 +35,7 @@ local phpunit_common(phpversion) = {
 local phpunit_mysql(phpversion, driver) = {
     name: 'PHPUnit',
     image: 'joomlaprojects/docker-images:php' + phpversion,
-    [if phpversion == '8.3' then 'failure']: 'ignore',
+    [if phpversion == '8.4' then 'failure']: 'ignore',
     commands: [
         'php --ri ' + driver + ' || true',
         'sleep 20',
@@ -46,7 +46,7 @@ local phpunit_mysql(phpversion, driver) = {
 local phpunit(phpversion, driver) = {
     name: 'PHPUnit',
     image: 'joomlaprojects/docker-images:php' + phpversion,
-    [if phpversion == '8.3' then 'failure']: 'ignore',
+    [if phpversion == '8.4' then 'failure']: 'ignore',
     commands: [
         'php --ri ' + driver + ' || true',
         'vendor/bin/phpunit --configuration phpunit.' + driver + '.xml.dist --testdox',
@@ -256,20 +256,29 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
     },
     pipeline_sqlite('8.1', 'sqlite', '--prefer-stable'),
     pipeline_sqlite('8.2', 'sqlite', '--prefer-stable'),
+    pipeline_sqlite('8.3', 'sqlite', '--prefer-stable'),
     pipeline_mysql('8.1', 'mysql', '5.7', '--prefer-stable'),
     pipeline_mysql('8.2', 'mysql', '5.7', '--prefer-stable'),
+    pipeline_mysql('8.3', 'mysql', '5.7', '--prefer-stable'),
     pipeline_mysql('8.1', 'mysql', '8.0', '--prefer-stable'),
     pipeline_mysql('8.2', 'mysql', '8.0', '--prefer-stable'),
+    pipeline_mysql('8.3', 'mysql', '8.0', '--prefer-stable'),
     pipeline_mysql('8.1', 'mysqli', '5.7', '--prefer-stable'),
     pipeline_mysql('8.2', 'mysqli', '5.7', '--prefer-stable'),
+    pipeline_mysql('8.3', 'mysqli', '5.7', '--prefer-stable'),
     pipeline_mysql('8.1', 'mysqli', '8.0', '--prefer-stable'),
     pipeline_mysql('8.2', 'mysqli', '8.0', '--prefer-stable'),
+    pipeline_mysql('8.3', 'mysqli', '8.0', '--prefer-stable'),
     pipeline_mariadb('8.1', 'mariadb', '10.2', '--prefer-stable'),
     pipeline_mariadb('8.2', 'mariadb', '10.2', '--prefer-stable'),
+    pipeline_mariadb('8.3', 'mariadb', '10.2', '--prefer-stable'),
     pipeline_postgres('8.1', 'pgsql', '10', '--prefer-stable'),
     pipeline_postgres('8.2', 'pgsql', '10', '--prefer-stable'),
+    pipeline_postgres('8.3', 'pgsql', '10', '--prefer-stable'),
     pipeline_postgres('8.1', 'pgsql', '11', '--prefer-stable'),
     pipeline_postgres('8.2', 'pgsql', '11', '--prefer-stable'),
+    pipeline_postgres('8.3', 'pgsql', '11', '--prefer-stable'),
     pipeline_sqlsrv('8.1', 'sqlsrv', '2017-latest', '--prefer-stable'),
     pipeline_sqlsrv('8.2', 'sqlsrv', '2017-latest', '--prefer-stable'),
+    pipeline_sqlsrv('8.3', 'sqlsrv', '2017-latest', '--prefer-stable'),
 ]
