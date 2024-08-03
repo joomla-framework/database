@@ -297,6 +297,16 @@ interface DatabaseInterface
     public function getVersion();
 
     /**
+     * Determine whether or not the database engine supports the ROW_NUMBER() window function.
+     *
+     * @return  boolean  True if the database engine supports supports the ROW_NUMBER()
+     *                   window function, false if not.
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function hasRowNumberSupport(): bool;
+
+    /**
      * Determine whether or not the database engine supports UTF-8 character encoding.
      *
      * @return  boolean  True if the database engine supports UTF-8 character encoding.

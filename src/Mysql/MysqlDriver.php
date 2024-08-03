@@ -200,6 +200,11 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
 
         $this->mariadb = stripos($serverVersion, 'mariadb') !== false;
 
+        // The ROW_NUMBER() window function is supported on MariaDB >= 10.2.0 and MySQL >= 8.0.0
+        $this->rownum
+            = $this->mariadb && version_compare($serverVersion, '10.2.0', '>=')
+            || !$this->mariadb && version_compare($serverVersion, '8.0.0', '>=');
+
         if ($this->utf8mb4) {
             // At this point we know the client supports utf8mb4.  Now we must check if the server supports utf8mb4 as well.
             $this->utf8mb4 = version_compare($serverVersion, '5.5.3', '>=');

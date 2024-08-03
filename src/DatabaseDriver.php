@@ -134,6 +134,14 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     protected $options;
 
     /**
+     * True if the database engine supports the ROW_NUMBER() window function.
+     *
+     * @var    boolean
+     * @since  __DEPLOY_VERSION__
+     */
+    protected $rownum = true;
+
+    /**
      * The current SQL statement to execute.
      *
      * @var    mixed
@@ -1039,6 +1047,19 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      * @throws  \RuntimeException
      */
     abstract public function getTableCreate($tables);
+
+   /**
+     * Determine whether or not the database engine supports the ROW_NUMBER() window function.
+     *
+     * @return  boolean  True if the database engine supports supports the ROW_NUMBER()
+     *                   window function, false if not.
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function hasRowNumberSupport(): bool
+    {
+        return $this->rownum;
+    }
 
     /**
      * Determine whether or not the database engine supports UTF-8 character encoding.

@@ -314,6 +314,13 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 
         $this->mariadb = stripos($this->connection->server_info, 'mariadb') !== false;
 
+        $serverVersion = $this->getVersion();
+
+        // The ROW_NUMBER() window function is supported on MariaDB >= 10.2.0 and MySQL >= 8.0.0
+        $this->rownum
+            = $this->mariadb && version_compare($serverVersion, '10.2.0', '>=')
+            || !$this->mariadb && version_compare($serverVersion, '8.0.0', '>=');
+
         $this->utf8mb4 = $this->serverClaimsUtf8mb4Support();
 
         // Set character sets (needed for MySQL 4.1.2+ and MariaDB).
