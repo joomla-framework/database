@@ -88,6 +88,7 @@ class SqlsrvDriver extends DatabaseDriver
         $options['password'] = $options['password'] ?? '';
         $options['database'] = $options['database'] ?? '';
         $options['select']   = isset($options['select']) ? (bool) $options['select'] : true;
+        $options['encrypt']  = isset($options['encrypt']) ? (bool) $options['encrypt'] : true;
 
         // Finalize initialisation
         parent::__construct($options);
@@ -119,6 +120,7 @@ class SqlsrvDriver extends DatabaseDriver
             'pwd'                  => $this->options['password'],
             'CharacterSet'         => 'UTF-8',
             'ReturnDatesAsStrings' => true,
+            'Encrypt'              => $this->options['encrypt']
         ];
 
         // Attempt to connect to the server.

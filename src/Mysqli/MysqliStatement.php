@@ -158,7 +158,7 @@ class MysqliStatement implements StatementInterface
         $quoteChar  = '';
         $literal    = '';
         $mapping    = [];
-        $replace    = [];
+        $position   = 0;
         $matches    = [];
         $pattern    = '/([:][a-zA-Z0-9_]+)/';
 
@@ -197,11 +197,15 @@ class MysqliStatement implements StatementInterface
                         $literal .= substr($substring, 0, $match[1]);
                     }
 
-                    $mapping[$match[0]]     = \count($mapping);
+                    if (!isset($mapping[$match[0]])) {
+                        $mapping[$match[0]] = [];
+                    }
+
+                    $mapping[$match[0]][]   = $position++;
                     $endOfPlaceholder       = $match[1] + strlen($match[0]);
                     $beginOfNextPlaceholder = $matches[0][$i + 1][1] ?? strlen($substring);
                     $beginOfNextPlaceholder -= $endOfPlaceholder;
-                    $literal .= '?' . substr($substring, $endOfPlaceholder, $beginOfNextPlaceholder);
+                    $literal                .= '?' . substr($substring, $endOfPlaceholder, $beginOfNextPlaceholder);
                 }
             } else {
                 $literal .= $substring;
@@ -371,8 +375,12 @@ class MysqliStatement implements StatementInterface
 
             if (!empty($this->parameterKeyMapping)) {
                 foreach ($this->bindedValues as $key => &$value) {
-                    $params[$this->parameterKeyMapping[$key]] =& $value;
-                    $types[$this->parameterKeyMapping[$key]]  = $this->typesKeyMapping[$key];
+                    $paramKey = $this->parameterKeyMapping[$key];
+
+                    foreach ($paramKey as $currentKey) {
+                        $params[$currentKey] =& $value;
+                        $types[$currentKey]  = $this->typesKeyMapping[$key];
+                    }
                 }
             } else {
                 foreach ($this->bindedValues as $key => &$value) {
