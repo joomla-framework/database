@@ -220,6 +220,11 @@ trait MysqlQueryBuilder
 	 */
 	public function selectRowNumber($orderBy, $orderColumnAlias)
 	{
+		// Use parent method with ROW_NUMBER() window function on MariaDB 11.0.0 and newer.
+		if ($this->db->isMariaDb() && version_compare($this->db->getVersion(), '11.0.0', '>=')) {
+			return parent::selectRowNumber($orderBy, $orderColumnAlias);
+		}
+
 		$this->validateRowNumber($orderBy, $orderColumnAlias);
 
 		return $this->select("(SELECT @rownum := @rownum + 1 FROM (SELECT @rownum := 0) AS r) AS $orderColumnAlias");
