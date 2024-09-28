@@ -111,7 +111,13 @@ class PgsqlDriver extends PdoDriver
 	 */
 	public function getCollation()
 	{
-		$this->setQuery('SHOW LC_COLLATE');
+		// https://www.postgresql.org/docs/current/release-16.html
+		if (version_compare($this->getVersion(), '16.0', '>=')) {
+			$this->setQuery('SELECT datcollate AS lc_collate FROM pg_database WHERE datname = current_database()');
+		} else {
+			$this->setQuery('SHOW LC_COLLATE');
+		}
+
 		$array = $this->loadAssocList();
 
 		return $array[0]['lc_collate'];
@@ -127,7 +133,13 @@ class PgsqlDriver extends PdoDriver
 	 */
 	public function getConnectionCollation()
 	{
-		$this->setQuery('SHOW LC_COLLATE');
+		// https://www.postgresql.org/docs/current/release-16.html
+		if (version_compare($this->getVersion(), '16.0', '>=')) {
+			$this->setQuery('SELECT datcollate AS lc_collate FROM pg_database WHERE datname = current_database()');
+		} else {
+			$this->setQuery('SHOW LC_COLLATE');
+		}
+
 		$array = $this->loadAssocList();
 
 		return $array[0]['lc_collate'];
