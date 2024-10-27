@@ -1897,11 +1897,12 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     /**
      * Extract pure host name (or IP address) and port or socket from host name option.
      *
-     * @param  integer  $defaultPort  The default port number to be used if no port is given.
+     * @param  integer  $defaultPort         The default port number to be used if no port is given.
+     * @param  boolean  $ipv6SquareBrackets  True if database connector uses ipv6 address with square brackets, false if not.
      *
      * @since  __DEPLOY_VERSION__
      */
-    protected function setHostPortSocket($defaultPort)
+    protected function setHostPortSocket($defaultPort, $ipv6SquareBrackets = true)
     {
         $port = $this->options['port'] ?? $defaultPort;
 
@@ -1925,7 +1926,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
             }
         } elseif (preg_match('/^(?P<host>\[.*\])(:(?P<port>.+))?$/', $this->options['host'], $matches)) {
             // We assume square-bracketed IPv6 address with or without port, e.g. [fe80:102::2%eth1]:3306
-            $this->options['host'] = $matches['host'];
+            $this->options['host'] = $ipv6SquareBrackets ? $matches['host'] : rtrim(ltrim($matches['host'], '['), ']');
 
             if (!empty($matches['port'])) {
                 $port = $matches['port'];

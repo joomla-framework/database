@@ -259,7 +259,7 @@ abstract class PdoDriver extends DatabaseDriver
 
             case 'pgsql':
                 // Extract host and port or socket from host option
-                $this->setHostPortSocket(5432);
+                $this->setHostPortSocket(5432, false);
 
                 if ($this->options['socket'] !== null) {
                     $format = 'pgsql:host=#SOCKET#;dbname=#DBNAME#';
