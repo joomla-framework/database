@@ -1036,4 +1036,193 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
             $params
         );
     }
+
+    /**
+     * @testdox  Pure host name or IP address and port or socket can be extracted from the host name option
+     */
+    public function testExtractHostPortSocket()
+    {
+        $refObject = new \ReflectionObject(static::$connection);
+        $refMethod = $refObject->getMethod('extractHostPortSocket');
+
+        $this->assertSame(
+            ['', 3306, null],
+            $refMethod->invoke(static::$connection, '', null, null, 3306)
+        );
+
+        $this->assertSame(
+            ['', 3307, null],
+            $refMethod->invoke(static::$connection, '', 3307, null, 3306)
+        );
+
+        $this->assertSame(
+            [null, 3306, '/path/to/unix/socket.sock'],
+            $refMethod->invoke(static::$connection, 'unix:/path/to/unix/socket.sock', null, null, 3306)
+        );
+
+        $this->assertSame(
+            [null, 3307, '/path/to/unix/socket.sock'],
+            $refMethod->invoke(static::$connection, 'unix:/path/to/unix/socket.sock', 3307, null, 3306)
+        );
+
+        $this->assertSame(
+            ['192.168.67.254', 3306, null],
+            $refMethod->invoke(static::$connection, '192.168.67.254', null, null, 3306)
+        );
+
+        $this->assertSame(
+            ['192.168.67.254', 3307, null],
+            $refMethod->invoke(static::$connection, '192.168.67.254', 3307, null, 3306)
+        );
+
+        $this->assertSame(
+            ['192.168.67.254', 3308, null],
+            $refMethod->invoke(static::$connection, '192.168.67.254:3308', null, null, 3306)
+        );
+
+        $this->assertSame(
+            ['192.168.67.254', 3308, null],
+            $refMethod->invoke(static::$connection, '192.168.67.254:3308', 3307, null, 3306)
+        );
+
+        $this->assertSame(
+            ['[fe80:102::2%eth1]', 3306, null],
+            $refMethod->invoke(static::$connection, '[fe80:102::2%eth1]', null, null, 3306)
+        );
+
+        $this->assertSame(
+            ['[fe80:102::2%eth1]', 3307, null],
+            $refMethod->invoke(static::$connection, '[fe80:102::2%eth1]', 3307, null, 3306)
+        );
+
+        $this->assertSame(
+            ['[fe80:102::2%eth1]', 3308, null],
+            $refMethod->invoke(static::$connection, '[fe80:102::2%eth1]:3308', null, null, 3306)
+        );
+
+        $this->assertSame(
+            ['[fe80:102::2%eth1]', 3308, null],
+            $refMethod->invoke(static::$connection, '[fe80:102::2%eth1]:3308', 3307, null, 3306)
+        );
+
+        $this->assertSame(
+            ['fe80:102::2%eth1', 3306, null],
+            $refMethod->invoke(static::$connection, '[fe80:102::2%eth1]', null, null, 3306, false)
+        );
+
+        $this->assertSame(
+            ['fe80:102::2%eth1', 3307, null],
+            $refMethod->invoke(static::$connection, '[fe80:102::2%eth1]', 3307, null, 3306, false)
+        );
+
+        $this->assertSame(
+            ['fe80:102::2%eth1', 3308, null],
+            $refMethod->invoke(static::$connection, '[fe80:102::2%eth1]:3308', null, null, 3306, false)
+        );
+
+        $this->assertSame(
+            ['fe80:102::2%eth1', 3308, null],
+            $refMethod->invoke(static::$connection, '[fe80:102::2%eth1]:3308', 3307, null, 3306, false)
+        );
+
+        $this->assertSame(
+            ['somehost', 3306, null],
+            $refMethod->invoke(static::$connection, 'somehost', null, null, 3306)
+        );
+
+        $this->assertSame(
+            ['somehost', 3307, null],
+            $refMethod->invoke(static::$connection, 'somehost', 3307, null, 3306)
+        );
+
+        $this->assertSame(
+            ['somehost', 3308, null],
+            $refMethod->invoke(static::$connection, 'somehost:3308', null, null, 3306)
+        );
+
+        $this->assertSame(
+            ['somehost', 3308, null],
+            $refMethod->invoke(static::$connection, 'somehost:3308', 3307, null, 3306)
+        );
+
+        $this->assertSame(
+            ['somehost.example.com', 3306, null],
+            $refMethod->invoke(static::$connection, 'somehost.example.com', null, null, 3306)
+        );
+
+        $this->assertSame(
+            ['somehost.example.com', 3307, null],
+            $refMethod->invoke(static::$connection, 'somehost.example.com', 3307, null, 3306)
+        );
+
+        $this->assertSame(
+            ['somehost.example.com', 3308, null],
+            $refMethod->invoke(static::$connection, 'somehost.example.com:3308', null, null, 3306)
+        );
+
+        $this->assertSame(
+            ['somehost.example.com', 3308, null],
+            $refMethod->invoke(static::$connection, 'somehost.example.com:3308', 3307, null, 3306)
+        );
+
+        $this->assertSame(
+            ['localhost', 3308, null],
+            $refMethod->invoke(static::$connection, ':3308', null, null, 3306)
+        );
+
+        $this->assertSame(
+            ['localhost', 3308, null],
+            $refMethod->invoke(static::$connection, ':3308', 3307, null, 3306)
+        );
+
+        $this->assertSame(
+            ['somehost', null, '/path/to/unix/socket.sock'],
+            $refMethod->invoke(static::$connection, 'somehost:/path/to/unix/socket.sock', null, null, 3306)
+        );
+
+        $this->assertSame(
+            ['somehost', 3307, '/path/to/unix/socket.sock'],
+            $refMethod->invoke(static::$connection, 'somehost:/path/to/unix/socket.sock', 3307, null, 3306)
+        );
+
+        $this->assertSame(
+            ['192.168.67.254', null, '/path/to/unix/socket.sock'],
+            $refMethod->invoke(static::$connection, '192.168.67.254:/path/to/unix/socket.sock', null, null, 3306)
+        );
+
+        $this->assertSame(
+            ['192.168.67.254', 3307, '/path/to/unix/socket.sock'],
+            $refMethod->invoke(static::$connection, '192.168.67.254:/path/to/unix/socket.sock', 3307, null, 3306)
+        );
+
+        $this->assertSame(
+            ['[fe80:102::2%eth1]', null, '/path/to/unix/socket.sock'],
+            $refMethod->invoke(static::$connection, '[fe80:102::2%eth1]:/path/to/unix/socket.sock', null, null, 3306)
+        );
+
+        $this->assertSame(
+            ['[fe80:102::2%eth1]', 3307, '/path/to/unix/socket.sock'],
+            $refMethod->invoke(static::$connection, '[fe80:102::2%eth1]:/path/to/unix/socket.sock', 3307, null, 3306)
+        );
+
+        $this->assertSame(
+            ['fe80:102::2%eth1', null, '/path/to/unix/socket.sock'],
+            $refMethod->invoke(static::$connection, '[fe80:102::2%eth1]:/path/to/unix/socket.sock', null, null, 3306, false)
+        );
+
+        $this->assertSame(
+            ['fe80:102::2%eth1', 3307, '/path/to/unix/socket.sock'],
+            $refMethod->invoke(static::$connection, '[fe80:102::2%eth1]:/path/to/unix/socket.sock', 3307, null, 3306, false)
+        );
+
+        $this->assertSame(
+            ['localhost', null, '/path/to/unix/socket.sock'],
+            $refMethod->invoke(static::$connection, ':/path/to/unix/socket.sock', null, null, 3306)
+        );
+
+        $this->assertSame(
+            ['localhost', 3307, '/path/to/unix/socket.sock'],
+            $refMethod->invoke(static::$connection, ':/path/to/unix/socket.sock', 3307, null, 3306)
+        );
+    }
 }
