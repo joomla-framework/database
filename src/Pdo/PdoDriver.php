@@ -210,7 +210,8 @@ abstract class PdoDriver extends DatabaseDriver
 
             case 'mysql':
                 // Extract host and port or socket from host option
-                $this->setHostPortSocket(3306);
+                [$this->options['host'], $this->options['port'], $this->options['socket']]
+                    = $this->extractHostPortSocket($this->options['host'], $this->options['port'], $this->options['socket'], 3306);
 
                 if ($this->options['socket'] !== null) {
                     $format = 'mysql:unix_socket=#SOCKET#;dbname=#DBNAME#;charset=#CHARSET#';
@@ -258,8 +259,9 @@ abstract class PdoDriver extends DatabaseDriver
                 break;
 
             case 'pgsql':
-                // Extract host and port or socket from host option
-                $this->setHostPortSocket(5432, false);
+                // Extract host and port or socket from host option and remove square brackets around ipv6 address
+                [$this->options['host'], $this->options['port'], $this->options['socket']]
+                    = $this->extractHostPortSocket($this->options['host'], $this->options['port'], $this->options['socket'], 5432, false);
 
                 if ($this->options['socket'] !== null) {
                     $format = 'pgsql:host=#SOCKET#;dbname=#DBNAME#';

@@ -199,7 +199,8 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
         }
 
         // Extract host and port or socket from host option
-        $this->setHostPortSocket(3306);
+        [$this->options['host'], $this->options['port'], $this->options['socket']]
+            = $this->extractHostPortSocket($this->options['host'], $this->options['port'], $this->options['socket'], 3306);
 
         $this->connection = mysqli_init();
 
