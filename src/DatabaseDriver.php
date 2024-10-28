@@ -1897,11 +1897,11 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     /**
      * Extract pure host name (or IP address) and port or socket from host name option.
      *
-     * @param  string       $host                Host given in options used to configure the connection.
-     * @param  int|null     $port                Port given in options used to configure the connection, null if none.
-     * @param  string|null  $socket              Socket given in options used to configure the connection, null if none.
-     * @param  integer      $defaultPort         The default port number to be used if no port is given.
-     * @param  boolean      $ipv6SquareBrackets  True if database connector uses ipv6 address with square brackets, false if not.
+     * @param  string        $host                Host given in options used to configure the connection.
+     * @param  integer|null  $port                Port given in options used to configure the connection, null if none.
+     * @param  string|null   $socket              Socket given in options used to configure the connection, null if none.
+     * @param  integer       $defaultPort         The default port number to be used if no port is given.
+     * @param  boolean       $ipv6SquareBrackets  True if database connector uses ipv6 address with square brackets, false if not.
      *
      * @return  array  Array with host, port and socket.
      *
