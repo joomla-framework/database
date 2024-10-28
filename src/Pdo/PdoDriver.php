@@ -210,23 +210,17 @@ abstract class PdoDriver extends DatabaseDriver
 
             case 'mysql':
                 // Extract host and port or socket from host option
-                [$this->options['host'], $this->options['port'], $this->options['socket']]
+                [$host, $port, $socket]
                     = $this->extractHostPortSocket($this->options['host'], $this->options['port'], $this->options['socket'], 3306);
 
-                if ($this->options['socket'] !== null) {
+                if ($socket !== null) {
                     $format = 'mysql:unix_socket=#SOCKET#;dbname=#DBNAME#;charset=#CHARSET#';
                 } else {
                     $format = 'mysql:host=#HOST#;port=#PORT#;dbname=#DBNAME#;charset=#CHARSET#';
                 }
 
                 $replace = ['#HOST#', '#PORT#', '#SOCKET#', '#DBNAME#', '#CHARSET#'];
-                $with    = [
-                    $this->options['host'],
-                    $this->options['port'],
-                    $this->options['socket'],
-                    $this->options['database'],
-                    $this->options['charset'],
-                ];
+                $with    = [$host, $port, $socket, $this->options['database'], $this->options['charset']];
 
                 break;
 
@@ -260,17 +254,17 @@ abstract class PdoDriver extends DatabaseDriver
 
             case 'pgsql':
                 // Extract host and port or socket from host option and remove square brackets around ipv6 address
-                [$this->options['host'], $this->options['port'], $this->options['socket']]
+                [$host, $port, $socket]
                     = $this->extractHostPortSocket($this->options['host'], $this->options['port'], $this->options['socket'], 5432, false);
 
-                if ($this->options['socket'] !== null) {
+                if ($socket !== null) {
                     $format = 'pgsql:host=#SOCKET#;dbname=#DBNAME#';
                 } else {
                     $format = 'pgsql:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
                 }
 
                 $replace = ['#HOST#', '#PORT#', '#SOCKET#', '#DBNAME#'];
-                $with    = [$this->options['host'], $this->options['port'], $this->options['socket'], $this->options['database']];
+                $with    = [$host, $port, $socket, $this->options['database']];
 
                 // For data in transit TLS encryption.
                 if ($this->options['ssl'] !== [] && $this->options['ssl']['enable'] === true) {
