@@ -1909,14 +1909,14 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      */
     protected function extractHostPortSocket(string $host, ?int $port, ?string $socket, int $defaultPort, bool $ipv6SquareBrackets = true)
     {
+        $portNew = $port ?? $defaultPort;
+
         if (preg_match('/^unix:(?P<socket>[^:]+)$/', $host, $matches)) {
             // UNIX socket URI, e.g. 'unix:/path/to/unix/socket.sock'
-            return [null, null, $matches['socket']];
-        }
-
-        $port = $port ?? $defaultPort;
-
-        if (
+            $host   = null;
+            $socket = $matches['socket'];
+            $port   = null;
+        } elseif (
             preg_match(
                 '/^(?P<host>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(:(?P<port>.+))?$/',
                 $host,
@@ -1927,36 +1927,35 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
             $host = $matches['host'];
 
             if (!empty($matches['port'])) {
-                $port = $matches['port'];
+                $portNew = $matches['port'];
             }
         } elseif (preg_match('/^(?P<host>\[.*\])(:(?P<port>.+))?$/', $host, $matches)) {
             // We assume square-bracketed IPv6 address with or without port, e.g. [fe80:102::2%eth1]:3306
             $host = $ipv6SquareBrackets ? $matches['host'] : rtrim(ltrim($matches['host'], '['), ']');
 
             if (!empty($matches['port'])) {
-                $port = $matches['port'];
+                $portNew = $matches['port'];
             }
         } elseif (preg_match('/^(?P<host>(\w+:\/{2,3})?[a-z0-9\.\-]+)(:(?P<port>[^:]+))?$/i', $host, $matches)) {
             // Named host (e.g example.com or localhost) with or without port
             $host = $matches['host'];
 
             if (!empty($matches['port'])) {
-                $port = $matches['port'];
+                $portNew = $matches['port'];
             }
         } elseif (preg_match('/^:(?P<port>[^:]+)$/', $host, $matches)) {
             // Empty host, just port, e.g. ':3306'
-            $host = 'localhost';
-            $port = $matches['port'];
+            $host    = 'localhost';
+            $portNew = $matches['port'];
         }
 
         // ... else we assume normal (naked) IPv6 address, so host and port stay as they are or default
 
         // Get the port number or socket name
-        if (is_numeric($port)) {
-            $port = (int) $port;
+        if (is_numeric($portNew)) {
+            $port = (int) $portNew;
         } else {
-            $socket = $port;
-	    $port   = null;
+            $socket = $portNew;
         }
 
         return [$host, $port, $socket];
