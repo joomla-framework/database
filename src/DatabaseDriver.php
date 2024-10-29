@@ -1897,7 +1897,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     /**
      * Extract pure host name (or IP address) and port or socket from host name option.
      *
-     * @param  string        $host                Host given in options used to configure the connection.
+     * @param  string        $host                Host given in options used to configure the connection, null if none.
      * @param  integer|null  $port                Port given in options used to configure the connection, null if none.
      * @param  string|null   $socket              Socket given in options used to configure the connection, null if none.
      * @param  integer       $defaultPort         The default port number to be used if no port is given.
@@ -1907,8 +1907,13 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      *
      * @since   __DEPLOY_VERSION__
      */
-    protected function extractHostPortSocket(string $host, ?int $port, ?string $socket, int $defaultPort, bool $ipv6SquareBrackets = true): array
+    protected function extractHostPortSocket(string ?$host, ?int $port, ?string $socket, int $defaultPort, bool $ipv6SquareBrackets = true): array
     {
+        // Do nothing if a socket is given and no host
+        if ($host === null && $socket !== null) {
+            return [$host, $port, $socket];
+        }
+
         $portNew = $port ?? $defaultPort;
 
         if (preg_match('/^unix:(?P<socket>[^:]+)$/', $host, $matches)) {
