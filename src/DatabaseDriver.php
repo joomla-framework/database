@@ -1907,7 +1907,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      *
      * @since   __DEPLOY_VERSION__
      */
-    protected function extractHostPortSocket(string ?$host, ?int $port, ?string $socket, int $defaultPort, bool $ipv6SquareBrackets = true): array
+    protected function extractHostPortSocket(?string $host, ?int $port, ?string $socket, int $defaultPort, bool $ipv6SquareBrackets = true): array
     {
         // Do nothing if a socket is given and no host
         if ($host === null && $socket !== null) {
