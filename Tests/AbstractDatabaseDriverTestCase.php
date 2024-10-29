@@ -1056,6 +1056,16 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
 
         $this->assertSame(
+            [null, null, '/path/to/unix/socket.sock'],
+            $refMethod->invoke(static::$connection, null, null, '/path/to/unix/socket.sock', 3306)
+        );
+
+        $this->assertSame(
+            [null, 3307, '/path/to/unix/socket.sock'],
+            $refMethod->invoke(static::$connection, null, 3307, '/path/to/unix/socket.sock', 3306)
+        );
+
+        $this->assertSame(
             [null, 3306, '/path/to/unix/socket.sock'],
             $refMethod->invoke(static::$connection, 'unix:/path/to/unix/socket.sock', null, null, 3306)
         );
