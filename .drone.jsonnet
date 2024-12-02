@@ -240,7 +240,7 @@ local pipeline_sqlsrv(phpversion, driver, dbversion, params) = {
                 depends: [ 'composer' ],
                 failure: 'ignore',
                 commands: [
-                    'vendor/bin/phpstan analyse src',
+                    './vendor/bin/phpstan',
                 ],
             },
             {
