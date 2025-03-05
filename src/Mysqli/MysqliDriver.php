@@ -375,7 +375,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
     public function connected()
     {
         if (\is_object($this->connection)) {
-            return $this->connection->ping();
+            return $this->connection->stat() !== false;
         }
 
         return false;
