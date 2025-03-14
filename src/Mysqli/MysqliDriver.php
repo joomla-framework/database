@@ -392,9 +392,10 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
      */
     public function getAlterDbCharacterSet($dbName)
     {
-        $charset = $this->utf8mb4 ? 'utf8mb4' : 'utf8';
+        $charset   = $this->utf8mb4 ? 'utf8mb4' : 'utf8';
+        $collation = $charset . '_unicode_ci';
 
-        return 'ALTER DATABASE ' . $this->quoteName($dbName) . ' CHARACTER SET `' . $charset . '`';
+        return 'ALTER DATABASE ' . $this->quoteName($dbName) . ' CHARACTER SET `' . $charset . '` COLLATE `' . $collation . '`';
     }
 
     /**
