@@ -75,7 +75,7 @@ class PgsqlPreparedStatementTest extends DatabaseTestCase
     public function testPreparedStatementWithDuplicateKey()
     {
         $dummyValue = 'test';
-        $query = static::$connection->getQuery(true);
+        $query = static::$connection->createQuery();
         $query->select('*')
             ->from($query->quoteName('dbtest'))
             ->where([
@@ -96,7 +96,7 @@ class PgsqlPreparedStatementTest extends DatabaseTestCase
     {
         $dummyValue = 'test';
         $dummyValue2 = 'test';
-        $query = static::$connection->getQuery(true);
+        $query = static::$connection->createQuery();
         $query->select('*')
             ->from($query->quoteName('dbtest'))
             ->where([
