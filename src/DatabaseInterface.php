@@ -49,6 +49,15 @@ interface DatabaseInterface
     public function createDatabase($options, $utf = true);
 
     /**
+     * Create a new DatabaseQuery object.
+     *
+     * @return  QueryInterface
+     *
+     * @since   4.0.0
+     */
+    public function createQuery(): QueryInterface;
+
+    /**
      * Replace special placeholder representing binary field with the original string.
      *
      * @param   string|resource  $data  Encoded string or resource.

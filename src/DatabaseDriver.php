@@ -1748,7 +1748,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 
         if (\is_string($query)) {
             // Allows taking advantage of bound variables in a direct query:
-            $query = $this->getQuery(true)->setQuery($query);
+            $query = $this->createQuery()->setQuery($query);
         } elseif (!($query instanceof QueryInterface)) {
             throw new \InvalidArgumentException(
                 sprintf(

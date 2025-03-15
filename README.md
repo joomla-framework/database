@@ -102,7 +102,7 @@ The `Database\DatabaseIterator` class allows iteration over database results
 ```php
 $db = DatabaseDriver::getInstance($options);
 $iterator = $db->setQuery(
-	$db->getQuery(true)->select('*')->from('#__content')
+	$db->createQuery()->select('*')->from('#__content')
 )->getIterator();
 
 foreach ($iterator as $row)
