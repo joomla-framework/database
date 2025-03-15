@@ -69,7 +69,7 @@ class MysqlImporterTest extends TestCase
             ->willReturn('jos_');
 
         $this->db->expects($this->any())
-            ->method('getQuery')
+            ->method('createQuery')
             ->willReturnCallback(function () {
                 return new MysqlQuery($this->db);
             });
