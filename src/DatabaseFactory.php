@@ -25,12 +25,12 @@ class DatabaseFactory
      * @param   string  $name     Name of the database driver you'd like to instantiate
      * @param   array   $options  Parameters to be passed to the database driver.
      *
-     * @return  DatabaseInterface
+     * @return  DatabaseInterface|DatabaseDriver
      *
      * @since   1.0
      * @throws  Exception\UnsupportedAdapterException if there is not a compatible database driver
      */
-    public function getDriver(string $name = 'mysqli', array $options = []): DatabaseInterface
+    public function getDriver(string $name = 'mysqli', array $options = []): DatabaseInterface|DatabaseDriver
     {
         // Sanitize the database connector options.
         $options['driver']   = preg_replace('/[^A-Z0-9_\.-]/i', '', $name);
