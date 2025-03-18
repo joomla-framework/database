@@ -1580,36 +1580,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     }
 
     /**
-     * Quote strings coming from quoteName call.
-     *
-     * @param   array  $strArr  Array of strings coming from quoteName dot-explosion.
-     *
-     * @return  string  Dot-imploded string of quoted parts.
-     *
-     * @since   1.0
-     * @deprecated  2.0  Use quoteNameString instead
-     */
-    protected function quoteNameStr($strArr)
-    {
-        $parts = [];
-        $q     = $this->nameQuote;
-
-        foreach ($strArr as $part) {
-            if ($part === null) {
-                continue;
-            }
-
-            if (\strlen($q) === 1) {
-                $parts[] = $q . $part . $q;
-            } else {
-                $parts[] = $q[0] . $part . $q[1];
-            }
-        }
-
-        return implode('.', $parts);
-    }
-
-    /**
      * This function replaces a string identifier with the configured table prefix.
      *
      * @param   string  $sql     The SQL statement to prepare.
