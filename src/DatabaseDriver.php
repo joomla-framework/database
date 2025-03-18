@@ -1702,27 +1702,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 	 */
 	protected function quoteNameStr($strArr)
 	{
-		$parts = [];
-		$q     = $this->nameQuote;
-
-		foreach ($strArr as $part)
-		{
-			if ($part === null)
-			{
-				continue;
-			}
-
-			if (\strlen($q) === 1)
-			{
-				$parts[] = $q . $part . $q;
-			}
-			else
-			{
-				$parts[] = $q[0] . $part . $q[1];
-			}
-		}
-
-		return implode('.', $parts);
+		return $this->quoteNameString(implode('.', $strArr));
 	}
 
 	/**
