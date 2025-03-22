@@ -89,7 +89,7 @@ class SqlsrvDriver extends DatabaseDriver
         $options['database']          = $options['database'] ?? '';
         $options['select']            = isset($options['select']) ? (bool) $options['select'] : true;
         $options['encrypt']           = isset($options['encrypt']) ? (bool) $options['encrypt'] : true;
-        $options['trust_certificate'] = $options['trust_certificate'] ?? false;
+        $options['trust_certificate'] = isset($options['trust_certificate']) ? (bool) $options['trust_certificate'] : false;
 
         // Finalize initialisation
         parent::__construct($options);
