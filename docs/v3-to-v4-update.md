@@ -1,4 +1,4 @@
-## Updating from v1 to v2
+## Updating from v3 to v4
 
 The following changes were made to the Database package between v3 and v4.
 
