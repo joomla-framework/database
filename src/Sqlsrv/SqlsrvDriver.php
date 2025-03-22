@@ -119,9 +119,9 @@ class SqlsrvDriver extends DatabaseDriver
 			'Database'               => $this->options['database'],
 			'uid'                    => $this->options['user'],
 			'pwd'                    => $this->options['password'],
-			'TrustServerCertificate' => $this->options['trust_certificate'],
 			'CharacterSet'           => 'UTF-8',
 			'ReturnDatesAsStrings'   => true,
+			'TrustServerCertificate' => $this->options['trust_certificate'],
 		];
 
 		// Attempt to connect to the server.
