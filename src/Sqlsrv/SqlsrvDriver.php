@@ -82,11 +82,11 @@ class SqlsrvDriver extends DatabaseDriver
 	public function __construct(array $options)
 	{
 		// Get some basic values from the options.
-		$options['host']     = $options['host'] ?? 'localhost';
-		$options['user']     = $options['user'] ?? '';
-		$options['password'] = $options['password'] ?? '';
-		$options['database'] = $options['database'] ?? '';
-		$options['select']   = isset($options['select']) ? (bool) $options['select'] : true;
+		$options['host']              = $options['host'] ?? 'localhost';
+		$options['user']              = $options['user'] ?? '';
+		$options['password']          = $options['password'] ?? '';
+		$options['database']          = $options['database'] ?? '';
+		$options['select']            = isset($options['select']) ? (bool) $options['select'] : true;
 		$options['trust_certificate'] = isset($options['trust_certificate']) ? (bool) $options['trust_certificate'] : false;
 
 		// Finalize initialisation
@@ -116,12 +116,12 @@ class SqlsrvDriver extends DatabaseDriver
 
 		// Build the connection configuration array.
 		$config = [
-			'Database'             => $this->options['database'],
-			'uid'                  => $this->options['user'],
-			'pwd'                  => $this->options['password'],
+			'Database'               => $this->options['database'],
+			'uid'                    => $this->options['user'],
+			'pwd'                    => $this->options['password'],
 			'TrustServerCertificate' => $this->options['trust_certificate'],
-			'CharacterSet'         => 'UTF-8',
-			'ReturnDatesAsStrings' => true,
+			'CharacterSet'           => 'UTF-8',
+			'ReturnDatesAsStrings'   => true,
 		];
 
 		// Attempt to connect to the server.
