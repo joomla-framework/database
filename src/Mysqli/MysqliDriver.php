@@ -136,6 +136,10 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
             $options['ssl']['verify_server_cert'] = isset($options['ssl']['verify_server_cert']) ? $options['ssl']['verify_server_cert'] : null;
         }
 
+        // Extract host and port or socket from host option
+        [$options['host'], $options['port'], $options['socket']]
+            = $this->extractHostPortSocket($options['host'], $options['port'], $options['socket'], 3306);
+
         // Finalize initialisation.
         parent::__construct($options);
     }
@@ -197,9 +201,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
         if (!static::isSupported()) {
             throw new UnsupportedAdapterException('The MySQLi extension is not available');
         }
-
-        // Extract host and port or socket from host option
-        $this->setHostPortSocket(3306);
 
         $this->connection = mysqli_init();
 
