@@ -229,7 +229,7 @@ class PgsqlDriver extends PdoDriver
      *
      * @return object
      */
-    private function ParseIdent($table)
+    private function parseIdent($table)
     {
         $query = $this->getQuery(1);
         $query->select(['r[1]','r[2]'])
@@ -261,7 +261,7 @@ class PgsqlDriver extends PdoDriver
 
         $result        = [];
         $tableSub      = $this->replacePrefix($table);
-        $fullname      = $this->ParseIdent($tableSub);
+        $fullname      = $this->parseIdent($tableSub);
 
         $this->setQuery(
             '
@@ -347,7 +347,7 @@ class PgsqlDriver extends PdoDriver
         // To check if table exists and prevent SQL injection
         $tableList = $this->getTableList();
         $tableSub  = $this->replacePrefix($table);
-        $fullname  = $this->ParseIdent($tableSub);
+        $fullname  = $this->parseIdent($tableSub);
 
         if (\in_array($fullname->table, $tableList, true)) {
             // Get the details columns information.
@@ -387,7 +387,7 @@ class PgsqlDriver extends PdoDriver
         $this->connect();
 
         $tableSub = $this->replacePrefix($table);
-        $fullname  = $this->ParseIdent($tableSub);
+        $fullname  = $this->parseIdent($tableSub);
 
         $tabInd   = explode(' ', $indKey);
         $colNames = [];
@@ -442,7 +442,7 @@ class PgsqlDriver extends PdoDriver
         // To check if table exists and prevent SQL injection
         $tableList = $this->getTableList();
         $tableSub  = $this->replacePrefix($table);
-        $fullname  = $this->ParseIdent($tableSub);
+        $fullname  = $this->parseIdent($tableSub);
 
         if (\in_array($fullname->table, $tableList, true)) {
             $name = [
@@ -555,8 +555,8 @@ class PgsqlDriver extends PdoDriver
 
         $oldTable = $this->replacePrefix($oldTable);
         $newTable = $this->replacePrefix($newTable);
-        $fullOldTable = $this->ParseIdent($oldTable);
-        $fullNewTable = $this->ParseIdent($newTable);
+        $fullOldTable = $this->parseIdent($oldTable);
+        $fullNewTable = $this->parseIdent($newTable);
 
         // To check if table exists and prevent SQL injection
         $tableList = $this->getTableList();
