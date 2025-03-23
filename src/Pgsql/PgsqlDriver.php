@@ -220,31 +220,29 @@ class PgsqlDriver extends PdoDriver
     {
         return [];
     }
-    
-	/**
-	 * Parses the fully qualified or bare name of the database object (table, view, procedure etc.) into object 
-	 * with fields "schema" and "table" respectively
-	 * 
-	 * @param string $table Name of the database object with schema or without it
-	 * 
-	 * @return object
-	 */
-	private function ParseIdent($table)
-	{
-		$query=$this->getQuery(1);
-		$query->select(['r[1]','r[2]'])
-		->from("parse_ident(:t) as r")
-		->bind(':t', $table);
-		$qn=$this->setQuery($query)
-		->loadRow();
-		if ($qn[1])
-		{
-			return (object) ['schema' => $qn[0], 'table' => $qn[1]];
-		} else
-		{
-			return (object) ['schema' => $this->getDefaultSchema(), 'table' => $qn[0]];
-		}
-	}
+
+    /**
+     * Parses the fully qualified or bare name of the database object (table, view, procedure etc.) into object
+     * with fields "schema" and "table" respectively
+     *
+     * @param string $table Name of the database object with schema or without it
+     *
+     * @return object
+     */
+    private function ParseIdent($table)
+    {
+        $query = $this->getQuery(1);
+        $query->select(['r[1]','r[2]'])
+        ->from("parse_ident(:t) as r")
+        ->bind(':t', $table);
+        $qn = $this->setQuery($query)
+        ->loadRow();
+        if ($qn[1]) {
+            return (object) ['schema' => $qn[0], 'table' => $qn[1]];
+        } else {
+            return (object) ['schema' => $this->getDefaultSchema(), 'table' => $qn[0]];
+        }
+    }
 
     /**
      * Retrieves field information about a given table.
