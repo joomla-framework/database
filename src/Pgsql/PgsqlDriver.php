@@ -232,16 +232,19 @@ class PgsqlDriver extends PdoDriver
     private function parseIdent($table)
     {
         $query = $this->getQuery(1);
+
         $query->select(['r[1]','r[2]'])
-        ->from("parse_ident(:t) as r")
-        ->bind(':t', $table);
+            ->from("parse_ident(:t) as r")
+            ->bind(':t', $table);
+
         $qn = $this->setQuery($query)
-        ->loadRow();
+            ->loadRow();
+
         if ($qn[1]) {
             return (object) ['schema' => $qn[0], 'table' => $qn[1]];
-        } else {
-            return (object) ['schema' => $this->getDefaultSchema(), 'table' => $qn[0]];
         }
+
+        return (object) ['schema' => $this->getDefaultSchema(), 'table' => $qn[0]];
     }
 
     /**
@@ -386,7 +389,7 @@ class PgsqlDriver extends PdoDriver
     {
         $this->connect();
 
-        $tableSub = $this->replacePrefix($table);
+        $tableSub  = $this->replacePrefix($table);
         $fullname  = $this->parseIdent($tableSub);
 
         $tabInd   = explode(' ', $indKey);
@@ -553,8 +556,8 @@ class PgsqlDriver extends PdoDriver
     {
         $this->connect();
 
-        $oldTable = $this->replacePrefix($oldTable);
-        $newTable = $this->replacePrefix($newTable);
+        $oldTable     = $this->replacePrefix($oldTable);
+        $newTable     = $this->replacePrefix($newTable);
         $fullOldTable = $this->parseIdent($oldTable);
         $fullNewTable = $this->parseIdent($newTable);
 
