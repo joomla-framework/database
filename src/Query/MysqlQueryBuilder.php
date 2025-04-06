@@ -218,7 +218,7 @@ trait MysqlQueryBuilder
     public function selectRowNumber($orderBy, $orderColumnAlias)
     {
         // Use parent method with ROW_NUMBER() window function on MariaDB >= 10.2.0 and MySQL >= 8.0.0.
-        if (version_compare($this->db->getVersion(), $this->mariadb ? '10.2.0' : '8.0.0', '>=')) {
+        if (version_compare($this->db->getVersion(), $this->db->isMariaDb() ? '10.2.0' : '8.0.0', '>=')) {
             return parent::selectRowNumber($orderBy, $orderColumnAlias);
         }
 
