@@ -1711,7 +1711,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 				continue;
 			}
 
-			$parts[] = quoteNameString($part, true);
+			$parts[] = $this->quoteNameString($part, true);
 		}
 
 		return implode('.', $parts);
