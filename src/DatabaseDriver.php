@@ -1592,18 +1592,13 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     protected function quoteNameStr($strArr)
     {
         $parts = [];
-        $q     = $this->nameQuote;
 
         foreach ($strArr as $part) {
             if ($part === null) {
                 continue;
             }
 
-            if (\strlen($q) === 1) {
-                $parts[] = $q . $part . $q;
-            } else {
-                $parts[] = $q[0] . $part . $q[1];
-            }
+            $parts[] = $this->quoteNameString($part, true);
         }
 
         return implode('.', $parts);
@@ -1897,59 +1892,67 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     /**
      * Extract pure host name (or IP address) and port or socket from host name option.
      *
-     * @param  integer  $defaultPort  The default port number to be used if no port is given.
+     * @param  string        $host                Host given in options used to configure the connection.
+     * @param  integer|null  $port                Port given in options used to configure the connection, null if none.
+     * @param  string|null   $socket              Socket given in options used to configure the connection, null if none.
+     * @param  integer       $defaultPort         The default port number to be used if no port is given.
+     * @param  boolean       $ipv6SquareBrackets  True if database connector uses ipv6 address with square brackets, false if not.
      *
-     * @since  __DEPLOY_VERSION__
+     * @return  array  Array with host, port and socket.
+     *
+     * @since   3.3.0
      */
-    protected function setHostPortSocket($defaultPort)
+    protected function extractHostPortSocket(string $host, ?int $port, ?string $socket, int $defaultPort, bool $ipv6SquareBrackets = true): array
     {
-        $port = $this->options['port'] ?? $defaultPort;
+        $portNew = $port ?? $defaultPort;
 
-        if (preg_match('/^unix:(?P<socket>[^:]+)$/', $this->options['host'], $matches)) {
+        if (preg_match('/^unix:(?P<socket>[^:]+)$/', $host, $matches)) {
             // UNIX socket URI, e.g. 'unix:/path/to/unix/socket.sock'
-            $this->options['host']   = null;
-            $this->options['socket'] = $matches['socket'];
-            $this->options['port']   = null;
+            $host   = null;
+            $socket = $matches['socket'];
+            $port   = null;
         } elseif (
             preg_match(
                 '/^(?P<host>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(:(?P<port>.+))?$/',
-                $this->options['host'],
+                $host,
                 $matches
             )
         ) {
             // It's an IPv4 address with or without port
-            $this->options['host'] = $matches['host'];
+            $host = $matches['host'];
 
             if (!empty($matches['port'])) {
-                $port = $matches['port'];
+                $portNew = $matches['port'];
             }
-        } elseif (preg_match('/^(?P<host>\[.*\])(:(?P<port>.+))?$/', $this->options['host'], $matches)) {
+        } elseif (preg_match('/^(?P<host>\[.*\])(:(?P<port>.+))?$/', $host, $matches)) {
             // We assume square-bracketed IPv6 address with or without port, e.g. [fe80:102::2%eth1]:3306
-            $this->options['host'] = $matches['host'];
+            $host = $ipv6SquareBrackets ? $matches['host'] : rtrim(ltrim($matches['host'], '['), ']');
 
             if (!empty($matches['port'])) {
-                $port = $matches['port'];
+                $portNew = $matches['port'];
             }
-        } elseif (preg_match('/^(?P<host>(\w+:\/{2,3})?[a-z0-9\.\-]+)(:(?P<port>[^:]+))?$/i', $this->options['host'], $matches)) {
+        } elseif (preg_match('/^(?P<host>(\w+:\/{2,3})?[a-z0-9\.\-]+)(:(?P<port>[^:]+))?$/i', $host, $matches)) {
             // Named host (e.g example.com or localhost) with or without port
-            $this->options['host'] = $matches['host'];
+            $host = $matches['host'];
 
             if (!empty($matches['port'])) {
-                $port = $matches['port'];
+                $portNew = $matches['port'];
             }
-        } elseif (preg_match('/^:(?P<port>[^:]+)$/', $this->options['host'], $matches)) {
+        } elseif (preg_match('/^:(?P<port>[^:]+)$/', $host, $matches)) {
             // Empty host, just port, e.g. ':3306'
-            $this->options['host'] = 'localhost';
-            $port                  = $matches['port'];
+            $host    = 'localhost';
+            $portNew = $matches['port'];
         }
 
         // ... else we assume normal (naked) IPv6 address, so host and port stay as they are or default
 
         // Get the port number or socket name
-        if (is_numeric($port)) {
-            $this->options['port'] = (int) $port;
+        if (is_numeric($portNew)) {
+            $port = (int) $portNew;
         } else {
-            $this->options['socket'] = $port;
+            $socket = $portNew;
         }
+
+        return [$host, $port, $socket];
     }
 }

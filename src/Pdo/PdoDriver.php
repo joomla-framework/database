@@ -80,7 +80,7 @@ abstract class PdoDriver extends DatabaseDriver
         $options['password']      = $options['password'] ?? '';
         $options['driverOptions'] = $options['driverOptions'] ?? [];
         $options['ssl']           = isset($options['ssl']) ? $options['ssl'] : [];
-        $options['socket']        = \strpos($options['host'], 'unix:') !== false ? \str_replace('unix:', '', $options['host']) : null;
+        $options['socket']        = $options['socket'] ?? null;
 
         if ($options['ssl'] !== []) {
             $options['ssl']['enable']             = isset($options['ssl']['enable']) ? $options['ssl']['enable'] : false;
@@ -90,6 +90,65 @@ abstract class PdoDriver extends DatabaseDriver
             $options['ssl']['key']                = isset($options['ssl']['key']) ? $options['ssl']['key'] : null;
             $options['ssl']['cert']               = isset($options['ssl']['cert']) ? $options['ssl']['cert'] : null;
             $options['ssl']['verify_server_cert'] = isset($options['ssl']['verify_server_cert']) ? $options['ssl']['verify_server_cert'] : null;
+        }
+
+        // Sanitize options
+        switch ($options['driver']) {
+            case 'cubrid':
+                $options['port'] = $options['port'] ?? 33000;
+
+                break;
+
+            case 'dblib':
+            case 'mssql':
+            case 'sybase':
+                $options['port'] = $options['port'] ?? 1433;
+
+                break;
+
+            case 'firebird':
+                $options['port'] = $options['port'] ?? 3050;
+
+                break;
+
+            case 'ibm':
+                $options['port'] = $options['port'] ?? 56789;
+
+                break;
+
+            case 'informix':
+                $options['port']     = $options['port'] ?? 1526;
+                $options['protocol'] = $options['protocol'] ?? 'onsoctcp';
+
+                break;
+
+            case 'mysql':
+                // Extract host and port or socket from host option
+                [$options['host'], $options['port'], $options['socket']]
+                    = $this->extractHostPortSocket($options['host'], $options['port'], $options['socket'], 3306);
+
+                break;
+
+            case 'oci':
+                $options['port']    = $options['port'] ?? 1521;
+                $options['charset'] = $options['charset'] ?? 'AL32UTF8';
+
+                break;
+
+            case 'pgsql':
+                // Extract host and port or socket from host option and remove square brackets around ipv6 address
+                [$options['host'], $options['port'], $options['socket']]
+                    = $this->extractHostPortSocket($options['host'], $options['port'], $options['socket'], 5432, false);
+
+                break;
+
+            case 'sqlite':
+                $options['version'] = isset($options['version']) ? (int) $options['version'] : 1;
+
+                break;
+
+            default:
+                // Do nothing
         }
 
         // Finalize initialisation
@@ -128,8 +187,6 @@ abstract class PdoDriver extends DatabaseDriver
         // Find the correct PDO DSN Format to use:
         switch ($this->options['driver']) {
             case 'cubrid':
-                $this->options['port'] = $this->options['port'] ?? 33000;
-
                 $format = 'cubrid:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
 
                 $replace = ['#HOST#', '#PORT#', '#DBNAME#'];
@@ -138,8 +195,6 @@ abstract class PdoDriver extends DatabaseDriver
                 break;
 
             case 'dblib':
-                $this->options['port'] = $this->options['port'] ?? 1433;
-
                 $format = 'dblib:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
 
                 $replace = ['#HOST#', '#PORT#', '#DBNAME#'];
@@ -148,8 +203,6 @@ abstract class PdoDriver extends DatabaseDriver
                 break;
 
             case 'firebird':
-                $this->options['port'] = $this->options['port'] ?? 3050;
-
                 $format = 'firebird:dbname=#DBNAME#';
 
                 $replace = ['#DBNAME#'];
@@ -158,8 +211,6 @@ abstract class PdoDriver extends DatabaseDriver
                 break;
 
             case 'ibm':
-                $this->options['port'] = $this->options['port'] ?? 56789;
-
                 if (!empty($this->options['dsn'])) {
                     $format = 'ibm:DSN=#DSN#';
 
@@ -175,9 +226,6 @@ abstract class PdoDriver extends DatabaseDriver
                 break;
 
             case 'informix':
-                $this->options['port']     = $this->options['port'] ?? 1526;
-                $this->options['protocol'] = $this->options['protocol'] ?? 'onsoctcp';
-
                 if (!empty($this->options['dsn'])) {
                     $format = 'informix:DSN=#DSN#';
 
@@ -199,8 +247,6 @@ abstract class PdoDriver extends DatabaseDriver
                 break;
 
             case 'mssql':
-                $this->options['port'] = $this->options['port'] ?? 1433;
-
                 $format = 'mssql:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
 
                 $replace = ['#HOST#', '#PORT#', '#DBNAME#'];
@@ -209,9 +255,6 @@ abstract class PdoDriver extends DatabaseDriver
                 break;
 
             case 'mysql':
-                // Extract host and port or socket from host option
-                $this->setHostPortSocket(3306);
-
                 if ($this->options['socket'] !== null) {
                     $format = 'mysql:unix_socket=#SOCKET#;dbname=#DBNAME#;charset=#CHARSET#';
                 } else {
@@ -230,9 +273,6 @@ abstract class PdoDriver extends DatabaseDriver
                 break;
 
             case 'oci':
-                $this->options['port']    = $this->options['port'] ?? 1521;
-                $this->options['charset'] = $this->options['charset'] ?? 'AL32UTF8';
-
                 if (!empty($this->options['dsn'])) {
                     $format = 'oci:dbname=#DSN#';
 
@@ -258,9 +298,6 @@ abstract class PdoDriver extends DatabaseDriver
                 break;
 
             case 'pgsql':
-                // Extract host and port or socket from host option
-                $this->setHostPortSocket(5432);
-
                 if ($this->options['socket'] !== null) {
                     $format = 'pgsql:host=#SOCKET#;dbname=#DBNAME#';
                 } else {
@@ -297,7 +334,7 @@ abstract class PdoDriver extends DatabaseDriver
                 break;
 
             case 'sqlite':
-                if (isset($this->options['version']) && $this->options['version'] == 2) {
+                if ($this->options['version'] === 2) {
                     $format = 'sqlite2:#DBNAME#';
                 } else {
                     $format = 'sqlite:#DBNAME#';
@@ -309,8 +346,6 @@ abstract class PdoDriver extends DatabaseDriver
                 break;
 
             case 'sybase':
-                $this->options['port'] = $this->options['port'] ?? 1433;
-
                 $format = 'mssql:host=#HOST#;port=#PORT#;dbname=#DBNAME#';
 
                 $replace = ['#HOST#', '#PORT#', '#DBNAME#'];
