@@ -17,3 +17,8 @@ The following are the minimum supported database versions:
 ### Removed quoteNameStr
 
 The deprecated method `quoteNameStr` has been removed. Use `quoteNameString` instead.
+
+### DatabaseInterface: `createQuery` method
+
+`DatabaseInterface` adds a `createQuery` method for creating query objects. Use `createQuery()` instead of `getQuery(true)`.
+If you have a custom query class update your adapter's `createQuery()` method to return your custom query class.
