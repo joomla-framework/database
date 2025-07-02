@@ -1,0 +1,203 @@
+name: CI Joomla Framework
+
+on:
+    push:
+    pull_request:
+    schedule:
+        - cron: 15 2 * * 1
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    composer:
+        name: Install PHP dependencies
+        runs-on: ubuntu-latest
+        container: joomlaprojects/docker-images:php8.1
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/cache@v4
+              id: cache-php
+              with:
+                  path: vendor
+                  key: ${{ runner.os }}-composer-${{ hashFiles('composer.json') }}
+            - name: Install PHP dependencies
+              if: steps.cache-php.outputs.cache-hit != 'true'
+              run: |
+                  git config --global --add safe.directory $GITHUB_WORKSPACE
+                  composer config --global home
+                  composer install --no-progress --ignore-platform-reqs
+
+    code-style-php:
+        name: Check PHP code style
+        runs-on: ubuntu-latest
+        container: joomlaprojects/docker-images:php8.1
+        needs: [composer]
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/cache/restore@v4
+              with:
+                  path: vendor
+                  key: ${{ runner.os }}-composer-${{ hashFiles('composer.json') }}
+            - name: Check PHP code style
+              env:
+                  PHP_CS_FIXER_IGNORE_ENV: true
+              run: ./vendor/bin/phpcs --standard=ruleset.xml src/
+
+    phpstan:
+        name: Run PHPstan
+        runs-on: ubuntu-latest
+        container: joomlaprojects/docker-images:php8.4
+        needs: [code-style-php]
+        continue-on-error: true
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/cache/restore@v4
+              with:
+                  path: vendor
+                  key: ${{ runner.os }}-composer-${{ hashFiles('composer.json') }}
+            - name: Run PHPstan
+              run: |
+                  ./vendor/bin/phpstan --error-format=github
+
+    tests-unit-sqlite:
+        name: Run Unit tests
+        runs-on: ubuntu-latest
+        container: joomlaprojects/docker-images:php${{ matrix.php_version }}
+        needs: [code-style-php]
+        strategy:
+            matrix:
+                php_version: ['8.1', '8.2', '8.3']
+        steps:
+            - uses: actions/checkout@v4
+            - name: Run Unit tests
+              run: |
+                  git config --global --add safe.directory $GITHUB_WORKSPACE
+                  composer update
+                  ./vendor/bin/phpunit --configuration phpunit.sqlite.xml.dist
+
+    tests-unit-mysql:
+        name: Run Unit tests
+        runs-on: ubuntu-latest
+        container: joomlaprojects/docker-images:php${{ matrix.php_version }}
+        needs: [code-style-php]
+        strategy:
+            matrix:
+                php_version: ['8.1', '8.2', '8.3']
+                db_engine: ['mysql', 'mysqli']
+                db_version: ['5.7', '8.0']
+        steps:
+            - uses: actions/checkout@v4
+            - name: Run Unit tests
+              run: |
+                  git config --global --add safe.directory $GITHUB_WORKSPACE
+                  composer update
+                  ./vendor/bin/phpunit --configuration phpunit.${{ matrix.db_engine }}.xml.dist
+        services:
+            mysql:
+                image: mysql:${{ matrix.db_version }}
+                env:
+                    MYSQL_USER: joomla_ut
+                    MYSQL_PASSWORD: joomla_ut
+                    MYSQL_ROOT_PASSWORD: joomla_ut
+                    MYSQL_DATABASE: test_joomla
+
+    tests-unit-mariadb:
+        name: Run Unit tests
+        runs-on: ubuntu-latest
+        container: joomlaprojects/docker-images:php${{ matrix.php_version }}
+        needs: [code-style-php]
+        strategy:
+            matrix:
+                php_version: ['8.1', '8.2', '8.3']
+        steps:
+            - uses: actions/checkout@v4
+            - name: Run Unit tests
+              run: |
+                  git config --global --add safe.directory $GITHUB_WORKSPACE
+                  composer update
+                  ./vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist
+        services:
+            mysql:
+                image: mariadb:10.2
+                env:
+                    MARIADB_USER: joomla_ut
+                    MARIADB_PASSWORD: joomla_ut
+                    MARIADB_ROOT_PASSWORD: joomla_ut
+                    MARIADB_DATABASE: test_joomla
+
+    tests-unit-postgres:
+        name: Run Unit tests
+        runs-on: ubuntu-latest
+        container: joomlaprojects/docker-images:php${{ matrix.php_version }}
+        needs: [code-style-php]
+        strategy:
+            matrix:
+                php_version: ['8.1', '8.2', '8.3']
+                db_version: ['10', '11']
+        steps:
+            - uses: actions/checkout@v4
+            - name: Run Unit tests
+              run: |
+                  git config --global --add safe.directory $GITHUB_WORKSPACE
+                  composer update
+                  ./vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist
+        services:
+            postgres:
+                image: postgres:{{ matrix.db_version }}-alpine
+                env:
+                    POSTGRES_USER: root
+                    POSTGRES_PASSWORD: joomla_ut
+                    POSTGRES_DB: test_joomla
+
+    tests-unit-sqlsrv:
+        name: Run Unit tests
+        runs-on: ubuntu-latest
+        container: joomlaprojects/docker-images:php${{ matrix.php_version }}
+        needs: [code-style-php]
+        strategy:
+            matrix:
+                php_version: ['8.1', '8.2', '8.3']
+        steps:
+            - uses: actions/checkout@v4
+            - name: Install MSSQL
+              uses: potatoqualitee/mssqlsuite@v1.8
+              with:
+                  install: sqlengine, sqlclient
+                  version: 2017-latest
+                  sa-password: 'Password12!'
+                  show-log: true
+            - name: Run Unit tests
+              run: |
+                  git config --global --add safe.directory $GITHUB_WORKSPACE
+                  composer update
+                  ./vendor/bin/phpunit --configuration phpunit.sqlsrv.xml.dist
+
+    tests-unit-windows:
+        name: Run Unit tests (Windows)
+        runs-on: windows-latest
+        needs: [code-style-php]
+        strategy:
+            matrix:
+                php_version: ['8.1', '8.2', '8.3']
+        steps:
+            - uses: actions/checkout@v4
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php_version }}
+                  extensions: openssl, mbstring, fileinfo, ftp
+            - name: Install MSSQL
+              uses: potatoqualitee/mssqlsuite@v1.8
+              with:
+                  install: sqlengine, sqlclient
+                  version: 2017-latest
+                  sa-password: 'Password12!'
+                  show-log: true
+            - name: Install Composer dependencies
+              run: |
+                  git config --global --add safe.directory $GITHUB_WORKSPACE
+                  composer install --no-progress --ignore-platform-reqs
+            - name: Run Unit tests
+              run: php vendor/bin/phpunit -c phpunit.appveyor_sql2017.xml.dist

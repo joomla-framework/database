@@ -21,8 +21,8 @@
         "psr/log": "^1.1",
         "symfony/phpunit-bridge": "^5.0",
         "squizlabs/php_codesniffer": "~3.7.2",
-        "phpstan/phpstan": "^1.10.7",
-        "phan/phan": "^5.4.2"
+        "phpstan/phpstan": "1.12.27",
+        "phpstan/phpstan-deprecation-rules": "1.2.1"
     },
     "suggest": {
         "joomla/archive": "To use the ExportCommand class, install joomla/archive",

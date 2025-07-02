@@ -1,4 +1,4 @@
-# The Database Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/database/status.svg?ref=refs/heads/3.x-dev)](https://ci.joomla.org/joomla-framework/database) [![Build status](https://ci.appveyor.com/api/projects/status/m2eh75a1g9k9y59u?svg=true)](https://ci.appveyor.com/project/joomla/database)
+# The Database Package [![Build Status](https://github.com/joomla-framework/database/actions/workflows/ci.yml/badge.svg?branch=3.x-dev)](https://github.com/joomla-framework/database) [![Build status](https://ci.appveyor.com/api/projects/status/m2eh75a1g9k9y59u?svg=true)](https://ci.appveyor.com/project/joomla/database)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/database/v/stable)](https://packagist.org/packages/joomla/database)
 [![Total Downloads](https://poser.pugx.org/joomla/database/downloads)](https://packagist.org/packages/joomla/database)

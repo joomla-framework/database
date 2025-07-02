@@ -1,8 +1,16 @@
-/.idea/
-build/
+# IDE Related Files #
+.buildpath
+.project
+.settings
+.DS_Store
+.idea
+
+# Composer and test related files #
 vendor/
 composer.phar
 composer.lock
 phpunit.xml
-phpunit.*.xml
-.phpunit.result.cache
+.phpunit.cache/
+.idea/
+/.phpunit.result.cache
+/.phpunit.cache/
