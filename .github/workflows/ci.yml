@@ -62,7 +62,7 @@ jobs:
                   ./vendor/bin/phpstan --error-format=github
 
     tests-unit-sqlite:
-        name: Run Unit tests
+        name: Run Unit tests on SQLite
         runs-on: ubuntu-latest
         container: joomlaprojects/docker-images:php${{ matrix.php_version }}
         needs: [code-style-php]
@@ -78,7 +78,7 @@ jobs:
                   ./vendor/bin/phpunit --configuration phpunit.sqlite.xml.dist
 
     tests-unit-mysql:
-        name: Run Unit tests
+        name: Run Unit tests on MySQL
         runs-on: ubuntu-latest
         container: joomlaprojects/docker-images:php${{ matrix.php_version }}
         needs: [code-style-php]
@@ -104,7 +104,7 @@ jobs:
                     MYSQL_DATABASE: test_joomla
 
     tests-unit-mariadb:
-        name: Run Unit tests
+        name: Run Unit tests on MariaDB
         runs-on: ubuntu-latest
         container: joomlaprojects/docker-images:php${{ matrix.php_version }}
         needs: [code-style-php]
@@ -128,7 +128,7 @@ jobs:
                     MARIADB_DATABASE: test_joomla
 
     tests-unit-postgres:
-        name: Run Unit tests
+        name: Run Unit tests on PostgreSQL
         runs-on: ubuntu-latest
         container: joomlaprojects/docker-images:php${{ matrix.php_version }}
         needs: [code-style-php]
@@ -152,7 +152,7 @@ jobs:
                     POSTGRES_DB: test_joomla
 
     tests-unit-sqlsrv:
-        name: Run Unit tests
+        name: Run Unit tests on SQLsrv
         runs-on: ubuntu-latest
         container: joomlaprojects/docker-images:php${{ matrix.php_version }}
         needs: [code-style-php]
@@ -165,7 +165,7 @@ jobs:
               uses: potatoqualitee/mssqlsuite@v1.8
               with:
                   install: sqlengine, sqlclient
-                  version: 2017-latest
+                  version: 2017
                   sa-password: 'Password12!'
                   show-log: true
             - name: Run Unit tests
@@ -175,7 +175,7 @@ jobs:
                   ./vendor/bin/phpunit --configuration phpunit.sqlsrv.xml.dist
 
     tests-unit-windows:
-        name: Run Unit tests (Windows)
+        name: Run Unit tests on MSSQL (Windows)
         runs-on: windows-latest
         needs: [code-style-php]
         strategy:
@@ -192,7 +192,7 @@ jobs:
               uses: potatoqualitee/mssqlsuite@v1.8
               with:
                   install: sqlengine, sqlclient
-                  version: 2017-latest
+                  version: 2017
                   sa-password: 'Password12!'
                   show-log: true
             - name: Install Composer dependencies
