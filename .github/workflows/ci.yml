@@ -161,18 +161,22 @@ jobs:
                 php_version: ['8.1', '8.2', '8.3']
         steps:
             - uses: actions/checkout@v4
-            - name: Install MSSQL
-              uses: potatoqualitee/mssqlsuite@v1.8
-              with:
-                  install: sqlengine, sqlclient
-                  version: 2019
-                  sa-password: 'Password12!'
-                  show-log: true
             - name: Run Unit tests
               run: |
                   git config --global --add safe.directory $GITHUB_WORKSPACE
+                  pecl install sqlsrv && docker-php-ext-enable sqlsrv
+                  pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv
+                  php --ri sqlsrv
+                  php --ri pdo_sqlsrv
                   composer update
                   ./vendor/bin/phpunit --configuration phpunit.sqlsrv.xml.dist
+        services:
+            sqlsrv:
+                image: mcr.microsoft.com/mssql/server:2017-latest
+                env:
+                    SA_PASSWORD: Password12!
+                    ACCEPT_EULA: Y
+                    MSSQL_PID: Developer
 
     tests-unit-windows:
         name: Run Unit tests on MSSQL (Windows)
@@ -187,7 +191,7 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php_version }}
-                  extensions: openssl, mbstring, fileinfo, ftp
+                  extensions: openssl, mbstring, fileinfo, ftp, sqlsrv
             - name: Install MSSQL
               uses: potatoqualitee/mssqlsuite@v1.8
               with:
