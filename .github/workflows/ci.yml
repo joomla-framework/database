@@ -100,7 +100,7 @@ jobs:
                 env:
                     MYSQL_USER: joomla_ut
                     MYSQL_PASSWORD: joomla_ut
-                    MYSQL_ROOT_PASSWORD: ''
+                    MYSQL_ROOT_PASSWORD: joomla_ut
                     MYSQL_DATABASE: joomla_ut
 
     tests-unit-mariadb:
@@ -124,7 +124,7 @@ jobs:
                 env:
                     MARIADB_USER: joomla_ut
                     MARIADB_PASSWORD: joomla_ut
-                    MARIADB_ROOT_PASSWORD: ''
+                    MARIADB_ROOT_PASSWORD: joomla_ut
                     MARIADB_DATABASE: joomla_ut
 
     tests-unit-postgres:
