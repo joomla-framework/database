@@ -100,7 +100,7 @@ jobs:
                 env:
                     MYSQL_USER: joomla_ut
                     MYSQL_PASSWORD: joomla_ut
-                    MYSQL_ROOT_PASSWORD: joomla_ut
+                    MYSQL_ROOT_PASSWORD: ''
                     MYSQL_DATABASE: test_joomla
 
     tests-unit-mariadb:
@@ -124,8 +124,8 @@ jobs:
                 env:
                     MARIADB_USER: joomla_ut
                     MARIADB_PASSWORD: joomla_ut
-                    MARIADB_ROOT_PASSWORD: joomla_ut
-                    MARIADB_DATABASE: test_joomla
+                    MARIADB_ROOT_PASSWORD: ''
+                    MARIADB_DATABASE: joomla_ut
 
     tests-unit-postgres:
         name: Run Unit tests on PostgreSQL
@@ -145,7 +145,7 @@ jobs:
                   ./vendor/bin/phpunit --configuration phpunit.pgsql.xml.dist
         services:
             postgres:
-                image: postgres:{{ matrix.db_version }}-alpine
+                image: postgres:${{ matrix.db_version }}-alpine
                 env:
                     POSTGRES_USER: root
                     POSTGRES_PASSWORD: joomla_ut
