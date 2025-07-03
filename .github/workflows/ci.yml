@@ -164,6 +164,8 @@ jobs:
             - name: Run Unit tests
               run: |
                   git config --global --add safe.directory $GITHUB_WORKSPACE
+                  apt-get update
+                  apt-get install -y software-properties-common lsb-release gnupg
                   pecl install sqlsrv && docker-php-ext-enable sqlsrv
                   pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv
                   php --ri sqlsrv
