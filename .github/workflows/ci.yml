@@ -119,7 +119,7 @@ jobs:
                   composer update
                   ./vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist
         services:
-            mysql:
+            mariadb:
                 image: mariadb:10.2
                 env:
                     MARIADB_USER: joomla_ut
