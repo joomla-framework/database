@@ -712,7 +712,7 @@ class SqlsrvQuery extends DatabaseQuery
                     $alias = end($table);
                     $table = $table[0];
 
-                    // Chek if exists a wildcard with current alias table?
+                    // Check if exists a wildcard with current alias table?
                     if (\in_array($alias, $wildcardTables, true)) {
                         if (!isset($cacheCols[$table])) {
                             $cacheCols[$table] = $this->db->getTableColumns($table);
@@ -744,7 +744,7 @@ class SqlsrvQuery extends DatabaseQuery
                         $table = $matches[1];
                         $alias = $matches[2] ?? $table;
 
-                        // Chek if exists a wildcard with current alias table?
+                        // Check if exists a wildcard with current alias table?
                         if (\in_array($alias, $wildcardTables, true)) {
                             if (!isset($cacheCols[$table])) {
                                 $cacheCols[$table] = $this->db->getTableColumns($table);

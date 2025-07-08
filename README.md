@@ -83,7 +83,7 @@ function search($title)
 
 In the first case, the title variable is simply escaped and quoted. Any quote characters in the title string will be prepended with a backslash and the whole string will be wrapped in quotes.
 
-In the second case, the example shows how to treat a search string that will be used in a `LIKE` clause. In this case, the title variable is manually escaped using `escape` with a second argument of `true`. This will force other special characters to be escaped (otherwise you could set youself up for serious performance problems if the user includes too many wildcards). Then, the result is passed to the `quote` method but escaping is turned off (because it has already been done manually).
+In the second case, the example shows how to treat a search string that will be used in a `LIKE` clause. In this case, the title variable is manually escaped using `escape` with a second argument of `true`. This will force other special characters to be escaped (otherwise you could set yourself up for serious performance problems if the user includes too many wildcards). Then, the result is passed to the `quote` method but escaping is turned off (because it has already been done manually).
 
 In the third case, the title variable is an array so the whole array can be passed to the `quote` method (this saves using a closure and a )
 
@@ -118,7 +118,7 @@ $count = count($iterator);
 ```
 ## Logging
 
-`Database\DatabaseDriver` implements the `Psr\Log\LoggerAwareInterface` so is ready for intergrating with a logging package that supports that standard.
+`Database\DatabaseDriver` implements the `Psr\Log\LoggerAwareInterface` so is ready for integrating with a logging package that supports that standard.
 
 Drivers log all errors with a log level of `LogLevel::ERROR`.
 
