@@ -504,8 +504,12 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      *
      * @since   2.0.0
      */
-    public function alterDbCharacterSet(string $dbName)
+    public function alterDbCharacterSet($dbName)
     {
+        if ($dbName === null || !is_string($dbName) || $dbName === '') {
+            throw new \RuntimeException('Database name must not be null and a non empty string.');
+        }
+
         $this->setQuery($this->getAlterDbCharacterSet($dbName));
 
         return $this->execute();
