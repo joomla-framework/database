@@ -37,6 +37,12 @@ parameters:
 			path: src/DatabaseDriver.php
 
 		-
+			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/DatabaseDriver.php
+
+		-
 			message: '#^If condition is always true\.$#'
 			identifier: if.alwaysTrue
 			count: 11
@@ -73,6 +79,12 @@ parameters:
 			path: src/DatabaseDriver.php
 
 		-
+			message: '#^Result of \|\| is always false\.$#'
+			identifier: booleanOr.alwaysFalse
+			count: 1
+			path: src/DatabaseDriver.php
+
+		-
 			message: '#^Strict comparison using \=\=\= between ''resource''\|''resource \(closed\)'' and ''object'' will always evaluate to false\.$#'
 			identifier: identical.alwaysFalse
 			count: 1
@@ -80,6 +92,12 @@ parameters:
 
 		-
 			message: '#^Strict comparison using \=\=\= between stdClass and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/DatabaseDriver.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between string and null will always evaluate to false\.$#'
 			identifier: identical.alwaysFalse
 			count: 1
 			path: src/DatabaseDriver.php
