@@ -70,9 +70,11 @@ class DatabaseIterator implements \Countable, \Iterator
      * @param   StatementInterface  $statement  The statement holding the result set to iterate.
      * @param   string              $column     An option column to use as the iterator key.
      * @param   string              $class      The class of object that is returned.
+     *                                          The $class parameter is deprecated in 4.x and will be removed in 6.0
+     *                                          without a replacement.
      *
-     * @since   1.0
      * @throws  \InvalidArgumentException
+     *@since   1.0
      */
     public function __construct(StatementInterface $statement, $column = null, $class = \stdClass::class)
     {
