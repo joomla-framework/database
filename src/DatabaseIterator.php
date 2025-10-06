@@ -74,7 +74,7 @@ class DatabaseIterator implements \Countable, \Iterator
      *                                          without a replacement.
      *
      * @throws  \InvalidArgumentException
-     *@since   1.0
+     * @since   1.0
      */
     public function __construct(StatementInterface $statement, $column = null, $class = \stdClass::class)
     {
