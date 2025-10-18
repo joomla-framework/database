@@ -71,5 +71,5 @@ interface PreparableInterface
      *
      * @since   1.0
      */
-    public function &getBounded($key = null);
+    public function getBounded($key = null);
 }

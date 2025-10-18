@@ -577,7 +577,7 @@ class SqlsrvDriver extends DatabaseDriver
         $this->count++;
 
         // Get list of bounded parameters
-        $bounded =& $this->sql->getBounded();
+        $bounded = $this->sql->getBounded();
 
         // If there is a monitor registered, let it know we are starting this query
         if ($this->monitor) {
