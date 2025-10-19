@@ -509,7 +509,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 
         foreach ($tables as $table) {
             // Set the query to get the table CREATE statement.
-            $row = $this->setQuery('SHOW CREATE TABLE ' . $this->quoteName($this->escape($table)))->loadRow();
+            $row = $this->setQuery('SHOW CREATE TABLE ' . $this->quoteName($table))->loadRow();
 
             // Populate the result array based on the create statements.
             $result[$table] = $row[1];
@@ -536,7 +536,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
         $result = [];
 
         // Set the query to get the table fields statement.
-        $fields = $this->setQuery('SHOW FULL COLUMNS FROM ' . $this->quoteName($this->escape($table)))->loadObjectList();
+        $fields = $this->setQuery('SHOW FULL COLUMNS FROM ' . $this->quoteName($table))->loadObjectList();
 
         // If we only want the type as the value add just that to the list.
         if ($typeOnly) {
