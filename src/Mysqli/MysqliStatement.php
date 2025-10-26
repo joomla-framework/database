@@ -306,7 +306,10 @@ class MysqliStatement implements StatementInterface
 
         if (!empty($this->parameterKeyMapping)) {
             foreach ($values as $key => &$value) {
-                $params[$this->parameterKeyMapping[$key]] =& $value;
+                $paramKey = $this->parameterKeyMapping[$key];
+                foreach ($paramKey as $currentKey) {
+                    $params[$currentKey] =& $value;
+                }
             }
 
             ksort($params);
