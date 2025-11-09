@@ -135,10 +135,10 @@ class MysqliStatement implements StatementInterface
 
         $query = $this->prepareParameterKeyMapping($query);
 
-        $this->statement  = $connection->prepare($query);
-
-        if (!$this->statement) {
-            throw new PrepareStatementFailureException($this->connection->error, $this->connection->errno);
+        try {
+            $this->statement = $connection->prepare($query);
+        } catch (\mysqli_sql_exception $e) {
+            throw new PrepareStatementFailureException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -397,19 +397,21 @@ class MysqliStatement implements StatementInterface
 
             array_unshift($params, implode('', $types));
 
-            if (!\call_user_func_array([$this->statement, 'bind_param'], $params)) {
-                throw new PrepareStatementFailureException($this->statement->error, $this->statement->errno);
+            try {
+                \call_user_func_array([$this->statement, 'bind_param'], $params);
+            } catch (\Exception $e) {
+                throw new PrepareStatementFailureException($e->getMessage(), $e->getCode(), $e);
             }
         } elseif ($parameters !== null) {
-            if (!$this->bindValues($parameters)) {
-                throw new PrepareStatementFailureException($this->statement->error, $this->statement->errno);
+            try {
+                $this->bindValues($parameters);
+            } catch (\Exception $e) {
+                throw new PrepareStatementFailureException($e->getMessage(), $e->getCode(), $e);
             }
         }
 
         try {
-            if (!$this->statement->execute()) {
-                throw new ExecutionFailureException($this->query, $this->statement->error, $this->statement->errno);
-            }
+            $this->statement->execute();
         } catch (\Throwable $e) {
             throw new ExecutionFailureException($this->query, $e->getMessage(), $e->getCode(), $e);
         }
@@ -442,9 +444,7 @@ class MysqliStatement implements StatementInterface
                 $refs[$key] =& $value;
             }
 
-            if (!\call_user_func_array([$this->statement, 'bind_result'], $refs)) {
-                throw new \RuntimeException($this->statement->error, $this->statement->errno);
-            }
+            \call_user_func_array([$this->statement, 'bind_result'], $refs);
         }
 
         $this->result = true;
@@ -486,10 +486,6 @@ class MysqliStatement implements StatementInterface
 
         if ($values === null) {
             return false;
-        }
-
-        if ($values === false) {
-            throw new \RuntimeException($this->statement->error, $this->statement->errno);
         }
 
         switch ($fetchStyle) {
@@ -543,7 +539,11 @@ class MysqliStatement implements StatementInterface
      */
     private function fetchData()
     {
-        $return = $this->statement->fetch();
+        try {
+            $return = $this->statement->fetch();
+        } catch (\Throwable $e) {
+            throw new \RuntimeException($e->getMessage(), $e->getCode(), $e);
+        }
 
         if ($return === true) {
             $values = [];
