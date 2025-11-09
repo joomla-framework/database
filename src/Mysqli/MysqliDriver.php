@@ -202,7 +202,10 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
             throw new UnsupportedAdapterException('The MySQLi extension is not available');
         }
 
-        $this->connection = mysqli_init();
+        // Enable mysqli error reporting
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+        $this->connection = new \mysqli();
 
         $connectionFlags = 0;
 
@@ -232,21 +235,21 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
             );
         }
 
-        // Attempt to connect to the server, use error suppression to silence warnings and allow us to throw an Exception separately.
-        $connected = @$this->connection->real_connect(
-            $this->options['host'],
-            $this->options['user'],
-            $this->options['password'],
-            null,
-            $this->options['port'],
-            $this->options['socket'],
-            $connectionFlags
-        );
-
-        if (!$connected) {
+        try {
+            $this->connection->real_connect(
+                $this->options['host'],
+                $this->options['user'],
+                $this->options['password'],
+                null,
+                $this->options['port'],
+                $this->options['socket'],
+                $connectionFlags
+            );
+        } catch (\mysqli_sql_exception $e) {
             throw new ConnectionFailureException(
-                'Could not connect to database: ' . $this->connection->connect_error,
-                $this->connection->connect_errno
+                'Could not connect to database: ' . $e->getMessage(),
+                $e->getCode(),
+                $e
             );
         }
 
@@ -783,8 +786,10 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
             return false;
         }
 
-        if (!$this->connection->select_db($database)) {
-            throw new ConnectionFailureException('Could not connect to database.');
+        try {
+            $this->connection->select_db($database);
+        } catch (\mysqli_sql_exception $e) {
+            throw new ConnectionFailureException('Could not connect to database: ' . $e->getMessage(), $e->getCode(), $e);
         }
 
         return true;
@@ -810,20 +815,26 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
         // Which charset should I use, plain utf8 or multibyte utf8mb4?
         $charset = $this->utf8mb4 && $this->options['utf8mb4'] ? 'utf8mb4' : 'utf8';
 
-        $result = @$this->connection->set_charset($charset);
-
-        /*
-         * If I could not set the utf8mb4 charset then the server doesn't support utf8mb4 despite claiming otherwise. This happens on old MySQL
-         * server versions (less than 5.5.3) using the mysqlnd PHP driver. Since mysqlnd masks the server version and reports only its own we
-         * can not be sure if the server actually does support UTF-8 Multibyte (i.e. it's MySQL 5.5.3 or later). Since the utf8mb4 charset is
-         * undefined in this case we catch the error and determine that utf8mb4 is not supported!
-         */
-        if (!$result && $this->utf8mb4 && $this->options['utf8mb4']) {
-            $this->utf8mb4 = false;
-            $result        = @$this->connection->set_charset('utf8');
+        try {
+            $this->connection->set_charset($charset);
+        } catch (\mysqli_sql_exception) {
+            /*
+            * If I could not set the utf8mb4 charset then the server doesn't support utf8mb4 despite claiming otherwise. This happens on old MySQL
+            * server versions (less than 5.5.3) using the mysqlnd PHP driver. Since mysqlnd masks the server version and reports only its own we
+            * can not be sure if the server actually does support UTF-8 Multibyte (i.e. it's MySQL 5.5.3 or later). Since the utf8mb4 charset is
+            * undefined in this case we catch the error and determine that utf8mb4 is not supported!
+            */
+            if ($this->utf8mb4 && $this->options['utf8mb4']) {
+                $this->utf8mb4 = false;
+                try {
+                    $this->connection->set_charset('utf8');
+                } catch (\mysqli_sql_exception) {
+                    return false;
+                }
+            }
         }
 
-        return $result;
+        return true;
     }
 
     /**
@@ -841,8 +852,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
         if (!$toSavepoint || $this->transactionDepth <= 1) {
             $this->connect();
 
-            if ($this->connection->commit()) {
+            try {
+                $this->connection->commit();
                 $this->transactionDepth = 0;
+            } catch (\mysqli_sql_exception) {
+                // TODO: Handle commit failure?
             }
 
             return;
@@ -866,8 +880,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
         if (!$toSavepoint || $this->transactionDepth <= 1) {
             $this->connect();
 
-            if ($this->connection->rollback()) {
+            try {
+                $this->connection->rollback();
                 $this->transactionDepth = 0;
+            } catch (\mysqli_sql_exception) {
+                // TODO: Handle rollback failure?
             }
 
             return;
@@ -922,12 +939,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
     {
         $this->connect();
 
-        $cursor = $this->connection->query($sql);
-
-        // If an error occurred handle it.
-        if (!$cursor) {
-            $errorNum = (int) $this->connection->errno;
-            $errorMsg = (string) $this->connection->error;
+        try {
+            $this->connection->query($sql);
+        } catch (\mysqli_sql_exception $e) {
+            $errorNum = $e->getCode();
+            $errorMsg = $e->getMessage();
 
             // Check if the server was disconnected.
             if (!$this->connected()) {
@@ -935,7 +951,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
                     // Attempt to reconnect.
                     $this->connection = null;
                     $this->connect();
-                } catch (ConnectionFailureException $e) {
+                } catch (ConnectionFailureException) {
                     // If connect fails, ignore that exception and throw the normal exception.
                     throw new ExecutionFailureException($sql, $errorMsg, $errorNum);
                 }
@@ -946,12 +962,6 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 
             // The server was not disconnected.
             throw new ExecutionFailureException($sql, $errorMsg, $errorNum);
-        }
-
-        $this->freeResult();
-
-        if ($cursor instanceof \mysqli_result) {
-            $cursor->free_result();
         }
 
         return true;
