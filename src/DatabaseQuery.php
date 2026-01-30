@@ -1728,8 +1728,10 @@ abstract class DatabaseQuery implements QueryInterface
      * Usage:
      * $query->values('1,2,3')->values('4,5,6');
      * $query->values(array('1,2,3', '4,5,6'));
+     * $query->values($subQuery);
      *
-     * @param   array|string  $values  A single tuple, or array of tuples.
+     * @param   array|string|DatabaseQuery  $values  A single tuple, or array of tuples,
+     *                                               or a DatabaseQuery object holding a sub-query.
      *
      * @return  $this
      *
