@@ -12,6 +12,7 @@ use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Sqlsrv\SqlsrvDriver;
 use Joomla\Database\Sqlsrv\SqlsrvQuery;
 use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for Joomla\Database\Sqlsrv\SqlsrvDriver.
@@ -121,68 +122,72 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
     /**
      * Data provider for escaping test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataEscape(): \Generator
+    public static function dataEscape(): array
     {
-        yield ["'%_abc123", false, '\'\'%_abc123'];
-        yield ["'%_abc123", true, '\'\'[%][_]abc123'];
-        yield [3, false, 3];
-        yield [3.14, false, '3.14'];
+        return [
+            ["'%_abc123", false, '\'\'%_abc123'],
+            ["'%_abc123", true, '\'\'[%][_]abc123'],
+            [3, false, 3],
+            [3.14, false, '3.14'],
+        ];
     }
 
     /**
      * Data provider for fetching table column test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataGetTableColumns(): \Generator
+    public static function dataGetTableColumns(): array
     {
-        yield 'only column types' => [
-            '#__dbtest',
-            true,
-            [
-                'id'          => 'int',
-                'title'       => 'nvarchar',
-                'start_date'  => 'datetime',
-                'description' => 'nvarchar',
-                'data'        => 'nvarchar',
+        return [
+            'only column types' => [
+                '#__dbtest',
+                true,
+                [
+                    'id'          => 'int',
+                    'title'       => 'nvarchar',
+                    'start_date'  => 'datetime',
+                    'description' => 'nvarchar',
+                    'data'        => 'nvarchar',
+                ],
             ],
-        ];
 
-        yield 'full column information' => [
-            '#__dbtest',
-            false,
-            [
-                'id' => (object) [
-                    'Field'   => 'id',
-                    'Type'    => 'int',
-                    'Null'    => 'NO',
-                    'Default' => '',
-                ],
-                'title' => (object) [
-                    'Field'   => 'title',
-                    'Type'    => 'nvarchar',
-                    'Null'    => 'NO',
-                    'Default' => '',
-                ],
-                'start_date' => (object) [
-                    'Field'   => 'start_date',
-                    'Type'    => 'datetime',
-                    'Null'    => 'NO',
-                    'Default' => '',
-                ],
-                'description' => (object) [
-                    'Field'   => 'description',
-                    'Type'    => 'nvarchar',
-                    'Null'    => 'NO',
-                    'Default' => '',
-                ],
-                'data' => (object) [
-                    'Field'   => 'data',
-                    'Type'    => 'nvarchar',
-                    'Null'    => 'YES',
-                    'Default' => '',
+            'full column information' => [
+                '#__dbtest',
+                false,
+                [
+                    'id' => (object) [
+                        'Field'   => 'id',
+                        'Type'    => 'int',
+                        'Null'    => 'NO',
+                        'Default' => '',
+                    ],
+                    'title' => (object) [
+                        'Field'   => 'title',
+                        'Type'    => 'nvarchar',
+                        'Null'    => 'NO',
+                        'Default' => '',
+                    ],
+                    'start_date' => (object) [
+                        'Field'   => 'start_date',
+                        'Type'    => 'datetime',
+                        'Null'    => 'NO',
+                        'Default' => '',
+                    ],
+                    'description' => (object) [
+                        'Field'   => 'description',
+                        'Type'    => 'nvarchar',
+                        'Null'    => 'NO',
+                        'Default' => '',
+                    ],
+                    'data' => (object) [
+                        'Field'   => 'data',
+                        'Type'    => 'nvarchar',
+                        'Null'    => 'YES',
+                        'Default' => '',
+                    ],
                 ],
             ],
         ];
@@ -191,25 +196,29 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
     /**
      * Data provider for binary quoting test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataQuoteBinary(): \Generator
+    public static function dataQuoteBinary(): array
     {
-        yield ['DATA', "0x" . bin2hex('DATA')];
-        yield ["\x00\x01\x02\xff", "0x000102ff"];
-        yield ["\x01\x01\x02\xff", "0x010102ff"];
+        return [
+            ['DATA', "0x" . bin2hex('DATA')],
+            ["\x00\x01\x02\xff", "0x000102ff"],
+            ["\x01\x01\x02\xff", "0x010102ff"],
+        ];
     }
 
     /**
      * Data provider for name quoting test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataQuoteName(): \Generator
+    public static function dataQuoteName(): array
     {
-        yield ['protected`title', null, '[protected`title]'];
-        yield ['protected"title', null, '[protected"title]'];
-        yield ['protected]title', null, '[protected]]title]'];
+        return [
+            ['protected`title', null, '[protected`title]'],
+            ['protected"title', null, '[protected"title]'],
+            ['protected]title', null, '[protected]]title]'],
+        ];
     }
 
     /*
@@ -469,9 +478,8 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
      * @param   string   $table     The name of the database table.
      * @param   boolean  $typeOnly  True (default) to only return field types.
      * @param   array    $expected  Expected result.
-     *
-     * @dataProvider  dataGetTableColumns
      */
+    #[DataProvider('dataGetTableColumns')]
     public function testGetTableColumns(string $table, bool $typeOnly, array $expected)
     {
         $this->assertEquals(

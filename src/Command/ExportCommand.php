@@ -95,7 +95,6 @@ class ExportCommand extends AbstractCommand
         $tableName  = $input->getOption('table');
         $zip        = $input->getOption('zip');
 
-        $zipFile = $folderPath . '/data_exported_' . date("Y-m-d\TH-i-s") . '.zip';
         $tables  = $this->db->getTableList();
         $prefix  = $this->db->getPrefix();
 
@@ -109,19 +108,14 @@ class ExportCommand extends AbstractCommand
             $tables = [$tableName];
         }
 
-        if ($zip) {
-            if (!class_exists(Archive::class)) {
-                $symfonyStyle->error('The "joomla/archive" Composer package is not installed, cannot create ZIP files.');
+        if ($zip && !class_exists(Archive::class)) {
+            $symfonyStyle->error('The "joomla/archive" Composer package is not installed, cannot create ZIP files.');
 
-                return 1;
-            }
-
-            /** @var Zip $zipArchive */
-            $zipArchive = (new Archive())->getAdapter('zip');
-
-            $filenames = [];
-            $zipFilesArray = [];
+            return 1;
         }
+
+        $filenames = [];
+        $zipFilesArray = [];
 
         foreach ($tables as $table) {
             // If an empty prefix is in use then we will dump all tables, otherwise the prefix must match
@@ -139,16 +133,18 @@ class ExportCommand extends AbstractCommand
 
                 File::write($filename, $data);
 
-                if ($zip) {
-                    $zipFilesArray[] = ['name' => $table . '.xml', 'data' => $data];
-                    $filenames[] = $filename;
-                }
+                $zipFilesArray[] = ['name' => $table . '.xml', 'data' => $data];
+                $filenames[] = $filename;
 
                 $symfonyStyle->text(sprintf('Exported data for %s in %d seconds', $table, round(microtime(true) - $taskTime, 3)));
             }
         }
 
         if ($zip) {
+            /** @var Zip $zipArchive */
+            $zipArchive = (new Archive())->getAdapter('zip');
+
+            $zipFile = $folderPath . '/data_exported_' . date("Y-m-d\TH-i-s") . '.zip';
             $zipArchive->create($zipFile, $zipFilesArray);
             foreach ($filenames as $fname) {
                 File::delete($fname);

@@ -250,7 +250,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
                 $baseName = $file->getBasename();
 
                 // Derive the class name from the type.
-                /** @var DatabaseDriver $class */
                 $class = __NAMESPACE__ . '\\' . ucfirst(strtolower($baseName)) . '\\' . ucfirst(strtolower($baseName)) . 'Driver';
 
                 // If the class doesn't exist, or if it's not supported on this system, move on to the next type.
@@ -501,15 +500,14 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      *
      * @param   string  $dbName  The database name that will be altered
      *
-     * @return  boolean|resource
+     * @return  boolean
      *
      * @since   2.0.0
-     * @throws  \RuntimeException
      */
     public function alterDbCharacterSet($dbName)
     {
-        if ($dbName === null) {
-            throw new \RuntimeException('Database name must not be null.');
+        if ($dbName === null || !is_string($dbName) || $dbName === '') {
+            throw new \RuntimeException('Database name must not be null and a non empty string.');
         }
 
         $this->setQuery($this->getAlterDbCharacterSet($dbName));
@@ -523,7 +521,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      * @param   \stdClass  $options  Object used to pass user and database name to database driver. This object must have "db_name" and "db_user" set.
      * @param   boolean    $utf      True if the database supports the UTF-8 character set.
      *
-     * @return  boolean|resource
+     * @return  boolean
      *
      * @since   2.0.0
      * @throws  \RuntimeException
@@ -979,7 +977,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     * Get the current query object or a new DatabaseQuery object.
     *
     * @param   boolean  $new  False to return the current query object, True to return a new DatabaseQuery object.
-    *                         The $new parameter is deprecated in 2.2 and will be removed in 4.0, use createQuery() instead.
+    *                         The $new parameter is deprecated in 2.2 and will be removed in 5.0, use createQuery() instead.
     *
     * @return  DatabaseQuery
     *
@@ -991,7 +989,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
             trigger_deprecation(
                 'joomla/database',
                 '2.2.0',
-                'The parameter $new is deprecated and will be removed in 4.0, use %s::createQuery() instead.',
+                'The parameter $new is deprecated and will be removed in 5.0, use %s::createQuery() instead.',
                 self::class
             );
 
@@ -1580,31 +1578,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     }
 
     /**
-     * Quote strings coming from quoteName call.
-     *
-     * @param   array  $strArr  Array of strings coming from quoteName dot-explosion.
-     *
-     * @return  string  Dot-imploded string of quoted parts.
-     *
-     * @since   1.0
-     * @deprecated  2.0  Use quoteNameString instead
-     */
-    protected function quoteNameStr($strArr)
-    {
-        $parts = [];
-
-        foreach ($strArr as $part) {
-            if ($part === null) {
-                continue;
-            }
-
-            $parts[] = $this->quoteNameString($part, true);
-        }
-
-        return implode('.', $parts);
-    }
-
-    /**
      * This function replaces a string identifier with the configured table prefix.
      *
      * @param   string  $sql     The SQL statement to prepare.
@@ -1743,7 +1716,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 
         if (\is_string($query)) {
             // Allows taking advantage of bound variables in a direct query:
-            $query = $this->getQuery(true)->setQuery($query);
+            $query = $this->createQuery()->setQuery($query);
         } elseif (!($query instanceof QueryInterface)) {
             throw new \InvalidArgumentException(
                 sprintf(

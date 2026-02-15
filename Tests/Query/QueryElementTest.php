@@ -7,6 +7,7 @@
 namespace Joomla\Database\Tests\Query;
 
 use Joomla\Database\Query\QueryElement;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,33 +25,35 @@ class QueryElementTest extends TestCase
      *                      glue => glue
      * - array   $expected  values in same array format
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataInstantiation(): \Generator
+    public static function dataInstantiation(): array
     {
-        yield 'array-element' => [
-            [
-                'name'     => 'FROM',
-                'elements' => ['field1', 'field2'],
-                'glue'     => ',',
+        return [
+            'array-element' => [
+                [
+                    'name'     => 'FROM',
+                    'elements' => ['field1', 'field2'],
+                    'glue'     => ',',
+                ],
+                [
+                    'name'     => 'FROM',
+                    'elements' => ['field1', 'field2'],
+                    'glue'     => ',',
+                ],
             ],
-            [
-                'name'     => 'FROM',
-                'elements' => ['field1', 'field2'],
-                'glue'     => ',',
-            ],
-        ];
 
-        yield 'non-array-element' => [
-            [
-                'name'     => 'TABLE',
-                'elements' => 'my_table_name',
-                'glue'     => ',',
-            ],
-            [
-                'name'     => 'TABLE',
-                'elements' => ['my_table_name'],
-                'glue'     => ',',
+            'non-array-element' => [
+                [
+                    'name'     => 'TABLE',
+                    'elements' => 'my_table_name',
+                    'glue'     => ',',
+                ],
+                [
+                    'name'     => 'TABLE',
+                    'elements' => ['my_table_name'],
+                    'glue'     => ',',
+                ],
             ],
         ];
     }
@@ -60,9 +63,8 @@ class QueryElementTest extends TestCase
      *
      * @param   array  $element   values for base element
      * @param   array  $expected  values for expected fields
-     *
-     * @dataProvider  dataInstantiation
      */
+    #[DataProvider('dataInstantiation')]
     public function testInstantiation(array $element, array $expected)
     {
         $baseElement = new QueryElement($element['name'], $element['elements'], $element['glue']);
@@ -92,36 +94,38 @@ class QueryElementTest extends TestCase
      * - string        $glue      the element glue
      * - string        $expected  expected result
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataCastingToString(): \Generator
+    public static function dataCastingToString(): array
     {
-        yield [
-            'FROM',
-            'table1',
-            ',',
-            PHP_EOL . 'FROM table1',
-        ];
+        return [
+            [
+                'FROM',
+                'table1',
+                ',',
+                PHP_EOL . 'FROM table1',
+            ],
 
-        yield [
-            'SELECT',
-            ['column1', 'column2'],
-            ',',
-            PHP_EOL . 'SELECT column1,column2',
-        ];
+            [
+                'SELECT',
+                ['column1', 'column2'],
+                ',',
+                PHP_EOL . 'SELECT column1,column2',
+            ],
 
-        yield [
-            '()',
-            ['column1', 'column2'],
-            ',',
-            PHP_EOL . '(column1,column2)',
-        ];
+            [
+                '()',
+                ['column1', 'column2'],
+                ',',
+                PHP_EOL . '(column1,column2)',
+            ],
 
-        yield [
-            'CONCAT()',
-            ['column1', 'column2'],
-            ',',
-            PHP_EOL . 'CONCAT(column1,column2)',
+            [
+                'CONCAT()',
+                ['column1', 'column2'],
+                ',',
+                PHP_EOL . 'CONCAT(column1,column2)',
+            ],
         ];
     }
 
@@ -132,9 +136,8 @@ class QueryElementTest extends TestCase
      * @param   mixed   $elements  String or array.
      * @param   string  $glue      The glue for elements.
      * @param   string  $expected  The expected value.
-     *
-     * @dataProvider  dataCastingToString
      */
+    #[DataProvider('dataCastingToString')]
     public function testCastingToString($name, $elements, $glue, $expected)
     {
         $this->assertThat(
@@ -155,46 +158,48 @@ class QueryElementTest extends TestCase
      * - array    $expected   array of elements that should be the value of the elements attribute after the merge
      * - string   $string     value of __toString() for element after append
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataAppend(): \Generator
+    public static function dataAppend(): array
     {
-        yield 'array-element' => [
-            [
-                'name'     => 'SELECT',
-                'elements' => [],
-                'glue'     => ',',
+        return [
+            'array-element' => [
+                [
+                    'name'     => 'SELECT',
+                    'elements' => [],
+                    'glue'     => ',',
+                ],
+                [
+                    'name'     => 'FROM',
+                    'elements' => ['my_table_name'],
+                    'glue'     => ',',
+                ],
+                [
+                    'name'     => 'FROM',
+                    'elements' => ['my_table_name'],
+                    'glue'     => ',',
+                ],
+                PHP_EOL . 'SELECT ' . PHP_EOL . 'FROM my_table_name',
             ],
-            [
-                'name'     => 'FROM',
-                'elements' => ['my_table_name'],
-                'glue'     => ',',
-            ],
-            [
-                'name'     => 'FROM',
-                'elements' => ['my_table_name'],
-                'glue'     => ',',
-            ],
-            PHP_EOL . 'SELECT ' . PHP_EOL . 'FROM my_table_name',
-        ];
 
-        yield 'non-array-element' => [
-            [
-                'name'     => 'SELECT',
-                'elements' => [],
-                'glue'     => ',',
+            'non-array-element' => [
+                [
+                    'name'     => 'SELECT',
+                    'elements' => [],
+                    'glue'     => ',',
+                ],
+                [
+                    'name'     => 'FROM',
+                    'elements' => ['my_table_name'],
+                    'glue'     => ',',
+                ],
+                [
+                    'name'     => 'FROM',
+                    'elements' => ['my_table_name'],
+                    'glue'     => ',',
+                ],
+                PHP_EOL . 'SELECT ' . PHP_EOL . 'FROM my_table_name',
             ],
-            [
-                'name'     => 'FROM',
-                'elements' => ['my_table_name'],
-                'glue'     => ',',
-            ],
-            [
-                'name'     => 'FROM',
-                'elements' => ['my_table_name'],
-                'glue'     => ',',
-            ],
-            PHP_EOL . 'SELECT ' . PHP_EOL . 'FROM my_table_name',
         ];
     }
 
@@ -205,9 +210,8 @@ class QueryElementTest extends TestCase
      * @param   array   $append    append element values
      * @param   array   $expected  expected element values for elements field after append
      * @param   string  $string    expected value of toString (not used in this test)
-     *
-     * @dataProvider  dataAppend
      */
+    #[DataProvider('dataAppend')]
     public function testAppend($element, $append, $expected, $string)
     {
         $baseElement     = new QueryElement($element['name'], $element['elements'], $element['glue']);

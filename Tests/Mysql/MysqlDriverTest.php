@@ -14,6 +14,7 @@ use Joomla\Database\Mysql\MysqlImporter;
 use Joomla\Database\Mysql\MysqlQuery;
 use Joomla\Database\ParameterType;
 use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for Joomla\Database\Mysql\MysqlDriver
@@ -91,9 +92,9 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
     /**
      * Data provider for fetching table column test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataGetTableColumns(): \Generator
+    public static function dataGetTableColumns(): array
     {
         // For unknown reasons, the connection gets lost on Travis. re-establish, if that happens
         if (static::$connection === null) {
@@ -103,76 +104,78 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         $isMySQL8        = !static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '8.0', '>=');
         $useDisplayWidth = static::$connection->isMariaDb() || version_compare(static::$connection->getVersion(), '8.0.17', '<');
 
-        yield 'only column types' => [
-            '#__dbtest',
-            true,
-            [
-                'id'          => 'int unsigned',
-                'title'       => 'varchar',
-                'start_date'  => 'datetime',
-                'description' => 'text',
-                'data'        => 'blob',
+        return [
+            'only column types' => [
+                '#__dbtest',
+                true,
+                [
+                    'id'          => 'int unsigned',
+                    'title'       => 'varchar',
+                    'start_date'  => 'datetime',
+                    'description' => 'text',
+                    'data'        => 'blob',
+                ],
             ],
-        ];
 
-        yield 'full column information' => [
-            '#__dbtest',
-            false,
-            [
-                'id' => (object) [
-                    'Field'      => 'id',
-                    'Type'       => $useDisplayWidth ? 'int(10) unsigned' : 'int unsigned',
-                    'Collation'  => $isMySQL8 ? null : '',
-                    'Null'       => 'NO',
-                    'Key'        => 'PRI',
-                    'Default'    => $isMySQL8 ? null : '',
-                    'Extra'      => 'auto_increment',
-                    'Privileges' => 'select,insert,update,references',
-                    'Comment'    => '',
-                ],
-                'title' => (object) [
-                    'Field'      => 'title',
-                    'Type'       => 'varchar(50)',
-                    'Collation'  => $isMySQL8 ? 'utf8mb3_general_ci' : 'utf8_general_ci',
-                    'Null'       => 'NO',
-                    'Key'        => '',
-                    'Default'    => $isMySQL8 ? null : '',
-                    'Extra'      => '',
-                    'Privileges' => 'select,insert,update,references',
-                    'Comment'    => '',
-                ],
-                'start_date' => (object) [
-                    'Field'      => 'start_date',
-                    'Type'       => 'datetime',
-                    'Collation'  => '',
-                    'Null'       => 'NO',
-                    'Key'        => '',
-                    'Default'    => '',
-                    'Extra'      => '',
-                    'Privileges' => 'select,insert,update,references',
-                    'Comment'    => '',
-                ],
-                'description' => (object) [
-                    'Field'      => 'description',
-                    'Type'       => 'text',
-                    'Collation'  => $isMySQL8 ? 'utf8mb3_general_ci' : 'utf8_general_ci',
-                    'Null'       => 'NO',
-                    'Key'        => '',
-                    'Default'    => $isMySQL8 ? null : '',
-                    'Extra'      => '',
-                    'Privileges' => 'select,insert,update,references',
-                    'Comment'    => '',
-                ],
-                'data' => (object) [
-                    'Field'      => 'data',
-                    'Type'       => 'blob',
-                    'Collation'  => '',
-                    'Null'       => 'YES',
-                    'Key'        => '',
-                    'Default'    => '',
-                    'Extra'      => '',
-                    'Privileges' => 'select,insert,update,references',
-                    'Comment'    => '',
+            'full column information' => [
+                '#__dbtest',
+                false,
+                [
+                    'id' => (object) [
+                        'Field'      => 'id',
+                        'Type'       => $useDisplayWidth ? 'int(10) unsigned' : 'int unsigned',
+                        'Collation'  => $isMySQL8 ? null : '',
+                        'Null'       => 'NO',
+                        'Key'        => 'PRI',
+                        'Default'    => $isMySQL8 ? null : '',
+                        'Extra'      => 'auto_increment',
+                        'Privileges' => 'select,insert,update,references',
+                        'Comment'    => '',
+                    ],
+                    'title' => (object) [
+                        'Field'      => 'title',
+                        'Type'       => 'varchar(50)',
+                        'Collation'  => $isMySQL8 ? 'utf8mb3_general_ci' : 'utf8_general_ci',
+                        'Null'       => 'NO',
+                        'Key'        => '',
+                        'Default'    => $isMySQL8 ? null : '',
+                        'Extra'      => '',
+                        'Privileges' => 'select,insert,update,references',
+                        'Comment'    => '',
+                    ],
+                    'start_date' => (object) [
+                        'Field'      => 'start_date',
+                        'Type'       => 'datetime',
+                        'Collation'  => '',
+                        'Null'       => 'NO',
+                        'Key'        => '',
+                        'Default'    => '',
+                        'Extra'      => '',
+                        'Privileges' => 'select,insert,update,references',
+                        'Comment'    => '',
+                    ],
+                    'description' => (object) [
+                        'Field'      => 'description',
+                        'Type'       => 'text',
+                        'Collation'  => $isMySQL8 ? 'utf8mb3_general_ci' : 'utf8_general_ci',
+                        'Null'       => 'NO',
+                        'Key'        => '',
+                        'Default'    => $isMySQL8 ? null : '',
+                        'Extra'      => '',
+                        'Privileges' => 'select,insert,update,references',
+                        'Comment'    => '',
+                    ],
+                    'data' => (object) [
+                        'Field'      => 'data',
+                        'Type'       => 'blob',
+                        'Collation'  => '',
+                        'Null'       => 'YES',
+                        'Key'        => '',
+                        'Default'    => '',
+                        'Extra'      => '',
+                        'Privileges' => 'select,insert,update,references',
+                        'Comment'    => '',
+                    ],
                 ],
             ],
         ];
@@ -181,50 +184,58 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
     /**
      * Data provider for escaping test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataEscape(): \Generator
+    public static function dataEscape(): array
     {
-        yield ["'%_abc123", false, '\\\'%_abc123'];
-        yield ["'%_abc123", true, '\\\'\\%\_abc123'];
-        yield [3, false, 3];
-        yield [3.14, false, '3.14'];
+        return [
+            ["'%_abc123", false, '\\\'%_abc123'],
+            ["'%_abc123", true, '\\\'\\%\_abc123'],
+            [3, false, 3],
+            [3.14, false, '3.14'],
+        ];
     }
 
     /**
      * Data provider for table dropping test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataDropTable()
+    public static function dataDropTable(): array
     {
-        yield 'database exists before query' => ['#__dbtest', true];
+        return [
+            'database exists before query' => ['#__dbtest', true],
 
-        yield 'database does not exist before query' => ['#__foo', false];
+            'database does not exist before query' => ['#__foo', false],
+        ];
     }
 
     /**
      * Data provider for binary quoting test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataQuoteBinary(): \Generator
+    public static function dataQuoteBinary(): array
     {
-        yield ['DATA', "X'" . bin2hex('DATA') . "'"];
-        yield ["\x00\x01\x02\xff", "X'000102ff'"];
-        yield ["\x01\x01\x02\xff", "X'010102ff'"];
+        return [
+            ['DATA', "X'" . bin2hex('DATA') . "'"],
+            ["\x00\x01\x02\xff", "X'000102ff'"],
+            ["\x01\x01\x02\xff", "X'010102ff'"],
+        ];
     }
 
     /**
      * Data provider for name quoting test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataQuoteName(): \Generator
+    public static function dataQuoteName(): array
     {
-        yield ['protected`title', null, '`protected``title`'];
-        yield ['protected"title', null, '`protected"title`'];
-        yield ['protected]title', null, '`protected]title`'];
+        return [
+            ['protected`title', null, '`protected``title`'],
+            ['protected"title', null, '`protected"title`'],
+            ['protected]title', null, '`protected]title`'],
+        ];
     }
 
     /*
@@ -381,13 +392,15 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
     /**
      * Data provider for transaction rollback test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataTransactionRollback()
+    public static function dataTransactionRollback(): array
     {
-        yield 'rollback without savepoint' => [null, 0];
+        return [
+            'rollback without savepoint' => [null, 0],
 
-        yield 'rollback with savepoint' => ['transactionSavepoint', 1];
+            'rollback with savepoint' => ['transactionSavepoint', 1],
+        ];
     }
 
     /**
@@ -395,9 +408,8 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
      *
      * @param   string|null  $toSavepoint  Savepoint name to rollback transaction to
      * @param   integer      $tupleCount   Number of tuples found after insertion and rollback
-     *
-     * @dataProvider  dataTransactionRollback
      */
+    #[DataProvider('dataTransactionRollback')]
     public function testTransactionRollback(?string $toSavepoint, int $tupleCount)
     {
         $this->loadExampleData();

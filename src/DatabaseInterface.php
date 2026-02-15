@@ -49,6 +49,15 @@ interface DatabaseInterface
     public function createDatabase($options, $utf = true);
 
     /**
+     * Create a new DatabaseQuery object.
+     *
+     * @return  QueryInterface
+     *
+     * @since   4.0.0
+     */
+    public function createQuery(): QueryInterface;
+
+    /**
      * Replace special placeholder representing binary field with the original string.
      *
      * @param   string|resource  $data  Encoded string or resource.
@@ -232,9 +241,10 @@ interface DatabaseInterface
     public function getNumRows();
 
     /**
-     * Get the current query object or a new QueryInterface object.
+     * Get the current query object. (Deprecated: Or a new QueryInterface object).
      *
-     * @param   boolean  $new  False to return the current query object, True to return a new QueryInterface object.
+     * @param   boolean  $new  False to return the current query object, True to return a new DatabaseQuery object.
+     *                         The $new parameter is deprecated in 2.2 and will be removed in 5.0, use createQuery() instead.
      *
      * @return  QueryInterface
      *

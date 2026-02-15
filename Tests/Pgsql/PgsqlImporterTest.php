@@ -10,6 +10,7 @@ use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Pgsql\PgsqlDriver;
 use Joomla\Database\Pgsql\PgsqlImporter;
 use Joomla\Database\Pgsql\PgsqlQuery;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -69,7 +70,7 @@ class PgsqlImporterTest extends TestCase
             ->willReturn('jos_');
 
         $this->db->expects($this->any())
-            ->method('getQuery')
+            ->method('createQuery')
             ->willReturnCallback(function () {
                 return new PgsqlQuery($this->db);
             });
@@ -211,9 +212,9 @@ class PgsqlImporterTest extends TestCase
     /**
      * Data provider for import test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataImport(): \Generator
+    public static function dataImport(): array
     {
         $idSequence = '<sequence Name="jos_dbtest_id_seq" Schema="public" Table="jos_dbtest" Column="id" Type="bigint" Start_Value="1" Min_Value="1" Max_Value="9223372036854775807" Increment="1" Cycle_option="NO" />';
 
@@ -224,93 +225,95 @@ class PgsqlImporterTest extends TestCase
         $idKey    = '<key Index="jos_dbtest_pkey" is_primary="TRUE" is_unique="TRUE" Key_name="id" Query="ALTER TABLE jos_dbtest ADD PRIMARY KEY (id)" />';
         $titleKey = '<key Index="jos_dbtest_idx_name" is_primary="FALSE" is_unique="FALSE" Key_name="name" Query="CREATE INDEX jos_dbtest_idx_name ON jos_dbtest USING btree (name)" />';
 
-        yield 'no changes in existing structure' => [
-            true,
-            false,
-            new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . $idField . $titleField . $idKey . '</table_structure></database></dump>'),
-            [],
-            [],
-        ];
+        return [
+            'no changes in existing structure' => [
+                true,
+                false,
+                new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . $idField . $titleField . $idKey . '</table_structure></database></dump>'),
+                [],
+                [],
+            ],
 
-        yield 'inserts row into database' => [
-            true,
-            true,
-            new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . $idField . $titleField . $idKey . '</table_structure>  <table_data name="#__dbtest"><row><field name="id">1</field><field name="title">Testing</field></row></table_data></database></dump>'),
-            [],
-            [
-                'jos_dbtest' => [
-                    (object) [
-                        'id'    => '1',
-                        'title' => 'Testing',
+            'inserts row into database' => [
+                true,
+                true,
+                new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . $idField . $titleField . $idKey . '</table_structure>  <table_data name="#__dbtest"><row><field name="id">1</field><field name="title">Testing</field></row></table_data></database></dump>'),
+                [],
+                [
+                    'jos_dbtest' => [
+                        (object) [
+                            'id'    => '1',
+                            'title' => 'Testing',
+                        ],
                     ],
                 ],
             ],
-        ];
 
-        yield 'adds alias column to the structure' => [
-            true,
-            false,
-            new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . $idField . $titleField . $aliasField . $idKey . '</table_structure></database></dump>'),
-            [
-                "ALTER TABLE \"jos_dbtest\" ADD COLUMN \"alias\" character varying(255) NOT NULL DEFAULT 'test'",
+            'adds alias column to the structure' => [
+                true,
+                false,
+                new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . $idField . $titleField . $aliasField . $idKey . '</table_structure></database></dump>'),
+                [
+                    "ALTER TABLE \"jos_dbtest\" ADD COLUMN \"alias\" character varying(255) NOT NULL DEFAULT 'test'",
+                ],
+                [],
             ],
-            [],
-        ];
 
-        yield 'adds key for the title column to the structure' => [
-            true,
-            false,
-            new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . $idField . $titleField . $idKey . $titleKey . '</table_structure></database></dump>'),
-            [
-                'CREATE INDEX jos_dbtest_idx_name ON jos_dbtest USING btree (name)',
+            'adds key for the title column to the structure' => [
+                true,
+                false,
+                new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . $idField . $titleField . $idKey . $titleKey . '</table_structure></database></dump>'),
+                [
+                    'CREATE INDEX jos_dbtest_idx_name ON jos_dbtest USING btree (name)',
+                ],
+                [],
             ],
-            [],
-        ];
 
-        yield 'removes the title column from the structure' => [
-            true,
-            false,
-            new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . $idField . $idKey . '</table_structure></database></dump>'),
-            [
-                'ALTER TABLE "jos_dbtest" DROP COLUMN "title"',
+            'removes the title column from the structure' => [
+                true,
+                false,
+                new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . $idField . $idKey . '</table_structure></database></dump>'),
+                [
+                    'ALTER TABLE "jos_dbtest" DROP COLUMN "title"',
+                ],
+                [],
             ],
-            [],
-        ];
 
-        yield 'removes the primary key based on the id column from the structure' => [
-            true,
-            false,
-            new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . $idField . $titleField . '</table_structure></database></dump>'),
-            [
-                'ALTER TABLE ONLY "jos_dbtest" DROP CONSTRAINT "jos_dbtest_pkey"',
+            'removes the primary key based on the id column from the structure' => [
+                true,
+                false,
+                new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . $idField . $titleField . '</table_structure></database></dump>'),
+                [
+                    'ALTER TABLE ONLY "jos_dbtest" DROP CONSTRAINT "jos_dbtest_pkey"',
+                ],
+                [],
             ],
-            [],
-        ];
 
-        yield 'adds a new database table' => [
-            true,
-            false,
-            new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . $idField . $titleField . $idKey . '</table_structure><table_structure name="jos_newtest"><sequence Name="jos_newtest_id_seq" Schema="public" Table="jos_newtest" Column="id" Type="bigint" Start_Value="1" Min_Value="1" Max_Value="9223372036854775807" Increment="1" Cycle_option="NO" /><field Field="id" Type="integer" Null="NO" Default="nextval(\'jos_newtest_id_seq\'::regclass)" Comments="" />' . $titleField . '<key Index="jos_newtest_pkey" is_primary="TRUE" is_unique="TRUE" Key_name="id" Query="ALTER TABLE jos_newtest ADD PRIMARY KEY (id)" /></table_structure></database></dump>'),
-            [
-                'CREATE TABLE "jos_newtest" ("id" SERIAL, "title" character varying(50) NOT NULL DEFAULT \'NULL\')',
-                'CREATE SEQUENCE IF NOT EXISTS jos_newtest_id_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 NO CYCLE OWNED BY "public.jos_newtest.id"',
-                "SELECT setval('jos_newtest_id_seq', , FALSE)",
-                'ALTER TABLE jos_newtest ADD PRIMARY KEY (id)',
+            'adds a new database table' => [
+                true,
+                false,
+                new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . $idField . $titleField . $idKey . '</table_structure><table_structure name="jos_newtest"><sequence Name="jos_newtest_id_seq" Schema="public" Table="jos_newtest" Column="id" Type="bigint" Start_Value="1" Min_Value="1" Max_Value="9223372036854775807" Increment="1" Cycle_option="NO" /><field Field="id" Type="integer" Null="NO" Default="nextval(\'jos_newtest_id_seq\'::regclass)" Comments="" />' . $titleField . '<key Index="jos_newtest_pkey" is_primary="TRUE" is_unique="TRUE" Key_name="id" Query="ALTER TABLE jos_newtest ADD PRIMARY KEY (id)" /></table_structure></database></dump>'),
+                [
+                    'CREATE TABLE "jos_newtest" ("id" SERIAL, "title" character varying(50) NOT NULL DEFAULT \'NULL\')',
+                    'CREATE SEQUENCE IF NOT EXISTS jos_newtest_id_seq INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 NO CYCLE OWNED BY "public.jos_newtest.id"',
+                    "SELECT setval('jos_newtest_id_seq', , FALSE)",
+                    'ALTER TABLE jos_newtest ADD PRIMARY KEY (id)',
+                ],
+                [],
             ],
-            [],
-        ];
 
-        yield 'changes the field type of the id field' => [
-            true,
-            false,
-            new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . '<field Field="id" Type="bigint" Null="NO" Default="nextval(\'jos_dbtest_id_seq\'::regclass)" Comments="" />' . $titleField . $idKey . '</table_structure></database></dump>'),
-            [
-                'ALTER TABLE "jos_dbtest" ALTER COLUMN "id"  TYPE bigint,
+            'changes the field type of the id field' => [
+                true,
+                false,
+                new \SimpleXMLElement('<dump><database name=""><table_structure name="#__dbtest">' . $idSequence . '<field Field="id" Type="bigint" Null="NO" Default="nextval(\'jos_dbtest_id_seq\'::regclass)" Comments="" />' . $titleField . $idKey . '</table_structure></database></dump>'),
+                [
+                    'ALTER TABLE "jos_dbtest" ALTER COLUMN "id"  TYPE bigint,
 ALTER COLUMN "id" SET NOT NULL,
 ALTER COLUMN "id" SET DEFAULT \'nextval(\'jos_dbtest_id_seq\'::regclass)\';
 ALTER SEQUENCE "jos_dbtest_id_seq" OWNED BY "jos_dbtest.id"',
+                ],
+                [],
             ],
-            [],
         ];
     }
 
@@ -322,9 +325,8 @@ ALTER SEQUENCE "jos_dbtest_id_seq" OWNED BY "jos_dbtest.id"',
      * @param   \SimpleXMLElement  $from                   XML document to import.
      * @param   string[]           $expectedQueries        The expected database queries to perform.
      * @param   string[]           $expectedInsertObjects  The expected objects to be given to the database's insertObject method.
-     *
-     * @dataProvider  dataImport
      */
+    #[DataProvider('dataImport')]
     public function testImport(bool $mergeStructure, bool $importData, \SimpleXMLElement $from, array $expectedQueries, array $expectedInsertObjects)
     {
         $importer = new PgsqlImporter();
@@ -346,45 +348,46 @@ ALTER SEQUENCE "jos_dbtest_id_seq" OWNED BY "jos_dbtest.id"',
     /**
      * Data provider for check test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataCheck(): \Generator
+    public static function dataCheck(): array
     {
-        yield 'passes checks' => [
-            $this->createMock(PgsqlDriver::class),
-            '#__dbtest',
-            null,
-        ];
+        return [
+            'passes checks' => [
+                PgsqlDriver::class,
+                '#__dbtest',
+                null,
+            ],
 
-        yield 'fails checks with incorrect database driver subclass' => [
-            $this->createMock(DatabaseInterface::class),
-            new \SimpleXMLElement('<table_structure name="#__dbtest" />'),
-            'Database connection wrong type.',
-        ];
+            'fails checks with incorrect database driver subclass' => [
+                DatabaseInterface::class,
+                new \SimpleXMLElement('<table_structure name="#__dbtest" />'),
+                'Database connection wrong type.',
+            ],
 
-        yield 'fails checks with no database driver' => [
-            null,
-            new \SimpleXMLElement('<table_structure name="#__dbtest" />'),
-            'Database connection wrong type.',
-        ];
+            'fails checks with no database driver' => [
+                null,
+                new \SimpleXMLElement('<table_structure name="#__dbtest" />'),
+                'Database connection wrong type.',
+            ],
 
-        yield 'fails checks with no tables' => [
-            $this->createMock(PgsqlDriver::class),
-            null,
-            'ERROR: No Tables Specified',
+            'fails checks with no tables' => [
+                PgsqlDriver::class,
+                null,
+                'ERROR: No Tables Specified',
+            ],
         ];
     }
 
     /**
      * @testdox  The importer checks for errors
      *
-     * @param   DatabaseInterface|null  $db                Database driver to set in the importer.
-     * @param   string[]|string|null    $from              Database structure to import.
-     * @param   string|null             $exceptionMessage  If an Exception should be thrown, the expected message
-     *
-     * @dataProvider  dataCheck
+     * @param   string|null           $db                Database driver to set in the importer.
+     * @param   string[]|string|null  $from              Database structure to import.
+     * @param   string|null           $exceptionMessage  If an Exception should be thrown, the expected message
      */
-    public function testCheck(?DatabaseInterface $db, $from, ?string $exceptionMessage)
+    #[DataProvider('dataCheck')]
+    public function testCheck(?string $db, $from, ?string $exceptionMessage)
     {
         if ($exceptionMessage) {
             $this->expectException(\RuntimeException::class);
@@ -394,7 +397,7 @@ ALTER SEQUENCE "jos_dbtest_id_seq" OWNED BY "jos_dbtest.id"',
         $importer = new PgsqlImporter();
 
         if ($db) {
-            $importer->setDbo($db);
+            $importer->setDbo($this->createMock($db));
         }
 
         if ($from) {

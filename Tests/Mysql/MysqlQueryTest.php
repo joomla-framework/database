@@ -8,6 +8,7 @@ namespace Joomla\Database\Tests\Mysql;
 
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Mysql\MysqlQuery;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -48,12 +49,14 @@ class MysqlQueryTest extends TestCase
     /**
      * Data provider for concatenate test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataConcatenate(): \Generator
+    public static function dataConcatenate(): array
     {
-        yield 'values without separator' => [['foo', 'bar'], null, 'CONCAT(foo,bar)'];
-        yield 'values with separator' => [['foo', 'bar'], ' and ', "CONCAT_WS(' and ', foo, bar)"];
+        return [
+            'values without separator' => [['foo', 'bar'], null, 'CONCAT(foo,bar)'],
+            'values with separator' => [['foo', 'bar'], ' and ', "CONCAT_WS(' and ', foo, bar)"],
+        ];
     }
 
     /**
@@ -62,9 +65,8 @@ class MysqlQueryTest extends TestCase
      * @param   string[]     $values     An array of values to concatenate.
      * @param   string|null  $separator  As separator to place between each value.
      * @param   string       $expected   The expected query string.
-     *
-     * @dataProvider  dataConcatenate
      */
+    #[DataProvider('dataConcatenate')]
     public function testConcatenate(array $values, ?string $separator, string $expected)
     {
         $this->db->expects($this->any())

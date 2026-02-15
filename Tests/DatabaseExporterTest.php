@@ -8,8 +8,12 @@
 namespace Joomla\Database\Tests;
 
 use Joomla\Database\DatabaseExporter;
+use Joomla\Database\DatabaseImporter;
 use Joomla\Database\DatabaseInterface;
+use Joomla\Database\Tests\Stubs\TestDatabaseExporter;
+use Joomla\Database\Tests\Stubs\TestDatabaseImporter;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -19,20 +23,38 @@ use PHPUnit\Framework\TestCase;
 class DatabaseExporterTest extends TestCase
 {
     /**
+     * Importer object
+     *
+     * @var  DatabaseExporter
+     */
+    private $exporter;
+
+    /**
+     * Sets up the fixture.
+     *
+     * This method is called before a test is executed.
+     *
+     * @return  void
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->exporter = new TestDatabaseExporter();
+    }
+
+    /**
      * @testdox  The exporter is correctly configured when instantiated
      */
     public function testInstantiation()
     {
-        /** @var DatabaseExporter|MockObject $exporter */
-        $exporter = $this->getMockForAbstractClass(DatabaseExporter::class);
-
         $expected = (object) [
             'withStructure' => true,
             'withData'      => false,
         ];
 
-        $this->assertEquals($expected, TestHelper::getValue($exporter, 'options'));
-        $this->assertSame('xml', TestHelper::getValue($exporter, 'asFormat'));
+        $this->assertEquals($expected, TestHelper::getValue($this->exporter, 'options'));
+        $this->assertSame('xml', TestHelper::getValue($this->exporter, 'asFormat'));
     }
 
     /**
@@ -40,34 +62,33 @@ class DatabaseExporterTest extends TestCase
      */
     public function testAsXml()
     {
-        /** @var DatabaseExporter|MockObject $exporter */
-        $exporter = $this->getMockForAbstractClass(DatabaseExporter::class);
+        $this->assertSame($this->exporter, $this->exporter->asXml(), 'The exporter supports method chaining');
 
-        $this->assertSame($exporter, $exporter->asXml(), 'The exporter supports method chaining');
-
-        $this->assertSame('xml', TestHelper::getValue($exporter, 'asFormat'));
+        $this->assertSame('xml', TestHelper::getValue($this->exporter, 'asFormat'));
     }
 
     /**
      * Data provider for from test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataFrom(): \Generator
+    public static function dataFrom(): array
     {
-        yield 'single table' => [
-            '#__dbtest',
-            false,
-        ];
+        return [
+            'single table' => [
+                '#__dbtest',
+                false,
+            ],
 
-        yield 'multiple tables' => [
-            ['#__content', '#__dbtest'],
-            false,
-        ];
+            'multiple tables' => [
+                ['#__content', '#__dbtest'],
+                false,
+            ],
 
-        yield 'incorrect table data type' => [
-            new \stdClass(),
-            true,
+            'incorrect table data type' => [
+                new \stdClass(),
+                true,
+            ],
         ];
     }
 
@@ -76,21 +97,17 @@ class DatabaseExporterTest extends TestCase
      *
      * @param   string[]|string  $from                  The name of a single table, or an array of the table names to export.
      * @param   boolean          $shouldRaiseException  Flag indicating the exporter should raise an exception for an unsupported data type
-     *
-     * @dataProvider  dataFrom
      */
+    #[DataProvider('dataFrom')]
     public function testFrom($from, bool $shouldRaiseException)
     {
         if ($shouldRaiseException) {
             $this->expectException(\InvalidArgumentException::class);
         }
 
-        /** @var DatabaseExporter|MockObject $exporter */
-        $exporter = $this->getMockForAbstractClass(DatabaseExporter::class);
+        $this->assertSame($this->exporter, $this->exporter->from($from), 'The exporter supports method chaining');
 
-        $this->assertSame($exporter, $exporter->from($from), 'The exporter supports method chaining');
-
-        $this->assertSame((array) $from, TestHelper::getValue($exporter, 'from'));
+        $this->assertSame((array) $from, TestHelper::getValue($this->exporter, 'from'));
     }
 
     /**
@@ -98,13 +115,10 @@ class DatabaseExporterTest extends TestCase
      */
     public function testSetDbo()
     {
-        /** @var DatabaseExporter|MockObject $exporter */
-        $exporter = $this->getMockForAbstractClass(DatabaseExporter::class);
-
         /** @var DatabaseInterface|MockObject $db */
         $db = $this->createMock(DatabaseInterface::class);
 
-        $this->assertSame($exporter, $exporter->setDbo($db), 'The exporter supports method chaining');
+        $this->assertSame($this->exporter, $this->exporter->setDbo($db), 'The exporter supports method chaining');
     }
 
     /**
@@ -112,12 +126,9 @@ class DatabaseExporterTest extends TestCase
      */
     public function testWithStructure()
     {
-        /** @var DatabaseExporter|MockObject $exporter */
-        $exporter = $this->getMockForAbstractClass(DatabaseExporter::class);
+        $this->assertSame($this->exporter, $this->exporter->withStructure(false), 'The exporter supports method chaining');
 
-        $this->assertSame($exporter, $exporter->withStructure(false), 'The exporter supports method chaining');
-
-        $options = TestHelper::getValue($exporter, 'options');
+        $options = TestHelper::getValue($this->exporter, 'options');
 
         $this->assertFalse($options->withStructure);
     }
@@ -127,12 +138,9 @@ class DatabaseExporterTest extends TestCase
      */
     public function testWithData()
     {
-        /** @var DatabaseExporter|MockObject $exporter */
-        $exporter = $this->getMockForAbstractClass(DatabaseExporter::class);
+        $this->assertSame($this->exporter, $this->exporter->withData(true), 'The exporter supports method chaining');
 
-        $this->assertSame($exporter, $exporter->withData(true), 'The exporter supports method chaining');
-
-        $options = TestHelper::getValue($exporter, 'options');
+        $options = TestHelper::getValue($this->exporter, 'options');
 
         $this->assertTrue($options->withData);
     }

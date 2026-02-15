@@ -13,6 +13,7 @@ use Joomla\Database\ParameterType;
 use Joomla\Database\Sqlite\SqliteDriver;
 use Joomla\Database\Sqlite\SqliteQuery;
 use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for Joomla\Database\Sqlite\SqliteDriver
@@ -88,73 +89,77 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
     /**
      * Data provider for escaping test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataEscape(): \Generator
+    public static function dataEscape(): array
     {
-        yield ["'%_abc123", false, "''%_abc123"];
-        yield ["'%_abc123", true, "''%_abc123"];
-        yield [3, false, 3];
-        yield [3.14, false, '3.14'];
+        return [
+            ["'%_abc123", false, "''%_abc123"],
+            ["'%_abc123", true, "''%_abc123"],
+            [3, false, 3],
+            [3.14, false, '3.14'],
+        ];
     }
 
     /**
      * Data provider for fetching table column test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataGetTableColumns(): \Generator
+    public static function dataGetTableColumns(): array
     {
-        yield 'only column types' => [
-            '#__dbtest',
-            true,
-            [
-                'id'          => 'INTEGER',
-                'title'       => 'TEXT',
-                'start_date'  => 'TEXT',
-                'description' => 'TEXT',
-                'data'        => 'BLOB',
+        return [
+            'only column types' => [
+                '#__dbtest',
+                true,
+                [
+                    'id'          => 'INTEGER',
+                    'title'       => 'TEXT',
+                    'start_date'  => 'TEXT',
+                    'description' => 'TEXT',
+                    'data'        => 'BLOB',
+                ],
             ],
-        ];
 
-        yield 'full column information' => [
-            '#__dbtest',
-            false,
-            [
-                'id' => (object) [
-                    'Field'   => 'id',
-                    'Type'    => 'INTEGER',
-                    'Null'    => 'YES',
-                    'Default' => null,
-                    'Key'     => 'PRI',
-                ],
-                'title' => (object) [
-                    'Field'   => 'title',
-                    'Type'    => 'TEXT',
-                    'Null'    => 'NO',
-                    'Default' => '\'\'',
-                    'Key'     => '',
-                ],
-                'start_date' => (object) [
-                    'Field'   => 'start_date',
-                    'Type'    => 'TEXT',
-                    'Null'    => 'NO',
-                    'Default' => '\'\'',
-                    'Key'     => '',
-                ],
-                'description' => (object) [
-                    'Field'   => 'description',
-                    'Type'    => 'TEXT',
-                    'Null'    => 'NO',
-                    'Default' => '\'\'',
-                    'Key'     => '',
-                ],
-                'data' => (object) [
-                    'Field'   => 'data',
-                    'Type'    => 'BLOB',
-                    'Null'    => 'YES',
-                    'Default' => null,
-                    'Key'     => '',
+            'full column information' => [
+                '#__dbtest',
+                false,
+                [
+                    'id' => (object) [
+                        'Field'   => 'id',
+                        'Type'    => 'INTEGER',
+                        'Null'    => 'YES',
+                        'Default' => null,
+                        'Key'     => 'PRI',
+                    ],
+                    'title' => (object) [
+                        'Field'   => 'title',
+                        'Type'    => 'TEXT',
+                        'Null'    => 'NO',
+                        'Default' => '\'\'',
+                        'Key'     => '',
+                    ],
+                    'start_date' => (object) [
+                        'Field'   => 'start_date',
+                        'Type'    => 'TEXT',
+                        'Null'    => 'NO',
+                        'Default' => '\'\'',
+                        'Key'     => '',
+                    ],
+                    'description' => (object) [
+                        'Field'   => 'description',
+                        'Type'    => 'TEXT',
+                        'Null'    => 'NO',
+                        'Default' => '\'\'',
+                        'Key'     => '',
+                    ],
+                    'data' => (object) [
+                        'Field'   => 'data',
+                        'Type'    => 'BLOB',
+                        'Null'    => 'YES',
+                        'Default' => null,
+                        'Key'     => '',
+                    ],
                 ],
             ],
         ];
@@ -163,37 +168,43 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
     /**
      * Data provider for table dropping test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataDropTable()
+    public static function dataDropTable(): array
     {
-        yield 'database exists before query' => ['#__dbtest', true];
+        return [
+            'database exists before query' => ['#__dbtest', true],
 
-        yield 'database does not exist before query' => ['#__foo', false];
+            'database does not exist before query' => ['#__foo', false],
+        ];
     }
 
     /**
      * Data provider for binary quoting test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataQuoteBinary(): \Generator
+    public static function dataQuoteBinary(): array
     {
-        yield ['DATA', "X'" . bin2hex('DATA') . "'"];
-        yield ["\x00\x01\x02\xff", "X'000102ff'"];
-        yield ["\x01\x01\x02\xff", "X'010102ff'"];
+        return [
+            ['DATA', "X'" . bin2hex('DATA') . "'"],
+            ["\x00\x01\x02\xff", "X'000102ff'"],
+            ["\x01\x01\x02\xff", "X'010102ff'"],
+        ];
     }
 
     /**
      * Data provider for name quoting test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataQuoteName(): \Generator
+    public static function dataQuoteName(): array
     {
-        yield ['protected`title', null, '`protected``title`'];
-        yield ['protected"title', null, '`protected"title`'];
-        yield ['protected]title', null, '`protected]title`'];
+        return [
+            ['protected`title', null, '`protected``title`'],
+            ['protected"title', null, '`protected"title`'],
+            ['protected]title', null, '`protected]title`'],
+        ];
     }
 
     /*
@@ -412,13 +423,15 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
     /**
      * Data provider for transaction rollback test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataTransactionRollback()
+    public static function dataTransactionRollback()
     {
-        yield 'rollback without savepoint' => [null, 0];
+        return [
+            'rollback without savepoint' => [null, 0],
 
-        yield 'rollback with savepoint' => ['transactionSavepoint', 1];
+            'rollback with savepoint' => ['transactionSavepoint', 1],
+        ];
     }
 
     /**
@@ -426,9 +439,8 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
      *
      * @param   string|null  $toSavepoint  Savepoint name to rollback transaction to
      * @param   integer      $tupleCount   Number of tuples found after insertion and rollback
-     *
-     * @dataProvider  dataTransactionRollback
      */
+    #[DataProvider('dataTransactionRollback')]
     public function testTransactionRollback(?string $toSavepoint, int $tupleCount)
     {
         $this->loadExampleData();

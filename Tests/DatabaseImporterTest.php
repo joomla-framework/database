@@ -9,6 +9,8 @@ namespace Joomla\Database\Tests;
 
 use Joomla\Database\DatabaseImporter;
 use Joomla\Database\DatabaseInterface;
+use Joomla\Database\Tests\Stubs\TestDatabaseImporter;
+use Joomla\Database\Tests\Stubs\TestDatabaseQuery;
 use Joomla\Test\TestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -19,19 +21,37 @@ use PHPUnit\Framework\TestCase;
 class DatabaseImporterTest extends TestCase
 {
     /**
+     * Importer object
+     *
+     * @var  DatabaseImporter
+     */
+    private $importer;
+
+    /**
+     * Sets up the fixture.
+     *
+     * This method is called before a test is executed.
+     *
+     * @return  void
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->importer = new TestDatabaseImporter();
+    }
+
+    /**
      * @testdox  The importer is correctly configured when instantiated
      */
     public function testInstantiation()
     {
-        /** @var DatabaseImporter|MockObject $importer */
-        $importer = $this->getMockForAbstractClass(DatabaseImporter::class);
-
         $expected = (object) [
             'withStructure' => true,
         ];
 
-        $this->assertEquals($expected, TestHelper::getValue($importer, 'options'));
-        $this->assertSame('xml', TestHelper::getValue($importer, 'asFormat'));
+        $this->assertEquals($expected, TestHelper::getValue($this->importer, 'options'));
+        $this->assertSame('xml', TestHelper::getValue($this->importer, 'asFormat'));
     }
 
     /**
@@ -39,12 +59,9 @@ class DatabaseImporterTest extends TestCase
      */
     public function testAsXml()
     {
-        /** @var DatabaseImporter|MockObject $importer */
-        $importer = $this->getMockForAbstractClass(DatabaseImporter::class);
+        $this->assertSame($this->importer, $this->importer->asXml(), 'The importer supports method chaining');
 
-        $this->assertSame($importer, $importer->asXml(), 'The importer supports method chaining');
-
-        $this->assertSame('xml', TestHelper::getValue($importer, 'asFormat'));
+        $this->assertSame('xml', TestHelper::getValue($this->importer, 'asFormat'));
     }
 
     /**
@@ -52,13 +69,10 @@ class DatabaseImporterTest extends TestCase
      */
     public function testSetDbo()
     {
-        /** @var DatabaseImporter|MockObject $importer */
-        $importer = $this->getMockForAbstractClass(DatabaseImporter::class);
-
         /** @var DatabaseInterface|MockObject $db */
         $db = $this->createMock(DatabaseInterface::class);
 
-        $this->assertSame($importer, $importer->setDbo($db), 'The importer supports method chaining');
+        $this->assertSame($this->importer, $this->importer->setDbo($db), 'The importer supports method chaining');
     }
 
     /**
@@ -66,12 +80,9 @@ class DatabaseImporterTest extends TestCase
      */
     public function testWithStructure()
     {
-        /** @var DatabaseImporter|MockObject $importer */
-        $importer = $this->getMockForAbstractClass(DatabaseImporter::class);
+        $this->assertSame($this->importer, $this->importer->withStructure(false), 'The importer supports method chaining');
 
-        $this->assertSame($importer, $importer->withStructure(false), 'The importer supports method chaining');
-
-        $options = TestHelper::getValue($importer, 'options');
+        $options = TestHelper::getValue($this->importer, 'options');
 
         $this->assertFalse($options->withStructure);
     }

@@ -83,7 +83,7 @@ function search($title)
 
 In the first case, the title variable is simply escaped and quoted. Any quote characters in the title string will be prepended with a backslash and the whole string will be wrapped in quotes.
 
-In the second case, the example shows how to treat a search string that will be used in a `LIKE` clause. In this case, the title variable is manually escaped using `escape` with a second argument of `true`. This will force other special characters to be escaped (otherwise you could set youself up for serious performance problems if the user includes too many wildcards). Then, the result is passed to the `quote` method but escaping is turned off (because it has already been done manually).
+In the second case, the example shows how to treat a search string that will be used in a `LIKE` clause. In this case, the title variable is manually escaped using `escape` with a second argument of `true`. This will force other special characters to be escaped (otherwise you could set yourself up for serious performance problems if the user includes too many wildcards). Then, the result is passed to the `quote` method but escaping is turned off (because it has already been done manually).
 
 In the third case, the title variable is an array so the whole array can be passed to the `quote` method (this saves using a closure and a )
 
@@ -102,7 +102,7 @@ The `Database\DatabaseIterator` class allows iteration over database results
 ```php
 $db = DatabaseDriver::getInstance($options);
 $iterator = $db->setQuery(
-	$db->getQuery(true)->select('*')->from('#__content')
+	$db->createQuery()->select('*')->from('#__content')
 )->getIterator();
 
 foreach ($iterator as $row)
@@ -118,7 +118,7 @@ $count = count($iterator);
 ```
 ## Logging
 
-`Database\DatabaseDriver` implements the `Psr\Log\LoggerAwareInterface` so is ready for intergrating with a logging package that supports that standard.
+`Database\DatabaseDriver` implements the `Psr\Log\LoggerAwareInterface` so is ready for integrating with a logging package that supports that standard.
 
 Drivers log all errors with a log level of `LogLevel::ERROR`.
 
@@ -173,12 +173,12 @@ This is the log file:
 
 ## Installation via Composer
 
-Add `"joomla/database": "~3.0"` to the require block in your composer.json and then run `composer install`.
+Add `"joomla/database": "~4.0"` to the require block in your composer.json and then run `composer install`.
 
 ```json
 {
 	"require": {
-		"joomla/database": "~3.0"
+		"joomla/database": "~4.0"
 	}
 }
 ```
@@ -186,11 +186,11 @@ Add `"joomla/database": "~3.0"` to the require block in your composer.json and t
 Alternatively, you can simply run the following from the command line:
 
 ```sh
-composer require joomla/database "~3.0"
+composer require joomla/database "~4.0"
 ```
 
 If you want to include the test sources, use
 
 ```sh
-composer require --prefer-source joomla/database "~3.0"
+composer require --prefer-source joomla/database "~4.0"
 ```

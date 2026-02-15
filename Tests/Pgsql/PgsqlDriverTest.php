@@ -12,6 +12,7 @@ use Joomla\Database\Pgsql\PgsqlExporter;
 use Joomla\Database\Pgsql\PgsqlImporter;
 use Joomla\Database\Pgsql\PgsqlQuery;
 use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for Joomla\Database\Pgsql\PgsqlDriver
@@ -54,75 +55,77 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
     /**
      * Data provider for fetching table column test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataGetTableColumns(): \Generator
+    public static function dataGetTableColumns(): array
     {
-        yield 'only column types' => [
-            '#__dbtest',
-            true,
-            [
-                'id'          => 'integer',
-                'title'       => 'character varying',
-                'start_date'  => 'timestamp without time zone',
-                'description' => 'text',
-                'data'        => 'bytea',
+        return [
+            'only column types' => [
+                '#__dbtest',
+                true,
+                [
+                    'id'          => 'integer',
+                    'title'       => 'character varying',
+                    'start_date'  => 'timestamp without time zone',
+                    'description' => 'text',
+                    'data'        => 'bytea',
+                ],
             ],
-        ];
 
-        yield 'full column information' => [
-            '#__dbtest',
-            false,
-            [
-                'id' => (object) [
-                    'column_name' => 'id',
-                    'Field'       => 'id',
-                    'type'        => 'integer',
-                    'Type'        => 'integer',
-                    'null'        => 'NO',
-                    'Null'        => 'NO',
-                    'Default'     => 'nextval(\'dbtest_id_seq\'::regclass)',
-                    'comments'    => '',
-                ],
-                'title' => (object) [
-                    'column_name' => 'title',
-                    'Field'       => 'title',
-                    'type'        => 'character varying(50)',
-                    'Type'        => 'character varying(50)',
-                    'null'        => 'NO',
-                    'Null'        => 'NO',
-                    'Default'     => null,
-                    'comments'    => '',
-                ],
-                'start_date' => (object) [
-                    'column_name' => 'start_date',
-                    'Field'       => 'start_date',
-                    'type'        => 'timestamp without time zone',
-                    'Type'        => 'timestamp without time zone',
-                    'null'        => 'NO',
-                    'Null'        => 'NO',
-                    'Default'     => null,
-                    'comments'    => '',
-                ],
-                'description' => (object) [
-                    'column_name' => 'description',
-                    'Field'       => 'description',
-                    'type'        => 'text',
-                    'Type'        => 'text',
-                    'null'        => 'NO',
-                    'Null'        => 'NO',
-                    'Default'     => null,
-                    'comments'    => '',
-                ],
-                'data' => (object) [
-                    'column_name' => 'data',
-                    'Field'       => 'data',
-                    'type'        => 'bytea',
-                    'Type'        => 'bytea',
-                    'null'        => 'YES',
-                    'Null'        => 'YES',
-                    'Default'     => null,
-                    'comments'    => '',
+            'full column information' => [
+                '#__dbtest',
+                false,
+                [
+                    'id' => (object) [
+                        'column_name' => 'id',
+                        'Field'       => 'id',
+                        'type'        => 'integer',
+                        'Type'        => 'integer',
+                        'null'        => 'NO',
+                        'Null'        => 'NO',
+                        'Default'     => 'nextval(\'dbtest_id_seq\'::regclass)',
+                        'comments'    => '',
+                    ],
+                    'title' => (object) [
+                        'column_name' => 'title',
+                        'Field'       => 'title',
+                        'type'        => 'character varying(50)',
+                        'Type'        => 'character varying(50)',
+                        'null'        => 'NO',
+                        'Null'        => 'NO',
+                        'Default'     => null,
+                        'comments'    => '',
+                    ],
+                    'start_date' => (object) [
+                        'column_name' => 'start_date',
+                        'Field'       => 'start_date',
+                        'type'        => 'timestamp without time zone',
+                        'Type'        => 'timestamp without time zone',
+                        'null'        => 'NO',
+                        'Null'        => 'NO',
+                        'Default'     => null,
+                        'comments'    => '',
+                    ],
+                    'description' => (object) [
+                        'column_name' => 'description',
+                        'Field'       => 'description',
+                        'type'        => 'text',
+                        'Type'        => 'text',
+                        'null'        => 'NO',
+                        'Null'        => 'NO',
+                        'Default'     => null,
+                        'comments'    => '',
+                    ],
+                    'data' => (object) [
+                        'column_name' => 'data',
+                        'Field'       => 'data',
+                        'type'        => 'bytea',
+                        'Type'        => 'bytea',
+                        'null'        => 'YES',
+                        'Null'        => 'YES',
+                        'Default'     => null,
+                        'comments'    => '',
+                    ],
                 ],
             ],
         ];
@@ -131,50 +134,58 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
     /**
      * Data provider for binary quoting test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataQuoteBinary(): \Generator
+    public static function dataQuoteBinary(): array
     {
-        yield ['DATA', "decode('44415441', 'hex')"];
-        yield ["\x00\x01\x02\xff", "decode('000102ff', 'hex')"];
-        yield ["\x01\x01\x02\xff", "decode('010102ff', 'hex')"];
+        return [
+            ['DATA', "decode('44415441', 'hex')"],
+            ["\x00\x01\x02\xff", "decode('000102ff', 'hex')"],
+            ["\x01\x01\x02\xff", "decode('010102ff', 'hex')"],
+        ];
     }
 
     /**
      * Data provider for table dropping test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataDropTable()
+    public static function dataDropTable(): array
     {
-        yield 'database does not exist before query' => ['#__foo', false];
+        return [
+            'database does not exist before query' => ['#__foo', false],
+        ];
     }
 
     /**
      * Data provider for escaping test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataEscape(): \Generator
+    public static function dataEscape(): array
     {
-        yield ["'%_abc123", false, '\'\'%_abc123'];
-        yield ["'%_abc123", true, '\'\'%_abc123'];
-        yield ["\'%_abc123", false, '\\\\\'\'%_abc123'];
-        yield ["\'%_abc123", true, '\\\\\'\'%_abc123'];
-        yield [3, false, 3];
-        yield [3.14, false, '3.14'];
+        return [
+            ["'%_abc123", false, '\'\'%_abc123'],
+            ["'%_abc123", true, '\'\'%_abc123'],
+            ["\'%_abc123", false, '\\\\\'\'%_abc123'],
+            ["\'%_abc123", true, '\\\\\'\'%_abc123'],
+            [3, false, 3],
+            [3.14, false, '3.14'],
+        ];
     }
 
     /**
      * Data provider for name quoting test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataQuoteName(): \Generator
+    public static function dataQuoteName(): array
     {
-        yield ['protected`title', null, '"protected`title"'];
-        yield ['protected"title', null, '"protected""title"'];
-        yield ['protected]title', null, '"protected]title"'];
+        return [
+            ['protected`title', null, '"protected`title"'],
+            ['protected"title', null, '"protected""title"'],
+            ['protected]title', null, '"protected]title"'],
+        ];
     }
 
     /*
@@ -452,13 +463,15 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
     /**
      * Data provider for transaction rollback test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataTransactionRollback()
+    public static function dataTransactionRollback(): array
     {
-        yield 'rollback without savepoint' => [null, 0];
+        return [
+            'rollback without savepoint' => [null, 0],
 
-        yield 'rollback with savepoint' => ['transactionSavepoint', 1];
+            'rollback with savepoint' => ['transactionSavepoint', 1],
+        ];
     }
 
     /**
@@ -466,9 +479,8 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
      *
      * @param   string|null  $toSavepoint  Savepoint name to rollback transaction to
      * @param   integer      $tupleCount   Number of tuples found after insertion and rollback
-     *
-     * @dataProvider  dataTransactionRollback
      */
+    #[DataProvider('dataTransactionRollback')]
     public function testTransactionRollback(?string $toSavepoint, int $tupleCount)
     {
         $this->loadExampleData();

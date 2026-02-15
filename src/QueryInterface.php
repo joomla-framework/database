@@ -11,15 +11,13 @@ namespace Joomla\Database;
 
 use Joomla\Database\Exception\QueryTypeAlreadyDefinedException;
 use Joomla\Database\Exception\UnknownTypeException;
-use Joomla\Database\Query\LimitableInterface;
-use Joomla\Database\Query\PreparableInterface;
 
 /**
  * Joomla Framework Query Building Interface.
  *
  * @since  2.0.0
  */
-interface QueryInterface extends PreparableInterface, LimitableInterface
+interface QueryInterface
 {
     /**
      * Convert the query object to a string.
@@ -373,6 +371,66 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
     public function join($type, $table, $condition = null);
 
     /**
+     * Add an INNER JOIN clause to the query.
+     *
+     * Usage:
+     * $query->innerJoin('b', 'b.id = a.id')->innerJoin('c', 'c.id = b.id');
+     *
+     * @param   string  $table      The name of table.
+     * @param   string  $condition  The join condition.
+     *
+     * @return  $this
+     *
+     * @since   4.0
+     */
+    public function innerJoin($table, $condition = null);
+
+    /**
+     * Add an OUTER JOIN clause to the query.
+     *
+     * Usage:
+     * $query->outerJoin('b', 'b.id = a.id')->leftJoin('c', 'c.id = b.id');
+     *
+     * @param   string  $table      The name of table.
+     * @param   string  $condition  The join condition.
+     *
+     * @return  $this
+     *
+     * @since   4.0
+     */
+    public function outerJoin($table, $condition = null);
+
+    /**
+     * Add a LEFT JOIN clause to the query.
+     *
+     * Usage:
+     * $query->leftJoin('b', 'b.id = a.id')->leftJoin('c', 'c.id = b.id');
+     *
+     * @param   string  $table      The name of table.
+     * @param   string  $condition  The join condition.
+     *
+     * @return  $this
+     *
+     * @since   4.0
+     */
+    public function leftJoin($table, $condition = null);
+
+    /**
+     * Add a RIGHT JOIN clause to the query.
+     *
+     * Usage:
+     * $query->rightJoin('b', 'b.id = a.id')->rightJoin('c', 'c.id = b.id');
+     *
+     * @param   string  $table      The name of table.
+     * @param   string  $condition  The join condition.
+     *
+     * @return  $this
+     *
+     * @since   4.0
+     */
+    public function rightJoin($table, $condition = null);
+
+    /**
      * Get the length of a string in bytes.
      *
      * Note, use 'charLength' to find the number of characters in a string.
@@ -536,6 +594,21 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
      * @since   2.0.0
      */
     public function set($conditions, $glue = ',');
+
+    /**
+     * Allows a direct query to be provided to the database driver's setQuery() method, but still allow queries
+     * to have bounded variables.
+     *
+     * Usage:
+     * $query->setQuery('select * from #__users');
+     *
+     * @param   DatabaseQuery|string  $sql  A SQL query string or DatabaseQuery object
+     *
+     * @return  $this
+     *
+     * @since   4.0
+     */
+    public function setQuery($sql);
 
     /**
      * Add a table name to the UPDATE clause of the query.
@@ -722,4 +795,75 @@ interface QueryInterface extends PreparableInterface, LimitableInterface
      * @since   2.0.0
      */
     public function toQuerySet();
+
+    /**
+     * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution.
+     *
+     * @param   array|string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
+     *                                                the form ':key', but can also be an integer.
+     * @param   mixed                 $value          The value that will be bound. It can be an array, in this case it has to be
+     *                                                same length of $key; The value is passed by reference to support output
+     *                                                parameters such as those possible with stored procedures.
+     * @param   array|string          $dataType       Constant corresponding to a SQL datatype. It can be an array, in this case it
+     *                                                has to be same length of $key
+     * @param   integer               $length         The length of the variable. Usually required for OUTPUT parameters.
+     * @param   array                 $driverOptions  Optional driver options to be used.
+     *
+     * @return  $this
+     *
+     * @since   4.0
+     */
+    public function bind($key, &$value, $dataType = ParameterType::STRING, $length = 0, $driverOptions = []);
+
+    /**
+     * Method to unbind a bound variable.
+     *
+     * @param   array|string|integer  $key  The key or array of keys to unbind.
+     *
+     * @return  $this
+     *
+     * @since   4.0.0
+     */
+    public function unbind($key);
+
+    /**
+     * Retrieves the bound parameters array when key is null and returns it by reference. If a key is provided then that item is returned.
+     *
+     * @param   mixed  $key  The bounded variable key to retrieve.
+     *
+     * @return  mixed
+     *
+     * @since   4.0
+     */
+    public function &getBounded($key = null);
+
+    /**
+     * Method to modify a query already in string format with the needed additions to make the query limited to a particular number of
+     * results, or start at a particular offset.
+     *
+     * @param   string   $query   The query in string format
+     * @param   integer  $limit   The limit for the result set
+     * @param   integer  $offset  The offset for the result set
+     *
+     * @return  string
+     *
+     * @since   4.0
+     */
+    public function processLimit($query, $limit, $offset = 0);
+
+    /**
+     * Sets the offset and limit for the result set, if the database driver supports it.
+     *
+     * Usage:
+     * $query->setLimit(100, 0); (retrieve 100 rows, starting at first record)
+     * $query->setLimit(50, 50); (retrieve 50 rows, starting at 50th record)
+     *
+     * @param   integer  $limit   The limit for the result set
+     * @param   integer  $offset  The offset for the result set
+     *
+     * @return  $this
+     *
+     * @since   4.0
+     */
+    public function setLimit($limit = 0, $offset = 0);
 }

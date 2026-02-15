@@ -559,26 +559,6 @@ abstract class DatabaseQuery implements QueryInterface
     }
 
     /**
-     * Casts a value to a char.
-     *
-     * Ensure that the value is properly quoted before passing to the method.
-     *
-     * Usage:
-     * $query->select($query->castAsChar('a'));
-     *
-     * @param   string  $value  The value to cast as a char.
-     *
-     * @return  string  SQL statement to cast the value as a char type.
-     *
-     * @since       1.0
-     * @deprecated  3.0  Use $query->castAs('CHAR', $value)
-     */
-    public function castAsChar($value)
-    {
-        return $this->castAs('CHAR', $value);
-    }
-
-    /**
      * Gets the number of characters in a string.
      *
      * Note, use 'length' to find the number of bytes in a string.

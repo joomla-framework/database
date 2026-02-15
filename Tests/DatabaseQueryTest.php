@@ -11,6 +11,8 @@ use Joomla\Database\DatabaseQuery;
 use Joomla\Database\Exception\QueryTypeAlreadyDefinedException;
 use Joomla\Database\Exception\UnknownTypeException;
 use Joomla\Database\ParameterType;
+use Joomla\Database\Tests\Stubs\TestDatabaseQuery;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -45,10 +47,7 @@ class DatabaseQueryTest extends TestCase
         parent::setUp();
 
         $this->db    = $this->createMock(DatabaseInterface::class);
-        $this->query = $this->getMockForAbstractClass(
-            DatabaseQuery::class,
-            [$this->db]
-        );
+        $this->query = new TestDatabaseQuery($this->db);
     }
 
     /**
@@ -80,14 +79,6 @@ class DatabaseQueryTest extends TestCase
     /**
      * @testdox  A string is cast as a character string for the driver
      */
-    public function testCastAsChar()
-    {
-        $this->assertSame('foo', $this->query->castAsChar('foo'));
-    }
-
-    /**
-     * @testdox  A string is cast as a character string for the driver
-     */
     public function testCastAs()
     {
         $this->assertSame('123', $this->query->castAs('CHAR', '123'));
@@ -113,12 +104,14 @@ class DatabaseQueryTest extends TestCase
     /**
      * Data provider for character length test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataCharLength(): \Generator
+    public static function dataCharLength(): array
     {
-        yield 'field without comparison' => ['a.title', null, null, 'CHAR_LENGTH(a.title)'];
-        yield 'field with comparison' => ['a.title', '!=', '0', 'CHAR_LENGTH(a.title) != 0'];
+        return [
+            'field without comparison' => ['a.title', null, null, 'CHAR_LENGTH(a.title)'],
+            'field with comparison' => ['a.title', '!=', '0', 'CHAR_LENGTH(a.title) != 0'],
+        ];
     }
 
     /**
@@ -128,9 +121,8 @@ class DatabaseQueryTest extends TestCase
      * @param   string|null  $operator   Comparison operator between charLength integer value and $condition
      * @param   string|null  $condition  Integer value to compare charLength with.
      * @param   string       $expected   The expected query string.
-     *
-     * @dataProvider  dataCharLength
      */
+    #[DataProvider('dataCharLength')]
     public function testCharLength(string $field, ?string $operator, ?string $condition, string $expected)
     {
         $this->assertSame(
@@ -156,12 +148,14 @@ class DatabaseQueryTest extends TestCase
     /**
      * Data provider for concatenate test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataConcatenate(): \Generator
+    public static function dataConcatenate(): array
     {
-        yield 'values without separator' => [['foo', 'bar'], null, 'CONCATENATE(foo || bar)'];
-        yield 'values with separator' => [['foo', 'bar'], ' and ', "CONCATENATE(foo || ' and ' || bar)"];
+        return [
+            'values without separator' => [['foo', 'bar'], null, 'CONCATENATE(foo || bar)'],
+            'values with separator' => [['foo', 'bar'], ' and ', "CONCATENATE(foo || ' and ' || bar)"],
+        ];
     }
 
     /**
@@ -170,9 +164,8 @@ class DatabaseQueryTest extends TestCase
      * @param   string[]     $values     An array of values to concatenate.
      * @param   string|null  $separator  As separator to place between each value.
      * @param   string       $expected   The expected query string.
-     *
-     * @dataProvider  dataConcatenate
      */
+    #[DataProvider('dataConcatenate')]
     public function testConcatenate(array $values, ?string $separator, string $expected)
     {
         $this->db->expects($this->any())
@@ -201,12 +194,14 @@ class DatabaseQueryTest extends TestCase
     /**
      * Data provider for dateAdd test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataDateAdd(): \Generator
+    public static function dataDateAdd(): array
     {
-        yield 'date with positive interval' => ["'2019-10-13'", '1', 'DAY', "DATE_ADD('2019-10-13', INTERVAL 1 DAY)"];
-        yield 'date with negative interval' => ["'2019-10-13'", '-1', 'DAY', "DATE_ADD('2019-10-13', INTERVAL -1 DAY)"];
+        return [
+            'date with positive interval' => ["'2019-10-13'", '1', 'DAY', "DATE_ADD('2019-10-13', INTERVAL 1 DAY)"],
+            'date with negative interval' => ["'2019-10-13'", '-1', 'DAY', "DATE_ADD('2019-10-13', INTERVAL -1 DAY)"],
+        ];
     }
 
     /**
@@ -216,9 +211,8 @@ class DatabaseQueryTest extends TestCase
      * @param   string  $interval  The string representation of the appropriate number of units
      * @param   string  $datePart  The part of the date to perform the addition on
      * @param   string  $expected  The expected query string.
-     *
-     * @dataProvider  dataDateAdd
      */
+    #[DataProvider('dataDateAdd')]
     public function testDateAdd(string $date, string $interval, string $datePart, string $expected)
     {
         $this->assertSame(
@@ -525,12 +519,14 @@ class DatabaseQueryTest extends TestCase
     /**
      * Data provider for null date test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataNullDate(): \Generator
+    public static function dataNullDate(): array
     {
-        yield 'null date with quote' => [true, "'0000-00-00 00:00:00'"];
-        yield 'null date without quote' => [false, '0000-00-00 00:00:00'];
+        return [
+            'null date with quote' => [true, "'0000-00-00 00:00:00'"],
+            'null date without quote' => [false, '0000-00-00 00:00:00'],
+        ];
     }
 
     /**
@@ -538,9 +534,8 @@ class DatabaseQueryTest extends TestCase
      *
      * @param   boolean  $quoted    Optionally wraps the null date in database quotes (true by default).
      * @param   string   $expected  The expected query string.
-     *
-     * @dataProvider  dataNullDate
      */
+    #[DataProvider('dataNullDate')]
     public function testNullDate(bool $quoted, string $expected)
     {
         $this->db->expects($this->once())
@@ -566,10 +561,7 @@ class DatabaseQueryTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
 
-        $query = $this->getMockForAbstractClass(
-            DatabaseQuery::class,
-            []
-        );
+        $query = new TestDatabaseQuery();
 
         $query->nullDate();
     }
@@ -627,10 +619,7 @@ class DatabaseQueryTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
 
-        $query = $this->getMockForAbstractClass(
-            DatabaseQuery::class,
-            []
-        );
+        $query = new TestDatabaseQuery();
 
         $query->isNullDatetime('a.created');
     }
@@ -673,10 +662,7 @@ class DatabaseQueryTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
 
-        $query = $this->getMockForAbstractClass(
-            DatabaseQuery::class,
-            []
-        );
+        $query = new TestDatabaseQuery();
 
         $query->quote('foo');
     }
@@ -705,10 +691,7 @@ class DatabaseQueryTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
 
-        $query = $this->getMockForAbstractClass(
-            DatabaseQuery::class,
-            []
-        );
+        $query = new TestDatabaseQuery();
 
         $query->quoteName('foo');
     }
@@ -930,28 +913,30 @@ class DatabaseQueryTest extends TestCase
     /**
      * Data provider for bind test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataBind(): \Generator
+    public static function dataBind(): array
     {
-        yield 'string field' => ['foo', 'bar', ParameterType::STRING, [
-            'foo' => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
-        ]];
-        yield 'numeric field' => ['foo', 42, ParameterType::INTEGER, [
-            'foo' => (object) ['value' => 42, 'dataType' => 'int', 'length' => 0, 'driverOptions' => []],
-        ]];
-        yield 'numeric key' => [1, 'bar', ParameterType::STRING, [
-            1 => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
-        ]];
-        yield 'array of data' => [[1, 'foo'], [42, 'bar'], [ParameterType::INTEGER, ParameterType::STRING], [
-            1     => (object) ['value' => 42, 'dataType' => 'int', 'length' => 0, 'driverOptions' => []],
-            'foo' => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
-        ]];
-        yield 'key array, single data value' => [[1, 2, 3], 'bar', ParameterType::STRING, [
-            1 => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
-            2 => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
-            3 => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
-        ]];
+        return [
+            'string field' => ['foo', 'bar', ParameterType::STRING, [
+                'foo' => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+            ]],
+            'numeric field' => ['foo', 42, ParameterType::INTEGER, [
+                'foo' => (object) ['value' => 42, 'dataType' => 'int', 'length' => 0, 'driverOptions' => []],
+            ]],
+            'numeric key' => [1, 'bar', ParameterType::STRING, [
+                1 => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+            ]],
+            'array of data' => [[1, 'foo'], [42, 'bar'], [ParameterType::INTEGER, ParameterType::STRING], [
+                1     => (object) ['value' => 42, 'dataType' => 'int', 'length' => 0, 'driverOptions' => []],
+                'foo' => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+            ]],
+            'key array, single data value' => [[1, 2, 3], 'bar', ParameterType::STRING, [
+                1 => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+                2 => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+                3 => (object) ['value' => 'bar', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+            ]],
+        ];
     }
 
     /**
@@ -965,9 +950,8 @@ class DatabaseQueryTest extends TestCase
      * @param   array|string          $dataType       Constant corresponding to a SQL datatype. It can be an array, in this case it
      *                                                has to be same length of $key
      * @param   array                 $expected       The expected structure of `$bounded`
-     *
-     * @dataProvider  dataBind
      */
+    #[DataProvider('dataBind')]
     public function testBind($key, $value, $dataType, $expected)
     {
         $this->assertSame($this->query, $this->query->bind($key, $value, $dataType), 'The query builder supports method chaining');

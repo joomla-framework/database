@@ -10,6 +10,7 @@ use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Mysqli\MysqliDriver;
 use Joomla\Database\Mysqli\MysqliExporter;
 use Joomla\Database\Mysqli\MysqliQuery;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -43,7 +44,7 @@ class MysqliExporterTest extends TestCase
             ->willReturn('jos_');
 
         $this->db->expects($this->any())
-            ->method('getQuery')
+            ->method('createQuery')
             ->willReturnCallback(function () {
                 return new MysqliQuery($this->db);
             });
@@ -120,11 +121,12 @@ class MysqliExporterTest extends TestCase
     /**
      * Data provider for string casting test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataCastingToString(): \Generator
+    public static function dataCastingToString(): array
     {
-        yield 'without structure or data' => [
+        return [
+        'without structure or data' => [
             false,
             false,
             <<<XML
@@ -134,9 +136,9 @@ class MysqliExporterTest extends TestCase
 </mysqldump>
 XML
             ,
-        ];
+        ],
 
-        yield 'with only structure' => [
+        'with only structure' => [
             true,
             false,
             <<<XML
@@ -151,9 +153,9 @@ XML
 </mysqldump>
 XML
             ,
-        ];
+        ],
 
-        yield 'with only data' => [
+        'with only data' => [
             false,
             true,
             <<<XML
@@ -173,9 +175,9 @@ XML
 </mysqldump>
 XML
             ,
-        ];
+        ],
 
-        yield 'with structure and data' => [
+        'with structure and data' => [
             true,
             true,
             <<<XML
@@ -200,6 +202,7 @@ XML
 </mysqldump>
 XML
             ,
+        ],
         ];
     }
 
@@ -209,9 +212,8 @@ XML
      * @param   boolean  $withStructure  True to export the structure, false to not.
      * @param   boolean  $withData       True to export the data, false to not.
      * @param   string   $expectedXml    Expected XML string.
-     *
-     * @dataProvider  dataCastingToString
      */
+    #[DataProvider('dataCastingToString')]
     public function testCastingToString(bool $withStructure, bool $withData, string $expectedXml)
     {
         $exporter = new MysqliExporter();
@@ -244,45 +246,46 @@ XML
     /**
      * Data provider for check test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataCheck(): \Generator
+    public static function dataCheck(): array
     {
-        yield 'passes checks' => [
-            $this->createMock(MysqliDriver::class),
-            '#__dbtest',
-            null,
-        ];
+        return [
+            'passes checks' => [
+                MysqliDriver::class,
+                '#__dbtest',
+                null,
+            ],
 
-        yield 'fails checks with incorrect database driver subclass' => [
-            $this->createMock(DatabaseInterface::class),
-            '#__dbtest',
-            'Database connection wrong type.',
-        ];
+            'fails checks with incorrect database driver subclass' => [
+                DatabaseInterface::class,
+                '#__dbtest',
+                'Database connection wrong type.',
+            ],
 
-        yield 'fails checks with no database driver' => [
-            null,
-            '#__dbtest',
-            'Database connection wrong type.',
-        ];
+            'fails checks with no database driver' => [
+                null,
+                '#__dbtest',
+                'Database connection wrong type.',
+            ],
 
-        yield 'fails checks with no tables' => [
-            $this->createMock(MysqliDriver::class),
-            null,
-            'ERROR: No Tables Specified',
+            'fails checks with no tables' => [
+                MysqliDriver::class,
+                null,
+                'ERROR: No Tables Specified',
+            ],
         ];
     }
 
     /**
      * @testdox  The exporter checks for errors
      *
-     * @param   DatabaseInterface|null  $db                Database driver to set in the exporter.
-     * @param   string[]|string|null    $from              Database tables to export from.
-     * @param   string|null             $exceptionMessage  If an Exception should be thrown, the expected message
-     *
-     * @dataProvider  dataCheck
+     * @param   string|null           $db                Database driver to set in the exporter.
+     * @param   string[]|string|null  $from              Database tables to export from.
+     * @param   string|null           $exceptionMessage  If an Exception should be thrown, the expected message
      */
-    public function testCheck(?DatabaseInterface $db, $from, ?string $exceptionMessage)
+    #[DataProvider('dataCheck')]
+    public function testCheck(?string $db, $from, ?string $exceptionMessage)
     {
         if ($exceptionMessage) {
             $this->expectException(\RuntimeException::class);
@@ -292,7 +295,7 @@ XML
         $exporter = new MysqliExporter();
 
         if ($db) {
-            $exporter->setDbo($db);
+            $exporter->setDbo($this->createMock($db));
         }
 
         if ($from) {

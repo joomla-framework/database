@@ -8,7 +8,7 @@ namespace Joomla\Database\Tests\Monitor;
 
 use Joomla\Database\Monitor\LoggingMonitor;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\Test\TestLogger;
+use ColinODell\PsrTestLogger\TestLogger;
 
 /**
  * Test class for Joomla\Database\Monitor\LoggingMonitor

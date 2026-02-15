@@ -18,6 +18,7 @@ use Joomla\Database\Mysqli\MysqliDriver;
 use Joomla\Database\QueryInterface;
 use Joomla\Database\StatementInterface;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,18 +50,20 @@ class DatabaseFactoryTest extends TestCase
     /**
      * Data provider for driver test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataGetDriver(): \Generator
+    public static function dataGetDriver(): array
     {
-        yield 'supported driver' => [
-            'mysqli',
-            false,
-        ];
+        return [
+            'supported driver' => [
+                'mysqli',
+                false,
+            ],
 
-        yield 'unsupported exporter' => [
-            'mariadb',
-            true,
+            'unsupported exporter' => [
+                'mariadb',
+                true,
+            ],
         ];
     }
 
@@ -69,9 +72,8 @@ class DatabaseFactoryTest extends TestCase
      *
      * @param   string   $adapter               The type of adapter to create
      * @param   boolean  $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
-     *
-     * @dataProvider  dataGetDriver
      */
+    #[DataProvider('dataGetDriver')]
     public function testGetDriver(string $adapter, bool $shouldRaiseException)
     {
         if ($shouldRaiseException) {
@@ -87,26 +89,28 @@ class DatabaseFactoryTest extends TestCase
     /**
      * Data provider for exporter test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataGetExporter(): \Generator
+    public static function dataGetExporter(): array
     {
-        yield 'exporter without database driver' => [
-            'mysqli',
-            false,
-            null,
-        ];
+        return [
+            'exporter without database driver' => [
+                'mysqli',
+                false,
+                false,
+            ],
 
-        yield 'exporter with database driver' => [
-            'mysqli',
-            false,
-            $this->createMock(MysqliDriver::class),
-        ];
+            'exporter with database driver' => [
+                'mysqli',
+                false,
+                true,
+            ],
 
-        yield 'unsupported exporter' => [
-            'mariadb',
-            true,
-            null,
+            'unsupported exporter' => [
+                'mariadb',
+                true,
+                false,
+            ],
         ];
     }
 
@@ -116,13 +120,18 @@ class DatabaseFactoryTest extends TestCase
      * @param   string               $adapter               The type of adapter to create
      * @param   boolean              $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
      * @param   DatabaseDriver|null  $databaseDriver        The optional database driver to be injected into the exporter
-     *
-     * @dataProvider  dataGetExporter
      */
-    public function testGetExporter(string $adapter, bool $shouldRaiseException, ?DatabaseDriver $databaseDriver)
+    #[DataProvider('dataGetExporter')]
+    public function testGetExporter(string $adapter, bool $shouldRaiseException, bool $createDb)
     {
         if ($shouldRaiseException) {
             $this->expectException(UnsupportedAdapterException::class);
+        }
+
+        $databaseDriver = null;
+
+        if ($createDb) {
+            $databaseDriver = $this->createMock(MysqliDriver::class);
         }
 
         $exporter = $this->factory->getExporter($adapter, $databaseDriver);
@@ -143,42 +152,49 @@ class DatabaseFactoryTest extends TestCase
     /**
      * Data provider for importer test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataGetImporter(): \Generator
+    public static function dataGetImporter(): array
     {
-        yield 'importer without database driver' => [
-            'mysqli',
-            false,
-            null,
-        ];
+        return [
+            'importer without database driver' => [
+                'mysqli',
+                false,
+                false,
+            ],
 
-        yield 'importer with database driver' => [
-            'mysqli',
-            false,
-            $this->createMock(MysqliDriver::class),
-        ];
+            'importer with database driver' => [
+                'mysqli',
+                false,
+                true,
+            ],
 
-        yield 'unsupported importer' => [
-            'mariadb',
-            true,
-            null,
+            'unsupported importer' => [
+                'mariadb',
+                true,
+                false,
+            ],
         ];
     }
 
     /**
      * @testdox  The factory builds a database importer correctly
      *
-     * @param   string               $adapter               The type of adapter to create
-     * @param   boolean              $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
-     * @param   DatabaseDriver|null  $databaseDriver        The optional database driver to be injected into the importer
-     *
-     * @dataProvider  dataGetImporter
+     * @param   string   $adapter               The type of adapter to create
+     * @param   boolean  $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
+     * @param   boolean  $createDb              The optional database driver to be injected into the importer
      */
-    public function testGetImporter(string $adapter, bool $shouldRaiseException, ?DatabaseDriver $databaseDriver)
+    #[DataProvider('dataGetImporter')]
+    public function testGetImporter(string $adapter, bool $shouldRaiseException, bool $createDb)
     {
         if ($shouldRaiseException) {
             $this->expectException(UnsupportedAdapterException::class);
+        }
+
+        $databaseDriver = null;
+
+        if ($createDb) {
+            $databaseDriver = $this->createMock(MysqliDriver::class);
         }
 
         $importer = $this->factory->getImporter($adapter, $databaseDriver);
@@ -199,26 +215,33 @@ class DatabaseFactoryTest extends TestCase
     /**
      * Data provider for iterator test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataGetIterator(): \Generator
+    public static function dataGetIterator(): array
     {
-        yield 'driver without custom iterator' => [
-            'mysqli',
-            $this->createMock(StatementInterface::class),
+        return [
+            'driver without custom iterator' => [
+                'mysqli',
+                true,
+            ],
         ];
     }
 
     /**
      * @testdox  The factory builds a database iterator correctly
      *
-     * @param   string              $adapter    The type of adapter to create
-     * @param   StatementInterface  $statement  Statement holding the result set to be iterated.
-     *
-     * @dataProvider  dataGetIterator
+     * @param   string  $adapter    The type of adapter to create
+     * @param   bool    $createStatement  Statement holding the result set to be iterated.
      */
-    public function testGetIterator(string $adapter, StatementInterface $statement)
+    #[DataProvider('dataGetIterator')]
+    public function testGetIterator(string $adapter, bool $createStatement)
     {
+        $statement = null;
+
+        if ($createStatement) {
+            $statement = $this->createMock(StatementInterface::class);
+        }
+
         $this->assertInstanceOf(
             DatabaseIterator::class,
             $this->factory->getIterator($adapter, $statement)
@@ -228,36 +251,43 @@ class DatabaseFactoryTest extends TestCase
     /**
      * Data provider for query test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataGetQuery(): \Generator
+    public static function dataGetQuery(): array
     {
-        yield 'supported query' => [
-            'mysqli',
-            false,
-            $this->createMock(MysqliDriver::class),
-        ];
+        return [
+            'supported query' => [
+                'mysqli',
+                false,
+                true,
+            ],
 
-        yield 'unsupported query' => [
-            'mariadb',
-            true,
-            null,
+            'unsupported query' => [
+                'mariadb',
+                true,
+                false,
+            ],
         ];
     }
 
     /**
      * @testdox  The factory builds a database query object correctly
      *
-     * @param   string               $adapter               The type of adapter to create
-     * @param   boolean              $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
-     * @param   DatabaseDriver|null  $databaseDriver        The optional database driver to be injected into the importer
-     *
-     * @dataProvider  dataGetQuery
+     * @param   string   $adapter               The type of adapter to create
+     * @param   boolean  $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
+     * @param   boolean  $createDb              The optional database driver to be injected into the importer
      */
-    public function testGetQuery(string $adapter, bool $shouldRaiseException, ?DatabaseDriver $databaseDriver)
+    #[DataProvider('dataGetQuery')]
+    public function testGetQuery(string $adapter, bool $shouldRaiseException, bool $createDb)
     {
         if ($shouldRaiseException) {
             $this->expectException(UnsupportedAdapterException::class);
+        }
+
+        $databaseDriver = null;
+
+        if ($createDb) {
+            $databaseDriver = $this->createMock(MysqliDriver::class);
         }
 
         $this->assertInstanceOf(

@@ -1,593 +1,739 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Variable \\$filenames might not be defined\\.$#"
+			message: '#^Trait Joomla\\Database\\DatabaseAwareTrait is used zero times and is not analysed\.$#'
+			identifier: trait.unused
 			count: 1
-			path: src/Command/ExportCommand.php
+			path: src/DatabaseAwareTrait.php
 
 		-
-			message: "#^Variable \\$zipFilesArray might not be defined\\.$#"
-			count: 1
-			path: src/Command/ExportCommand.php
-
-		-
-			message: "#^Access to an undefined property Joomla\\\\Database\\\\QueryInterface\\:\\:\\$limit\\.$#"
+			message: '#^Access to an undefined property Joomla\\Database\\QueryInterface\:\:\$limit\.$#'
+			identifier: property.notFound
 			count: 1
 			path: src/DatabaseDriver.php
 
 		-
-			message: "#^Access to an undefined property Joomla\\\\Database\\\\QueryInterface\\:\\:\\$offset\\.$#"
+			message: '#^Access to an undefined property Joomla\\Database\\QueryInterface\:\:\$offset\.$#'
+			identifier: property.notFound
 			count: 1
 			path: src/DatabaseDriver.php
 
 		-
-			message: "#^Call to function is_object\\(\\) with array will always evaluate to false\\.$#"
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
 			count: 1
 			path: src/DatabaseDriver.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^Call to function is_object\(\) with array will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: src/DatabaseDriver.php
+
+		-
+			message: '#^Call to function is_string\(\) with non\-falsy\-string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/DatabaseDriver.php
+
+		-
+			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/DatabaseDriver.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
 			count: 11
 			path: src/DatabaseDriver.php
 
 		-
-			message: "#^Method Joomla\\\\Database\\\\DatabaseDriver\\:\\:getQuery\\(\\) should return Joomla\\\\Database\\\\DatabaseQuery but returns Joomla\\\\Database\\\\QueryInterface\\.$#"
+			message: '#^Instanceof between Joomla\\Database\\QueryInterface and Joomla\\Database\\QueryInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
 			count: 1
 			path: src/DatabaseDriver.php
 
 		-
-			message: "#^Parameter \\#1 \\$class of function class_exists expects string, Joomla\\\\Database\\\\DatabaseDriver given\\.$#"
+			message: '#^Method Joomla\\Database\\DatabaseDriver\:\:getQuery\(\) should return Joomla\\Database\\DatabaseQuery but returns Joomla\\Database\\QueryInterface\.$#'
+			identifier: return.type
 			count: 1
 			path: src/DatabaseDriver.php
 
 		-
-			message: "#^Parameter \\#2 \\$array of function implode expects array\\<string\\>, array\\<int\\<0, max\\>, array\\|string\\> given\\.$#"
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, list\<array\|string\> given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/DatabaseDriver.php
 
 		-
-			message: "#^Property Joomla\\\\Database\\\\DatabaseDriver\\:\\:\\$connection \\(resource\\) does not accept null\\.$#"
+			message: '#^Property Joomla\\Database\\DatabaseDriver\:\:\$connection \(resource\) does not accept null\.$#'
+			identifier: assign.propertyType
 			count: 2
 			path: src/DatabaseDriver.php
 
 		-
-			message: "#^Property Joomla\\\\Database\\\\DatabaseDriver\\:\\:\\$statement \\(Joomla\\\\Database\\\\StatementInterface\\) does not accept null\\.$#"
+			message: '#^Property Joomla\\Database\\DatabaseDriver\:\:\$statement \(Joomla\\Database\\StatementInterface\) does not accept null\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: src/DatabaseDriver.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between 'resource'\\|'resource \\(closed\\)' and 'object' will always evaluate to false\\.$#"
+			message: '#^Result of \|\| is always false\.$#'
+			identifier: booleanOr.alwaysFalse
 			count: 1
 			path: src/DatabaseDriver.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between stdClass and null will always evaluate to false\\.$#"
+			message: '#^Strict comparison using \=\=\= between ''resource''\|''resource \(closed\)'' and ''object'' will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
 			count: 1
 			path: src/DatabaseDriver.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
+			message: '#^Strict comparison using \=\=\= between stdClass and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
 			count: 1
 			path: src/DatabaseDriver.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			message: '#^Strict comparison using \=\=\= between string and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/DatabaseDriver.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
 			count: 2
 			path: src/DatabaseDriver.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
 			count: 5
 			path: src/DatabaseIterator.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
 			count: 2
 			path: src/DatabaseIterator.php
 
 		-
-			message: "#^Argument of an invalid type Joomla\\\\Database\\\\DatabaseQuery supplied for foreach, only iterables are supported\\.$#"
+			message: '#^Argument of an invalid type \$this\(Joomla\\Database\\DatabaseQuery\) supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
 			count: 1
 			path: src/DatabaseQuery.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
 			count: 9
 			path: src/DatabaseQuery.php
 
 		-
-			message: "#^Instanceof between string and \\$this\\(Joomla\\\\Database\\\\DatabaseQuery\\) will always evaluate to false\\.$#"
+			message: '#^Instanceof between Joomla\\Database\\DatabaseInterface and Joomla\\Database\\DatabaseInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 6
+			path: src/DatabaseQuery.php
+
+		-
+			message: '#^Instanceof between string and \$this\(Joomla\\Database\\DatabaseQuery\) will always evaluate to false\.$#'
+			identifier: instanceof.alwaysFalse
 			count: 1
 			path: src/DatabaseQuery.php
 
 		-
-			message: "#^Left side of \\|\\| is always true\\.$#"
+			message: '#^Left side of \|\| is always true\.$#'
+			identifier: booleanOr.leftAlwaysTrue
 			count: 1
 			path: src/DatabaseQuery.php
 
 		-
-			message: "#^Parameter \\#2 \\$array of function implode expects array\\|null, string given\\.$#"
+			message: '#^Parameter \#2 \$array of function implode expects array\|null, string given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/DatabaseQuery.php
 
 		-
-			message: "#^Parameter \\#2 \\$elements of class Joomla\\\\Database\\\\Query\\\\QueryElement constructor expects array\\<string\\>\\|string, null given\\.$#"
+			message: '#^Parameter \#2 \$elements of class Joomla\\Database\\Query\\QueryElement constructor expects array\<string\>\|string, null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/DatabaseQuery.php
 
 		-
-			message: "#^Property Joomla\\\\Database\\\\DatabaseQuery\\:\\:\\$querySet has unknown class Joomla\\\\Database\\\\Query\\\\DatabaseQuery as its type\\.$#"
+			message: '#^Property Joomla\\Database\\DatabaseQuery\:\:\$querySet has unknown class Joomla\\Database\\Query\\DatabaseQuery as its type\.$#'
+			identifier: class.notFound
 			count: 1
 			path: src/DatabaseQuery.php
 
 		-
-			message: "#^Return type \\(string\\) of method Joomla\\\\Database\\\\DatabaseQuery\\:\\:length\\(\\) should be compatible with return type \\(int\\) of method Joomla\\\\Database\\\\QueryInterface\\:\\:length\\(\\)$#"
+			message: '#^Return type \(string\) of method Joomla\\Database\\DatabaseQuery\:\:length\(\) should be compatible with return type \(int\) of method Joomla\\Database\\QueryInterface\:\:length\(\)$#'
+			identifier: method.childReturnType
 			count: 1
 			path: src/DatabaseQuery.php
 
 		-
-			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
 			count: 1
 			path: src/DatabaseQuery.php
 
 		-
-			message: "#^Call to function is_float\\(\\) with string will always evaluate to false\\.$#"
+			message: '#^Call to function is_float\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: src/Mysql/MysqlDriver.php
 
 		-
-			message: "#^Call to function is_int\\(\\) with string will always evaluate to false\\.$#"
+			message: '#^Call to function is_int\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: src/Mysql/MysqlDriver.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^Call to function is_string\(\) with non\-falsy\-string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
 			count: 1
 			path: src/Mysql/MysqlDriver.php
 
 		-
-			message: "#^Parameter \\#2 \\$array of function implode expects array\\<string\\>, array\\<int\\<0, max\\>, array\\|string\\> given\\.$#"
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
 			count: 1
 			path: src/Mysql/MysqlDriver.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, list\<array\|string\> given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Mysql/MysqlDriver.php
 
 		-
-			message: "#^Call to an undefined method Joomla\\\\Database\\\\DatabaseInterface\\:\\:isMariaDb\\(\\)\\.$#"
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: src/Mysql/MysqlDriver.php
+
+		-
+			message: '#^Method Joomla\\Database\\Mysql\\MysqlImporter\:\:getKeyLookup\(\) has Exception in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
+			count: 1
+			path: src/Mysql/MysqlImporter.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
 			count: 1
 			path: src/Mysql/MysqlQuery.php
 
 		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: src/Mysql/MysqlQuery.php
-
-		-
-			message: "#^Call to function is_float\\(\\) with string will always evaluate to false\\.$#"
+			message: '#^Call to function is_callable\(\) with array\{mysqli, ''close''\} will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
 			count: 1
 			path: src/Mysqli/MysqliDriver.php
 
 		-
-			message: "#^Call to function is_int\\(\\) with string will always evaluate to false\\.$#"
+			message: '#^Call to function is_float\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: src/Mysqli/MysqliDriver.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^Call to function is_int\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: src/Mysqli/MysqliDriver.php
 
 		-
-			message: "#^Method Joomla\\\\Database\\\\Mysqli\\\\MysqliDriver\\:\\:serverClaimsUtf8mb4Support\\(\\) is unused\\.$#"
+			message: '#^Call to function is_object\(\) with mysqli will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
 			count: 1
 			path: src/Mysqli/MysqliDriver.php
 
 		-
-			message: "#^PHPDoc type mysqli of property Joomla\\\\Database\\\\Mysqli\\\\MysqliDriver\\:\\:\\$connection is not covariant with PHPDoc type resource of overridden property Joomla\\\\Database\\\\DatabaseDriver\\:\\:\\$connection\\.$#"
+			message: '#^Call to function is_string\(\) with non\-falsy\-string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
 			count: 1
 			path: src/Mysqli/MysqliDriver.php
 
 		-
-			message: "#^Parameter \\#2 \\$array of function implode expects array\\<string\\>, array\\<int\\<0, max\\>, array\\|string\\> given\\.$#"
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
 			count: 1
 			path: src/Mysqli/MysqliDriver.php
 
 		-
-			message: "#^Property Joomla\\\\Database\\\\Mysqli\\\\MysqliDriver\\:\\:\\$connection \\(mysqli\\) does not accept null\\.$#"
+			message: '#^Method Joomla\\Database\\Mysqli\\MysqliDriver\:\:connect\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
 			count: 1
 			path: src/Mysqli/MysqliDriver.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			message: '#^Method Joomla\\Database\\Mysqli\\MysqliDriver\:\:serverClaimsUtf8mb4Support\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: src/Mysqli/MysqliDriver.php
+
+		-
+			message: '#^PHPDoc type mysqli of property Joomla\\Database\\Mysqli\\MysqliDriver\:\:\$connection is not covariant with PHPDoc type resource of overridden property Joomla\\Database\\DatabaseDriver\:\:\$connection\.$#'
+			identifier: property.phpDocType
+			count: 1
+			path: src/Mysqli/MysqliDriver.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, list\<array\|string\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Mysqli/MysqliDriver.php
+
+		-
+			message: '#^Property Joomla\\Database\\Mysqli\\MysqliDriver\:\:\$connection \(mysqli\) does not accept null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Mysqli/MysqliDriver.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
 			count: 2
 			path: src/Mysqli/MysqliDriver.php
 
 		-
-			message: "#^Call to an undefined method Joomla\\\\Database\\\\DatabaseInterface\\:\\:isMariaDb\\(\\)\\.$#"
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
 			count: 1
 			path: src/Mysqli/MysqliQuery.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^PHPDoc type array of property Joomla\\Database\\Mysqli\\MysqliQuery\:\:\$nullDatetimeList is not covariant with PHPDoc type array\<string\> of overridden property Joomla\\Database\\DatabaseQuery\:\:\$nullDatetimeList\.$#'
+			identifier: property.phpDocType
 			count: 1
 			path: src/Mysqli/MysqliQuery.php
 
 		-
-			message: "#^PHPDoc type array of property Joomla\\\\Database\\\\Mysqli\\\\MysqliQuery\\:\\:\\$nullDatetimeList is not covariant with PHPDoc type array\\<string\\> of overridden property Joomla\\\\Database\\\\DatabaseQuery\\:\\:\\$nullDatetimeList\\.$#"
-			count: 1
-			path: src/Mysqli/MysqliQuery.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$dataType with type int is incompatible with native type string\\.$#"
+			message: '#^PHPDoc tag @param for parameter \$dataType with type int is incompatible with native type string\.$#'
+			identifier: parameter.phpDocType
 			count: 1
 			path: src/Mysqli/MysqliStatement.php
 
 		-
-			message: "#^Parameter \\#4 \\$previous of class Joomla\\\\Database\\\\Exception\\\\ExecutionFailureException constructor expects Exception\\|null, Throwable given\\.$#"
+			message: '#^Parameter \#4 \$previous of class Joomla\\Database\\Exception\\ExecutionFailureException constructor expects Exception\|null, Throwable given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Mysqli/MysqliStatement.php
 
 		-
-			message: "#^Return type \\(int\\) of method Joomla\\\\Database\\\\Mysqli\\\\MysqliStatement\\:\\:errorCode\\(\\) should be compatible with return type \\(string\\) of method Joomla\\\\Database\\\\StatementInterface\\:\\:errorCode\\(\\)$#"
+			message: '#^Return type \(int\) of method Joomla\\Database\\Mysqli\\MysqliStatement\:\:errorCode\(\) should be compatible with return type \(string\) of method Joomla\\Database\\StatementInterface\:\:errorCode\(\)$#'
+			identifier: method.childReturnType
 			count: 1
 			path: src/Mysqli/MysqliStatement.php
 
 		-
-			message: "#^Return type \\(string\\) of method Joomla\\\\Database\\\\Mysqli\\\\MysqliStatement\\:\\:errorInfo\\(\\) should be compatible with return type \\(array\\) of method Joomla\\\\Database\\\\StatementInterface\\:\\:errorInfo\\(\\)$#"
+			message: '#^Return type \(string\) of method Joomla\\Database\\Mysqli\\MysqliStatement\:\:errorInfo\(\) should be compatible with return type \(array\) of method Joomla\\Database\\StatementInterface\:\:errorInfo\(\)$#'
+			identifier: method.childReturnType
 			count: 1
 			path: src/Mysqli/MysqliStatement.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between array\\|bool and null will always evaluate to false\\.$#"
+			message: '#^Strict comparison using \=\=\= between array\|bool and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
 			count: 1
 			path: src/Mysqli/MysqliStatement.php
 
 		-
-			message: "#^Call to function is_float\\(\\) with string will always evaluate to false\\.$#"
+			message: '#^Call to function is_float\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: src/Pdo/PdoDriver.php
 
 		-
-			message: "#^Call to function is_int\\(\\) with string will always evaluate to false\\.$#"
+			message: '#^Call to function is_int\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: src/Pdo/PdoDriver.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
 			count: 4
 			path: src/Pdo/PdoDriver.php
 
 		-
-			message: "#^PHPDoc type PDO of property Joomla\\\\Database\\\\Pdo\\\\PdoDriver\\:\\:\\$connection is not covariant with PHPDoc type resource of overridden property Joomla\\\\Database\\\\DatabaseDriver\\:\\:\\$connection\\.$#"
+			message: '#^Method Joomla\\Database\\Pdo\\PdoDriver\:\:connect\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
 			count: 1
 			path: src/Pdo/PdoDriver.php
 
 		-
-			message: "#^Property Joomla\\\\Database\\\\Pdo\\\\PdoDriver\\:\\:\\$connection \\(PDO\\) does not accept null\\.$#"
+			message: '#^PHPDoc type PDO of property Joomla\\Database\\Pdo\\PdoDriver\:\:\$connection is not covariant with PHPDoc type resource of overridden property Joomla\\Database\\DatabaseDriver\:\:\$connection\.$#'
+			identifier: property.phpDocType
 			count: 1
 			path: src/Pdo/PdoDriver.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			message: '#^Property Joomla\\Database\\Pdo\\PdoDriver\:\:\$connection \(PDO\) does not accept null\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: src/Pdo/PdoDriver.php
 
 		-
-			message: "#^PHPDoc type array of property Joomla\\\\Database\\\\Pdo\\\\PdoQuery\\:\\:\\$nullDatetimeList is not covariant with PHPDoc type array\\<string\\> of overridden property Joomla\\\\Database\\\\DatabaseQuery\\:\\:\\$nullDatetimeList\\.$#"
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: src/Pdo/PdoDriver.php
+
+		-
+			message: '#^PHPDoc type array of property Joomla\\Database\\Pdo\\PdoQuery\:\:\$nullDatetimeList is not covariant with PHPDoc type array\<string\> of overridden property Joomla\\Database\\DatabaseQuery\:\:\$nullDatetimeList\.$#'
+			identifier: property.phpDocType
 			count: 1
 			path: src/Pdo/PdoQuery.php
 
 		-
-			message: "#^Call to an undefined method Joomla\\\\Database\\\\QueryInterface\\:\\:leftJoin\\(\\)\\.$#"
+			message: '#^Call to function is_object\(\) with array will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: src/Pgsql/PgsqlDriver.php
 
 		-
-			message: "#^Call to an undefined method Joomla\\\\Database\\\\QueryInterface\\:\\:returning\\(\\)\\.$#"
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
 			count: 1
 			path: src/Pgsql/PgsqlDriver.php
 
 		-
-			message: "#^Call to function is_object\\(\\) with array will always evaluate to false\\.$#"
+			message: '#^Method Joomla\\Database\\Pgsql\\PgsqlDriver\:\:getTableCreate\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
 			count: 1
 			path: src/Pgsql/PgsqlDriver.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^Strict comparison using \=\=\= between string and 0 will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
 			count: 1
 			path: src/Pgsql/PgsqlDriver.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between string and 0 will always evaluate to false\\.$#"
+			message: '#^Strict comparison using \=\=\= between string and 1 will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
 			count: 1
 			path: src/Pgsql/PgsqlDriver.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between string and 1 will always evaluate to false\\.$#"
+			message: '#^Strict comparison using \=\=\= between string and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
 			count: 1
 			path: src/Pgsql/PgsqlDriver.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between string and false will always evaluate to false\\.$#"
+			message: '#^Strict comparison using \=\=\= between string and true will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
 			count: 1
 			path: src/Pgsql/PgsqlDriver.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between string and true will always evaluate to false\\.$#"
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
 			count: 1
 			path: src/Pgsql/PgsqlDriver.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 1
-			path: src/Pgsql/PgsqlDriver.php
-
-		-
-			message: "#^Call to an undefined method Joomla\\\\Database\\\\DatabaseInterface\\:\\:getNamesKey\\(\\)\\.$#"
+			message: '#^Instanceof between Joomla\\Database\\Pgsql\\PgsqlDriver and Joomla\\Database\\Pgsql\\PgsqlDriver will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
 			count: 1
 			path: src/Pgsql/PgsqlExporter.php
 
 		-
-			message: "#^Call to an undefined method Joomla\\\\Database\\\\DatabaseInterface\\:\\:getSequenceIsCalled\\(\\)\\.$#"
-			count: 1
-			path: src/Pgsql/PgsqlExporter.php
-
-		-
-			message: "#^Call to an undefined method Joomla\\\\Database\\\\DatabaseInterface\\:\\:getSequenceLastValue\\(\\)\\.$#"
-			count: 1
-			path: src/Pgsql/PgsqlExporter.php
-
-		-
-			message: "#^Call to an undefined method Joomla\\\\Database\\\\DatabaseInterface\\:\\:getTableSequences\\(\\)\\.$#"
-			count: 1
-			path: src/Pgsql/PgsqlExporter.php
-
-		-
-			message: "#^Call to an undefined method Joomla\\\\Database\\\\DatabaseInterface\\:\\:getTableSequences\\(\\)\\.$#"
+			message: '#^Cannot access property \$Index on array\.$#'
+			identifier: property.nonObject
 			count: 1
 			path: src/Pgsql/PgsqlImporter.php
 
 		-
-			message: "#^Cannot access property \\$Index on array\\.$#"
+			message: '#^Cannot access property \$Key_name on array\.$#'
+			identifier: property.nonObject
 			count: 1
 			path: src/Pgsql/PgsqlImporter.php
 
 		-
-			message: "#^Cannot access property \\$Key_name on array\\.$#"
+			message: '#^Instanceof between Joomla\\Database\\Pgsql\\PgsqlDriver and Joomla\\Database\\Pgsql\\PgsqlDriver will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
 			count: 1
 			path: src/Pgsql/PgsqlImporter.php
 
 		-
-			message: "#^Instanceof between array and SimpleXMLElement will always evaluate to false\\.$#"
+			message: '#^Instanceof between array and SimpleXMLElement will always evaluate to false\.$#'
+			identifier: instanceof.alwaysFalse
 			count: 1
 			path: src/Pgsql/PgsqlImporter.php
 
 		-
-			message: "#^Method Joomla\\\\Database\\\\Pgsql\\\\PgsqlImporter\\:\\:getChangeSequenceSql\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			message: '#^Method Joomla\\Database\\Pgsql\\PgsqlImporter\:\:getChangeSequenceSql\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
 			count: 1
 			path: src/Pgsql/PgsqlImporter.php
 
 		-
-			message: "#^Method Joomla\\\\Database\\\\Pgsql\\\\PgsqlImporter\\:\\:getSetvalSequenceSql\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			message: '#^Method Joomla\\Database\\Pgsql\\PgsqlImporter\:\:getSetvalSequenceSql\(\) invoked with 2 parameters, 1 required\.$#'
+			identifier: arguments.count
 			count: 1
 			path: src/Pgsql/PgsqlImporter.php
 
 		-
-			message: "#^Parameter \\#1 \\$field of method Joomla\\\\Database\\\\Pgsql\\\\PgsqlImporter\\:\\:getChangeSequenceSql\\(\\) expects SimpleXMLElement, \\(int\\|string\\) given\\.$#"
+			message: '#^Parameter \#1 \$field of method Joomla\\Database\\Pgsql\\PgsqlImporter\:\:getChangeSequenceSql\(\) expects SimpleXMLElement, \(int\|string\) given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Pgsql/PgsqlImporter.php
 
 		-
-			message: "#^Parameter \\#1 \\$field of method Joomla\\\\Database\\\\Pgsql\\\\PgsqlImporter\\:\\:getSetvalSequenceSql\\(\\) expects SimpleXMLElement, \\(int\\|string\\) given\\.$#"
+			message: '#^Parameter \#1 \$field of method Joomla\\Database\\Pgsql\\PgsqlImporter\:\:getSetvalSequenceSql\(\) expects SimpleXMLElement, \(int\|string\) given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Pgsql/PgsqlImporter.php
 
 		-
-			message: "#^Parameter \\#2 \\$key of method Joomla\\\\Database\\\\Pgsql\\\\PgsqlImporter\\:\\:getAddUniqueSql\\(\\) expects array, SimpleXMLElement given\\.$#"
+			message: '#^Parameter \#2 \$key of method Joomla\\Database\\Pgsql\\PgsqlImporter\:\:getAddUniqueSql\(\) expects array, SimpleXMLElement given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Pgsql/PgsqlImporter.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
 			count: 12
 			path: src/Pgsql/PgsqlQuery.php
 
 		-
-			message: "#^Instanceof between string and \\$this\\(Joomla\\\\Database\\\\Pgsql\\\\PgsqlQuery\\) will always evaluate to false\\.$#"
+			message: '#^Instanceof between string and \$this\(Joomla\\Database\\Pgsql\\PgsqlQuery\) will always evaluate to false\.$#'
+			identifier: instanceof.alwaysFalse
 			count: 1
 			path: src/Pgsql/PgsqlQuery.php
 
 		-
-			message: "#^Parameter \\#2 \\$elements of class Joomla\\\\Database\\\\Query\\\\QueryElement constructor expects array\\<string\\>\\|string, int given\\.$#"
+			message: '#^Parameter \#2 \$elements of class Joomla\\Database\\Query\\QueryElement constructor expects array\<string\>\|string, int given\.$#'
+			identifier: argument.type
 			count: 2
 			path: src/Pgsql/PgsqlQuery.php
 
 		-
-			message: "#^Parameter \\#2 \\$elements of class Joomla\\\\Database\\\\Query\\\\QueryElement constructor expects array\\<string\\>\\|string, null given\\.$#"
+			message: '#^Parameter \#2 \$elements of class Joomla\\Database\\Query\\QueryElement constructor expects array\<string\>\|string, null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Pgsql/PgsqlQuery.php
 
 		-
-			message: "#^Ternary operator condition is always true\\.$#"
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
 			count: 1
 			path: src/Pgsql/PgsqlQuery.php
 
 		-
-			message: """
-				#^Fetching class constant class of deprecated interface Joomla\\\\Database\\\\Query\\\\LimitableInterface\\:
-				3\\.0  Capabilities will be required in Joomla\\\\Database\\\\QueryInterface$#
-			"""
-			count: 1
-			path: src/Query/LimitableInterface.php
-
-		-
-			message: """
-				#^Fetching class constant class of deprecated interface Joomla\\\\Database\\\\Query\\\\PreparableInterface\\:
-				3\\.0  Capabilities will be required in Joomla\\\\Database\\\\QueryInterface$#
-			"""
-			count: 1
-			path: src/Query/PreparableInterface.php
-
-		-
-			message: "#^Argument of an invalid type Joomla\\\\Database\\\\Query\\\\QueryElement supplied for foreach, only iterables are supported\\.$#"
+			message: '#^Argument of an invalid type \$this\(Joomla\\Database\\Query\\QueryElement\) supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
 			count: 1
 			path: src/Query/QueryElement.php
 
 		-
-			message: """
-				#^Interface Joomla\\\\Database\\\\QueryInterface extends deprecated interface Joomla\\\\Database\\\\Query\\\\LimitableInterface\\:
-				3\\.0  Capabilities will be required in Joomla\\\\Database\\\\QueryInterface$#
-			"""
-			count: 1
-			path: src/QueryInterface.php
-
-		-
-			message: """
-				#^Interface Joomla\\\\Database\\\\QueryInterface extends deprecated interface Joomla\\\\Database\\\\Query\\\\PreparableInterface\\:
-				3\\.0  Capabilities will be required in Joomla\\\\Database\\\\QueryInterface$#
-			"""
-			count: 1
-			path: src/QueryInterface.php
-
-		-
-			message: "#^Call to function is_float\\(\\) with string will always evaluate to false\\.$#"
+			message: '#^Call to function is_float\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: src/Sqlite/SqliteDriver.php
 
 		-
-			message: "#^Call to function is_int\\(\\) with string will always evaluate to false\\.$#"
+			message: '#^Call to function is_int\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: src/Sqlite/SqliteDriver.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
 			count: 1
 			path: src/Sqlite/SqliteDriver.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			message: '#^Method Joomla\\Database\\Sqlite\\SqliteDriver\:\:alterDbCharacterSet\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
 			count: 1
 			path: src/Sqlite/SqliteDriver.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^Method Joomla\\Database\\Sqlite\\SqliteDriver\:\:connect\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
+			count: 1
+			path: src/Sqlite/SqliteDriver.php
+
+		-
+			message: '#^Method Joomla\\Database\\Sqlite\\SqliteDriver\:\:createDatabase\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
+			count: 1
+			path: src/Sqlite/SqliteDriver.php
+
+		-
+			message: '#^Method Joomla\\Database\\Sqlite\\SqliteDriver\:\:getConnectionCollation\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
+			count: 1
+			path: src/Sqlite/SqliteDriver.php
+
+		-
+			message: '#^Method Joomla\\Database\\Sqlite\\SqliteDriver\:\:getConnectionEncryption\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
+			count: 1
+			path: src/Sqlite/SqliteDriver.php
+
+		-
+			message: '#^Method Joomla\\Database\\Sqlite\\SqliteDriver\:\:lockTable\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
+			count: 1
+			path: src/Sqlite/SqliteDriver.php
+
+		-
+			message: '#^Method Joomla\\Database\\Sqlite\\SqliteDriver\:\:unlockTables\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
+			count: 1
+			path: src/Sqlite/SqliteDriver.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: src/Sqlite/SqliteDriver.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
 			count: 1
 			path: src/Sqlite/SqliteQuery.php
 
 		-
-			message: "#^Left side of \\|\\| is always true\\.$#"
+			message: '#^Left side of \|\| is always true\.$#'
+			identifier: booleanOr.leftAlwaysTrue
 			count: 1
 			path: src/Sqlite/SqliteQuery.php
 
 		-
-			message: "#^Result of \\|\\| is always true\\.$#"
+			message: '#^Result of \|\| is always true\.$#'
+			identifier: booleanOr.alwaysTrue
 			count: 1
 			path: src/Sqlite/SqliteQuery.php
 
 		-
-			message: "#^Unsafe usage of new static\\(\\)\\.$#"
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
 			count: 1
 			path: src/Sqlite/SqliteQuery.php
 
 		-
-			message: "#^Call to function is_float\\(\\) with string will always evaluate to false\\.$#"
+			message: '#^Call to function is_float\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: src/Sqlsrv/SqlsrvDriver.php
 
 		-
-			message: "#^Call to function is_int\\(\\) with string will always evaluate to false\\.$#"
+			message: '#^Call to function is_int\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: src/Sqlsrv/SqlsrvDriver.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
 			count: 4
 			path: src/Sqlsrv/SqlsrvDriver.php
 
 		-
-			message: "#^Parameter \\#2 \\$array of function implode expects array\\<string\\>, array\\<int\\<0, max\\>, array\\|string\\> given\\.$#"
+			message: '#^Method Joomla\\Database\\Sqlsrv\\SqlsrvDriver\:\:connect\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
 			count: 1
 			path: src/Sqlsrv/SqlsrvDriver.php
 
 		-
-			message: "#^Parameter \\#3 \\$params of function sqlsrv_query expects array, null given\\.$#"
+			message: '#^Method Joomla\\Database\\Sqlsrv\\SqlsrvDriver\:\:lockTable\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
 			count: 1
 			path: src/Sqlsrv/SqlsrvDriver.php
 
 		-
-			message: "#^Property Joomla\\\\Database\\\\DatabaseDriver\\:\\:\\$connection \\(resource\\) does not accept null\\.$#"
+			message: '#^Method Joomla\\Database\\Sqlsrv\\SqlsrvDriver\:\:unlockTables\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
+			identifier: throws.unusedType
 			count: 1
 			path: src/Sqlsrv/SqlsrvDriver.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, list\<array\|string\> given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Sqlsrv/SqlsrvDriver.php
 
 		-
-			message: "#^Comparison operation \"\\>\" between 0 and 1 is always false\\.$#"
+			message: '#^Parameter \#3 \$params of function sqlsrv_query expects array, null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Sqlsrv/SqlsrvDriver.php
+
+		-
+			message: '#^Property Joomla\\Database\\DatabaseDriver\:\:\$connection \(resource\) does not accept null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Sqlsrv/SqlsrvDriver.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: src/Sqlsrv/SqlsrvDriver.php
+
+		-
+			message: '#^Comparison operation "\>" between 0 and 1 is always false\.$#'
+			identifier: greater.alwaysFalse
 			count: 1
 			path: src/Sqlsrv/SqlsrvQuery.php
 
 		-
-			message: "#^If condition is always true\\.$#"
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
 			count: 14
 			path: src/Sqlsrv/SqlsrvQuery.php
 
 		-
-			message: "#^Left side of \\|\\| is always true\\.$#"
+			message: '#^Instanceof between Joomla\\Database\\DatabaseInterface and Joomla\\Database\\DatabaseInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
 			count: 1
 			path: src/Sqlsrv/SqlsrvQuery.php
 
 		-
-			message: "#^Offset int\\<1, max\\> on array\\<0, mixed\\> in isset\\(\\) does not exist\\.$#"
+			message: '#^Left side of \|\| is always true\.$#'
+			identifier: booleanOr.leftAlwaysTrue
 			count: 1
 			path: src/Sqlsrv/SqlsrvQuery.php
 
 		-
-			message: "#^PHPDoc type array of property Joomla\\\\Database\\\\Sqlsrv\\\\SqlsrvQuery\\:\\:\\$nullDatetimeList is not covariant with PHPDoc type array\\<string\\> of overridden property Joomla\\\\Database\\\\DatabaseQuery\\:\\:\\$nullDatetimeList\\.$#"
+			message: '#^Offset int\<1, max\> on list in isset\(\) does not exist\.$#'
+			identifier: isset.offset
 			count: 1
 			path: src/Sqlsrv/SqlsrvQuery.php
 
 		-
-			message: "#^Parameter \\#2 \\$array of function implode expects array\\<string\\>, array\\<array\\|string\\> given\\.$#"
+			message: '#^PHPDoc type array of property Joomla\\Database\\Sqlsrv\\SqlsrvQuery\:\:\$nullDatetimeList is not covariant with PHPDoc type array\<string\> of overridden property Joomla\\Database\\DatabaseQuery\:\:\$nullDatetimeList\.$#'
+			identifier: property.phpDocType
 			count: 1
 			path: src/Sqlsrv/SqlsrvQuery.php
 
 		-
-			message: "#^Result of \\|\\| is always true\\.$#"
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array\<array\|string\> given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Sqlsrv/SqlsrvQuery.php
 
 		-
-			message: "#^Return type \\(string\\) of method Joomla\\\\Database\\\\Sqlsrv\\\\SqlsrvQuery\\:\\:length\\(\\) should be compatible with return type \\(int\\) of method Joomla\\\\Database\\\\QueryInterface\\:\\:length\\(\\)$#"
+			message: '#^Result of \|\| is always true\.$#'
+			identifier: booleanOr.alwaysTrue
 			count: 1
 			path: src/Sqlsrv/SqlsrvQuery.php
 
 		-
-			message: "#^Method Joomla\\\\Database\\\\Sqlsrv\\\\SqlsrvStatement\\:\\:errorCode\\(\\) should return string but returns false\\.$#"
+			message: '#^Return type \(string\) of method Joomla\\Database\\Sqlsrv\\SqlsrvQuery\:\:length\(\) should be compatible with return type \(int\) of method Joomla\\Database\\QueryInterface\:\:length\(\)$#'
+			identifier: method.childReturnType
 			count: 1
-			path: src/Sqlsrv/SqlsrvStatement.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: src/Sqlsrv/SqlsrvStatement.php
-
-		-
-			message: "#^Parameter \\#2 \\$className of function sqlsrv_fetch_object expects string, int given\\.$#"
-			count: 1
-			path: src/Sqlsrv/SqlsrvStatement.php
-
-		-
-			message: "#^Property Joomla\\\\Database\\\\Sqlsrv\\\\SqlsrvStatement\\:\\:\\$defaultObjectClass \\(int\\) does not accept default value of type string\\.$#"
-			count: 1
-			path: src/Sqlsrv/SqlsrvStatement.php
-
-		-
-			message: "#^Property Joomla\\\\Database\\\\Sqlsrv\\\\SqlsrvStatement\\:\\:\\$statement \\(resource\\) does not accept null\\.$#"
-			count: 1
-			path: src/Sqlsrv/SqlsrvStatement.php
+			path: src/Sqlsrv/SqlsrvQuery.php

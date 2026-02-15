@@ -13,6 +13,7 @@ use Joomla\Database\Monitor\DebugMonitor;
 use Joomla\Database\ParameterType;
 use Joomla\Database\QueryInterface;
 use Joomla\Test\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Base test class for Joomla\Database\DatabaseDriver
@@ -72,13 +73,15 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
     /**
      * Data provider for table dropping test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataDropTable()
+    public static function dataDropTable(): array
     {
-        yield 'database exists before query' => ['#__dbtest', true];
+        return [
+            'database exists before query' => ['#__dbtest', true],
 
-        yield 'database does not exist before query' => ['#__foo', false];
+            'database does not exist before query' => ['#__foo', false],
+        ];
     }
 
     /**
@@ -86,9 +89,8 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
      *
      * @param   string   $table          The name of the database table to drop.
      * @param   boolean  $alreadyExists  Flag indicating the table should exist before the DROP TABLE query.
-     *
-     * @dataProvider  dataDropTable
      */
+    #[DataProvider('dataDropTable')]
     public function testDropTable(string $table, bool $alreadyExists)
     {
         $this->assertSame(
@@ -110,9 +112,9 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
     /**
      * Data provider for escaping test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    abstract public function dataEscape(): \Generator;
+    abstract public static function dataEscape(): array;
 
     /**
      * @testdox  Text can be escaped
@@ -120,9 +122,8 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
      * @param   string   $text      The string to be escaped.
      * @param   boolean  $extra     Optional parameter to provide extra escaping.
      * @param   string   $expected  The expected result.
-     *
-     * @dataProvider  dataEscape
      */
+    #[DataProvider('dataEscape')]
     public function testEscape($text, $extra, $expected)
     {
         $this->assertSame(
@@ -240,9 +241,9 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
     /**
      * Data provider for fetching table column test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    abstract public function dataGetTableColumns(): \Generator;
+    abstract public static function dataGetTableColumns(): array;
 
     /**
      * @testdox  Information about the columns of a database table is returned
@@ -250,9 +251,8 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
      * @param   string   $table     The name of the database table.
      * @param   boolean  $typeOnly  True (default) to only return field types.
      * @param   array    $expected  Expected result.
-     *
-     * @dataProvider  dataGetTableColumns
      */
+    #[DataProvider('dataGetTableColumns')]
     public function testGetTableColumns(string $table, bool $typeOnly, array $expected)
     {
         $this->assertEquals(
@@ -596,18 +596,17 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
     /**
      * Data provider for binary quoting test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    abstract public function dataQuoteBinary(): \Generator;
+    abstract public static function dataQuoteBinary(): array;
 
     /**
      * @testdox  A binary value is quoted properly
      *
      * @param   string  $data      The binary quoted input string.
      * @param   string  $expected  The expected result.
-     *
-     * @dataProvider  dataQuoteBinary
      */
+    #[DataProvider('dataQuoteBinary')]
     public function testQuoteBinary($data, $expected)
     {
         $this->assertSame($expected, static::$connection->quoteBinary($data));
@@ -616,9 +615,9 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
     /**
      * Data provider for name quoting test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    abstract public function dataQuoteName(): \Generator;
+    abstract public static function dataQuoteName(): array;
 
     /**
      * @testdox  A value is name quoted properly
@@ -626,9 +625,8 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
      * @param   array|string  $name      The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
      * @param   array|string  $as        The AS query part associated to $name.
      * @param   array|string  $expected  The expected result.
-     *
-     * @dataProvider  dataQuoteName
      */
+    #[DataProvider('dataQuoteName')]
     public function testQuoteName($name, $as, $expected)
     {
         $this->assertSame(

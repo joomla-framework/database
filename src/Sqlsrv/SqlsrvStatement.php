@@ -44,7 +44,7 @@ class SqlsrvStatement implements StatementInterface
     /**
      * The default class to use for building object result sets.
      *
-     * @var    integer
+     * @var    string
      * @since  2.0.0
      */
     protected $defaultObjectClass = \stdClass::class;
@@ -80,7 +80,7 @@ class SqlsrvStatement implements StatementInterface
     /**
      * The prepared statement.
      *
-     * @var    resource
+     * @var    ?resource
      * @since  2.0.0
      */
     protected $statement;
@@ -352,7 +352,7 @@ class SqlsrvStatement implements StatementInterface
             return $errors[0]['code'];
         }
 
-        return false;
+        return '';
     }
 
     /**

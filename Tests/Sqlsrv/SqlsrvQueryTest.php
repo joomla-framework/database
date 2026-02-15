@@ -8,6 +8,7 @@ namespace Joomla\Database\Tests\Sqlsrv;
 
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Sqlsrv\SqlsrvQuery;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -48,14 +49,6 @@ class SqlsrvQueryTest extends TestCase
     /**
      * @testdox  A string is cast as a character string for the driver
      */
-    public function testCastAsChar()
-    {
-        $this->assertSame('CAST(foo as NVARCHAR(10))', $this->query->castAsChar('foo'));
-    }
-
-    /**
-     * @testdox  A string is cast as a character string for the driver
-     */
     public function testCastAsWithChar()
     {
         $this->assertSame('CAST(foo as NVARCHAR(10))', $this->query->castAs('CHAR', 'foo'));
@@ -86,12 +79,14 @@ class SqlsrvQueryTest extends TestCase
     /**
      * Data provider for character length test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataCharLength(): \Generator
+    public static function dataCharLength(): array
     {
-        yield 'field without comparison' => ['a.title', null, null, 'DATALENGTH(a.title)'];
-        yield 'field with comparison' => ['a.title', '!=', '0', 'DATALENGTH(a.title) != 0'];
+        return [
+            'field without comparison' => ['a.title', null, null, 'DATALENGTH(a.title)'],
+            'field with comparison' => ['a.title', '!=', '0', 'DATALENGTH(a.title) != 0'],
+        ];
     }
 
     /**
@@ -101,9 +96,8 @@ class SqlsrvQueryTest extends TestCase
      * @param   string|null  $operator   Comparison operator between charLength integer value and $condition
      * @param   string|null  $condition  Integer value to compare charLength with.
      * @param   string       $expected   The expected query string.
-     *
-     * @dataProvider  dataCharLength
      */
+    #[DataProvider('dataCharLength')]
     public function testCharLength(string $field, ?string $operator, ?string $condition, string $expected)
     {
         $this->assertSame(
@@ -115,12 +109,14 @@ class SqlsrvQueryTest extends TestCase
     /**
      * Data provider for concatenate test cases
      *
-     * @return  \Generator
+     * @return  array
      */
-    public function dataConcatenate(): \Generator
+    public static function dataConcatenate(): array
     {
-        yield 'values without separator' => [['foo', 'bar'], null, '(foo+bar)'];
-        yield 'values with separator' => [['foo', 'bar'], ' and ', "(foo+' and '+bar)"];
+        return [
+            'values without separator' => [['foo', 'bar'], null, '(foo+bar)'],
+            'values with separator' => [['foo', 'bar'], ' and ', "(foo+' and '+bar)"],
+        ];
     }
 
     /**
@@ -129,9 +125,8 @@ class SqlsrvQueryTest extends TestCase
      * @param   string[]     $values     An array of values to concatenate.
      * @param   string|null  $separator  As separator to place between each value.
      * @param   string       $expected   The expected query string.
-     *
-     * @dataProvider  dataConcatenate
      */
+    #[DataProvider('dataConcatenate')]
     public function testConcatenate(array $values, ?string $separator, string $expected)
     {
         $this->db->expects($this->any())

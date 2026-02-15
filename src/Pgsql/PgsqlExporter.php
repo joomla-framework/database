@@ -19,6 +19,14 @@ use Joomla\Database\DatabaseExporter;
 class PgsqlExporter extends DatabaseExporter
 {
     /**
+     * The database connector to use for exporting structure and/or data.
+     *
+     * @var    PgsqlDriver
+     * @since  1.0
+     */
+    protected $db;
+
+    /**
      * Builds the XML data for the tables to export.
      *
      * @return  string  An XML string
@@ -126,7 +134,7 @@ class PgsqlExporter extends DatabaseExporter
                 }
             }
 
-            $query = $this->db->getQuery(true);
+            $query = $this->db->createQuery();
             $query->select($query->quoteName(array_keys($fields)))
                 ->from($query->quoteName($table));
             $this->db->setQuery($query);

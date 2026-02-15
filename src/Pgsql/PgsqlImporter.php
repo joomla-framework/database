@@ -19,6 +19,14 @@ use Joomla\Database\DatabaseImporter;
 class PgsqlImporter extends DatabaseImporter
 {
     /**
+     * The database connector to use for exporting structure and/or data.
+     *
+     * @var    PgsqlDriver
+     * @since  1.0
+     */
+    protected $db;
+
+    /**
      * Checks if all data and options are in order prior to exporting.
      *
      * @return  $this
