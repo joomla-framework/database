@@ -963,6 +963,30 @@ class DatabaseQueryTest extends TestCase
     }
 
     /**
+     * @testdox  The bind method records a bound parameter for the query
+     *
+     * @param   array|string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
+     *                                                the form ':key', but can also be an integer.
+     * @param   mixed                 $value          The value that will be bound. It can be an array, in this case it has to be
+     *                                                same length of $key; The value is passed by reference to support output
+     *                                                parameters such as those possible with stored procedures.
+     * @param   array|string          $dataType       Constant corresponding to a SQL datatype. It can be an array, in this case it
+     *                                                has to be same length of $key
+     * @param   array                 $expected       The expected structure of `$bounded`
+     */
+    public function testBindValue()
+    {
+        $this->assertSame($this->query, $this->query->bindValue(':bindValue', 'JustValueNoReference', ParameterType::STRING), 'The query builder supports method chaining');
+
+        $this->assertEquals(
+            [
+                ':bindValue' => (object) ['value' => 'JustValueNoReference', 'dataType' => 'string', 'length' => 0, 'driverOptions' => []],
+            ],
+            $this->query->bounded
+        );
+    }
+
+    /**
      * @testdox  The bind method does not record bound parameters when the keys and values are an unbalanced number of items
      */
     public function testBindUnbalancedKeyValue()

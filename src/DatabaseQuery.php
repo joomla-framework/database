@@ -1940,6 +1940,30 @@ abstract class DatabaseQuery implements QueryInterface
     }
 
     /**
+     * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution.
+     * 
+     * Proxy method to self::bind() without the need to provide a referenceable input for value
+     *
+     * @param   array|string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
+     *                                                the form ':key', but can also be an integer.
+     * @param   mixed                 $value          The value that will be bound. It can be an array, in this case it has to be
+     *                                                same length of $key
+     * @param   array|string          $dataType       Constant corresponding to a SQL datatype. It can be an array, in this case it
+     *                                                has to be same length of $key
+     * @param   integer               $length         The length of the variable. Usually required for OUTPUT parameters.
+     * @param   array                 $driverOptions  Optional driver options to be used.
+     *
+     * @return  $this
+     *
+     * @since   __DEPLOY_VERSION__
+     * @throws  \InvalidArgumentException
+     */
+    public function bindValue($key, $value, $dataType = ParameterType::STRING, $length = 0, $driverOptions = [])
+    {
+        return $this->bind($key, $value, $dataType, $length, $driverOptions);
+    }
+
+    /**
      * Method to unbind a bound variable.
      *
      * @param   array|string|integer  $key  The key or array of keys to unbind.
