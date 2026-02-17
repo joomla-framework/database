@@ -222,6 +222,32 @@ class PgsqlDriver extends PdoDriver
     }
 
     /**
+     * Parses the fully qualified or bare name of the database object (table, view, procedure etc.) into object
+     * with fields "schema" and "table" respectively
+     *
+     * @param string $table Name of the database object with schema or without it
+     *
+     * @return object
+     */
+    private function parseIdent($table)
+    {
+        $query = $this->getQuery(1);
+
+        $query->select(['r[1]','r[2]'])
+            ->from("parse_ident(:t) as r")
+            ->bind(':t', $table);
+
+        $qn = $this->setQuery($query)
+            ->loadRow();
+
+        if ($qn[1]) {
+            return (object) ['schema' => $qn[0], 'table' => $qn[1]];
+        }
+
+        return (object) ['schema' => $this->getDefaultSchema(), 'table' => $qn[0]];
+    }
+
+    /**
      * Retrieves field information about a given table.
      *
      * @param   string   $table     The name of the database table.
@@ -238,7 +264,7 @@ class PgsqlDriver extends PdoDriver
 
         $result        = [];
         $tableSub      = $this->replacePrefix($table);
-        $defaultSchema = $this->getDefaultSchema();
+        $fullname      = $this->parseIdent($tableSub);
 
         $this->setQuery(
             '
@@ -259,9 +285,9 @@ class PgsqlDriver extends PdoDriver
 			LEFT JOIN pg_catalog.pg_attrdef adef ON a.attrelid=adef.adrelid AND a.attnum=adef.adnum
 			LEFT JOIN pg_catalog.pg_type t ON a.atttypid=t.oid
 			WHERE a.attrelid =
-				(SELECT oid FROM pg_catalog.pg_class WHERE relname=' . $this->quote($tableSub) . '
+				(SELECT oid FROM pg_catalog.pg_class WHERE relname=' . $this->quote($fullname->table) . '
 					AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE
-					nspname = ' . $this->quote($defaultSchema) . ')
+					nspname = ' . $this->quote($fullname->schema) . ')
 				)
 			AND a.attnum > 0 AND NOT a.attisdropped
 			ORDER BY a.attnum'
@@ -324,8 +350,9 @@ class PgsqlDriver extends PdoDriver
         // To check if table exists and prevent SQL injection
         $tableList = $this->getTableList();
         $tableSub  = $this->replacePrefix($table);
+        $fullname  = $this->parseIdent($tableSub);
 
-        if (\in_array($tableSub, $tableList, true)) {
+        if (\in_array($fullname->table, $tableList, true)) {
             // Get the details columns information.
             $this->setQuery(
                 '
@@ -338,7 +365,7 @@ class PgsqlDriver extends PdoDriver
 				FROM pg_indexes
 				LEFT JOIN pg_class AS pgClassFirst ON indexname=pgClassFirst.relname
 				LEFT JOIN pg_index AS pgIndex ON pgClassFirst.oid=pgIndex.indexrelid
-				WHERE tablename=' . $this->quote($tableSub) . ' ORDER BY indkey'
+				WHERE tablename=' . $this->quote($fullname->table) . ' ORDER BY indkey'
             );
 
             return $this->loadObjectList();
@@ -362,7 +389,8 @@ class PgsqlDriver extends PdoDriver
     {
         $this->connect();
 
-        $tableSub = $this->replacePrefix($table);
+        $tableSub  = $this->replacePrefix($table);
+        $fullname  = $this->parseIdent($tableSub);
 
         $tabInd   = explode(' ', $indKey);
         $colNames = [];
@@ -371,7 +399,7 @@ class PgsqlDriver extends PdoDriver
             $query = $this->createQuery()
                 ->select('attname')
                 ->from('pg_attribute')
-                ->join('LEFT', 'pg_class ON pg_class.relname=' . $this->quote($tableSub))
+                ->join('LEFT', 'pg_class ON pg_class.relname=' . $this->quote($fullname->table))
                 ->where('attnum=' . $numCol . ' AND attrelid=pg_class.oid');
             $this->setQuery($query);
             $colNames[] = $this->loadResult();
@@ -417,8 +445,9 @@ class PgsqlDriver extends PdoDriver
         // To check if table exists and prevent SQL injection
         $tableList = $this->getTableList();
         $tableSub  = $this->replacePrefix($table);
+        $fullname  = $this->parseIdent($tableSub);
 
-        if (\in_array($tableSub, $tableList, true)) {
+        if (\in_array($fullname->table, $tableList, true)) {
             $name = [
                 's.relname', 'n.nspname', 't.relname', 'a.attname', 'info.data_type',
                 'info.minimum_value', 'info.maximum_value', 'info.increment', 'info.cycle_option', 'info.start_value',
@@ -437,7 +466,7 @@ class PgsqlDriver extends PdoDriver
                 ->leftJoin('pg_namespace n ON n.oid = t.relnamespace')
                 ->leftJoin('pg_attribute a ON a.attrelid = t.oid AND a.attnum = d.refobjsubid')
                 ->leftJoin('information_schema.sequences AS info ON info.sequence_name = s.relname')
-                ->where('s.relkind = ' . $this->quote('S') . ' AND d.deptype = ' . $this->quote('a') . ' AND t.relname = ' . $this->quote($tableSub));
+                ->where('s.relkind = ' . $this->quote('S') . ' AND d.deptype = ' . $this->quote('a') . ' AND t.relname = ' . $this->quote($fullname->table));
             $this->setQuery($query);
 
             return $this->loadObjectList();
@@ -527,14 +556,16 @@ class PgsqlDriver extends PdoDriver
     {
         $this->connect();
 
-        $oldTable = $this->replacePrefix($oldTable);
-        $newTable = $this->replacePrefix($newTable);
+        $oldTable     = $this->replacePrefix($oldTable);
+        $newTable     = $this->replacePrefix($newTable);
+        $fullOldTable = $this->parseIdent($oldTable);
+        $fullNewTable = $this->parseIdent($newTable);
 
         // To check if table exists and prevent SQL injection
         $tableList = $this->getTableList();
 
         // Origin Table does not exist
-        if (!\in_array($oldTable, $tableList, true)) {
+        if (!\in_array($fullOldTable->table, $tableList, true)) {
             // Origin Table not found
             throw new \RuntimeException('Table not found in Postgresql database.');
         }
@@ -543,7 +574,7 @@ class PgsqlDriver extends PdoDriver
         $subQuery = $this->createQuery()
             ->select('indexrelid')
             ->from('pg_index, pg_class')
-            ->where('pg_class.relname = ' . $this->quote($oldTable))
+            ->where('pg_class.relname = ' . $this->quote($fullOldTable->table))
             ->where('pg_class.oid = pg_index.indrelid');
 
         $this->setQuery(
@@ -556,7 +587,7 @@ class PgsqlDriver extends PdoDriver
         $oldIndexes = $this->loadColumn();
 
         foreach ($oldIndexes as $oldIndex) {
-            $changedIdxName = str_replace($oldTable, $newTable, $oldIndex);
+            $changedIdxName = str_replace($fullOldTable->table, $fullNewTable->table, $oldIndex);
             $this->setQuery('ALTER INDEX ' . $this->escape($oldIndex) . ' RENAME TO ' . $this->escape($changedIdxName))->execute();
         }
 
@@ -573,18 +604,18 @@ class PgsqlDriver extends PdoDriver
                 ->from('pg_class')
                 ->where('relkind = ' . $this->quote('S'))
                 ->where('relnamespace IN (' . (string) $subQuery . ')')
-                ->where('relname LIKE ' . $this->quote("%$oldTable%"))
+                ->where('relname LIKE ' . $this->quote("%{$fullOldTable->table}%"))
         );
 
         $oldSequences = $this->loadColumn();
 
         foreach ($oldSequences as $oldSequence) {
-            $changedSequenceName = str_replace($oldTable, $newTable, $oldSequence);
+            $changedSequenceName = str_replace($fullOldTable->table, $fullNewTable->table, $oldSequence);
             $this->setQuery('ALTER SEQUENCE ' . $this->escape($oldSequence) . ' RENAME TO ' . $this->escape($changedSequenceName))->execute();
         }
 
         // Rename table
-        $this->setQuery('ALTER TABLE ' . $this->escape($oldTable) . ' RENAME TO ' . $this->escape($newTable))->execute();
+        $this->setQuery('ALTER TABLE ' . $this->escape($fullOldTable->table) . ' RENAME TO ' . $this->escape($fullNewTable->table))->execute();
 
         return $this;
     }
