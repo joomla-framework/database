@@ -51,6 +51,14 @@ class MysqliPreparedStatementTest extends DatabaseTestCase
                 )
             );
         }
+
+        $insertQuery = 'INSERT INTO dbtest (title, description, start_date) VALUES (:title, :description, :start_date)';
+        $mysqliStatementObject = new MysqliStatement(static::$connection->getConnection(), $insertQuery);
+        $mysqliStatementObject->execute([
+            ':title'       => 'Test Title',
+            ':description' => 'Test Description',
+            ':start_date'  => '2023-01-01',
+        ]);
     }
 
     /**
@@ -148,10 +156,45 @@ class MysqliPreparedStatementTest extends DatabaseTestCase
         $statement = 'SELECT * FROM dbtest WHERE `title` LIKE :search OR `description` LIKE :search2';
         $mysqliStatementObject = new MysqliStatement(static::$connection->getConnection(), $statement);
         $dummyValue = 'test';
-        $dummyValue2 = 'test';
         $mysqliStatementObject->bindParam(':search', $dummyValue);
         $mysqliStatementObject->bindParam(':search2', $dummyValue);
 
         $mysqliStatementObject->execute();
+    }
+
+    /**
+     * Regression test to ensure running queries with bound variables still works
+     */
+    public function testPreparedStatementWithBinding()
+    {
+        $statement = 'SELECT id FROM dbtest WHERE `title` LIKE :search';
+        $mysqliStatementObject = new MysqliStatement(static::$connection->getConnection(), $statement);
+        $title = 'Test Title';
+        $mysqliStatementObject->bindParam(':search', $title);
+        $mysqliStatementObject->execute();
+        $result = $mysqliStatementObject->fetchColumn();
+
+        $title = 'changed';
+        $mysqliStatementObject->execute();
+        $result2 = $mysqliStatementObject->fetchColumn();
+        $this->assertNotEquals($result, $result2);
+    }
+
+    /**
+     * Regression test to ensure running queries with bound variables still works
+     */
+    public function testPreparedStatementWithoutBinding()
+    {
+        $statement = 'SELECT id FROM dbtest WHERE `title` LIKE :search';
+        $mysqliStatementObject = new MysqliStatement(static::$connection->getConnection(), $statement);
+        $title = 'Test Title';
+        $params = [':search' => $title];
+        $mysqliStatementObject->execute($params);
+        $result = $mysqliStatementObject->fetchColumn();
+
+        $params[':search'] = 'changed';
+        $mysqliStatementObject->execute($params);
+        $result2 = $mysqliStatementObject->fetchColumn();
+        $this->assertNotEquals($result, $result2);
     }
 }
