@@ -208,6 +208,6 @@ jobs:
             - name: Install Composer dependencies
               run: |
                   git config --global --add safe.directory $GITHUB_WORKSPACE
-                  composer install --no-progress --ignore-platform-reqs
+                  composer update
             - name: Run Unit tests
               run: php vendor/bin/phpunit -c phpunit.appveyor_sql2019.xml.dist
