@@ -1941,7 +1941,7 @@ abstract class DatabaseQuery implements QueryInterface
 
     /**
      * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution.
-     * 
+     *
      * Proxy method to self::bind() without the need to provide a referenceable input for value
      *
      * @param   array|string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
