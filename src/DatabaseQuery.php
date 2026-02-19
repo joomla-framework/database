@@ -1466,7 +1466,7 @@ abstract class DatabaseQuery implements QueryInterface
      * @param   array|string  $text    A string or an array of strings to quote.
      * @param   boolean       $escape  True (default) to escape the string, false to leave it unchanged.
      *
-     * @return  string  The quoted input string.
+     * @return  array|string  The quoted input string.
      *
      * @since   1.0
      * @throws  \RuntimeException if the internal db property is not a valid object.
