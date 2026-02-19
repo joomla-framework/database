@@ -20,26 +20,26 @@ use Joomla\Database\Exception\UnknownTypeException;
  * @property-read  array                      $bounded             Holds key / value pair of bound objects.
  * @property-read  array                      $parameterMapping    Mapping array for parameter types.
  * @property-read  DatabaseInterface          $db                  The database driver.
- * @property-read  string                     $sql                 The SQL query (if a direct query string was provided).
+ * @property-read  string|null                $sql                 The SQL query (if a direct query string was provided).
  * @property-read  string                     $type                The query type.
  * @property-read  string|null                $alias               The query alias.
  * @property-read  Query\QueryElement         $element             The query element for a generic query (type = null).
- * @property-read  Query\QueryElement         $select              The select element.
- * @property-read  Query\QueryElement         $delete              The delete element.
- * @property-read  Query\QueryElement         $update              The update element.
- * @property-read  Query\QueryElement         $insert              The insert element.
- * @property-read  Query\QueryElement         $from                The from element.
+ * @property-read  Query\QueryElement|null    $select              The select element.
+ * @property-read  Query\QueryElement|null    $delete              The delete element.
+ * @property-read  Query\QueryElement|null    $update              The update element.
+ * @property-read  Query\QueryElement|null    $insert              The insert element.
+ * @property-read  Query\QueryElement|null    $from                The from element.
  * @property-read  Query\QueryElement[]|null  $join                The join elements.
- * @property-read  Query\QueryElement         $set                 The set element.
- * @property-read  Query\QueryElement         $where               The where element.
- * @property-read  Query\QueryElement         $group               The group element.
- * @property-read  Query\QueryElement         $having              The having element.
- * @property-read  Query\QueryElement         $columns             The column list for an INSERT statement.
- * @property-read  Query\QueryElement         $values              The values list for an INSERT statement.
- * @property-read  Query\QueryElement         $order               The order element.
- * @property-read  boolean                    $autoIncrementField  The auto increment insert field element.
- * @property-read  Query\QueryElement         $call                The call element.
- * @property-read  Query\QueryElement         $exec                The exec element.
+ * @property-read  Query\QueryElement|null    $set                 The set element.
+ * @property-read  Query\QueryElement|null    $where               The where element.
+ * @property-read  Query\QueryElement|null    $group               The group element.
+ * @property-read  Query\QueryElement|null    $having              The having element.
+ * @property-read  Query\QueryElement|null    $columns             The column list for an INSERT statement.
+ * @property-read  Query\QueryElement|null    $values              The values list for an INSERT statement.
+ * @property-read  Query\QueryElement|null    $order               The order element.
+ * @property-read  boolean|null               $autoIncrementField  The auto increment insert field element.
+ * @property-read  Query\QueryElement|null    $call                The call element.
+ * @property-read  Query\QueryElement|null    $exec                The exec element.
  * @property-read  Query\QueryElement[]|null  $merge               The list of query elements.
  * @property-read  DatabaseQuery|null         $querySet            The query object.
  * @property-read  array|null                 $selectRowNumber     Details of window function.
@@ -83,7 +83,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The SQL query (if a direct query string was provided).
      *
-     * @var    string
+     * @var    ?string
      * @since  1.0
      */
     protected $sql;
@@ -115,7 +115,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The select element.
      *
-     * @var    Query\QueryElement
+     * @var    ?Query\QueryElement
      * @since  1.0
      */
     protected $select;
@@ -123,7 +123,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The delete element.
      *
-     * @var    Query\QueryElement
+     * @var    ?Query\QueryElement
      * @since  1.0
      */
     protected $delete;
@@ -131,7 +131,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The update element.
      *
-     * @var    Query\QueryElement
+     * @var    ?Query\QueryElement
      * @since  1.0
      */
     protected $update;
@@ -139,7 +139,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The insert element.
      *
-     * @var    Query\QueryElement
+     * @var    ?Query\QueryElement
      * @since  1.0
      */
     protected $insert;
@@ -147,7 +147,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The from element.
      *
-     * @var    Query\QueryElement
+     * @var    ?Query\QueryElement
      * @since  1.0
      */
     protected $from;
@@ -155,7 +155,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The join elements.
      *
-     * @var    Query\QueryElement[]
+     * @var    ?Query\QueryElement[]
      * @since  1.0
      */
     protected $join;
@@ -163,7 +163,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The set element.
      *
-     * @var    Query\QueryElement
+     * @var    ?Query\QueryElement
      * @since  1.0
      */
     protected $set;
@@ -171,7 +171,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The where element.
      *
-     * @var    Query\QueryElement
+     * @var    ?Query\QueryElement
      * @since  1.0
      */
     protected $where;
@@ -179,7 +179,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The group by element.
      *
-     * @var    Query\QueryElement
+     * @var    ?Query\QueryElement
      * @since  1.0
      */
     protected $group;
@@ -187,7 +187,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The having element.
      *
-     * @var    Query\QueryElement
+     * @var    ?Query\QueryElement
      * @since  1.0
      */
     protected $having;
@@ -195,7 +195,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The column list for an INSERT statement.
      *
-     * @var    Query\QueryElement
+     * @var    ?Query\QueryElement
      * @since  1.0
      */
     protected $columns;
@@ -203,7 +203,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The values list for an INSERT statement.
      *
-     * @var    Query\QueryElement
+     * @var    ?Query\QueryElement
      * @since  1.0
      */
     protected $values;
@@ -211,7 +211,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The order element.
      *
-     * @var    Query\QueryElement
+     * @var    ?Query\QueryElement
      * @since  1.0
      */
     protected $order;
@@ -219,7 +219,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The auto increment insert field element.
      *
-     * @var    boolean
+     * @var    ?boolean
      * @since  1.0
      */
     protected $autoIncrementField = false;
@@ -227,7 +227,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The call element.
      *
-     * @var    Query\QueryElement
+     * @var    ?Query\QueryElement
      * @since  1.0
      */
     protected $call;
@@ -235,7 +235,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The exec element.
      *
-     * @var    Query\QueryElement
+     * @var    ?Query\QueryElement
      * @since  1.0
      */
     protected $exec;
@@ -243,7 +243,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The list of query elements, which may include UNION, UNION ALL, EXCEPT and INTERSECT.
      *
-     * @var    Query\QueryElement[]
+     * @var    ?Query\QueryElement[]
      * @since  2.0.0
      */
     protected $merge;
