@@ -50,7 +50,6 @@ jobs:
         runs-on: ubuntu-latest
         container: joomlaprojects/docker-images:php8.4
         needs: [code-style-php]
-        continue-on-error: true
         steps:
             - uses: actions/checkout@v4
             - uses: actions/cache/restore@v4
