@@ -251,7 +251,7 @@ abstract class DatabaseQuery implements QueryInterface
     /**
      * The query object.
      *
-     * @var    Query\DatabaseQuery
+     * @var    ?DatabaseQuery
      * @since  2.0.0
      */
     protected $querySet;
