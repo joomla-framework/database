@@ -19,7 +19,7 @@ trait PostgresqlQueryBuilder
     /**
      * The FOR UPDATE element used in "FOR UPDATE" lock
      *
-     * @var    QueryElement
+     * @var    ?QueryElement
      * @since  2.0.0
      */
     protected $forUpdate;
@@ -27,7 +27,7 @@ trait PostgresqlQueryBuilder
     /**
      * The FOR SHARE element used in "FOR SHARE" lock
      *
-     * @var    QueryElement
+     * @var    ?QueryElement
      * @since  2.0.0
      */
     protected $forShare;
@@ -35,7 +35,7 @@ trait PostgresqlQueryBuilder
     /**
      * The NOWAIT element used in "FOR SHARE" and "FOR UPDATE" lock
      *
-     * @var    QueryElement
+     * @var    ?QueryElement
      * @since  2.0.0
      */
     protected $noWait;
@@ -59,7 +59,7 @@ trait PostgresqlQueryBuilder
     /**
      * The RETURNING element of INSERT INTO
      *
-     * @var    QueryElement
+     * @var    ?QueryElement
      * @since  2.0.0
      */
     protected $returning;
