@@ -457,6 +457,18 @@ parameters:
 			path: src/Pgsql/PgsqlQuery.php
 
 		-
+			message: '#^Property Joomla\\Database\\DatabaseQuery\:\:\$limit \(int\|null\) does not accept Joomla\\Database\\Query\\QueryElement\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Pgsql/PgsqlQuery.php
+
+		-
+			message: '#^Property Joomla\\Database\\DatabaseQuery\:\:\$offset \(int\|null\) does not accept Joomla\\Database\\Query\\QueryElement\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Pgsql/PgsqlQuery.php
+
+		-
 			message: '#^Argument of an invalid type \$this\(Joomla\\Database\\Query\\QueryElement\) supplied for foreach, only iterables are supported\.$#'
 			identifier: foreach.nonIterable
 			count: 1
