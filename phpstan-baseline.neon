@@ -127,12 +127,6 @@ parameters:
 			path: src/DatabaseQuery.php
 
 		-
-			message: '#^If condition is always true\.$#'
-			identifier: if.alwaysTrue
-			count: 9
-			path: src/DatabaseQuery.php
-
-		-
 			message: '#^Instanceof between Joomla\\Database\\DatabaseInterface and Joomla\\Database\\DatabaseInterface will always evaluate to true\.$#'
 			identifier: instanceof.alwaysTrue
 			count: 6
@@ -145,26 +139,8 @@ parameters:
 			path: src/DatabaseQuery.php
 
 		-
-			message: '#^Left side of \|\| is always true\.$#'
-			identifier: booleanOr.leftAlwaysTrue
-			count: 1
-			path: src/DatabaseQuery.php
-
-		-
-			message: '#^Parameter \#2 \$array of function implode expects array\|null, string given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/DatabaseQuery.php
-
-		-
 			message: '#^Parameter \#2 \$elements of class Joomla\\Database\\Query\\QueryElement constructor expects array\<string\>\|string, null given\.$#'
 			identifier: argument.type
-			count: 1
-			path: src/DatabaseQuery.php
-
-		-
-			message: '#^Property Joomla\\Database\\DatabaseQuery\:\:\$querySet has unknown class Joomla\\Database\\Query\\DatabaseQuery as its type\.$#'
-			identifier: class.notFound
 			count: 1
 			path: src/DatabaseQuery.php
 
@@ -217,18 +193,6 @@ parameters:
 			path: src/Mysql/MysqlDriver.php
 
 		-
-			message: '#^Method Joomla\\Database\\Mysql\\MysqlImporter\:\:getKeyLookup\(\) has Exception in PHPDoc @throws tag but it''s not thrown\.$#'
-			identifier: throws.unusedType
-			count: 1
-			path: src/Mysql/MysqlImporter.php
-
-		-
-			message: '#^If condition is always true\.$#'
-			identifier: if.alwaysTrue
-			count: 1
-			path: src/Mysql/MysqlQuery.php
-
-		-
 			message: '#^Call to function is_callable\(\) with array\{mysqli, ''close''\} will always evaluate to true\.$#'
 			identifier: function.alreadyNarrowedType
 			count: 1
@@ -265,12 +229,6 @@ parameters:
 			path: src/Mysqli/MysqliDriver.php
 
 		-
-			message: '#^Method Joomla\\Database\\Mysqli\\MysqliDriver\:\:connect\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
-			identifier: throws.unusedType
-			count: 1
-			path: src/Mysqli/MysqliDriver.php
-
-		-
 			message: '#^Method Joomla\\Database\\Mysqli\\MysqliDriver\:\:serverClaimsUtf8mb4Support\(\) is unused\.$#'
 			identifier: method.unused
 			count: 1
@@ -299,12 +257,6 @@ parameters:
 			identifier: deadCode.unreachable
 			count: 2
 			path: src/Mysqli/MysqliDriver.php
-
-		-
-			message: '#^If condition is always true\.$#'
-			identifier: if.alwaysTrue
-			count: 1
-			path: src/Mysqli/MysqliQuery.php
 
 		-
 			message: '#^PHPDoc type array of property Joomla\\Database\\Mysqli\\MysqliQuery\:\:\$nullDatetimeList is not covariant with PHPDoc type array\<string\> of overridden property Joomla\\Database\\DatabaseQuery\:\:\$nullDatetimeList\.$#'
@@ -361,12 +313,6 @@ parameters:
 			path: src/Pdo/PdoDriver.php
 
 		-
-			message: '#^Method Joomla\\Database\\Pdo\\PdoDriver\:\:connect\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
-			identifier: throws.unusedType
-			count: 1
-			path: src/Pdo/PdoDriver.php
-
-		-
 			message: '#^PHPDoc type PDO of property Joomla\\Database\\Pdo\\PdoDriver\:\:\$connection is not covariant with PHPDoc type resource of overridden property Joomla\\Database\\DatabaseDriver\:\:\$connection\.$#'
 			identifier: property.phpDocType
 			count: 1
@@ -399,12 +345,6 @@ parameters:
 		-
 			message: '#^If condition is always true\.$#'
 			identifier: if.alwaysTrue
-			count: 1
-			path: src/Pgsql/PgsqlDriver.php
-
-		-
-			message: '#^Method Joomla\\Database\\Pgsql\\PgsqlDriver\:\:getTableCreate\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
-			identifier: throws.unusedType
 			count: 1
 			path: src/Pgsql/PgsqlDriver.php
 
@@ -499,12 +439,6 @@ parameters:
 			path: src/Pgsql/PgsqlImporter.php
 
 		-
-			message: '#^If condition is always true\.$#'
-			identifier: if.alwaysTrue
-			count: 12
-			path: src/Pgsql/PgsqlQuery.php
-
-		-
 			message: '#^Instanceof between string and \$this\(Joomla\\Database\\Pgsql\\PgsqlQuery\) will always evaluate to false\.$#'
 			identifier: instanceof.alwaysFalse
 			count: 1
@@ -523,8 +457,14 @@ parameters:
 			path: src/Pgsql/PgsqlQuery.php
 
 		-
-			message: '#^Ternary operator condition is always true\.$#'
-			identifier: ternary.alwaysTrue
+			message: '#^Property Joomla\\Database\\DatabaseQuery\:\:\$limit \(int\|null\) does not accept Joomla\\Database\\Query\\QueryElement\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Pgsql/PgsqlQuery.php
+
+		-
+			message: '#^Property Joomla\\Database\\DatabaseQuery\:\:\$offset \(int\|null\) does not accept Joomla\\Database\\Query\\QueryElement\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: src/Pgsql/PgsqlQuery.php
 
@@ -553,70 +493,10 @@ parameters:
 			path: src/Sqlite/SqliteDriver.php
 
 		-
-			message: '#^Method Joomla\\Database\\Sqlite\\SqliteDriver\:\:alterDbCharacterSet\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
-			identifier: throws.unusedType
-			count: 1
-			path: src/Sqlite/SqliteDriver.php
-
-		-
-			message: '#^Method Joomla\\Database\\Sqlite\\SqliteDriver\:\:connect\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
-			identifier: throws.unusedType
-			count: 1
-			path: src/Sqlite/SqliteDriver.php
-
-		-
-			message: '#^Method Joomla\\Database\\Sqlite\\SqliteDriver\:\:createDatabase\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
-			identifier: throws.unusedType
-			count: 1
-			path: src/Sqlite/SqliteDriver.php
-
-		-
-			message: '#^Method Joomla\\Database\\Sqlite\\SqliteDriver\:\:getConnectionCollation\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
-			identifier: throws.unusedType
-			count: 1
-			path: src/Sqlite/SqliteDriver.php
-
-		-
-			message: '#^Method Joomla\\Database\\Sqlite\\SqliteDriver\:\:getConnectionEncryption\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
-			identifier: throws.unusedType
-			count: 1
-			path: src/Sqlite/SqliteDriver.php
-
-		-
-			message: '#^Method Joomla\\Database\\Sqlite\\SqliteDriver\:\:lockTable\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
-			identifier: throws.unusedType
-			count: 1
-			path: src/Sqlite/SqliteDriver.php
-
-		-
-			message: '#^Method Joomla\\Database\\Sqlite\\SqliteDriver\:\:unlockTables\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
-			identifier: throws.unusedType
-			count: 1
-			path: src/Sqlite/SqliteDriver.php
-
-		-
 			message: '#^Unreachable statement \- code above always terminates\.$#'
 			identifier: deadCode.unreachable
 			count: 1
 			path: src/Sqlite/SqliteDriver.php
-
-		-
-			message: '#^If condition is always true\.$#'
-			identifier: if.alwaysTrue
-			count: 1
-			path: src/Sqlite/SqliteQuery.php
-
-		-
-			message: '#^Left side of \|\| is always true\.$#'
-			identifier: booleanOr.leftAlwaysTrue
-			count: 1
-			path: src/Sqlite/SqliteQuery.php
-
-		-
-			message: '#^Result of \|\| is always true\.$#'
-			identifier: booleanOr.alwaysTrue
-			count: 1
-			path: src/Sqlite/SqliteQuery.php
 
 		-
 			message: '#^Unsafe usage of new static\(\)\.$#'
@@ -643,27 +523,9 @@ parameters:
 			path: src/Sqlsrv/SqlsrvDriver.php
 
 		-
-			message: '#^Method Joomla\\Database\\Sqlsrv\\SqlsrvDriver\:\:connect\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
-			identifier: throws.unusedType
-			count: 1
-			path: src/Sqlsrv/SqlsrvDriver.php
-
-		-
-			message: '#^Method Joomla\\Database\\Sqlsrv\\SqlsrvDriver\:\:lockTable\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
-			identifier: throws.unusedType
-			count: 1
-			path: src/Sqlsrv/SqlsrvDriver.php
-
-		-
-			message: '#^Method Joomla\\Database\\Sqlsrv\\SqlsrvDriver\:\:unlockTables\(\) has RuntimeException in PHPDoc @throws tag but it''s not thrown\.$#'
-			identifier: throws.unusedType
-			count: 1
-			path: src/Sqlsrv/SqlsrvDriver.php
-
-		-
 			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, list\<array\|string\> given\.$#'
 			identifier: argument.type
-			count: 1
+			count: 2
 			path: src/Sqlsrv/SqlsrvDriver.php
 
 		-
@@ -691,20 +553,8 @@ parameters:
 			path: src/Sqlsrv/SqlsrvQuery.php
 
 		-
-			message: '#^If condition is always true\.$#'
-			identifier: if.alwaysTrue
-			count: 14
-			path: src/Sqlsrv/SqlsrvQuery.php
-
-		-
 			message: '#^Instanceof between Joomla\\Database\\DatabaseInterface and Joomla\\Database\\DatabaseInterface will always evaluate to true\.$#'
 			identifier: instanceof.alwaysTrue
-			count: 1
-			path: src/Sqlsrv/SqlsrvQuery.php
-
-		-
-			message: '#^Left side of \|\| is always true\.$#'
-			identifier: booleanOr.leftAlwaysTrue
 			count: 1
 			path: src/Sqlsrv/SqlsrvQuery.php
 
@@ -717,18 +567,6 @@ parameters:
 		-
 			message: '#^PHPDoc type array of property Joomla\\Database\\Sqlsrv\\SqlsrvQuery\:\:\$nullDatetimeList is not covariant with PHPDoc type array\<string\> of overridden property Joomla\\Database\\DatabaseQuery\:\:\$nullDatetimeList\.$#'
 			identifier: property.phpDocType
-			count: 1
-			path: src/Sqlsrv/SqlsrvQuery.php
-
-		-
-			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array\<array\|string\> given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Sqlsrv/SqlsrvQuery.php
-
-		-
-			message: '#^Result of \|\| is always true\.$#'
-			identifier: booleanOr.alwaysTrue
 			count: 1
 			path: src/Sqlsrv/SqlsrvQuery.php
 
