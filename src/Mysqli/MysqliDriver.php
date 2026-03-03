@@ -95,6 +95,14 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
     protected static $dbMinMariadb = '10.0';
 
     /**
+     * The database server version.
+     *
+     * @var    string
+     * @since  __DEPLOY_VERSION__
+     */
+    protected $serverVersion;
+
+    /**
      * Constructor.
      *
      * @param   array  $options  List of options used to configure the connection
@@ -266,9 +274,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
             $this->select($this->options['database']);
         }
 
-        $this->mariadb = stripos($this->connection->server_info, 'mariadb') !== false;
+        $serverVersion = $this->getVersion();
 
-        $this->utf8mb4 = $this->serverClaimsUtf8mb4Support();
+        $this->mariadb = stripos($serverVersion, 'mariadb') !== false;
+
+        $this->utf8mb4 = $this->serverClaimsUtf8mb4Support($serverVersion);
 
         // Set character sets (needed for MySQL 4.1.2+ and MariaDB).
         $this->utf = $this->setUtf();
@@ -591,22 +601,26 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
     }
 
     /**
-     * Get the version of the database connector.
+     * Get the version of the database server.
      *
-     * @return  string  The database connector version.
+     * @return  string  The database server version.
      *
      * @since   1.0
      */
     public function getVersion()
     {
-        $this->connect();
+        if (!isset($this->serverVersion)) {
+            $this->connect();
 
-        if ($this->mariadb) {
-            // MariaDB: Strip off any leading '5.5.5-', if present
-            return preg_replace('/^5\.5\.5-/', '', $this->connection->server_info);
+            $this->serverVersion = $this->setQuery('SELECT @@version;')->loadResult();
+
+            if (stripos($this->serverVersion, 'mariadb') !== false) {
+                // MariaDB: Strip off any leading '5.5.5-', if present
+                $this->serverVersion = preg_replace('/^5\.5\.5-/', '', $this->serverVersion);
+            }
         }
 
-        return $this->connection->server_info;
+        return $this->serverVersion;
     }
 
     /**
@@ -1006,16 +1020,15 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
      *
      * @since   1.4.0
      */
-    private function serverClaimsUtf8mb4Support()
+    private function serverClaimsUtf8mb4Support($serverVersion)
     {
         $client_version = mysqli_get_client_info();
-        $server_version = $this->getVersion();
 
-        if (version_compare($server_version, '5.5.3', '<')) {
+        if (version_compare($serverVersion, '5.5.3', '<')) {
             return false;
         }
 
-        if ($this->mariadb && version_compare($server_version, '10.0.0', '<')) {
+        if ($this->mariadb && version_compare($serverVersion, '10.0.0', '<')) {
             return false;
         }
 

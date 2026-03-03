@@ -103,6 +103,14 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
     public $charset = 'utf8';
 
     /**
+     * The database server version.
+     *
+     * @var    string
+     * @since  __DEPLOY_VERSION__
+     */
+    protected $serverVersion;
+
+    /**
      * Constructor.
      *
      * @param   array  $options  Array of database options with keys: host, user, password, database, select.
@@ -492,24 +500,26 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
     }
 
     /**
-     * Get the version of the database connector.
+     * Get the version of the database server.
      *
-     * @return  string  The database connector version.
+     * @return  string  The database server version.
      *
      * @since   2.0.0
      */
     public function getVersion()
     {
-        $this->connect();
+        if (!isset($this->serverVersion)) {
+            $this->connect();
 
-        $version = $this->getOption(\PDO::ATTR_SERVER_VERSION);
+            $this->serverVersion = $this->setQuery('SELECT @@version;')->loadResult();
 
-        if (stripos($version, 'mariadb') !== false) {
-            // MariaDB: Strip off any leading '5.5.5-', if present
-            return preg_replace('/^5\.5\.5-/', '', $version);
+            if (stripos($this->serverVersion, 'mariadb') !== false) {
+                // MariaDB: Strip off any leading '5.5.5-', if present
+                $this->serverVersion = preg_replace('/^5\.5\.5-/', '', $this->serverVersion);
+            }
         }
 
-        return $version;
+        return $this->serverVersion;
     }
 
     /**
