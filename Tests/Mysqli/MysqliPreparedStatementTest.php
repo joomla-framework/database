@@ -10,6 +10,7 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Mysqli\MysqliStatement;
 use Joomla\Test\DatabaseTestCase;
+use Joomla\Test\TestHelper;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
@@ -91,17 +92,11 @@ class MysqliPreparedStatementTest extends DatabaseTestCase
             $rawQuery
         );
 
-        $refObject = new \ReflectionObject($mysqliStatementObject);
-        $refMapping = $refObject->getProperty('parameterKeyMapping');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $refMapping->setAccessible(true);
-        $parameterKeyMapping = $refMapping->getValue($mysqliStatementObject);
-
         $this->assertEquals(
             [
                 ':search' => [0, 1],
             ],
-            $parameterKeyMapping
+            TestHelper::getValue($mysqliStatementObject, 'parameterKeyMapping')
         );
     }
 
@@ -119,18 +114,12 @@ class MysqliPreparedStatementTest extends DatabaseTestCase
             $rawQuery
         );
 
-        $refObject = new \ReflectionObject($mysqliStatementObject);
-        $refMapping = $refObject->getProperty('parameterKeyMapping');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $refMapping->setAccessible(true);
-        $parameterKeyMapping = $refMapping->getValue($mysqliStatementObject);
-
         $this->assertEquals(
             [
                 ':search' => [0],
                 ':search2' => [1],
             ],
-            $parameterKeyMapping
+            TestHelper::getValue($mysqliStatementObject, 'parameterKeyMapping')
         );
     }
 

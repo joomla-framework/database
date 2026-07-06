@@ -10,6 +10,7 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Sqlsrv\SqlsrvStatement;
 use Joomla\Test\DatabaseTestCase;
+use Joomla\Test\TestHelper;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
@@ -85,17 +86,11 @@ class SqlsrvPreparedStatementTest extends DatabaseTestCase
             $rawQuery
         );
 
-        $refObject = new \ReflectionObject($sqlsrvStatement);
-        $refMapping = $refObject->getProperty('parameterKeyMapping');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $refMapping->setAccessible(true);
-        $parameterKeyMapping = $refMapping->getValue($sqlsrvStatement);
-
         $this->assertEquals(
             [
                 ':search' => [0, 1],
             ],
-            $parameterKeyMapping
+            TestHelper::getValue($sqlsrvStatement, 'parameterKeyMapping')
         );
     }
 
@@ -113,18 +108,12 @@ class SqlsrvPreparedStatementTest extends DatabaseTestCase
             $rawQuery
         );
 
-        $refObject = new \ReflectionObject($sqlsrvStatement);
-        $refMapping = $refObject->getProperty('parameterKeyMapping');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $refMapping->setAccessible(true);
-        $parameterKeyMapping = $refMapping->getValue($sqlsrvStatement);
-
         $this->assertEquals(
             [
                 ':search' => [0],
                 ':search2' => [1],
             ],
-            $parameterKeyMapping
+            TestHelper::getValue($sqlsrvStatement, 'parameterKeyMapping')
         );
     }
 
