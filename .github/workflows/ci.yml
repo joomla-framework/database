@@ -206,7 +206,7 @@ jobs:
                   show-log: true
             - name: Install Composer dependencies
               run: |
-                  git config --global --add safe.directory $GITHUB_WORKSPACE
+                  git config --global --add safe.directory ${env:GITHUB_WORKSPACE}
                   composer update
             - name: Run Unit tests
               run: php vendor/bin/phpunit -c phpunit.windows.xml.dist
