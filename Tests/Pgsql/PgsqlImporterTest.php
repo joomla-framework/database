@@ -195,7 +195,7 @@ class PgsqlImporterTest extends TestCase
      */
     protected function tearDown(): void
     {
-        $this->expectedInsertObjects = [];
+        $this->executedInsertObjects = [];
         $this->executedQueries       = [];
     }
 
