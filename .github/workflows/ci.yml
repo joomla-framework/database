@@ -16,8 +16,8 @@ jobs:
         runs-on: ubuntu-latest
         container: joomlaprojects/docker-images:php8.3
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/cache@v4
+            - uses: actions/checkout@v6
+            - uses: actions/cache@v5
               id: cache-php
               with:
                   path: vendor
@@ -35,8 +35,8 @@ jobs:
         container: joomlaprojects/docker-images:php8.3
         needs: [composer]
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/cache/restore@v4
+            - uses: actions/checkout@v6
+            - uses: actions/cache/restore@v5
               with:
                   path: vendor
                   key: ${{ runner.os }}-composer-${{ hashFiles('composer.json') }}
@@ -51,8 +51,8 @@ jobs:
         container: joomlaprojects/docker-images:php8.4
         needs: [code-style-php]
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/cache/restore@v4
+            - uses: actions/checkout@v6
+            - uses: actions/cache/restore@v5
               with:
                   path: vendor
                   key: ${{ runner.os }}-composer-${{ hashFiles('composer.json') }}
@@ -69,7 +69,7 @@ jobs:
             matrix:
                 php_version: ['8.3', '8.4']
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - name: Run Unit tests
               run: |
                   git config --global --add safe.directory $GITHUB_WORKSPACE
@@ -87,7 +87,7 @@ jobs:
                 db_engine: ['mysql', 'mysqli']
                 db_version: ['5.7', '8.0']
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - name: Run Unit tests
               run: |
                   git config --global --add safe.directory $GITHUB_WORKSPACE
@@ -111,7 +111,7 @@ jobs:
             matrix:
                 php_version: ['8.3', '8.4']
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - name: Run Unit tests
               run: |
                   git config --global --add safe.directory $GITHUB_WORKSPACE
@@ -136,7 +136,7 @@ jobs:
                 php_version: ['8.3', '8.4']
                 db_version: ['10', '11']
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - name: Run Unit tests
               run: |
                   git config --global --add safe.directory $GITHUB_WORKSPACE
@@ -159,7 +159,7 @@ jobs:
             matrix:
                 php_version: ['8.3', '8.4']
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - name: Run Unit tests
               run: |
                   git config --global --add safe.directory $GITHUB_WORKSPACE
@@ -191,14 +191,14 @@ jobs:
             matrix:
                 php_version: ['8.3', '8.4']
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - name: Setup PHP
-              uses: shivammathur/setup-php@v2
+              uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.37.2
               with:
                   php-version: ${{ matrix.php_version }}
                   extensions: openssl, mbstring, fileinfo, ftp, sqlsrv
             - name: Install MSSQL
-              uses: potatoqualitee/mssqlsuite@v1.8
+              uses: potatoqualitee/mssqlsuite@2291d923e83859edd871679c05b379037376761f # v1.12
               with:
                   install: sqlengine, sqlclient
                   version: 2019
