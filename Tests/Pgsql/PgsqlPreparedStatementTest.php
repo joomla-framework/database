@@ -27,7 +27,7 @@ class PgsqlPreparedStatementTest extends DatabaseTestCase
     {
         parent::setUpBeforeClass();
 
-        if (!static::$connection || static::$connection->getName() !== 'pgsql') {
+        if (!static::$connection) {
             self::markTestSkipped('PostgreSQL database not configured.');
         }
     }

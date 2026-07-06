@@ -28,7 +28,7 @@ class SqlsrvPreparedStatementTest extends DatabaseTestCase
     {
         parent::setUpBeforeClass();
 
-        if (!static::$connection || static::$connection->getName() !== 'sqlsrv') {
+        if (!static::$connection) {
             self::markTestSkipped('SQL Server database not configured.');
         }
     }
