@@ -5,7 +5,7 @@
 		<env name="JOOMLA_TEST_DB_HOST" value="sqlsrv" />
 		<env name="JOOMLA_TEST_DB_PORT" value="1433" />
 		<env name="JOOMLA_TEST_DB_USER" value="sa" />
-		<env name="JOOMLA_TEST_DB_PASSWORD" value="JoomlaFramework123" />
+		<env name="JOOMLA_TEST_DB_PASSWORD" value="Password12!" />
 		<env name="JOOMLA_TEST_DB_DATABASE" value="joomla_ut" />
 		<env name="JOOMLA_TEST_DB_PREFIX" value="" />
 
