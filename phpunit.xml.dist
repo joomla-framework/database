@@ -17,7 +17,6 @@
 			<directory>Tests/Monitor</directory>
 			<directory>Tests/Query</directory>
 			<directory>Tests/Service</directory>
-			<file>Tests/AbstractDatabaseDriverTestCase.php</file>
 			<file>Tests/DatabaseAwareTraitTest.php</file>
 			<file>Tests/DatabaseExporterTest.php</file>
 			<file>Tests/DatabaseFactoryTest.php</file>
