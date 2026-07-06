@@ -7,12 +7,9 @@
 
 namespace Joomla\Database\Tests;
 
-use Joomla\Database\DatabaseImporter;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Tests\Stubs\TestDatabaseImporter;
-use Joomla\Database\Tests\Stubs\TestDatabaseQuery;
 use Joomla\Test\TestHelper;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -65,12 +62,11 @@ class DatabaseImporterTest extends TestCase
     }
 
     /**
-     * @testdox  A database drier can be set to the importer
+     * @testdox  A database driver can be set to the importer
      */
     public function testSetDbo()
     {
-        /** @var DatabaseInterface|MockObject $db */
-        $db = $this->createMock(DatabaseInterface::class);
+        $db = $this->createStub(DatabaseInterface::class);
 
         $this->assertSame($this->importer, $this->importer->setDbo($db), 'The importer supports method chaining');
     }

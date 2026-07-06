@@ -131,7 +131,7 @@ class DatabaseFactoryTest extends TestCase
         $databaseDriver = null;
 
         if ($createDb) {
-            $databaseDriver = $this->createMock(MysqliDriver::class);
+            $databaseDriver = $this->createStub(MysqliDriver::class);
         }
 
         $exporter = $this->factory->getExporter($adapter, $databaseDriver);
@@ -194,7 +194,7 @@ class DatabaseFactoryTest extends TestCase
         $databaseDriver = null;
 
         if ($createDb) {
-            $databaseDriver = $this->createMock(MysqliDriver::class);
+            $databaseDriver = $this->createStub(MysqliDriver::class);
         }
 
         $importer = $this->factory->getImporter($adapter, $databaseDriver);
@@ -239,7 +239,7 @@ class DatabaseFactoryTest extends TestCase
         $statement = null;
 
         if ($createStatement) {
-            $statement = $this->createMock(StatementInterface::class);
+            $statement = $this->createStub(StatementInterface::class);
         }
 
         $this->assertInstanceOf(
@@ -287,7 +287,7 @@ class DatabaseFactoryTest extends TestCase
         $databaseDriver = null;
 
         if ($createDb) {
-            $databaseDriver = $this->createMock(MysqliDriver::class);
+            $databaseDriver = $this->createStub(MysqliDriver::class);
         }
 
         $this->assertInstanceOf(

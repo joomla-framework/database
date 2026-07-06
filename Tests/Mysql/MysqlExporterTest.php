@@ -11,7 +11,7 @@ use Joomla\Database\Mysql\MysqlDriver;
 use Joomla\Database\Mysql\MysqlExporter;
 use Joomla\Database\Mysql\MysqlQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,7 +22,7 @@ class MysqlExporterTest extends TestCase
     /**
      * Mock database driver
      *
-     * @var  MockObject|MysqlDriver
+     * @var  Stub|MysqlDriver
      */
     private $db;
 
@@ -37,20 +37,17 @@ class MysqlExporterTest extends TestCase
     {
         parent::setUp();
 
-        $this->db = $this->createMock(MysqlDriver::class);
+        $this->db = $this->createStub(MysqlDriver::class);
 
-        $this->db->expects($this->any())
-            ->method('getPrefix')
+        $this->db->method('getPrefix')
             ->willReturn('jos_');
 
-        $this->db->expects($this->any())
-            ->method('createQuery')
+        $this->db->method('createQuery')
             ->willReturnCallback(function () {
                 return new MysqlQuery($this->db);
             });
 
-        $this->db->expects($this->any())
-            ->method('getTableColumns')
+        $this->db->method('getTableColumns')
             ->willReturn(
                 [
                     'id' => (object) [
@@ -78,8 +75,7 @@ class MysqlExporterTest extends TestCase
                 ]
             );
 
-        $this->db->expects($this->any())
-            ->method('getTableKeys')
+        $this->db->method('getTableKeys')
             ->willReturn(
                 [
                     (object) [
@@ -99,8 +95,7 @@ class MysqlExporterTest extends TestCase
                 ]
             );
 
-        $this->db->expects($this->any())
-            ->method('quoteName')
+        $this->db->method('quoteName')
             ->willReturnCallback(
                 function ($name, $as = null) {
                     if (is_string($name)) {
@@ -224,8 +219,7 @@ XML
             ->withData($withData);
 
         if ($withData) {
-            $this->db->expects($this->once())
-                ->method('loadObjectList')
+            $this->db->method('loadObjectList')
                 ->willReturn(
                     [
                         (object) [
@@ -295,7 +289,7 @@ XML
         $exporter = new MysqlExporter();
 
         if ($db) {
-            $exporter->setDbo($this->createMock($db));
+            $exporter->setDbo($this->createStub($db));
         }
 
         if ($from) {

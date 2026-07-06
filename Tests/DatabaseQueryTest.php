@@ -13,7 +13,7 @@ use Joomla\Database\Exception\UnknownTypeException;
 use Joomla\Database\ParameterType;
 use Joomla\Database\Tests\Stubs\TestDatabaseQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,14 +24,14 @@ class DatabaseQueryTest extends TestCase
     /**
      * Object being tested
      *
-     * @var  MockObject|DatabaseQuery
+     * @var  DatabaseQuery
      */
     private $query;
 
     /**
      * Mock database driver
      *
-     * @var  MockObject|DatabaseInterface
+     * @var  Stub|DatabaseInterface
      */
     private $db;
 
@@ -46,7 +46,7 @@ class DatabaseQueryTest extends TestCase
     {
         parent::setUp();
 
-        $this->db    = $this->createMock(DatabaseInterface::class);
+        $this->db    = $this->createStub(DatabaseInterface::class);
         $this->query = new TestDatabaseQuery($this->db);
     }
 
@@ -168,8 +168,7 @@ class DatabaseQueryTest extends TestCase
     #[DataProvider('dataConcatenate')]
     public function testConcatenate(array $values, ?string $separator, string $expected)
     {
-        $this->db->expects($this->any())
-            ->method('quote')
+        $this->db->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
             });
@@ -538,11 +537,14 @@ class DatabaseQueryTest extends TestCase
     #[DataProvider('dataNullDate')]
     public function testNullDate(bool $quoted, string $expected)
     {
-        $this->db->expects($this->once())
+        $db    = $this->createMock(DatabaseInterface::class);
+        $query = new TestDatabaseQuery($db);
+
+        $db->expects($this->once())
             ->method('getNullDate')
             ->willReturn('0000-00-00 00:00:00');
 
-        $this->db->expects($this->any())
+        $db->expects($this->exactly((int) $quoted))
             ->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
@@ -550,7 +552,7 @@ class DatabaseQueryTest extends TestCase
 
         $this->assertSame(
             $expected,
-            $this->query->nullDate($quoted)
+            $query->nullDate($quoted)
         );
     }
 
@@ -582,7 +584,9 @@ class DatabaseQueryTest extends TestCase
      */
     public function testIsNullDatetimeWithDates()
     {
-        $this->db->expects($this->any())
+        $db = $this->createMock(DatabaseInterface::class);
+
+        $db->expects($this->once())
             ->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 foreach ($text as $k => $v) {
@@ -592,7 +596,7 @@ class DatabaseQueryTest extends TestCase
                 return $text;
             });
 
-        $query = new class ($this->db) extends DatabaseQuery {
+        $query = new class ($db) extends DatabaseQuery {
             protected $nullDatetimeList = ['0000-00-00 00:00:00', '1000-01-01 00:00:00'];
 
             public function groupConcat($expression, $separator = ',')
@@ -643,7 +647,10 @@ class DatabaseQueryTest extends TestCase
      */
     public function testQuote()
     {
-        $this->db->expects($this->any())
+        $db    = $this->createMock(DatabaseInterface::class);
+        $query = new TestDatabaseQuery($db);
+
+        $db->expects($this->once())
             ->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
@@ -651,7 +658,7 @@ class DatabaseQueryTest extends TestCase
 
         $this->assertSame(
             "'foo'",
-            $this->query->quote('foo')
+            $query->quote('foo')
         );
     }
 
@@ -672,7 +679,10 @@ class DatabaseQueryTest extends TestCase
      */
     public function testQuoteName()
     {
-        $this->db->expects($this->any())
+        $db    = $this->createMock(DatabaseInterface::class);
+        $query = new TestDatabaseQuery($db);
+
+        $db->expects($this->once())
             ->method('quoteName')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "`" . $text . "`";
@@ -680,7 +690,7 @@ class DatabaseQueryTest extends TestCase
 
         $this->assertSame(
             "`foo`",
-            $this->query->quoteName('foo')
+            $query->quoteName('foo')
         );
     }
 
@@ -1255,13 +1265,15 @@ class DatabaseQueryTest extends TestCase
      */
     public function testCastingToStringInsertSet()
     {
-        $this->db->expects($this->any())
+        $db = $this->createMock(DatabaseInterface::class);
+
+        $db->expects($this->once())
             ->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
             });
 
-        $query = new class ($this->db) extends DatabaseQuery {
+        $query = new class ($db) extends DatabaseQuery {
             public function groupConcat($expression, $separator = ',')
             {
                 return '';
@@ -1289,13 +1301,15 @@ class DatabaseQueryTest extends TestCase
      */
     public function testCastingToStringInsertColumnsValues()
     {
-        $this->db->expects($this->any())
+        $db = $this->createMock(DatabaseInterface::class);
+
+        $db->expects($this->once())
             ->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
             });
 
-        $query = new class ($this->db) extends DatabaseQuery {
+        $query = new class ($db) extends DatabaseQuery {
             public function groupConcat($expression, $separator = ',')
             {
                 return '';

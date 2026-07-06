@@ -30,7 +30,7 @@ class DatabaseAwareTraitTest extends TestCase
      */
     public function testGetSetDatabase(): void
     {
-        $db = $this->createMock(DatabaseInterface::class);
+        $db = $this->createStub(DatabaseInterface::class);
 
         $trait = new class () {
             use DatabaseAwareTrait;

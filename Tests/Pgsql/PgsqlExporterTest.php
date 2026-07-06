@@ -11,7 +11,7 @@ use Joomla\Database\Pgsql\PgsqlDriver;
 use Joomla\Database\Pgsql\PgsqlExporter;
 use Joomla\Database\Pgsql\PgsqlQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,7 +22,7 @@ class PgsqlExporterTest extends TestCase
     /**
      * Mock database driver
      *
-     * @var  MockObject|PgsqlDriver
+     * @var  Stub|PgsqlDriver
      */
     private $db;
 
@@ -37,20 +37,17 @@ class PgsqlExporterTest extends TestCase
     {
         parent::setUp();
 
-        $this->db = $this->createMock(PgsqlDriver::class);
+        $this->db = $this->createStub(PgsqlDriver::class);
 
-        $this->db->expects($this->any())
-            ->method('getPrefix')
+        $this->db->method('getPrefix')
             ->willReturn('jos_');
 
-        $this->db->expects($this->any())
-            ->method('createQuery')
+        $this->db->method('createQuery')
             ->willReturnCallback(function () {
                 return new PgsqlQuery($this->db);
             });
 
-        $this->db->expects($this->any())
-            ->method('getTableColumns')
+        $this->db->method('getTableColumns')
             ->willReturn(
                 [
                     'id' => (object) [
@@ -88,8 +85,7 @@ class PgsqlExporterTest extends TestCase
                 ]
             );
 
-        $this->db->expects($this->any())
-            ->method('getTableKeys')
+        $this->db->method('getTableKeys')
             ->willReturn(
                 [
                     (object) [
@@ -102,8 +98,7 @@ class PgsqlExporterTest extends TestCase
                 ]
             );
 
-        $this->db->expects($this->any())
-            ->method('getTableSequences')
+        $this->db->method('getTableSequences')
             ->willReturn(
                 [
                     (object) [
@@ -121,8 +116,7 @@ class PgsqlExporterTest extends TestCase
                 ]
             );
 
-        $this->db->expects($this->any())
-            ->method('quoteName')
+        $this->db->method('quoteName')
             ->willReturnCallback(
                 function ($name, $as = null) {
                     if (is_string($name)) {
@@ -252,8 +246,7 @@ XML
             ->withData($withData);
 
         if ($withData) {
-            $this->db->expects($this->once())
-                ->method('loadObjectList')
+            $this->db->method('loadObjectList')
                 ->willReturn(
                     [
                         (object) [
@@ -323,7 +316,7 @@ XML
         $exporter = new PgsqlExporter();
 
         if ($db) {
-            $exporter->setDbo($this->createMock($db));
+            $exporter->setDbo($this->createStub($db));
         }
 
         if ($from) {

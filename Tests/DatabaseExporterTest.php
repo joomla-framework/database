@@ -7,14 +7,10 @@
 
 namespace Joomla\Database\Tests;
 
-use Joomla\Database\DatabaseExporter;
-use Joomla\Database\DatabaseImporter;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Tests\Stubs\TestDatabaseExporter;
-use Joomla\Database\Tests\Stubs\TestDatabaseImporter;
 use Joomla\Test\TestHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -111,12 +107,11 @@ class DatabaseExporterTest extends TestCase
     }
 
     /**
-     * @testdox  A database drier can be set to the exporter
+     * @testdox  A database driver can be set to the exporter
      */
     public function testSetDbo()
     {
-        /** @var DatabaseInterface|MockObject $db */
-        $db = $this->createMock(DatabaseInterface::class);
+        $db = $this->createStub(DatabaseInterface::class);
 
         $this->assertSame($this->exporter, $this->exporter->setDbo($db), 'The exporter supports method chaining');
     }

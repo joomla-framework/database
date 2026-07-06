@@ -9,7 +9,7 @@ namespace Joomla\Database\Tests\Mysqli;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Mysqli\MysqliQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,7 +27,7 @@ class MysqliQueryTest extends TestCase
     /**
      * Mock database driver
      *
-     * @var  MockObject|DatabaseInterface
+     * @var  Stub|DatabaseInterface
      */
     private $db;
 
@@ -42,7 +42,7 @@ class MysqliQueryTest extends TestCase
     {
         parent::setUp();
 
-        $this->db    = $this->createMock(DatabaseInterface::class);
+        $this->db    = $this->createStub(DatabaseInterface::class);
         $this->query = new MysqliQuery($this->db);
     }
 
@@ -69,8 +69,7 @@ class MysqliQueryTest extends TestCase
     #[DataProvider('dataConcatenate')]
     public function testConcatenate(array $values, ?string $separator, string $expected)
     {
-        $this->db->expects($this->any())
-            ->method('quote')
+        $this->db->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
             });
@@ -97,8 +96,7 @@ class MysqliQueryTest extends TestCase
      */
     public function testGroupConcat()
     {
-        $this->db->expects($this->any())
-            ->method('quote')
+        $this->db->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
             });

@@ -10,6 +10,7 @@ use Joomla\Database\DatabaseIterator;
 use Joomla\Database\FetchMode;
 use Joomla\Database\StatementInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,7 +28,7 @@ class DatabaseIteratorTest extends TestCase
 
         $i = 0;
 
-        $statement->expects($this->any())
+        $statement->expects($this->once())
                   ->method('fetch')
                   ->willReturnCallback(
                       function () use ($i) {
@@ -229,8 +230,8 @@ class DatabaseIteratorTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        /** @var StatementInterface|MockObject $statement */
-        $statement = $this->createMock(StatementInterface::class);
+        /** @var StatementInterface|Stub $statement */
+        $statement = $this->createStub(StatementInterface::class);
 
         $iterator = new DatabaseIterator($statement, null, \NonExistingClass::class);
     }

@@ -11,7 +11,7 @@ use Joomla\Database\Pgsql\PgsqlDriver;
 use Joomla\Database\Pgsql\PgsqlImporter;
 use Joomla\Database\Pgsql\PgsqlQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,7 +22,7 @@ class PgsqlImporterTest extends TestCase
     /**
      * Mock database driver
      *
-     * @var  MockObject|PgsqlDriver
+     * @var  Stub|PgsqlDriver
      */
     private $db;
 
@@ -63,20 +63,17 @@ class PgsqlImporterTest extends TestCase
     {
         parent::setUp();
 
-        $this->db = $this->createMock(PgsqlDriver::class);
+        $this->db = $this->createStub(PgsqlDriver::class);
 
-        $this->db->expects($this->any())
-            ->method('getPrefix')
+        $this->db->method('getPrefix')
             ->willReturn('jos_');
 
-        $this->db->expects($this->any())
-            ->method('createQuery')
+        $this->db->method('createQuery')
             ->willReturnCallback(function () {
                 return new PgsqlQuery($this->db);
             });
 
-        $this->db->expects($this->any())
-            ->method('getTableColumns')
+        $this->db->method('getTableColumns')
             ->willReturn(
                 [
                     'id' => (object) [
@@ -98,8 +95,7 @@ class PgsqlImporterTest extends TestCase
                 ]
             );
 
-        $this->db->expects($this->any())
-            ->method('getTableKeys')
+        $this->db->method('getTableKeys')
             ->willReturn(
                 [
                     (object) [
@@ -112,16 +108,14 @@ class PgsqlImporterTest extends TestCase
                 ]
             );
 
-        $this->db->expects($this->any())
-            ->method('getTableList')
+        $this->db->method('getTableList')
             ->willReturn(
                 [
                     'jos_dbtest',
                 ]
             );
 
-        $this->db->expects($this->any())
-            ->method('getTableSequences')
+        $this->db->method('getTableSequences')
             ->willReturn(
                 [
                     (object) [
@@ -139,8 +133,7 @@ class PgsqlImporterTest extends TestCase
                 ]
             );
 
-        $this->db->expects($this->any())
-            ->method('insertObject')
+        $this->db->method('insertObject')
             ->willReturnCallback(
                 function ($table, &$object, $key = null) {
                     if (!isset($this->executedInsertObjects[$table])) {
@@ -153,8 +146,7 @@ class PgsqlImporterTest extends TestCase
                 }
             );
 
-        $this->db->expects($this->any())
-            ->method('quoteName')
+        $this->db->method('quoteName')
             ->willReturnCallback(
                 function ($name, $as = null) {
                     if (is_string($name)) {
@@ -171,8 +163,7 @@ class PgsqlImporterTest extends TestCase
                 }
             );
 
-        $this->db->expects($this->any())
-            ->method('quote')
+        $this->db->method('quote')
             ->willReturnCallback(
                 function ($text, $escape = true) {
                     if (is_string($text)) {
@@ -189,8 +180,7 @@ class PgsqlImporterTest extends TestCase
                 }
             );
 
-        $this->db->expects($this->any())
-            ->method('setQuery')
+        $this->db->method('setQuery')
             ->willReturnCallback(
                 function ($query, $offset = 0, $limit = 0) {
                     $this->executedQueries[] = $query;
@@ -397,7 +387,7 @@ ALTER SEQUENCE "jos_dbtest_id_seq" OWNED BY "jos_dbtest.id"',
         $importer = new PgsqlImporter();
 
         if ($db) {
-            $importer->setDbo($this->createMock($db));
+            $importer->setDbo($this->createStub($db));
         }
 
         if ($from) {
