@@ -9,6 +9,7 @@ namespace Joomla\Database\Tests\Pgsql;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Test\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 /**
@@ -71,9 +72,8 @@ class PgsqlPreparedStatementTest extends DatabaseTestCase
 
     /**
      * Make sure the mysqli driver correctly runs queries with named parameters appearing more than once.
-     *
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testPreparedStatementWithDuplicateKey()
     {
         $dummyValue = 'test';
@@ -91,9 +91,8 @@ class PgsqlPreparedStatementTest extends DatabaseTestCase
 
     /**
      * Regression test to ensure running queries with named parameters appearing once didn't break.
-     *
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testPreparedStatementWithSingleKey()
     {
         $dummyValue = 'test';
