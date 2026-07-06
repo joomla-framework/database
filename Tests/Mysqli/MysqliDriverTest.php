@@ -255,11 +255,14 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
 
             $collationText = match (true) {
                 !static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '8.0.30', '>=') => 'utf8mb3_general_ci',
+                static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '11.5', '>=') => 'utf8mb3_uca1400_ai_ci',
+                static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '10.6', '>=') => 'utf8mb3_general_ci',
                 default => 'utf8_general_ci',
             };
 
             $defaultText = match (true) {
                 !static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '8.0', '>=') => null,
+                static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '11.5', '>=') => null,
                 default => '',
             };
 
@@ -360,6 +363,15 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
             $dbtestPrimaryKey['Visible']    = 'YES';
             if (version_compare(static::$connection->getVersion(), '8.0.13', '>=')) {
                 $dbtestPrimaryKey['Expression'] = null;
+            }
+
+        // MariaDB 10.6 adds additional data and casts certain keys to integers
+        } elseif (static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '10.6', '>=')) {
+            $dbtestPrimaryKey['Non_unique']   = (int) $dbtestPrimaryKey['Non_unique'];
+            $dbtestPrimaryKey['Seq_in_index'] = (int) $dbtestPrimaryKey['Seq_in_index'];
+            $dbtestPrimaryKey['Cardinality']  = (int) $dbtestPrimaryKey['Cardinality'];
+
+            $dbtestPrimaryKey['Ignored'] = 'NO';
         }
 
         $keys = [
