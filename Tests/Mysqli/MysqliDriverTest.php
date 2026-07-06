@@ -16,10 +16,12 @@ use Joomla\Database\Mysqli\MysqliQuery;
 use Joomla\Database\ParameterType;
 use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 /**
  * Test class for Joomla\Database\Mysqli\MysqliDriver
  */
+#[RequiresPhpExtension('mysqli')]
 class MysqliDriverTest extends AbstractDatabaseDriverTestCase
 {
     /**

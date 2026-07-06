@@ -15,10 +15,12 @@ use Joomla\Database\Mysql\MysqlQuery;
 use Joomla\Database\ParameterType;
 use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 /**
  * Test class for Joomla\Database\Mysql\MysqlDriver
  */
+#[RequiresPhpExtension('pdo_mysql')]
 class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 {
     /**

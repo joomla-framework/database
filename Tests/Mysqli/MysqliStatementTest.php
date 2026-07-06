@@ -10,10 +10,12 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Mysqli\MysqliStatement;
 use Joomla\Test\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 /**
  * Test class for Joomla\Database\Mysqli\MysqliStatement
  */
+#[RequiresPhpExtension('mysqli')]
 class MysqliStatementTest extends DatabaseTestCase
 {
     /**

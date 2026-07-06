@@ -13,10 +13,12 @@ use Joomla\Database\Sqlsrv\SqlsrvDriver;
 use Joomla\Database\Sqlsrv\SqlsrvQuery;
 use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 /**
  * Test class for Joomla\Database\Sqlsrv\SqlsrvDriver.
  */
+#[RequiresPhpExtension('sqlsrv')]
 class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
 {
     /**

@@ -10,10 +10,12 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Sqlsrv\SqlsrvStatement;
 use Joomla\Test\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 /**
  * Test class for Joomla\Database\Sqlsrv\SqlsrvStatement
  */
+#[RequiresPhpExtension('sqlsrv')]
 class SqlsrvPreparedStatementTest extends DatabaseTestCase
 {
     /**

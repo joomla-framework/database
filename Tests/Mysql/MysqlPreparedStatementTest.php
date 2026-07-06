@@ -9,7 +9,9 @@ namespace Joomla\Database\Tests\Mysql;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Test\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
+#[RequiresPhpExtension('pdo_mysql')]
 class MysqlPreparedStatementTest extends DatabaseTestCase
 {
     /**

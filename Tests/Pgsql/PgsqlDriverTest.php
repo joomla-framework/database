@@ -13,10 +13,12 @@ use Joomla\Database\Pgsql\PgsqlImporter;
 use Joomla\Database\Pgsql\PgsqlQuery;
 use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 /**
  * Test class for Joomla\Database\Pgsql\PgsqlDriver
  */
+#[RequiresPhpExtension('pdo_pgsql')]
 class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
 {
     /**

@@ -9,10 +9,12 @@ namespace Joomla\Database\Tests\Pgsql;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Test\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 /**
  * Test class for Joomla\Database\Pgsql\PgsqlStatement
  */
+#[RequiresPhpExtension('pdo_pgsql')]
 class PgsqlPreparedStatementTest extends DatabaseTestCase
 {
     /**

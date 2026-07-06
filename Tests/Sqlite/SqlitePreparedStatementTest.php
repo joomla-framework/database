@@ -9,7 +9,10 @@ namespace Joomla\Database\Tests\Sqlite;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Test\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
+#[RequiresPhpExtension('pdo_sqlite')]
+#[RequiresPhpExtension('sqlite3')]
 class SqlitePreparedStatementTest extends DatabaseTestCase
 {
     /**
