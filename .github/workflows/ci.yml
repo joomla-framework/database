@@ -101,6 +101,8 @@ jobs:
                     MYSQL_PASSWORD: joomla_ut
                     MYSQL_ROOT_PASSWORD: joomla_ut
                     MYSQL_DATABASE: joomla_ut
+                options: >-
+                    --health-cmd="mysqladmin ping -h localhost -u joomla_ut -pjoomla_ut"
 
     tests-unit-mariadb:
         name: Run Unit tests on MariaDB
@@ -125,6 +127,8 @@ jobs:
                     MARIADB_PASSWORD: joomla_ut
                     MARIADB_ROOT_PASSWORD: joomla_ut
                     MARIADB_DATABASE: joomla_ut
+                options: >-
+                    --health-cmd="healthcheck.sh --connect --innodb_initialized"
 
     tests-unit-postgres:
         name: Run Unit tests on PostgreSQL
@@ -148,7 +152,9 @@ jobs:
                 env:
                     POSTGRES_USER: root
                     POSTGRES_PASSWORD: joomla_ut
-                    POSTGRES_DB: test_joomla
+                    POSTGRES_DB: joomla_ut
+                options: >-
+                    --health-cmd="pg_isready -d joomla_ut"
 
     tests-unit-sqlsrv:
         name: Run Unit tests on SQLsrv
@@ -182,6 +188,8 @@ jobs:
                     SA_PASSWORD: Password12!
                     ACCEPT_EULA: Y
                     MSSQL_PID: Developer
+                options: >-
+                    --health-cmd="bash -c 'SQLCMD=$(command -v /opt/mssql-tools/bin/sqlcmd || command -v /opt/mssql-tools18/bin/sqlcmd); [ -z \"$SQLCMD\" ] && exit 1; $SQLCMD -S localhost -U sa -P Password12! -C -Q SELECT\ 1'"
 
     tests-unit-windows:
         name: Run Unit tests on MSSQL (Windows)
