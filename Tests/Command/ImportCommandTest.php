@@ -10,15 +10,16 @@ namespace Joomla\Database\Tests\Command;
 use Joomla\Console\Application;
 use Joomla\Database\Command\ImportCommand;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseImporter;
 use Joomla\Database\Exception\UnsupportedAdapterException;
-use Joomla\Test\DatabaseTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 /**
  * Test class for Joomla\Database\Command\ImportCommand
  */
-class ImportCommandTest extends DatabaseTestCase
+class ImportCommandTest extends TestCase
 {
     /**
      * Path to the database stubs
@@ -39,10 +40,6 @@ class ImportCommandTest extends DatabaseTestCase
         }
 
         parent::setUpBeforeClass();
-
-        if (!static::$connection || static::$connection->getName() !== 'mysql') {
-            self::markTestSkipped('MySQL database not configured.');
-        }
     }
 
     /**
@@ -58,23 +55,30 @@ class ImportCommandTest extends DatabaseTestCase
         $this->stubPath = dirname(__DIR__) . '/Stubs/Importer';
     }
 
-    /**
-     * Tears down the fixture, for example, close a network connection.
-     * This method is called after a test is executed.
-     *
-     * @return  void
-     */
-    protected function tearDown(): void
-    {
-        foreach (static::$connection->getTableList() as $table) {
-            static::$connection->dropTable($table);
-        }
-
-        parent::tearDown();
-    }
-
     public function testTheDatabaseIsImportedWithAllTables()
     {
+        $db       = $this->createMock(DatabaseDriver::class);
+        $importer = $this->createMock(DatabaseImporter::class);
+
+        $importer->expects($this->once())
+            ->method('withStructure')
+            ->with(true)
+            ->willReturnSelf();
+        $importer->expects($this->once())
+            ->method('asXml')
+            ->willReturnSelf();
+        $importer->expects($this->once())
+            ->method('mergeStructure');
+        $importer->expects($this->once())
+            ->method('importData');
+
+        $db->expects($this->once())
+            ->method('getImporter')
+            ->willReturn($importer);
+        $db->expects($this->once())
+            ->method('dropTable')
+            ->with('dbtest', true);
+
         $input  = new ArrayInput(
             [
                 'command'  => 'database:import',
@@ -85,17 +89,42 @@ class ImportCommandTest extends DatabaseTestCase
 
         $application = new Application($input, $output);
 
-        $command = new ImportCommand(static::$connection);
+        $command = new ImportCommand($db);
         $command->setApplication($application);
 
         $this->assertSame(0, $command->execute($input, $output));
 
         $screenOutput = $output->fetch();
+        $this->assertStringContainsString('Importing dbtest from dbtest.xml', $screenOutput);
+        $this->assertStringContainsString('Processing the dbtest table', $screenOutput);
+        $this->assertStringContainsString('Imported data for dbtest.xml in', $screenOutput);
         $this->assertStringContainsString('Import completed in', $screenOutput);
     }
 
     public function testTheDatabaseIsImportedWithASingleTable()
     {
+        $db       = $this->createMock(DatabaseDriver::class);
+        $importer = $this->createMock(DatabaseImporter::class);
+
+        $importer->expects($this->once())
+            ->method('withStructure')
+            ->with(true)
+            ->willReturnSelf();
+        $importer->expects($this->once())
+            ->method('asXml')
+            ->willReturnSelf();
+        $importer->expects($this->once())
+            ->method('mergeStructure');
+        $importer->expects($this->once())
+            ->method('importData');
+
+        $db->expects($this->once())
+            ->method('getImporter')
+            ->willReturn($importer);
+        $db->expects($this->once())
+            ->method('dropTable')
+            ->with('dbtest', true);
+
         $input  = new ArrayInput(
             [
                 'command'  => 'database:import',
@@ -107,12 +136,15 @@ class ImportCommandTest extends DatabaseTestCase
 
         $application = new Application($input, $output);
 
-        $command = new ImportCommand(static::$connection);
+        $command = new ImportCommand($db);
         $command->setApplication($application);
 
         $this->assertSame(0, $command->execute($input, $output));
 
         $screenOutput = $output->fetch();
+        $this->assertStringContainsString('Importing dbtest from dbtest.xml', $screenOutput);
+        $this->assertStringContainsString('Processing the dbtest table', $screenOutput);
+        $this->assertStringContainsString('Imported data for dbtest.xml in', $screenOutput);
         $this->assertStringContainsString('Import completed in', $screenOutput);
     }
 
@@ -148,6 +180,27 @@ class ImportCommandTest extends DatabaseTestCase
 
     public function testTheCommandFailsIfTheRequestedTableDoesNotHaveAnImportFile()
     {
+        $db       = $this->createMock(DatabaseDriver::class);
+        $importer = $this->createMock(DatabaseImporter::class);
+
+        $importer->expects($this->once())
+            ->method('withStructure')
+            ->with(true)
+            ->willReturnSelf();
+        $importer->expects($this->once())
+            ->method('asXml')
+            ->willReturnSelf();
+        $importer->expects($this->never())
+            ->method('mergeStructure');
+        $importer->expects($this->never())
+            ->method('importData');
+
+        $db->expects($this->once())
+            ->method('getImporter')
+            ->willReturn($importer);
+        $db->expects($this->never())
+            ->method('dropTable');
+
         $input  = new ArrayInput(
             [
                 'command'  => 'database:import',
@@ -159,7 +212,7 @@ class ImportCommandTest extends DatabaseTestCase
 
         $application = new Application($input, $output);
 
-        $command = new ImportCommand(static::$connection);
+        $command = new ImportCommand($db);
         $command->setApplication($application);
 
         $this->assertSame(1, $command->execute($input, $output));
