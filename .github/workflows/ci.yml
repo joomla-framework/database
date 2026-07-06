@@ -67,7 +67,7 @@ jobs:
         needs: [code-style-php]
         strategy:
             matrix:
-                php_version: ['8.3', '8.4']
+                php_version: ['8.3', '8.4', '8.5']
         steps:
             - uses: actions/checkout@v6
             - name: Run Unit tests
@@ -83,7 +83,7 @@ jobs:
         needs: [code-style-php]
         strategy:
             matrix:
-                php_version: ['8.3', '8.4']
+                php_version: ['8.3', '8.4', '8.5']
                 db_engine: ['mysql', 'mysqli']
                 db_version: ['5.7', '8.0']
         steps:
@@ -109,7 +109,7 @@ jobs:
         needs: [code-style-php]
         strategy:
             matrix:
-                php_version: ['8.3', '8.4']
+                php_version: ['8.3', '8.4', '8.5']
         steps:
             - uses: actions/checkout@v6
             - name: Run Unit tests
@@ -133,7 +133,7 @@ jobs:
         needs: [code-style-php]
         strategy:
             matrix:
-                php_version: ['8.3', '8.4']
+                php_version: ['8.3', '8.4', '8.5']
                 db_version: ['10', '11']
         steps:
             - uses: actions/checkout@v6
@@ -157,7 +157,7 @@ jobs:
         needs: [code-style-php]
         strategy:
             matrix:
-                php_version: ['8.3', '8.4']
+                php_version: ['8.3', '8.4', '8.5']
         steps:
             - uses: actions/checkout@v6
             - name: Run Unit tests
@@ -189,7 +189,7 @@ jobs:
         needs: [code-style-php]
         strategy:
             matrix:
-                php_version: ['8.3', '8.4']
+                php_version: ['8.3', '8.4', '8.5']
         steps:
             - uses: actions/checkout@v6
             - name: Setup PHP
