@@ -16,8 +16,8 @@ jobs:
         runs-on: ubuntu-latest
         container: joomlaprojects/docker-images:php8.3
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/cache@v4
+            - uses: actions/checkout@v6
+            - uses: actions/cache@v5
               id: cache-php
               with:
                   path: vendor
@@ -35,8 +35,8 @@ jobs:
         container: joomlaprojects/docker-images:php8.3
         needs: [composer]
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/cache/restore@v4
+            - uses: actions/checkout@v6
+            - uses: actions/cache/restore@v5
               with:
                   path: vendor
                   key: ${{ runner.os }}-composer-${{ hashFiles('composer.json') }}
@@ -51,8 +51,8 @@ jobs:
         container: joomlaprojects/docker-images:php8.4
         needs: [code-style-php]
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/cache/restore@v4
+            - uses: actions/checkout@v6
+            - uses: actions/cache/restore@v5
               with:
                   path: vendor
                   key: ${{ runner.os }}-composer-${{ hashFiles('composer.json') }}
@@ -67,9 +67,9 @@ jobs:
         needs: [code-style-php]
         strategy:
             matrix:
-                php_version: ['8.3', '8.4']
+                php_version: ['8.3', '8.4', '8.5']
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - name: Run Unit tests
               run: |
                   git config --global --add safe.directory $GITHUB_WORKSPACE
@@ -83,11 +83,11 @@ jobs:
         needs: [code-style-php]
         strategy:
             matrix:
-                php_version: ['8.3', '8.4']
+                php_version: ['8.3', '8.4', '8.5']
                 db_engine: ['mysql', 'mysqli']
-                db_version: ['5.7', '8.0']
+                db_version: ['5.7', '8.0', '9']
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - name: Run Unit tests
               run: |
                   git config --global --add safe.directory $GITHUB_WORKSPACE
@@ -109,9 +109,10 @@ jobs:
         needs: [code-style-php]
         strategy:
             matrix:
-                php_version: ['8.3', '8.4']
+                php_version: ['8.3', '8.4', '8.5']
+                db_version: ['10.4', '10.6', '10.11', '11.4', '11.8', '12.3']
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - name: Run Unit tests
               run: |
                   git config --global --add safe.directory $GITHUB_WORKSPACE
@@ -119,7 +120,7 @@ jobs:
                   ./vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist
         services:
             mariadb:
-                image: mariadb:10.2
+                image: mariadb:${{ matrix.db_version }}
                 env:
                     MARIADB_USER: joomla_ut
                     MARIADB_PASSWORD: joomla_ut
@@ -133,10 +134,10 @@ jobs:
         needs: [code-style-php]
         strategy:
             matrix:
-                php_version: ['8.3', '8.4']
-                db_version: ['10', '11']
+                php_version: ['8.3', '8.4', '8.5']
+                db_version: ['10', '12', '18']
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - name: Run Unit tests
               run: |
                   git config --global --add safe.directory $GITHUB_WORKSPACE
@@ -157,30 +158,30 @@ jobs:
         needs: [code-style-php]
         strategy:
             matrix:
-                php_version: ['8.3', '8.4']
+                php_version: ['8.3', '8.4', '8.5']
+                db_version: ['2017', '2025']
         steps:
             - uses: actions/checkout@v4
-            - name: Run Unit tests
+            - name: Prepare SQLSRV environment
               run: |
-                  git config --global --add safe.directory $GITHUB_WORKSPACE
-                  apt-get update
-                  apt-get install -y software-properties-common lsb-release gnupg
-                  curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-                  echo "deb [arch=amd64,armhf,arm64] https://packages.microsoft.com/ubuntu/22.04/prod jammy main" >> /etc/apt/sources.list
+                  curl -sSL -O https://packages.microsoft.com/config/debian/$(grep VERSION_ID /etc/os-release | cut -d '"' -f 2 | cut -d '.' -f 1)/packages-microsoft-prod.deb
+                  dpkg -i packages-microsoft-prod.deb
+                  rm packages-microsoft-prod.deb
                   apt-get update
                   ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc-dev
                   pecl install sqlsrv && docker-php-ext-enable sqlsrv
-                  pecl install pdo_sqlsrv && docker-php-ext-enable pdo_sqlsrv
                   php --ri sqlsrv
-                  php --ri pdo_sqlsrv
+            - name: Run Unit tests
+              run: |
+                  git config --global --add safe.directory $GITHUB_WORKSPACE
                   composer update
                   ./vendor/bin/phpunit --configuration phpunit.sqlsrv.xml.dist
         services:
             sqlsrv:
-                image: mcr.microsoft.com/mssql/server:2017-latest
+                image: mcr.microsoft.com/mssql/server:${{ matrix.db_version }}-latest
                 env:
-                    SA_PASSWORD: Password12!
                     ACCEPT_EULA: Y
+                    MSSQL_SA_PASSWORD: Password12!
                     MSSQL_PID: Developer
 
     tests-unit-windows:
@@ -189,16 +190,16 @@ jobs:
         needs: [code-style-php]
         strategy:
             matrix:
-                php_version: ['8.3', '8.4']
+                php_version: ['8.3', '8.4', '8.5']
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - name: Setup PHP
-              uses: shivammathur/setup-php@v2
+              uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.37.2
               with:
                   php-version: ${{ matrix.php_version }}
                   extensions: openssl, mbstring, fileinfo, ftp, sqlsrv
             - name: Install MSSQL
-              uses: potatoqualitee/mssqlsuite@v1.8
+              uses: potatoqualitee/mssqlsuite@2291d923e83859edd871679c05b379037376761f # v1.12
               with:
                   install: sqlengine, sqlclient
                   version: 2019
