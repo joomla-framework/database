@@ -85,7 +85,7 @@ jobs:
             matrix:
                 php_version: ['8.3', '8.4', '8.5']
                 db_engine: ['mysql', 'mysqli']
-                db_version: ['5.7', '8.0']
+                db_version: ['5.7', '8.0', '9']
         steps:
             - uses: actions/checkout@v6
             - name: Run Unit tests
@@ -110,6 +110,7 @@ jobs:
         strategy:
             matrix:
                 php_version: ['8.3', '8.4', '8.5']
+                db_version: ['10.4', '10.6', '10.11', '11.4', '11.8', '12.3']
         steps:
             - uses: actions/checkout@v6
             - name: Run Unit tests
@@ -119,7 +120,7 @@ jobs:
                   ./vendor/bin/phpunit --configuration phpunit.mariadb.xml.dist
         services:
             mariadb:
-                image: mariadb:10.2
+                image: mariadb:${{ matrix.db_version }}
                 env:
                     MARIADB_USER: joomla_ut
                     MARIADB_PASSWORD: joomla_ut
@@ -134,7 +135,7 @@ jobs:
         strategy:
             matrix:
                 php_version: ['8.3', '8.4', '8.5']
-                db_version: ['10', '11']
+                db_version: ['10', '12', '18']
         steps:
             - uses: actions/checkout@v6
             - name: Run Unit tests
@@ -158,6 +159,7 @@ jobs:
         strategy:
             matrix:
                 php_version: ['8.3', '8.4', '8.5']
+                db_version: ['2017', '2025']
         steps:
             - uses: actions/checkout@v6
             - name: Run Unit tests
@@ -177,7 +179,7 @@ jobs:
                   ./vendor/bin/phpunit --configuration phpunit.sqlsrv.xml.dist
         services:
             sqlsrv:
-                image: mcr.microsoft.com/mssql/server:2017-latest
+                image: mcr.microsoft.com/mssql/server:${{ matrix.db_version }}-latest
                 env:
                     SA_PASSWORD: Password12!
                     ACCEPT_EULA: Y
