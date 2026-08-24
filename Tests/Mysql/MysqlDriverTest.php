@@ -247,7 +247,6 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
     public function testGetTableColumns(string $table, bool $typeOnly, array $expected)
     {
         if (!$typeOnly) {
-            $isMySQL8        = !static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '8.0', '>=');
             $useDisplayWidth = static::$connection->isMariaDb() || version_compare(static::$connection->getVersion(), '8.0.17', '<');
 
             $collationText = match (true) {
