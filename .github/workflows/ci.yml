@@ -60,6 +60,22 @@ jobs:
               run: |
                   ./vendor/bin/phpstan --error-format=github
 
+    tests-unit:
+        name: Run Unit tests
+        runs-on: ubuntu-latest
+        container: joomlaprojects/docker-images:php${{ matrix.php_version }}
+        needs: [code-style-php]
+        strategy:
+            matrix:
+                php_version: ['8.3', '8.4', '8.5']
+        steps:
+            - uses: actions/checkout@v6
+            - name: Run Unit tests
+              run: |
+                  git config --global --add safe.directory $GITHUB_WORKSPACE
+                  composer update
+                  ./vendor/bin/phpunit
+
     tests-unit-sqlite:
         name: Run Unit tests on SQLite
         runs-on: ubuntu-latest
