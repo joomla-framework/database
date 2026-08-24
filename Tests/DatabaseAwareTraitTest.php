@@ -10,11 +10,14 @@ namespace Joomla\Database\Tests;
 use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Exception\DatabaseNotFoundException;
+use PHPUnit\Framework\Attributes\CoversTrait;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for DatabaseAwareTrait class.
  */
+#[CoversTrait(DatabaseAwareTrait::class)]
 class DatabaseAwareTraitTest extends TestCase
 {
     /**
@@ -22,15 +25,10 @@ class DatabaseAwareTraitTest extends TestCase
      */
     protected $object;
 
-    /**
-     * @testdox  Database can be set with setDatabase()
-     *
-     * @covers   \Joomla\Database\DatabaseAwareTrait
-     * @uses     \Joomla\Database\Database
-     */
+    #[TestDox('Database can be set with setDatabase()')]
     public function testGetSetDatabase(): void
     {
-        $db = $this->createMock(DatabaseInterface::class);
+        $db = $this->createStub(DatabaseInterface::class);
 
         $trait = new class () {
             use DatabaseAwareTrait;
@@ -46,11 +44,7 @@ class DatabaseAwareTraitTest extends TestCase
         $this->assertSame($db, $trait->getDb());
     }
 
-    /**
-     * @testdox  getDatabase() throws an DatabaseNotFoundException, if no database is set
-     *
-     * @covers   \Joomla\Database\DatabaseAwareTrait
-     */
+    #[TestDox('getDatabase() throws an DatabaseNotFoundException, if no database is set')]
     public function testGetDatabaseException(): void
     {
         $this->expectException(DatabaseNotFoundException::class);

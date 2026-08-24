@@ -8,6 +8,7 @@ namespace Joomla\Database\Tests\Query;
 
 use Joomla\Database\Query\QueryElement;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -59,12 +60,11 @@ class QueryElementTest extends TestCase
     }
 
     /**
-     * @testdox  The object is correctly configured when instantiated
-     *
      * @param   array  $element   values for base element
      * @param   array  $expected  values for expected fields
      */
     #[DataProvider('dataInstantiation')]
+    #[TestDox('The object is correctly configured when instantiated')]
     public function testInstantiation(array $element, array $expected)
     {
         $baseElement = new QueryElement($element['name'], $element['elements'], $element['glue']);
@@ -130,14 +130,13 @@ class QueryElementTest extends TestCase
     }
 
     /**
-     * @testdox  A query element is converted to a string
-     *
      * @param   string  $name      The name of the element.
      * @param   mixed   $elements  String or array.
      * @param   string  $glue      The glue for elements.
      * @param   string  $expected  The expected value.
      */
     #[DataProvider('dataCastingToString')]
+    #[TestDox('A query element is converted to a string')]
     public function testCastingToString($name, $elements, $glue, $expected)
     {
         $this->assertThat(
@@ -204,14 +203,13 @@ class QueryElementTest extends TestCase
     }
 
     /**
-     * @testdox  Data can be appended to a query element
-     *
      * @param   array   $element   base element values
      * @param   array   $append    append element values
      * @param   array   $expected  expected element values for elements field after append
      * @param   string  $string    expected value of toString (not used in this test)
      */
     #[DataProvider('dataAppend')]
+    #[TestDox('Data can be appended to a query element')]
     public function testAppend($element, $append, $expected, $string)
     {
         $baseElement     = new QueryElement($element['name'], $element['elements'], $element['glue']);
@@ -226,9 +224,7 @@ class QueryElementTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A query element can be cloned with a custom array property
-     */
+    #[TestDox('A query element can be cloned with a custom array property')]
     public function testCloneWithCustomArrayProperty()
     {
         $baseElement            = new QueryElement(null, null);
@@ -242,9 +238,7 @@ class QueryElementTest extends TestCase
         $this->assertCount(0, $cloneElement->testArray);
     }
 
-    /**
-     * @testdox  A query element can be cloned with a custom object property
-     */
+    #[TestDox('A query element can be cloned with a custom object property')]
     public function testCloneWithCustomObjectProperty()
     {
         $baseElement             = new QueryElement(null, null);

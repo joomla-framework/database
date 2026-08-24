@@ -15,10 +15,13 @@ use Joomla\Database\Mysql\MysqlQuery;
 use Joomla\Database\ParameterType;
 use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * Test class for Joomla\Database\Mysql\MysqlDriver
  */
+#[RequiresPhpExtension('pdo_mysql')]
 class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 {
     /**
@@ -41,7 +44,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
 
         parent::setUpBeforeClass();
 
-        if (!static::$connection || static::$connection->getName() !== 'mysql') {
+        if (!static::$connection) {
             self::markTestSkipped('MySQL database not configured.');
         }
     }
@@ -96,14 +99,6 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
      */
     public static function dataGetTableColumns(): array
     {
-        // For unknown reasons, the connection gets lost on Travis. re-establish, if that happens
-        if (static::$connection === null) {
-            self::setUpBeforeClass();
-        }
-
-        $isMySQL8        = !static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '8.0', '>=');
-        $useDisplayWidth = static::$connection->isMariaDb() || version_compare(static::$connection->getVersion(), '8.0.17', '<');
-
         return [
             'only column types' => [
                 '#__dbtest',
@@ -123,11 +118,11 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
                 [
                     'id' => (object) [
                         'Field'      => 'id',
-                        'Type'       => $useDisplayWidth ? 'int(10) unsigned' : 'int unsigned',
-                        'Collation'  => $isMySQL8 ? null : '',
+                        'Type'       => '<<<variable>>>',
+                        'Collation'  => null,
                         'Null'       => 'NO',
                         'Key'        => 'PRI',
-                        'Default'    => $isMySQL8 ? null : '',
+                        'Default'    => null,
                         'Extra'      => 'auto_increment',
                         'Privileges' => 'select,insert,update,references',
                         'Comment'    => '',
@@ -135,10 +130,10 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
                     'title' => (object) [
                         'Field'      => 'title',
                         'Type'       => 'varchar(50)',
-                        'Collation'  => $isMySQL8 ? 'utf8mb3_general_ci' : 'utf8_general_ci',
+                        'Collation'  => '<<<variable>>>',
                         'Null'       => 'NO',
                         'Key'        => '',
-                        'Default'    => $isMySQL8 ? null : '',
+                        'Default'    => '<<<variable>>>',
                         'Extra'      => '',
                         'Privileges' => 'select,insert,update,references',
                         'Comment'    => '',
@@ -157,10 +152,10 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
                     'description' => (object) [
                         'Field'      => 'description',
                         'Type'       => 'text',
-                        'Collation'  => $isMySQL8 ? 'utf8mb3_general_ci' : 'utf8_general_ci',
+                        'Collation'  => '<<<variable>>>',
                         'Null'       => 'NO',
                         'Key'        => '',
-                        'Default'    => $isMySQL8 ? null : '',
+                        'Default'    => '<<<variable>>>',
                         'Extra'      => '',
                         'Privileges' => 'select,insert,update,references',
                         'Comment'    => '',
@@ -242,13 +237,46 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
      * Overrides for parent class test cases
      */
 
+    /**
+     * @param   string   $table     The name of the database table.
+     * @param   boolean  $typeOnly  True (default) to only return field types.
+     * @param   array    $expected  Expected result.
+     */
+    #[DataProvider('dataGetTableColumns')]
+    #[TestDox('Information about the columns of a database table is returned')]
+    public function testGetTableColumns(string $table, bool $typeOnly, array $expected)
+    {
+        if (!$typeOnly) {
+            $useDisplayWidth = static::$connection->isMariaDb() || version_compare(static::$connection->getVersion(), '8.0.17', '<');
+
+            $collationText = match (true) {
+                !static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '8.0.30', '>=') => 'utf8mb3_general_ci',
+                static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '11.5', '>=') => 'utf8mb3_uca1400_ai_ci',
+                static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '10.6', '>=') => 'utf8mb3_general_ci',
+                default => 'utf8_general_ci',
+            };
+
+            $defaultText = match (true) {
+                !static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '8.0', '>=') => null,
+                static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '11.5', '>=') => null,
+                default => '',
+            };
+
+            $expected['id']->Type               = $useDisplayWidth ? 'int(10) unsigned' : 'int unsigned';
+            $expected['title']->Collation       = $collationText;
+            $expected['title']->Default         = $defaultText;
+            $expected['description']->Collation = $collationText;
+            $expected['description']->Default   = $defaultText;
+        }
+
+        parent::testGetTableColumns($table, $typeOnly, $expected);
+    }
+
     /*
      * Test cases for this subclass
      */
 
-    /**
-     * @testdox  The database driver reports if it is supported in the present environment
-     */
+    #[TestDox('The database driver reports if it is supported in the present environment')]
     public function testIsSupported()
     {
         $this->assertTrue(
@@ -256,9 +284,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database collation can be retrieved
-     */
+    #[TestDox('The database collation can be retrieved')]
     public function testGetCollation()
     {
         $this->assertNotFalse(
@@ -266,9 +292,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database connection collation can be retrieved
-     */
+    #[TestDox('The database connection collation can be retrieved')]
     public function testGetConnectionCollation()
     {
         $this->assertNotFalse(
@@ -276,9 +300,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database connection encryption can be retrieved
-     */
+    #[TestDox('The database connection encryption can be retrieved')]
     public function testGetConnectionEncryption()
     {
         $this->assertEmpty(
@@ -287,9 +309,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A list of queries to create the given tables is returned
-     */
+    #[TestDox('A list of queries to create the given tables is returned')]
     public function testGetTableCreate()
     {
         $this->assertCount(
@@ -299,9 +319,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  Information about the keys of a database table is returned
-     */
+    #[TestDox('Information about the keys of a database table is returned')]
     public function testGetTableKeys()
     {
         $dbtestPrimaryKey = [
@@ -320,10 +338,24 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
             'Index_comment' => '',
         ];
 
-        // MySQL 8.0 adds additional data
+        // MySQL 8.0 adds additional data and casts certain keys to integers
         if (!static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '8.0', '>=')) {
+            $dbtestPrimaryKey['Non_unique']   = (int) $dbtestPrimaryKey['Non_unique'];
+            $dbtestPrimaryKey['Seq_in_index'] = (int) $dbtestPrimaryKey['Seq_in_index'];
+            $dbtestPrimaryKey['Cardinality']  = (int) $dbtestPrimaryKey['Cardinality'];
+
             $dbtestPrimaryKey['Visible']    = 'YES';
-            $dbtestPrimaryKey['Expression'] = null;
+            if (version_compare(static::$connection->getVersion(), '8.0.13', '>=')) {
+                $dbtestPrimaryKey['Expression'] = null;
+            }
+
+        // MariaDB 10.6 adds additional data and casts certain keys to integers
+        } elseif (static::$connection->isMariaDb() && version_compare(static::$connection->getVersion(), '10.6', '>=')) {
+            $dbtestPrimaryKey['Non_unique']   = (int) $dbtestPrimaryKey['Non_unique'];
+            $dbtestPrimaryKey['Seq_in_index'] = (int) $dbtestPrimaryKey['Seq_in_index'];
+            $dbtestPrimaryKey['Cardinality']  = (int) $dbtestPrimaryKey['Cardinality'];
+
+            $dbtestPrimaryKey['Ignored'] = 'NO';
         }
 
         $keys = [
@@ -336,9 +368,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database reports if it has support for the utf8mb4 character sets
-     */
+    #[TestDox('The database reports if it has support for the utf8mb4 character sets')]
     public function testHasUTF8mb4Support()
     {
         $this->assertFalse(
@@ -347,9 +377,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A transaction can be started and committed
-     */
+    #[TestDox('A transaction can be started and committed')]
     public function testTransactionCommit()
     {
         $this->loadExampleData();
@@ -404,12 +432,11 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
     }
 
     /**
-     * @testdox  A transaction can be started and committed
-     *
      * @param   string|null  $toSavepoint  Savepoint name to rollback transaction to
      * @param   integer      $tupleCount   Number of tuples found after insertion and rollback
      */
     #[DataProvider('dataTransactionRollback')]
+    #[TestDox('A transaction can be started and committed')]
     public function testTransactionRollback(?string $toSavepoint, int $tupleCount)
     {
         $this->loadExampleData();
@@ -477,9 +504,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         $this->assertCount($tupleCount, $transactionRows);
     }
 
-    /**
-     * @testdox  The database connection can be retrieved
-     */
+    #[TestDox('The database connection can be retrieved')]
     public function testGetConnection()
     {
         $this->assertInstanceOf(
@@ -488,9 +513,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The name of the database driver is retrieved
-     */
+    #[TestDox('The name of the database driver is retrieved')]
     public function testGetName()
     {
         $this->assertSame(
@@ -499,9 +522,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The type of server for the database driver is retrieved
-     */
+    #[TestDox('The type of server for the database driver is retrieved')]
     public function testGetServerType()
     {
         $this->assertSame(
@@ -510,9 +531,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The null date for the server type is retrieved
-     */
+    #[TestDox('The null date for the server type is retrieved')]
     public function testGetNullDate()
     {
         $result   = static::$connection->setQuery('SELECT @@SESSION.sql_mode;')->loadResult();
@@ -528,9 +547,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  An exporter for the database driver can be created
-     */
+    #[TestDox('An exporter for the database driver can be created')]
     public function testGetExporter()
     {
         $this->assertInstanceOf(
@@ -539,9 +556,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  An importer for the database driver can be created
-     */
+    #[TestDox('An importer for the database driver can be created')]
     public function testGetImporter()
     {
         $this->assertInstanceOf(
@@ -550,9 +565,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A new query instance can be created
-     */
+    #[TestDox('A new query instance can be created')]
     public function testGetQueryNewInstance()
     {
         $this->assertInstanceOf(
@@ -561,9 +574,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  Binary values are correctly supported
-     */
+    #[TestDox('Binary values are correctly supported')]
     public function testQuoteAndDecodeBinary()
     {
         $this->loadExampleData();
@@ -650,9 +661,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @testdox  The connection can be set to use UTF-8 encoding
-     */
+    #[TestDox('The connection can be set to use UTF-8 encoding')]
     public function testSetUtf()
     {
         $this->assertFalse(
@@ -660,9 +669,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A database table can be truncated
-     */
+    #[TestDox('A database table can be truncated')]
     public function testTruncateTable()
     {
         $this->loadExampleData();

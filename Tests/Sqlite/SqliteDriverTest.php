@@ -14,10 +14,14 @@ use Joomla\Database\Sqlite\SqliteDriver;
 use Joomla\Database\Sqlite\SqliteQuery;
 use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * Test class for Joomla\Database\Sqlite\SqliteDriver
  */
+#[RequiresPhpExtension('pdo_sqlite')]
+#[RequiresPhpExtension('sqlite3')]
 class SqliteDriverTest extends AbstractDatabaseDriverTestCase
 {
     /**
@@ -211,9 +215,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
      * Overrides for parent class test cases
      */
 
-    /**
-     * @testdox  The list of tables is returned
-     */
+    #[TestDox('The list of tables is returned')]
     public function testGetTableList()
     {
         $this->assertSame(
@@ -225,9 +227,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The minimum supported database version is retrieved
-     */
+    #[TestDox('The minimum supported database version is retrieved')]
     public function testGetMinimum()
     {
         $this->assertNull(
@@ -236,9 +236,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The number of rows returned by the query can be retrieved
-     */
+    #[TestDox('The number of rows returned by the query can be retrieved')]
     public function testGetNumRows()
     {
         $this->loadExampleData();
@@ -259,9 +257,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
      * Test cases for this subclass
      */
 
-    /**
-     * @testdox  The database character set can be changed
-     */
+    #[TestDox('The database character set can be changed')]
     public function testAlterDbCharacterSet()
     {
         $this->assertFalse(
@@ -270,9 +266,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A database can be created
-     */
+    #[TestDox('A database can be created')]
     public function testCreateDatabase()
     {
         $this->assertTrue(
@@ -281,9 +275,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database collation can be retrieved
-     */
+    #[TestDox('The database collation can be retrieved')]
     public function testGetCollation()
     {
         $this->assertFalse(
@@ -292,9 +284,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database connection collation can be retrieved
-     */
+    #[TestDox('The database connection collation can be retrieved')]
     public function testGetConnectionCollation()
     {
         $this->assertFalse(
@@ -303,9 +293,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database connection encryption can be retrieved
-     */
+    #[TestDox('The database connection encryption can be retrieved')]
     public function testGetConnectionEncryption()
     {
         $this->assertEmpty(
@@ -314,9 +302,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A list of queries to create the given tables is returned
-     */
+    #[TestDox('A list of queries to create the given tables is returned')]
     public function testGetTableCreate()
     {
         $this->assertSame(
@@ -326,9 +312,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  Information about the keys of a database table is returned
-     */
+    #[TestDox('Information about the keys of a database table is returned')]
     public function testGetTableKeys()
     {
         $this->assertEquals(
@@ -346,9 +330,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The connection can be set to use UTF-8 encoding
-     */
+    #[TestDox('The connection can be set to use UTF-8 encoding')]
     public function testSetUtf()
     {
         $this->assertFalse(
@@ -356,9 +338,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A database table can be truncated
-     */
+    #[TestDox('A database table can be truncated')]
     public function testTruncateTable()
     {
         $this->loadExampleData();
@@ -368,9 +348,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         $this->assertSame(4, static::$connection->getAffectedRows());
     }
 
-    /**
-     * @testdox  The database driver reports if it is supported in the present environment
-     */
+    #[TestDox('The database driver reports if it is supported in the present environment')]
     public function testIsSupported()
     {
         $this->assertTrue(
@@ -378,9 +356,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A transaction can be started and committed
-     */
+    #[TestDox('A transaction can be started and committed')]
     public function testTransactionCommit()
     {
         $this->loadExampleData();
@@ -435,12 +411,11 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
     }
 
     /**
-     * @testdox  A transaction can be started and committed
-     *
      * @param   string|null  $toSavepoint  Savepoint name to rollback transaction to
      * @param   integer      $tupleCount   Number of tuples found after insertion and rollback
      */
     #[DataProvider('dataTransactionRollback')]
+    #[TestDox('A transaction can be started and committed')]
     public function testTransactionRollback(?string $toSavepoint, int $tupleCount)
     {
         $this->loadExampleData();
@@ -508,9 +483,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         $this->assertCount($tupleCount, $transactionRows);
     }
 
-    /**
-     * @testdox  The database connection can be retrieved
-     */
+    #[TestDox('The database connection can be retrieved')]
     public function testGetConnection()
     {
         $this->assertInstanceOf(
@@ -519,9 +492,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The name of the database driver is retrieved
-     */
+    #[TestDox('The name of the database driver is retrieved')]
     public function testGetName()
     {
         $this->assertSame(
@@ -530,9 +501,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The type of server for the database driver is retrieved
-     */
+    #[TestDox('The type of server for the database driver is retrieved')]
     public function testGetServerType()
     {
         $this->assertSame(
@@ -541,9 +510,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The null date for the server type is retrieved
-     */
+    #[TestDox('The null date for the server type is retrieved')]
     public function testGetNullDate()
     {
         $this->assertSame(
@@ -552,9 +519,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  An exporter for the database driver can be created
-     */
+    #[TestDox('An exporter for the database driver can be created')]
     public function testGetExporter()
     {
         $this->expectException(UnsupportedAdapterException::class);
@@ -562,9 +527,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         static::$connection->getExporter();
     }
 
-    /**
-     * @testdox  An importer for the database driver can be created
-     */
+    #[TestDox('An importer for the database driver can be created')]
     public function testGetImporter()
     {
         $this->expectException(UnsupportedAdapterException::class);
@@ -572,9 +535,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         static::$connection->getImporter();
     }
 
-    /**
-     * @testdox  A new query instance can be created
-     */
+    #[TestDox('A new query instance can be created')]
     public function testGetQueryNewInstance()
     {
         $this->assertInstanceOf(
@@ -583,9 +544,7 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  Binary values are correctly supported
-     */
+    #[TestDox('Binary values are correctly supported')]
     public function testQuoteAndDecodeBinary()
     {
         $this->loadExampleData();

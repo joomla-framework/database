@@ -9,7 +9,8 @@ namespace Joomla\Database\Tests\Sqlsrv;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Sqlsrv\SqlsrvQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,7 +28,7 @@ class SqlsrvQueryTest extends TestCase
     /**
      * Mock database driver
      *
-     * @var  MockObject|DatabaseInterface
+     * @var  Stub|DatabaseInterface
      */
     private $db;
 
@@ -42,21 +43,17 @@ class SqlsrvQueryTest extends TestCase
     {
         parent::setUp();
 
-        $this->db    = $this->createMock(DatabaseInterface::class);
+        $this->db    = $this->createStub(DatabaseInterface::class);
         $this->query = new SqlsrvQuery($this->db);
     }
 
-    /**
-     * @testdox  A string is cast as a character string for the driver
-     */
+    #[TestDox('A string is cast as a character string for the driver')]
     public function testCastAsWithChar()
     {
         $this->assertSame('CAST(foo as NVARCHAR(10))', $this->query->castAs('CHAR', 'foo'));
     }
 
-    /**
-     * @testdox  The length param is added to the CAST statement when provided
-     */
+    #[TestDox('The length param is added to the CAST statement when provided')]
     public function testCastAsWithCharAndLengthParam()
     {
         $this->assertSame(
@@ -65,9 +62,7 @@ class SqlsrvQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  Test castAs behaviour with INT
-     */
+    #[TestDox('Test castAs behaviour with INT')]
     public function testCastAsWithIntegerType()
     {
         $this->assertSame(
@@ -90,14 +85,13 @@ class SqlsrvQueryTest extends TestCase
     }
 
     /**
-     * @testdox  A SQL statement for checking the character length of a field is generated
-     *
      * @param   string       $field      A value.
      * @param   string|null  $operator   Comparison operator between charLength integer value and $condition
      * @param   string|null  $condition  Integer value to compare charLength with.
      * @param   string       $expected   The expected query string.
      */
     #[DataProvider('dataCharLength')]
+    #[TestDox('A SQL statement for checking the character length of a field is generated')]
     public function testCharLength(string $field, ?string $operator, ?string $condition, string $expected)
     {
         $this->assertSame(
@@ -120,17 +114,15 @@ class SqlsrvQueryTest extends TestCase
     }
 
     /**
-     * @testdox  A SQL statement for concatenating values is generated
-     *
      * @param   string[]     $values     An array of values to concatenate.
      * @param   string|null  $separator  As separator to place between each value.
      * @param   string       $expected   The expected query string.
      */
     #[DataProvider('dataConcatenate')]
+    #[TestDox('A SQL statement for concatenating values is generated')]
     public function testConcatenate(array $values, ?string $separator, string $expected)
     {
-        $this->db->expects($this->any())
-            ->method('quote')
+        $this->db->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
             });
@@ -141,9 +133,7 @@ class SqlsrvQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement for the current timestamp is generated
-     */
+    #[TestDox('A SQL statement for the current timestamp is generated')]
     public function testCurrentTimestamp()
     {
         $this->assertSame(
@@ -152,9 +142,7 @@ class SqlsrvQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to get the length of a field is generated
-     */
+    #[TestDox('A SQL statement to get the length of a field is generated')]
     public function testLength()
     {
         $this->assertSame(
@@ -163,9 +151,7 @@ class SqlsrvQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement for the MySQL find_in_set() function is generated
-     */
+    #[TestDox('A SQL statement for the MySQL find_in_set() function is generated')]
     public function testFindInSet()
     {
         $this->assertSame(
@@ -174,13 +160,10 @@ class SqlsrvQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to concatenate a group of values is generated
-     */
+    #[TestDox('A SQL statement to concatenate a group of values is generated')]
     public function testGroupConcat()
     {
-        $this->db->expects($this->any())
-            ->method('quote')
+        $this->db->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
             });
@@ -191,9 +174,7 @@ class SqlsrvQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to get a random floating point value is generated
-     */
+    #[TestDox('A SQL statement to get a random floating point value is generated')]
     public function testRand()
     {
         $this->assertSame(
