@@ -1228,6 +1228,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      * Method to get the first row of the result set from the database query as an object.
      *
      * @param   string  $class  The class name to use for the returned row object.
+     *                          The $class parameter is deprecated in 4.x and will be removed in 6.0 without a replacement.
      *
      * @return  mixed  The return value or null if the query failed.
      *
@@ -1275,6 +1276,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      *
      * @param   string  $key    The name of a field on which to key the result array.
      * @param   string  $class  The class name to use for the returned row objects.
+     *                          The $class parameter is deprecated in 4.x and will be removed in 6.0 without a replacement.
      *
      * @return  mixed  The return value or null if the query failed.
      *
