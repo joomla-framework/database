@@ -9,7 +9,9 @@ namespace Joomla\Database\Tests;
 use Joomla\Database\DatabaseIterator;
 use Joomla\Database\FetchMode;
 use Joomla\Database\StatementInterface;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,9 +19,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DatabaseIteratorTest extends TestCase
 {
-    /**
-     * @testdox  The iterator is instantiated and the first object from the result set is set as the current key
-     */
+    #[TestDox('The iterator is instantiated and the first object from the result set is set as the current key')]
     public function testInstantiation()
     {
         /** @var StatementInterface|MockObject $statement */
@@ -27,7 +27,7 @@ class DatabaseIteratorTest extends TestCase
 
         $i = 0;
 
-        $statement->expects($this->any())
+        $statement->expects($this->once())
                   ->method('fetch')
                   ->willReturnCallback(
                       function () use ($i) {
@@ -51,9 +51,7 @@ class DatabaseIteratorTest extends TestCase
         $this->assertEquals($expected, $iterator->current());
     }
 
-    /**
-     * @testdox  The iterator can iterate over all rows in a result set
-     */
+    #[TestDox('The iterator can iterate over all rows in a result set')]
     public function testIteration()
     {
         /** @var StatementInterface|MockObject $statement */
@@ -105,9 +103,7 @@ class DatabaseIteratorTest extends TestCase
         $this->assertEquals($expected, iterator_to_array($iterator));
     }
 
-    /**
-     * @testdox  The iterator can iterate over all rows in a result set with a custom key
-     */
+    #[TestDox('The iterator can iterate over all rows in a result set with a custom key')]
     public function testIterationWithCustomKey()
     {
         /** @var StatementInterface|MockObject $statement */
@@ -164,9 +160,7 @@ class DatabaseIteratorTest extends TestCase
         $this->assertEquals($expected, iterator_to_array($iterator));
     }
 
-    /**
-     * @testdox  The iterator can iterate over all rows in a result set with a custom PHP class
-     */
+    #[TestDox('The iterator can iterate over all rows in a result set with a custom PHP class')]
     public function testIterationWithCustomClass()
     {
         /** @var StatementInterface|MockObject $statement */
@@ -204,9 +198,7 @@ class DatabaseIteratorTest extends TestCase
         $this->assertEquals($expected, iterator_to_array($iterator));
     }
 
-    /**
-     * @testdox  The iterator can be counted
-     */
+    #[TestDox('The iterator can be counted')]
     public function testCount()
     {
         /** @var StatementInterface|MockObject $statement */
@@ -222,15 +214,13 @@ class DatabaseIteratorTest extends TestCase
         $this->assertCount(42, $iterator);
     }
 
-    /**
-     * @testdox  The iterator cannot be created if the class that objects should be placed in does not exist
-     */
+    #[TestDox('The iterator cannot be created if the class that objects should be placed in does not exist')]
     public function testConstructorExceptionForNonExistingClass()
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        /** @var StatementInterface|MockObject $statement */
-        $statement = $this->createMock(StatementInterface::class);
+        /** @var StatementInterface|Stub $statement */
+        $statement = $this->createStub(StatementInterface::class);
 
         $iterator = new DatabaseIterator($statement, null, \NonExistingClass::class);
     }

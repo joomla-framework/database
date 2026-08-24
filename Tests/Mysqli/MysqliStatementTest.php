@@ -10,10 +10,13 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Mysqli\MysqliStatement;
 use Joomla\Test\DatabaseTestCase;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 /**
  * Test class for Joomla\Database\Mysqli\MysqliStatement
  */
+#[RequiresPhpExtension('mysqli')]
 class MysqliStatementTest extends DatabaseTestCase
 {
     /**
@@ -25,7 +28,7 @@ class MysqliStatementTest extends DatabaseTestCase
     {
         parent::setUpBeforeClass();
 
-        if (!static::$connection || static::$connection->getName() !== 'mysqli') {
+        if (!static::$connection) {
             self::markTestSkipped('MySQL database not configured.');
         }
     }
@@ -70,9 +73,8 @@ class MysqliStatementTest extends DatabaseTestCase
 
     /**
      * Regression test to ensure that named values with matching named params are correctly prepared, this simulates a whereIn condition.
-     *
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testStatementPreparesManyArrayValues()
     {
         $query = 'SELECT * FROM dbtest WHERE id IN (:preparedArray1,:preparedArray2,:preparedArray3,:preparedArray4,:preparedArray5,:preparedArray6,:preparedArray7,:preparedArray8,:preparedArray9,:preparedArray10)';
@@ -82,9 +84,8 @@ class MysqliStatementTest extends DatabaseTestCase
 
     /**
      * Regression test to ensure that named values with matching named params are correctly prepared (part 2), this simulates a general use case.
-     *
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testStatementWithKeysMatching()
     {
         $query = 'SELECT * FROM dbtest WHERE `id` = :id AND `title` = :id_title';
@@ -95,9 +96,8 @@ class MysqliStatementTest extends DatabaseTestCase
     /**
      * Regression test to ensure that named values with matching named params are correctly prepared (part 3).
      * This simulates a general use case for a search function where we reuse the same prepared statement term.
-     *
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testStatementWithMultipleUseOfVars()
     {
         $query = 'SELECT * FROM `dbtest` WHERE `description` LIKE :search_term AND `title` LIKE :search_term';

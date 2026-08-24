@@ -13,10 +13,13 @@ use Joomla\Database\Sqlsrv\SqlsrvDriver;
 use Joomla\Database\Sqlsrv\SqlsrvQuery;
 use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * Test class for Joomla\Database\Sqlsrv\SqlsrvDriver.
  */
+#[RequiresPhpExtension('sqlsrv')]
 class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
 {
     /**
@@ -28,7 +31,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
     {
         parent::setUpBeforeClass();
 
-        if (!static::$connection || static::$connection->getName() !== 'sqlsrv') {
+        if (!static::$connection) {
             self::markTestSkipped('SQL Server database not configured.');
         }
     }
@@ -223,10 +226,9 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
      */
 
     /**
-     * @testdox  The first row of a result set can be loaded as a PHP object
-     *
      * @note This test case is an override from the parent because SQL Server casts the key to integers and has millisecond precision
      */
+    #[TestDox('The first row of a result set can be loaded as a PHP object')]
     public function testLoadObject()
     {
         $this->loadExampleData();
@@ -249,10 +251,9 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
     }
 
     /**
-     * @testdox  All rows of a result set can be loaded as PHP objects
-     *
      * @note This test case is an override from the parent because SQL Server casts the key to integers and has millisecond precision
      */
+    #[TestDox('All rows of a result set can be loaded as PHP objects')]
     public function testLoadObjectList()
     {
         $this->loadExampleData();
@@ -298,10 +299,9 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
     }
 
     /**
-     * @testdox  The first row of a result set can be loaded as an array
-     *
      * @note This test case is an override from the parent because SQL Server casts the key to integers and has millisecond precision
      */
+    #[TestDox('The first row of a result set can be loaded as an array')]
     public function testLoadRow()
     {
         $this->loadExampleData();
@@ -324,10 +324,9 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
     }
 
     /**
-     * @testdox  All rows of a result set can be loaded as an array
-     *
      * @note This test case is an override from the parent because SQL Server casts the key to integers and has millisecond precision
      */
+    #[TestDox('All rows of a result set can be loaded as an array')]
     public function testLoadRowList()
     {
         $this->loadExampleData();
@@ -373,10 +372,9 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
     }
 
     /**
-     * @testdox  Queries converted to the querySet type are correctly built and executed
-     *
      * @note This test case is an override from the parent because the result set has more rows
      */
+    #[TestDox('Queries converted to the querySet type are correctly built and executed')]
     public function testSelectToQuerySetWithUnionAll()
     {
         $this->loadExampleData();
@@ -415,9 +413,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
      * Test cases for this subclass
      */
 
-    /**
-     * @testdox  The database driver reports if it is supported in the present environment
-     */
+    #[TestDox('The database driver reports if it is supported in the present environment')]
     public function testIsSupported()
     {
         $this->assertTrue(
@@ -425,9 +421,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database collation can be retrieved
-     */
+    #[TestDox('The database collation can be retrieved')]
     public function testGetCollation()
     {
         $this->assertSame(
@@ -436,9 +430,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database connection collation can be retrieved
-     */
+    #[TestDox('The database connection collation can be retrieved')]
     public function testGetConnectionCollation()
     {
         $this->assertSame(
@@ -447,9 +439,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database connection encryption can be retrieved
-     */
+    #[TestDox('The database connection encryption can be retrieved')]
     public function testGetConnectionEncryption()
     {
         $this->assertEmpty(
@@ -458,9 +448,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A list of queries to create the given tables is returned
-     */
+    #[TestDox('A list of queries to create the given tables is returned')]
     public function testGetTableCreate()
     {
         $this->assertEmpty(
@@ -470,13 +458,12 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
     }
 
     /**
-     * @testdox  Information about the columns of a database table is returned
-     *
      * @param   string   $table     The name of the database table.
      * @param   boolean  $typeOnly  True (default) to only return field types.
      * @param   array    $expected  Expected result.
      */
     #[DataProvider('dataGetTableColumns')]
+    #[TestDox('Information about the columns of a database table is returned')]
     public function testGetTableColumns(string $table, bool $typeOnly, array $expected)
     {
         $this->assertEquals(
@@ -485,9 +472,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  Information about the keys of a database table is returned
-     */
+    #[TestDox('Information about the keys of a database table is returned')]
     public function testGetTableKeys()
     {
         $this->assertEmpty(
@@ -496,9 +481,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The connection can be set to use UTF-8 encoding
-     */
+    #[TestDox('The connection can be set to use UTF-8 encoding')]
     public function testSetUtf()
     {
         $this->assertTrue(
@@ -506,9 +489,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database connection can be retrieved
-     */
+    #[TestDox('The database connection can be retrieved')]
     public function testGetConnection()
     {
         $this->assertTrue(
@@ -516,9 +497,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The name of the database driver is retrieved
-     */
+    #[TestDox('The name of the database driver is retrieved')]
     public function testGetName()
     {
         $this->assertSame(
@@ -527,9 +506,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The null date for the server type is retrieved
-     */
+    #[TestDox('The null date for the server type is retrieved')]
     public function testGetNullDate()
     {
         $this->assertSame(
@@ -538,9 +515,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  An exporter for the database driver can be created
-     */
+    #[TestDox('An exporter for the database driver can be created')]
     public function testGetExporter()
     {
         $this->expectException(UnsupportedAdapterException::class);
@@ -548,9 +523,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         static::$connection->getExporter();
     }
 
-    /**
-     * @testdox  An importer for the database driver can be created
-     */
+    #[TestDox('An importer for the database driver can be created')]
     public function testGetImporter()
     {
         $this->expectException(UnsupportedAdapterException::class);
@@ -558,9 +531,7 @@ class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
         static::$connection->getImporter();
     }
 
-    /**
-     * @testdox  A new query instance can be created
-     */
+    #[TestDox('A new query instance can be created')]
     public function testGetQueryNewInstance()
     {
         $this->assertInstanceOf(
