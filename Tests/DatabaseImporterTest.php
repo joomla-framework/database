@@ -10,6 +10,7 @@ namespace Joomla\Database\Tests;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Tests\Stubs\TestDatabaseImporter;
 use Joomla\Test\TestHelper;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -38,9 +39,7 @@ class DatabaseImporterTest extends TestCase
         $this->importer = new TestDatabaseImporter();
     }
 
-    /**
-     * @testdox  The importer is correctly configured when instantiated
-     */
+    #[TestDox('The importer is correctly configured when instantiated')]
     public function testInstantiation()
     {
         $expected = (object) [
@@ -51,9 +50,7 @@ class DatabaseImporterTest extends TestCase
         $this->assertSame('xml', TestHelper::getValue($this->importer, 'asFormat'));
     }
 
-    /**
-     * @testdox  The importer can be set to XML format
-     */
+    #[TestDox('The importer can be set to XML format')]
     public function testAsXml()
     {
         $this->assertSame($this->importer, $this->importer->asXml(), 'The importer supports method chaining');
@@ -61,9 +58,7 @@ class DatabaseImporterTest extends TestCase
         $this->assertSame('xml', TestHelper::getValue($this->importer, 'asFormat'));
     }
 
-    /**
-     * @testdox  A database driver can be set to the importer
-     */
+    #[TestDox('A database driver can be set to the importer')]
     public function testSetDbo()
     {
         $db = $this->createStub(DatabaseInterface::class);
@@ -71,9 +66,7 @@ class DatabaseImporterTest extends TestCase
         $this->assertSame($this->importer, $this->importer->setDbo($db), 'The importer supports method chaining');
     }
 
-    /**
-     * @testdox  The importer can be configured to export with structure
-     */
+    #[TestDox('The importer can be configured to export with structure')]
     public function testWithStructure()
     {
         $this->assertSame($this->importer, $this->importer->withStructure(false), 'The importer supports method chaining');

@@ -11,6 +11,7 @@ use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Tests\Stubs\TestDatabaseExporter;
 use Joomla\Test\TestHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -39,9 +40,7 @@ class DatabaseExporterTest extends TestCase
         $this->exporter = new TestDatabaseExporter();
     }
 
-    /**
-     * @testdox  The exporter is correctly configured when instantiated
-     */
+    #[TestDox('The exporter is correctly configured when instantiated')]
     public function testInstantiation()
     {
         $expected = (object) [
@@ -53,9 +52,7 @@ class DatabaseExporterTest extends TestCase
         $this->assertSame('xml', TestHelper::getValue($this->exporter, 'asFormat'));
     }
 
-    /**
-     * @testdox  The exporter can be set to XML format
-     */
+    #[TestDox('The exporter can be set to XML format')]
     public function testAsXml()
     {
         $this->assertSame($this->exporter, $this->exporter->asXml(), 'The exporter supports method chaining');
@@ -89,12 +86,11 @@ class DatabaseExporterTest extends TestCase
     }
 
     /**
-     * @testdox  The tables to be exported can be configured
-     *
      * @param   string[]|string  $from                  The name of a single table, or an array of the table names to export.
      * @param   boolean          $shouldRaiseException  Flag indicating the exporter should raise an exception for an unsupported data type
      */
     #[DataProvider('dataFrom')]
+    #[TestDox('The tables to be exported can be configured')]
     public function testFrom($from, bool $shouldRaiseException)
     {
         if ($shouldRaiseException) {
@@ -106,9 +102,7 @@ class DatabaseExporterTest extends TestCase
         $this->assertSame((array) $from, TestHelper::getValue($this->exporter, 'from'));
     }
 
-    /**
-     * @testdox  A database driver can be set to the exporter
-     */
+    #[TestDox('A database driver can be set to the exporter')]
     public function testSetDbo()
     {
         $db = $this->createStub(DatabaseInterface::class);
@@ -116,9 +110,7 @@ class DatabaseExporterTest extends TestCase
         $this->assertSame($this->exporter, $this->exporter->setDbo($db), 'The exporter supports method chaining');
     }
 
-    /**
-     * @testdox  The exporter can be configured to export with structure
-     */
+    #[TestDox('The exporter can be configured to export with structure')]
     public function testWithStructure()
     {
         $this->assertSame($this->exporter, $this->exporter->withStructure(false), 'The exporter supports method chaining');
@@ -128,9 +120,7 @@ class DatabaseExporterTest extends TestCase
         $this->assertFalse($options->withStructure);
     }
 
-    /**
-     * @testdox  The exporter can be configured to export with data
-     */
+    #[TestDox('The exporter can be configured to export with data')]
     public function testWithData()
     {
         $this->assertSame($this->exporter, $this->exporter->withData(true), 'The exporter supports method chaining');

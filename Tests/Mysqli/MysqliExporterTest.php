@@ -11,6 +11,7 @@ use Joomla\Database\Mysqli\MysqliDriver;
 use Joomla\Database\Mysqli\MysqliExporter;
 use Joomla\Database\Mysqli\MysqliQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
@@ -202,13 +203,12 @@ XML
     }
 
     /**
-     * @testdox  The exporter can be cast to a string
-     *
      * @param   boolean  $withStructure  True to export the structure, false to not.
      * @param   boolean  $withData       True to export the data, false to not.
      * @param   string   $expectedXml    Expected XML string.
      */
     #[DataProvider('dataCastingToString')]
+    #[TestDox('The exporter can be cast to a string')]
     public function testCastingToString(bool $withStructure, bool $withData, string $expectedXml)
     {
         $exporter = new MysqliExporter();
@@ -272,13 +272,12 @@ XML
     }
 
     /**
-     * @testdox  The exporter checks for errors
-     *
      * @param   string|null           $db                Database driver to set in the exporter.
      * @param   string[]|string|null  $from              Database tables to export from.
      * @param   string|null           $exceptionMessage  If an Exception should be thrown, the expected message
      */
     #[DataProvider('dataCheck')]
+    #[TestDox('The exporter checks for errors')]
     public function testCheck(?string $db, $from, ?string $exceptionMessage)
     {
         if ($exceptionMessage) {

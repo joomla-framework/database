@@ -9,6 +9,7 @@ namespace Joomla\Database\Tests\Mysql;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Mysql\MysqlQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
@@ -60,13 +61,12 @@ class MysqlQueryTest extends TestCase
     }
 
     /**
-     * @testdox  A SQL statement for concatenating values is generated
-     *
      * @param   string[]     $values     An array of values to concatenate.
      * @param   string|null  $separator  As separator to place between each value.
      * @param   string       $expected   The expected query string.
      */
     #[DataProvider('dataConcatenate')]
+    #[TestDox('A SQL statement for concatenating values is generated')]
     public function testConcatenate(array $values, ?string $separator, string $expected)
     {
         $this->db->method('quote')
@@ -80,9 +80,7 @@ class MysqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement for the MySQL find_in_set() function is generated
-     */
+    #[TestDox('A SQL statement for the MySQL find_in_set() function is generated')]
     public function testFindInSet()
     {
         $this->assertSame(
@@ -91,9 +89,7 @@ class MysqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to concatenate a group of values is generated
-     */
+    #[TestDox('A SQL statement to concatenate a group of values is generated')]
     public function testGroupConcat()
     {
         $this->db->method('quote')
@@ -107,9 +103,7 @@ class MysqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to get a random floating point value is generated
-     */
+    #[TestDox('A SQL statement to get a random floating point value is generated')]
     public function testRand()
     {
         $this->assertSame(
@@ -118,9 +112,7 @@ class MysqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to prepend a string with a regex operator is generated
-     */
+    #[TestDox('A SQL statement to prepend a string with a regex operator is generated')]
     public function testRegexp()
     {
         $this->assertSame(
@@ -129,17 +121,13 @@ class MysqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A string is cast as a character string for the driver
-     */
+    #[TestDox('A string is cast as a character string for the driver')]
     public function testCastAsWithChar()
     {
         $this->assertSame('123', $this->query->castAs('CHAR', '123'));
     }
 
-    /**
-     * @testdox  The length param is added to the CAST statement when provided
-     */
+    #[TestDox('The length param is added to the CAST statement when provided')]
     public function testCastAsWithCharAndLengthParam()
     {
         $this->assertSame(
@@ -148,9 +136,7 @@ class MysqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  Test castAs behaviour with INT (adds 0 to the input)
-     */
+    #[TestDox('Test castAs behaviour with INT (adds 0 to the input)')]
     public function testCastAsWithIntegerType()
     {
         $this->assertSame(

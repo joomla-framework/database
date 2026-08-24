@@ -11,6 +11,7 @@ use Joomla\Database\Pgsql\PgsqlDriver;
 use Joomla\Database\Pgsql\PgsqlImporter;
 use Joomla\Database\Pgsql\PgsqlQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
@@ -308,8 +309,6 @@ ALTER SEQUENCE "jos_dbtest_id_seq" OWNED BY "jos_dbtest.id"',
     }
 
     /**
-     * @testdox  The importer processes a XML document
-     *
      * @param   boolean            $mergeStructure         True to merge the structure.
      * @param   boolean            $importData             True to import the data.
      * @param   \SimpleXMLElement  $from                   XML document to import.
@@ -317,6 +316,7 @@ ALTER SEQUENCE "jos_dbtest_id_seq" OWNED BY "jos_dbtest.id"',
      * @param   string[]           $expectedInsertObjects  The expected objects to be given to the database's insertObject method.
      */
     #[DataProvider('dataImport')]
+    #[TestDox('The importer processes a XML document')]
     public function testImport(bool $mergeStructure, bool $importData, \SimpleXMLElement $from, array $expectedQueries, array $expectedInsertObjects)
     {
         $importer = new PgsqlImporter();
@@ -370,13 +370,12 @@ ALTER SEQUENCE "jos_dbtest_id_seq" OWNED BY "jos_dbtest.id"',
     }
 
     /**
-     * @testdox  The importer checks for errors
-     *
      * @param   string|null           $db                Database driver to set in the importer.
      * @param   string[]|string|null  $from              Database structure to import.
      * @param   string|null           $exceptionMessage  If an Exception should be thrown, the expected message
      */
     #[DataProvider('dataCheck')]
+    #[TestDox('The importer checks for errors')]
     public function testCheck(?string $db, $from, ?string $exceptionMessage)
     {
         if ($exceptionMessage) {

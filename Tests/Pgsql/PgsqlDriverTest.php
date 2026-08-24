@@ -14,6 +14,7 @@ use Joomla\Database\Pgsql\PgsqlQuery;
 use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * Test class for Joomla\Database\Pgsql\PgsqlDriver
@@ -194,9 +195,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
      * Overrides for parent class test cases
      */
 
-    /**
-     * @testdox  An object can be inserted into the database
-     */
+    #[TestDox('An object can be inserted into the database')]
     public function testInsertObject()
     {
         $this->loadExampleData();
@@ -224,9 +223,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         $this->assertNotNull($data->id, 'When given a key, the insertObject method should set the row ID');
     }
 
-    /**
-     * @testdox  A database table can be renamed
-     */
+    #[TestDox('A database table can be renamed')]
     public function testRenameTable()
     {
         $oldTableName = '#__dbtest';
@@ -301,9 +298,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
      * Test cases for this subclass
      */
 
-    /**
-     * @testdox  The database collation can be retrieved
-     */
+    #[TestDox('The database collation can be retrieved')]
     public function testGetCollation()
     {
         $this->assertNotFalse(
@@ -311,9 +306,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database connection collation can be retrieved
-     */
+    #[TestDox('The database connection collation can be retrieved')]
     public function testGetConnectionCollation()
     {
         $this->assertNotFalse(
@@ -321,9 +314,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database connection encryption can be retrieved
-     */
+    #[TestDox('The database connection encryption can be retrieved')]
     public function testGetConnectionEncryption()
     {
         $this->assertEmpty(
@@ -332,9 +323,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A list of queries to create the given tables is returned
-     */
+    #[TestDox('A list of queries to create the given tables is returned')]
     public function testGetTableCreate()
     {
         $this->assertEmpty(
@@ -343,9 +332,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  Information about the keys of a database table is returned
-     */
+    #[TestDox('Information about the keys of a database table is returned')]
     public function testGetTableKeys()
     {
         $this->assertEquals(
@@ -362,9 +349,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  Information about the sequences of a database table is returned
-     */
+    #[TestDox('Information about the sequences of a database table is returned')]
     public function testGetTableSequences()
     {
         $sequence = [
@@ -393,9 +378,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The last value of a table sequence is returned
-     */
+    #[TestDox('The last value of a table sequence is returned')]
     public function testGetSequenceLastValue()
     {
         $this->assertTrue(
@@ -403,9 +386,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The last value of a table sequence is returned
-     */
+    #[TestDox('The last value of a table sequence is returned')]
     public function testGetSequenceIsCalled()
     {
         $this->assertTrue(
@@ -413,9 +394,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A transaction can be started and committed
-     */
+    #[TestDox('A transaction can be started and committed')]
     public function testTransactionCommit()
     {
         $this->loadExampleData();
@@ -470,12 +449,11 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
     }
 
     /**
-     * @testdox  A transaction can be started and committed
-     *
      * @param   string|null  $toSavepoint  Savepoint name to rollback transaction to
      * @param   integer      $tupleCount   Number of tuples found after insertion and rollback
      */
     #[DataProvider('dataTransactionRollback')]
+    #[TestDox('A transaction can be started and committed')]
     public function testTransactionRollback(?string $toSavepoint, int $tupleCount)
     {
         $this->loadExampleData();
@@ -543,9 +521,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         $this->assertCount($tupleCount, $transactionRows);
     }
 
-    /**
-     * @testdox  The database driver reports if it is supported in the present environment
-     */
+    #[TestDox('The database driver reports if it is supported in the present environment')]
     public function testIsSupported()
     {
         $this->assertTrue(
@@ -553,9 +529,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  Binary values are correctly supported
-     */
+    #[TestDox('Binary values are correctly supported')]
     public function testQuoteAndDecodeBinary()
     {
         $this->loadExampleData();
@@ -642,9 +616,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @testdox  The database connection can be retrieved
-     */
+    #[TestDox('The database connection can be retrieved')]
     public function testGetConnection()
     {
         $this->assertInstanceOf(
@@ -653,9 +625,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The name of the database driver is retrieved
-     */
+    #[TestDox('The name of the database driver is retrieved')]
     public function testGetName()
     {
         $this->assertSame(
@@ -664,9 +634,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The type of server for the database driver is retrieved
-     */
+    #[TestDox('The type of server for the database driver is retrieved')]
     public function testGetServerType()
     {
         $this->assertSame(
@@ -675,9 +643,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The null date for the server type is retrieved
-     */
+    #[TestDox('The null date for the server type is retrieved')]
     public function testGetNullDate()
     {
         $this->assertSame(
@@ -686,9 +652,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  An exporter for the database driver can be created
-     */
+    #[TestDox('An exporter for the database driver can be created')]
     public function testGetExporter()
     {
         $this->assertInstanceOf(
@@ -697,9 +661,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  An importer for the database driver can be created
-     */
+    #[TestDox('An importer for the database driver can be created')]
     public function testGetImporter()
     {
         $this->assertInstanceOf(
@@ -708,9 +670,7 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A new query instance can be created
-     */
+    #[TestDox('A new query instance can be created')]
     public function testGetQueryNewInstance()
     {
         $this->assertInstanceOf(

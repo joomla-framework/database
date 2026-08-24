@@ -16,6 +16,7 @@ use Joomla\Database\ParameterType;
 use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * Test class for Joomla\Database\Mysql\MysqlDriver
@@ -237,13 +238,12 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
      */
 
     /**
-     * @testdox  Information about the columns of a database table is returned
-     *
      * @param   string   $table     The name of the database table.
      * @param   boolean  $typeOnly  True (default) to only return field types.
      * @param   array    $expected  Expected result.
      */
     #[DataProvider('dataGetTableColumns')]
+    #[TestDox('Information about the columns of a database table is returned')]
     public function testGetTableColumns(string $table, bool $typeOnly, array $expected)
     {
         if (!$typeOnly) {
@@ -276,9 +276,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
      * Test cases for this subclass
      */
 
-    /**
-     * @testdox  The database driver reports if it is supported in the present environment
-     */
+    #[TestDox('The database driver reports if it is supported in the present environment')]
     public function testIsSupported()
     {
         $this->assertTrue(
@@ -286,9 +284,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database collation can be retrieved
-     */
+    #[TestDox('The database collation can be retrieved')]
     public function testGetCollation()
     {
         $this->assertNotFalse(
@@ -296,9 +292,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database connection collation can be retrieved
-     */
+    #[TestDox('The database connection collation can be retrieved')]
     public function testGetConnectionCollation()
     {
         $this->assertNotFalse(
@@ -306,9 +300,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database connection encryption can be retrieved
-     */
+    #[TestDox('The database connection encryption can be retrieved')]
     public function testGetConnectionEncryption()
     {
         $this->assertEmpty(
@@ -317,9 +309,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A list of queries to create the given tables is returned
-     */
+    #[TestDox('A list of queries to create the given tables is returned')]
     public function testGetTableCreate()
     {
         $this->assertCount(
@@ -329,9 +319,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  Information about the keys of a database table is returned
-     */
+    #[TestDox('Information about the keys of a database table is returned')]
     public function testGetTableKeys()
     {
         $dbtestPrimaryKey = [
@@ -380,9 +368,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The database reports if it has support for the utf8mb4 character sets
-     */
+    #[TestDox('The database reports if it has support for the utf8mb4 character sets')]
     public function testHasUTF8mb4Support()
     {
         $this->assertFalse(
@@ -391,9 +377,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A transaction can be started and committed
-     */
+    #[TestDox('A transaction can be started and committed')]
     public function testTransactionCommit()
     {
         $this->loadExampleData();
@@ -448,12 +432,11 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
     }
 
     /**
-     * @testdox  A transaction can be started and committed
-     *
      * @param   string|null  $toSavepoint  Savepoint name to rollback transaction to
      * @param   integer      $tupleCount   Number of tuples found after insertion and rollback
      */
     #[DataProvider('dataTransactionRollback')]
+    #[TestDox('A transaction can be started and committed')]
     public function testTransactionRollback(?string $toSavepoint, int $tupleCount)
     {
         $this->loadExampleData();
@@ -521,9 +504,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         $this->assertCount($tupleCount, $transactionRows);
     }
 
-    /**
-     * @testdox  The database connection can be retrieved
-     */
+    #[TestDox('The database connection can be retrieved')]
     public function testGetConnection()
     {
         $this->assertInstanceOf(
@@ -532,9 +513,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The name of the database driver is retrieved
-     */
+    #[TestDox('The name of the database driver is retrieved')]
     public function testGetName()
     {
         $this->assertSame(
@@ -543,9 +522,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The type of server for the database driver is retrieved
-     */
+    #[TestDox('The type of server for the database driver is retrieved')]
     public function testGetServerType()
     {
         $this->assertSame(
@@ -554,9 +531,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  The null date for the server type is retrieved
-     */
+    #[TestDox('The null date for the server type is retrieved')]
     public function testGetNullDate()
     {
         $result   = static::$connection->setQuery('SELECT @@SESSION.sql_mode;')->loadResult();
@@ -572,9 +547,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  An exporter for the database driver can be created
-     */
+    #[TestDox('An exporter for the database driver can be created')]
     public function testGetExporter()
     {
         $this->assertInstanceOf(
@@ -583,9 +556,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  An importer for the database driver can be created
-     */
+    #[TestDox('An importer for the database driver can be created')]
     public function testGetImporter()
     {
         $this->assertInstanceOf(
@@ -594,9 +565,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A new query instance can be created
-     */
+    #[TestDox('A new query instance can be created')]
     public function testGetQueryNewInstance()
     {
         $this->assertInstanceOf(
@@ -605,9 +574,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  Binary values are correctly supported
-     */
+    #[TestDox('Binary values are correctly supported')]
     public function testQuoteAndDecodeBinary()
     {
         $this->loadExampleData();
@@ -694,9 +661,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @testdox  The connection can be set to use UTF-8 encoding
-     */
+    #[TestDox('The connection can be set to use UTF-8 encoding')]
     public function testSetUtf()
     {
         $this->assertFalse(
@@ -704,9 +669,7 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
-    /**
-     * @testdox  A database table can be truncated
-     */
+    #[TestDox('A database table can be truncated')]
     public function testTruncateTable()
     {
         $this->loadExampleData();

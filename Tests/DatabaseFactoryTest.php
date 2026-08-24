@@ -19,6 +19,7 @@ use Joomla\Database\QueryInterface;
 use Joomla\Database\StatementInterface;
 use Joomla\Test\TestHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -68,12 +69,11 @@ class DatabaseFactoryTest extends TestCase
     }
 
     /**
-     * @testdox  The factory builds a database driver correctly
-     *
      * @param   string   $adapter               The type of adapter to create
      * @param   boolean  $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
      */
     #[DataProvider('dataGetDriver')]
+    #[TestDox('The factory builds a database driver correctly')]
     public function testGetDriver(string $adapter, bool $shouldRaiseException)
     {
         if ($shouldRaiseException) {
@@ -115,13 +115,12 @@ class DatabaseFactoryTest extends TestCase
     }
 
     /**
-     * @testdox  The factory builds a database exporter correctly
-     *
      * @param   string               $adapter               The type of adapter to create
      * @param   boolean              $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
      * @param   DatabaseDriver|null  $databaseDriver        The optional database driver to be injected into the exporter
      */
     #[DataProvider('dataGetExporter')]
+    #[TestDox('The factory builds a database exporter correctly')]
     public function testGetExporter(string $adapter, bool $shouldRaiseException, bool $createDb)
     {
         if ($shouldRaiseException) {
@@ -178,13 +177,12 @@ class DatabaseFactoryTest extends TestCase
     }
 
     /**
-     * @testdox  The factory builds a database importer correctly
-     *
      * @param   string   $adapter               The type of adapter to create
      * @param   boolean  $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
      * @param   boolean  $createDb              The optional database driver to be injected into the importer
      */
     #[DataProvider('dataGetImporter')]
+    #[TestDox('The factory builds a database importer correctly')]
     public function testGetImporter(string $adapter, bool $shouldRaiseException, bool $createDb)
     {
         if ($shouldRaiseException) {
@@ -228,12 +226,11 @@ class DatabaseFactoryTest extends TestCase
     }
 
     /**
-     * @testdox  The factory builds a database iterator correctly
-     *
      * @param   string  $adapter    The type of adapter to create
      * @param   bool    $createStatement  Statement holding the result set to be iterated.
      */
     #[DataProvider('dataGetIterator')]
+    #[TestDox('The factory builds a database iterator correctly')]
     public function testGetIterator(string $adapter, bool $createStatement)
     {
         $statement = null;
@@ -271,13 +268,12 @@ class DatabaseFactoryTest extends TestCase
     }
 
     /**
-     * @testdox  The factory builds a database query object correctly
-     *
      * @param   string   $adapter               The type of adapter to create
      * @param   boolean  $shouldRaiseException  Flag indicating the factory should raise an exception for an unsupported adapter
      * @param   boolean  $createDb              The optional database driver to be injected into the importer
      */
     #[DataProvider('dataGetQuery')]
+    #[TestDox('The factory builds a database query object correctly')]
     public function testGetQuery(string $adapter, bool $shouldRaiseException, bool $createDb)
     {
         if ($shouldRaiseException) {

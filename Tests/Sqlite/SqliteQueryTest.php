@@ -9,6 +9,7 @@ namespace Joomla\Database\Tests\Sqlite;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Sqlite\SqliteQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
@@ -60,14 +61,13 @@ class SqliteQueryTest extends TestCase
     }
 
     /**
-     * @testdox  A SQL statement for checking the character length of a field is generated
-     *
      * @param   string       $field      A value.
      * @param   string|null  $operator   Comparison operator between charLength integer value and $condition
      * @param   string|null  $condition  Integer value to compare charLength with.
      * @param   string       $expected   The expected query string.
      */
     #[DataProvider('dataCharLength')]
+    #[TestDox('A SQL statement for checking the character length of a field is generated')]
     public function testCharLength(string $field, ?string $operator, ?string $condition, string $expected)
     {
         $this->assertSame(
@@ -90,13 +90,12 @@ class SqliteQueryTest extends TestCase
     }
 
     /**
-     * @testdox  A SQL statement for concatenating values is generated
-     *
      * @param   string[]     $values     An array of values to concatenate.
      * @param   string|null  $separator  As separator to place between each value.
      * @param   string       $expected   The expected query string.
      */
     #[DataProvider('dataConcatenate')]
+    #[TestDox('A SQL statement for concatenating values is generated')]
     public function testConcatenate(array $values, ?string $separator, string $expected)
     {
         $this->db->method('quote')
@@ -110,9 +109,7 @@ class SqliteQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to concatenate a group of values is generated
-     */
+    #[TestDox('A SQL statement to concatenate a group of values is generated')]
     public function testGroupConcat()
     {
         $this->db->method('quote')
