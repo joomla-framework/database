@@ -147,9 +147,9 @@ jobs:
             postgres:
                 image: postgres:${{ matrix.db_version }}-alpine
                 env:
-                    POSTGRES_USER: root
+                    POSTGRES_USER: joomla_ut
                     POSTGRES_PASSWORD: joomla_ut
-                    POSTGRES_DB: test_joomla
+                    POSTGRES_DB: joomla_ut
 
     tests-unit-sqlsrv:
         name: Run Unit tests on SQLsrv
