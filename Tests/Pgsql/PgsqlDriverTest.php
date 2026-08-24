@@ -31,9 +31,6 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
      */
     public static function setUpBeforeClass(): void
     {
-        // Give the container a chance to get ready
-        sleep(20);
-
         parent::setUpBeforeClass();
 
         if (!static::$connection) {
