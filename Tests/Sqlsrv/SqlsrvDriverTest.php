@@ -12,6 +12,7 @@ use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Database\Sqlsrv\SqlsrvDriver;
 use Joomla\Database\Sqlsrv\SqlsrvQuery;
 use Joomla\Database\Tests\AbstractDatabaseDriverTestCase;
+use Joomla\Test\DatabaseManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -22,6 +23,22 @@ use PHPUnit\Framework\Attributes\TestDox;
 #[RequiresPhpExtension('sqlsrv')]
 class SqlsrvDriverTest extends AbstractDatabaseDriverTestCase
 {
+    protected static function createDatabaseManager(): DatabaseManager
+    {
+        $manager = new class () extends DatabaseManager {
+            protected function initialiseParams(): void
+            {
+                parent::initialiseParams();
+
+                if (\is_array($this->params)) {
+                    $this->params['trust_certificate'] = true;
+                }
+            }
+        };
+
+        return $manager;
+    }
+
     /**
      * This method is called before the first test of this test class is run.
      *
