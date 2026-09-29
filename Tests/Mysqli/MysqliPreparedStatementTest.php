@@ -10,7 +10,11 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Mysqli\MysqliStatement;
 use Joomla\Test\DatabaseTestCase;
+use Joomla\Test\TestHelper;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
+#[RequiresPhpExtension('mysqli')]
 class MysqliPreparedStatementTest extends DatabaseTestCase
 {
     /**
@@ -22,7 +26,7 @@ class MysqliPreparedStatementTest extends DatabaseTestCase
     {
         parent::setUpBeforeClass();
 
-        if (!static::$connection || static::$connection->getName() !== 'mysqli') {
+        if (!static::$connection) {
             self::markTestSkipped('MySQL database not configured.');
         }
     }
@@ -88,17 +92,11 @@ class MysqliPreparedStatementTest extends DatabaseTestCase
             $rawQuery
         );
 
-        $refObject = new \ReflectionObject($mysqliStatementObject);
-        $refMapping = $refObject->getProperty('parameterKeyMapping');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $refMapping->setAccessible(true);
-        $parameterKeyMapping = $refMapping->getValue($mysqliStatementObject);
-
         $this->assertEquals(
             [
                 ':search' => [0, 1],
             ],
-            $parameterKeyMapping
+            TestHelper::getValue($mysqliStatementObject, 'parameterKeyMapping')
         );
     }
 
@@ -116,26 +114,19 @@ class MysqliPreparedStatementTest extends DatabaseTestCase
             $rawQuery
         );
 
-        $refObject = new \ReflectionObject($mysqliStatementObject);
-        $refMapping = $refObject->getProperty('parameterKeyMapping');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $refMapping->setAccessible(true);
-        $parameterKeyMapping = $refMapping->getValue($mysqliStatementObject);
-
         $this->assertEquals(
             [
                 ':search' => [0],
                 ':search2' => [1],
             ],
-            $parameterKeyMapping
+            TestHelper::getValue($mysqliStatementObject, 'parameterKeyMapping')
         );
     }
 
     /**
      * Make sure the mysqli driver correctly runs queries with named parameters appearing more than once.
-     *
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testPreparedStatementWithDuplicateKey()
     {
         $statement = 'SELECT * FROM dbtest WHERE `title` LIKE :search OR `description` LIKE :search';
@@ -148,9 +139,8 @@ class MysqliPreparedStatementTest extends DatabaseTestCase
 
     /**
      * Regression test to ensure running queries with named parameters appearing once didn't break.
-     *
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testPreparedStatementWithSingleKey()
     {
         $statement = 'SELECT * FROM dbtest WHERE `title` LIKE :search OR `description` LIKE :search2';

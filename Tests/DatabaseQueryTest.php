@@ -13,7 +13,8 @@ use Joomla\Database\Exception\UnknownTypeException;
 use Joomla\Database\ParameterType;
 use Joomla\Database\Tests\Stubs\TestDatabaseQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,14 +25,14 @@ class DatabaseQueryTest extends TestCase
     /**
      * Object being tested
      *
-     * @var  MockObject|DatabaseQuery
+     * @var  DatabaseQuery
      */
     private $query;
 
     /**
      * Mock database driver
      *
-     * @var  MockObject|DatabaseInterface
+     * @var  Stub|DatabaseInterface
      */
     private $db;
 
@@ -46,13 +47,11 @@ class DatabaseQueryTest extends TestCase
     {
         parent::setUp();
 
-        $this->db    = $this->createMock(DatabaseInterface::class);
+        $this->db    = $this->createStub(DatabaseInterface::class);
         $this->query = new TestDatabaseQuery($this->db);
     }
 
-    /**
-     * @testdox  The call method correctly creates and manages a CALL query element
-     */
+    #[TestDox('The call method correctly creates and manages a CALL query element')]
     public function testCall()
     {
         $this->assertSame($this->query, $this->query->call('foo'), 'The query builder supports method chaining');
@@ -64,9 +63,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The call method raises an exception if changing the query type
-     */
+    #[TestDox('The call method raises an exception if changing the query type')]
     public function testCallChangeQueryType()
     {
         $this->expectException(QueryTypeAlreadyDefinedException::class);
@@ -76,25 +73,19 @@ class DatabaseQueryTest extends TestCase
             ->call('foo');
     }
 
-    /**
-     * @testdox  A string is cast as a character string for the driver
-     */
+    #[TestDox('A string is cast as a character string for the driver')]
     public function testCastAs()
     {
         $this->assertSame('123', $this->query->castAs('CHAR', '123'));
     }
 
-    /**
-     * @testdox  The length param is ignored for castAs when the sql driver doesn't support it
-     */
+    #[TestDox("The length param is ignored for castAs when the sql driver doesn't support it")]
     public function testCastAsLengthParamIgnoredWhenNotSupported()
     {
         $this->assertSame('123', $this->query->castAs('CHAR', '123', 2));
     }
 
-    /**
-     * @testdox  Test an unknown type case return an unknown type exception
-     */
+    #[TestDox('Test an unknown type case return an unknown type exception')]
     public function testCastAsWithUnknownType()
     {
         $this->expectException(UnknownTypeException::class);
@@ -115,14 +106,13 @@ class DatabaseQueryTest extends TestCase
     }
 
     /**
-     * @testdox  A SQL statement for checking the character length of a field is generated
-     *
      * @param   string       $field      A value.
      * @param   string|null  $operator   Comparison operator between charLength integer value and $condition
      * @param   string|null  $condition  Integer value to compare charLength with.
      * @param   string       $expected   The expected query string.
      */
     #[DataProvider('dataCharLength')]
+    #[TestDox('A SQL statement for checking the character length of a field is generated')]
     public function testCharLength(string $field, ?string $operator, ?string $condition, string $expected)
     {
         $this->assertSame(
@@ -131,9 +121,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The columns method correctly creates and manages a list of columns
-     */
+    #[TestDox('The columns method correctly creates and manages a list of columns')]
     public function testColumns()
     {
         $this->assertSame($this->query, $this->query->columns('foo'), 'The query builder supports method chaining');
@@ -159,17 +147,15 @@ class DatabaseQueryTest extends TestCase
     }
 
     /**
-     * @testdox  A SQL statement for concatenating values is generated
-     *
      * @param   string[]     $values     An array of values to concatenate.
      * @param   string|null  $separator  As separator to place between each value.
      * @param   string       $expected   The expected query string.
      */
     #[DataProvider('dataConcatenate')]
+    #[TestDox('A SQL statement for concatenating values is generated')]
     public function testConcatenate(array $values, ?string $separator, string $expected)
     {
-        $this->db->expects($this->any())
-            ->method('quote')
+        $this->db->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
             });
@@ -180,9 +166,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement for the current timestamp is generated
-     */
+    #[TestDox('A SQL statement for the current timestamp is generated')]
     public function testCurrentTimestamp()
     {
         $this->assertSame(
@@ -205,14 +189,13 @@ class DatabaseQueryTest extends TestCase
     }
 
     /**
-     * @testdox  A SQL statement for adding date values is generated
-     *
      * @param   string  $date      The db quoted string representation of the date to add to. May be date or datetime
      * @param   string  $interval  The string representation of the appropriate number of units
      * @param   string  $datePart  The part of the date to perform the addition on
      * @param   string  $expected  The expected query string.
      */
     #[DataProvider('dataDateAdd')]
+    #[TestDox('A SQL statement for adding date values is generated')]
     public function testDateAdd(string $date, string $interval, string $datePart, string $expected)
     {
         $this->assertSame(
@@ -221,9 +204,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The delete method correctly creates a DELETE query element without a table name
-     */
+    #[TestDox('The delete method correctly creates a DELETE query element without a table name')]
     public function testDeleteWithoutTable()
     {
         $this->assertSame($this->query, $this->query->delete(), 'The query builder supports method chaining');
@@ -232,9 +213,7 @@ class DatabaseQueryTest extends TestCase
         $this->assertNull($this->query->from);
     }
 
-    /**
-     * @testdox  The delete method correctly creates a DELETE and FROM query element with a table name
-     */
+    #[TestDox('The delete method correctly creates a DELETE and FROM query element with a table name')]
     public function testDeleteWithTable()
     {
         $this->assertSame($this->query, $this->query->delete('#__content'), 'The query builder supports method chaining');
@@ -243,9 +222,7 @@ class DatabaseQueryTest extends TestCase
         $this->assertNotNull($this->query->from);
     }
 
-    /**
-     * @testdox  The delete method raises an exception if changing the query type
-     */
+    #[TestDox('The delete method raises an exception if changing the query type')]
     public function testDeleteChangeQueryType()
     {
         $this->expectException(QueryTypeAlreadyDefinedException::class);
@@ -255,9 +232,7 @@ class DatabaseQueryTest extends TestCase
             ->delete('foo');
     }
 
-    /**
-     * @testdox  The exec method correctly creates and manages a EXEC query element
-     */
+    #[TestDox('The exec method correctly creates and manages a EXEC query element')]
     public function testExec()
     {
         $this->assertSame($this->query, $this->query->exec('foo'), 'The query builder supports method chaining');
@@ -269,9 +244,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The exec method raises an exception if changing the query type
-     */
+    #[TestDox('The exec method raises an exception if changing the query type')]
     public function testExecChangeQueryType()
     {
         $this->expectException(QueryTypeAlreadyDefinedException::class);
@@ -281,9 +254,7 @@ class DatabaseQueryTest extends TestCase
             ->exec('foo');
     }
 
-    /**
-     * @testdox  A SQL statement for the MySQL find_in_set() function is generated
-     */
+    #[TestDox('A SQL statement for the MySQL find_in_set() function is generated')]
     public function testFindInSet()
     {
         $this->assertSame(
@@ -292,9 +263,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The from method correctly creates and manages a FROM query element
-     */
+    #[TestDox('The from method correctly creates and manages a FROM query element')]
     public function testFrom()
     {
         $this->assertSame($this->query, $this->query->from('foo'), 'The query builder supports method chaining');
@@ -306,9 +275,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The query can be aliased
-     */
+    #[TestDox('The query can be aliased')]
     public function testAlias()
     {
         $this->assertSame($this->query, $this->query->alias('foo'), 'The query builder supports method chaining');
@@ -319,9 +286,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to extract the year from a date is generated
-     */
+    #[TestDox('A SQL statement to extract the year from a date is generated')]
     public function testYear()
     {
         $this->assertSame(
@@ -330,9 +295,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to extract the month from a date is generated
-     */
+    #[TestDox('A SQL statement to extract the month from a date is generated')]
     public function testMonth()
     {
         $this->assertSame(
@@ -341,9 +304,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to extract the day from a date is generated
-     */
+    #[TestDox('A SQL statement to extract the day from a date is generated')]
     public function testDay()
     {
         $this->assertSame(
@@ -352,9 +313,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to extract the hour from a date is generated
-     */
+    #[TestDox('A SQL statement to extract the hour from a date is generated')]
     public function testHour()
     {
         $this->assertSame(
@@ -363,9 +322,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to extract the minute from a date is generated
-     */
+    #[TestDox('A SQL statement to extract the minute from a date is generated')]
     public function testMinute()
     {
         $this->assertSame(
@@ -374,9 +331,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to extract the second from a date is generated
-     */
+    #[TestDox('A SQL statement to extract the second from a date is generated')]
     public function testSecond()
     {
         $this->assertSame(
@@ -385,9 +340,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The group method correctly creates and manages a GROUP BY query element
-     */
+    #[TestDox('The group method correctly creates and manages a GROUP BY query element')]
     public function testGroup()
     {
         $this->assertSame($this->query, $this->query->group('foo'), 'The query builder supports method chaining');
@@ -399,9 +352,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The having method correctly creates and manages a HAVING query element
-     */
+    #[TestDox('The having method correctly creates and manages a HAVING query element')]
     public function testHaving()
     {
         $this->assertSame($this->query, $this->query->having('foo'), 'The query builder supports method chaining');
@@ -413,9 +364,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The insert method correctly creates a INSERT query element
-     */
+    #[TestDox('The insert method correctly creates a INSERT query element')]
     public function testInsert()
     {
         $this->assertSame($this->query, $this->query->insert('foo'), 'The query builder supports method chaining');
@@ -423,9 +372,7 @@ class DatabaseQueryTest extends TestCase
         $this->assertNotNull($this->query->insert);
     }
 
-    /**
-     * @testdox  The insert method raises an exception if changing the query type
-     */
+    #[TestDox('The insert method raises an exception if changing the query type')]
     public function testInsertChangeQueryType()
     {
         $this->expectException(QueryTypeAlreadyDefinedException::class);
@@ -435,9 +382,7 @@ class DatabaseQueryTest extends TestCase
             ->insert('foo');
     }
 
-    /**
-     * @testdox  The join method correctly creates a JOIN query element
-     */
+    #[TestDox('The join method correctly creates a JOIN query element')]
     public function testJoin()
     {
         $this->assertSame($this->query, $this->query->join('inner', 'foo'), 'The query builder supports method chaining');
@@ -449,9 +394,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The innerJoin method correctly creates a INNER JOIN query element
-     */
+    #[TestDox('The innerJoin method correctly creates a INNER JOIN query element')]
     public function testInnerJoin()
     {
         $this->assertSame($this->query, $this->query->innerJoin('foo'), 'The query builder supports method chaining');
@@ -463,9 +406,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The outerJoin method correctly creates a OUTER JOIN query element
-     */
+    #[TestDox('The outerJoin method correctly creates a OUTER JOIN query element')]
     public function testOuterJoin()
     {
         $this->assertSame($this->query, $this->query->outerJoin('foo'), 'The query builder supports method chaining');
@@ -477,9 +418,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The leftJoin method correctly creates a LEFT JOIN query element
-     */
+    #[TestDox('The leftJoin method correctly creates a LEFT JOIN query element')]
     public function testLeftJoin()
     {
         $this->assertSame($this->query, $this->query->leftJoin('foo'), 'The query builder supports method chaining');
@@ -491,9 +430,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The rightJoin method correctly creates a RIGHT JOIN query element
-     */
+    #[TestDox('The rightJoin method correctly creates a RIGHT JOIN query element')]
     public function testRightJoin()
     {
         $this->assertSame($this->query, $this->query->rightJoin('foo'), 'The query builder supports method chaining');
@@ -505,9 +442,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to get the length of a field is generated
-     */
+    #[TestDox('A SQL statement to get the length of a field is generated')]
     public function testLength()
     {
         $this->assertSame(
@@ -530,19 +465,21 @@ class DatabaseQueryTest extends TestCase
     }
 
     /**
-     * @testdox  The null date from the database driver is retrieved
-     *
      * @param   boolean  $quoted    Optionally wraps the null date in database quotes (true by default).
      * @param   string   $expected  The expected query string.
      */
     #[DataProvider('dataNullDate')]
+    #[TestDox('The null date from the database driver is retrieved')]
     public function testNullDate(bool $quoted, string $expected)
     {
-        $this->db->expects($this->once())
+        $db    = $this->createMock(DatabaseInterface::class);
+        $query = new TestDatabaseQuery($db);
+
+        $db->expects($this->once())
             ->method('getNullDate')
             ->willReturn('0000-00-00 00:00:00');
 
-        $this->db->expects($this->any())
+        $db->expects($this->exactly((int) $quoted))
             ->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
@@ -550,13 +487,11 @@ class DatabaseQueryTest extends TestCase
 
         $this->assertSame(
             $expected,
-            $this->query->nullDate($quoted)
+            $query->nullDate($quoted)
         );
     }
 
-    /**
-     * @testdox  The null date cannot be retrieved from the database driver if no driver is present
-     */
+    #[TestDox('The null date cannot be retrieved from the database driver if no driver is present')]
     public function testNullDateException()
     {
         $this->expectException(\RuntimeException::class);
@@ -566,9 +501,7 @@ class DatabaseQueryTest extends TestCase
         $query->nullDate();
     }
 
-    /**
-     * @testdox  A SQL statement to determine if a field contains a null date is generated when the query has no known null dates
-     */
+    #[TestDox('A SQL statement to determine if a field contains a null date is generated when the query has no known null dates')]
     public function testIsNullDatetimeNoDates()
     {
         $this->assertSame(
@@ -577,12 +510,12 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to determine if a field contains a null date is generated when the query has known null dates
-     */
+    #[TestDox('A SQL statement to determine if a field contains a null date is generated when the query has known null dates')]
     public function testIsNullDatetimeWithDates()
     {
-        $this->db->expects($this->any())
+        $db = $this->createMock(DatabaseInterface::class);
+
+        $db->expects($this->once())
             ->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 foreach ($text as $k => $v) {
@@ -592,7 +525,7 @@ class DatabaseQueryTest extends TestCase
                 return $text;
             });
 
-        $query = new class ($this->db) extends DatabaseQuery {
+        $query = new class ($db) extends DatabaseQuery {
             protected $nullDatetimeList = ['0000-00-00 00:00:00', '1000-01-01 00:00:00'];
 
             public function groupConcat($expression, $separator = ',')
@@ -612,9 +545,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to determine if a field contains a null date cannot be retrieved from the database driver if no driver is present
-     */
+    #[TestDox('A SQL statement to determine if a field contains a null date cannot be retrieved from the database driver if no driver is present')]
     public function testIsNullDatetimeException()
     {
         $this->expectException(\RuntimeException::class);
@@ -624,9 +555,7 @@ class DatabaseQueryTest extends TestCase
         $query->isNullDatetime('a.created');
     }
 
-    /**
-     * @testdox  The order method correctly creates and manages a ORDER BY query element
-     */
+    #[TestDox('The order method correctly creates and manages a ORDER BY query element')]
     public function testOrder()
     {
         $this->assertSame($this->query, $this->query->order('foo'), 'The query builder supports method chaining');
@@ -638,12 +567,13 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A string can be quoted
-     */
+    #[TestDox('A string can be quoted')]
     public function testQuote()
     {
-        $this->db->expects($this->any())
+        $db    = $this->createMock(DatabaseInterface::class);
+        $query = new TestDatabaseQuery($db);
+
+        $db->expects($this->once())
             ->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
@@ -651,13 +581,11 @@ class DatabaseQueryTest extends TestCase
 
         $this->assertSame(
             "'foo'",
-            $this->query->quote('foo')
+            $query->quote('foo')
         );
     }
 
-    /**
-     * @testdox  A string cannot be quoted if no database driver is present
-     */
+    #[TestDox('A string cannot be quoted if no database driver is present')]
     public function testQuoteException()
     {
         $this->expectException(\RuntimeException::class);
@@ -667,12 +595,13 @@ class DatabaseQueryTest extends TestCase
         $query->quote('foo');
     }
 
-    /**
-     * @testdox  A string can be quoted as a field identifier
-     */
+    #[TestDox('A string can be quoted as a field identifier')]
     public function testQuoteName()
     {
-        $this->db->expects($this->any())
+        $db    = $this->createMock(DatabaseInterface::class);
+        $query = new TestDatabaseQuery($db);
+
+        $db->expects($this->once())
             ->method('quoteName')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "`" . $text . "`";
@@ -680,13 +609,11 @@ class DatabaseQueryTest extends TestCase
 
         $this->assertSame(
             "`foo`",
-            $this->query->quoteName('foo')
+            $query->quoteName('foo')
         );
     }
 
-    /**
-     * @testdox  A string cannot be quoted as a field identifier if no database driver is present
-     */
+    #[TestDox('A string cannot be quoted as a field identifier if no database driver is present')]
     public function testQuoteNameException()
     {
         $this->expectException(\RuntimeException::class);
@@ -696,9 +623,7 @@ class DatabaseQueryTest extends TestCase
         $query->quoteName('foo');
     }
 
-    /**
-     * @testdox  A SQL statement to get a random floating point value is generated
-     */
+    #[TestDox('A SQL statement to get a random floating point value is generated')]
     public function testRand()
     {
         $this->assertSame(
@@ -707,9 +632,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to prepend a string with a regex operator is generated
-     */
+    #[TestDox('A SQL statement to prepend a string with a regex operator is generated')]
     public function testRegexp()
     {
         $this->assertSame(
@@ -718,9 +641,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The select method correctly creates and manages a SELECT query element
-     */
+    #[TestDox('The select method correctly creates and manages a SELECT query element')]
     public function testSelect()
     {
         $this->assertSame($this->query, $this->query->select('foo'), 'The query builder supports method chaining');
@@ -732,9 +653,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The select method raises an exception if changing the query type
-     */
+    #[TestDox('The select method raises an exception if changing the query type')]
     public function testSelectChangeQueryType()
     {
         $this->expectException(QueryTypeAlreadyDefinedException::class);
@@ -743,9 +662,7 @@ class DatabaseQueryTest extends TestCase
             ->select('foo');
     }
 
-    /**
-     * @testdox  The set method correctly creates and manages a SET query element
-     */
+    #[TestDox('The set method correctly creates and manages a SET query element')]
     public function testSet()
     {
         $this->assertSame($this->query, $this->query->set('foo'), 'The query builder supports method chaining');
@@ -757,9 +674,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The setLimit method correctly manages the limit and offset for a query
-     */
+    #[TestDox('The setLimit method correctly manages the limit and offset for a query')]
     public function testSetLimit()
     {
         $this->assertSame($this->query, $this->query->setLimit(10, 25), 'The query builder supports method chaining');
@@ -775,9 +690,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The setQuery method correctly manages an injected SQL query
-     */
+    #[TestDox('The setQuery method correctly manages an injected SQL query')]
     public function testSetQuery()
     {
         $query = 'SELECT foo FROM bar';
@@ -790,9 +703,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The update method correctly creates a UPDATE query element
-     */
+    #[TestDox('The update method correctly creates a UPDATE query element')]
     public function testUpdate()
     {
         $this->assertSame($this->query, $this->query->update('foo'), 'The query builder supports method chaining');
@@ -800,9 +711,7 @@ class DatabaseQueryTest extends TestCase
         $this->assertNotNull($this->query->update);
     }
 
-    /**
-     * @testdox  The update method raises an exception if changing the query type
-     */
+    #[TestDox('The update method raises an exception if changing the query type')]
     public function testUpdateChangeQueryType()
     {
         $this->expectException(QueryTypeAlreadyDefinedException::class);
@@ -812,9 +721,7 @@ class DatabaseQueryTest extends TestCase
             ->update('foo');
     }
 
-    /**
-     * @testdox  The values method correctly creates and manages a list of values
-     */
+    #[TestDox('The values method correctly creates and manages a list of values')]
     public function testValues()
     {
         $this->assertSame($this->query, $this->query->values('foo'), 'The query builder supports method chaining');
@@ -826,9 +733,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The where method correctly creates and manages a WHERE query element
-     */
+    #[TestDox('The where method correctly creates and manages a WHERE query element')]
     public function testWhere()
     {
         $this->assertSame($this->query, $this->query->where('foo'), 'The query builder supports method chaining');
@@ -840,9 +745,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The whereIn method correctly creates and manages a WHERE query element with parameter binding
-     */
+    #[TestDox('The whereIn method correctly creates and manages a WHERE query element with parameter binding')]
     public function testWhereIn()
     {
         $this->assertSame($this->query, $this->query->whereIn('foo', [1, 2]), 'The query builder supports method chaining');
@@ -854,9 +757,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The whereNotIn method correctly creates and manages a WHERE query element with parameter binding
-     */
+    #[TestDox('The whereNotIn method correctly creates and manages a WHERE query element with parameter binding')]
     public function testWhereNotIn()
     {
         $this->assertSame($this->query, $this->query->whereNotIn('foo', [1, 2]), 'The query builder supports method chaining');
@@ -868,9 +769,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The extendWhere method correctly overrides a WHERE query element
-     */
+    #[TestDox('The extendWhere method correctly overrides a WHERE query element')]
     public function testExtendWhere()
     {
         $this->query->where('foo');
@@ -882,9 +781,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The orWhere method correctly overrides a WHERE query element
-     */
+    #[TestDox('The orWhere method correctly overrides a WHERE query element')]
     public function testOrWhere()
     {
         $this->query->where('foo');
@@ -896,9 +793,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The andWhere method correctly overrides a WHERE query element
-     */
+    #[TestDox('The andWhere method correctly overrides a WHERE query element')]
     public function testAndWhere()
     {
         $this->query->where('foo');
@@ -940,8 +835,6 @@ class DatabaseQueryTest extends TestCase
     }
 
     /**
-     * @testdox  The bind method records a bound parameter for the query
-     *
      * @param   array|string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
      *                                                the form ':key', but can also be an integer.
      * @param   mixed                 $value          The value that will be bound. It can be an array, in this case it has to be
@@ -952,6 +845,7 @@ class DatabaseQueryTest extends TestCase
      * @param   array                 $expected       The expected structure of `$bounded`
      */
     #[DataProvider('dataBind')]
+    #[TestDox('The bind method records a bound parameter for the query')]
     public function testBind($key, $value, $dataType, $expected)
     {
         $this->assertSame($this->query, $this->query->bind($key, $value, $dataType), 'The query builder supports method chaining');
@@ -962,9 +856,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The bind method does not record bound parameters when the keys and values are an unbalanced number of items
-     */
+    #[TestDox('The bind method does not record bound parameters when the keys and values are an unbalanced number of items')]
     public function testBindUnbalancedKeyValue()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -977,9 +869,7 @@ class DatabaseQueryTest extends TestCase
         $this->query->bind($keys, $values, $dataTypes);
     }
 
-    /**
-     * @testdox  The bind method does not record bound parameters when the keys and data types are an unbalanced number of items
-     */
+    #[TestDox('The bind method does not record bound parameters when the keys and data types are an unbalanced number of items')]
     public function testBindUnbalancedKeyDataType()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -992,9 +882,7 @@ class DatabaseQueryTest extends TestCase
         $this->query->bind($keys, $values, $dataTypes);
     }
 
-    /**
-     * @testdox Values are stored by reference
-     */
+    #[TestDox('Values are stored by reference')]
     public function testBindByReference()
     {
         $key   = 1;
@@ -1010,9 +898,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox bind() does not rely on index sequence
-     */
+    #[TestDox('bind() does not rely on index sequence')]
     public function testBindIndexSequence()
     {
         $keys = [1, 2];
@@ -1033,9 +919,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox bind() accepts associated value arrays
-     */
+    #[TestDox('bind() accepts associated value arrays')]
     public function testBindAssoc()
     {
         $keys = [1, 2];
@@ -1053,9 +937,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The bindArray method creates bound parameters for an array and returns the parameter names
-     */
+    #[TestDox('The bindArray method creates bound parameters for an array and returns the parameter names')]
     public function testBindArray()
     {
         $this->assertSame(
@@ -1064,9 +946,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The union method correctly creates and manages a merge query element
-     */
+    #[TestDox('The union method correctly creates and manages a merge query element')]
     public function testUnion()
     {
         $this->assertSame($this->query, $this->query->union('foo'), 'The query builder supports method chaining');
@@ -1078,9 +958,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The unionAll method correctly creates and manages a merge query element
-     */
+    #[TestDox('The unionAll method correctly creates and manages a merge query element')]
     public function testUnionAll()
     {
         $this->assertSame($this->query, $this->query->unionAll('foo'), 'The query builder supports method chaining');
@@ -1092,9 +970,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The querySet method correctly marks the query type
-     */
+    #[TestDox('The querySet method correctly marks the query type')]
     public function testQuerySet()
     {
         $this->assertSame($this->query, $this->query->querySet('SELECT foo FROM bar'), 'The query builder supports method chaining');
@@ -1105,9 +981,7 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The query is converted to a querySet type
-     */
+    #[TestDox('The query is converted to a querySet type')]
     public function testToQuerySet()
     {
         $this->query->setQuery('SELECT foo FROM bar');
@@ -1117,9 +991,7 @@ class DatabaseQueryTest extends TestCase
         $this->assertNotSame($querySetQuery, $this->query);
     }
 
-    /**
-     * @testdox  A query object containing a SELECT query is converted to a proper SQL string
-     */
+    #[TestDox('A query object containing a SELECT query is converted to a proper SQL string')]
     public function testCastingToStringSelect()
     {
         $query = new class ($this->db) extends DatabaseQuery {
@@ -1160,9 +1032,7 @@ class DatabaseQueryTest extends TestCase
         $this->assertSame($expected, (string) $query);
     }
 
-    /**
-     * @testdox  A query object containing an aliased SELECT query is converted to a proper SQL string
-     */
+    #[TestDox('A query object containing an aliased SELECT query is converted to a proper SQL string')]
     public function testCastingToStringSelectAliased()
     {
         $query = new class ($this->db) extends DatabaseQuery {
@@ -1190,9 +1060,7 @@ class DatabaseQueryTest extends TestCase
         $this->assertSame($expected, (string) $query);
     }
 
-    /**
-     * @testdox  A query object containing a DELETE query is converted to a proper SQL string
-     */
+    #[TestDox('A query object containing a DELETE query is converted to a proper SQL string')]
     public function testCastingToStringDelete()
     {
         $query = new class ($this->db) extends DatabaseQuery {
@@ -1220,9 +1088,7 @@ class DatabaseQueryTest extends TestCase
         $this->assertSame($expected, (string) $query);
     }
 
-    /**
-     * @testdox  A query object containing a UPDATE query is converted to a proper SQL string
-     */
+    #[TestDox('A query object containing a UPDATE query is converted to a proper SQL string')]
     public function testCastingToStringUpdate()
     {
         $query = new class ($this->db) extends DatabaseQuery {
@@ -1250,18 +1116,18 @@ class DatabaseQueryTest extends TestCase
         $this->assertSame($expected, (string) $query);
     }
 
-    /**
-     * @testdox  A query object containing a INSERT query with SET notation is converted to a proper SQL string
-     */
+    #[TestDox('A query object containing a INSERT query with SET notation is converted to a proper SQL string')]
     public function testCastingToStringInsertSet()
     {
-        $this->db->expects($this->any())
+        $db = $this->createMock(DatabaseInterface::class);
+
+        $db->expects($this->once())
             ->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
             });
 
-        $query = new class ($this->db) extends DatabaseQuery {
+        $query = new class ($db) extends DatabaseQuery {
             public function groupConcat($expression, $separator = ',')
             {
                 return '';
@@ -1284,18 +1150,18 @@ class DatabaseQueryTest extends TestCase
         $this->assertSame($expected, (string) $query);
     }
 
-    /**
-     * @testdox  A query object containing a INSERT query with COLUMNS/VALUES notation is converted to a proper SQL string
-     */
+    #[TestDox('A query object containing a INSERT query with COLUMNS/VALUES notation is converted to a proper SQL string')]
     public function testCastingToStringInsertColumnsValues()
     {
-        $this->db->expects($this->any())
+        $db = $this->createMock(DatabaseInterface::class);
+
+        $db->expects($this->once())
             ->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
             });
 
-        $query = new class ($this->db) extends DatabaseQuery {
+        $query = new class ($db) extends DatabaseQuery {
             public function groupConcat($expression, $separator = ',')
             {
                 return '';
@@ -1319,9 +1185,7 @@ class DatabaseQueryTest extends TestCase
         $this->assertSame($expected, (string) $query);
     }
 
-    /**
-     * @testdox  A query object containing a CALL query is converted to a proper SQL string
-     */
+    #[TestDox('A query object containing a CALL query is converted to a proper SQL string')]
     public function testCastingToStringCall()
     {
         $query = new class ($this->db) extends DatabaseQuery {
@@ -1343,9 +1207,7 @@ class DatabaseQueryTest extends TestCase
         $this->assertSame($expected, (string) $query);
     }
 
-    /**
-     * @testdox  A query object containing a EXEC query is converted to a proper SQL string
-     */
+    #[TestDox('A query object containing a EXEC query is converted to a proper SQL string')]
     public function testCastingToStringExec()
     {
         $query = new class ($this->db) extends DatabaseQuery {
@@ -1367,9 +1229,7 @@ class DatabaseQueryTest extends TestCase
         $this->assertSame($expected, (string) $query);
     }
 
-    /**
-     * @testdox  A query object containing an injected query is converted to a proper SQL string
-     */
+    #[TestDox('A query object containing an injected query is converted to a proper SQL string')]
     public function testCastingToStringInjectedQuery()
     {
         $query = new class ($this->db) extends DatabaseQuery {

@@ -13,6 +13,7 @@ use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Service\DatabaseProvider;
 use Joomla\DI\Container;
 use Joomla\Registry\Registry;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -46,9 +47,7 @@ class DatabaseProviderTest extends TestCase
         $this->container->set('config', $config);
     }
 
-    /**
-     * @testdox  Verify that the DatabaseProvider returns a DatabaseInterface object
-     */
+    #[TestDox('Verify that the DatabaseProvider returns a DatabaseInterface object')]
     public function testVerifyTheDatabaseDriverIsRegisteredToTheContainer()
     {
         $this->container->registerServiceProvider(new DatabaseProvider());
@@ -59,9 +58,7 @@ class DatabaseProviderTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  Verify that the DatabaseProvider returns a DatabaseFactory object
-     */
+    #[TestDox('Verify that the DatabaseProvider returns a DatabaseFactory object')]
     public function testVerifyTheDatabaseFactoryIsRegisteredToTheContainer()
     {
         $this->container->registerServiceProvider(new DatabaseProvider());

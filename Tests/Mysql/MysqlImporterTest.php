@@ -11,7 +11,8 @@ use Joomla\Database\Mysql\MysqlDriver;
 use Joomla\Database\Mysql\MysqlImporter;
 use Joomla\Database\Mysql\MysqlQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,7 +23,7 @@ class MysqlImporterTest extends TestCase
     /**
      * Mock database driver
      *
-     * @var  MockObject|MysqlDriver
+     * @var  Stub|MysqlDriver
      */
     private $db;
 
@@ -63,20 +64,17 @@ class MysqlImporterTest extends TestCase
     {
         parent::setUp();
 
-        $this->db = $this->createMock(MysqlDriver::class);
+        $this->db = $this->createStub(MysqlDriver::class);
 
-        $this->db->expects($this->any())
-            ->method('getPrefix')
+        $this->db->method('getPrefix')
             ->willReturn('jos_');
 
-        $this->db->expects($this->any())
-            ->method('createQuery')
+        $this->db->method('createQuery')
             ->willReturnCallback(function () {
                 return new MysqlQuery($this->db);
             });
 
-        $this->db->expects($this->any())
-            ->method('getTableColumns')
+        $this->db->method('getTableColumns')
             ->willReturn(
                 [
                     'id' => (object) [
@@ -104,8 +102,7 @@ class MysqlImporterTest extends TestCase
                 ]
             );
 
-        $this->db->expects($this->any())
-            ->method('getTableKeys')
+        $this->db->method('getTableKeys')
             ->willReturn(
                 [
                     (object) [
@@ -125,16 +122,14 @@ class MysqlImporterTest extends TestCase
                 ]
             );
 
-        $this->db->expects($this->any())
-            ->method('getTableList')
+        $this->db->method('getTableList')
             ->willReturn(
                 [
                     'jos_dbtest',
                 ]
             );
 
-        $this->db->expects($this->any())
-            ->method('insertObject')
+        $this->db->method('insertObject')
             ->willReturnCallback(
                 function ($table, &$object, $key = null) {
                     if (!isset($this->executedInsertObjects[$table])) {
@@ -147,8 +142,7 @@ class MysqlImporterTest extends TestCase
                 }
             );
 
-        $this->db->expects($this->any())
-            ->method('quoteName')
+        $this->db->method('quoteName')
             ->willReturnCallback(
                 function ($name, $as = null) {
                     if (is_string($name)) {
@@ -165,8 +159,7 @@ class MysqlImporterTest extends TestCase
                 }
             );
 
-        $this->db->expects($this->any())
-            ->method('quote')
+        $this->db->method('quote')
             ->willReturnCallback(
                 function ($text, $escape = true) {
                     if (is_string($text)) {
@@ -183,8 +176,7 @@ class MysqlImporterTest extends TestCase
                 }
             );
 
-        $this->db->expects($this->any())
-            ->method('setQuery')
+        $this->db->method('setQuery')
             ->willReturnCallback(
                 function ($query, $offset = 0, $limit = 0) {
                     $this->executedQueries[] = $query;
@@ -199,7 +191,7 @@ class MysqlImporterTest extends TestCase
      */
     protected function tearDown(): void
     {
-        $this->expectedInsertObjects = [];
+        $this->executedInsertObjects = [];
         $this->executedQueries       = [];
     }
 
@@ -304,8 +296,6 @@ class MysqlImporterTest extends TestCase
     }
 
     /**
-     * @testdox  The importer processes a XML document
-     *
      * @param   boolean            $mergeStructure         True to merge the structure.
      * @param   boolean            $importData             True to import the data.
      * @param   \SimpleXMLElement  $from                   XML document to import.
@@ -313,6 +303,7 @@ class MysqlImporterTest extends TestCase
      * @param   string[]           $expectedInsertObjects  The expected objects to be given to the database's insertObject method.
      */
     #[DataProvider('dataImport')]
+    #[TestDox('The importer processes a XML document')]
     public function testImport(bool $mergeStructure, bool $importData, \SimpleXMLElement $from, array $expectedQueries, array $expectedInsertObjects)
     {
         $importer = new MysqlImporter();
@@ -366,13 +357,12 @@ class MysqlImporterTest extends TestCase
     }
 
     /**
-     * @testdox  The importer checks for errors
-     *
      * @param   string|null           $db                Database driver to set in the importer.
      * @param   string[]|string|null  $from              Database structure to import.
      * @param   string|null           $exceptionMessage  If an Exception should be thrown, the expected message
      */
     #[DataProvider('dataCheck')]
+    #[TestDox('The importer checks for errors')]
     public function testCheck(?string $db, $from, ?string $exceptionMessage)
     {
         if ($exceptionMessage) {
@@ -383,7 +373,7 @@ class MysqlImporterTest extends TestCase
         $importer = new MysqlImporter();
 
         if ($db) {
-            $importer->setDbo($this->createMock($db));
+            $importer->setDbo($this->createStub($db));
         }
 
         if ($from) {

@@ -8,6 +8,7 @@ namespace Joomla\Database\Tests\Monitor;
 
 use Joomla\Database\Monitor\ChainedMonitor;
 use Joomla\Database\QueryMonitorInterface;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,9 +37,7 @@ class ChainedMonitorTest extends TestCase
         $this->monitor = new ChainedMonitor();
     }
 
-    /**
-     * @testdox  The chained monitor forwards calls to all attached monitors
-     */
+    #[TestDox('The chained monitor forwards calls to all attached monitors')]
     public function testChaining()
     {
         $monitor1 = $this->createMonitor();

@@ -14,6 +14,7 @@ use Joomla\Database\ParameterType;
 use Joomla\Database\QueryInterface;
 use Joomla\Test\DatabaseTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 
 /**
  * Base test class for Joomla\Database\DatabaseDriver
@@ -59,9 +60,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         }
     }
 
-    /**
-     * @testdox  The connection can be checked for encryption support
-     */
+    #[TestDox('The connection can be checked for encryption support')]
     public function testIsConnectionEncryptionSupported()
     {
         $this->assertTrue(
@@ -85,12 +84,11 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
     }
 
     /**
-     * @testdox  A database table can be dropped
-     *
      * @param   string   $table          The name of the database table to drop.
      * @param   boolean  $alreadyExists  Flag indicating the table should exist before the DROP TABLE query.
      */
     #[DataProvider('dataDropTable')]
+    #[TestDox('A database table can be dropped')]
     public function testDropTable(string $table, bool $alreadyExists)
     {
         $this->assertSame(
@@ -117,13 +115,12 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
     abstract public static function dataEscape(): array;
 
     /**
-     * @testdox  Text can be escaped
-     *
      * @param   string   $text      The string to be escaped.
      * @param   boolean  $extra     Optional parameter to provide extra escaping.
      * @param   string   $expected  The expected result.
      */
     #[DataProvider('dataEscape')]
+    #[TestDox('Text can be escaped')]
     public function testEscape($text, $extra, $expected)
     {
         $this->assertSame(
@@ -132,9 +129,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  Values can be escaped in a locale aware context
-     */
+    #[TestDox('Values can be escaped in a locale aware context')]
     public function testEscapeNonLocaleAware()
     {
         $origin = setlocale(LC_NUMERIC, 0);
@@ -153,9 +148,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         setlocale(LC_NUMERIC, $origin);
     }
 
-    /**
-     * @testdox  The number of executed SQL statements can be retrieved
-     */
+    #[TestDox('The number of executed SQL statements can be retrieved')]
     public function testGetCount()
     {
         $this->assertTrue(
@@ -164,9 +157,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  A PHP DateTime compatible date format for the database driver can be retrieved
-     */
+    #[TestDox('A PHP DateTime compatible date format for the database driver can be retrieved')]
     public function testGetDateFormat()
     {
         $this->assertSame(
@@ -175,9 +166,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  The minimum supported database version is retrieved
-     */
+    #[TestDox('The minimum supported database version is retrieved')]
     public function testGetMinimum()
     {
         $this->assertTrue(
@@ -186,9 +175,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  The number of rows returned by the query can be retrieved
-     */
+    #[TestDox('The number of rows returned by the query can be retrieved')]
     public function testGetNumRows()
     {
         $this->loadExampleData();
@@ -205,9 +192,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         $this->assertSame(1, static::$connection->getNumRows());
     }
 
-    /**
-     * @testdox  A cached query instance can be retrieved
-     */
+    #[TestDox('A cached query instance can be retrieved')]
     public function testGetQueryCachedQuery()
     {
         $query = static::$connection->createQuery()
@@ -219,9 +204,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         $this->assertSame($query, static::$connection->getQuery(false));
     }
 
-    /**
-     * @testdox  An iterator for the database driver can be created
-     */
+    #[TestDox('An iterator for the database driver can be created')]
     public function testGetIterator()
     {
         $this->loadExampleData();
@@ -246,13 +229,12 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
     abstract public static function dataGetTableColumns(): array;
 
     /**
-     * @testdox  Information about the columns of a database table is returned
-     *
      * @param   string   $table     The name of the database table.
      * @param   boolean  $typeOnly  True (default) to only return field types.
      * @param   array    $expected  Expected result.
      */
     #[DataProvider('dataGetTableColumns')]
+    #[TestDox('Information about the columns of a database table is returned')]
     public function testGetTableColumns(string $table, bool $typeOnly, array $expected)
     {
         $this->assertEquals(
@@ -261,9 +243,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  The list of tables is returned
-     */
+    #[TestDox('The list of tables is returned')]
     public function testGetTableList()
     {
         $this->assertSame(
@@ -274,9 +254,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  The database version is returned
-     */
+    #[TestDox('The database version is returned')]
     public function testGetVersion()
     {
         $this->assertNotEmpty(
@@ -284,9 +262,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  The connection can be checked for UTF support
-     */
+    #[TestDox('The connection can be checked for UTF support')]
     public function testHasUtfSupport()
     {
         $this->assertTrue(
@@ -294,9 +270,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  An object can be inserted into the database
-     */
+    #[TestDox('An object can be inserted into the database')]
     public function testInsertObject()
     {
         $this->loadExampleData();
@@ -317,9 +291,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         $this->assertNotNull($data->id, 'When given a key, the insertObject method should set the row ID');
     }
 
-    /**
-     * @testdox  The database server can be checked if it is running a version matching the minimum supported version
-     */
+    #[TestDox('The database server can be checked if it is running a version matching the minimum supported version')]
     public function testIsMinimumVersion()
     {
         $this->assertTrue(
@@ -327,9 +299,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-    * @testdox  The first row of a result set can be loaded as an associative array, using old getQuery(true) syntax
-    */
+    #[TestDox('The first row of a result set can be loaded as an associative array, using old getQuery(true) syntax')]
     public function testLoadAssocWithOldGetQueryTrueSyntax()
     {
         $this->loadExampleData();
@@ -348,9 +318,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-    * @testdox  The first row of a result set can be loaded as an associative array
-    */
+    #[TestDox('The first row of a result set can be loaded as an associative array')]
     public function testLoadAssoc()
     {
         $this->loadExampleData();
@@ -369,9 +337,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  All rows of a result set can be loaded as an associative array
-     */
+    #[TestDox('All rows of a result set can be loaded as an associative array')]
     public function testLoadAssocList()
     {
         $this->loadExampleData();
@@ -393,9 +359,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  The specified column from all rows of a result set can be loaded as an array
-     */
+    #[TestDox('The specified column from all rows of a result set can be loaded as an array')]
     public function testLoadColumn()
     {
         $this->loadExampleData();
@@ -417,9 +381,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  The first row of a result set can be loaded as a PHP object
-     */
+    #[TestDox('The first row of a result set can be loaded as a PHP object')]
     public function testLoadObject()
     {
         $this->loadExampleData();
@@ -441,9 +403,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @testdox  All rows of a result set can be loaded as PHP objects
-     */
+    #[TestDox('All rows of a result set can be loaded as PHP objects')]
     public function testLoadObjectList()
     {
         $this->loadExampleData();
@@ -488,9 +448,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @testdox  The first field from the first row of a result set can be loaded
-     */
+    #[TestDox('The first field from the first row of a result set can be loaded')]
     public function testLoadResult()
     {
         $this->loadExampleData();
@@ -504,9 +462,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         $this->assertEquals('1', $result);
     }
 
-    /**
-     * @testdox  The first row of a result set can be loaded as an array
-     */
+    #[TestDox('The first row of a result set can be loaded as an array')]
     public function testLoadRow()
     {
         $this->loadExampleData();
@@ -528,9 +484,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @testdox  All rows of a result set can be loaded as an array
-     */
+    #[TestDox('All rows of a result set can be loaded as an array')]
     public function testLoadRowList()
     {
         $this->loadExampleData();
@@ -575,9 +529,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @testdox  A database table can be locked and unlocked
-     */
+    #[TestDox('A database table can be locked and unlocked')]
     public function testLockAndUnlockTable()
     {
         $this->assertSame(
@@ -601,12 +553,11 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
     abstract public static function dataQuoteBinary(): array;
 
     /**
-     * @testdox  A binary value is quoted properly
-     *
      * @param   string  $data      The binary quoted input string.
      * @param   string  $expected  The expected result.
      */
     #[DataProvider('dataQuoteBinary')]
+    #[TestDox('A binary value is quoted properly')]
     public function testQuoteBinary($data, $expected)
     {
         $this->assertSame($expected, static::$connection->quoteBinary($data));
@@ -620,13 +571,12 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
     abstract public static function dataQuoteName(): array;
 
     /**
-     * @testdox  A value is name quoted properly
-     *
      * @param   array|string  $name      The identifier name to wrap in quotes, or an array of identifier names to wrap in quotes.
      * @param   array|string  $as        The AS query part associated to $name.
      * @param   array|string  $expected  The expected result.
      */
     #[DataProvider('dataQuoteName')]
+    #[TestDox('A value is name quoted properly')]
     public function testQuoteName($name, $as, $expected)
     {
         $this->assertSame(
@@ -635,9 +585,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  A database table can be renamed
-     */
+    #[TestDox('A database table can be renamed')]
     public function testRenameTable()
     {
         $oldTableName = '#__dbtest';
@@ -661,9 +609,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  A query monitor can be set and retrieved
-     */
+    #[TestDox('A query monitor can be set and retrieved')]
     public function testGetAndSetQueryMonitor()
     {
         $this->assertNull(static::$connection->getMonitor(), 'A database driver has no monitor by default');
@@ -682,9 +628,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  A QueryInterface object can be set to the driver without an offset or limit
-     */
+    #[TestDox('A QueryInterface object can be set to the driver without an offset or limit')]
     public function testSetQueryWithQueryObjectWithoutOffsetOrLimit()
     {
         $query = static::$connection->createQuery()
@@ -704,9 +648,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  A QueryInterface object can be set to the driver with an offset or limit
-     */
+    #[TestDox('A QueryInterface object can be set to the driver with an offset or limit')]
     public function testSetQueryWithQueryObjectWithOffsetAndLimit()
     {
         $query = static::$connection->createQuery()
@@ -740,9 +682,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  A QueryInterface object can be set to the driver while retraining the offset and limit from the query
-     */
+    #[TestDox('A QueryInterface object can be set to the driver while retraining the offset and limit from the query')]
     public function testSetQueryWithQueryObjectWithOffsetAndLimitOnQuery()
     {
         $query = static::$connection->createQuery()
@@ -777,9 +717,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  A string can be set to the driver without an offset or limit
-     */
+    #[TestDox('A string can be set to the driver without an offset or limit')]
     public function testSetQueryWithStringWithoutOffsetOrLimit()
     {
         $query = 'SELECT * FROM #__dbtest';
@@ -797,9 +735,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  An invalid query type cannot be set to the driver
-     */
+    #[TestDox('An invalid query type cannot be set to the driver')]
     public function testSetQueryWithInvalidQueryType()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -807,9 +743,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         static::$connection->setQuery(new \stdClass());
     }
 
-    /**
-     * @testdox  A database can be selected for use
-     */
+    #[TestDox('A database can be selected for use')]
     public function testSelect()
     {
         $this->assertTrue(
@@ -817,9 +751,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  An object can be used to update a row in the database
-     */
+    #[TestDox('An object can be used to update a row in the database')]
     public function testUpdateObject()
     {
         $this->loadExampleData();
@@ -850,9 +782,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         $this->assertSame($row->title, $data->title);
     }
 
-    /**
-     * @testdox  Queries using the querySet type are correctly built and executed
-     */
+    #[TestDox('Queries using the querySet type are correctly built and executed')]
     public function testQuerySetWithUnionAll()
     {
         $this->loadExampleData();
@@ -888,9 +818,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  Queries converted to the querySet type are correctly built and executed
-     */
+    #[TestDox('Queries converted to the querySet type are correctly built and executed')]
     public function testSelectToQuerySetWithUnionAll()
     {
         $this->loadExampleData();
@@ -923,9 +851,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  Select statements can be prepared once and executed repeatedly
-     */
+    #[TestDox('Select statements can be prepared once and executed repeatedly')]
     public function testRepeatedSelectStatement()
     {
         $this->loadExampleData();
@@ -959,9 +885,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  DebugMonitor reports correct parameters with reusable query
-     */
+    #[TestDox('DebugMonitor reports correct parameters with reusable query')]
     public function testMonitorWithReusableQuery()
     {
         static::$connection->setMonitor(new DebugMonitor());
@@ -1001,9 +925,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    /**
-     * @testdox  DebugMonitor reports correct parameters with repeated statement
-     */
+    #[TestDox('DebugMonitor reports correct parameters with repeated statement')]
     public function testMonitorWithRepeatedStatement()
     {
         static::$connection->setMonitor(new DebugMonitor());

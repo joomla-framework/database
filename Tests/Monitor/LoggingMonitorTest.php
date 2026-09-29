@@ -7,6 +7,7 @@
 namespace Joomla\Database\Tests\Monitor;
 
 use Joomla\Database\Monitor\LoggingMonitor;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use ColinODell\PsrTestLogger\TestLogger;
 
@@ -45,9 +46,7 @@ class LoggingMonitorTest extends TestCase
         $this->monitor = new LoggingMonitor();
     }
 
-    /**
-     * @testdox  The monitor does not log messages if no logger is injected
-     */
+    #[TestDox('The monitor does not log messages if no logger is injected')]
     public function testStartQueryNoLogger()
     {
         $this->monitor->startQuery('SELECT 1');
@@ -57,9 +56,7 @@ class LoggingMonitorTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  The monitor does log messages if a logger is injected
-     */
+    #[TestDox('The monitor does log messages if a logger is injected')]
     public function testStartQueryWithLogger()
     {
         $this->monitor->setLogger($this->logger);

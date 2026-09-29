@@ -7,6 +7,7 @@
 namespace Joomla\Database\Tests\Monitor;
 
 use Joomla\Database\Monitor\DebugMonitor;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,9 +36,7 @@ class DebugMonitorTest extends TestCase
         $this->monitor = new DebugMonitor();
     }
 
-    /**
-     * @testdox  The monitor collects debug metrics about a query
-     */
+    #[TestDox('The monitor collects debug metrics about a query')]
     public function testMonitor()
     {
         // "Execute" 3 queries, we'll use the password_hash function to force time/memory usage to increase along the way

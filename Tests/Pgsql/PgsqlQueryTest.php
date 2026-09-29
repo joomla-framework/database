@@ -9,7 +9,8 @@ namespace Joomla\Database\Tests\Pgsql;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Pgsql\PgsqlQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,7 +28,7 @@ class PgsqlQueryTest extends TestCase
     /**
      * Mock database driver
      *
-     * @var  MockObject|DatabaseInterface
+     * @var  Stub|DatabaseInterface
      */
     private $db;
 
@@ -42,21 +43,17 @@ class PgsqlQueryTest extends TestCase
     {
         parent::setUp();
 
-        $this->db    = $this->createMock(DatabaseInterface::class);
+        $this->db    = $this->createStub(DatabaseInterface::class);
         $this->query = new PgsqlQuery($this->db);
     }
 
-    /**
-     * @testdox  A string is cast as a character string for the driver
-     */
+    #[TestDox('A string is cast as a character string for the driver')]
     public function testCastAsWithChar()
     {
         $this->assertSame('foo::text', $this->query->castAs('CHAR', 'foo'));
     }
 
-    /**
-     * @testdox  The length param is added to the CAST statement when provided
-     */
+    #[TestDox('The length param is added to the CAST statement when provided')]
     public function testCastAsWithCharAndLengthParam()
     {
         $this->assertSame(
@@ -65,9 +62,7 @@ class PgsqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  Test castAs behaviour with INT
-     */
+    #[TestDox('Test castAs behaviour with INT')]
     public function testCastAsWithIntegerType()
     {
         $this->assertSame(
@@ -90,17 +85,15 @@ class PgsqlQueryTest extends TestCase
     }
 
     /**
-     * @testdox  A SQL statement for concatenating values is generated
-     *
      * @param   string[]     $values     An array of values to concatenate.
      * @param   string|null  $separator  As separator to place between each value.
      * @param   string       $expected   The expected query string.
      */
     #[DataProvider('dataConcatenate')]
+    #[TestDox('A SQL statement for concatenating values is generated')]
     public function testConcatenate(array $values, ?string $separator, string $expected)
     {
-        $this->db->expects($this->any())
-            ->method('quote')
+        $this->db->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
             });
@@ -111,9 +104,7 @@ class PgsqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement for the current timestamp is generated
-     */
+    #[TestDox('A SQL statement for the current timestamp is generated')]
     public function testCurrentTimestamp()
     {
         $this->assertSame(
@@ -122,9 +113,7 @@ class PgsqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement for the MySQL find_in_set() function is generated
-     */
+    #[TestDox('A SQL statement for the MySQL find_in_set() function is generated')]
     public function testFindInSet()
     {
         $this->assertSame(
@@ -133,13 +122,10 @@ class PgsqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to concatenate a group of values is generated
-     */
+    #[TestDox('A SQL statement to concatenate a group of values is generated')]
     public function testGroupConcat()
     {
-        $this->db->expects($this->any())
-            ->method('quote')
+        $this->db->method('quote')
             ->willReturnCallback(function ($text, $escape = true) {
                 return "'" . $text . "'";
             });
@@ -150,9 +136,7 @@ class PgsqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to extract the year from a date is generated
-     */
+    #[TestDox('A SQL statement to extract the year from a date is generated')]
     public function testYear()
     {
         $this->assertSame(
@@ -161,9 +145,7 @@ class PgsqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to extract the month from a date is generated
-     */
+    #[TestDox('A SQL statement to extract the month from a date is generated')]
     public function testMonth()
     {
         $this->assertSame(
@@ -172,9 +154,7 @@ class PgsqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to extract the day from a date is generated
-     */
+    #[TestDox('A SQL statement to extract the day from a date is generated')]
     public function testDay()
     {
         $this->assertSame(
@@ -183,9 +163,7 @@ class PgsqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to extract the hour from a date is generated
-     */
+    #[TestDox('A SQL statement to extract the hour from a date is generated')]
     public function testHour()
     {
         $this->assertSame(
@@ -194,9 +172,7 @@ class PgsqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to extract the minute from a date is generated
-     */
+    #[TestDox('A SQL statement to extract the minute from a date is generated')]
     public function testMinute()
     {
         $this->assertSame(
@@ -205,9 +181,7 @@ class PgsqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to extract the second from a date is generated
-     */
+    #[TestDox('A SQL statement to extract the second from a date is generated')]
     public function testSecond()
     {
         $this->assertSame(
@@ -230,14 +204,13 @@ class PgsqlQueryTest extends TestCase
     }
 
     /**
-     * @testdox  A SQL statement for adding date values is generated
-     *
      * @param   string  $date      The db quoted string representation of the date to add to. May be date or datetime
      * @param   string  $interval  The string representation of the appropriate number of units
      * @param   string  $datePart  The part of the date to perform the addition on
      * @param   string  $expected  The expected query string.
      */
     #[DataProvider('dataDateAdd')]
+    #[TestDox('A SQL statement for adding date values is generated')]
     public function testDateAdd(string $date, string $interval, string $datePart, string $expected)
     {
         $this->assertSame(
@@ -246,9 +219,7 @@ class PgsqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to get a random floating point value is generated
-     */
+    #[TestDox('A SQL statement to get a random floating point value is generated')]
     public function testRand()
     {
         $this->assertSame(
@@ -257,9 +228,7 @@ class PgsqlQueryTest extends TestCase
         );
     }
 
-    /**
-     * @testdox  A SQL statement to prepend a string with a regex operator is generated
-     */
+    #[TestDox('A SQL statement to prepend a string with a regex operator is generated')]
     public function testRegexp()
     {
         $this->assertSame(

@@ -10,17 +10,17 @@ namespace Joomla\Database\Tests\Command;
 use Joomla\Console\Application;
 use Joomla\Database\Command\ExportCommand;
 use Joomla\Database\DatabaseDriver;
-use Joomla\Database\Exception\ExecutionFailureException;
+use Joomla\Database\DatabaseExporter;
 use Joomla\Database\Exception\UnsupportedAdapterException;
 use Joomla\Filesystem\Folder;
-use Joomla\Test\DatabaseTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 /**
  * Test class for Joomla\Database\Command\ExportCommand
  */
-class ExportCommandTest extends DatabaseTestCase
+class ExportCommandTest extends TestCase
 {
     /**
      * Path to the test space
@@ -48,10 +48,6 @@ class ExportCommandTest extends DatabaseTestCase
         }
 
         parent::setUpBeforeClass();
-
-        if (!static::$connection || static::$connection->getName() !== 'mysql') {
-            self::markTestSkipped('MySQL database not configured.');
-        }
     }
 
     /**
@@ -63,20 +59,6 @@ class ExportCommandTest extends DatabaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        try {
-            foreach (DatabaseDriver::splitSql(file_get_contents(dirname(__DIR__) . '/Stubs/Schema/mysql.sql')) as $query) {
-                static::$connection->setQuery($query)
-                    ->execute();
-            }
-        } catch (ExecutionFailureException $exception) {
-            $this->markTestSkipped(
-                \sprintf(
-                    'Could not load MySQL database: %s',
-                    $exception->getMessage()
-                )
-            );
-        }
 
         $this->umask    = umask(0);
         $this->testPath = sys_get_temp_dir() . '/' . microtime(true) . '.' . mt_rand();
@@ -98,55 +80,35 @@ class ExportCommandTest extends DatabaseTestCase
 
         umask($this->umask);
 
-        foreach (static::$connection->getTableList() as $table) {
-            static::$connection->dropTable($table);
-        }
-
         parent::tearDown();
-    }
-
-    /**
-     * Loads the example data into the database.
-     *
-     * @return  void
-     */
-    protected function loadExampleData(): void
-    {
-        $data = [
-            (object) [
-                'id'          => 1,
-                'title'       => 'Testing1',
-                'start_date'  => '2019-10-26 00:00:00',
-                'description' => 'test row one',
-            ],
-            (object) [
-                'id'          => 2,
-                'title'       => 'Testing2',
-                'start_date'  => '2019-10-26 00:00:00',
-                'description' => 'test row two',
-            ],
-            (object) [
-                'id'          => 3,
-                'title'       => 'Testing3',
-                'start_date'  => '2019-10-26 00:00:00',
-                'description' => 'test row three',
-            ],
-            (object) [
-                'id'          => 4,
-                'title'       => 'Testing4',
-                'start_date'  => '2019-10-26 00:00:00',
-                'description' => 'test row four',
-            ],
-        ];
-
-        foreach ($data as $row) {
-            static::$connection->insertObject('#__dbtest', $row);
-        }
     }
 
     public function testTheDatabaseIsExportedWithAllTables()
     {
-        $this->loadExampleData();
+        $db       = $this->createMock(DatabaseDriver::class);
+        $exporter = $this->createMock(DatabaseExporter::class);
+
+        $exporter->expects($this->once())
+            ->method('withStructure')
+            ->with(true)
+            ->willReturnSelf();
+        $exporter->expects($this->exactly(2))
+            ->method('withData')
+            ->with(true)
+            ->willReturnSelf();
+        $exporter->expects($this->exactly(2))
+            ->method('from')
+            ->willReturnSelf();
+
+        $db->expects($this->once())
+            ->method('getExporter')
+            ->willReturn($exporter);
+        $db->expects($this->once())
+            ->method('getTableList')
+            ->willReturn(['dbtest', 'dbtest2']);
+        $db->expects($this->once())
+            ->method('getPrefix')
+            ->willReturn('');
 
         $input  = new ArrayInput(
             [
@@ -158,18 +120,47 @@ class ExportCommandTest extends DatabaseTestCase
 
         $application = new Application($input, $output);
 
-        $command = new ExportCommand(static::$connection);
+        $command = new ExportCommand($db);
         $command->setApplication($application);
 
         $this->assertSame(0, $command->execute($input, $output));
+        $this->assertTrue(is_file($this->testPath . '/dbtest.xml'));
+        $this->assertTrue(is_file($this->testPath . '/dbtest2.xml'));
 
         $screenOutput = $output->fetch();
+        $this->assertStringContainsString('Processing the dbtest table', $screenOutput);
+        $this->assertStringContainsString('Exported data for dbtest in', $screenOutput);
+        $this->assertStringContainsString('Processing the dbtest2 table', $screenOutput);
+        $this->assertStringContainsString('Exported data for dbtest2 in', $screenOutput);
         $this->assertStringContainsString('Export completed in', $screenOutput);
     }
 
     public function testTheDatabaseIsExportedWithAllTablesInZipFormat()
     {
-        $this->loadExampleData();
+        $db       = $this->createMock(DatabaseDriver::class);
+        $exporter = $this->createMock(DatabaseExporter::class);
+
+        $exporter->expects($this->once())
+            ->method('withStructure')
+            ->with(true)
+            ->willReturnSelf();
+        $exporter->expects($this->exactly(2))
+            ->method('withData')
+            ->with(true)
+            ->willReturnSelf();
+        $exporter->expects($this->exactly(2))
+            ->method('from')
+            ->willReturnSelf();
+
+        $db->expects($this->once())
+            ->method('getExporter')
+            ->willReturn($exporter);
+        $db->expects($this->once())
+            ->method('getTableList')
+            ->willReturn(['dbtest', 'dbtest2']);
+        $db->expects($this->once())
+            ->method('getPrefix')
+            ->willReturn('');
 
         $input  = new ArrayInput(
             [
@@ -182,18 +173,46 @@ class ExportCommandTest extends DatabaseTestCase
 
         $application = new Application($input, $output);
 
-        $command = new ExportCommand(static::$connection);
+        $command = new ExportCommand($db);
         $command->setApplication($application);
 
         $this->assertSame(0, $command->execute($input, $output));
+        $this->assertCount(1, glob($this->testPath . '/data_exported_*.zip'));
 
         $screenOutput = $output->fetch();
+        $this->assertStringContainsString('Processing the dbtest table', $screenOutput);
+        $this->assertStringContainsString('Exported data for dbtest in', $screenOutput);
+        $this->assertStringContainsString('Processing the dbtest2 table', $screenOutput);
+        $this->assertStringContainsString('Exported data for dbtest2 in', $screenOutput);
         $this->assertStringContainsString('Export completed in', $screenOutput);
     }
 
     public function testTheDatabaseIsExportedWithASingleTable()
     {
-        $this->loadExampleData();
+        $db       = $this->createMock(DatabaseDriver::class);
+        $exporter = $this->createMock(DatabaseExporter::class);
+
+        $exporter->expects($this->once())
+            ->method('withStructure')
+            ->with(true)
+            ->willReturnSelf();
+        $exporter->expects($this->once())
+            ->method('withData')
+            ->with(true)
+            ->willReturnSelf();
+        $exporter->expects($this->once())
+            ->method('from')
+            ->willReturnSelf();
+
+        $db->expects($this->once())
+            ->method('getExporter')
+            ->willReturn($exporter);
+        $db->expects($this->once())
+            ->method('getTableList')
+            ->willReturn(['dbtest', 'dbtest2']);
+        $db->expects($this->once())
+            ->method('getPrefix')
+            ->willReturn('');
 
         $input  = new ArrayInput(
             [
@@ -206,12 +225,16 @@ class ExportCommandTest extends DatabaseTestCase
 
         $application = new Application($input, $output);
 
-        $command = new ExportCommand(static::$connection);
+        $command = new ExportCommand($db);
         $command->setApplication($application);
 
         $this->assertSame(0, $command->execute($input, $output));
+        $this->assertTrue(is_file($this->testPath . '/dbtest.xml'));
+        $this->assertFalse(is_file($this->testPath . '/dbtest2.xml'));
 
         $screenOutput = $output->fetch();
+        $this->assertStringContainsString('Processing the dbtest table', $screenOutput);
+        $this->assertStringContainsString('Exported data for dbtest in', $screenOutput);
         $this->assertStringContainsString('Export completed in', $screenOutput);
     }
 
@@ -247,7 +270,29 @@ class ExportCommandTest extends DatabaseTestCase
 
     public function testTheCommandFailsIfTheRequestedTableDoesNotExistInTheDatabase()
     {
-        $this->loadExampleData();
+        $db       = $this->createMock(DatabaseDriver::class);
+        $exporter = $this->createMock(DatabaseExporter::class);
+
+        $exporter->expects($this->once())
+            ->method('withStructure')
+            ->with(true)
+            ->willReturnSelf();
+        $exporter->expects($this->never())
+            ->method('withData')
+            ->willReturnSelf();
+        $exporter->expects($this->never())
+            ->method('from')
+            ->willReturnSelf();
+
+        $db->expects($this->once())
+            ->method('getExporter')
+            ->willReturn($exporter);
+        $db->expects($this->once())
+            ->method('getTableList')
+            ->willReturn(['dbtest']);
+        $db->expects($this->once())
+            ->method('getPrefix')
+            ->willReturn('');
 
         $input  = new ArrayInput(
             [
@@ -260,7 +305,7 @@ class ExportCommandTest extends DatabaseTestCase
 
         $application = new Application($input, $output);
 
-        $command = new ExportCommand(static::$connection);
+        $command = new ExportCommand($db);
         $command->setApplication($application);
 
         $this->assertSame(1, $command->execute($input, $output));

@@ -10,10 +10,14 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Sqlsrv\SqlsrvStatement;
 use Joomla\Test\DatabaseTestCase;
+use Joomla\Test\TestHelper;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 /**
  * Test class for Joomla\Database\Sqlsrv\SqlsrvStatement
  */
+#[RequiresPhpExtension('sqlsrv')]
 class SqlsrvPreparedStatementTest extends DatabaseTestCase
 {
     /**
@@ -25,7 +29,7 @@ class SqlsrvPreparedStatementTest extends DatabaseTestCase
     {
         parent::setUpBeforeClass();
 
-        if (!static::$connection || static::$connection->getName() !== 'sqlsrv') {
+        if (!static::$connection) {
             self::markTestSkipped('SQL Server database not configured.');
         }
     }
@@ -82,17 +86,11 @@ class SqlsrvPreparedStatementTest extends DatabaseTestCase
             $rawQuery
         );
 
-        $refObject = new \ReflectionObject($sqlsrvStatement);
-        $refMapping = $refObject->getProperty('parameterKeyMapping');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $refMapping->setAccessible(true);
-        $parameterKeyMapping = $refMapping->getValue($sqlsrvStatement);
-
         $this->assertEquals(
             [
                 ':search' => [0, 1],
             ],
-            $parameterKeyMapping
+            TestHelper::getValue($sqlsrvStatement, 'parameterKeyMapping')
         );
     }
 
@@ -110,26 +108,19 @@ class SqlsrvPreparedStatementTest extends DatabaseTestCase
             $rawQuery
         );
 
-        $refObject = new \ReflectionObject($sqlsrvStatement);
-        $refMapping = $refObject->getProperty('parameterKeyMapping');
-        /** @noinspection PhpExpressionResultUnusedInspection */
-        $refMapping->setAccessible(true);
-        $parameterKeyMapping = $refMapping->getValue($sqlsrvStatement);
-
         $this->assertEquals(
             [
                 ':search' => [0],
                 ':search2' => [1],
             ],
-            $parameterKeyMapping
+            TestHelper::getValue($sqlsrvStatement, 'parameterKeyMapping')
         );
     }
 
     /**
      * Make sure the mysqli driver correctly runs queries with named parameters appearing more than once.
-     *
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testPreparedStatementWithDuplicateKey()
     {
         $dummyValue = 'test';
@@ -147,9 +138,8 @@ class SqlsrvPreparedStatementTest extends DatabaseTestCase
 
     /**
      * Regression test to ensure running queries with named parameters appearing once didn't break.
-     *
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testPreparedStatementWithSingleKey()
     {
         $dummyValue = 'test';
