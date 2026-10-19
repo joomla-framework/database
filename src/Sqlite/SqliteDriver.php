@@ -79,33 +79,42 @@ class SqliteDriver extends PdoDriver
 
         parent::connect();
 
-        $this->connection->sqliteCreateFunction(
-            'ROW_NUMBER',
-            function ($init = null) {
-                static $rownum, $partition;
+        $rownumberfn = function ($init = null) {
+            static $rownum, $partition;
 
-                if ($init !== null) {
-                    $rownum    = $init;
-                    $partition = null;
-
-                    return $rownum;
-                }
-
-                $args = \func_get_args();
-                array_shift($args);
-
-                $partitionBy = $args ? implode(',', $args) : null;
-
-                if ($partitionBy === null || $partitionBy === $partition) {
-                    $rownum++;
-                } else {
-                    $rownum    = 1;
-                    $partition = $partitionBy;
-                }
+            if ($init !== null) {
+                $rownum    = $init;
+                $partition = null;
 
                 return $rownum;
             }
-        );
+
+            $args = \func_get_args();
+            array_shift($args);
+
+            $partitionBy = $args ? implode(',', $args) : null;
+
+            if ($partitionBy === null || $partitionBy === $partition) {
+                $rownum++;
+            } else {
+                $rownum    = 1;
+                $partition = $partitionBy;
+            }
+
+            return $rownum;
+        };
+
+        if ($this->connection instanceof \Pdo\Sqlite) {
+            $this->connection->createFunction(
+                'ROW_NUMBER',
+                $rownumberfn
+            );
+        } else {
+            $this->connection->sqliteCreateFunction(
+                'ROW_NUMBER',
+                $rownumberfn
+            );
+        }
     }
 
     /**

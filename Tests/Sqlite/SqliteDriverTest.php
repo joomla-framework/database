@@ -630,4 +630,45 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
 
         $this->assertEquals($expected, $result);
     }
+
+    #[TestDox('The custom ROW_NUMBER function correctly numbers rows')]
+    public function testRowNumberCustomFunction()
+    {
+        $this->loadExampleData();
+
+        static::$connection->setQuery('SELECT ROW_NUMBER(0)')->execute();
+
+        $query = static::$connection->createQuery()
+            ->select('ROW_NUMBER() AS row_num, title')
+            ->from('#__dbtest');
+
+        $results = static::$connection->setQuery($query)->loadObjectList();
+
+        $this->assertCount(4, $results);
+        $this->assertEquals(1, $results[0]->row_num);
+        $this->assertEquals(2, $results[1]->row_num);
+        $this->assertEquals(3, $results[2]->row_num);
+        $this->assertEquals(4, $results[3]->row_num);
+
+        $query = static::$connection->createQuery()
+            ->update('#__dbtest')
+            ->set('start_date = ' . static::$connection->quote('2019-10-19 00:00:00'))
+            ->where('id = 4');
+
+        static::$connection->setQuery($query)->execute();
+
+        static::$connection->setQuery('SELECT ROW_NUMBER(0)')->execute();
+
+        $query = static::$connection->createQuery()
+            ->select('ROW_NUMBER(NULL, start_date) AS row_num, title')
+            ->from('#__dbtest');
+
+        $results = static::$connection->setQuery($query)->loadObjectList();
+
+        $this->assertCount(4, $results);
+        $this->assertEquals(1, $results[0]->row_num);
+        $this->assertEquals(2, $results[1]->row_num);
+        $this->assertEquals(3, $results[2]->row_num);
+        $this->assertEquals(1, $results[3]->row_num);
+    }
 }

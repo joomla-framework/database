@@ -361,12 +361,21 @@ abstract class PdoDriver extends DatabaseDriver
         $connectionString = str_replace($replace, $with, $format);
 
         try {
-            $this->connection = new \PDO(
-                $connectionString,
-                $this->options['user'],
-                $this->options['password'],
-                $this->options['driverOptions']
-            );
+            if (PHP_VERSION_ID >= 80400) {
+                $this->connection = \PDO::connect(
+                    $connectionString,
+                    $this->options['user'],
+                    $this->options['password'],
+                    $this->options['driverOptions']
+                );
+            } else {
+                $this->connection = new \PDO(
+                    $connectionString,
+                    $this->options['user'],
+                    $this->options['password'],
+                    $this->options['driverOptions']
+                );
+            }
         } catch (\PDOException $e) {
             throw new ConnectionFailureException('Could not connect to PDO: ' . $e->getMessage(), $e->getCode(), $e);
         }
