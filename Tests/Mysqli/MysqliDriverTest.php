@@ -280,6 +280,23 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
+    #[TestDox('Loading a row into a custom class fails with a clear message')]
+    public function testLoadObjectWithCustomClass()
+    {
+        $this->loadExampleData();
+
+        static::$connection->setQuery(
+            static::$connection->createQuery()
+                ->select(static::$connection->quoteName(['id', 'title']))
+                ->from('#__dbtest')
+        );
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('cannot fetch rows into a custom class');
+
+        @static::$connection->loadObject(\ArrayObject::class);
+    }
+
     #[TestDox('The database collation can be retrieved')]
     public function testGetCollation()
     {

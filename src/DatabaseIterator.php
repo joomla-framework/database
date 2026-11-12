@@ -69,7 +69,8 @@ class DatabaseIterator implements \Countable, \Iterator
      *
      * @param   StatementInterface  $statement  The statement holding the result set to iterate.
      * @param   string              $column     An option column to use as the iterator key.
-     * @param   string              $class      The class of object that is returned.
+     * @param   string              $class      The class of object that is returned. Classes other than stdClass are
+     *                                          deprecated and will not be supported in 5.0.
      *
      * @since   1.0
      * @throws  \InvalidArgumentException
@@ -87,6 +88,13 @@ class DatabaseIterator implements \Countable, \Iterator
             if ($fetchMode === FetchMode::STANDARD_OBJECT) {
                 $statement->setFetchMode($fetchMode);
             } else {
+                trigger_deprecation(
+                    'joomla/database',
+                    '__DEPLOY_VERSION__',
+                    'Passing a class other than stdClass to %s() is deprecated and will not be supported in 5.0. Map the returned stdClass objects yourself.',
+                    __METHOD__
+                );
+
                 $statement->setFetchMode($fetchMode, $class);
             }
         }

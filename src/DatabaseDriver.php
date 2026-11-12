@@ -1003,7 +1003,8 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      * Get a new iterator on the current query.
      *
      * @param   string  $column  An option column to use as the iterator key.
-     * @param   string  $class   The class of object that is returned.
+     * @param   string  $class   The class of object that is returned. Classes other than stdClass are deprecated and will
+     *                           not be supported in 5.0.
      *
      * @return  DatabaseIterator
      *
@@ -1227,7 +1228,8 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     /**
      * Method to get the first row of the result set from the database query as an object.
      *
-     * @param   string  $class  The class name to use for the returned row object.
+     * @param   string  $class  The class name to use for the returned row object. Classes other than stdClass are
+     *                          deprecated and will not be supported in 5.0.
      *
      * @return  mixed  The return value or null if the query failed.
      *
@@ -1247,6 +1249,13 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
             if ($fetchMode === FetchMode::STANDARD_OBJECT) {
                 $this->statement->setFetchMode($fetchMode);
             } else {
+                trigger_deprecation(
+                    'joomla/database',
+                    '__DEPLOY_VERSION__',
+                    'Passing a class other than stdClass to %s() is deprecated and will not be supported in 5.0. Map the returned stdClass objects yourself.',
+                    __METHOD__
+                );
+
                 $this->statement->setFetchMode($fetchMode, $class);
             }
         }
@@ -1274,7 +1283,8 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      * NOTE: Choosing to key the result array by a non-unique field name can result in unwanted behavior and should be avoided.
      *
      * @param   string  $key    The name of a field on which to key the result array.
-     * @param   string  $class  The class name to use for the returned row objects.
+     * @param   string  $class  The class name to use for the returned row objects. Classes other than stdClass are
+     *                          deprecated and will not be supported in 5.0.
      *
      * @return  mixed  The return value or null if the query failed.
      *
@@ -1294,6 +1304,13 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
             if ($fetchMode === FetchMode::STANDARD_OBJECT) {
                 $this->statement->setFetchMode($fetchMode);
             } else {
+                trigger_deprecation(
+                    'joomla/database',
+                    '__DEPLOY_VERSION__',
+                    'Passing a class other than stdClass to %s() is deprecated and will not be supported in 5.0. Map the returned stdClass objects yourself.',
+                    __METHOD__
+                );
+
                 $this->statement->setFetchMode($fetchMode, $class);
             }
         }
