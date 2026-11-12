@@ -585,6 +585,14 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
+    #[TestDox('Arrays of different length passed to quoteName() are rejected')]
+    public function testQuoteNameWithMismatchedAliases()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        static::$connection->quoteName(['a', 'b'], ['x']);
+    }
+
     #[TestDox('A database table can be renamed')]
     public function testRenameTable()
     {
