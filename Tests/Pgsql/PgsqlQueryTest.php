@@ -113,6 +113,25 @@ class PgsqlQueryTest extends TestCase
         );
     }
 
+    #[TestDox('limit() and offset() add a LIMIT and OFFSET clause to a SELECT query')]
+    public function testLimitAndOffset()
+    {
+        $this->query->select('*')->from('a')->limit(5)->offset(10);
+
+        $this->assertSame(
+            implode(PHP_EOL, ['SELECT *', 'FROM a LIMIT 5 OFFSET 10']),
+            trim((string) $this->query)
+        );
+    }
+
+    #[TestDox('An INSERT query does not get a LIMIT clause')]
+    public function testInsertHasNoLimit()
+    {
+        $this->query->insert('a')->columns('id')->values('1')->setLimit(1);
+
+        $this->assertStringNotContainsString('LIMIT', (string) $this->query);
+    }
+
     #[TestDox('A SQL statement for the MySQL find_in_set() function is generated')]
     public function testFindInSet()
     {
