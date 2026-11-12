@@ -103,6 +103,19 @@ class MysqlQueryTest extends TestCase
         );
     }
 
+    #[TestDox('The LIMIT clause is built for limit and offset combinations')]
+    public function testProcessLimit()
+    {
+        $this->assertSame('SELECT 1', $this->query->processLimit('SELECT 1', 0, 0));
+        $this->assertSame('SELECT 1 LIMIT 5', $this->query->processLimit('SELECT 1', 5, 0));
+        $this->assertSame('SELECT 1 LIMIT 10, 5', $this->query->processLimit('SELECT 1', 5, 10));
+        $this->assertSame(
+            'SELECT 1 LIMIT 10, 18446744073709551615',
+            $this->query->processLimit('SELECT 1', 0, 10),
+            'An offset without a limit must not be dropped'
+        );
+    }
+
     #[TestDox('A SQL statement to get a random floating point value is generated')]
     public function testRand()
     {

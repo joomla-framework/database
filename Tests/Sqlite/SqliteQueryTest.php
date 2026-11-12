@@ -109,6 +109,15 @@ class SqliteQueryTest extends TestCase
         );
     }
 
+    #[TestDox('The LIMIT clause is built for limit and offset combinations')]
+    public function testProcessLimit()
+    {
+        $this->assertSame('SELECT 1', $this->query->processLimit('SELECT 1', 0, 0));
+        $this->assertSame('SELECT 1 LIMIT 0, 5', $this->query->processLimit('SELECT 1', 5, 0));
+        $this->assertSame('SELECT 1 LIMIT 10, 5', $this->query->processLimit('SELECT 1', 5, 10));
+        $this->assertSame('SELECT 1 LIMIT 10, -1', $this->query->processLimit('SELECT 1', 0, 10), 'An offset without a limit must not limit the rows');
+    }
+
     #[TestDox('A SQL statement to concatenate a group of values is generated')]
     public function testGroupConcat()
     {

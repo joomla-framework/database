@@ -609,6 +609,22 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
+    #[TestDox('An offset without a limit skips rows and returns all remaining rows')]
+    public function testOffsetWithoutLimit()
+    {
+        $this->loadExampleData();
+
+        $result = static::$connection->setQuery(
+            static::$connection->createQuery()
+                ->select(static::$connection->quoteName('title'))
+                ->from('#__dbtest')
+                ->order(static::$connection->quoteName('id'))
+                ->setLimit(0, 2)
+        )->loadColumn();
+
+        $this->assertSame(['Testing3', 'Testing4'], $result);
+    }
+
     #[TestDox('A query monitor can be set and retrieved')]
     public function testGetAndSetQueryMonitor()
     {

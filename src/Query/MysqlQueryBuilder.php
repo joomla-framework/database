@@ -74,6 +74,9 @@ trait MysqlQueryBuilder
             $query .= ' LIMIT ' . $offset . ', ' . $limit;
         } elseif ($limit > 0) {
             $query .= ' LIMIT ' . $limit;
+        } elseif ($offset > 0) {
+            // MySQL has no OFFSET without LIMIT; the documented way is the largest possible row count
+            $query .= ' LIMIT ' . $offset . ', 18446744073709551615';
         }
 
         return $query;

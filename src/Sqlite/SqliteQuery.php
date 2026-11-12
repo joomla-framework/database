@@ -200,7 +200,8 @@ class SqliteQuery extends PdoQuery
     public function processLimit($query, $limit, $offset = 0)
     {
         if ($limit > 0 || $offset > 0) {
-            $query .= ' LIMIT ' . $offset . ', ' . $limit;
+            // A negative limit means "no limit" in SQLite
+            $query .= ' LIMIT ' . $offset . ', ' . ($limit > 0 ? $limit : -1);
         }
 
         return $query;
