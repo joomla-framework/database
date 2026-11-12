@@ -901,44 +901,18 @@ class PgsqlDriver extends PdoDriver
     {
         $sql = trim($sql);
 
-        if (strpos($sql, '\'')) {
-            // Sequence name quoted with ' ' but need to be replaced
-            if (strpos($sql, 'currval')) {
-                $sql = explode('currval', $sql);
-
-                for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2) {
-                    $sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
-                }
-
-                $sql = implode('currval', $sql);
-            }
-
-            // Sequence name quoted with ' ' but need to be replaced
-            if (strpos($sql, 'nextval')) {
-                $sql = explode('nextval', $sql);
-
-                for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2) {
-                    $sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
-                }
-
-                $sql = implode('nextval', $sql);
-            }
-
-            // Sequence name quoted with ' ' but need to be replaced
-            if (strpos($sql, 'setval')) {
-                $sql = explode('setval', $sql);
-
-                for ($nIndex = 1, $nIndexMax = \count($sql); $nIndex < $nIndexMax; $nIndex += 2) {
-                    $sql[$nIndex] = str_replace($prefix, $this->tablePrefix, $sql[$nIndex]);
-                }
-
-                $sql = implode('setval', $sql);
-            }
+        if (strpos($sql, '\'') !== false) {
+            // Sequence names are passed to these functions as string literals, but still need the prefix replaced
+            $sql = preg_replace_callback(
+                '/(currval|nextval|setval)(\s*\(\s*\')([^\']*)/',
+                fn (array $match): string => $match[1] . $match[2] . str_replace($prefix, $this->tablePrefix, $match[3]),
+                $sql
+            );
 
             $explodedQuery = explode('\'', $sql);
 
             for ($nIndex = 0, $nIndexMax = \count($explodedQuery); $nIndex < $nIndexMax; $nIndex += 2) {
-                if (strpos($explodedQuery[$nIndex], $prefix)) {
+                if (strpos($explodedQuery[$nIndex], $prefix) !== false) {
                     $explodedQuery[$nIndex] = str_replace($prefix, $this->tablePrefix, $explodedQuery[$nIndex]);
                 }
             }
