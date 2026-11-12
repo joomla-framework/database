@@ -8,6 +8,7 @@
 		<env name="JOOMLA_TEST_DB_PASSWORD" value="Password12!" />
 		<env name="JOOMLA_TEST_DB_DATABASE" value="joomla_ut" />
 		<env name="JOOMLA_TEST_DB_PREFIX" value="" />
+		<env name="JOOMLA_TEST_DB_TRUST_CERTIFICATE" value="yes" />
 
 		<env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
 	</php>

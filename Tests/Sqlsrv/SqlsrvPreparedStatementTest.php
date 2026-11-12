@@ -20,6 +20,8 @@ use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 #[RequiresPhpExtension('sqlsrv')]
 class SqlsrvPreparedStatementTest extends DatabaseTestCase
 {
+    use TrustServerCertificateTrait;
+
     /**
      * This method is called before the first test of this test class is run.
      *
