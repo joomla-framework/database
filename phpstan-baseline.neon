@@ -61,12 +61,6 @@ parameters:
 			path: src/DatabaseDriver.php
 
 		-
-			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, list\<array\|string\> given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/DatabaseDriver.php
-
-		-
 			message: '#^Property Joomla\\Database\\DatabaseDriver\:\:\$connection \(resource\) does not accept null\.$#'
 			identifier: assign.propertyType
 			count: 2
@@ -181,12 +175,6 @@ parameters:
 			path: src/Mysql/MysqlDriver.php
 
 		-
-			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, list\<array\|string\> given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Mysql/MysqlDriver.php
-
-		-
 			message: '#^Unreachable statement \- code above always terminates\.$#'
 			identifier: deadCode.unreachable
 			count: 1
@@ -237,12 +225,6 @@ parameters:
 		-
 			message: '#^PHPDoc type mysqli of property Joomla\\Database\\Mysqli\\MysqliDriver\:\:\$connection is not covariant with PHPDoc type resource of overridden property Joomla\\Database\\DatabaseDriver\:\:\$connection\.$#'
 			identifier: property.phpDocType
-			count: 1
-			path: src/Mysqli/MysqliDriver.php
-
-		-
-			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, list\<array\|string\> given\.$#'
-			identifier: argument.type
 			count: 1
 			path: src/Mysqli/MysqliDriver.php
 
@@ -520,12 +502,6 @@ parameters:
 			message: '#^If condition is always true\.$#'
 			identifier: if.alwaysTrue
 			count: 4
-			path: src/Sqlsrv/SqlsrvDriver.php
-
-		-
-			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, list\<array\|string\> given\.$#'
-			identifier: argument.type
-			count: 2
 			path: src/Sqlsrv/SqlsrvDriver.php
 
 		-
