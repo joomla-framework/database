@@ -529,6 +529,41 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         $this->assertEquals($expected, $result);
     }
 
+    #[TestDox('A full commit inside a savepoint ends the transaction')]
+    public function testFullCommitInsideSavepointEndsTransaction()
+    {
+        $depth = new \ReflectionProperty(static::$connection, 'transactionDepth');
+
+        static::$connection->transactionStart();
+        static::$connection->transactionStart(true);
+        static::$connection->transactionCommit();
+
+        $this->assertSame(0, $depth->getValue(static::$connection), 'A full commit must reset the transaction depth');
+
+        // A new transaction must work normally afterwards
+        static::$connection->transactionStart(true);
+        static::$connection->transactionCommit();
+
+        $this->assertSame(0, $depth->getValue(static::$connection));
+    }
+
+    #[TestDox('A full rollback inside a savepoint ends the transaction')]
+    public function testFullRollbackInsideSavepointEndsTransaction()
+    {
+        $depth = new \ReflectionProperty(static::$connection, 'transactionDepth');
+
+        static::$connection->transactionStart();
+        static::$connection->transactionStart(true);
+        static::$connection->transactionRollback();
+
+        $this->assertSame(0, $depth->getValue(static::$connection), 'A full rollback must reset the transaction depth');
+
+        static::$connection->transactionStart(true);
+        static::$connection->transactionRollback();
+
+        $this->assertSame(0, $depth->getValue(static::$connection));
+    }
+
     #[TestDox('A database table can be locked and unlocked')]
     public function testLockAndUnlockTable()
     {
