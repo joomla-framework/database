@@ -678,6 +678,11 @@ abstract class PdoDriver extends DatabaseDriver
 
         if (!$toSavepoint || $this->transactionDepth === 1) {
             $this->connection->commit();
+
+            // The whole transaction has ended, including all savepoints
+            $this->transactionDepth = 0;
+
+            return;
         }
 
         $this->transactionDepth--;
@@ -699,6 +704,11 @@ abstract class PdoDriver extends DatabaseDriver
 
         if (!$toSavepoint || $this->transactionDepth === 1) {
             $this->connection->rollBack();
+
+            // The whole transaction has ended, including all savepoints
+            $this->transactionDepth = 0;
+
+            return;
         }
 
         $this->transactionDepth--;
