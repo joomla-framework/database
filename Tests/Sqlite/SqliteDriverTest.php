@@ -99,7 +99,8 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
     {
         return [
             ["'%_abc123", false, "''%_abc123"],
-            ["'%_abc123", true, "''%_abc123"],
+            ["'%_abc123", true, '\'\'\\%\\_abc123'],
+            ['a' . \chr(0) . 'b', false, 'a' . \chr(0) . 'b'],
             [3, false, 3],
             [3.14, false, '3.14'],
         ];

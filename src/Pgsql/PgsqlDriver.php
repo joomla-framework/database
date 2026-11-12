@@ -102,6 +102,48 @@ class PgsqlDriver extends PdoDriver
     }
 
     /**
+     * Method to escape a string for usage in an SQL statement.
+     *
+     * The string is escaped by the connection, which takes its client encoding and standard_conforming_strings setting
+     * into account.
+     *
+     * Note: Using query objects with bound variables is preferable to the below.
+     *
+     * @param   string|int|float  $text   The string to be escaped.
+     * @param   boolean           $extra  True to also escape the LIKE wildcards % and _ with a backslash.
+     *
+     * @return  string|int  The escaped string; integers are returned unchanged.
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function escape($text, $extra = false)
+    {
+        if (\is_int($text)) {
+            return $text;
+        }
+
+        if (\is_float($text)) {
+            // Force the dot as a decimal point.
+            return str_replace(',', '.', (string) $text);
+        }
+
+        $text = (string) $text;
+
+        // The connection stops escaping at a NUL byte, which PostgreSQL cannot store in text anyway; let the server reject it
+        if (str_contains($text, "\0")) {
+            return parent::escape($text, $extra);
+        }
+
+        if ($extra) {
+            $text = addcslashes($text, '%_');
+        }
+
+        $this->connect();
+
+        return substr($this->connection->quote($text), 1, -1);
+    }
+
+    /**
      * Method to get the database collation in use by sampling a text field of a table in the database.
      *
      * @return  string|boolean  The collation in use by the database or boolean false if not supported.

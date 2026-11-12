@@ -131,7 +131,8 @@ class SqliteDriver extends PdoDriver
      * Note: Using query objects with bound variables is preferable to the below.
      *
      * @param   string   $text   The string to be escaped.
-     * @param   boolean  $extra  Unused optional parameter to provide extra escaping.
+     * @param   boolean  $extra  True to also escape the LIKE wildcards % and _ with a backslash. SQLite has no default
+     *                           escape character for LIKE, so the pattern needs an ESCAPE '\' clause.
      *
      * @return  string  The escaped string.
      *
@@ -148,7 +149,14 @@ class SqliteDriver extends PdoDriver
             return str_replace(',', '.', $text);
         }
 
-        return \SQLite3::escapeString($text);
+        // SQLite string literals only need the single quote doubled. SQLite3::escapeString() would cut the text at a NUL byte.
+        $text = (string) $text;
+
+        if ($extra) {
+            $text = addcslashes($text, '%_');
+        }
+
+        return str_replace("'", "''", $text);
     }
 
     /**
@@ -454,7 +462,7 @@ class SqliteDriver extends PdoDriver
      */
     public static function isSupported()
     {
-        return class_exists('\\PDO') && class_exists('\\SQLite3') && \in_array('sqlite', \PDO::getAvailableDrivers(), true);
+        return class_exists('\\PDO') && \in_array('sqlite', \PDO::getAvailableDrivers(), true);
     }
 
     /**
