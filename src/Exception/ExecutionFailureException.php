@@ -30,11 +30,11 @@ class ExecutionFailureException extends \RuntimeException
      * @param   string       $query     The SQL statement that was executed.
      * @param   string       $message   The Exception message to throw. [optional]
      * @param   integer      $code      The Exception code. [optional]
-     * @param   ?\Exception  $previous  The previous exception used for the exception chaining. [optional]
+     * @param   ?\Throwable  $previous  The previous exception used for the exception chaining. [optional]
      *
      * @since   1.5.0
      */
-    public function __construct($query, $message = '', $code = 0, ?\Exception $previous = null)
+    public function __construct($query, $message = '', $code = 0, ?\Throwable $previous = null)
     {
         // PDO uses strings for exception codes, PHP forces numeric codes, so "force" the string code to be used
         parent::__construct($message, 0, $previous);
