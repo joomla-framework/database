@@ -1179,7 +1179,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
 
         // Get all of the rows from the result set.
         while ($row = $this->fetchAssoc()) {
-            $value = $column ? ($row[$column] ?? $row) : $row;
+            $value = $column && \array_key_exists($column, $row) ? $row[$column] : $row;
 
             if ($key) {
                 $array[$row[$key]] = $value;
