@@ -288,7 +288,7 @@ abstract class DatabaseExporter
                 foreach ($row as $key => $value) {
                     if (!in_array($key, $colblob)) {
                         if (is_null($value)) {
-                            $buffer[] = '    <field name="' . $key . '" value_is_null></field>';
+                            $buffer[] = '    <field name="' . $key . '" value_is_null="1"></field>';
                         } else {
                             $buffer[] = '    <field name="' . $key . '">' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '</field>';
                         }
