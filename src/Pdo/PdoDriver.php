@@ -745,11 +745,69 @@ abstract class PdoDriver extends DatabaseDriver
     }
 
     /**
+     * Serialize the driver without its PDO connection, which cannot be serialized
+     *
+     * @return  array
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function __serialize(): array
+    {
+        $data = [];
+
+        foreach ((new \ReflectionClass($this))->getProperties() as $property) {
+            if ($property->isStatic() || !$property->isInitialized($this)) {
+                continue;
+            }
+
+            $value = $property->getValue($this);
+
+            if (!($value instanceof \PDO)) {
+                $data[$property->getName()] = $value;
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Restore the driver after serialization and get the connection back
+     *
+     * @param   array  $data  The serialized properties
+     *
+     * @return  void
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function __unserialize(array $data): void
+    {
+        $reflection = new \ReflectionClass($this);
+
+        foreach ($data as $name => $value) {
+            // Data serialized by __sleep() before uses mangled names for protected and private properties
+            $name = (string) $name;
+            $pos  = strrpos($name, \chr(0));
+
+            if ($pos !== false) {
+                $name = substr($name, $pos + 1);
+            }
+
+            if ($reflection->hasProperty($name)) {
+                $reflection->getProperty($name)->setValue($this, $value);
+            }
+        }
+
+        // Get connection back
+        $this->__construct($this->options);
+    }
+
+    /**
      * PDO does not support serialize
      *
      * @return  array
      *
-     * @since   1.0
+     * @since       1.0
+     * @deprecated  5.0  PHP calls __serialize() instead; PHP 8.5 deprecates __sleep()
      */
     public function __sleep()
     {
@@ -775,7 +833,8 @@ abstract class PdoDriver extends DatabaseDriver
      *
      * @return  void
      *
-     * @since   1.0
+     * @since       1.0
+     * @deprecated  5.0  PHP calls __unserialize() instead; PHP 8.5 deprecates __wakeup()
      */
     public function __wakeup()
     {

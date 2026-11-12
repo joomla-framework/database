@@ -535,6 +535,36 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         static::$connection->getImporter();
     }
 
+    #[TestDox('A connected driver can be serialized and unserialized without its connection')]
+    public function testSerialization()
+    {
+        $db = new SqliteDriver(['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => 'jos_']);
+        $db->connect();
+
+        $deprecations = [];
+
+        set_error_handler(
+            function (int $errno, string $errstr) use (&$deprecations) {
+                $deprecations[] = $errstr;
+
+                return true;
+            },
+            E_DEPRECATED | E_USER_DEPRECATED
+        );
+
+        try {
+            $copy = unserialize(serialize($db));
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertSame([], $deprecations);
+        $this->assertInstanceOf(SqliteDriver::class, $copy);
+        $this->assertNull($copy->getConnection(), 'The connection is not serialized');
+        $this->assertSame('jos_', $copy->getPrefix());
+        $this->assertSame(1, (int) $copy->setQuery('SELECT 1')->loadResult(), 'The unserialized driver can connect again');
+    }
+
     #[TestDox('A new query instance can be created')]
     public function testGetQueryNewInstance()
     {
