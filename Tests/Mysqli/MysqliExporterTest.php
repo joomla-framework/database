@@ -237,6 +237,36 @@ XML
         $this->assertXmlStringEqualsXmlString($expectedXml, (string) $exporter);
     }
 
+    #[TestDox('NULL values are exported as well-formed XML that the importer recognises')]
+    public function testNullValuesAreExportedAsWellFormedXml()
+    {
+        $exporter = new MysqliExporter();
+
+        $exporter->setDbo($this->db)
+            ->from('jos_test')
+            ->withStructure(false)
+            ->withData(true);
+
+        $this->db->method('loadObjectList')
+            ->willReturn(
+                [
+                    (object) [
+                        'id'    => 1,
+                        'title' => null,
+                    ],
+                ]
+            );
+
+        $xml = simplexml_load_string((string) $exporter);
+
+        $this->assertNotFalse($xml, 'The export must be well-formed XML');
+
+        $fields = $xml->database->table_data->row->field;
+
+        $this->assertFalse(isset($fields[0]['value_is_null']));
+        $this->assertTrue(isset($fields[1]['value_is_null']));
+    }
+
     /**
      * Data provider for check test cases
      *
