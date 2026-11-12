@@ -191,8 +191,6 @@ trait PostgresqlQueryBuilder
                     }
                 }
 
-                $query = $this->processLimit($query, $this->limit, $this->offset);
-
                 break;
 
             default:
@@ -548,9 +546,7 @@ trait PostgresqlQueryBuilder
      */
     public function limit($limit = 0)
     {
-        if ($this->limit === null) {
-            $this->limit = new QueryElement('LIMIT', (int) $limit);
-        }
+        $this->limit = (int) $limit;
 
         return $this;
     }
@@ -566,9 +562,7 @@ trait PostgresqlQueryBuilder
      */
     public function offset($offset = 0)
     {
-        if ($this->offset === null) {
-            $this->offset = new QueryElement('OFFSET', (int) $offset);
-        }
+        $this->offset = (int) $offset;
 
         return $this;
     }
