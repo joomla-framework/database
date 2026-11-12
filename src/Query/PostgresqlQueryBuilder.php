@@ -363,8 +363,6 @@ trait PostgresqlQueryBuilder
      */
     public function forUpdate($tableName, $glue = ',')
     {
-        $this->type = 'forUpdate';
-
         if ($this->forUpdate === null) {
             $glue            = strtoupper($glue);
             $this->forUpdate = new QueryElement('FOR UPDATE', 'OF ' . $tableName, "$glue ");
@@ -387,8 +385,6 @@ trait PostgresqlQueryBuilder
      */
     public function forShare($tableName, $glue = ',')
     {
-        $this->type = 'forShare';
-
         if ($this->forShare === null) {
             $glue           = strtoupper($glue);
             $this->forShare = new QueryElement('FOR SHARE', 'OF ' . $tableName, "$glue ");
@@ -528,8 +524,6 @@ trait PostgresqlQueryBuilder
      */
     public function noWait()
     {
-        $this->type = 'noWait';
-
         if ($this->noWait === null) {
             $this->noWait = new QueryElement('NOWAIT', null);
         }

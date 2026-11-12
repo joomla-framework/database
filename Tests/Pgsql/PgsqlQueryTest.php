@@ -236,4 +236,28 @@ class PgsqlQueryTest extends TestCase
             $this->query->regexp('foo')
         );
     }
+
+    #[TestDox('FOR UPDATE is appended to a SELECT query')]
+    public function testForUpdate()
+    {
+        $this->query->select('*')->from('a')->where('a.id = 1')->forUpdate('a')->forUpdate('b');
+
+        $this->assertSame('select', $this->query->type);
+        $this->assertSame(
+            implode(PHP_EOL, ['SELECT *', 'FROM a', 'WHERE a.id = 1', 'FOR UPDATE OF a, b']),
+            trim((string) $this->query)
+        );
+    }
+
+    #[TestDox('FOR SHARE and NOWAIT are appended to a SELECT query')]
+    public function testForShareNoWait()
+    {
+        $this->query->select('*')->from('a')->where('a.id = 1')->forShare('a')->noWait();
+
+        $this->assertSame('select', $this->query->type);
+        $this->assertSame(
+            implode(PHP_EOL, ['SELECT *', 'FROM a', 'WHERE a.id = 1', 'FOR SHARE OF a', 'NOWAIT']),
+            trim((string) $this->query)
+        );
+    }
 }
