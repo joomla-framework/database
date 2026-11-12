@@ -557,34 +557,30 @@ class PgsqlDriver extends PdoDriver
 
         foreach ($oldIndexes as $oldIndex) {
             $changedIdxName = str_replace($oldTable, $newTable, $oldIndex);
-            $this->setQuery('ALTER INDEX ' . $this->escape($oldIndex) . ' RENAME TO ' . $this->escape($changedIdxName))->execute();
+            $this->setQuery('ALTER INDEX ' . $this->quoteName($oldIndex) . ' RENAME TO ' . $this->quoteName($changedIdxName))->execute();
         }
 
-        // Rename sequences
-        $subQuery = $this->createQuery()
-            ->select('oid')
-            ->from('pg_namespace')
-            ->where('nspname NOT LIKE ' . $this->quote('pg_%'))
-            ->where('nspname != ' . $this->quote('information_schema'));
-
+        // Rename the sequences owned by the table's columns (serial and identity columns), not those of other tables
         $this->setQuery(
             $this->createQuery()
-                ->select('relname')
-                ->from('pg_class')
-                ->where('relkind = ' . $this->quote('S'))
-                ->where('relnamespace IN (' . (string) $subQuery . ')')
-                ->where('relname LIKE ' . $this->quote("%$oldTable%"))
+                ->select('s.relname')
+                ->from('pg_class AS s')
+                ->join('INNER', "pg_depend AS d ON d.objid = s.oid AND d.classid = 'pg_class'::regclass AND d.refclassid = 'pg_class'::regclass")
+                ->join('INNER', 'pg_class AS t ON t.oid = d.refobjid')
+                ->where('s.relkind = ' . $this->quote('S'))
+                ->where('d.deptype IN (' . $this->quote('a') . ', ' . $this->quote('i') . ')')
+                ->where('t.relname = ' . $this->quote($oldTable))
         );
 
         $oldSequences = $this->loadColumn();
 
         foreach ($oldSequences as $oldSequence) {
             $changedSequenceName = str_replace($oldTable, $newTable, $oldSequence);
-            $this->setQuery('ALTER SEQUENCE ' . $this->escape($oldSequence) . ' RENAME TO ' . $this->escape($changedSequenceName))->execute();
+            $this->setQuery('ALTER SEQUENCE ' . $this->quoteName($oldSequence) . ' RENAME TO ' . $this->quoteName($changedSequenceName))->execute();
         }
 
         // Rename table
-        $this->setQuery('ALTER TABLE ' . $this->escape($oldTable) . ' RENAME TO ' . $this->escape($newTable))->execute();
+        $this->setQuery('ALTER TABLE ' . $this->quoteName($oldTable) . ' RENAME TO ' . $this->quoteName($newTable))->execute();
 
         return $this;
     }

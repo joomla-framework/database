@@ -319,6 +319,31 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
+    #[TestDox('Renaming a table leaves the sequences of other tables alone')]
+    public function testRenameTableKeepsOtherSequences()
+    {
+        static::$connection->setQuery('CREATE TABLE ' . static::$connection->quoteName('#__dbtest_more') . ' (id serial PRIMARY KEY)')->execute();
+
+        $otherSequence = static::$connection->replacePrefix('#__dbtest_more_id_seq');
+
+        static::$connection->renameTable('#__dbtest', 'bak-dbtest');
+
+        try {
+            $this->assertContains('bak-dbtest', static::$connection->getTableList(), 'Names that need quoting can be used');
+            $this->assertSame(
+                [$otherSequence],
+                array_column(static::$connection->getTableSequences('#__dbtest_more'), 'sequence'),
+                'The sequence of another table containing the old name must keep its name'
+            );
+            $this->assertSame(
+                ['bak-dbtest_id_seq'],
+                array_column(static::$connection->getTableSequences('bak-dbtest'), 'sequence')
+            );
+        } finally {
+            static::$connection->renameTable('bak-dbtest', '#__dbtest');
+        }
+    }
+
     /*
      * Test cases for this subclass
      */
