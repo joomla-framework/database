@@ -331,6 +331,13 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
+    #[TestDox('The position of a substring is returned')]
+    public function testGetStringPositionSql()
+    {
+        $this->assertSame(3, static::$connection->getStringPositionSql("'c'", "'abcde'"));
+        $this->assertSame(0, static::$connection->getStringPositionSql("'x'", "'abcde'"));
+    }
+
     #[TestDox('The database connection collation can be retrieved')]
     public function testGetConnectionCollation()
     {
