@@ -594,7 +594,7 @@ class PgsqlDriver extends PdoDriver
      *
      * @param   array   $columns     Array of table's column returned by ::getTableColumns.
      * @param   string  $fieldName   The table field's name.
-     * @param   string  $fieldValue  The variable value to quote and return.
+     * @param   mixed   $fieldValue  The variable value to quote and return.
      *
      * @return  string  The quoted string.
      *
@@ -623,7 +623,14 @@ class PgsqlDriver extends PdoDriver
             case 'smallint':
             case 'serial':
             case 'numeric,':
-                $val = $fieldValue === '' ? 'NULL' : $fieldValue;
+                if ($fieldValue === '' || $fieldValue === null) {
+                    $val = 'NULL';
+                } elseif (is_numeric($fieldValue)) {
+                    $val = (string) $fieldValue;
+                } else {
+                    // Never put a non-numeric value into the query unquoted; PostgreSQL casts or rejects the literal
+                    $val = $this->quote($fieldValue);
+                }
 
                 break;
 
