@@ -359,6 +359,21 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
+    #[TestDox('A keyed list of a single column keeps NULL values as NULL')]
+    public function testLoadAssocListWithKeyAndColumnContainingNull()
+    {
+        $this->loadExampleData();
+
+        $result = static::$connection->setQuery(
+            static::$connection->createQuery()
+                ->select(static::$connection->quoteName(['id', 'data']))
+                ->from('#__dbtest')
+                ->order('id')
+        )->loadAssocList('id', 'data');
+
+        $this->assertSame([1 => null, 2 => null, 3 => null, 4 => null], $result);
+    }
+
     #[TestDox('The specified column from all rows of a result set can be loaded as an array')]
     public function testLoadColumn()
     {
