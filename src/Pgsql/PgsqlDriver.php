@@ -637,6 +637,11 @@ class PgsqlDriver extends PdoDriver
 
                 break;
 
+            case 'bytea':
+                $val = $this->quoteBinary($fieldValue);
+
+                break;
+
             default:
                 $val = $this->quote($fieldValue);
 
