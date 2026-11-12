@@ -10,7 +10,7 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Database\Mysqli\MysqliStatement;
 use Joomla\Test\DatabaseTestCase;
-use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use Joomla\Test\TestHelper;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 /**
@@ -73,35 +73,59 @@ class MysqliStatementTest extends DatabaseTestCase
 
     /**
      * Regression test to ensure that named values with matching named params are correctly prepared, this simulates a whereIn condition.
+     *
+     * The interesting case is :preparedArray1 being a prefix of :preparedArray10 - a naive parser
+     * matches the shorter name inside the longer one.
      */
-    #[DoesNotPerformAssertions]
     public function testStatementPreparesManyArrayValues()
     {
         $query = 'SELECT * FROM dbtest WHERE id IN (:preparedArray1,:preparedArray2,:preparedArray3,:preparedArray4,:preparedArray5,:preparedArray6,:preparedArray7,:preparedArray8,:preparedArray9,:preparedArray10)';
 
-        new MysqliStatement(static::$connection->getConnection(), $query);
+        $statement = new MysqliStatement(static::$connection->getConnection(), $query);
+
+        $expected = [];
+
+        for ($i = 1; $i <= 10; $i++) {
+            $expected[':preparedArray' . $i] = [$i - 1];
+        }
+
+        $this->assertEquals($expected, TestHelper::getValue($statement, 'parameterKeyMapping'));
     }
 
     /**
      * Regression test to ensure that named values with matching named params are correctly prepared (part 2), this simulates a general use case.
+     *
+     * Here :id is a prefix of :id_title.
      */
-    #[DoesNotPerformAssertions]
     public function testStatementWithKeysMatching()
     {
         $query = 'SELECT * FROM dbtest WHERE `id` = :id AND `title` = :id_title';
 
-        new MysqliStatement(static::$connection->getConnection(), $query);
+        $statement = new MysqliStatement(static::$connection->getConnection(), $query);
+
+        $this->assertEquals(
+            [
+                ':id'       => [0],
+                ':id_title' => [1],
+            ],
+            TestHelper::getValue($statement, 'parameterKeyMapping')
+        );
     }
 
     /**
      * Regression test to ensure that named values with matching named params are correctly prepared (part 3).
      * This simulates a general use case for a search function where we reuse the same prepared statement term.
      */
-    #[DoesNotPerformAssertions]
     public function testStatementWithMultipleUseOfVars()
     {
         $query = 'SELECT * FROM `dbtest` WHERE `description` LIKE :search_term AND `title` LIKE :search_term';
 
-        new MysqliStatement(static::$connection->getConnection(), $query);
+        $statement = new MysqliStatement(static::$connection->getConnection(), $query);
+
+        $this->assertEquals(
+            [':search_term' => [0, 1]],
+            TestHelper::getValue($statement, 'parameterKeyMapping'),
+            'One name used twice must map to both placeholder positions'
+        );
     }
 }
