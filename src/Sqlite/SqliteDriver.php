@@ -39,6 +39,20 @@ class SqliteDriver extends PdoDriver
     protected $nameQuote = '`';
 
     /**
+     * Constructor.
+     *
+     * @param   array  $options  List of options used to configure the connection
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function __construct(array $options)
+    {
+        $options['driver'] = 'sqlite';
+
+        parent::__construct($options);
+    }
+
+    /**
      * Destructor.
      *
      * @since   1.0
