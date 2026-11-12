@@ -67,4 +67,19 @@ class LoggingMonitorTest extends TestCase
             $this->logger->hasInfoThatContains('Query Executed:')
         );
     }
+
+    #[TestDox('The logged stack trace does not contain function arguments')]
+    public function testStartQueryLogsTraceWithoutArguments()
+    {
+        $this->monitor->setLogger($this->logger);
+
+        (function (string $argument) {
+            $this->monitor->startQuery('SELECT 1');
+        })('database password');
+
+        $trace = $this->logger->records[0]['context']['trace'];
+
+        $this->assertNotEmpty($trace);
+        $this->assertStringNotContainsString('database password', print_r($trace, true));
+    }
 }

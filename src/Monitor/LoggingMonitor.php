@@ -38,7 +38,7 @@ class LoggingMonitor implements QueryMonitorInterface, LoggerAwareInterface
             // Add the query to the object queue.
             $this->logger->info(
                 'Query Executed: {sql}',
-                ['sql' => $sql, 'trace' => debug_backtrace()]
+                ['sql' => $sql, 'trace' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)]
             );
         }
     }
