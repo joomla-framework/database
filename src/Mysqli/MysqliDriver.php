@@ -854,9 +854,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 
             try {
                 $this->connection->commit();
+            } catch (\mysqli_sql_exception $e) {
+                throw new ExecutionFailureException('COMMIT', $e->getMessage(), $e->getCode(), $e);
+            } finally {
+                // The transaction has ended on the server whether or not the COMMIT succeeded
                 $this->transactionDepth = 0;
-            } catch (\mysqli_sql_exception) {
-                // TODO: Handle commit failure?
             }
 
             return;
@@ -882,9 +884,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
 
             try {
                 $this->connection->rollback();
+            } catch (\mysqli_sql_exception $e) {
+                throw new ExecutionFailureException('ROLLBACK', $e->getMessage(), $e->getCode(), $e);
+            } finally {
+                // The transaction has ended on the server whether or not the ROLLBACK succeeded
                 $this->transactionDepth = 0;
-            } catch (\mysqli_sql_exception) {
-                // TODO: Handle rollback failure?
             }
 
             return;
