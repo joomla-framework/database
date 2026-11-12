@@ -46,7 +46,14 @@ class PgsqlDriverSqlValueTest extends TestCase
     #[DataProvider('dataNumericValues')]
     public function testSqlValueForNumericColumns(string $type, $value, string $expected): void
     {
-        $db = new PgsqlDriver([]);
+        // Escape like PostgreSQL does, without needing a connection
+        $db = $this->getMockBuilder(PgsqlDriver::class)
+            ->setConstructorArgs([[]])
+            ->onlyMethods(['escape'])
+            ->getMock();
+
+        $db->method('escape')
+            ->willReturnCallback(fn ($text) => str_replace("'", "''", (string) $text));
 
         $this->assertSame($expected, $db->sqlValue(['col' => $type], 'col', $value));
     }
