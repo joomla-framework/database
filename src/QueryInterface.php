@@ -835,7 +835,7 @@ interface QueryInterface
      *
      * @since   4.0
      */
-    public function &getBounded($key = null);
+    public function getBounded($key = null);
 
     /**
      * Method to modify a query already in string format with the needed additions to make the query limited to a particular number of
