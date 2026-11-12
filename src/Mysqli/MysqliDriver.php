@@ -763,7 +763,7 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
      */
     public function renameTable($oldTable, $newTable, $backup = null, $prefix = null)
     {
-        $this->setQuery('RENAME TABLE ' . $oldTable . ' TO ' . $newTable)->execute();
+        $this->setQuery('RENAME TABLE ' . $this->quoteName($oldTable) . ' TO ' . $this->quoteName($newTable))->execute();
 
         return $this;
     }

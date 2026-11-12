@@ -462,7 +462,7 @@ class PgsqlDriver extends PdoDriver
 
         $query = $this->createQuery()
             ->select($this->quoteName('last_value'))
-            ->from($sequence);
+            ->from($this->quoteName($sequence));
 
         $this->setQuery($query);
 
@@ -485,7 +485,7 @@ class PgsqlDriver extends PdoDriver
 
         $query = $this->createQuery()
             ->select($this->quoteName('is_called'))
-            ->from($sequence);
+            ->from($this->quoteName($sequence));
 
         $this->setQuery($query);
 

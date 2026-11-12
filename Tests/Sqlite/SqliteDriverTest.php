@@ -338,6 +338,21 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
+    #[TestDox('A table name that needs quoting can be renamed and inspected')]
+    public function testRenameTableWithNameThatNeedsQuoting()
+    {
+        static::$connection->renameTable('#__dbtest', 'bak-dbtest');
+
+        try {
+            $this->assertContains('bak-dbtest', static::$connection->getTableList());
+            $this->assertArrayHasKey('title', static::$connection->getTableColumns('bak-dbtest'));
+        } finally {
+            static::$connection->renameTable('bak-dbtest', '#__dbtest');
+        }
+
+        $this->assertNotContains('bak-dbtest', static::$connection->getTableList());
+    }
+
     #[TestDox('A database table can be truncated')]
     public function testTruncateTable()
     {

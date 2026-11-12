@@ -248,7 +248,7 @@ class SqliteDriver extends PdoDriver
 
         $table = strtoupper($table);
 
-        $fields = $this->setQuery('pragma table_info(' . $table . ')')->loadObjectList();
+        $fields = $this->setQuery('pragma table_info(' . $this->quoteName($table) . ')')->loadObjectList();
 
         if ($typeOnly) {
             foreach ($fields as $field) {
@@ -295,7 +295,7 @@ class SqliteDriver extends PdoDriver
 
         $table = strtoupper($table);
 
-        $rows = $this->setQuery('pragma table_info( ' . $table . ')')->loadObjectList();
+        $rows = $this->setQuery('pragma table_info(' . $this->quoteName($table) . ')')->loadObjectList();
 
         foreach ($rows as $column) {
             if ($column->PK == 1) {
@@ -411,7 +411,7 @@ class SqliteDriver extends PdoDriver
      */
     public function renameTable($oldTable, $newTable, $backup = null, $prefix = null)
     {
-        $this->setQuery('ALTER TABLE ' . $oldTable . ' RENAME TO ' . $newTable)->execute();
+        $this->setQuery('ALTER TABLE ' . $this->quoteName($oldTable) . ' RENAME TO ' . $this->quoteName($newTable))->execute();
 
         return $this;
     }

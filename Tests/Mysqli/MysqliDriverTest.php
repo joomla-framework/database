@@ -272,6 +272,21 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
      * Test cases for this subclass
      */
 
+    #[TestDox('A table name that needs quoting can be renamed and inspected')]
+    public function testRenameTableWithNameThatNeedsQuoting()
+    {
+        static::$connection->renameTable('#__dbtest', 'bak-dbtest');
+
+        try {
+            $this->assertContains('bak-dbtest', static::$connection->getTableList());
+            $this->assertArrayHasKey('title', static::$connection->getTableColumns('bak-dbtest'));
+        } finally {
+            static::$connection->renameTable('bak-dbtest', '#__dbtest');
+        }
+
+        $this->assertNotContains('bak-dbtest', static::$connection->getTableList());
+    }
+
     #[TestDox('The database driver reports if it is supported in the present environment')]
     public function testIsSupported()
     {

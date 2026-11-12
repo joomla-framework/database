@@ -191,7 +191,7 @@ class SqlsrvDriver extends DatabaseDriver
         $this->connect();
 
         foreach ($constraints as $constraint) {
-            $this->setQuery('sp_rename ' . $constraint . ',' . str_replace($prefix, $backup, $constraint))
+            $this->setQuery('sp_rename ' . $this->quote($constraint) . ', ' . $this->quote(str_replace($prefix, $backup, $constraint)))
                 ->execute();
         }
     }
@@ -461,7 +461,7 @@ class SqlsrvDriver extends DatabaseDriver
         $this->connect();
 
         // Set the query to get the tables statement.
-        return $this->setQuery('SELECT name FROM ' . $this->getDatabase() . '.sys.Tables WHERE type = \'U\';')->loadColumn();
+        return $this->setQuery('SELECT name FROM ' . $this->quoteName($this->getDatabase()) . '.sys.Tables WHERE type = \'U\';')->loadColumn();
     }
 
     /**
@@ -734,7 +734,7 @@ class SqlsrvDriver extends DatabaseDriver
             return false;
         }
 
-        if (!sqlsrv_query($this->connection, 'USE [' . $database . ']', null, ['scrollable' => \SQLSRV_CURSOR_STATIC])) {
+        if (!sqlsrv_query($this->connection, 'USE [' . str_replace(']', ']]', $database) . ']', null, ['scrollable' => \SQLSRV_CURSOR_STATIC])) {
             throw new ConnectionFailureException('Could not connect to database');
         }
 
@@ -850,7 +850,8 @@ class SqlsrvDriver extends DatabaseDriver
 
         $table = $this->replacePrefix((string) $table);
         $this->setQuery(
-            "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$table' AND COLUMN_NAME = '$field' ORDER BY ORDINAL_POSITION"
+            'SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ' . $this->quote($table)
+            . ' AND COLUMN_NAME = ' . $this->quote($field) . ' ORDER BY ORDINAL_POSITION'
         );
 
         return (bool) $this->loadResult();
@@ -896,7 +897,7 @@ class SqlsrvDriver extends DatabaseDriver
             $this->renameConstraints($constraints, $prefix, $backup);
         }
 
-        $this->setQuery("sp_rename '" . $oldTable . "', '" . $newTable . "'");
+        $this->setQuery('sp_rename ' . $this->quote($this->replacePrefix($oldTable)) . ', ' . $this->quote($this->replacePrefix($newTable)));
 
         $this->execute();
 
