@@ -253,7 +253,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
                 $class = __NAMESPACE__ . '\\' . ucfirst(strtolower($baseName)) . '\\' . ucfirst(strtolower($baseName)) . 'Driver';
 
                 // If the class doesn't exist, or if it's not supported on this system, move on to the next type.
-                if (!class_exists($class) || !$class::isSupported()) {
+                if (!class_exists($class) || (new \ReflectionClass($class))->isAbstract() || !$class::isSupported()) {
                     continue;
                 }
 

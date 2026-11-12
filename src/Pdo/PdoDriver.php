@@ -290,7 +290,7 @@ abstract class PdoDriver extends DatabaseDriver
                 break;
 
             case 'odbc':
-                $format = 'odbc:DSN=#DSN#;UID:#USER#;PWD=#PASSWORD#';
+                $format = 'odbc:DSN=#DSN#;UID=#USER#;PWD=#PASSWORD#';
 
                 $replace = ['#DSN#', '#USER#', '#PASSWORD#'];
                 $with    = [$this->options['dsn'], $this->options['user'], $this->options['password']];
@@ -334,11 +334,7 @@ abstract class PdoDriver extends DatabaseDriver
                 break;
 
             case 'sqlite':
-                if ($this->options['version'] === 2) {
-                    $format = 'sqlite2:#DBNAME#';
-                } else {
-                    $format = 'sqlite:#DBNAME#';
-                }
+                $format = 'sqlite:#DBNAME#';
 
                 $replace = ['#DBNAME#'];
                 $with    = [$this->options['database']];

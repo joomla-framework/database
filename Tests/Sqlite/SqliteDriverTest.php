@@ -483,6 +483,26 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         $this->assertCount($tupleCount, $transactionRows);
     }
 
+    #[TestDox('The driver connects through PDO SQLite without a driver option')]
+    public function testConnectsWithoutDriverOption()
+    {
+        $db = new SqliteDriver(['database' => ':memory:']);
+        $db->connect();
+
+        $this->assertSame('sqlite', $db->getConnection()->getAttribute(\PDO::ATTR_DRIVER_NAME));
+
+        $db->disconnect();
+    }
+
+    #[TestDox('Only drivers that can be instantiated are listed as connectors')]
+    public function testGetConnectorsSkipsAbstractDrivers()
+    {
+        $connectors = DatabaseDriver::getConnectors();
+
+        $this->assertContains('Sqlite', $connectors);
+        $this->assertNotContains('Pdo', $connectors);
+    }
+
     #[TestDox('The database connection can be retrieved')]
     public function testGetConnection()
     {
