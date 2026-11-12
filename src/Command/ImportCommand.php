@@ -78,24 +78,21 @@ class ImportCommand extends AbstractCommand
             throw new \RuntimeException('The PHP zip extension is not installed or is disabled');
         }
 
-        $zip = zip_open($archive);
+        $zip = new \ZipArchive();
 
-        if (!\is_resource($zip)) {
+        if ($zip->open($archive, \ZipArchive::RDONLY) !== true) {
             throw new \RuntimeException('Unable to open archive');
         }
 
-        while ($file = @zip_read($zip)) {
-            if (strpos(zip_entry_name($file), $this->db->getPrefix()) === false) {
-                zip_entry_close($file);
-                @zip_close($zip);
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            if (strpos((string) $zip->getNameIndex($i), $this->db->getPrefix()) === false) {
+                $zip->close();
 
                 throw new \RuntimeException('Unable to find table matching database prefix');
             }
-
-            zip_entry_close($file);
         }
 
-        @zip_close($zip);
+        $zip->close();
     }
 
     /**
@@ -154,7 +151,7 @@ class ImportCommand extends AbstractCommand
                 return 1;
             }
 
-            $folderPath .= File::stripExt($zipFile);
+            $folderPath .= '/' . File::stripExt($zipFile);
 
             try {
                 Folder::create($folderPath);
