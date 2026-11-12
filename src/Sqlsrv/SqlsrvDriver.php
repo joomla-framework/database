@@ -510,16 +510,13 @@ class SqlsrvDriver extends DatabaseDriver
                 continue;
             }
 
-            if (!$this->checkFieldExists($table, $k)) {
-                continue;
-            }
-
             if ($k[0] === '_') {
                 // Internal field
                 continue;
             }
 
-            if ($k === $key && $key == 0) {
+            // Let the database generate the primary key instead of inserting 0 into an IDENTITY column
+            if ($k === $key && ($v === 0 || $v === '0')) {
                 continue;
             }
 
