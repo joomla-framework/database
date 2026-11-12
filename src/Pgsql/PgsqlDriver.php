@@ -822,19 +822,20 @@ class PgsqlDriver extends PdoDriver
     /**
      * Get the substring position inside a string
      *
-     * @param   string  $substring  The string being sought
-     * @param   string  $string     The string/column being searched
+     * Both arguments are SQL expressions and are put into the query as they are; quote string values with quote().
      *
-     * @return  integer  The position of $substring in $string
+     * @param   string  $substring  The string being sought, as an SQL expression
+     * @param   string  $string     The string/column being searched, as an SQL expression
+     *
+     * @return  integer  The position of $substring in $string, starting at 1, or 0 if it is not found
      *
      * @since   1.5.0
      */
     public function getStringPositionSql($substring, $string)
     {
         $this->setQuery("SELECT POSITION($substring IN $string)");
-        $position = $this->loadRow();
 
-        return $position['position'];
+        return (int) $this->loadResult();
     }
 
     /**
