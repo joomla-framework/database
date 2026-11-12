@@ -390,7 +390,7 @@ abstract class PdoDriver extends DatabaseDriver
      * Note: Using query objects with bound variables is preferable to the below.
      *
      * @param   string   $text   The string to be escaped.
-     * @param   boolean  $extra  Unused optional parameter to provide extra escaping.
+     * @param   boolean  $extra  True to also escape the LIKE wildcards % and _ with a backslash.
      *
      * @return  string  The escaped string.
      *
@@ -405,6 +405,11 @@ abstract class PdoDriver extends DatabaseDriver
         if (\is_float($text)) {
             // Force the dot as a decimal point.
             return str_replace(',', '.', (string) $text);
+        }
+
+        if ($extra) {
+            // Escape the wildcards first, so that the backslashes are escaped for the string literal as well
+            $text = addcslashes((string) $text, '%_');
         }
 
         $text = str_replace("'", "''", (string) $text);
