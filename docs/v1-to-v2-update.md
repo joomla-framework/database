@@ -1,122 +1,245 @@
-## Updating from v1 to v2
+# Updating from v1 to v2
 
-The following changes were made to the Database package between v1 and v2.
+Release 2.0.0 is the largest break in this package's history. Prepared statements became mandatory,
+the driver lost its debug and logging features to query monitors, and several query builder methods
+changed shape.
 
-### Minimum supported PHP version raised
+## At a glance
 
-All Framework packages now require PHP 7.2 or newer.
+| | v1 (1.8.x) | v2 (2.0.0) |
+|---|---|---|
+| PHP | `^5.3.10 \| ~7.0` | `^7.2.5 \| ^8.0` |
+| PDO Oracle, native PostgreSQL | supported | **removed** |
+| Prepared statements | optional | required of every query object |
+| Parameter types | driver-specific constants | `ParameterType` |
+| Driver debug mode (`setDebug()`, `$debug`) | present | **removed** |
+| PSR-3 logging on the driver | present | **removed**, use a query monitor |
+| `DatabaseDriver::getInstance()` | supported | deprecated |
+| `unionDistinct()` | present | **removed** |
+| `join()` argument shape | `('INNER', 'b ON b.id = a.id')` | `('INNER', 'b', 'b.id = a.id')` |
+| Changing a query's type | silently allowed | throws |
+| `castAsChar()` | present | deprecated |
 
-### Minimum supported database versions raised
+## Requirements
 
-The following are the minimum supported database versions:
+All Framework packages now require **PHP 7.2** or newer.
 
-- MySQL: 5.6
-- PostgreSQL: 9.2.0
-- MS SQL: 11.0.2100.60 (SQL Server 2012)
+Minimum database versions:
 
-### Removed Driver Support
+| Server | Minimum |
+|---|---|
+| MySQL | 5.6 |
+| PostgreSQL | 9.2.0 |
+| MS SQL | 11.0.2100.60 (SQL Server 2012) |
 
-Support for PDO Oracle and native PostgreSQL has been removed.  PDO PostgreSQL is available for PostgreSQL users.
+### Removed driver support
 
-### `Joomla\Database\DatabaseInterface` populated
+PDO Oracle and the native PostgreSQL driver are gone. PostgreSQL users move to the PDO driver:
 
-`Joomla\Database\DatabaseInterface` has been filled with most of the public methods of `Joomla\Database\DatabaseDatabase`.
+```php
+// v1
+$db = DatabaseDriver::getInstance(['driver' => 'postgresql', /* … */]);
 
-### `Joomla\Database\QueryInterface` added
+// v2
+$db = (new DatabaseFactory())->getDriver('pgsql', [/* … */]);
+```
 
-`Joomla\Database\QueryInterface` has been added to the package. All query objects must now implement this interface.
+## Interfaces
 
-### Query feature interfaces deprecated
+### `DatabaseInterface` populated
 
-As `Joomla\Database\QueryInterface` is now extending `Joomla\Database\Query\LimitableInterface` and `Joomla\Database\Query\PreparableInterface`, these
-feature interfaces are no longer required and are deprecated. All query objects must implement `Joomla\Database\QueryInterface` and as of 3.0 the
-methods defined in the deprecated interfaces will be moved into `Joomla\Database\QueryInterface`.
+`Joomla\Database\DatabaseInterface` was close to empty in 1.x. It now carries most of the public
+methods of `DatabaseDriver`, so you can type-hint the interface and still call `loadObjectList()`,
+`quote()`, `transactionStart()` and the rest.
 
-### Support for parameterized queries required
+### `QueryInterface` added
 
-`Joomla\Database\QueryInterface` extends `Joomla\Database\Query\PrepareableInterface`, which is the interface defining that
-a query supports parameterized queries. This effectively mandates that all query objects support parameterized queries.
+Every query object must implement `Joomla\Database\QueryInterface`. It extends the feature
+interfaces `Query\LimitableInterface` and `Query\PreparableInterface`, which are **deprecated as of
+2.0** — their methods move onto `QueryInterface` itself in a later release (this happened in 4.0).
 
-### Abstraction layer for parameterized queries
+```php
+// v2 - implement the one interface
+class MyQuery extends DatabaseQuery implements QueryInterface
+```
 
-For drivers which support defining an argument's type, the method required passing a parameter specific to the driver's implementation.
-As of 2.0, there is now a `Joomla\Database\ParameterType` object defining supported data types in an abstract manner.
-`Joomla\Database\Query\PrepareableInterface` implementations should map this argument to the driver specific data type when applicable.
+### Prepared statements are mandatory
 
-### `Joomla\Database\DatabaseDriver` general changes
+Because `QueryInterface` extends `PreparableInterface`, every query object supports bound
+parameters. There is no longer a query implementation that only concatenates strings.
 
-The base `Joomla\Database\DatabaseDriver` class has undergone several underlying API changes to create a more flexible platform moving forward.
-Significant changes include:
+### `ParameterType` replaces driver constants
 
-#### Debug mode removed
+Binding used to require a constant specific to the driver. 2.0 introduces an abstract set:
 
-The database driver's debug mode, and corresponding `setDebug` API and `$debug` property, have been removed
+```php
+use Joomla\Database\ParameterType;
 
-#### Query monitors added
+$query->bind(':id', $id, ParameterType::INTEGER);
+```
 
-Database drivers now support monitors via a `Joomla\Database\QueryMonitorInterface` implementation. This implementation is loosely modeled on the
-Doctrine SQLLogger interface.
+| Constant | Value |
+|---|---|
+| `BOOLEAN` | `'boolean'` |
+| `INTEGER` | `'int'` |
+| `LARGE_OBJECT` | `'lob'` |
+| `NULL` | `'null'` |
+| `STRING` | `'string'` |
 
-#### PSR-3 support removed
+They are **strings**, not the PDO integers. Each `PreparableInterface` implementation maps them to
+its driver's own type where that applies.
 
-Database drivers are no longer logger aware, logging should instead be performed in a query monitor if desired.
+## `DatabaseDriver` changes
 
-#### Connection events added
+### Debug mode removed
 
-Database drivers now support dispatching read-only events when a connection to the database is opened or closed.
+`setDebug()` and the `$debug` property are gone. What debug mode used to give you — the SQL, the
+timing, the call stack — is what a query monitor gives you now.
 
-#### Singleton storage deprecated
+### Query monitors added
 
-`Joomla\Database\DatabaseDriver::getInstance()` has been deprecated and will be removed in 3.0. Applications which require support for singleton object
-storage should extend `Joomla\Database\DatabaseFactory::getDriver()` implementing their additional logic.
+Drivers accept a `QueryMonitorInterface` implementation, loosely modelled on Doctrine's SQLLogger:
 
-### `Joomla\Database\DatabaseQuery` general changes
+```php
+use Joomla\Database\Monitor\DebugMonitor;
 
-#### Changes in methods `union()`, `unionAll()` and `unionDistinct()`
+$monitor = new DebugMonitor();
+$db->setMonitor($monitor);
 
-- Method `unionDistinct()` has been removed. Use `union()` instead.
-- Argument `$query` stops accepting the array. Only `DatabaseQuery` object or string.
-- Argument `$distinct` has been removed from `unionAll`.
-- Argument `$glue` has been removed from both.
+// … run queries …
 
-Method `union()` by default has `$distinct = true`.
-If `$distinct` is `false` then generates `UNION ALL` sql statement.
+$monitor->getLogs();        // the SQL statements
+$monitor->getTimings();     // start and stop, two entries per query
+$monitor->getCallStacks();
+```
 
-Class variables `$union` and `$unionAll` have been merged into one variable `$merge`.
-The new variable represents an ordered array of individual elements.
+See [Connections and drivers](connections.md#observing-queries).
 
-Stop supporting `$type = 'union'` in method `__toString()`.
+### PSR-3 support removed
 
-New methods:
-- `querySet($query)` changes object type to querySet and set a query in query set.
-- `toQuerySet()` from current object creates DatabaseQuery of type querySet.
+Drivers are no longer logger-aware. Replace `$db->setLogger($logger)` with a
+`Monitor\LoggingMonitor`:
 
-The DatabaseQuery object of type querySet can be used to generate a union query
-where the first SELECT statement has own ORDER BY and LIMIT.
+```php
+use Joomla\Database\Monitor\LoggingMonitor;
 
-#### Changes in methods `join()`, `innerJoin()`, `outerJoin()`, `leftJoin()`, `rightJoin()`
+$monitor = new LoggingMonitor();
+$monitor->setLogger($logger);
 
-The last argument `$conditions` has been split into two arguments: $table and $condition.
-Instead of `$query->join('INNER', 'b ON b.id = a.id)` use `$query->join('INNER', 'b', 'b.id = a.id)`.
+$db->setMonitor($monitor);
+```
 
-Although the old syntax still works in many cases, it will not work on PostgreSQL update query.
+### Connection events added
 
-#### Changes in the `from()` method
+Drivers dispatch read-only events when a connection opens or closes —
+`DatabaseEvents::POST_CONNECT` and `DatabaseEvents::POST_DISCONNECT`, both carrying an
+`Event\ConnectionEvent`.
 
-The first argument, `$table`, stops accepting the array. Only `DatabaseQuery` object or string.
+### Singleton storage deprecated
 
-- Argument `$subQueryAlias` has been removed.
+`DatabaseDriver::getInstance()` is deprecated and removed in 3.0.
 
-Instead of `$query->from($subquery, 'alias')` use `$query->from($subquery->alias('alias'))`.
+```php
+// v1
+$db = DatabaseDriver::getInstance($options);
 
-#### Query type immutability enforced
+// v2
+$db = (new DatabaseFactory())->getDriver($options['driver'], $options);
+```
 
-Several methods which defined a query type (i.e. INSERT, SELECT, UPDATE) contained doc blocks indicating the query type should not be changed, but
-this was not enforced in the code. As of 2.0, an exception will be thrown if trying to change a query type. If intending to change the query type,
-either call `DatabaseQuery::clear()` (optionally only clearing the type clause) or a new query object should be created instead.
+If you need singleton semantics, share the driver through a DI container — `Service\DatabaseProvider`
+does exactly that — or extend `DatabaseFactory::getDriver()` with your own caching.
 
-#### `castAsChar` deprecated. Replaced with `castAs`
+## `DatabaseQuery` changes
 
-`castAsChar($value)` has been deprecated in favour using of the more generic `castAs('CHAR', $value)` method. This
-method has support for supplying the length of a string and also accepting other types of casts such as integers.
-The intent is to add more cast types in the subsequent versions.
+### `union()`, `unionAll()`, `unionDistinct()`
+
+```php
+// v1
+$query->unionDistinct($other);
+$query->union([$a, $b]);
+$query->unionAll($other, $distinct, $glue);
+
+// v2
+$query->union($other);              // distinct by default
+$query->union($other, false);       // UNION ALL
+$query->unionAll($other);
+```
+
+* `unionDistinct()` was removed — `union()` is distinct by default.
+* `$query` no longer accepts an array. Pass a `DatabaseQuery` or a string, once per call.
+* `$distinct` was removed from `unionAll()`, and `$glue` from both.
+* The `$union` and `$unionAll` properties merged into a single ordered `$merge`.
+* `__toString()` no longer supports `$type = 'union'`.
+
+Two methods arrived with them:
+
+```php
+$query->querySet($other);      // turn this object into a query set and add a query
+$set = $query->toQuerySet();   // build a query set from the current query
+```
+
+A query set lets the first `SELECT` keep its own `ORDER BY` and `LIMIT` inside a union.
+
+### `join()` and friends
+
+The trailing `$conditions` argument was split into `$table` and `$condition`:
+
+```php
+// v1
+$query->join('INNER', 'b ON b.id = a.id');
+
+// v2
+$query->join('INNER', 'b', 'b.id = a.id');
+```
+
+The old single-string form still parses in many cases, but **not** for a PostgreSQL UPDATE query.
+Split it.
+
+### `from()`
+
+```php
+// v1
+$query->from($subquery, 'alias');
+$query->from([$a, $b]);
+
+// v2
+$query->from($subquery->alias('alias'));
+$query->from($a)->from($b);
+```
+
+`$table` no longer accepts an array, and `$subQueryAlias` was removed in favour of the new
+`alias()` method on the query.
+
+### Query type immutability enforced
+
+Methods that define a query type — `select()`, `insert()`, `update()`, `delete()` — documented that
+the type must not change afterwards, but nothing enforced it. 2.0 throws
+`Exception\QueryTypeAlreadyDefinedException`.
+
+```php
+$query->clear();                // start over
+$query->clear('select');        // or clear just the type clause
+```
+
+### `castAsChar()` deprecated
+
+```php
+// v1
+$query->castAsChar($value);
+
+// v2
+$query->castAs('CHAR', $value);
+$query->castAs('CHAR', $value, 10);     // with a length
+```
+
+`castAs()` is the generic form and supports other target types. `castAsChar()` was removed in 4.0.
+
+## Dependency changes
+
+| Package | v1 (1.8.x) | v2 (2.0.0) |
+|---|---|---|
+| `php` | `^5.3.10 \| ~7.0` | `^7.2.5 \| ^8.0` |
+| `psr/log` | `~1.0` (required) | moved to dev/suggest — the driver is no longer logger-aware |
+| `joomla/event` | — | `^2.0` (connection events) |
+| `symfony/deprecation-contracts` | — | `^2.1` |
