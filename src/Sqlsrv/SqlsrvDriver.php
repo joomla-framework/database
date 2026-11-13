@@ -221,9 +221,6 @@ class SqlsrvDriver extends DatabaseDriver
 
         $result = str_replace("'", "''", $text);
 
-        // SQL Server does not accept NULL byte in query string
-        $result = str_replace("\0", "' + CHAR(0) + N'", $result);
-
         // Fix for SQL Sever escape sequence, see https://support.microsoft.com/en-us/kb/164291
         $result = str_replace(
             ["\\\n",     "\\\r",     "\\\\\r\r\n"],
@@ -259,8 +256,13 @@ class SqlsrvDriver extends DatabaseDriver
             return parent::quote($text, $escape);
         }
 
+        if ($escape) {
+            // SQL Server does not accept a NUL byte in the query string, so it is concatenated as CHAR(0)
+            $text = str_replace("\0", "' + CHAR(0) + N'", $this->escape($text));
+        }
+
         // To support unicode on MSSQL we have to add prefix N
-        return 'N\'' . ($escape ? $this->escape($text) : $text) . '\'';
+        return 'N\'' . $text . '\'';
     }
 
     /**
