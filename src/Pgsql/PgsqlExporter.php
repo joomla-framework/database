@@ -80,24 +80,27 @@ class PgsqlExporter extends DatabaseExporter
             $buffer[] = '  <table_structure name="' . $table . '">';
 
             foreach ($sequences as $sequence) {
-                $buffer[] = '   <sequence Name="' . $this->getGenericTableName($sequence->sequence) . '" Schema="' . $sequence->schema . '"' .
-                    ' Table="' . $table . '" Column="' . $sequence->column . '" Type="' . $sequence->data_type . '"' .
-                    ' Start_Value="' . $sequence->start_value . '" Min_Value="' . $sequence->minimum_value . '"' .
-                    ' Max_Value="' . $sequence->maximum_value . '" Last_Value="' . $this->db->getSequenceLastValue($sequence->sequence) . '"' .
-                    ' Increment="' . $sequence->increment . '" Cycle_option="' . $sequence->cycle_option . '"' .
-                    ' Is_called="' . $this->db->getSequenceIsCalled($sequence->sequence) . '"' .
-                    ' />';
+                $buffer[] = '   <sequence Name="' . $this->escapeXml($this->getGenericTableName($sequence->sequence)) . '"'
+                    . ' Schema="' . $this->escapeXml($sequence->schema) . '" Table="' . $this->escapeXml($table) . '"'
+                    . ' Column="' . $this->escapeXml($sequence->column) . '" Type="' . $this->escapeXml($sequence->data_type) . '"'
+                    . ' Start_Value="' . $this->escapeXml($sequence->start_value) . '" Min_Value="' . $this->escapeXml($sequence->minimum_value) . '"'
+                    . ' Max_Value="' . $this->escapeXml($sequence->maximum_value) . '"'
+                    . ' Last_Value="' . $this->escapeXml($this->db->getSequenceLastValue($sequence->sequence)) . '"'
+                    . ' Increment="' . $this->escapeXml($sequence->increment) . '" Cycle_option="' . $this->escapeXml($sequence->cycle_option) . '"'
+                    . ' Is_called="' . $this->escapeXml($this->db->getSequenceIsCalled($sequence->sequence)) . '" />';
             }
 
             foreach ($fields as $field) {
-                $buffer[] = '   <field Field="' . $field->column_name . '" Type="' . $field->type . '" Null="' . $field->null . '"' .
-                    ' Default="' . $field->Default . '" Comments="' . $field->comments . '" />';
+                $buffer[] = '   <field Field="' . $this->escapeXml($field->column_name) . '" Type="' . $this->escapeXml($field->type) . '"'
+                    . ' Null="' . $this->escapeXml($field->null) . '" Default="' . $this->escapeXml($field->Default) . '"'
+                    . ' Comments="' . $this->escapeXml($field->comments) . '" />';
             }
 
             foreach ($keys as $key) {
-                $buffer[] = '   <key Index="' . $this->getGenericTableName($key->idxName) . '" is_primary="' . $key->isPrimary . '"' .
-                    ' is_unique="' . $key->isUnique . '" Key_name="' . $this->db->getNamesKey($table, $key->indKey) . '"' .
-                    ' Query=\'' . $key->Query . '\' />';
+                $buffer[] = '   <key Index="' . $this->escapeXml($this->getGenericTableName($key->idxName)) . '"'
+                    . ' is_primary="' . $this->escapeXml($key->isPrimary) . '" is_unique="' . $this->escapeXml($key->isUnique) . '"'
+                    . ' Key_name="' . $this->escapeXml($this->db->getNamesKey($table, $key->indKey)) . '"'
+                    . ' Query="' . $this->escapeXml($key->Query) . '" />';
             }
 
             $buffer[] = '  </table_structure>';
@@ -151,10 +154,12 @@ class PgsqlExporter extends DatabaseExporter
                 $buffer[] = '   <row>';
 
                 foreach ($row as $key => $value) {
-                    if (!in_array($key, $colblob)) {
-                        $buffer[] = '    <field name="' . $key . '">' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '</field>';
+                    if ($value === null) {
+                        $buffer[] = '    <field name="' . $key . '" value_is_null="1"></field>';
+                    } elseif (!in_array($key, $colblob)) {
+                        $buffer[] = '    <field name="' . $key . '">' . htmlspecialchars((string) $value, ENT_COMPAT, 'UTF-8') . '</field>';
                     } else {
-                        $buffer[] = '    <field name="' . $key . '">' . stream_get_contents($value) . '</field>';
+                        $buffer[] = '    <field name="' . $key . '" encoding="base64">' . base64_encode($this->db->decodeBinary($value)) . '</field>';
                     }
                 }
 

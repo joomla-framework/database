@@ -264,6 +264,40 @@ XML
         $this->assertXmlStringEqualsXmlString($expectedXml, (string) $exporter);
     }
 
+    #[TestDox('NULL values and bytea columns are exported as well-formed XML')]
+    public function testNullAndByteaValues()
+    {
+        $binary = "\x00\xFF<&>";
+        $stream = fopen('php://memory', 'r+');
+        fwrite($stream, $binary);
+        rewind($stream);
+
+        $db = $this->createStub(PgsqlDriver::class);
+        $db->method('getPrefix')->willReturn('jos_');
+        $db->method('createQuery')->willReturnCallback(fn () => new PgsqlQuery($db));
+        $db->method('getTableColumns')->willReturn(
+            [
+                'title' => (object) ['Field' => 'title', 'Type' => 'character varying'],
+                'data'  => (object) ['Field' => 'data', 'Type' => 'bytea'],
+            ]
+        );
+        $db->method('decodeBinary')->willReturnCallback(fn ($data) => \is_resource($data) ? stream_get_contents($data) : $data);
+        $db->method('loadObjectList')->willReturn([(object) ['title' => null, 'data' => $stream]]);
+
+        $exporter = new PgsqlExporter();
+        $exporter->setDbo($db)->from('jos_dbtest')->withStructure(false)->withData(true);
+
+        $xml = simplexml_load_string((string) $exporter);
+
+        $this->assertNotFalse($xml, 'The export must be well-formed XML');
+
+        $fields = $xml->database->table_data->row->field;
+
+        $this->assertTrue(isset($fields[0]['value_is_null']), 'NULL must be marked as NULL');
+        $this->assertSame('base64', (string) $fields[1]['encoding']);
+        $this->assertSame($binary, base64_decode((string) $fields[1]));
+    }
+
     /**
      * Data provider for check test cases
      *

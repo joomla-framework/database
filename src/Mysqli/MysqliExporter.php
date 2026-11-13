@@ -71,18 +71,18 @@ class MysqliExporter extends DatabaseExporter
             $buffer[] = '  <table_structure name="' . $table . '">';
 
             foreach ($fields as $field) {
-                $buffer[] = '   <field Field="' . $field->Field . '" Type="' . $field->Type . '" Null="' . $field->Null . '" Key="' .
-                    $field->Key . '"' . (isset($field->Default) ? ' Default="' . $field->Default . '"' : '') . ' Extra="' . $field->Extra . '"' .
-                    ' />';
+                $buffer[] = '   <field Field="' . $this->escapeXml($field->Field) . '" Type="' . $this->escapeXml($field->Type) . '"'
+                    . ' Null="' . $this->escapeXml($field->Null) . '" Key="' . $this->escapeXml($field->Key) . '"'
+                    . (isset($field->Default) ? ' Default="' . $this->escapeXml($field->Default) . '"' : '')
+                    . ' Extra="' . $this->escapeXml($field->Extra) . '" />';
             }
 
             foreach ($keys as $key) {
-                $buffer[] = '   <key Table="' . $table . '" Non_unique="' . $key->Non_unique . '" Key_name="' . $key->Key_name . '"' .
-                    ' Seq_in_index="' . $key->Seq_in_index . '" Column_name="' . $key->Column_name . '" Collation="' . $key->Collation . '"' .
-                    ' Null="' . $key->Null . '" Index_type="' . $key->Index_type . '"' .
-                    ' Sub_part="' . $key->Sub_part . '"' .
-                    ' Comment="' . htmlspecialchars($key->Comment, \ENT_COMPAT, 'UTF-8') . '"' .
-                    ' />';
+                $buffer[] = '   <key Table="' . $this->escapeXml($table) . '" Non_unique="' . $this->escapeXml($key->Non_unique) . '"'
+                    . ' Key_name="' . $this->escapeXml($key->Key_name) . '" Seq_in_index="' . $this->escapeXml($key->Seq_in_index) . '"'
+                    . ' Column_name="' . $this->escapeXml($key->Column_name) . '" Collation="' . $this->escapeXml($key->Collation) . '"'
+                    . ' Null="' . $this->escapeXml($key->Null) . '" Index_type="' . $this->escapeXml($key->Index_type) . '"'
+                    . ' Sub_part="' . $this->escapeXml($key->Sub_part) . '" Comment="' . $this->escapeXml($key->Comment) . '" />';
             }
 
             $buffer[] = '  </table_structure>';

@@ -194,6 +194,20 @@ abstract class DatabaseExporter
     }
 
     /**
+     * Escape a value for use in an XML attribute or element.
+     *
+     * @param   mixed  $value  The value to escape.
+     *
+     * @return  string
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    protected function escapeXml($value): string
+    {
+        return htmlspecialchars((string) $value, \ENT_QUOTES | \ENT_XML1, 'UTF-8');
+    }
+
+    /**
      * Sets the database connector to use for importing structure and/or data.
      *
      * @param   DatabaseInterface  $db  The database connector.
@@ -262,8 +276,8 @@ abstract class DatabaseExporter
             $colblob = [];
 
             foreach ($fields as $field) {
-                // Catch blob for conversion xml
-                if ($field->Type == 'mediumblob') {
+                // Catch binary columns, which are exported base64 encoded
+                if (preg_match('/^((tiny|medium|long)?blob|(var)?binary\(.*)$/i', $field->Type)) {
                     $colblob[] = $field->Field;
                 }
             }
@@ -288,12 +302,14 @@ abstract class DatabaseExporter
                 foreach ($row as $key => $value) {
                     if (!in_array($key, $colblob)) {
                         if (is_null($value)) {
-                            $buffer[] = '    <field name="' . $key . '" value_is_null></field>';
+                            $buffer[] = '    <field name="' . $key . '" value_is_null="1"></field>';
                         } else {
                             $buffer[] = '    <field name="' . $key . '">' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '</field>';
                         }
+                    } elseif (is_null($value)) {
+                        $buffer[] = '    <field name="' . $key . '" value_is_null="1"></field>';
                     } else {
-                        $buffer[] = '    <field name="' . $key . '">' . base64_encode($value) . '</field>';
+                        $buffer[] = '    <field name="' . $key . '" encoding="base64">' . base64_encode($value) . '</field>';
                     }
                 }
 

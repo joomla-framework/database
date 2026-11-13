@@ -269,6 +269,8 @@ abstract class DatabaseImporter
                     foreach ($row->children() as $data) {
                         if (isset($data['value_is_null'])) {
                             $entry->{(string) $data['name']} = null;
+                        } elseif ((string) $data['encoding'] === 'base64') {
+                            $entry->{(string) $data['name']} = base64_decode((string) $data);
                         } else {
                             $entry->{(string) $data['name']} = (string) $data;
                         }

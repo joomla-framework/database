@@ -9,6 +9,7 @@ namespace Joomla\Database\Tests\Mysqli;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\Mysqli\MysqliDriver;
 use Joomla\Database\Mysqli\MysqliExporter;
+use Joomla\Database\Mysqli\MysqliImporter;
 use Joomla\Database\Mysqli\MysqliQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -235,6 +236,84 @@ XML
         }
 
         $this->assertXmlStringEqualsXmlString($expectedXml, (string) $exporter);
+    }
+
+    #[TestDox('Special characters and binary data survive an export and import round trip')]
+    public function testRoundTripWithSpecialCharactersAndBinaryData()
+    {
+        $binary = "\x00\xFF'\"<&>";
+
+        $db = $this->createStub(MysqliDriver::class);
+        $db->method('getPrefix')->willReturn('jos_');
+        $db->method('createQuery')->willReturnCallback(fn () => new MysqliQuery($db));
+        $db->method('getTableKeys')->willReturn([]);
+        $db->method('getTableColumns')->willReturn(
+            [
+                'title' => (object) [
+                    'Field' => 'title', 'Type' => 'varchar(255)', 'Null' => 'NO', 'Key' => '', 'Default' => 'a"b&c<d', 'Extra' => '',
+                ],
+                'data' => (object) [
+                    'Field' => 'data', 'Type' => 'blob', 'Null' => 'YES', 'Key' => '', 'Default' => null, 'Extra' => '',
+                ],
+            ]
+        );
+        $db->method('loadObjectList')->willReturn([(object) ['title' => 'x', 'data' => $binary]]);
+
+        $exporter = new MysqliExporter();
+        $exporter->setDbo($db)->from('jos_test')->withStructure(true)->withData(true);
+
+        $xml = simplexml_load_string((string) $exporter);
+
+        $this->assertNotFalse($xml, 'The export must be well-formed XML');
+        $this->assertSame('a"b&c<d', (string) $xml->database->table_structure->field[0]['Default']);
+
+        $imported = [];
+
+        $target = $this->createStub(MysqliDriver::class);
+        $target->method('getPrefix')->willReturn('jos_');
+        $target->method('insertObject')->willReturnCallback(
+            function ($table, $object) use (&$imported) {
+                $imported[] = $object;
+
+                return true;
+            }
+        );
+
+        $importer = new MysqliImporter();
+        $importer->setDbo($target)->from($xml)->asXml()->importData();
+
+        $this->assertSame($binary, $imported[0]->data, 'Binary data must be decoded on import');
+        $this->assertSame('x', $imported[0]->title);
+    }
+
+    #[TestDox('NULL values are exported as well-formed XML that the importer recognises')]
+    public function testNullValuesAreExportedAsWellFormedXml()
+    {
+        $exporter = new MysqliExporter();
+
+        $exporter->setDbo($this->db)
+            ->from('jos_test')
+            ->withStructure(false)
+            ->withData(true);
+
+        $this->db->method('loadObjectList')
+            ->willReturn(
+                [
+                    (object) [
+                        'id'    => 1,
+                        'title' => null,
+                    ],
+                ]
+            );
+
+        $xml = simplexml_load_string((string) $exporter);
+
+        $this->assertNotFalse($xml, 'The export must be well-formed XML');
+
+        $fields = $xml->database->table_data->row->field;
+
+        $this->assertFalse(isset($fields[0]['value_is_null']));
+        $this->assertTrue(isset($fields[1]['value_is_null']));
     }
 
     /**
