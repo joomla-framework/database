@@ -213,14 +213,13 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
         if ($this->options['ssl'] !== [] && $this->options['ssl']['enable'] === true) {
             $connectionFlags += MYSQLI_CLIENT_SSL;
 
-            // Verify server certificate is only available in PHP 5.6.16+. See https://www.php.net/ChangeLog-5.php#5.6.16
+            // Verify the server certificate, or explicitly do not verify it
             if (isset($this->options['ssl']['verify_server_cert'])) {
-                // New constants in PHP 5.6.16+. See https://www.php.net/ChangeLog-5.php#5.6.16
-                if ($this->options['ssl']['verify_server_cert'] === true && defined('MYSQLI_CLIENT_SSL_VERIFY_SERVER_CERT')) {
+                if ($this->options['ssl']['verify_server_cert'] === true) {
                     $connectionFlags += MYSQLI_CLIENT_SSL_VERIFY_SERVER_CERT;
-                } elseif ($this->options['ssl']['verify_server_cert'] === false && defined('MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT')) {
+                } elseif ($this->options['ssl']['verify_server_cert'] === false) {
                     $connectionFlags += MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT;
-                } elseif (defined('MYSQLI_OPT_SSL_VERIFY_SERVER_CERT')) {
+                } else {
                     $this->connection->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, $this->options['ssl']['verify_server_cert']);
                 }
             }
