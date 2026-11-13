@@ -51,6 +51,23 @@ class DatabaseQueryTest extends TestCase
         $this->query = new TestDatabaseQuery($this->db);
     }
 
+    #[TestDox('The bindValue method binds a copy of the value')]
+    public function testBindValue()
+    {
+        $this->assertSame($this->query, $this->query->bindValue(':literal', 'JustValueNoReference'), 'The query builder supports method chaining');
+
+        foreach ([1, 2, 3] as $i) {
+            $this->query->bindValue(':id' . $i, $i, ParameterType::INTEGER);
+        }
+
+        $bounded = $this->query->getBounded();
+
+        $this->assertSame('JustValueNoReference', $bounded[':literal']->value);
+        $this->assertSame(ParameterType::STRING, $bounded[':literal']->dataType);
+        $this->assertSame([1, 2, 3], [$bounded[':id1']->value, $bounded[':id2']->value, $bounded[':id3']->value], 'Each binding keeps its own value');
+        $this->assertSame(ParameterType::INTEGER, $bounded[':id2']->dataType);
+    }
+
     #[TestDox('The call method correctly creates and manages a CALL query element')]
     public function testCall()
     {

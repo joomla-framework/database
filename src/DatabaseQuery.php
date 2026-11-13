@@ -1867,7 +1867,41 @@ abstract class DatabaseQuery implements QueryInterface
     }
 
     /**
+     * Method to add a value to an internal array that will be bound to a prepared SQL statement before query execution.
+     *
+     * Unlike bind(), the value is copied, so literals can be bound and changing a variable afterwards does not change
+     * the bound value.
+     *
+     * @param   array|string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
+     *                                                the form ':key', but can also be an integer.
+     * @param   mixed                 $value          The value that will be bound. It can be an array, in this case it has to be
+     *                                                same length of $key.
+     * @param   array|string          $dataType       Constant corresponding to a SQL datatype. It can be an array, in this case it
+     *                                                has to be same length of $key
+     * @param   integer               $length         The length of the variable. Usually required for OUTPUT parameters.
+     * @param   array                 $driverOptions  Optional driver options to be used.
+     *
+     * @return  $this
+     *
+     * @since   __DEPLOY_VERSION__
+     * @throws  \InvalidArgumentException
+     */
+    public function bindValue(
+        array|string|int $key,
+        mixed $value,
+        array|string $dataType = ParameterType::STRING,
+        int $length = 0,
+        array $driverOptions = []
+    ): static {
+        // $value is a copy here, so bind() references the copy instead of the caller's variable
+        return $this->bind($key, $value, $dataType, $length, $driverOptions);
+    }
+
+    /**
      * Method to add a variable to an internal array that will be bound to a prepared SQL statement before query execution.
+     *
+     * The variable is bound by reference: the value it has when the query is executed is used, not the value it has
+     * when bind() is called. Use bindValue() to bind a literal or the current value of a variable.
      *
      * @param   array|string|integer  $key            The key that will be used in your SQL query to reference the value. Usually of
      *                                                the form ':key', but can also be an integer.
