@@ -1445,10 +1445,11 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     /**
      * Quotes and optionally escapes a string to database requirements for use in database queries.
      *
-     * @param   array|string  $text    A string or an array of strings to quote.
-     * @param   boolean       $escape  True (default) to escape the string, false to leave it unchanged.
+     * @param   mixed    $text    A scalar or an array of scalars to quote. Other values are deprecated and will not be
+     *                            accepted in 5.0.
+     * @param   boolean  $escape  True (default) to escape the string, false to leave it unchanged.
      *
-     * @return  array|string  The quoted input string.
+     * @return  array|string  The quoted string, or an array of quoted strings for an array.
      *
      * @since   1.0
      */
@@ -1462,7 +1463,30 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
             return $text;
         }
 
+        $this->checkQuoteInput($text);
+
         return '\'' . ($escape ? $this->escape($text) : $text) . '\'';
+    }
+
+    /**
+     * Trigger a deprecation for values that quote() will not accept in 5.0.
+     *
+     * @param   mixed  $text  The value passed to quote().
+     *
+     * @return  void
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    protected function checkQuoteInput($text): void
+    {
+        if ($text !== null && !\is_scalar($text) && !$text instanceof \Stringable) {
+            trigger_deprecation(
+                'joomla/database',
+                '__DEPLOY_VERSION__',
+                'Passing a value of type %s to quote() is deprecated and will throw a TypeError in 5.0; pass a scalar or an array of scalars.',
+                get_debug_type($text)
+            );
+        }
     }
 
     /**

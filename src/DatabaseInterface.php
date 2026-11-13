@@ -93,10 +93,10 @@ interface DatabaseInterface
     /**
      * Escapes a string for usage in an SQL statement.
      *
-     * @param   string   $text   The string to be escaped.
-     * @param   boolean  $extra  Optional parameter to provide extra escaping.
+     * @param   string|int|float  $text   The string to be escaped. Integers and floats are returned as numbers.
+     * @param   boolean           $extra  Optional parameter to provide extra escaping.
      *
-     * @return  string   The escaped string.
+     * @return  string|int  The escaped string; an integer input is returned unchanged.
      *
      * @since   2.0.0
      */
@@ -467,10 +467,11 @@ interface DatabaseInterface
     /**
      * Quotes and optionally escapes a string to database requirements for use in database queries.
      *
-     * @param   array|string  $text    A string or an array of strings to quote.
-     * @param   boolean       $escape  True (default) to escape the string, false to leave it unchanged.
+     * @param   array|string|int|float|null  $text    A scalar or an array of scalars to quote. Other values are
+     *                                               deprecated and will not be accepted in 5.0.
+     * @param   boolean                      $escape  True (default) to escape the string, false to leave it unchanged.
      *
-     * @return  array|string  The quoted input string.
+     * @return  array|string  The quoted string, or an array of quoted strings for an array.
      *
      * @since   2.0.0
      */

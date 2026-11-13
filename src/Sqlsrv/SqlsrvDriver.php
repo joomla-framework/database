@@ -259,6 +259,8 @@ class SqlsrvDriver extends DatabaseDriver
             return parent::quote($text, $escape);
         }
 
+        $this->checkQuoteInput($text);
+
         // To support unicode on MSSQL we have to add prefix N
         return 'N\'' . ($escape ? $this->escape($text) : $text) . '\'';
     }
