@@ -829,7 +829,7 @@ class SqlsrvDriver extends DatabaseDriver
         }
 
         $savepoint = 'SP_' . $this->transactionDepth;
-        $this->setQuery('BEGIN TRANSACTION ' . $this->quoteName($savepoint))->execute();
+        $this->setQuery('SAVE TRANSACTION ' . $this->quoteName($savepoint))->execute();
 
         $this->transactionDepth++;
     }
