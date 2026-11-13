@@ -234,6 +234,24 @@ class MysqlDriverTest extends AbstractDatabaseDriverTestCase
      * Overrides for parent class test cases
      */
 
+    #[TestDox('Empty strings for decimal and date columns are left out when inserting an object')]
+    public function testInsertObjectWithEmptyDecimalAndDate()
+    {
+        static::$connection->setQuery(
+            'CREATE TABLE ' . static::$connection->quoteName('#__emptyvalues') . ' ('
+            . '`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY, `amount` decimal(10,2) NOT NULL DEFAULT 0, `day` date NULL)'
+        )->execute();
+
+        $row = (object) ['id' => null, 'amount' => '', 'day' => ''];
+
+        $this->assertTrue(static::$connection->insertObject('#__emptyvalues', $row, 'id'));
+
+        $this->assertEquals(
+            ['amount' => '0.00', 'day' => null],
+            static::$connection->setQuery('SELECT `amount`, `day` FROM ' . static::$connection->quoteName('#__emptyvalues'))->loadAssoc()
+        );
+    }
+
     /**
      * @param   string   $table     The name of the database table.
      * @param   boolean  $typeOnly  True (default) to only return field types.

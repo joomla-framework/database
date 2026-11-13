@@ -707,6 +707,11 @@ class MysqliDriver extends DatabaseDriver implements UTF8MB4SupportInterface
                 continue;
             }
 
+            // Ignore empty values for the other numeric and temporal types too, which strict mode rejects
+            if ($v === '' && preg_match('/^(decimal|numeric|float|double|real|bit|date|time|timestamp|year)/i', $tableColumns[$k])) {
+                continue;
+            }
+
             // Prepare and sanitize the fields and values for the database query.
             $fields[] = $this->quoteName($k);
             $values[] = $this->quote($v);
