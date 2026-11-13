@@ -182,15 +182,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     protected $errorMsg;
 
     /**
-     * DatabaseDriver instances container.
-     *
-     * @var    DatabaseDriver[]
-     * @since  1.0
-     * @deprecated  3.0  Singleton storage will no longer be supported.
-     */
-    protected static $instances = [];
-
-    /**
      * The minimum supported database version.
      *
      * @var    string
@@ -263,55 +254,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
         }
 
         return self::$connectors;
-    }
-
-    /**
-     * Method to return a DatabaseDriver instance based on the given options.
-     *
-     * There are three global options and then the rest are specific to the database driver.
-     *
-     * - The 'driver' option defines which DatabaseDriver class is used for the connection -- the default is 'mysqli'.
-     * - The 'database' option determines which database is to be used for the connection.
-     * - The 'select' option determines whether the connector should automatically select the chosen database.
-     *
-     * Instances are unique to the given options and new objects are only created when a unique options array is
-     * passed into the method.  This ensures that we don't end up with unnecessary database connection resources.
-     *
-     * @param   array  $options  Parameters to be passed to the database driver.
-     *
-     * @return  DatabaseDriver
-     *
-     * @since   1.0
-     * @throws  \RuntimeException
-     * @deprecated  3.0  Use DatabaseFactory::getDriver() instead
-     */
-    public static function getInstance(array $options = [])
-    {
-        trigger_deprecation(
-            'joomla/database',
-            '2.0.0',
-            '%s() is deprecated and will be removed in 3.0, use %s::getDriver() instead.',
-            __METHOD__,
-            DatabaseFactory::class
-        );
-
-        // Sanitize the database connector options.
-        $options['driver']   = isset($options['driver']) ? preg_replace('/[^A-Z0-9_\.-]/i', '', $options['driver']) : 'mysqli';
-        $options['database'] = $options['database'] ?? null;
-        $options['select']   = $options['select'] ?? true;
-        $options['factory']  = $options['factory'] ?? new DatabaseFactory();
-        $options['monitor']  = $options['monitor'] ?? null;
-
-        // Get the options signature for the database connector.
-        $signature = md5(serialize($options));
-
-        // If we already have a database connector instance for these options then just use that.
-        if (empty(self::$instances[$signature])) {
-            // Set the new connector to the global instances based on signature.
-            self::$instances[$signature] = $options['factory']->getDriver($options['driver'], $options);
-        }
-
-        return self::$instances[$signature];
     }
 
     /**
@@ -421,43 +363,6 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
         }
 
         return $queries;
-    }
-
-    /**
-     * Magic method to access properties of the database driver.
-     *
-     * @param   string  $name  The name of the property.
-     *
-     * @return  mixed   A value if the property name is valid, null otherwise.
-     *
-     * @since       1.4.0
-     * @deprecated  3.0  This is a B/C proxy since $this->name was previously public
-     */
-    public function __get($name)
-    {
-        switch ($name) {
-            case 'name':
-                trigger_deprecation(
-                    'joomla/database',
-                    '1.4.0',
-                    'Accessing the name property of %s is deprecated, use the getName() method instead.',
-                    self::class
-                );
-
-                return $this->getName();
-
-            default:
-                $trace = debug_backtrace();
-                trigger_error(
-                    sprintf(
-                        'Undefined property via __get(): %1$s in %2$s on line %3$s',
-                        $name,
-                        $trace[0]['file'],
-                        $trace[0]['line']
-                    ),
-                    \E_USER_NOTICE
-                );
-        }
     }
 
     /**
@@ -974,26 +879,18 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     }
 
     /**
-    * Get the current query object or a new DatabaseQuery object.
-    *
-    * @param   boolean  $new  False to return the current query object, True to return a new DatabaseQuery object.
-    *                         The $new parameter is deprecated in 2.2 and will be removed in 5.0, use createQuery() instead.
-    *
-    * @return  DatabaseQuery
-    *
-    * @since   1.0
-    */
-    public function getQuery($new = false)
+     * Get the current query object.
+     *
+     * @return  QueryInterface|null
+     *
+     * @since   1.0
+     * @throws  \InvalidArgumentException for getQuery(true), which was removed in 5.0; use createQuery()
+     */
+    public function getQuery()
     {
-        if ($new) {
-            trigger_deprecation(
-                'joomla/database',
-                '2.2.0',
-                'The parameter $new is deprecated and will be removed in 5.0, use %s::createQuery() instead.',
-                self::class
-            );
-
-            return $this->createQuery();
+        // Fail loudly instead of returning the current query to callers that still expect getQuery(true) to create one
+        if (\func_num_args() > 0 && \func_get_arg(0)) {
+            throw new \InvalidArgumentException(sprintf('%s() no longer creates a query, use createQuery() to create a new query.', __METHOD__));
         }
 
         return $this->sql;
@@ -1699,17 +1596,20 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
     /**
      * Sets the SQL statement string for later execution.
      *
-     * @param   string|QueryInterface  $query   The SQL statement to set either as a Query object or a string.
-     * @param   integer                $offset  The affected row offset to set. {@deprecated 3.0 Use LimitableInterface::setLimit() instead}
-     * @param   integer                $limit   The maximum affected rows to set. {@deprecated 3.0 Use LimitableInterface::setLimit() instead}
+     * @param   string|QueryInterface  $query  The SQL statement to set either as a Query object or a string.
      *
      * @return  $this
      *
      * @since   1.0
      * @throws  \InvalidArgumentException
      */
-    public function setQuery($query, $offset = 0, $limit = 0)
+    public function setQuery($query)
     {
+        // Fail loudly instead of silently ignoring a limit passed the 4.x way
+        if (\func_num_args() > 1) {
+            throw new \InvalidArgumentException(sprintf('The offset and limit arguments of %s() were removed in 5.0, use %s::setLimit().', __METHOD__, QueryInterface::class));
+        }
+
         $this->connect();
 
         $this->freeResult();
@@ -1727,26 +1627,8 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
             );
         }
 
-        if ($offset > 0 || $limit > 0) {
-            trigger_deprecation(
-                'joomla/database',
-                '2.0.0',
-                'The "$offset" and "$limit" arguments of %s() are deprecated and will be removed in 3.0, use %s::setLimit() instead.',
-                __METHOD__,
-                QueryInterface::class
-            );
-        }
-
-        // Check for values set on the query object and use those if there is a zero value passed here
-        if ($limit === 0 && $query->limit > 0) {
-            $limit = $query->limit;
-        }
-
-        if ($offset === 0 && $query->offset > 0) {
-            $offset = $query->offset;
-        }
-
-        $query->setLimit($limit, $offset);
+        $limit  = (int) $query->limit;
+        $offset = (int) $query->offset;
 
         $sql = $this->replacePrefix((string) $query);
 

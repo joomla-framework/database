@@ -299,23 +299,12 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    #[TestDox('The first row of a result set can be loaded as an associative array, using old getQuery(true) syntax')]
-    public function testLoadAssocWithOldGetQueryTrueSyntax()
+    #[TestDox('getQuery(true) no longer creates a query')]
+    public function testGetQueryWithArgumentThrows()
     {
-        $this->loadExampleData();
+        $this->expectException(\InvalidArgumentException::class);
 
-        $result = static::$connection->setQuery(
-            static::$connection->getQuery(true)
-                ->select('title')
-                ->from('#__dbtest')
-        )->loadAssoc();
-
-        $this->assertEquals(
-            [
-                'title' => 'Testing1',
-            ],
-            $result
-        );
+        static::$connection->getQuery(true);
     }
 
     #[TestDox('The first row of a result set can be loaded as an associative array')]
@@ -648,38 +637,12 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
-    #[TestDox('A QueryInterface object can be set to the driver with an offset or limit')]
-    public function testSetQueryWithQueryObjectWithOffsetAndLimit()
+    #[TestDox('The removed offset and limit arguments of setQuery() are rejected')]
+    public function testSetQueryWithOffsetAndLimitThrows()
     {
-        $query = static::$connection->createQuery()
-            ->select('*')
-            ->from('#__dbtest');
+        $this->expectException(\InvalidArgumentException::class);
 
-        $this->assertSame(
-            static::$connection,
-            static::$connection->setQuery($query, 3, 10),
-            'The database driver supports method chaining'
-        );
-
-        $queryFromDriver = static::$connection->getQuery(false);
-
-        $this->assertSame(
-            $query,
-            $queryFromDriver,
-            'The injected query object should be returned'
-        );
-
-        $this->assertSame(
-            3,
-            $queryFromDriver->offset,
-            'An offset should be set to the query object.'
-        );
-
-        $this->assertSame(
-            10,
-            $queryFromDriver->limit,
-            'A limit should be set to the query object.'
-        );
+        static::$connection->setQuery(static::$connection->createQuery()->select('*')->from('#__dbtest'), 3, 10);
     }
 
     #[TestDox('A QueryInterface object can be set to the driver while retraining the offset and limit from the query')]
@@ -806,7 +769,7 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
             ->unionAll($union2)
             ->order('id');
 
-        $result = static::$connection->setQuery($query, 0, 3)->loadAssocList();
+        $result = static::$connection->setQuery($query->setLimit(3))->loadAssocList();
 
         $this->assertEquals(
             [

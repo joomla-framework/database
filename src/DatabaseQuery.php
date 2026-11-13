@@ -846,29 +846,6 @@ abstract class DatabaseQuery implements QueryInterface
     }
 
     /**
-     * Creates a HTML formatted dump of the query for debugging purposes.
-     *
-     * Usage:
-     * echo $query->dump();
-     *
-     * @return  string
-     *
-     * @since   1.0
-     * @deprecated  3.0  Deprecated without replacement
-     */
-    public function dump()
-    {
-        trigger_deprecation(
-            'joomla/database',
-            '2.0.0',
-            '%s() is deprecated and will be removed in 3.0.',
-            __METHOD__
-        );
-
-        return '<pre class="jdatabasequery">' . str_replace('#__', $this->db->getPrefix(), $this) . '</pre>';
-    }
-
-    /**
      * Add a table name to the DELETE clause of the query.
      *
      * Usage:
