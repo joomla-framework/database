@@ -1772,6 +1772,11 @@ abstract class DatabaseQuery implements QueryInterface
      */
     public function whereIn(string $keyName, array $keyValues, $dataType = ParameterType::INTEGER)
     {
+        // Nothing is in an empty list
+        if (!$keyValues) {
+            return $this->where('1 = 0');
+        }
+
         return $this->where(
             $keyName . ' IN (' . implode(',', $this->bindArray($keyValues, $dataType)) . ')'
         );
@@ -1796,6 +1801,11 @@ abstract class DatabaseQuery implements QueryInterface
      */
     public function whereNotIn(string $keyName, array $keyValues, $dataType = ParameterType::INTEGER)
     {
+        // Everything is not in an empty list
+        if (!$keyValues) {
+            return $this->where('1 = 1');
+        }
+
         return $this->where(
             $keyName . ' NOT IN (' . implode(',', $this->bindArray($keyValues, $dataType)) . ')'
         );
@@ -1819,6 +1829,11 @@ abstract class DatabaseQuery implements QueryInterface
      */
     public function extendWhere($outerGlue, $conditions, $innerGlue = 'AND')
     {
+        // Without a WHERE clause there is nothing to extend
+        if ($this->where === null) {
+            return $this->where($conditions, $innerGlue);
+        }
+
         // Replace the current WHERE with a new one which has the old one as an unnamed child.
         $this->where = new Query\QueryElement('WHERE', $this->where->setName('()'), " $outerGlue ");
 
@@ -2225,7 +2240,7 @@ abstract class DatabaseQuery implements QueryInterface
 
             switch ($match[5]) {
                 case 'a':
-                    return 0 + $replacement;
+                    return is_numeric($replacement) ? 0 + $replacement : 0;
 
                 case 'e':
                     return $query->escape($replacement);

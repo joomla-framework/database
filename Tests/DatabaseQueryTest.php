@@ -769,6 +769,15 @@ class DatabaseQueryTest extends TestCase
         );
     }
 
+    #[TestDox('The whereIn and whereNotIn methods accept an empty list')]
+    public function testWhereInWithEmptyList()
+    {
+        $this->query->whereIn('foo', [])->whereNotIn('bar', []);
+
+        $this->assertSame(['1 = 0', '1 = 1'], $this->query->where->getElements());
+        $this->assertSame([], $this->query->getBounded());
+    }
+
     #[TestDox('The extendWhere method correctly overrides a WHERE query element')]
     public function testExtendWhere()
     {
@@ -803,6 +812,26 @@ class DatabaseQueryTest extends TestCase
             2,
             $this->query->where->getElements()
         );
+    }
+
+    #[TestDox('The orWhere and andWhere methods work without a previous WHERE clause')]
+    public function testOrWhereAndAndWhereWithoutWhere()
+    {
+        $this->query->orWhere(['foo', 'bar']);
+
+        $this->assertSame(['foo', 'bar'], $this->query->where->getElements());
+        $this->assertSame(' AND ', $this->query->where->getGlue(), 'The conditions are joined with the inner glue');
+
+        $query = new TestDatabaseQuery($this->db);
+        $query->andWhere('baz');
+
+        $this->assertSame(['baz'], $query->where->getElements());
+    }
+
+    #[TestDox('The format method casts %a arguments to a number')]
+    public function testFormatNumericArgument()
+    {
+        $this->assertSame('1.5 0 0', $this->query->format('%a %a %a', '1.5', 'abc'));
     }
 
     /**
