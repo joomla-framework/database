@@ -161,19 +161,19 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
             // If customised, add cipher suite, ca file path, ca path, private key file path and certificate file path to PDO driver options.
             foreach (['cipher', 'ca', 'capath', 'key', 'cert'] as $key => $value) {
                 if ($this->options['ssl'][$value] !== null) {
-                    $this->options['driverOptions'][constant('\PDO::MYSQL_ATTR_SSL_' . strtoupper($value))] = $this->options['ssl'][$value];
-                    $sslContextIsNull                                                                       = false;
+                    $this->options['driverOptions'][static::getSslAttribute($value)] = $this->options['ssl'][$value];
+                    $sslContextIsNull                                                  = false;
                 }
             }
 
             // PDO, if no cipher, ca, capath, cert and key are set, can't start TLS one-way connection, set a common ciphers suite to force it.
             if ($sslContextIsNull === true) {
-                $this->options['driverOptions'][\PDO::MYSQL_ATTR_SSL_CIPHER] = implode(':', static::$defaultCipherSuite);
+                $this->options['driverOptions'][static::getSslAttribute('cipher')] = implode(':', static::$defaultCipherSuite);
             }
 
-            // If customised, for capable systems (PHP 7.0.14+ and 7.1.4+) verify certificate chain and Common Name to driver options.
-            if ($this->options['ssl']['verify_server_cert'] !== null && defined('\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT')) {
-                $this->options['driverOptions'][\PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = $this->options['ssl']['verify_server_cert'];
+            // If customised, verify certificate chain and Common Name to driver options.
+            if ($this->options['ssl']['verify_server_cert'] !== null) {
+                $this->options['driverOptions'][static::getSslAttribute('verify_server_cert')] = $this->options['ssl']['verify_server_cert'];
             }
         }
 
@@ -222,6 +222,24 @@ class MysqlDriver extends PdoDriver implements UTF8MB4SupportInterface
         }
 
         $this->setOption(\PDO::ATTR_EMULATE_PREPARES, true);
+    }
+
+    /**
+     * Get the PDO attribute for an SSL option.
+     *
+     * PHP 8.4 added the MySQL specific attributes to Pdo\Mysql, and PHP 8.5 deprecates the PDO::MYSQL_ATTR_* constants.
+     *
+     * @param   string  $name  The SSL option, e.g. 'ca' or 'verify_server_cert'
+     *
+     * @return  integer
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    protected static function getSslAttribute(string $name): int
+    {
+        $prefix = PHP_VERSION_ID >= 80400 ? '\Pdo\Mysql::ATTR_SSL_' : '\PDO::MYSQL_ATTR_SSL_';
+
+        return \constant($prefix . strtoupper($name));
     }
 
     /**
