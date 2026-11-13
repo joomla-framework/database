@@ -299,15 +299,18 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
     #[TestDox('Queries can be run after calling a stored procedure that returns rows')]
     public function testQueryAfterCallingStoredProcedure()
     {
-        static::$connection->setQuery('DROP PROCEDURE IF EXISTS ' . static::$connection->quoteName('jtest_proc'))->execute();
-        static::$connection->setQuery('CREATE PROCEDURE ' . static::$connection->quoteName('jtest_proc') . '() SELECT 1')->execute();
+        // Older servers cannot prepare these statements, so run them on the native connection
+        static::$connection->connect();
+        $native = static::$connection->getConnection();
+        $native->query('DROP PROCEDURE IF EXISTS ' . static::$connection->quoteName('jtest_proc'));
+        $native->query('CREATE PROCEDURE ' . static::$connection->quoteName('jtest_proc') . '() SELECT 1');
 
         try {
             $this->assertEquals(1, static::$connection->setQuery('CALL ' . static::$connection->quoteName('jtest_proc') . '()')->loadResult());
             $this->assertEquals(1, static::$connection->setQuery('CALL ' . static::$connection->quoteName('jtest_proc') . '()')->loadResult());
             $this->assertEquals(2, static::$connection->setQuery('SELECT 2')->loadResult());
         } finally {
-            static::$connection->setQuery('DROP PROCEDURE IF EXISTS ' . static::$connection->quoteName('jtest_proc'))->execute();
+            $native->query('DROP PROCEDURE IF EXISTS ' . static::$connection->quoteName('jtest_proc'));
         }
     }
 
