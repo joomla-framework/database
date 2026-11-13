@@ -23,6 +23,11 @@
 			<file>Tests/DatabaseImporterTest.php</file>
 			<file>Tests/DatabaseIteratorTest.php</file>
 			<file>Tests/DatabaseQueryTest.php</file>
+			<file>Tests/Mysql/MysqlQueryTest.php</file>
+			<file>Tests/Mysqli/MysqliQueryTest.php</file>
+			<file>Tests/Pgsql/PgsqlQueryTest.php</file>
+			<file>Tests/Sqlite/SqliteQueryTest.php</file>
+			<file>Tests/Sqlsrv/SqlsrvQueryTest.php</file>
 		</testsuite>
 	</testsuites>
 </phpunit>
