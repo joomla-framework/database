@@ -330,6 +330,13 @@ class MysqliStatement implements StatementInterface
     public function closeCursor(): void
     {
         $this->statement->free_result();
+
+        // A CALL of a stored procedure returns further result sets; they must be consumed, or the next statement fails
+        // with "Commands out of sync"
+        while ($this->statement->more_results() && $this->statement->next_result()) {
+            $this->statement->free_result();
+        }
+
         $this->result = false;
     }
 
