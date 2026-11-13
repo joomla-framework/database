@@ -544,6 +544,38 @@ class SqliteDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
+    #[TestDox('Loading rows into a custom class is deprecated')]
+    public function testLoadObjectListWithCustomClassIsDeprecated()
+    {
+        $this->loadExampleData();
+
+        $deprecations = [];
+
+        set_error_handler(
+            function (int $errno, string $errstr) use (&$deprecations) {
+                $deprecations[] = $errstr;
+
+                return true;
+            },
+            E_USER_DEPRECATED
+        );
+
+        try {
+            $rows = static::$connection->setQuery(
+                static::$connection->createQuery()
+                    ->select(static::$connection->quoteName(['id', 'title']))
+                    ->from('#__dbtest')
+            )->loadObjectList('', \ArrayObject::class);
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertCount(4, $rows);
+        $this->assertInstanceOf(\ArrayObject::class, $rows[0], 'Custom classes still work in 4.x');
+        $this->assertCount(1, $deprecations);
+        $this->assertStringContainsString('loadObjectList() is deprecated', $deprecations[0]);
+    }
+
     #[TestDox('Binary values are correctly supported')]
     public function testQuoteAndDecodeBinary()
     {

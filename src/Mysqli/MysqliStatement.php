@@ -487,6 +487,11 @@ class MysqliStatement implements StatementInterface
             case FetchMode::STANDARD_OBJECT:
                 return (object) array_combine($this->columnNames, $values);
 
+            case FetchMode::CUSTOM_OBJECT:
+                throw new \InvalidArgumentException(
+                    'The MySQLi driver cannot fetch rows into a custom class. Fetch stdClass objects and map them yourself.'
+                );
+
             default:
                 throw new \InvalidArgumentException("Unknown fetch type '{$fetchStyle}'");
         }
