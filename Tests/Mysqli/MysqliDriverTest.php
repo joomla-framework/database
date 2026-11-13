@@ -238,7 +238,6 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
      * @param   boolean  $typeOnly  True (default) to only return field types.
      * @param   array    $expected  Expected result.
      */
-    #[DataProvider('dataGetTableColumns')]
     #[TestDox('Empty strings for decimal and date columns are left out when inserting an object')]
     public function testInsertObjectWithEmptyDecimalAndDate()
     {
@@ -257,6 +256,7 @@ class MysqliDriverTest extends AbstractDatabaseDriverTestCase
         );
     }
 
+    #[DataProvider('dataGetTableColumns')]
     #[TestDox('Information about the columns of a database table is returned')]
     public function testGetTableColumns(string $table, bool $typeOnly, array $expected)
     {
