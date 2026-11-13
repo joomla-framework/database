@@ -1523,6 +1523,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      * @return  array|string  The quote wrapped name, same type of $name.
      *
      * @since   1.0
+     * @throws  \InvalidArgumentException if $name is an array and $as is neither null nor an array
      */
     public function quoteName($name, $as = null)
     {
@@ -1542,12 +1543,21 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
             foreach ($name as $str) {
                 $fin[] = $this->quoteName($str);
             }
-        } elseif (\is_array($name) && (\count($name) === \count($as))) {
+        } elseif (!\is_array($as)) {
+            throw new \InvalidArgumentException('An array of names needs an array of aliases of the same length.');
+        } elseif (\count($name) === \count($as)) {
             $count = \count($name);
 
             for ($i = 0; $i < $count; $i++) {
                 $fin[] = $this->quoteName($name[$i], $as[$i]);
             }
+        } else {
+            trigger_deprecation(
+                'joomla/database',
+                '__DEPLOY_VERSION__',
+                'Passing arrays of different length to %s() is deprecated and will throw an InvalidArgumentException in 5.0.',
+                __METHOD__
+            );
         }
 
         return $fin;

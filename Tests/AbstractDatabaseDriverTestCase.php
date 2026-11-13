@@ -585,6 +585,39 @@ abstract class AbstractDatabaseDriverTestCase extends DatabaseTestCase
         );
     }
 
+    #[TestDox('Arrays of different length passed to quoteName() trigger a deprecation')]
+    public function testQuoteNameWithMismatchedAliases()
+    {
+        $deprecations = [];
+
+        set_error_handler(
+            function (int $errno, string $errstr) use (&$deprecations) {
+                $deprecations[] = $errstr;
+
+                return true;
+            },
+            E_USER_DEPRECATED
+        );
+
+        try {
+            $result = static::$connection->quoteName(['a', 'b'], ['x']);
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertSame([], $result);
+        $this->assertCount(1, $deprecations);
+        $this->assertStringContainsString('will throw an InvalidArgumentException in 5.0', $deprecations[0]);
+    }
+
+    #[TestDox('An array of names with a single alias is rejected by quoteName()')]
+    public function testQuoteNameWithArrayAndStringAlias()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        static::$connection->quoteName(['a', 'b'], 'x');
+    }
+
     #[TestDox('A database table can be renamed')]
     public function testRenameTable()
     {
