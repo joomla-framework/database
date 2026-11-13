@@ -854,14 +854,14 @@ abstract class DatabaseQuery implements QueryInterface
      * @return  string
      *
      * @since   1.0
-     * @deprecated  3.0  Deprecated without replacement
+     * @deprecated  5.0  Deprecated without replacement
      */
     public function dump()
     {
         trigger_deprecation(
             'joomla/database',
             '2.0.0',
-            '%s() is deprecated and will be removed in 3.0.',
+            '%s() is deprecated and will be removed in 5.0.',
             __METHOD__
         );
 

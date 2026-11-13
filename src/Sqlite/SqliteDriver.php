@@ -206,11 +206,11 @@ class SqliteDriver extends PdoDriver
     /**
      * Shows the table CREATE statement that creates the given tables.
      *
-     * Note: Doesn't appear to have support in SQLite
+     * Note: Not supported by this driver. It returns the given table names, not CREATE statements.
      *
      * @param   mixed  $tables  A table name or a list of table names.
      *
-     * @return  array  A list of the create SQL for the tables.
+     * @return  array  The given table names.
      *
      * @since   1.0
      * @throws  \RuntimeException

@@ -186,7 +186,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      *
      * @var    DatabaseDriver[]
      * @since  1.0
-     * @deprecated  3.0  Singleton storage will no longer be supported.
+     * @deprecated  5.0  Singleton storage will no longer be supported.
      */
     protected static $instances = [];
 
@@ -283,14 +283,14 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      *
      * @since   1.0
      * @throws  \RuntimeException
-     * @deprecated  3.0  Use DatabaseFactory::getDriver() instead
+     * @deprecated  5.0  Use DatabaseFactory::getDriver() instead
      */
     public static function getInstance(array $options = [])
     {
         trigger_deprecation(
             'joomla/database',
             '2.0.0',
-            '%s() is deprecated and will be removed in 3.0, use %s::getDriver() instead.',
+            '%s() is deprecated and will be removed in 5.0, use %s::getDriver() instead.',
             __METHOD__,
             DatabaseFactory::class
         );
@@ -431,7 +431,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      * @return  mixed   A value if the property name is valid, null otherwise.
      *
      * @since       1.4.0
-     * @deprecated  3.0  This is a B/C proxy since $this->name was previously public
+     * @deprecated  5.0  This is a B/C proxy since $this->name was previously public
      */
     public function __get($name)
     {
@@ -1700,8 +1700,8 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      * Sets the SQL statement string for later execution.
      *
      * @param   string|QueryInterface  $query   The SQL statement to set either as a Query object or a string.
-     * @param   integer                $offset  The affected row offset to set. {@deprecated 3.0 Use LimitableInterface::setLimit() instead}
-     * @param   integer                $limit   The maximum affected rows to set. {@deprecated 3.0 Use LimitableInterface::setLimit() instead}
+     * @param   integer                $offset  The affected row offset to set. {@deprecated 5.0 Use QueryInterface::setLimit() instead}
+     * @param   integer                $limit   The maximum affected rows to set. {@deprecated 5.0 Use QueryInterface::setLimit() instead}
      *
      * @return  $this
      *
@@ -1731,7 +1731,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
             trigger_deprecation(
                 'joomla/database',
                 '2.0.0',
-                'The "$offset" and "$limit" arguments of %s() are deprecated and will be removed in 3.0, use %s::setLimit() instead.',
+                'The "$offset" and "$limit" arguments of %s() are deprecated and will be removed in 5.0, use %s::setLimit() instead.',
                 __METHOD__,
                 QueryInterface::class
             );

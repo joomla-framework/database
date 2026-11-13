@@ -281,7 +281,9 @@ class SqlsrvDriver extends DatabaseDriver
     /**
      * Determines if the connection to the server is active.
      *
-     * @return  boolean  True if connected to the database engine.
+     * Note: Not implemented by this driver; it always returns true without checking the connection.
+     *
+     * @return  boolean  Always true.
      *
      * @since   1.0
      */
@@ -322,7 +324,9 @@ class SqlsrvDriver extends DatabaseDriver
     /**
      * Method to get the database collation in use by sampling a text field of a table in the database.
      *
-     * @return  string|boolean  The collation in use by the database or boolean false if not supported.
+     * Note: Not implemented by this driver; it returns a fixed string instead of asking the server.
+     *
+     * @return  string|boolean  Always 'MSSQL UTF-8 (UCS2)'.
      *
      * @since   1.0
      */
@@ -335,7 +339,9 @@ class SqlsrvDriver extends DatabaseDriver
     /**
      * Method to get the database connection collation in use by sampling a text field of a table in the database.
      *
-     * @return  string|boolean  The collation in use by the database connection (string) or boolean false if not supported.
+     * Note: Not implemented by this driver; it returns a fixed string instead of asking the server.
+     *
+     * @return  string|boolean  Always 'MSSQL UTF-8 (UCS2)'.
      *
      * @since   1.6.0
      */
@@ -418,7 +424,7 @@ class SqlsrvDriver extends DatabaseDriver
      *
      * @param   mixed  $tables  A table name or a list of table names.
      *
-     * @return  array  A list of the create SQL for the tables.
+     * @return  array  Always an empty array.
      *
      * @since   1.0
      * @throws  \RuntimeException
@@ -433,9 +439,11 @@ class SqlsrvDriver extends DatabaseDriver
     /**
      * Get the details list of keys for a table.
      *
+     * Note: Not implemented by this driver; it always returns an empty array.
+     *
      * @param   string  $table  The name of the table.
      *
-     * @return  array  An array of the column specification for the table.
+     * @return  array  Always an empty array.
      *
      * @since   1.0
      * @throws  \RuntimeException
