@@ -258,7 +258,7 @@ class MysqliImporter extends DatabaseImporter
         $blobs = ['text', 'smalltext', 'mediumtext', 'largetext'];
 
         $fName    = (string) $field['Field'];
-        $fType    = (string) $field['Type'];
+        $fType    = $this->checkColumnType((string) $field['Type']);
         $fNull    = (string) $field['Null'];
         $fDefault = isset($field['Default']) ? (string) $field['Default'] : null;
         $fExtra   = (string) $field['Extra'];
@@ -286,6 +286,16 @@ class MysqliImporter extends DatabaseImporter
         }
 
         if ($fExtra) {
+            // Only the attributes MySQL reports in the Extra column are allowed, not arbitrary SQL
+            if (!preg_match('/^(?:\s*(?:auto_increment|default_generated|invisible|on update current_timestamp(?:\(\d*\))?))+\s*$/i', $fExtra)) {
+                throw new \RuntimeException(sprintf('Invalid column attributes "%s" in the import file.', $fExtra));
+            }
+
+            // A generated default is an expression; only allow the current timestamp, quote anything else
+            if ($fDefault !== null && !preg_match('/^(?:current_timestamp(?:\(\d*\))?|now\(\))$/i', $fDefault)) {
+                $fDefault = $this->db->quote($fDefault);
+            }
+
             // MySql 8.0 introduces DEFAULT_GENERATED in the extra column and should be replaced with the default value
             if (stristr($fExtra, 'DEFAULT_GENERATED') !== false) {
                 $sql .= ' ' . strtoupper(str_ireplace('DEFAULT_GENERATED', 'DEFAULT ' . $fDefault, $fExtra));
@@ -384,7 +394,7 @@ class MysqliImporter extends DatabaseImporter
             $kLength = '';
 
             if (!empty($column['Sub_part'])) {
-                $kLength = '(' . $column['Sub_part'] . ')';
+                $kLength = '(' . (int) $column['Sub_part'] . ')';
             }
 
             $kColumns[] = $this->db->quoteName((string) $column['Column_name']) . $kLength;

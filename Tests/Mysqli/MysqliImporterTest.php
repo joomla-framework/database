@@ -382,4 +382,63 @@ class MysqliImporterTest extends TestCase
 
         $this->assertSame($importer, $importer->check(), 'The importer supports method chaining');
     }
+
+    #[TestDox('SQL in the column type or attributes of an import file is rejected')]
+    public function testInjectedColumnDefinitionIsRejected()
+    {
+        $importer = new MysqliImporter();
+        $importer->setDbo($this->db);
+
+        $method = new \ReflectionMethod($importer, 'getColumnSql');
+
+        foreach (
+            [
+                '<field Field="a" Type="int; DROP TABLE x" Null="YES" Key="" Extra="" />',
+                '<field Field="a" Type="int" Null="YES" Key="" Extra="auto_increment; DROP TABLE x" />',
+            ] as $field
+        ) {
+            try {
+                $method->invoke($importer, new \SimpleXMLElement($field));
+                $this->fail('Expected the column definition to be rejected: ' . $field);
+            } catch (\RuntimeException $e) {
+                $this->assertStringContainsString('in the import file', $e->getMessage());
+            }
+        }
+
+        $this->assertSame(
+            '`a` enum(' . "'x','y'" . ') NOT NULL DEFAULT ' . "'x'",
+            $method->invoke($importer, new \SimpleXMLElement('<field Field="a" Type="enum(' . "'x','y'" . ')" Null="NO" Key="" Default="x" Extra="" />')),
+            'Valid types are still accepted'
+        );
+    }
+
+    #[TestDox('A semicolon in a default value does not split the CREATE TABLE statement')]
+    public function testSemicolonInDefaultKeepsStatementTogether()
+    {
+        $queries = [];
+
+        $db = $this->createStub(MysqliDriver::class);
+        $db->method('getPrefix')->willReturn('jos_');
+        $db->method('getTableList')->willReturn([]);
+        $db->method('quote')->willReturnCallback(fn ($text) => "'" . str_replace("'", "''", $text) . "'");
+        $db->method('quoteName')->willReturnCallback(fn ($name) => '`' . $name . '`');
+        $db->method('setQuery')->willReturnCallback(
+            function ($query) use (&$queries, $db) {
+                $queries[] = (string) $query;
+
+                return $db;
+            }
+        );
+
+        $xml = '<mysqldump><database name=""><table_structure name="#__semi">'
+            . '<field Field="a" Type="varchar(10)" Null="NO" Key="" Default="x;y" Extra="" />'
+            . '</table_structure></database></mysqldump>';
+
+        $importer = new MysqliImporter();
+        $importer->setDbo($db)->from($xml)->asXml()->mergeStructure();
+
+        $this->assertCount(1, $queries);
+        $this->assertStringContainsString("DEFAULT 'x;y'", $queries[0]);
+    }
 }
+

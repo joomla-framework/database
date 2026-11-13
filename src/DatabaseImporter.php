@@ -12,6 +12,9 @@ namespace Joomla\Database;
 /**
  * Joomla Framework Database Importer Class
  *
+ * Import files must come from a trusted source. Column types and attributes are validated, but parts of the
+ * structure, such as the index definitions in PostgreSQL exports, are executed as SQL.
+ *
  * @since  1.0
  */
 abstract class DatabaseImporter
@@ -281,6 +284,31 @@ abstract class DatabaseImporter
     }
 
     /**
+     * Check that a column type from an import file is a plain type declaration and not arbitrary SQL.
+     *
+     * Accepts a type name of one or more words, an optional length, precision or quoted value list in parentheses,
+     * optional modifiers such as "unsigned" and an optional array suffix.
+     *
+     * @param   string  $type  The column type from the import file.
+     *
+     * @return  string  The type, if it is valid.
+     *
+     * @since   __DEPLOY_VERSION__
+     * @throws  \RuntimeException if the type is not a plain type declaration.
+     */
+    protected function checkColumnType(string $type): string
+    {
+        $quoted = "'(?:[^'\\\\]|''|\\\\.)*'";
+        $values = '(?:[0-9, ]*|' . $quoted . '(?:\s*,\s*' . $quoted . ')*)';
+
+        if (!preg_match('/^[a-z][a-z0-9_ ]*(?:\(' . $values . '\))?[a-z ]*(?:\[\])?$/i', $type)) {
+            throw new \RuntimeException(sprintf('Invalid column type "%s" in the import file.', $type));
+        }
+
+        return $type;
+    }
+
+    /**
      * Merges the incoming structure definition with the existing structure.
      *
      * @return  void
@@ -317,10 +345,13 @@ abstract class DatabaseImporter
                 }
             } else {
                 // This is a new table.
+                // Split on statement boundaries only, not on semicolons inside quoted defaults or comments
                 $sql     = $this->xmlToCreate($table);
-                $queries = explode(';', (string) $sql);
+                $queries = DatabaseDriver::splitSql((string) $sql);
 
                 foreach ($queries as $query) {
+                    $query = rtrim($query, "; \t\n\r");
+
                     if (!empty($query)) {
                         $this->db->setQuery((string) $query);
                         $this->db->execute();

@@ -321,7 +321,7 @@ class PgsqlImporter extends DatabaseImporter
         $blobs = ['text', 'smalltext', 'mediumtext', 'largetext'];
 
         $fName = (string) $field['Field'];
-        $fType = (string) $field['Type'];
+        $fType = $this->checkColumnType((string) $field['Type']);
         $fNull = (string) $field['Null'];
 
         $fDefault = (isset($field['Default']) && $field['Default'] != 'NULL') ?
@@ -368,11 +368,16 @@ class PgsqlImporter extends DatabaseImporter
     protected function getColumnSql(\SimpleXMLElement $field)
     {
         $fName = (string) $field['Field'];
-        $fType = (string) $field['Type'];
+        $fType = $this->checkColumnType((string) $field['Type']);
         $fNull = (string) $field['Null'];
 
         if (strpos($field['Default'], '::') != false) {
             $fDefault = strstr($field['Default'], '::', true);
+
+            // The part before the cast must be a plain literal or a sequence call, not arbitrary SQL
+            if (!preg_match("/^(?:'(?:[^']|'')*'|-?[0-9.]+|nextval\('(?:[^']|'')*')$/i", $fDefault)) {
+                $fDefault = $this->db->quote($fDefault);
+            }
         } else {
             $fDefault = isset($field['Default']) && strlen($field['Default']) > 0
                 ? preg_match('/^[0-9]$/', $field['Default']) ? $field['Default'] : $this->db->quote((string) $field['Default'])
