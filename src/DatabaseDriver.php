@@ -1523,6 +1523,7 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
      * @return  array|string  The quote wrapped name, same type of $name.
      *
      * @since   1.0
+     * @throws  \InvalidArgumentException if $name is an array and $as is not an array of the same length
      */
     public function quoteName($name, $as = null)
     {
@@ -1542,7 +1543,9 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
             foreach ($name as $str) {
                 $fin[] = $this->quoteName($str);
             }
-        } elseif (\is_array($name) && (\count($name) === \count($as))) {
+        } elseif (!\is_array($as) || \count($name) !== \count($as)) {
+            throw new \InvalidArgumentException('An array of names needs an array of aliases of the same length.');
+        } else {
             $count = \count($name);
 
             for ($i = 0; $i < $count; $i++) {
