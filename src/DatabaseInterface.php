@@ -241,17 +241,14 @@ interface DatabaseInterface
     public function getNumRows();
 
     /**
-     * Get the current query object. (Deprecated: Or a new QueryInterface object).
+     * Get the current query object.
      *
-     * @param   boolean  $new  False to return the current query object, True to return a new DatabaseQuery object.
-     *                         The $new parameter is deprecated in 2.2 and will be removed in 5.0, use createQuery() instead.
-     *
-     * @return  QueryInterface
+     * @return  QueryInterface|null
      *
      * @since   2.0.0
      * @throws  \RuntimeException
      */
-    public function getQuery($new = false);
+    public function getQuery();
 
     /**
      * Get the server family type.
@@ -544,15 +541,13 @@ interface DatabaseInterface
     /**
      * Sets the SQL statement string for later execution.
      *
-     * @param   mixed    $query   The SQL statement to set either as a Query object or a string.
-     * @param   integer  $offset  The affected row offset to set. {@deprecated 3.0 Use LimitableInterface::setLimit() instead}
-     * @param   integer  $limit   The maximum affected rows to set. {@deprecated 3.0 Use LimitableInterface::setLimit() instead}
+     * @param   mixed  $query  The SQL statement to set either as a Query object or a string.
      *
      * @return  $this
      *
      * @since   2.0.0
      */
-    public function setQuery($query, $offset = 0, $limit = 0);
+    public function setQuery($query);
 
     /**
      * Method to commit a transaction.
