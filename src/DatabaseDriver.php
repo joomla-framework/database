@@ -1618,6 +1618,19 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
                 $j = $n;
             }
 
+            // A comment before the next quote is copied as it is, so that quotes inside it are not taken as literals
+            $comment = $this->findComment($sql, $startPos, $j);
+
+            if ($comment !== null) {
+                [$commentStart, $commentEnd] = $comment;
+
+                $literal .= str_replace($prefix, $this->tablePrefix, substr($sql, $startPos, $commentStart - $startPos));
+                $literal .= substr($sql, $commentStart, $commentEnd - $commentStart);
+                $startPos = $commentEnd;
+
+                continue;
+            }
+
             $literal .= str_replace($prefix, $this->tablePrefix, substr($sql, $startPos, $j - $startPos));
             $startPos = $j;
 
@@ -1666,6 +1679,57 @@ abstract class DatabaseDriver implements DatabaseInterface, DispatcherAwareInter
         }
 
         return $literal;
+    }
+
+    /**
+     * Find the first comment between two positions of an SQL statement.
+     *
+     * Recognises block comments and line comments starting with two dashes followed by whitespace, which is a
+     * comment in every supported database. MySQL's # comments are not recognised, because # starts the table prefix.
+     *
+     * @param   string   $sql    The SQL statement.
+     * @param   integer  $start  The position to start searching at.
+     * @param   integer  $end    The position before which the comment has to start.
+     *
+     * @return  integer[]|null  The start and end position of the comment, or null if there is none.
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    private function findComment(string $sql, int $start, int $end): ?array
+    {
+        $n = \strlen($sql);
+
+        while ($start < $end) {
+            $line  = strpos($sql, '--', $start);
+            $block = strpos($sql, '/*', $start);
+
+            if ($line !== false && ($block === false || $line < $block)) {
+                if ($line >= $end) {
+                    return null;
+                }
+
+                // In MySQL, two dashes only start a comment when followed by whitespace or the end of the statement
+                if ($line + 2 < $n && !ctype_space($sql[$line + 2])) {
+                    $start = $line + 2;
+
+                    continue;
+                }
+
+                $commentEnd = strpos($sql, "\n", $line);
+
+                return [$line, $commentEnd === false ? $n : $commentEnd + 1];
+            }
+
+            if ($block === false || $block >= $end) {
+                return null;
+            }
+
+            $commentEnd = strpos($sql, '*/', $block + 2);
+
+            return [$block, $commentEnd === false ? $n : $commentEnd + 2];
+        }
+
+        return null;
     }
 
     /**
