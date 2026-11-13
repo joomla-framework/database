@@ -2029,7 +2029,7 @@ abstract class DatabaseQuery implements QueryInterface
      *
      * @since   1.5.0
      */
-    public function &getBounded($key = null)
+    public function getBounded($key = null)
     {
         if (empty($key)) {
             return $this->bounded;
