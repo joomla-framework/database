@@ -98,7 +98,10 @@ class PgsqlDriver extends PdoDriver
 
         parent::connect();
 
-        $this->setQuery('SET standard_conforming_strings = off')->execute();
+        // https://www.postgresql.org/docs/release/19.0/
+        if (version_compare($this->getVersion(), '19.0', '<')) {
+            $this->setQuery('SET standard_conforming_strings = off')->execute();
+        }
     }
 
     /**
