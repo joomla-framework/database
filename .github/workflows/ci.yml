@@ -155,7 +155,7 @@ jobs:
         strategy:
             matrix:
                 php_version: ['8.3', '8.4', '8.5']
-                db_version: ['10', '12', '18']
+                db_version: ['10', '12', '18', '19']
         steps:
             - uses: actions/checkout@v6
             - name: Run Unit tests
