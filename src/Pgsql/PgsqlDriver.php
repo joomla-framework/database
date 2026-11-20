@@ -1079,4 +1079,45 @@ class PgsqlDriver extends PdoDriver
 
         return $data;
     }
+
+    /**
+     * Method to escape a string for usage in an SQL statement.
+     *
+     * Oracle escaping reference:
+     * http://www.orafaq.com/wiki/SQL_FAQ#How_does_one_escape_special_characters_when_writing_SQL_queries.3F
+     *
+     * SQLite escaping notes:
+     * http://www.sqlite.org/faq.html#q14
+     *
+     * Method body is as implemented by the Zend Framework
+     *
+     * Note: Using query objects with bound variables is preferable to the below.
+     *
+     * @param   string   $text   The string to be escaped.
+     * @param   boolean  $extra  Unused optional parameter to provide extra escaping.
+     *
+     * @return  string  The escaped string.
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function escape($text, $extra = false)
+    {
+        if (\is_int($text)) {
+            return $text;
+        }
+
+        if (\is_float($text)) {
+            // Force the dot as a decimal point.
+            return str_replace(',', '.', (string) $text);
+        }
+
+        $text = str_replace("'", "''", (string) $text);
+
+        // https://www.postgresql.org/docs/release/19.0/
+        if (version_compare($this->getVersion(), '19.0', '<')) {
+            return addcslashes($text, "\000\n\r\\\032");
+        }
+
+        return $text;
+    }
 }
