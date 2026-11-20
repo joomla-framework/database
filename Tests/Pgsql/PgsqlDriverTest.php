@@ -703,4 +703,21 @@ class PgsqlDriverTest extends AbstractDatabaseDriverTestCase
             static::$connection->createQuery()
         );
     }
+
+    #[DataProvider('dataEscape')]
+    #[TestDox('Text can be escaped')]
+    public function testEscape($text, $extra, $expected)
+    {
+        if (
+            version_compare(static::$connection->getVersion(), '19.0', '>=')
+            && $text === "\\'%_abc123"
+        ) {
+            $expected = "\\''%_abc123";
+        }
+
+        $this->assertSame(
+            $expected,
+            static::$connection->escape($text, $extra)
+        );
+    }
 }
