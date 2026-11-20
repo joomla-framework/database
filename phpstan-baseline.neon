@@ -378,6 +378,18 @@ parameters:
 			count: 1
 			path: src/Pgsql/PgsqlDriver.php
 
+        -
+			message: '#^Call to function is_float\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: src/Pgsql/PgsqlDriver.php
+
+		-
+			message: '#^Call to function is_int\(\) with string will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: src/Pgsql/PgsqlDriver.php
+
 		-
 			message: '#^Instanceof between Joomla\\Database\\Pgsql\\PgsqlDriver and Joomla\\Database\\Pgsql\\PgsqlDriver will always evaluate to true\.$#'
 			identifier: instanceof.alwaysTrue
